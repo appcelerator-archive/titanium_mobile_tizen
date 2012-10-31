@@ -8,10 +8,20 @@
 
 console.log("command line args: " + process.argv);
 //TODO: pass it as parameters, hardcoded are ok for sample only
+
+var fs = require('fs');
+var path = require('path');
+
 var sdkpath;
 var titaniumSdk = "C:\\Users\\aod\\Application Data\\Titanium\\mobilesdk\\win32\\3.1.0.v20121016132513";
 var targetTitaniumSdkVersion="3.1.0.v20121016132513";
-var targetProject = "C:\\projects\\appceleraror\\gtt\\repo_titanium_tizen\\MobileWebProject\\MobileWebProject";
+//detecting current working dir
+var targetProject = process.cwd();
+
+if(!fs.existsSync(targetProject + '\\tiapp.xml')){
+	console.log("cannot file file  " + targetProject + '\\tiapp.xml' + 'in current directory. Will it is not Titanium project');
+	process.exit(1);//error code for exit
+}
 
 var myArgs = process.argv.slice(2);
  console.log('myArgs: ', myArgs);
@@ -38,7 +48,7 @@ var async = require('async');
 						keyvalue = keyvalue.slice(0, -4);
 						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
 						console.log('reading file: ' + keyvalue);
-						fs = require('fs');
+						//fs = require('fs');
 						fs.readFile(keyvalue, 'utf8', function (err,data) {
 							if (err) {
 								return console.log(err);
@@ -98,7 +108,8 @@ function startTitaniumMobileBuild(){
 	builder.exec(
 		//'titanium',['build','--platform=mobileweb', "--project-dir=" + targetProject, "--sdk=" + targetTitaniumSdkVersion],
 		//'titanium build --platform=mobileweb --project-dir=D:\\research\\titatiumtizen\\repo\\MobileWebProject --sdk=3.1.0.v20121016132513 --log-level=debug',
-		'titanium build --platform=mobileweb --project-dir='+targetProject+ ' --sdk=' + targetTitaniumSdkVersion + ' --log-level=debug',
+		//'titanium build --platform=mobileweb --project-dir='+targetProject+ ' --sdk=' + targetTitaniumSdkVersion + ' --log-level=debug',
+		'titanium build --platform=mobileweb --project-dir='+ targetProject + ' --log-level=debug',
 		function (err, stdout, stderr) {
 			console.log(stdout);
 			if(err != null){
@@ -124,9 +135,10 @@ function createTizenProject(){
 	//copy mobileweb into tizen
 
 	fs.renameSync(targetProject + '\\build\\mobileweb', tizenBuildDir);
-
-	copyFileSync( __dirname + '\\..\\..\\build_templates\\config.xml', tizenBuildDir+'\\config.xml');
-	copyFileSync( __dirname + '\\..\\..\\build_templates\\icon.png', tizenBuildDir+'\\icon.png');
+	//TODO: generate config.xml from content of tiapp.xml
+	copyFileSync( __dirname + '\\..\\..\\templates\\app\\config.xml', tizenBuildDir+'\\config.xml');
+	
+	copyFileSync( __dirname + '\\..\\..\\templates\\app\\default\\Resources\\tizen\\appicon.png', tizenBuildDir+'\\icon.png');
 	wgtPackaging7z();
 }
 
