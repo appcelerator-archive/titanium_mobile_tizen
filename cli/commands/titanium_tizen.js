@@ -74,11 +74,11 @@ var async = require('async');
 					startTitaniumMobileBuild();
 					break;
 				case 'install':
-					installWgt(myArgs[1]);
+					installWgt(targetProject + '\\build\\tizen\\tizenapp.wgt');
 					break;
 				case 'runemulator':
-					console.log('run on tizen emulator: ' + myArgs[1]);
-					runWgtOnEmulator(myArgs[1], myArgs[2]);
+					console.log('run on tizen emulator: ' + targetProject + '\\build\\tizen\\tizenapp.wgt');
+					runWgtOnEmulator(myArgs[1], targetProject + '\\build\\tizen\\tizenapp.wgt');
 					break;
 				case 'runsimulator':
 					console.log('run on tizen simulator');
