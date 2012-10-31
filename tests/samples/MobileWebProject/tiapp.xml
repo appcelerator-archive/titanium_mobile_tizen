@@ -13,7 +13,7 @@
         <target device="android">false</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>3.1.0.v20121016132513</sdk-version>
+    <sdk-version>3.0.0</sdk-version>
     <id>com.app.mobileweb.example</id>
     <name>MobileWebProject</name>
     <version>1.0</version>
