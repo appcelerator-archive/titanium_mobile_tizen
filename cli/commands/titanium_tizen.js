@@ -13,8 +13,9 @@ var fs = require('fs');
 var path = require('path');
 
 var sdkpath;
-var titaniumSdk = "C:\\Users\\aod\\Application Data\\Titanium\\mobilesdk\\win32\\3.1.0.v20121016132513";
-var targetTitaniumSdkVersion="3.1.0.v20121016132513";
+//var titaniumSdk = "C:\\Users\\aod\\Application Data\\Titanium\\mobilesdk\\win32\\3.1.0.v20121016132513";
+//var targetTitaniumSdkVersion="3.1.0.v20121016132513";
+
 //detecting current working dir
 var targetProject = process.cwd();
 
@@ -74,11 +75,11 @@ var async = require('async');
 					startTitaniumMobileBuild();
 					break;
 				case 'install':
-					installWgt(targetProject + '\\build\\tizen\\tizenapp.wgt');
+					installWgt(path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt'));
 					break;
 				case 'runemulator':
-					console.log('run on tizen emulator: ' + targetProject + '\\build\\tizen\\tizenapp.wgt');
-					runWgtOnEmulator(myArgs[1], targetProject + '\\build\\tizen\\tizenapp.wgt');
+					console.log('run on tizen emulator: ' + path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt').toString());
+					runWgtOnEmulator(myArgs[1], path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt'));
 					break;
 				case 'runsimulator':
 					console.log('run on tizen simulator');
@@ -98,17 +99,10 @@ var async = require('async');
 	});
 
 function startTitaniumMobileBuild(){
-	//sdkpath - path to tizen sdk
-	//titaniumSdk path to titanium sdk
-	//targetProject - build this project
-
+	// initiate bild process with --platform=mobileweb
 	console.log('startTitaniumMobileBuild');
 	var builder = require("child_process");
-	//titanium build --platform=mobileweb --project-dir=D:\research\titatiumtizen\repo\MobileWebProject --sdk=3.1.0.v20121016132513
 	builder.exec(
-		//'titanium',['build','--platform=mobileweb', "--project-dir=" + targetProject, "--sdk=" + targetTitaniumSdkVersion],
-		//'titanium build --platform=mobileweb --project-dir=D:\\research\\titatiumtizen\\repo\\MobileWebProject --sdk=3.1.0.v20121016132513 --log-level=debug',
-		//'titanium build --platform=mobileweb --project-dir='+targetProject+ ' --sdk=' + targetTitaniumSdkVersion + ' --log-level=debug',
 		'titanium build --platform=mobileweb --project-dir='+ targetProject + ' --log-level=debug',
 		function (err, stdout, stderr) {
 			console.log(stdout);
@@ -123,7 +117,7 @@ function startTitaniumMobileBuild(){
 }
  
 function createTizenProject(){
-	var tizenBuildDir = targetProject + '\\build\\tizen';
+	var tizenBuildDir = path.join(targetProject, 'build', 'tizen');
 	
 	console.log('startTitaniumMobileBuild: tizenBuildDir:' + tizenBuildDir);
 
@@ -134,11 +128,10 @@ function createTizenProject(){
 	}
 	//copy mobileweb into tizen
 
-	fs.renameSync(targetProject + '\\build\\mobileweb', tizenBuildDir);
+	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
 	//TODO: generate config.xml from content of tiapp.xml
-	copyFileSync( __dirname + '\\..\\..\\templates\\app\\config.xml', tizenBuildDir+'\\config.xml');
-	
-	copyFileSync( __dirname + '\\..\\..\\templates\\app\\default\\Resources\\tizen\\appicon.png', tizenBuildDir+'\\icon.png');
+	copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
 	wgtPackaging7z();
 }
 
@@ -160,18 +153,22 @@ function copyFileSync(srcFile, destFile) {
 };
 
 function wgtPackaging7z(){
-	var tizenBuildDir = targetProject + '\\build\\tizen';
+	var tizenBuildDir = path.join(targetProject, 'build','tizen');
 
 	var packer = require("child_process");
 	var cmd = '7z a ' + tizenBuildDir + '\\tizenapp.zip' + ' ' + tizenBuildDir+'\\*';
-	console.log('7z cmd: ' + cmd);
 
 	var async = require('async');
 
 	async.series([
 		function(next){
+			fixStatus200ErrorInIndexHtml();
+			next(null, 'ok');
+		}
+		, function(next){
 			//packaging
 			//TODO: xml signing will required late
+			console.log('7z cmd: ' + cmd);
 			packer.exec(
 				cmd,
 				function (err, stdout, stderr) {
@@ -204,7 +201,8 @@ function wgtPackaging7z(){
 
 function installWgt(pathToWgt){
 	var runner = require("child_process");
-	var cmd = sdkpath + '\\tools\\ide\\bin\\'  + 'web-install.bat --id=http://yourdomain/Harness --widget=' + pathToWgt;		
+	var pathToCmd = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-install.bat');
+	var cmd = pathToCmd + ' --id=http://yourdomain/Harness --widget=' + pathToWgt;
 	console.log('install cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -221,7 +219,9 @@ function installWgt(pathToWgt){
 
 function runWgtOnEmulator(widgetId, pathToWgt){
 	var runner = require("child_process");
-	var cmd = sdkpath + '\\tools\\ide\\bin\\'  + 'web-run.bat -id ' + widgetId + ' -w ' + pathToWgt;		
+	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-run.bat');
+	
+	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w ' + pathToWgt;
 	console.log('Run widget cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -234,4 +234,14 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 				console.log('Run ok ');
 			}
 	});	
+}
+
+function fixStatus200ErrorInIndexHtml(){
+	console.log('Fixing issue with expected HTTP status 200 when working without http server');
+	var filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	console.log('FIX: target path: ' + filepath);
+	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
+	console.log('FIX: read size: ' + indexFile.length);
+	indexFile = indexFile.replace("if (xhr.status === 200) {","if (xhr.status === 200 || xhr.status === 0) {");
+	fs.writeFileSync(filepath, indexFile, 'utf8');
 }
