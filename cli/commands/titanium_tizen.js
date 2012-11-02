@@ -7,14 +7,14 @@
  */
 
 console.log("command line args: " + process.argv);
+//TODO: add Linux support, currently script supports Windows only
 //TODO: pass it as parameters, hardcoded are ok for sample only
 
 var fs = require('fs');
 var path = require('path');
 
-var sdkpath;
-//var titaniumSdk = "C:\\Users\\aod\\Application Data\\Titanium\\mobilesdk\\win32\\3.1.0.v20121016132513";
-//var targetTitaniumSdkVersion="3.1.0.v20121016132513";
+//default value, good only for default installation of Tizen SDK 2.0.0 on Windows, 
+var sdkpath = 'C:\\\\tizen-sdk\\';
 
 //detecting current working dir
 var targetProject = process.cwd();
@@ -160,43 +160,22 @@ function wgtPackaging7z(){
 
 	var async = require('async');
 
-	async.series([
-		function(next){
-			fixStatus200ErrorInIndexHtml();
-			next(null, 'ok');
-		}
-		, function(next){
-			//packaging
-			//TODO: xml signing will required late
-			console.log('7z cmd: ' + cmd);
-			packer.exec(
-				cmd,
-				function (err, stdout, stderr) {
-					console.log(stdout);
-					if(err != null){
-						console.log('failed packaging for tizen platform');
-						console.log(stderr);
-						next(err, 'failed');
-					}else{
-						console.log('compressing ok');
-						next(null, 'ok');
-					}
-				});	
-		}
-		, function(next){
-			//rename .zip into wgt
-			var fs = require('fs');
-			console.log('rename zip into wgt');
-			fs.renameSync(tizenBuildDir + '\\tizenapp.zip', tizenBuildDir + '\\tizenapp.wgt');			
-		}
-		], function(err){
-			if(err) 
-				console.log(err)
-			else {
-				// Waits for defined functions to finish
-				console.log('Failed')
+	var cmd7za = find7za().toString() + ' a "' + path.join(tizenBuildDir, 'tizenapp.wgt') + '" "' + tizenBuildDir + '/*" -tzip';
+	//packaging
+	//TODO: xml signing will required late
+	console.log('7z cmd: ' + cmd7za);
+	packer.exec(
+		cmd7za,
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			if(err != null){
+				console.log('failed packaging for tizen platform');
+				console.log(stderr);
+				next(err, 'failed');
+			}else{
+				console.log('compressing ok');
 			}
-	});
+		});		
 }    
 
 function installWgt(pathToWgt){
@@ -244,4 +223,15 @@ function fixStatus200ErrorInIndexHtml(){
 	console.log('FIX: read size: ' + indexFile.length);
 	indexFile = indexFile.replace("if (xhr.status === 200) {","if (xhr.status === 200 || xhr.status === 0) {");
 	fs.writeFileSync(filepath, indexFile, 'utf8');
+}
+
+function find7za(){	
+	var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));	
+	console.log('7za.exe path is ' + path.normalize(zippath));
+
+	if(fs.existsSync(zippath)){
+		return zippath;
+	}else{
+		console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
+	}
 }
