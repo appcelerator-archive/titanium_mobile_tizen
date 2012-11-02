@@ -19,10 +19,14 @@ var sdkpath = 'C:\\\\tizen-sdk\\';
 //detecting current working dir
 var targetProject = process.cwd();
 
-if(!fs.existsSync(targetProject + '\\tiapp.xml')){
+if(!fs.existsSync(path.join(targetProject, 'tiapp.xml'))){
 	console.log("cannot file file  " + targetProject + '\\tiapp.xml' + 'in current directory. Will it is not Titanium project');
 	process.exit(1);//error code for exit
 }
+
+//test me and exit
+//addTizenToTiXml();
+//process.exit(1);
 
 var myArgs = process.argv.slice(2);
  console.log('myArgs: ', myArgs);
@@ -234,4 +238,40 @@ function find7za(){
 	}else{
 		console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
 	}
+}
+
+function addTizenToTiXml(){
+	var xmldom = require('xmldom');
+	var DOMParser = xmldom.DOMParser;
+	var XMLSerializer = xmldom.XMLSerializer;
+
+	var xmlpath = path.join(targetProject, 'tiapp.xml');
+	var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
+	var parsedTiXml = doc.documentElement;
+	//check for Tizen section
+	var tizenTagFound = false;
+	var node = parsedTiXml.firstChild;
+
+	while (node) {
+		if (node.nodeType == 1 && node.tagName == 'tizen'){
+			//tizen section exists, nothing to do
+			tizenTagFound = false;
+		}
+
+		
+		node = node.nextSibling;
+	}
+	//no tizen section in xml, add it
+	var tizenSectionStr = '<tizen><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
+	var tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml');
+	parsedTiXml.appendChild(tizenSec);
+	var result = new XMLSerializer().serializeToString(doc);
+	fs.writeFileSync(xmlpath, result, 'utf8');
+}
+
+function generateConfigXml(){	
+//app name
+//<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/Harness" version="1.0"	
+//icon
+
 }
