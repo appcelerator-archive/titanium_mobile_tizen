@@ -103,7 +103,7 @@ function startTitaniumMobileBuild(){
 	console.log('Initiate build process for mobileweb application');
 	var builder = require("child_process");
 	builder.exec(
-		'titanium build --platform=mobileweb --project-dir='+ targetProject + ' --log-level=debug',
+		'titanium build --platform=mobileweb --project-dir="'+ targetProject + '" --log-level=debug',
 		function (err, stdout, stderr) {
 			console.log(stdout);
 			if(err != null){
@@ -253,7 +253,7 @@ function addTizenToTiXml(){
 	while (node) {
 		if (node.nodeType == 1 && node.tagName == 'tizen'){
 			//tizen section exists, nothing to do
-			tizenTagFound = false;
+			tizenTagFound = true;
 		}
 		node = node.nextSibling;
 	}
