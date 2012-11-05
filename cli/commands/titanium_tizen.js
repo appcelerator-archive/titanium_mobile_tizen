@@ -302,23 +302,24 @@ function generateConfigXml(){
 		if (node.nodeType == 1 && node.tagName == 'tizen'){
 			//tizen section found, keep reference
 			tizenNode = node;
+			console.log('node tizen. value:' + node.textContent);
 		}
 		if (node.nodeType == 1 && node.tagName == 'name'){
-			widgetName = node.value;
+			widgetName = node.textContent;
 		}
 		if (node.nodeType == 1 && node.tagName == 'id'){
-			tiId = node.value;
-
+			tiId = node.textContent;
 		}
 		node = node.nextSibling;
-
 	}
 	widgetId = 'http://' + tiId + '/' + widgetName;
-	var templt = fs.readFileSync(xmlpath).toString(widgetId);
-	templt = templt.replace('%%WIDGET_ID%%',);
-	templt = templt.replace('%%WIDGET_NAME%%',widgetName);
-	templt = templt.replace('%%APP_ID%%',tizenAppId);
-	templt = templt.replace('%%FEATURES_LIST%%',new XMLSerializer().serializeToString(tizenNode);
-	fs.writeFileSync(resulConfig, templt, 'utf8');
 
+	var templt = fs.readFileSync(temltPath, 'utf8').toString(widgetId);
+	templt = templt.replace('%%WIDGET_ID%%', widgetId);
+	templt = templt.replace('%%WIDGET_NAME%%', widgetName);
+	templt = templt.replace('%%APP_ID%%', tizenAppId);
+	templt = templt.replace('%%FEATURES_LIST%%', new XMLSerializer().serializeToString(tizenNode));
+	templt = templt.replace('<tizen>', ' ');
+	templt = templt.replace('</tizen>', ' ');
+	fs.writeFileSync(resulConfig, templt, 'utf8');
 }
