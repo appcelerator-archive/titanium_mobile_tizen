@@ -132,6 +132,7 @@ function createTizenProject(){
 
 	//TODO: generate config.xml from content of tiapp.xml
 	//copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
+	fixStatus200ErrorInIndexHtml();
 	addTizenToTiXml();
 	generateConfigXml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
