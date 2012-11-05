@@ -24,12 +24,7 @@ if(!fs.existsSync(path.join(targetProject, 'tiapp.xml'))){
 	process.exit(1);//error code for exit
 }
 
-//test me and exit
-//addTizenToTiXml();
-//process.exit(1);
-
 var myArgs = process.argv.slice(2);
- console.log('myArgs: ', myArgs);
 
 var async = require('async');
 
@@ -72,6 +67,7 @@ var async = require('async');
 
 		}
 		, function(next){
+			//TODO: use commander for parsing parameters
 			if(myArgs.length > 0){
 				switch (myArgs[0]) {
 				case 'build':
@@ -104,7 +100,7 @@ var async = require('async');
 
 function startTitaniumMobileBuild(){
 	// initiate bild process with --platform=mobileweb
-	console.log('startTitaniumMobileBuild');
+	console.log('Initiate build process for mobileweb application');
 	var builder = require("child_process");
 	builder.exec(
 		'titanium build --platform=mobileweb --project-dir='+ targetProject + ' --log-level=debug',
@@ -120,19 +116,18 @@ function startTitaniumMobileBuild(){
 	});
 }
  
-function createTizenProject(){
+function createTizenProject(){	
+	console.log('Creating tizen app in ' + tizenBuildDir);
 	var tizenBuildDir = path.join(targetProject, 'build', 'tizen');
-	
-	console.log('startTitaniumMobileBuild: tizenBuildDir:' + tizenBuildDir);
-
 	var fs = require('fs');
 	var wrench = require('wrench');
 	if(fs.existsSync(tizenBuildDir)){
 		wrench.rmdirSyncRecursive(tizenBuildDir, true);
 	}
+	
 	//copy mobileweb into tizen
-
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
+
 	//TODO: generate config.xml from content of tiapp.xml
 	//copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
 	addTizenToTiXml();
@@ -159,6 +154,7 @@ function copyFileSync(srcFile, destFile) {
 };
 
 function wgtPackaging7z(){
+	console.log('Packaging application into wgt');
 	var tizenBuildDir = path.join(targetProject, 'build','tizen');
 
 	var packer = require('child_process');
@@ -233,7 +229,7 @@ function fixStatus200ErrorInIndexHtml(){
 
 function find7za(){	
 	var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));	
-	console.log('7za.exe path is ' + path.normalize(zippath));
+	console.log('7za.exe detected. Path is ' + path.normalize(zippath));
 
 	if(fs.existsSync(zippath)){
 		return zippath;
@@ -265,7 +261,7 @@ function addTizenToTiXml(){
 	if(tizenTagFound){
 		return;
 	}
-
+	console.log('<tizen> node absent in tiapp.xml, adding it.');
 	//todo: fix deployment-targets
 	
 	//no tizen section in xml, add it
@@ -276,7 +272,8 @@ function addTizenToTiXml(){
 	fs.writeFileSync(xmlpath, result, 'utf8');
 }
 
-function generateConfigXml(){	
+function generateConfigXml(){
+	console.log('generating config.xml for tizen application');
 	var temltPath = path.normalize(path.join(__dirname, '..','..','templates','app','config.tmpl'));
 	var resulConfig = path.join(targetProject, 'build', 'tizen','config.xml');
 
@@ -295,14 +292,13 @@ function generateConfigXml(){
 	//values for config
 	var widgetName = 'Titanium App';
 	var widgetId = 'Titanium App';
-	var tiId;
+	var tiId = 'com.ti.changeme';
 	var tizenNode;
 	var tizenAppId = 'zhrTuDSwYV';
 	while (node) {
 		if (node.nodeType == 1 && node.tagName == 'tizen'){
 			//tizen section found, keep reference
-			tizenNode = node;
-			console.log('node tizen. value:' + node.textContent);
+			tizenNode = node;			
 		}
 		if (node.nodeType == 1 && node.tagName == 'name'){
 			widgetName = node.textContent;
