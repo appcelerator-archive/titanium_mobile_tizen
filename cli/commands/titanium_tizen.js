@@ -116,11 +116,13 @@ function startTitaniumMobileBuild(){
 	});
 }
  
-function createTizenProject(){	
-	console.log('Creating tizen app in ' + tizenBuildDir);
+function createTizenProject(){		
 	var tizenBuildDir = path.join(targetProject, 'build', 'tizen');
 	var fs = require('fs');
 	var wrench = require('wrench');
+
+	console.log('Creating tizen app in ' + tizenBuildDir);
+
 	if(fs.existsSync(tizenBuildDir)){
 		wrench.rmdirSyncRecursive(tizenBuildDir, true);
 	}
@@ -202,7 +204,7 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 	var runner = require("child_process");
 	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-run.bat');
 	
-	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w ' + pathToWgt;
+	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w "' + pathToWgt +'"';
 	console.log('Run widget cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -318,7 +320,7 @@ function generateConfigXml(){
 	templt = templt.replace('%%WIDGET_NAME%%', widgetName);
 	templt = templt.replace('%%APP_ID%%', tizenAppId);
 	templt = templt.replace('%%FEATURES_LIST%%', new XMLSerializer().serializeToString(tizenNode));
-	templt = templt.replace('<tizen>', ' ');
+	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');
 	templt = templt.replace('</tizen>', ' ');
 	fs.writeFileSync(resulConfig, templt, 'utf8');
 }
