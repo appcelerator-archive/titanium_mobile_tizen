@@ -48,7 +48,6 @@ var async = require('async');
 						keyvalue = keyvalue.slice(0, -4);
 						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
 						console.log('reading file: ' + keyvalue);
-						//fs = require('fs');
 						fs.readFile(keyvalue, 'utf8', function (err,data) {
 							if (err) {
 								return console.log(err);
@@ -118,7 +117,6 @@ function startTitaniumMobileBuild(){
  
 function createTizenProject(){		
 	var tizenBuildDir = path.join(targetProject, 'build', 'tizen');
-	var fs = require('fs');
 	var wrench = require('wrench');
 
 	console.log('Creating tizen app in ' + tizenBuildDir);
