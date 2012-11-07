@@ -37,16 +37,17 @@ async.series([
 	}
 	, function(next){
 		console.log('Start unzip');
+		next(null, 'ok');
 		//Unzip
-		appc.zip.unzip(scriptArgs[0], scriptArgs[2], function(errorMsg){
-			if(errorMsg){
-				//next('Unzip failed' + errorMsg, 'ok');
-				//TODO: do not ignore error, right now it is required for windows
-				next(null, 'ok');
-			}else{
-				next(null, 'ok');
-			}
-		});
+		// appc.zip.unzip(scriptArgs[0], scriptArgs[2], function(errorMsg){
+		// 	if(errorMsg){
+		// 		//next('Unzip failed' + errorMsg, 'ok');
+		// 		//TODO: do not ignore error, right now it is required for windows
+		// 		next(null, 'ok');
+		// 	}else{
+		// 		next(null, 'ok');
+		// 	}
+		// });
 	}
 	, function(next){
 		console.log('[DEBUG] Create tizen platform, initially copy it from mobileweb');
@@ -84,8 +85,33 @@ function copymobilWebToTizen(finish){
 	appc.fs.visitDirs(basePath, function(name, dpath){
 		sdkRoot = dpath;
 		console.log('[DEBUG] Full path to SDK folder:' + sdkRoot);
+		wrench.copyDirSyncRecursive(path.join(sdkRoot, 'mobileweb'), path.join(sdkRoot, 'tizen'));
+		wrench.copyDirSyncRecursive(path.join(titaniumTizenDir, 'titanium', 'Ti'), path.join(sdkRoot, 'tizen', 'Ti'));
+		copyFileSync(path.join(titaniumTizenDir, 'titanium', 'Ti.js'), path.join(sdkRoot, 'tizen', 'Ti.js'));
+
+		//remove tizen/templates/app/default/resources/mobileweb directory		
+		wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
+		wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
+
 	}, 
 	function(){
 		//visitDirs finished
 	})
 }
+
+function copyFileSync(srcFile, destFile) {
+	var bytesRead, fdr, fdw, pos;
+	var BUF_LENGTH = 64 * 1024;
+	var _buff = new Buffer(BUF_LENGTH);
+	fdr = fs.openSync(srcFile, 'r');
+	fdw = fs.openSync(destFile, 'w');
+	bytesRead = 1;
+	pos = 0;
+	while (bytesRead > 0) {
+		bytesRead = fs.readSync(fdr, _buff, 0, BUF_LENGTH, pos);
+		fs.writeSync(fdw, _buff, 0, bytesRead);
+		pos += bytesRead;
+	}
+	fs.closeSync(fdr);
+	return fs.closeSync(fdw);
+};
