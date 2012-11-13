@@ -203,7 +203,7 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 	var runner = require("child_process");
 	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-run.bat');
 	
-	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w "' + pathToWgt +'"';
+	var cmd = pathToWebRun + ' -id ' + widgetId + ' -w "' + pathToWgt +'"';
 	console.log('Run widget cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -273,6 +273,15 @@ function addTizenToTiXml(){
 	fs.writeFileSync(xmlpath, result, 'utf8');
 }
 
+var tiapp = {
+	name : '',
+	description : '',
+
+
+};
+
+//var mobilewebSdkPath =
+
 function generateConfigXml(){
 	console.log('generating config.xml for tizen application');
 	var temltPath = path.normalize(path.join(__dirname, '..','..','templates','app','config.tmpl'));
@@ -320,6 +329,39 @@ function generateConfigXml(){
 	templt = templt.replace('%%APP_ID%%', tizenAppId);
 	templt = templt.replace('%%FEATURES_LIST%%', new XMLSerializer().serializeToString(tizenNode));
 	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');
+	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');//saniti
 	templt = templt.replace('</tizen>', ' ');
 	fs.writeFileSync(resulConfig, templt, 'utf8');
 }
+
+//{{--------- index.html generation, mostly borrowed from MobileWeb. 
+function regenerateIndexHtml(){
+	createIndexHtml();
+}
+
+function createIndexHtml() {
+	console.log('Creating the index.html');
+	
+	// get status bar style
+	var statusBarStyle = 'default';
+	//TODO: use other styles, I made things simple and hardcoded default style
+	statusBarStyle = 'default';
+
+	
+	// write the index.html
+	fs.writeFileSync(this.buildDir + '/index.html', renderTemplate(fs.readFileSync(this.mobilewebSdkPath + '/src/index.html').toString().trim(), {
+		ti_header: HTML_HEADER,
+		project_name: this.tiapp.name || '',
+		app_description: this.tiapp.description || '',
+		app_publisher: this.tiapp.publisher || '',
+		ti_generator: 'Appcelerator Titanium Mobile ' + ti.manifest.version,
+		ti_statusbar_style: statusBarStyle,
+		ti_css: fs.readFileSync(this.buildDir + '/titanium.css').toString(),
+		splash_screen: this.splashHtml,
+		ti_js: fs.readFileSync(this.buildDir + '/titanium.js').toString()
+	}));
+}
+
+
+
+//--------- index.html generation }}
