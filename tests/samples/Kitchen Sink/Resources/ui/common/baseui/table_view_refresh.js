@@ -3,7 +3,7 @@ function tv_refresh() {
 	
 	
 	var tv = Ti.UI.createTableView();
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!isMobileBase()) {
 		tv.style = Titanium.UI.iPhone.TableViewStyle.GROUPED;
 	}
 	
@@ -23,7 +23,7 @@ function tv_refresh() {
 	}
 	
 	var refresh = Titanium.UI.createButton();
-	if (Ti.Platform.osname !== 'mobileweb'){
+	if (!isMobileBase()){
 		refresh.systemButton = Titanium.UI.iPhone.SystemButton.REFRESH;
 	}
 	refresh.addEventListener('click', function()

@@ -4,7 +4,7 @@ function MashupsWindow(title) {
 		backgroundColor:'white'
 	});
 
-	var isMobileWeb = Titanium.Platform.osname == 'mobileweb';
+	var isMobileWeb = isMobileBase();
 	
 	// create table view data object
 	var data = [

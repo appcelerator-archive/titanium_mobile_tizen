@@ -16,7 +16,7 @@ function ControlsWindow(title) {
 		{title:'Text Area', hasChild:true, test:'ui/common/controls/textarea'}
 	];
 	
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!isMobileBase()) {
 		data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});
 		data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'});
 		data.push({title:'Picker', hasChild:true, test:'ui/common/controls/picker'});

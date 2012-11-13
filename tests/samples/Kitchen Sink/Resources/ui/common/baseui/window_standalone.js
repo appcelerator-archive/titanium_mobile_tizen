@@ -49,7 +49,7 @@ function win_standalone(_args) {
 		w.open();
 	});
 
-	if (Ti.Platform.osname !== 'mobileweb') {	
+	if (!isMobileBase()) {	
 		//
 		//  OPEN (ANIMATE FROM BOTTOM RIGHT)
 		//
@@ -387,7 +387,7 @@ function win_standalone(_args) {
 	
 	
 	win.add(b1);
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!isMobileBase()) {
 		win.add(b2);
 		win.add(b3);
 	}

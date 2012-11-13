@@ -1,7 +1,7 @@
 function views(_args) {
 	var win = Ti.UI.createWindow({backgroundColor:'#fff'});
 	
-	var isMobileWeb = Titanium.Platform.osname == 'mobileweb';
+	var isMobileWeb = isMobileBase();
 	
 	//create table view data object
 	var data = [

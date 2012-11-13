@@ -3,7 +3,7 @@ function tv_empty() {
 	
 	var tableView = Ti.UI.createTableView({top:110,backgroundColor:'yellow'});
 	
-	var isMW = (Ti.Platform.osname === 'mobileweb');
+	var isMW = (isMobileBase());
 	
 	var b1 = Ti.UI.createButton({
 		height:40,

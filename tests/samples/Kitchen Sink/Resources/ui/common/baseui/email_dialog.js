@@ -1,7 +1,7 @@
 /*
 function openEmail() {
 	var emailDialog = Titanium.UI.createEmailDialog();
-	if (Ti.Platform.osname !== 'mobileweb' && !emailDialog.isSupported()) {
+	if (!isMobileBase() && !emailDialog.isSupported()) {
 		Ti.UI.createAlertDialog({
 			title:'Error',
 			message:'Email not available'
@@ -22,7 +22,7 @@ function openEmail() {
 	}
 
 	// attach a file
-	if (Ti.Platform.osname !== 'mobileweb')  {
+	if (!isMobileBase())  {
 		var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, '/images/cricket.wav');
 		emailDialog.addAttachment(f);
 	}
