@@ -128,13 +128,36 @@ function createTizenProject(){
 	//copy mobileweb into tizen
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
 	//copy fixed/customizen MobileWeb sources
-	wrench.copyDirSyncRecursive(path.join(__dirname, '..','..','titanium','Ti'), path.join(tizenBuildDir, 'titanium','Ti'));
+	//wrench.copyDirSyncRecursive(path.join(__dirname, '..','..','titanium','Ti'), path.join(tizenBuildDir, 'titanium','Ti'));
 
 	addTizenToTiXml();
 	generateConfigXml();
 	fixIndexHtml();
 	fixStatus200ErrorInIndexHtml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
+
+	//Override some Ti APIs
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'Ti.js')), path.join(tizenBuildDir, 'titanium', 'Ti.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Buffer.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Buffer.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Geolocation.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Geolocation.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Platform.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Platform.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'include.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'include.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'text.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'text.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'Filesystem','Local.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'Filesystem','Local.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Group.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Group.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Person.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Person.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem', 'File.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem', 'File.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem', 'FileStream.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem', 'FileStream.js'));
+
+	//creating wgt
 	wgtPackaging7z();
 }
 
