@@ -127,6 +127,8 @@ function createTizenProject(){
 	
 	//copy mobileweb into tizen
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
+	//copy fixed/customizen MobileWeb sources
+	wrench.copyDirSyncRecursive(path.join(__dirname, '..','..','titanium','Ti'), path.join(tizenBuildDir, 'titanium','Ti'));
 
 	addTizenToTiXml();
 	generateConfigXml();
@@ -291,8 +293,6 @@ var tiapp = {
 
 
 };
-
-//var mobilewebSdkPath =
 
 function generateConfigXml(){
 	//creating config.xml from tiapp.xml
