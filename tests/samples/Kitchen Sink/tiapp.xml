@@ -83,6 +83,9 @@
         <feature name="http://tizen.org/api/mediacontent" required="true"/>
         <feature name="http://tizen.org/api/alarm" required="true"/>
         <access origin="*"/>
+        <access origin="http://www.appcelerator.com" subdomains="true"/> 
+        <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
+        <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>
     <modules/>
 </ti:app>
