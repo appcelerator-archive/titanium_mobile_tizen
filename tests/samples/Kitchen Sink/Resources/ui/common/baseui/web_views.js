@@ -4,7 +4,7 @@ function webviews(_args) {
 	
 	// create table view data object
 	var data = [
-		{title:'External URL', hasChild:true, url:'http://www.google.com'},
+		{title:'External URL', hasChild:true, url:'http://maps.google.co.nz/maps?q=-40,176%28Test%20Point%29&output=embed&t=h&z=15'},
 		{title:'Local URL', hasChild:true, url:'/etc/local_webview.html'},
 		{title:'XHR to Filesystem', hasChild:true},	
 		{title:'Image URL', hasChild:true, url:'http://www.appcelerator.com/wp-content/uploads/2010/01/TABWAVE_graph1.png'},
