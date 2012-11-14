@@ -151,6 +151,7 @@ function createTizenProject(){
 
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'Filesystem','Local.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'Filesystem','Local.js'));
 
+	fs.mkdirSync(path.join(tizenBuildDir, 'titanium','Ti', 'Contacts'));
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Group.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Group.js'));
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Person.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Person.js'));
 
