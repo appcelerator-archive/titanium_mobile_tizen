@@ -373,19 +373,7 @@ define(
 			margin: 0,
 			padding: 0
 		});
-
-		/*var addressbook = tizen.contact.getDefaultAddressBook();
-		addressbook.find(function(tizenContacts){
-			var i = 0, contactsCount = tizenContacts.length,
-			contacts = [];
-			for (i = 0; i < contactsCount; i++) {
-				contacts.push(tizenContacts[i].id);
-			}
-			Object.defineProperty(global, "contacts", {value: contacts, writable: false});
-		}, function(err){
-			console.log('The following errors occured while getting contacts: ' + err.name);
-		});*/
-
+		
 		if (App.analytics) {
 			// enroll event
 			if (localStorage.getItem("ti:enrolled") === null) {
@@ -406,7 +394,7 @@ define(
 
 			// app start event
 			analytics.add("ti.start", "ti.start", {
-				tz: (new Date).getTimezoneOffset(),
+				tz: (new Date()).getTimezoneOffset(),
 				deploytype: deployType,
 				os: Platform.osname,
 				osver: Platform.ostype,

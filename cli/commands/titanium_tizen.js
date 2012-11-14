@@ -128,11 +128,10 @@ function createTizenProject(){
 	//copy mobileweb into tizen
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
 
-	//TODO: generate config.xml from content of tiapp.xml
-	//copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
-	fixStatus200ErrorInIndexHtml();
 	addTizenToTiXml();
 	generateConfigXml();
+	fixIndexHtml();
+	fixStatus200ErrorInIndexHtml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
 	wgtPackaging7z();
 }
@@ -203,7 +202,7 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 	var runner = require("child_process");
 	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-run.bat');
 	
-	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w "' + pathToWgt +'"';
+	var cmd = pathToWebRun + ' -id ' + widgetId + ' -w "' + pathToWgt +'"';
 	console.log('Run widget cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -217,6 +216,18 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 			}
 	});	
 }
+function fixIndexHtml(){
+	var finishPart = ' require("Ti/App/Properties", function(p) {});require(["Ti","Ti/Accelerometer","Ti/Analytics","Ti/BlobStream","Ti/BufferStream","Ti/Facebook/LoginButton","Ti/Filesystem/FileStream","Ti/Map/Annotation","Ti/Map/View","Ti/Media/VideoPlayer","Ti/Network/HTTPClient","Ti/Platform/DisplayCaps","Ti/UI/2DMatrix","Ti/UI/ActivityIndicator","Ti/UI/AlertDialog","Ti/UI/Clipboard","Ti/UI/EmailDialog","Ti/UI/OptionDialog","Ti/UI/Picker","Ti/UI/PickerColumn","Ti/UI/PickerRow","Ti/UI/ProgressBar","Ti/UI/ScrollView","Ti/UI/ScrollableView","Ti/UI/Slider","Ti/UI/Switch","Ti/UI/Tab","Ti/UI/TabGroup","Ti/UI/TableView","Ti/UI/TableViewRow","Ti/UI/TableViewSection","Ti/UI/TextArea","Ti/UI/TextField","Ti/UI/WebView","Ti/UI/Window","Ti/XML","Ti/Yahoo","Ti/_/Promise","Ti/_/colors","Ti/_/image"]);</script></body></html>';
+	console.log('Removing require cache from index html');
+	var filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	console.log('FIX: target path: ' + filepath);
+	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
+
+	var partOne = indexFile.lastIndexOf('require.cache({');
+	indexFile = indexFile.substring(0, partOne) + finishPart;
+	//TODO: beware,fix. It breaks ACS, because removes keys	
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+}
 
 function fixStatus200ErrorInIndexHtml(){
 	console.log('Fixing issue with expected HTTP status 200 when working without http server');
@@ -224,7 +235,8 @@ function fixStatus200ErrorInIndexHtml(){
 	console.log('FIX: target path: ' + filepath);
 	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
 	console.log('FIX: read size: ' + indexFile.length);
-	indexFile = indexFile.replace('if (xhr.status === 200) {', 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("if (xhr.status === 200) {", 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("x.status === 200", '(x.status === 200 || x.status === 0)');
 	fs.writeFileSync(filepath, indexFile, 'utf8');
 }
 
@@ -273,7 +285,17 @@ function addTizenToTiXml(){
 	fs.writeFileSync(xmlpath, result, 'utf8');
 }
 
+var tiapp = {
+	name : '',
+	description : '',
+
+
+};
+
+//var mobilewebSdkPath =
+
 function generateConfigXml(){
+	//creating config.xml from tiapp.xml
 	console.log('generating config.xml for tizen application');
 	var temltPath = path.normalize(path.join(__dirname, '..','..','templates','app','config.tmpl'));
 	var resulConfig = path.join(targetProject, 'build', 'tizen','config.xml');
@@ -320,6 +342,7 @@ function generateConfigXml(){
 	templt = templt.replace('%%APP_ID%%', tizenAppId);
 	templt = templt.replace('%%FEATURES_LIST%%', new XMLSerializer().serializeToString(tizenNode));
 	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');
+	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');//saniti
 	templt = templt.replace('</tizen>', ' ');
 	fs.writeFileSync(resulConfig, templt, 'utf8');
 }

@@ -2,19 +2,19 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <deployment-targets>
         <target device="mobileweb">true</target>
-        <target device="iphone">true</target>
-        <target device="ipad">true</target>
-        <target device="android">true</target>
+        <target device="iphone">false</target>
+        <target device="ipad">false</target>
+        <target device="android">false</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>3.0.0</sdk-version>
-    <id>com.appcelerator.kitchensink</id>
-    <name>KitchenSink</name>
-    <version>2.1.3.GA</version>
-    <publisher>adecena</publisher>
-    <url>http://appcelerator.com</url>
+    <sdk-version>2.1.3.GA</sdk-version>
+    <id>com.contactssample</id>
+    <name>ContactsSampleForRelease</name>
+    <version>1.0</version>
+    <publisher>roman.kamenetskyi</publisher>
+    <url>http://</url>
     <description>not specified</description>
-    <copyright>2012 by adecena</copyright>
+    <copyright>2012 by roman.kamenetskyi</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
@@ -23,7 +23,8 @@
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
     <analytics>true</analytics>
-    <guid>28a706e9-4130-4acb-bc76-9494255a9279</guid>
+    <guid>802f3892-882b-4820-850f-b69e36adb88f</guid>
+    <property name="ti.ui.defaultunit">system</property>
     <iphone>
         <orientations device="iphone">
             <orientation>Ti.UI.PORTRAIT</orientation>
@@ -35,27 +36,16 @@
             <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
-    <android xmlns:android="http://schemas.android.com/apk/res/android">
-        <manifest>
-            <supports-screens android:anyDensity="false"/>
-            <application>
-                <activity android:alwaysRetainTaskState="true"
-                    android:configChanges="keyboardHidden|orientation"
-                    android:label="KitchenSink"
-                    android:name=".KitchensinkActivity" android:theme="@style/Theme.Titanium">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN"/>
-                        <category android:name="android.intent.category.LAUNCHER"/>
-                    </intent-filter>
-                </activity>
-            </application>
-        </manifest>
-        <activity android:name="ti.modules.titanium.ui.android.TiPreferencesActivity"/>
-        <services>
-            <service type="interval" url="testservice.js"/>
-        </services>
-    </android>
-    <tizen appid="nmgg3ski3z">
+    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
+    <mobileweb>
+        <precache/>
+        <splash>
+            <enabled>true</enabled>
+            <inline-css-images>true</inline-css-images>
+        </splash>
+        <theme>default</theme>
+    </mobileweb>
+    <tizen appid="nmredfd23z">
         <feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>
         <feature name="http://tizen.org/api/geocoder" required="true"/>
@@ -83,9 +73,6 @@
         <feature name="http://tizen.org/api/mediacontent" required="true"/>
         <feature name="http://tizen.org/api/alarm" required="true"/>
         <access origin="*"/>
-        <access origin="http://www.appcelerator.com" subdomains="true"/> 
-        <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
-        <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
-    </tizen>
+    </tizen>	
     <modules/>
 </ti:app>
