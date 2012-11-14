@@ -128,11 +128,10 @@ function createTizenProject(){
 	//copy mobileweb into tizen
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
 
-	//TODO: generate config.xml from content of tiapp.xml
-	//copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
-	fixStatus200ErrorInIndexHtml();
 	addTizenToTiXml();
 	generateConfigXml();
+	fixIndexHtml();
+	fixStatus200ErrorInIndexHtml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
 	wgtPackaging7z();
 }
@@ -217,6 +216,18 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 			}
 	});	
 }
+function fixIndexHtml(){
+	var finishPart = ' require("Ti/App/Properties", function(p) {});require(["Ti","Ti/Accelerometer","Ti/Analytics","Ti/BlobStream","Ti/BufferStream","Ti/Facebook/LoginButton","Ti/Filesystem/FileStream","Ti/Map/Annotation","Ti/Map/View","Ti/Media/VideoPlayer","Ti/Network/HTTPClient","Ti/Platform/DisplayCaps","Ti/UI/2DMatrix","Ti/UI/ActivityIndicator","Ti/UI/AlertDialog","Ti/UI/Clipboard","Ti/UI/EmailDialog","Ti/UI/OptionDialog","Ti/UI/Picker","Ti/UI/PickerColumn","Ti/UI/PickerRow","Ti/UI/ProgressBar","Ti/UI/ScrollView","Ti/UI/ScrollableView","Ti/UI/Slider","Ti/UI/Switch","Ti/UI/Tab","Ti/UI/TabGroup","Ti/UI/TableView","Ti/UI/TableViewRow","Ti/UI/TableViewSection","Ti/UI/TextArea","Ti/UI/TextField","Ti/UI/WebView","Ti/UI/Window","Ti/XML","Ti/Yahoo","Ti/_/Promise","Ti/_/colors","Ti/_/image"]);</script></body></html>';
+	console.log('Removing require cache from index html');
+	var filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	console.log('FIX: target path: ' + filepath);
+	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
+
+	var partOne = indexFile.lastIndexOf('require.cache({');
+	indexFile = indexFile.substring(0, partOne) + finishPart;
+	//TODO: beware,fix. It breaks ACS, because removes keys	
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+}
 
 function fixStatus200ErrorInIndexHtml(){
 	console.log('Fixing issue with expected HTTP status 200 when working without http server');
@@ -224,7 +235,8 @@ function fixStatus200ErrorInIndexHtml(){
 	console.log('FIX: target path: ' + filepath);
 	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
 	console.log('FIX: read size: ' + indexFile.length);
-	indexFile = indexFile.replace('if (xhr.status === 200) {', 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("if (xhr.status === 200) {", 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("x.status === 200", '(x.status === 200 || x.status === 0)');
 	fs.writeFileSync(filepath, indexFile, 'utf8');
 }
 
@@ -283,6 +295,7 @@ var tiapp = {
 //var mobilewebSdkPath =
 
 function generateConfigXml(){
+	//creating config.xml from tiapp.xml
 	console.log('generating config.xml for tizen application');
 	var temltPath = path.normalize(path.join(__dirname, '..','..','templates','app','config.tmpl'));
 	var resulConfig = path.join(targetProject, 'build', 'tizen','config.xml');
@@ -333,35 +346,3 @@ function generateConfigXml(){
 	templt = templt.replace('</tizen>', ' ');
 	fs.writeFileSync(resulConfig, templt, 'utf8');
 }
-
-//{{--------- index.html generation, mostly borrowed from MobileWeb. 
-function regenerateIndexHtml(){
-	createIndexHtml();
-}
-
-function createIndexHtml() {
-	console.log('Creating the index.html');
-	
-	// get status bar style
-	var statusBarStyle = 'default';
-	//TODO: use other styles, I made things simple and hardcoded default style
-	statusBarStyle = 'default';
-
-	
-	// write the index.html
-	fs.writeFileSync(this.buildDir + '/index.html', renderTemplate(fs.readFileSync(this.mobilewebSdkPath + '/src/index.html').toString().trim(), {
-		ti_header: HTML_HEADER,
-		project_name: this.tiapp.name || '',
-		app_description: this.tiapp.description || '',
-		app_publisher: this.tiapp.publisher || '',
-		ti_generator: 'Appcelerator Titanium Mobile ' + ti.manifest.version,
-		ti_statusbar_style: statusBarStyle,
-		ti_css: fs.readFileSync(this.buildDir + '/titanium.css').toString(),
-		splash_screen: this.splashHtml,
-		ti_js: fs.readFileSync(this.buildDir + '/titanium.js').toString()
-	}));
-}
-
-
-
-//--------- index.html generation }}
