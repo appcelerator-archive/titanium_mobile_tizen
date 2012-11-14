@@ -2,3 +2,4 @@ tmp
 build
 .sdb.devicemap
 .settings
+build.bat

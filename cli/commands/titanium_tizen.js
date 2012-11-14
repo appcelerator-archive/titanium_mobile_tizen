@@ -133,6 +133,8 @@ function createTizenProject(){
 	addTizenToTiXml();
 	generateConfigXml();
 	fixIndexHtml();
+	fixStylesInIndexHtml();
+	fixMetaTagsInIndexHtml();
 	fixStatus200ErrorInIndexHtml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
 
@@ -253,6 +255,31 @@ function fixIndexHtml(){
 	indexFile = indexFile.substring(0, partOne) + finishPart;
 	//TODO: beware,fix. It breaks ACS, because removes keys	
 	fs.writeFileSync(filepath, indexFile, 'utf8');
+}
+
+function fixStylesInIndexHtml() {
+	var commonCssStartText = "html,", filepath = "", indexFile = '',
+		linkToCommonCss = '<link href="themes\\common.css" rel="stylesheet" type="text/css" />',
+		linkToDefaultCss = '<link href="themes\\default\\default.css" rel="stylesheet" type="text/css" />';
+	console.log('Removing styles from index.html');
+	filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	indexFile = fs.readFileSync(filepath, 'utf8').toString();
+	indexFile = indexFile.substring(0, indexFile.indexOf(commonCssStartText)) + "</style>" + linkToCommonCss + linkToDefaultCss +  indexFile.substring(indexFile.indexOf("</style>") + 8, indexFile.length);
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+	
+	console.log('Fixing styles is finised');
+}
+
+function fixMetaTagsInIndexHtml() {
+	var str = '<meta name="apple-mobile-web-app-capable"', 
+		filepath = path.join(targetProject, 'build', 'tizen', 'index.html'),
+		indexFile = fs.readFileSync(filepath, 'utf8').toString();
+		
+	console.log('Removing unneeded meta tags');
+	indexFile = indexFile.substring(0, indexFile.indexOf(str)) + indexFile.substring(indexFile.indexOf('<style>'),  indexFile.length);
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+	
+	console.log('Removed meta tags successfully');
 }
 
 function fixStatus200ErrorInIndexHtml(){
