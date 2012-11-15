@@ -24,9 +24,11 @@ var appc = require('node-appc');
 var xmldom = require('xmldom');
 var wrench = require('wrench');
 var scriptArgs = process.argv.slice(2);
-var workingDir = scriptArgs[2];
+var workingDir = scriptArgs[1];
 var titaniumTizenDir = __dirname;
 var sdkRoot;
+
+console.log('[DEBUG] scriptArgs(zip, working): ' + scriptArgs);
 
 async.series([
 	function(next){
@@ -39,15 +41,15 @@ async.series([
 		console.log('Start unzip');
 		next(null, 'ok');
 		//Unzip
-		// appc.zip.unzip(scriptArgs[0], scriptArgs[2], function(errorMsg){
-		// 	if(errorMsg){
-		// 		//next('Unzip failed' + errorMsg, 'ok');
-		// 		//TODO: do not ignore error, right now it is required for windows
-		// 		next(null, 'ok');
-		// 	}else{
-		// 		next(null, 'ok');
-		// 	}
-		// });
+		appc.zip.unzip(scriptArgs[0], scriptArgs[1], function(errorMsg){
+			if(errorMsg){
+				//next('Unzip failed' + errorMsg, 'ok');
+				//TODO: do not ignore error, right now it is required for windows
+				next(null, 'ok');
+			}else{
+				next(null, 'ok');
+			}
+		});
 	}
 	, function(next){
 		console.log('[DEBUG] Create tizen platform, initially copy it from mobileweb');
@@ -72,9 +74,9 @@ function validateArgs(params){
 		console.log('Error: param 1 should point existng zip archive. Current value: ' + params[0]);
 		workOk = false;
 	}
-	var stats = fs.statSync(params[2]);
+	var stats = fs.statSync(params[1]);
 	if(!stats.isDirectory() ){
-		console.log('Error: param 3 should point existing directory. Current value: ' + params[2]);
+		console.log('Error: param 3 should point existing directory. Current value: ' + params[1]);
 		workOk = false;
 	}	
 	return workOk;
