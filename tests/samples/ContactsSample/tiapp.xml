@@ -7,7 +7,7 @@
         <target device="android">false</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.1.3.GA</sdk-version>
+    <sdk-version>3.0.0</sdk-version>
     <id>com.appcelerator.tizen.contactssample</id>
     <name>ContactsSample</name>
     <version>1.0</version>
