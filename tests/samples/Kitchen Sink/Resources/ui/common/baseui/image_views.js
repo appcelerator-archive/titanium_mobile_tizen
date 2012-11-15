@@ -9,8 +9,11 @@ function image_views(_args) {
 		{title:'Image View Positioning', hasChild:true, test:'ui/common/baseui/image_view_positioning'}
 	];
 	
-	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
+	if (!(Ti.Platform.osname === 'mobileweb')) {
 		data.push({title:'Animated', hasChild:true, test:'ui/common/baseui/image_view_animated'});
+	}
+	
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		data.push({title:'Image View Encoding', hasChild:true, test:'ui/common/baseui/image_view_encoding'});
 	}
 	
