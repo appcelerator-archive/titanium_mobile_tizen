@@ -16,10 +16,10 @@
     <id>com.app.mobileweb.example</id>
     <name>MobileWebProject</name>
     <version>1.0</version>
-    <publisher>aod</publisher>
+    <publisher>appcelerator</publisher>
     <url>http://example.com</url>
     <description>not specified</description>
-    <copyright>2012 by aod</copyright>
+    <copyright>2012 by appcelerator</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
