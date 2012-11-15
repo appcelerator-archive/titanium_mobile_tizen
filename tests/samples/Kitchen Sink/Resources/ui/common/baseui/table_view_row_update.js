@@ -19,7 +19,7 @@ function tv_row_update() {
 		{title:'Row15'}
 	];
 	
-	var isMW = (isMobileBase());
+	var isMW = ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen'));
 	
 	//
 	// Create table view

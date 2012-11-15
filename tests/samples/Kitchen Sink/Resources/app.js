@@ -14,9 +14,7 @@
 if (Ti.version < 2.0 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 2.0 or later');
 }
-function isMobileBase(){
-	return Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen';
-}
+
 // This is a single context application with mutliple windows in a stack
 (function() {
 	//determine platform and form factor and render approproate components
@@ -36,7 +34,7 @@ function isMobileBase(){
 	if (osname === 'iphone' || osname === 'ipad') {
 		Window = require('ui/handheld/ios/ApplicationWindow');
 	}
-	else if (isMobileBase()){
+	else if ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')){
 		Window = require('ui/mobileweb/ApplicationWindow');
 	}
 	else {

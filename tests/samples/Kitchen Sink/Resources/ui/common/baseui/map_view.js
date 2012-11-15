@@ -6,7 +6,7 @@ function mapview() {
 		isAndroid = true;
 	}
 	
-	var isMW = (isMobileBase());
+	var isMW = ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen'));
 	//
 	// CREATE ANNOTATIONS
 	//
@@ -42,7 +42,7 @@ function mapview() {
 			myid:3 // CUSTOM ATTRIBUTE THAT IS PASSED INTO EVENT OBJECTS
 		};
 		
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		atlantaParams.rightButton = Titanium.UI.iPhone.SystemButton.DISCLOSURE;
 	}
 	

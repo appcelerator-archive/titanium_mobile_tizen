@@ -81,7 +81,8 @@ var async = require('async');
 					runWgtOnEmulator(myArgs[1], path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt'));
 					break;
 				case 'runsimulator':
-					console.log('run on tizen simulator');
+					console.log('run on tizen simulator:' + path.join( targetProject, 'build', 'tizen', 'index.html').toString());
+					runIndexOnSimulator(path.join(targetProject, 'build', 'tizen', 'index.html'));
 					break;
 				default:
 					console.log('Sorry, that is not something I know how to do.');
@@ -280,6 +281,29 @@ function fixMetaTagsInIndexHtml() {
 	fs.writeFileSync(filepath, indexFile, 'utf8');
 	
 	console.log('Removed meta tags successfully');
+}
+
+function runIndexOnSimulator(pathToWgt){
+	var runner = require("child_process");
+	//var pathToWebRun = path.join(sdkpath, 'tools', 'websimulator', 'simulator.bat');
+
+	var optpath = path.join(sdkpath, 'tools', 'websimulator', 'sdk-wrt-options.txt');
+	var apppath = path.join(sdkpath, 'tools', 'websimulator', 'web', 'index.html');
+	var usrpath = path.join(sdkpath, 'tools', 'websimulator', 'sdk-profile-data');
+	var options = fs.readFileSync(optpath, 'utf8').toString().trim();
+	var cmd = 'chrome.exe ' + options + ' --app="file:///' + apppath + '?url=file:///' + pathToWgt + '"' + ' --user-data-dir=' + usrpath;
+	console.log('Run widget cmd: ' + cmd);
+	runner.exec(
+		cmd,
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			if(err != null){
+				console.log('failed run index.html');
+				console.log(stderr);
+			}else{
+				console.log('Run ok ');
+			}
+	});	
 }
 
 function fixStatus200ErrorInIndexHtml(){
