@@ -34,7 +34,7 @@ if (Ti.version < 2.0 ) {
 	if (osname === 'iphone' || osname === 'ipad') {
 		Window = require('ui/handheld/ios/ApplicationWindow');
 	}
-	else if (osname === 'mobileweb'){
+	else if ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')){
 		Window = require('ui/mobileweb/ApplicationWindow');
 	}
 	else {

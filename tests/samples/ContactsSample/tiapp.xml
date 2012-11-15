@@ -8,13 +8,13 @@
         <target device="blackberry">false</target>
     </deployment-targets>
     <sdk-version>2.1.3.GA</sdk-version>
-    <id>com.contactssample</id>
-    <name>ContactsSampleForRelease</name>
+    <id>com.appcelerator.tizen.contactssample</id>
+    <name>ContactsSample</name>
     <version>1.0</version>
     <publisher>roman.kamenetskyi</publisher>
     <url>http://</url>
     <description>not specified</description>
-    <copyright>2012 by roman.kamenetskyi</copyright>
+    <copyright>2012 by appcelerator</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
@@ -22,7 +22,7 @@
     <statusbar-hidden>false</statusbar-hidden>
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
-    <analytics>true</analytics>
+    <analytics>false</analytics>
     <guid>802f3892-882b-4820-850f-b69e36adb88f</guid>
     <property name="ti.ui.defaultunit">system</property>
     <iphone>
@@ -41,7 +41,7 @@
         <precache/>
         <splash>
             <enabled>true</enabled>
-            <inline-css-images>true</inline-css-images>
+            <inline-css-images>false</inline-css-images>
         </splash>
         <theme>default</theme>
     </mobileweb>

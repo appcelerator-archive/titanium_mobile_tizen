@@ -128,13 +128,40 @@ function createTizenProject(){
 	
 	//copy mobileweb into tizen
 	fs.renameSync(path.join(targetProject, 'build', 'mobileweb'), tizenBuildDir);
+	//copy fixed/customizen MobileWeb sources
+	//wrench.copyDirSyncRecursive(path.join(__dirname, '..','..','titanium','Ti'), path.join(tizenBuildDir, 'titanium','Ti'));
 
-	//TODO: generate config.xml from content of tiapp.xml
-	//copyFileSync(path.normalize(path.join(__dirname, '..','..','templates','app','config.xml')), path.join(tizenBuildDir,'config.xml'));	
-	fixStatus200ErrorInIndexHtml();
 	addTizenToTiXml();
 	generateConfigXml();
+	fixIndexHtml();
+	fixStylesInIndexHtml();
+	fixMetaTagsInIndexHtml();
+	fixStatus200ErrorInIndexHtml();
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','templates','app', 'default', 'Resources', 'tizen', 'appicon.png')), path.join(tizenBuildDir,'icon.png'));
+
+	//Override some Ti APIs
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'Ti.js')), path.join(tizenBuildDir, 'titanium', 'Ti.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Buffer.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Buffer.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Geolocation.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Geolocation.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Platform.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Platform.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'include.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'include.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'text.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'text.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', '_', 'Filesystem','Local.js')), path.join(tizenBuildDir, 'titanium','Ti', '_', 'Filesystem','Local.js'));
+
+	fs.mkdirSync(path.join(tizenBuildDir, 'titanium','Ti', 'Contacts'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Group.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Group.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts', 'Person.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts', 'Person.js'));
+
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem', 'File.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem', 'File.js'));
+	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Filesystem', 'FileStream.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Filesystem', 'FileStream.js'));
+
+	//creating wgt
 	wgtPackaging7z();
 }
 
@@ -204,7 +231,7 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 	var runner = require("child_process");
 	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-run.bat');
 	
-	var cmd = pathToWebRun + ' web-run.bat -id ' + widgetId + ' -w "' + pathToWgt +'"';
+	var cmd = pathToWebRun + ' -id ' + widgetId + ' -w "' + pathToWgt +'"';
 	console.log('Run widget cmd: ' + cmd);
 	runner.exec(
 		cmd,
@@ -217,6 +244,43 @@ function runWgtOnEmulator(widgetId, pathToWgt){
 				console.log('Run ok ');
 			}
 	});	
+}
+function fixIndexHtml(){
+	var finishPart = ' require("Ti/App/Properties", function(p) {});require(["Ti","Ti/Accelerometer","Ti/Analytics","Ti/BlobStream","Ti/BufferStream","Ti/Facebook/LoginButton","Ti/Filesystem/FileStream","Ti/Map/Annotation","Ti/Map/View","Ti/Media/VideoPlayer","Ti/Network/HTTPClient","Ti/Platform/DisplayCaps","Ti/UI/2DMatrix","Ti/UI/ActivityIndicator","Ti/UI/AlertDialog","Ti/UI/Clipboard","Ti/UI/EmailDialog","Ti/UI/OptionDialog","Ti/UI/Picker","Ti/UI/PickerColumn","Ti/UI/PickerRow","Ti/UI/ProgressBar","Ti/UI/ScrollView","Ti/UI/ScrollableView","Ti/UI/Slider","Ti/UI/Switch","Ti/UI/Tab","Ti/UI/TabGroup","Ti/UI/TableView","Ti/UI/TableViewRow","Ti/UI/TableViewSection","Ti/UI/TextArea","Ti/UI/TextField","Ti/UI/WebView","Ti/UI/Window","Ti/XML","Ti/Yahoo","Ti/_/Promise","Ti/_/colors","Ti/_/image"]);</script></body></html>';
+	console.log('Removing require cache from index html');
+	var filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	console.log('FIX: target path: ' + filepath);
+	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
+
+	var partOne = indexFile.lastIndexOf('require.cache({');
+	indexFile = indexFile.substring(0, partOne) + finishPart;
+	//TODO: beware,fix. It breaks ACS, because removes keys	
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+}
+
+function fixStylesInIndexHtml() {
+	var commonCssStartText = "html,", filepath = "", indexFile = '',
+		linkToCommonCss = '<link href="themes\\common.css" rel="stylesheet" type="text/css" />',
+		linkToDefaultCss = '<link href="themes\\default\\default.css" rel="stylesheet" type="text/css" />';
+	console.log('Removing styles from index.html');
+	filepath = path.join(targetProject, 'build', 'tizen', 'index.html');
+	indexFile = fs.readFileSync(filepath, 'utf8').toString();
+	indexFile = indexFile.substring(0, indexFile.indexOf(commonCssStartText)) + "</style>" + linkToCommonCss + linkToDefaultCss +  indexFile.substring(indexFile.indexOf("</style>") + 8, indexFile.length);
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+	
+	console.log('Fixing styles is finised');
+}
+
+function fixMetaTagsInIndexHtml() {
+	var str = '<meta name="apple-mobile-web-app-capable"', 
+		filepath = path.join(targetProject, 'build', 'tizen', 'index.html'),
+		indexFile = fs.readFileSync(filepath, 'utf8').toString();
+		
+	console.log('Removing unneeded meta tags');
+	indexFile = indexFile.substring(0, indexFile.indexOf(str)) + indexFile.substring(indexFile.indexOf('<style>'),  indexFile.length);
+	fs.writeFileSync(filepath, indexFile, 'utf8');
+	
+	console.log('Removed meta tags successfully');
 }
 
 function runIndexOnSimulator(pathToWgt){
@@ -248,7 +312,8 @@ function fixStatus200ErrorInIndexHtml(){
 	console.log('FIX: target path: ' + filepath);
 	var indexFile =  fs.readFileSync(filepath, 'utf8').toString();
 	console.log('FIX: read size: ' + indexFile.length);
-	indexFile = indexFile.replace('if (xhr.status === 200) {', 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("if (xhr.status === 200) {", 'if (xhr.status === 200 || xhr.status === 0) {');
+	indexFile = indexFile.replace("x.status === 200", '(x.status === 200 || x.status === 0)');
 	fs.writeFileSync(filepath, indexFile, 'utf8');
 }
 
@@ -297,7 +362,15 @@ function addTizenToTiXml(){
 	fs.writeFileSync(xmlpath, result, 'utf8');
 }
 
+var tiapp = {
+	name : '',
+	description : '',
+
+
+};
+
 function generateConfigXml(){
+	//creating config.xml from tiapp.xml
 	console.log('generating config.xml for tizen application');
 	var temltPath = path.normalize(path.join(__dirname, '..','..','templates','app','config.tmpl'));
 	var resulConfig = path.join(targetProject, 'build', 'tizen','config.xml');
@@ -344,6 +417,7 @@ function generateConfigXml(){
 	templt = templt.replace('%%APP_ID%%', tizenAppId);
 	templt = templt.replace('%%FEATURES_LIST%%', new XMLSerializer().serializeToString(tizenNode));
 	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');
+	templt = templt.replace(new RegExp('<tizen appid=".+">'), ' ');//saniti
 	templt = templt.replace('</tizen>', ' ');
 	fs.writeFileSync(resulConfig, templt, 'utf8');
 }

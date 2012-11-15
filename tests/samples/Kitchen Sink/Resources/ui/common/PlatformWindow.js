@@ -4,7 +4,7 @@ function PlatformWindow(title) {
 		backgroundColor:'white'
 	});
 	
-	var isMobileWeb = Titanium.Platform.osname == 'mobileweb';
+	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
 	
 	// create table view data object
 	var data = [

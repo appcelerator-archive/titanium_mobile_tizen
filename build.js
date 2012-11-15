@@ -81,6 +81,7 @@ function validateArgs(params){
 }
 
 function copymobilWebToTizen(finish){
+	//todo: need same for linux
 	var basePath = path.join(workingDir, 'mobilesdk', 'win32');
 	appc.fs.visitDirs(basePath, function(name, dpath){
 		sdkRoot = dpath;

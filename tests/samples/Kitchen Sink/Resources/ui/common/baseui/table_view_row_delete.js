@@ -16,7 +16,7 @@ function tv_row_delete() {
 	var button = Titanium.UI.createButton({
 		title:'Delete Row'
 	});
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		button.style = Titanium.UI.iPhone.SystemButtonStyle.BORDERED;
 	}
 	
@@ -64,7 +64,7 @@ function tv_row_delete() {
 		Ti.API.info("deleting row "+index);
 		
 		try {
-			if (Ti.Platform.osname !== 'mobileweb') {
+			if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 				tableview.deleteRow(index,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
 			} else {
 				tableview.deleteRow(index);

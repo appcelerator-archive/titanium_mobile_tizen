@@ -4,7 +4,7 @@ function BaseUIWindow(title) {
 		backgroundColor:'white'
 	});
 	
-	var isMobileWeb = Titanium.Platform.osname == 'mobileweb';
+	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
 	
 	// create table view data object
 	var data = [
@@ -95,7 +95,7 @@ function BaseUIWindow(title) {
 		Ti.API.info('FOCUS RECEIVED IN base_ui');
 		Ti.App.fireEvent('nav_back');
 		
-		if (Ti.Platform.osname !== 'mobileweb') {
+		if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 			Ti.API.info(Ti.dumpCoverage());
 		}
 	});

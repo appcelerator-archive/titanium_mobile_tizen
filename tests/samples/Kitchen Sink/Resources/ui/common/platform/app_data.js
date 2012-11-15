@@ -11,7 +11,7 @@ function app_data() {
 	data+= 'Description: ' + Titanium.App.getDescription() + '\n';
 	data+= 'Copyright: ' + Titanium.App.getCopyright() + '\n';
 	data+= 'GUID: ' + Titanium.App.getGUID() + '\n';
-	if (Titanium.Platform.osname === 'mobileweb') {
+	if ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		data+= 'Path: ' + Titanium.App.appURLToPath('index.html') + '\n';
 	}
 	data+= 'Build: ' + Titanium.version + '.' + Titanium.buildHash + ' (' + Titanium.buildDate + ')\n';

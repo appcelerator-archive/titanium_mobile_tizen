@@ -22,7 +22,7 @@ function image_view_scale() {
 	
 	
 	function getDimensions() {
-		if (Ti.Platform.osname === 'mobileweb') {
+		if ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 			l.text = 'dimensions unavailable'
 		} else {
 			l.text = 'retrieving dimensions...';

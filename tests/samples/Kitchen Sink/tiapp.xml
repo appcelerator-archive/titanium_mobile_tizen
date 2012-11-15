@@ -22,7 +22,7 @@
     <statusbar-hidden>false</statusbar-hidden>
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
-    <analytics>true</analytics>
+    <analytics>false</analytics>
     <guid>28a706e9-4130-4acb-bc76-9494255a9279</guid>
     <iphone>
         <orientations device="iphone">
@@ -55,6 +55,14 @@
             <service type="interval" url="testservice.js"/>
         </services>
     </android>
+    <mobileweb>
+        <precache/>
+        <splash>
+            <enabled>true</enabled>
+            <inline-css-images>false</inline-css-images>
+        </splash>
+        <theme>default</theme>
+    </mobileweb>    
     <tizen appid="nmgg3ski3z">
         <feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>
@@ -83,6 +91,9 @@
         <feature name="http://tizen.org/api/mediacontent" required="true"/>
         <feature name="http://tizen.org/api/alarm" required="true"/>
         <access origin="*"/>
+        <access origin="http://www.appcelerator.com" subdomains="true"/> 
+        <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
+        <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>
     <modules/>
 </ti:app>

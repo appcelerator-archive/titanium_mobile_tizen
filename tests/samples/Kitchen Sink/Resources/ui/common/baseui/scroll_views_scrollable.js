@@ -119,7 +119,7 @@ function scroll_view_scroll() {
 	var add = Titanium.UI.createButton({
 		title:'Add'
 	});
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		add.style = Titanium.UI.iPhone.SystemButtonStyle.BORDERED
 	}
 	add.addEventListener('click',function()
@@ -141,7 +141,7 @@ function scroll_view_scroll() {
 	var jump = Titanium.UI.createButton({
 		title:'Jump'
 	});
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		jump.style = Titanium.UI.iPhone.SystemButtonStyle.BORDERED;
 	}
 	jump.addEventListener('click',function()
@@ -154,7 +154,7 @@ function scroll_view_scroll() {
 	var change = Titanium.UI.createButton({
 		title:'Change'
 	});
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		change.style = Titanium.UI.iPhone.SystemButtonStyle.BORDERED;
 	}
 	change.addEventListener('click',function()

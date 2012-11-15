@@ -6,7 +6,7 @@ function tv_scroll() {
 	var tv = Ti.UI.createTableView({
 		showVerticalScrollIndicator:showScrollIndicators
 	});
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		tv.style = Titanium.UI.iPhone.TableViewStyle.GROUPED;
 	}
 	
@@ -26,7 +26,7 @@ function tv_scroll() {
 	}
 	
 	var refresh = Titanium.UI.createButton();
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		refresh.systemButton = Titanium.UI.iPhone.SystemButton.REFRESH;
 	}
 	refresh.addEventListener('click', function()

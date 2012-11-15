@@ -10,7 +10,7 @@ function textfield_list(_args) {
 		{title:'The Rest', hasChild:true, test:'ui/common/controls/textfield_therest'}
 	];
 	
-	if (Ti.Platform.osname !== 'mobileweb') {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		data.push({title:'Keyboard', hasChild:true, test:'ui/common/controls/textfield_keyboards'});
 		data.push({title:'Border Style', hasChild:true, test:'ui/common/controls/textfield_borders'});
 	}
