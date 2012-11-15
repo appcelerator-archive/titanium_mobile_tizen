@@ -49,7 +49,7 @@ function win_standalone(_args) {
 		w.open();
 	});
 
-	if (!isMobileBase()) {	
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {	
 		//
 		//  OPEN (ANIMATE FROM BOTTOM RIGHT)
 		//
@@ -387,7 +387,7 @@ function win_standalone(_args) {
 	
 	
 	win.add(b1);
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		win.add(b2);
 		win.add(b3);
 	}

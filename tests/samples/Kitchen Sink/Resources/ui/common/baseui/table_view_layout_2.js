@@ -2,7 +2,7 @@ function tv_layout2() {
 	var win = Titanium.UI.createWindow();
 	win.barColor = '#385292';
 	
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		
 		//
 		// CREATE SEARCH BAR
@@ -164,7 +164,7 @@ function tv_layout2() {
 	//
 	// create table view (
 	//
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		tableView = Titanium.UI.createTableView({
 			data:data,
 			search:search,
@@ -185,7 +185,7 @@ function tv_layout2() {
 		// use rowNum property on object to get row number
 		var rowNum = e.index;
 		var updateRow;
-		if (!isMobileBase()) {
+		if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 			updateRow = createUpdateRow('You clicked on the '+e.source.clickName);
 			tableView.updateRow(rowNum,updateRow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});
 		} else {

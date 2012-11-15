@@ -27,7 +27,7 @@ function textarea_basic() {
 		suppressReturn:false
 	});
 	
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		ta1.appearance = Titanium.UI.KEYBOARD_APPEARANCE_ALERT;
 		ta1.keyboardType = Titanium.UI.KEYBOARD_NUMBERS_PUNCTUATION;
 		ta1.returnKeyType = Titanium.UI.RETURNKEY_EMERGENCY_CALL;

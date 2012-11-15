@@ -36,7 +36,7 @@ function table_views(_args) {
 		{title:'Table View (Layout 2)', hasChild:true, test:'ui/common/baseui/table_view_layout_2'}
 	];
 	
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		data.push({title:'Table Search', hasChild:true, test:'ui/common/baseui/table_view_api_search'});
 	}
 	
@@ -84,7 +84,7 @@ function table_views(_args) {
 			rowBackgroundColor:'white'
 		};
 	
-	if (!isMobileBase()) {
+	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		tableViewOptions.style = Titanium.UI.iPhone.TableViewStyle.GROUPED;
 	}
 	
