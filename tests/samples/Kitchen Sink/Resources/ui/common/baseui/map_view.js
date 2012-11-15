@@ -137,7 +137,7 @@ function mapview() {
 		});
 	};
 	
-	if (!isAndroid) {
+	if (!isAndroid && !isMW) {
 		removeAll = Titanium.UI.createButton({
 			style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED,
 			title:'Remove All'
@@ -200,7 +200,7 @@ function mapview() {
 		wireClickHandlers();
 		
 		win.setToolbar([flexSpace,std,flexSpace,hyb,flexSpace,sat,flexSpace,atl,flexSpace,sv,flexSpace,zoomin,flexSpace,zoomout,flexSpace]);
-	} else {
+	} else if(isAndroid) {
 		var activity = Ti.Android.currentActivity;
 		activity.onCreateOptionsMenu = function(e) {
 			var menu = e.menu;

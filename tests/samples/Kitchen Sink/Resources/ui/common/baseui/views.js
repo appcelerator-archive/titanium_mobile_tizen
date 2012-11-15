@@ -18,7 +18,8 @@ function views(_args) {
 		{title:'Email Dialog', hasChild:true, test:'ui/common/baseui/email_dialog'},
 		{title:'Point Conversion', hasChild:true, test:'ui/common/baseui/view_point_conversion'},
 		{title:'View w/ Size', hasChild:!isMobileWeb, test:'ui/common/baseui/view_with_size', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Map View', hasChild:!isMobileWeb, test:'ui/common/baseui/map_view', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"}
+		//{title:'Map View', hasChild:!isMobileWeb, test:'ui/common/baseui/map_view', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"}
+		{title:'Map View', hasChild:true, test:'ui/common/baseui/map_view', touchEnabled:true, color:"#aaa"}
 	];
 	
 	if (Titanium.Platform.name == 'iPhone OS')
