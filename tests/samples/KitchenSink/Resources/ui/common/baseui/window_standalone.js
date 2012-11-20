@@ -126,6 +126,61 @@ function win_standalone(_args) {
 			});
 			w.open({modal:true});
 		});
+	} else if (Ti.Platform.osname === 'tizen') {
+		//
+		//  OPEN (ANIMATE FROM BOTTOM RIGHT)
+		//
+		var b2 = Titanium.UI.createButton({
+			title:'Open (Nav Bar Covered)',
+			width:200,
+			height:40,
+			top:60
+		});
+		
+		b2.addEventListener('click', function()
+		{
+
+			var t = Titanium.UI.create2DMatrix().scale(0);
+			
+			var options = {
+					height:Titanium.Platform.displayCaps.platformHeight;,
+					width:Titanium.Platform.displayCaps.platformWidth,
+					backgroundColor:'#336699',
+					bottom:0,
+					right:0,
+					transform : t
+				};
+
+			var t1 = Titanium.UI.create2DMatrix().scale(1);
+			var w = Titanium.UI.createWindow(options);
+			var a = Titanium.UI.createAnimation();
+		
+			// NOTE: good example of making dynamic platform height / width values
+			// iPad vs. iPhone vs Android etc.
+			// a.height = Titanium.Platform.displayCaps.platformHeight;
+			// a.width = Titanium.Platform.displayCaps.platformWidth;
+			a.transform = t1;
+			a.duration = 300;
+		
+			// create a button to close window
+			var b = Titanium.UI.createButton({
+				title:'Close',
+				height:30,
+				width:150
+			});
+			w.add(b);
+			b.addEventListener('click', function()
+			{
+				// a.height = 0;
+				// a.width = 0;
+				a.transform = t;
+				w.animate(a);
+				w.close();
+			});
+
+			w.open();
+			w.animate(a);
+		});
 	}
 	
 	//
