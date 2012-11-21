@@ -39,12 +39,12 @@ async.series([
 	}
 	, function(next){
 		console.log('Start unzip');
-		next(null, 'ok');
 		//Unzip
 		appc.zip.unzip(scriptArgs[0], scriptArgs[1], function(errorMsg){
 			if(errorMsg){
 				//next('Unzip failed' + errorMsg, 'ok');
 				//TODO: do not ignore error, right now it is required for windows
+				console.log('[DEBUG] unzip finished with error: ' + errorMsg);
 				next(null, 'ok');
 			}else{
 				next(null, 'ok');
@@ -54,16 +54,21 @@ async.series([
 	, function(next){
 		console.log('[DEBUG] Create tizen platform, initially copy it from mobileweb');
  		copymobilWebToTizen(function(){
-
+ 			console.log('[DEBUG] copymobilWebToTizen calling next()');
  			next(null, 'ok');
  		});
+	}
+	, function(next){
+		console.log('[DEBUG] fixing manifest.json');			
+		fixManifest();
+		next(null, 'ok');
 	}
 	], function(err){
 		if(err) 
 			console.log(err)
 		else {
 			// Waits for defined functions to finish
-			console.log('Failed')
+			console.log('Finished')
 		}
 });
 
@@ -85,24 +90,43 @@ function validateArgs(params){
 function copymobilWebToTizen(finish){
 	//todo: need same for linux
 	var basePath = path.join(workingDir, 'mobilesdk', 'win32');
-	appc.fs.visitDirs(basePath, function(name, dpath){
-		sdkRoot = dpath;
-		console.log('[DEBUG] Full path to SDK folder:' + sdkRoot);
-		wrench.copyDirSyncRecursive(path.join(sdkRoot, 'mobileweb'), path.join(sdkRoot, 'tizen'));
-		wrench.copyDirSyncRecursive(path.join(titaniumTizenDir, 'titanium', 'Ti'), path.join(sdkRoot, 'tizen', 'Ti'));
-		copyFileSync(path.join(titaniumTizenDir, 'titanium', 'Ti.js'), path.join(sdkRoot, 'tizen', 'Ti.js'));
+	console.log('[DEBUG] Looking for sdk in  folder:' + basePath);
+	appc.fs.visitDirs(basePath, 
+		function(name, dpath){
+			sdkRoot = dpath;
+			console.log('[DEBUG] Full path to SDK folder:' + sdkRoot);
+		}, 
+		function(){
+			//visitDirs finished, sdk root detected, do copy
+			console.log('[DEBUG] wrench.copyDirSyncRecursive from ' + path.join(sdkRoot, 'mobileweb') + " to "+ path.join(sdkRoot, 'tizen'));
+			wrench.copyDirSyncRecursive(path.join(sdkRoot, 'mobileweb'), path.join(sdkRoot, 'tizen'));
+			
+			console.log('[DEBUG] copyDirSyncRecursiveEx from ' +path.join(titaniumTizenDir, 'titanium', 'Ti') + " to "+ path.join(sdkRoot, 'tizen', 'titanium', 'Ti'));
+			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'titanium', 'Ti'), path.join(sdkRoot, 'tizen', 'titanium', 'Ti'));
 
-		//remove tizen/templates/app/default/resources/mobileweb directory		
-		wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
-		wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
+			copyFileSync(path.join(titaniumTizenDir, 'titanium', 'Ti.js'), path.join(sdkRoot, 'tizen', 'titanium', 'Ti.js'));
 
-	}, 
-	function(){
-		//visitDirs finished
-	})
+			//remove tizen/templates/app/default/resources/mobileweb directory		
+			console.log('[DEBUG]rmdirSyncRecursive from ' + path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'));
+			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
+			
+			wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
+
+			finish();		
+		}
+	);
+}
+
+function fixManifest(){
+	var manifestPath = path.join(sdkRoot, "manifest.json");
+	var manifestStr = fs.readFileSync(manifestPath, 'utf8').toString();
+	var manifestObject = JSON.parse(manifestStr);
+	manifestObject.platforms.push("tizen");
+	fs.writeFileSync(manifestPath, JSON.stringify(manifestObject), 'utf8');
 }
 
 function copyFileSync(srcFile, destFile) {
+	console.log('[DEBUG] copyFileSync from ' + srcFile + " to "+ destFile);
 	var bytesRead, fdr, fdw, pos;
 	var BUF_LENGTH = 64 * 1024;
 	var _buff = new Buffer(BUF_LENGTH);
@@ -117,4 +141,37 @@ function copyFileSync(srcFile, destFile) {
 	}
 	fs.closeSync(fdr);
 	return fs.closeSync(fdw);
+};
+
+function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
+	console.log('[DEBUG] copyDirSyncRecursiveEx src ' + sourceDir + " destination "+ newDirLocation);
+    /*  Create the directory where all our junk is moving to; read the mode of the source directory and mirror it */
+    var checkDir = fs.statSync(sourceDir);
+    try {
+    	if(!fs.existsSync(newDirLocation)){
+        	fs.mkdirSync(newDirLocation, checkDir.mode);
+    	}
+    } catch (e) {
+        //if the directory already exists, that's okay
+        if (e.code !== 'EEXIST') throw e;
+    }
+
+    var files = fs.readdirSync(sourceDir);
+	console.log('[DEBUG] copyDirSyncRecursiveEx created filelist for ' + sourceDir + " it contains "+ files.length);
+    for(var i = 0; i < files.length; i++) {
+        var currFile = fs.lstatSync(sourceDir + "/" + files[i]);
+        if(currFile.isDirectory()) {
+            /*  recursion this thing right on back. */
+            copyDirSyncRecursiveEx(sourceDir + "/" + files[i], newDirLocation + "/" + files[i]);
+        } else if(currFile.isSymbolicLink()) {
+        	console.log('[WARRNING] copyDirSyncRecursiveEx symlink instead of file: ' + sourceDir + "/" + files[i]);
+            var symlinkFull = fs.readlinkSync(sourceDir + "/" + files[i]);
+            fs.symlinkSync(symlinkFull, newDirLocation + "/" + files[i]);
+        } else {
+            /*  At this point, we've hit a file actually worth copying... so copy it on over. */
+            // var contents = fs.readFileSync(sourceDir + "/" + files[i]);
+            // fs.writeFileSync(newDirLocation + "/" + files[i], contents);
+            copyFileSync(sourceDir + "/" + files[i], newDirLocation + "/" + files[i])
+        }
+    }
 };
