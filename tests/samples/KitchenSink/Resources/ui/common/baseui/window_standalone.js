@@ -143,7 +143,7 @@ function win_standalone(_args) {
 			var t = Titanium.UI.create2DMatrix().scale(0);
 			
 			var options = {
-					height:Titanium.Platform.displayCaps.platformHeight;,
+					height:Titanium.Platform.displayCaps.platformHeight,
 					width:Titanium.Platform.displayCaps.platformWidth,
 					backgroundColor:'#336699',
 					bottom:0,
@@ -174,12 +174,17 @@ function win_standalone(_args) {
 				// a.height = 0;
 				// a.width = 0;
 				a.transform = t;
+				a.addEventListener('complete', function(){
+					w.close()
+				})
 				w.animate(a);
-				w.close();
+			});
+
+			w.addEventListener('postlayout', function(){
+				w.animate(a);
 			});
 
 			w.open();
-			w.animate(a);
 		});
 	}
 	
@@ -445,6 +450,8 @@ function win_standalone(_args) {
 	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		win.add(b2);
 		win.add(b3);
+	}else if (Ti.Platform.osname === 'tizen'){
+		win.add(b2);
 	}
 	win.add(b6);
 	
