@@ -13,13 +13,14 @@ function ControlsWindow(title) {
 		{title:'Button', hasChild:true, test:'ui/common/controls/button'},
 		{title:'Label', hasChild:true, test:'ui/common/controls/label'},
 		{title:'Text Field', hasChild:true, test:'ui/common/controls/textfield'},
-		{title:'Text Area', hasChild:true, test:'ui/common/controls/textarea'}
+		{title:'Text Area', hasChild:true, test:'ui/common/controls/textarea'},
+		{title:'Picker', hasChild:true, test:'ui/common/controls/picker'}
 	];
 	
 	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
 		data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});
 		data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'});
-		data.push({title:'Picker', hasChild:true, test:'ui/common/controls/picker'});
+		//data.push({title:'Picker', hasChild:true, test:'ui/common/controls/picker'});
 	}
 	
 	// add iphone specific tests
