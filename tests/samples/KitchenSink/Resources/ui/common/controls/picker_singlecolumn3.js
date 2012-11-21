@@ -4,6 +4,14 @@ function picker_single3() {
 	
 	var picker = Ti.UI.createPicker();
 	
+	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen') {
+		picker = Ti.UI.createPicker({
+			width: '100',
+			height: '110',
+			color: '#fc0'
+		});
+	}
+	
 	// just add each row implicitly to one column
 	picker.add(Ti.UI.createPickerRow({title:'Bananas',custom_item:'b'}));
 	picker.add(Ti.UI.createPickerRow({title:'Strawberries',custom_item:'s'}));

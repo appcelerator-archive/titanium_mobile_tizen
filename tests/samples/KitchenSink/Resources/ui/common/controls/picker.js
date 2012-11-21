@@ -8,6 +8,7 @@ function picker(_args) {
 	var isAndroid = Ti.Platform.osname === 'android';
 	var items = [
 		{title:'Basic Picker', hasChild:true, test:'ui/common/controls/picker_basic'},
+		
 		{title:'Basic Picker 2', hasChild:true, test:'ui/common/controls/picker_basic2', noandroid:true},
 		{title:'Picker w/o selection', hasChild:true, test:'ui/common/controls/picker_noselection', noandroid:true},
 	
@@ -40,6 +41,17 @@ function picker(_args) {
 		data.push({title:'Android "useSpinner" - time', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_time'});
 		data.push({title:'Android "useSpinner" - time (2)', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_time2'});
 	}
+	
+	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen') {
+		data = [];
+		for (var i = 0; i < items.length; i++) {
+			if (!items[i].noandroid) {
+				data.push(items[i]);
+			}
+		}
+	}
+	
+	
 	
 	// create table view
 	var tableview = Titanium.UI.createTableView({
