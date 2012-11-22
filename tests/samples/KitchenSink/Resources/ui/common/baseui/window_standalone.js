@@ -186,6 +186,34 @@ function win_standalone(_args) {
 
 			w.open();
 		});
+
+		//
+		//  TRADITIONAL MODAL (FROM 0.8.x)
+		//
+		var b3 = Titanium.UI.createButton({
+			title:'Traditional Modal',
+			width:200,
+			height:40,
+			top:110
+		});
+		
+		b3.addEventListener('click', function()
+		{
+			var Win = require('ui/common/phone/vibrate'),
+				w = new Win();
+				w.title = 'Modal Window';
+				w.barColor = 'black';
+	
+			var b = Titanium.UI.createButton({
+				title:'Close',
+			});
+			w.setLeftNavButton(b);
+			b.addEventListener('click',function()
+			{
+				w.close();
+			});
+			w.open({modal:true});
+		});
 	}
 	
 	//
@@ -447,11 +475,9 @@ function win_standalone(_args) {
 	
 	
 	win.add(b1);
-	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
+	if (!(Ti.Platform.osname === 'mobileweb')) {
 		win.add(b2);
 		win.add(b3);
-	}else if (Ti.Platform.osname === 'tizen'){
-		win.add(b2);
 	}
 	win.add(b6);
 	
