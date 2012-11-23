@@ -24,6 +24,30 @@ function options_dialog() {
 				dialog.buttonNames = [];
 			}
 		};
+	} else if (Ti.Platform.osname === 'tizen'){
+		var cancel_index = -1;
+		var cancel_option = '';
+		
+		var showCancel = Ti.UI.createSwitch({
+			label : 'Show Cancel Button',
+			top : 160
+		});
+		
+		var applyOptions = function(){
+			if (showCancel.value) {
+				if(dialog.cancel < 0 && cancel_index > -1){
+					dialog.options.splice(cancel_index, 0, cancel_option);
+					dialog.cancel = cancel_index;
+					cancel_index = -1;
+				}
+			}else{
+				if(dialog.cancel > -1){
+					cancel_option = dialog.options.splice(dialog.cancel, 1);
+					cancel_index = dialog.cancel;
+					dialog.cancel = -1;
+				}
+			}
+		}
 	}
 	//
 	// BASIC OPTIONS DIALOG
@@ -68,6 +92,8 @@ function options_dialog() {
 		if (isAndroid) {
 			dialog.androidView = null;
 			applyButtons();
+		} else if (Ti.Platform.osname === 'tizen'){
+			applyOptions();
 		}
 		dialog.show();
 	});
@@ -88,6 +114,8 @@ function options_dialog() {
 		if (isAndroid) {
 			dialog.androidView = null;
 			applyButtons();
+		} else if (Ti.Platform.osname === 'tizen'){
+			applyOptions();
 		}
 		dialog.show();
 	});
@@ -147,6 +175,8 @@ function options_dialog() {
 	if (isAndroid) {
 		win.add(showCancel);
 		win.add(button3);
+	} else if (Ti.Platform.osname === 'tizen'){
+		win.add(showCancel);
 	}
 	
 	if (!isAndroid) {
@@ -162,6 +192,8 @@ function options_dialog() {
 			if (isAndroid) {
 				dialog.androidView = null;
 				applyButtons();
+			} else if (Ti.Platform.osname === 'tizen'){
+				applyOptions();
 			}
 			dialog.show();
 			setTimeout(function(){dialog.hide({animated:true});},2000);
@@ -179,6 +211,8 @@ function options_dialog() {
 			if (isAndroid) {
 				dialog.androidView = null;
 				applyButtons();
+			} else if (Ti.Platform.osname === 'tizen'){
+				applyOptions();
 			}
 			dialog.show();
 			setTimeout(function(){dialog.hide({animated:false});},2000);
