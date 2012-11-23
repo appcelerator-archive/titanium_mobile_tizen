@@ -132,6 +132,8 @@ function copymobilWebToTizen(finish){
 			console.log('[DEBUG] copyDirSyncRecursiveEx from ' +path.join(titaniumTizenDir, 'titanium', 'Ti') + " to "+ path.join(sdkRoot, 'tizen', 'titanium', 'Ti'));
 			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'titanium', 'Ti'), path.join(sdkRoot, 'tizen', 'titanium', 'Ti'));
 
+			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'cli', 'commands'), path.join(sdkRoot, 'tizen', 'cli', 'commands'));
+
 			copyFileSync(path.join(titaniumTizenDir, 'titanium', 'Ti.js'), path.join(sdkRoot, 'tizen', 'titanium', 'Ti.js'));
 
 			//remove tizen/templates/app/default/resources/mobileweb directory		

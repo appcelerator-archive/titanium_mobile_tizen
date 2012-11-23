@@ -134,6 +134,7 @@ function build(logger, config, cli, finished) {
 	}];
 	
 	if (!this.dependenciesMap) {
+		this.logger.info(__n('Tolik: parsing dependenciesMap %s', 'Tolik: parsing dependenciesMap %s', path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
 	
@@ -155,7 +156,7 @@ function build(logger, config, cli, finished) {
 			},
 			splash: {
 				enabled: true,
-				'inline-css-images': true
+				'inline-css-images': false
 			},
 			theme: 'default'
 		}
@@ -201,7 +202,11 @@ function build(logger, config, cli, finished) {
 				this.minifyJavaScript();
 				this.createFilesystemRegistry();
 				this.createIndexHtml();
-				finished && finished.call(this);
+				//finished && finished.call(this);
+				//TODO: create wgt
+				this.wgtPackaging7z(logger, function(){
+					finished && finished.call(this);	
+				})				
 			});
 		});
 	}.bind(this));
@@ -482,7 +487,8 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		// this.modulesToCache = [];
+		//TODO: tolik, return it back, do not bypass caching
+		 this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
@@ -667,40 +673,46 @@ build.prototype = {
 		
 		// write the titanium.css
 		fs.writeFileSync(this.buildDir + '/titanium.css', cleanCSS.process(tiCSS.join('')));
-		
+
+		this.logger.info(__('Tolik: Assembling titanium.css finished'));
 		callback();
 	},
 	
 	createIcons: function (callback) {
-		this.logger.info(__('Creating favicon and Apple touch icons'));
+		//just show log and go to next. TODO: fix this function if we really have to use it on Tizen
+		this.logger.info(__('Tolik: Dissabled. Creating favicon and Apple touch icons'));
+		afs.copyFileSync(path.join(this.projectResDir, 'mobileweb', 'appicon.png'), this.buildDir, { logger: this.logger.debug });
+		callback();
+
+		// this.logger.info(__('Creating favicon and Apple touch icons'));
 		
-		var file = path.join(this.projectResDir, this.tiapp.icon);
-		if (!/\.(png|jpg|gif)$/.test(file) || !afs.exists(file)) {
-			file = path.join(this.projectResDir, 'mobileweb', 'appicon.png');
-		}
+		// var file = path.join(this.projectResDir, this.tiapp.icon);
+		// if (!/\.(png|jpg|gif)$/.test(file) || !afs.exists(file)) {
+		// 	file = path.join(this.projectResDir, 'mobileweb', 'appicon.png');
+		// }
 		
-		if (afs.exists(file)) {
-			afs.copyFileSync(file, this.buildDir, { logger: this.logger.debug });
+		// if (afs.exists(file)) {
+		// 	afs.copyFileSync(file, this.buildDir, { logger: this.logger.debug });
 			
-			appc.image.resize(file, [
-				{ file: this.buildDir + '/favicon.ico', width: 16, height: 16 },
-				{ file: this.buildDir + '/apple-touch-icon-precomposed.png', width: 57, height: 57 },
-				{ file: this.buildDir + '/apple-touch-icon-57x57-precomposed.png', width: 57, height: 57 },
-				{ file: this.buildDir + '/apple-touch-icon-72x72-precomposed.png', width: 72, height: 72 },
-				{ file: this.buildDir + '/apple-touch-icon-114x114-precomposed.png', width: 114, height: 114 },
-			], function (err, stdout, stderr) {
-				if (err) {
-					this.logger.error(__('Failed to create icons'));
-					stderr && stderr.toString().split('\n').forEach(function (line) {
-						line && this.logger.error(line);
-					}, this);
-					process.exit(1);
-				}
-				callback();
-			}.bind(this));
-		} else {
-			callback();
-		}
+		// 	appc.image.resize(file, [
+		// 		{ file: this.buildDir + '/favicon.ico', width: 16, height: 16 },
+		// 		{ file: this.buildDir + '/apple-touch-icon-precomposed.png', width: 57, height: 57 },
+		// 		{ file: this.buildDir + '/apple-touch-icon-57x57-precomposed.png', width: 57, height: 57 },
+		// 		{ file: this.buildDir + '/apple-touch-icon-72x72-precomposed.png', width: 72, height: 72 },
+		// 		{ file: this.buildDir + '/apple-touch-icon-114x114-precomposed.png', width: 114, height: 114 },
+		// 	], function (err, stdout, stderr) {
+		// 		if (err) {
+		// 			this.logger.error(__('Failed to create icons'));
+		// 			stderr && stderr.toString().split('\n').forEach(function (line) {
+		// 				line && this.logger.error(line);
+		// 			}, this);
+		// 			process.exit(1);
+		// 		}
+		// 		callback();
+		// 	}.bind(this));
+		// } else {
+		// 	callback();
+		// }
 	},
 	
 	createFilesystemRegistry: function () {
@@ -827,16 +839,60 @@ build.prototype = {
 		
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
 		
+		//this.logger.info (__("Tolik: looking into dependenciesMap '%s'.", dep[1]) + '\n');
 		var deps = this.dependenciesMap[dep[1]];
-		for (var i = 0, l = deps.length; i < l; i++) {
-			dep = deps[i];
-			ref = mid.split('/');
-			ref.pop();
-			ref = ref.join('/') + '/';
-			this.parseModule(dep, ref);
+		if(deps){
+			for (var i = 0, l = deps.length; i < l; i++) {
+				dep = deps[i];
+				ref = mid.split('/');
+				ref.pop();
+				ref = ref.join('/') + '/';
+				this.parseModule(dep, ref);
+			}
+			this.moduleMap[mid] = deps;
 		}
-		this.moduleMap[mid] = deps;
+	},
+
+	wgtPackaging7z: function(logger, packagingFinished){
+		//TODO: signing required
+		//TODO: clean up code.
+		//TODO: add Linux support
+		logger.info(__('Packaging application into wgt'));
+
+		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
+		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
+		var packer = require('child_process');
+		//var cmd = '7z a ' + tizenBuildDir + '\\tizenapp.zip' + ' ' + tizenBuildDir+'\\*';
+
+		var async = require('async');
+
+		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
+		//packaging
+		logger.info(__('wgtPackaging7z  7z cmd: "%s" ', cmd7za));
+		packer.exec(
+			cmd7za,
+			function (err, stdout, stderr) {
+				console.log(stdout);
+				if(err != null){
+					console.log('failed packaging for tizen platform');
+					console.log(stderr);
+					packagingFinished();
+				}else{
+					console.log('compressing ok');
+					packagingFinished();
+				}
+			});		
+	},
+
+	find7za: function(){	
+		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
+		if(fs.existsSync(zippath)){
+			return zippath;
+		}else{
+			console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
+		}
 	}
+
 
 };
 
