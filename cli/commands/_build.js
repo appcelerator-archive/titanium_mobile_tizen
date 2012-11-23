@@ -162,6 +162,13 @@ function build(logger, config, cli, finished) {
 		}
 	});
 	
+	//adding defauld tizen values into tiapp and create/fill tizen specific settings
+	this.tiapp.tizen = {
+		appid : 'change1me2',
+	};
+	this.addTizenToTiAppXml();
+
+	// tiapp are ready now, continye
 	this.validateTheme();
 	
 	var mwBuildSettings = this.tiapp.mobileweb.build[this.buildType];
@@ -203,7 +210,8 @@ function build(logger, config, cli, finished) {
 				this.createFilesystemRegistry();
 				this.createIndexHtml();
 				//finished && finished.call(this);
-				//TODO: create wgt
+				
+				//TODO: create wgt				
 				this.wgtPackaging7z(logger, function(){
 					finished && finished.call(this);	
 				})				
@@ -769,7 +777,92 @@ build.prototype = {
 			ti_js: fs.readFileSync(this.buildDir + '/titanium.js').toString()
 		}));
 	},
-	
+
+	addTizenToTiAppXml: function (){
+		this.logger.info(__('addTizenToTiXml'));
+
+		var DOMParser = xmldom.DOMParser;
+		var XMLSerializer = xmldom.XMLSerializer;
+
+		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
+		var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
+		var parsedTiXml = doc.documentElement;
+		//check for Tizen section
+		var tizenTagFound = false;
+		var node = parsedTiXml.firstChild;
+
+		while (node) {
+			if (node.nodeType == 1 && node.tagName == 'tizen'){
+				//tizen section exists, nothing to do
+				tizenTagFound = true;
+			}
+			node = node.nextSibling;
+		}
+
+		if(tizenTagFound){
+			return;
+		}
+		this.logger.info(__('<tizen> node absent in tiapp.xml, adding it.'));
+		
+		//no tizen section in xml, add it
+		var tizenSectionStr = '<tizen appid="change1me2"><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
+		var tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml');
+		parsedTiXml.appendChild(tizenSec);
+		var result = new XMLSerializer().serializeToString(doc);
+		fs.writeFileSync(xmlpath, result, 'utf8');
+	},
+
+	readConfigXmlFromTiAppXml: function () {
+		this.logger.info(__('readConfigXmlFromTiAppXml'));
+		var DOMParser = xmldom.DOMParser;
+		//var XMLSerializer = xmldom.XMLSerializer;
+
+		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
+		var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
+		var parsedTiXml = doc.documentElement;
+		//check for Tizen section
+		//var tizenTagFound = false;
+		var node = parsedTiXml.firstChild;
+		
+		var tizenNode;
+		//values for config
+		//var widgetName = 'Titanium TizenApp';
+		//var widgetId = 'Titanium App';
+		var tiId = 'http://appcelerator.com/TizenApp';		
+		var tizenAppId = 'change1me2';
+
+// this.tiapp.tizen = {
+// 		appid : 'change1me2',
+//		widgetName : 'sdsds'
+// 	};
+
+		while (node) {
+			if (node.nodeType == 1 && node.tagName == 'tizen'){
+				//tizen section found, keep reference
+				tizenNode = node;
+				if(tizenNode.getAttribute('appid')){
+					//tizenAppId = tizenNode.getAttribute('appid');
+					this.tiapp.tizen.appid = tizenNode.getAttribute('appid');
+				}
+			}
+			if (node.nodeType == 1 && node.tagName == 'name'){
+				//widgetName = node.textContent;
+				this.tiapp.tizen.widgetName = node.textContent;
+			}
+			// if (node.nodeType == 1 && node.tagName == 'id'){
+			// 	this.tiapp.tizen.tiId = node.textContent;
+			// }
+			node = node.nextSibling;
+		}
+		//widgetId = //'http://' + tiId + '/' + widgetName;
+		
+
+	},
+
+	createConfigXml: function () {
+		this.logger.info(__('createConfigXml'));
+	},
+
 	collapsePath: function (p) {
 		var result = [], segment, lastSegment;
 		p = p.replace(/\\/g, '/').split('/');

@@ -140,7 +140,7 @@ function createTizenProject(){
 
 	//Override some Ti APIs
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'Ti.js')), path.join(tizenBuildDir, 'titanium', 'Ti.js'));
-	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
+	//copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
 
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Buffer.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Buffer.js'));
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts.js'));

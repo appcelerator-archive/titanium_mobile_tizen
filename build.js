@@ -76,11 +76,9 @@ async.series([
 		fixManifest();
 		next(null, 'ok');
 	}, function(next){
-		//tizen/templates/app/default/resources/mobileweb
 		executeDependenciesAnalyzer(function(){
 			next(null, 'ok');
 		});
-
 	}, function(next){
 		if(process.platform === 'win32'){
 			console.log('Start packaging on win32');
@@ -140,6 +138,10 @@ function copymobilWebToTizen(finish){
 			console.log('[DEBUG]rmdirSyncRecursive from ' + path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'));
 			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
 			
+			//config.tmpl template for 
+			copyFileSync(path.join(titaniumTizenDir, 'templates', 'app', 'config.tmpl'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'config.tmpl'));
+
+
 			wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
 
 			copyFileSync(path.join(titaniumTizenDir, 'src', 'loader.js'), path.join(sdkRoot, 'tizen', 'src', 'loader.js'));
