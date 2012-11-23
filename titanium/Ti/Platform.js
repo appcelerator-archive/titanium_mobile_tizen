@@ -12,21 +12,104 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 	mid || (mid = localStorage.getItem(midName));
 	mid || localStorage.setItem(midName, mid = _.uuid());
 
+	// Id of listener to be able to unsbscribe from listening this property
+	var wifiNetworkPropertyValueChangeListenerId = null;
+
 	function saveMid() {
 		if (!unloaded) {
 			unloaded = 1;
-			// expire cookie in 20 years... forever in mobile terms
-			doc.cookie = midName + "=" + encodeURIComponent(mid) + "; expires=" + (new Date(Date.now() + 63072e7)).toUTCString();
+			var d = new Date();
+			d.setTime(d.getTime() + 63072e7); // forever in mobile terms
+			doc.cookie = midName + "=" + encodeURIComponent(mid) + "; expires=" + d.toUTCString();
 			localStorage.setItem(midName, mid);
 		}
+	};
+	
+	// Do we need to unsubsctibe? Do we need ot call it anywhere?
+	//function DeinitPlatformData()
+	//{
+	//	if (wifiNetworkPropertyValueChangeListenerId != null) 
+	//		tizen.systeminfo.removePropertyValueChangeListener(wifiNetworkPropertyValueChangeListenerId);
+	//};
+
+	// initialize values that should be initialized via fucntions with callbacks
+	function InitPlatformData()
+	{
+		// subscribing to WiFi property changes
+		wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener("WifiNetwork", onSuccessWifiNetworkCallback);		
+		// but anyway we need to get cuurent value
+		tizen.systeminfo.getPropertyValue("WifiNetwork", onSuccessWifiNetworkCallback, onErrorCallback);
+
+		// we are not expexting that device specific data like device model or version can be changed during application is running so we are not monitoring it
+		tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback, onErrorCallback);
+		
+		//Get our application info.
+		var appInfo = tizen.application.getAppInfo();
+		//Applications's globally-unique ID (UUID).
+		Platform.constants.__values__.id = appInfo.id; //The unique ID for an installed application. 
+	};
+
+	function onErrorCallback(error) {
+	    //console.log("An error occurred " + error.message);
+	};
+	
+	// Callback to update device model\version
+	function onSuccessSystemInfoDeviceCallback(systemInfoDevice)
+	{
+		//[NoInterfaceObject] interface SystemInfoDevice : SystemInfoProperty {
+		//    readonly attribute DOMString imei;
+		//    readonly attribute DOMString model;
+		//    readonly attribute DOMString version;
+		//    readonly attribute DOMString vendor;
+		//};
+		try{                                                                                                      
+				Platform.constants.__values__.model = systemInfoDevice.model;
+                                //console.log("Platform.model is set to " + systemInfoDevice.model);
+
+				Platform.constants.__values__.version = systemInfoDevice.version;
+				//console.log("Platform.version is set to " + systemInfoDevice.version);
+		}
+		catch (e) {
+			//console.log("Error on getting device info. Error: " + e.message);
+			Platform.constants.__values__.model = undefined;
+                        Platform.constants.__values__.version = undefined;
+		}
 	}
- 
+	
+	// Callback to update WiFi's IP address
+	function onSuccessWifiNetworkCallback(wifiNetwork)
+	{
+		// [NoInterfaceObject] 
+		// interface SystemInfoWifiNetwork : SystemInfoProperty {
+		//   readonly attribute DOMString status; (ON or OFF) 
+		//   readonly attribute DOMString ssid;
+		//   readonly attribute DOMString ipAddress;
+		//   readonly attribute DOMString ipv6Address;
+		//   readonly attribute double signalStrength;
+		// };
+		try{
+                        //console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
+
+			if (wifiNetwork.status == "ON"){
+				Platform.constants.__values__.address = wifiNetwork.ipAddress;	
+			}
+			else{
+				Platform.constants.__values__.address = undefined;
+			}
+			//console.log("Platform.address is set to " + Platform.address);
+		}
+		catch (e) {
+			//console.log("Error on getting WifiNetwork info. Error: " + e.message);
+			Platform.constants.__values__.address = undefined;
+		}
+	}
+	
 	on(window, "beforeunload", saveMid);
 	on(window, "unload", saveMid);
 
-	var nav = navigator,
-		battery = nav.battery || nav.webkitBattery || nav.mozBattery,
-		Platform = lang.setObject("Ti.Platform", Evented, {
+	var nav = navigator;
+	var battery = nav.battery || nav.webkitBattery || nav.mozBattery;
+	var Platform = lang.setObject("Ti.Platform", Evented, {
 
 			canOpenURL: function(url) {
 				return !!url;
@@ -77,8 +160,8 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				BATTERY_STATE_UNKNOWN: -1,
 				BATTERY_STATE_UNPLUGGED: 0,
 				address: void 0,
-				architecture: void 0,
-				availableMemory: void 0,
+				architecture: void 0, // not possible on Tizen? 
+				availableMemory: void 0, // not possible on Tizen?
 				batteryLevel: function() {
 					return this.batteryMonitoring && battery ? battery.level * 100 : -1;
 				},
@@ -90,9 +173,9 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				locale: Locale,
 				macaddress: void 0,
 				model: nav.userAgent,
-				name: "tizen",
+                                name: "tizen",
 				netmask: void 0,
-				osname: "tizen",
+                                osname: "tizen",
 				ostype: nav.platform,
 				runtime: browser.runtime,
 				processorCount: void 0,
@@ -109,6 +192,6 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		});
 	});
 
+	InitPlatformData();
 	return Platform;
-
 });
