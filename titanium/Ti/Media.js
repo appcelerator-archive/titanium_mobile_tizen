@@ -40,7 +40,11 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},
 
 		//beep: function() {},
-
+		
+		openPhotoGallery: function(){
+			//TODO: need to implement;
+		},
+		
 		createAudioPlayer: function(args) {
 			return new (require("Ti/Media/AudioPlayer"))(args);
 		},
