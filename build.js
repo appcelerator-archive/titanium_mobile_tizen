@@ -86,7 +86,10 @@ async.series([
 				next(null, 'ok');
 			});
 		} else {
-			next('Packaging implemented for Windows platform only', 'failed');
+			packagingSDKLinux(function(){
+				next('Packaging on linux', null);	
+			});
+			next('Packaging on linux', null);
 		}
 	}
 	], function(err){
@@ -273,9 +276,34 @@ function packagingSDK7z(finish){
 			if(err != null){
 				console.log('failed packaging for tizen platform');
 				console.log(stderr);
+			}else{
+				console.log('compressing ok');
+			}
+			finish();
+		});	
+}
+
+function packagingSDKLinux(finish){
+	console.log('Packaging application into zip with linux zip');
+	var packer = require('child_process');
+	var async = require('async');
+	var cmdzip = 'zip -r "' + resultPath + '" *';
+	//packaging
+	console.log('zip cmd: ' + cmdzip);
+	packer.exec(
+		cmdzip,
+		{
+			cwd: workingDir
+		},
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			if(err != null){
+				console.log('failed packaging for tizen platform');
+				console.log(stderr);
 				finish();
 			}else{
 				console.log('compressing ok');
 			}
+			finish();
 		});	
 }
