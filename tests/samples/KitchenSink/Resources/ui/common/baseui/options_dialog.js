@@ -165,6 +165,40 @@ function options_dialog() {
 			dialog.androidView = root;
 			dialog.show();
 		});
+	} else if (Ti.Platform.osname === 'tizen'){
+		// BUTTON TO MODIFY DIALOG TO USE A VIEW AND SHOW
+		var button3 = Titanium.UI.createButton({
+			title:'Option dialog with tizenView',
+			height:Titanium.UI.SIZE,
+			width:200,
+			top:220
+		});
+		button3.addEventListener('click', function()
+		{
+			// For now, you must give the containing view dimensions in order for it to appear.
+			var root = Ti.UI.createView({
+				width : "100%", 
+				height : 110
+			});
+			
+			var view = Ti.UI.createView({
+				width : 300, height: '100'
+			});
+			root.add(view);
+			var l = Ti.UI.createLabel({
+				text : 'I am a label',
+				top: 10, left: 10, bottom: 10, right: 10,
+				color : 'white',
+				borderRadius : 10,
+				backgroundColor : 'blue'
+			}); 
+			view.add(l);
+			
+			dialog.title = 'Tizen with a View';
+			dialog.options = ['OK'];
+			dialog.tizenView = root;
+			dialog.show();
+		});
 	}
 	
 	
@@ -172,11 +206,9 @@ function options_dialog() {
 	win.add(button2);
 	win.add(label);
 	
-	if (isAndroid) {
+	if (isAndroid || Ti.Platform.osname === 'tizen') {
 		win.add(showCancel);
 		win.add(button3);
-	} else if (Ti.Platform.osname === 'tizen'){
-		win.add(showCancel);
 	}
 	
 	if (!isAndroid) {
@@ -184,7 +216,7 @@ function options_dialog() {
 			title:'Show w/hide, animated',
 			height:40,
 			width:200,
-			top:250
+			top:280
 		});
 		
 		button4.addEventListener('click', function()
@@ -203,7 +235,7 @@ function options_dialog() {
 			title:'Show w/hide, nonanimated',
 			height:40,
 			width:200,
-			top:300
+			top:330
 		});
 		
 		button5.addEventListener('click', function()
