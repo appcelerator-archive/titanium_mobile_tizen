@@ -8,12 +8,11 @@
 
 console.log("command line args: " + process.argv);
 //TODO: add Linux support, currently script supports Windows only
-//TODO: pass it as parameters, hardcoded are ok for sample only
 
 var fs = require('fs');
 var path = require('path');
 
-//default value, good only for default installation of Tizen SDK 2.0.0 on Windows, 
+//default value, good only for default installation of Tizen SDK 2.0.0 on Windows
 var sdkpath = 'C:\\\\tizen-sdk\\';
 
 //detecting current working dir
@@ -141,7 +140,7 @@ function createTizenProject(){
 
 	//Override some Ti APIs
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'Ti.js')), path.join(tizenBuildDir, 'titanium', 'Ti.js'));
-	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
+	//copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium', 'dependencies.json')), path.join(tizenBuildDir, 'titanium', 'dependencies.json'));
 
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Buffer.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Buffer.js'));
 	copyFileSync( path.normalize(path.join(__dirname, '..','..','titanium','Ti', 'Contacts.js')), path.join(tizenBuildDir, 'titanium','Ti', 'Contacts.js'));

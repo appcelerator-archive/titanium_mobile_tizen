@@ -382,14 +382,14 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 
 		open: function(mode) {
 			var FileStream = require("Ti/Filesystem/FileStream");
-			return this.exists() && this.isFile() ? new FileStream({
+			return /*this.exists() &&*/ this.isFile() ? new FileStream({
 				mode: mode,
 				data: this.read().text
 			}) : null;
 		},
 
 		read: function() {
-			if (this.exists() && this.isFile()) {
+			if (/*this.exists() && */this.isFile()) {
 				var path = this.nativePath,
 					obj,
 					data = this._remote ? (obj = getRemote(path)).data : getLocal(path) || "",
