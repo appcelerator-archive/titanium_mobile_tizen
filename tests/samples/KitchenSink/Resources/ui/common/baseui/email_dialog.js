@@ -49,6 +49,9 @@ function openEmail() {
 }
 */
 
+
+
+
 function email_dialog() {
 	var win = Ti.UI.createWindow();
 	
@@ -126,4 +129,42 @@ function email_dialog() {
 	return win;
 };
 
-module.exports = email_dialog;
+
+//This function is different with function email_dialog for Android and iOS:
+//1.removed the dependency from PhotoGallery
+//2.removed the "complete" event
+//3.removed the attachment functionality (attachment does not supported on Tizen)
+function email_dialogTizenWeb() {
+	var win = Ti.UI.createWindow();
+	
+	// initialize to all modes
+	win.orientationModes = [
+		Titanium.UI.PORTRAIT,
+		Titanium.UI.LANDSCAPE_LEFT,
+		Titanium.UI.LANDSCAPE_RIGHT
+	];
+	
+	win.addEventListener('open', function() {
+		var emailDialog = Titanium.UI.createEmailDialog();
+		if (!emailDialog.isSupported()) {
+			Ti.UI.createAlertDialog({
+				title:'Error',
+				message:'Email not available'
+			}).show();
+			return;
+		}
+		emailDialog.setSubject('Hello from Titanium!');
+		emailDialog.setToRecipients(['foo@yahoo.com']);
+		emailDialog.setCcRecipients(['bar@yahoo.com']);
+		emailDialog.setBccRecipients(['blah@yahoo.com']);
+		emailDialog.setMessageBody('Appcelerator Titanium Rocks!');
+		emailDialog.open();
+	});			
+	
+	return win;
+};
+if(Ti.Platform.osname == 'tizen' || Ti.Platform.osname == 'mobileweb') {
+	module.exports = email_dialogTizenWeb;
+} else {
+	module.exports = email_dialog;
+}
