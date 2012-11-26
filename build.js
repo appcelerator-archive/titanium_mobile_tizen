@@ -145,7 +145,7 @@ function copymobilWebToTizen(finish){
 			wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
 
 			copyFileSync(path.join(titaniumTizenDir, 'src', 'loader.js'), path.join(sdkRoot, 'tizen', 'src', 'loader.js'));
-			copyFileSync(path.join(titaniumTizenDir, 'tiapp.xml'), path.join(sdkRoot, 'tiapp.xml'));
+			//copyFileSync(path.join(titaniumTizenDir, 'tiapp.xml'), path.join(sdkRoot, 'tiapp.xml'));
 
 			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
 
