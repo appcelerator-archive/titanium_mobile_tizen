@@ -3,7 +3,7 @@ function BaseUIWindow(title) {
 		title:title,
 		backgroundColor:'white'
 	});
-
+	
 	// create table view data object
 	var data = [
         {title:'Tab Groups', hasChild:true, test:'ui/common/baseui/tab_groups', color:"#000"},
@@ -56,7 +56,6 @@ function BaseUIWindow(title) {
 	{
 		if (e.rowData.test)
 		{
-		    self.tabGroup = theTabGroup;
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title:e.rowData.title,containingTab:self.containingTab,tabGroup:self.tabGroup});
 			if (Ti.Platform.name == "android") {
