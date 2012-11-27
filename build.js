@@ -53,7 +53,7 @@ async.series([
 	, function(next){
 		console.log('Start unzip');
 		//Unzip
-		appc.zip.unzip(scriptArgs[0], scriptArgs[1], function(errorMsg){
+		var resultCb = function(errorMsg){
 			if(errorMsg){
 				//TODO: do not ignore error, right now it is required for Windows since 7z return error always
 				//next('Unzip failed' + errorMsg, 'ok');				
@@ -62,7 +62,12 @@ async.series([
 			}else{
 				next(null, 'ok');
 			}
-		});
+		};
+		if(process.platform === 'win32'){
+			unzip7za(scriptArgs[0], scriptArgs[1], resultCb);
+		}else{
+			appc.zip.unzip(scriptArgs[0], scriptArgs[1], resultCb);
+		}
 	}
 	, function(next){
 		console.log('[DEBUG] Create tizen platform, initially copy it from mobileweb');
@@ -152,7 +157,7 @@ function copymobilWebToTizen(finish){
 			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
 
 			//signer app for tizen
-			fs.mkdirSync(path.join(tizenBuildDir, 'utils'));
+			fs.mkdirSync(path.join(sdkRoot, 'tizen', 'utils'));
 			copyFileSync(path.join(titaniumTizenDir, 'utils', 'signapp.jar'), path.join(sdkRoot, 'tizen', 'utils', 'signapp.jar'));
 
 			finish();
@@ -283,6 +288,26 @@ function packagingSDK7z(finish){
 				console.log('compressing ok');
 			}
 			finish();
+		});
+}
+
+function unzip7za(src, dest, callback){
+//7za.exe x "D:\TitaniumCI\mobilesdk-3.0.0.v20121030170824-win32.zip" -o"D:\TitaniumCI\workdir" -y -bd	
+	var packer = require('child_process');
+	var async = require('async');
+	var cmd7za = find7za().toString() + ' x "' + src + '" -o"' + dest + '" -y -bd';
+	//unzipping
+	console.log('7z cmd: ' + cmd7za);
+	packer.exec(
+		cmd7za,
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			if(err != null){
+				console.log('7za finished with errors:\n' + stderr);
+			}else{
+				console.log('compressing ok');
+			}
+			callback(null);
 		});	
 }
 
@@ -301,12 +326,10 @@ function packagingSDKLinux(finish){
 		function (err, stdout, stderr) {
 			console.log(stdout);
 			if(err != null){
-				console.log('failed packaging for tizen platform');
-				console.log(stderr);
-				finish();
+				console.log('failed packaging for tizen platform with errors:\n' + stderr);
 			}else{
 				console.log('compressing ok');
 			}
-			finish();
+			finish(null);
 		});	
 }

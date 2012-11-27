@@ -13,6 +13,7 @@ var ti = require('titanium-sdk'),
 	cleanCSS = require('clean-css'),
 	afs = appc.fs,
 	xml = appc.xml,
+	async = require('async'),
 	parallel = appc.async.parallel,
 	uglify = require('uglify-js'),
 	fs = require('fs'),
@@ -211,28 +212,28 @@ function build(logger, config, cli, finished) {
 					function(next){
 						this.minifyJavaScript();
 						next(null, 'ok');
-					}, function(next){
+					}.bind(this), function(next){
 						this.createFilesystemRegistry();
 						next(null, 'ok');
 
-					}, function(next){
+					}.bind(this), function(next){
 						this.createIndexHtml();
 						next(null, 'ok');
 
-					}, function(next){
+					}.bind(this), function(next){
 						this.createConfigXml();
 						next(null, 'ok');
 
-					}, function(next){
-						signTizenApp(function(){
+					}.bind(this), function(next){
+						this.signTizenApp(logger, function(){
 							next(null, 'ok');
 						});
-					}, function(next){
+					}.bind(this), function(next){
 						this.wgtPackaging7z(logger, function(){
 							finished && finished.call(this);	
 						});
 						next(null, 'ok');
-					}
+					}.bind(this)
 					], function(err){
 						if(err) 
 							console.log(err)
@@ -994,9 +995,9 @@ build.prototype = {
 		}else{
 			console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
 		}
-	}
+	},
 
-	signTizenApp: function(callback){
+	signTizenApp: function(logger, callback){
 		logger.info(__('signing application in  "%s" ', this.buildDir));		
 		var packer = require('child_process');
 		var async = require('async');
