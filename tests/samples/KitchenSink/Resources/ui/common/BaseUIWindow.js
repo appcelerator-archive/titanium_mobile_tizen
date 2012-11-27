@@ -3,12 +3,10 @@ function BaseUIWindow(title) {
 		title:title,
 		backgroundColor:'white'
 	});
-	
-	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
-	
+
 	// create table view data object
 	var data = [
-		{title:'Tab Groups', hasChild:!isMobileWeb, test:'ui/common/baseui/tab_groups', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
+        {title:'Tab Groups', hasChild:true, test:'ui/common/baseui/tab_groups', color:"#000"},
 		{title:'Window Properties', hasChild:true, test:'ui/common/baseui/window_properties'},
 		{title:'Window Layout', hasChild:true, test:'ui/common/baseui/window_layout'},
 		{title:'Window (Standalone)', hasChild:true, test:'ui/common/baseui/window_standalone'},
@@ -58,6 +56,7 @@ function BaseUIWindow(title) {
 	{
 		if (e.rowData.test)
 		{
+		    self.tabGroup = theTabGroup;
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title:e.rowData.title,containingTab:self.containingTab,tabGroup:self.tabGroup});
 			if (Ti.Platform.name == "android") {

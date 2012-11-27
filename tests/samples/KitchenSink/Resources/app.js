@@ -42,7 +42,7 @@ if (Ti.version < 2.0 ) {
 	}
 
 	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-	var theTabGroup = new ApplicationTabGroup();
+	theTabGroup = new ApplicationTabGroup();
 	if (osname === 'iphone' || osname === 'ipad') {
 		theTabGroup.open({transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
 	}
