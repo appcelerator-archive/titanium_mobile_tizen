@@ -20,8 +20,8 @@ package com.appcelerator.tizen.signapp;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -70,7 +70,7 @@ public class CreateSignature {
 			File signatureFile = new File(pathToProject + "signature1.xml");
 
 			KeyStore ks = KeyStore.getInstance(inputParams.getKeystoreType());
-			FileInputStream fis = new FileInputStream(inputParams.getCertPath());
+			InputStream fis = InputProccesor.class.getClassLoader().getResourceAsStream(inputParams.getCertPath());
 
 			// load the keystore
 			ks.load(fis, keystorePass.toCharArray());

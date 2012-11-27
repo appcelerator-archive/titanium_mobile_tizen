@@ -19,7 +19,7 @@ public class InputProccesor {
 	private static final String ALIAS_INPUT = "-alias";
 	private static final String KEY_PASS_INPUT = "-keypass";
 
-	private static final String CERT_FILE_PATH_DEFAULT = "key/keystore.jks";
+	private static final String CERT_FILE_PATH_DEFAULT = "com/appcelerator/tizen/signapp/keystore.jks";
 	private static final String KEYSTORE_TYPE_DEFAULT = "JKS";
 	private static final String KEYSTORE_PASS_DEFAULT = "changeit";
 	private static final String ALIAS_INPUT_DEFAULT = "test";
@@ -38,12 +38,13 @@ public class InputProccesor {
 	}
 
 	public void showErrorOnConsole() throws WrongInputException {
-		System.err.println("You enter wrong parameters. Use:\nFor example java -jar signapp.jar -sig_proj C:/temp/");
+		System.err.println("You enter wrong parameters. Use:\nFor example java -jar signapp.jar -sig_proj C:/temp/ \n or \n java -jar signapp.jar C:/temp/");
 		throw new WrongInputException();
 	}
 
 	public void proccesInputData(String[] consoleArg)
 			throws WrongInputException {
+
 		if (consoleArg == null || consoleArg.length == 0)
 			showErrorOnConsole();
 
