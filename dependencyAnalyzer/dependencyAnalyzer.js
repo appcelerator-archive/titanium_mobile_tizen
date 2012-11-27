@@ -55,7 +55,6 @@ for (i = 0, len = fileList.length; i < len; i++) {
 var resultDep = JSON.stringify(dependencyMap, null, '\t');
 if(process.platform === 'win32'){
 	//quick and dirty workarround, it generates lots \\ in code and it cause error in Titanium applications 
-	//resultDep = resultDep.replace('\\\\', '/');
 	resultDep = resultDep.replace(/\\\\/gi, '/');
 	
 }

@@ -292,7 +292,6 @@ function packagingSDK7z(finish){
 }
 
 function unzip7za(src, dest, callback){
-//7za.exe x "D:\TitaniumCI\mobilesdk-3.0.0.v20121030170824-win32.zip" -o"D:\TitaniumCI\workdir" -y -bd	
 	var packer = require('child_process');
 	var async = require('async');
 	var cmd7za = find7za().toString() + ' x "' + src + '" -o"' + dest + '" -y -bd';

@@ -947,8 +947,7 @@ build.prototype = {
 		}
 		
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
-		
-		//this.logger.info (__("Tolik: looking into dependenciesMap '%s'.", dep[1]) + '\n');
+
 		var deps = this.dependenciesMap[dep[1]];
 		if(deps){
 			for (var i = 0, l = deps.length; i < l; i++) {
@@ -967,8 +966,6 @@ build.prototype = {
 		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
-		//var cmd = '7z a ' + tizenBuildDir + '\\tizenapp.zip' + ' ' + tizenBuildDir+'\\*';
-
 		var async = require('async');
 
 		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
