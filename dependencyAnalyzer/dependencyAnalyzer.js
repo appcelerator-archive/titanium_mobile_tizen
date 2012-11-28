@@ -52,5 +52,11 @@ for (i = 0, len = fileList.length; i < len; i++) {
 		}
 	}
 }
-fs.writeFileSync(path.join(sourceDir, 'dependencies.json'), JSON.stringify(dependencyMap, null, '\t'));
+var resultDep = JSON.stringify(dependencyMap, null, '\t');
+if(process.platform === 'win32'){
+	//quick and dirty workarround, it generates lots \\ in code and it cause error in Titanium applications 
+	resultDep = resultDep.replace(/\\\\/gi, '/');
+	
+}
+fs.writeFileSync(path.join(sourceDir, 'dependencies.json'), resultDep);
 console.log('Completed in ' + ((Date.now() - startTime) / 1000) + 's');

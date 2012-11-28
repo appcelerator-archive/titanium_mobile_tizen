@@ -24,6 +24,9 @@ function ApplicationTabGroup() {
 		window: baseUIWin
 	});
 	baseUIWin.containingTab = baseUITab;
+	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
+	if(isMobileWeb)
+	   baseUIWin.tabGroup = self;
 	self.addTab(baseUITab);
 	
 	var controlsTab = Ti.UI.createTab({

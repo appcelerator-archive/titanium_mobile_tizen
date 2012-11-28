@@ -22,7 +22,7 @@ function MashupsWindow(title) {
 		data.push({title:'RSS', hasChild:true, test:'ui/handheld/ios/mashups/rss', barColor:'#b40000'});
 	}
 	 
-	data.push({title:'SOAP', hasChild:!isMobileWeb, test:'ui/common/mashups/soap', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	data.push({title:'SOAP', hasChild:true, test:'ui/common/mashups/soap', touchEnabled:true, color:"#aaa"});
 	
 	// create table view
 	for (var i = 0; i < data.length; i++ ) { data[i].color = '#000'; data[i].font = {fontWeight:'bold'} };

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="%%WIDGET_ID%%" version="1.0" viewmodes="fullscreen">
-    <icon src="icon.png"/>
+    <icon src="appicon.png"/>
     <content src="index.html"/>
 <name>%%WIDGET_NAME%%</name>
 <tizen:application id="%%APP_ID%%" required_version="1.0"/>
 %%FEATURES_LIST%%
+<tizen:appservice src="index.html" operation="http://tizen.org/appcontrol/operation/pick"/>
 </widget>

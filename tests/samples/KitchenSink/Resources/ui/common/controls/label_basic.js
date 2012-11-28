@@ -1,6 +1,12 @@
 function label_basic() {
 	var win = Ti.UI.createWindow();
 	
+	var scrollView = Ti.UI.createScrollView({
+		showVerticalScrollIndicator: true,
+		height: '100%',
+		width: '100%'
+	});
+	
 	var l1 = Titanium.UI.createLabel({
 		id:'font_label_test',
 		text:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
@@ -9,7 +15,7 @@ function label_basic() {
 		textAlign:'center'
 	});
 	
-	win.add(l1);
+	scrollView.add(l1);
 	
 	var l2 = Titanium.UI.createLabel({
 		text:'Appcelerator',
@@ -23,7 +29,7 @@ function label_basic() {
 		textAlign:'center'
 	});
 	
-	win.add(l2);
+	scrollView.add(l2);
 	
 	var b1 = Titanium.UI.createButton({
 		title:'Hide/Show',
@@ -47,7 +53,7 @@ function label_basic() {
 			visible=true;
 		}
 	});
-	win.add(b1);
+	scrollView.add(b1);
 	
 	var b2 = Titanium.UI.createButton({
 		title:'Change Label 2',
@@ -75,7 +81,7 @@ function label_basic() {
 			changed=false;
 		}
 	});
-	win.add(b2);
+	scrollView.add(b2);
 	
 	var b3 = Titanium.UI.createButton({
 		title:'Label 1 background',
@@ -99,16 +105,18 @@ function label_basic() {
 			bg = false;
 		}
 	});
-	win.add(b3);
+	scrollView.add(b3);
 	
 	var size = Ti.UI.createLabel({
 		height:30,
 		width:300,
 		font:{fontSize:14},
 		color:'#777',
-		bottom:10
+		top: 380
 	});
-	win.add(size);
+	scrollView.add(size);
+	
+	win.add(scrollView);
 	
 	return win;
 }

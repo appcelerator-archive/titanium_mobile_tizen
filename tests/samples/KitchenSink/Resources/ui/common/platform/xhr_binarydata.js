@@ -1,4 +1,5 @@
 function xhr_binary() {
+	
 	var win = Titanium.UI.createWindow();
 	
 	var l = Titanium.UI.createLabel({
@@ -23,9 +24,15 @@ function xhr_binary() {
 	xhr.onload = function()
 	{
 		var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,'ti.png');
+		
+		//ImageView will support Blob and File on Tizen/MobileWeb if we implement Base64 in Blob
+		//The next row demonstrate it. 
+		//this.responseData._data = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+		
 		f.write(this.responseData);
 		imageView.image = f.nativePath;
 	};
+	
 	// open the client (and test HTTPS)
 	xhr.open('GET','http://www.appcelerator.com/wp-content/themes/appcelerator/img/a-logo.png');
 	
