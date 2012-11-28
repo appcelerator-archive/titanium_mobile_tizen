@@ -523,7 +523,7 @@ build.prototype = {
 		
 		// uncomment next line to bypass module caching (which is ill advised):
 		//TODO: tolik, return it back, do not bypass caching
-		 this.modulesToCache = [];
+		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
@@ -997,10 +997,10 @@ build.prototype = {
 	signTizenApp: function(logger, callback){
 		logger.info(__('signing application in  "%s" ', this.buildDir));		
 		var packer = require('child_process');
-		var async = require('async');
-		var cmdSign = 'java -jar signapp.jar -sig_proj ' +this.buildDir;
-
-		logger.debug(__('Signer commandline: "%s" ', cmdSign));
+		var async = require('async');//
+		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
+		//logger.debug(__('Signer commandline: "%s" ', cmdSign));
+		console.log('Signer commandline: ' + cmdSign);
 		packer.exec(
 			cmdSign,
 			function (err, stdout, stderr) {
