@@ -10,7 +10,7 @@ function textfield_list(_args) {
 		{title:'The Rest', hasChild:true, test:'ui/common/controls/textfield_therest'}
 	];
 	
-	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
+	if (!(Ti.Platform.osname === 'mobileweb' /*|| Ti.Platform.osname === 'tizen'*/)) {
 		data.push({title:'Keyboard', hasChild:true, test:'ui/common/controls/textfield_keyboards'});
 		data.push({title:'Border Style', hasChild:true, test:'ui/common/controls/textfield_borders'});
 	}
@@ -23,7 +23,9 @@ function textfield_list(_args) {
 		data.push({title:'Textfield in scrollview', hasChild:true, test:'ui/handheld/ios/controls/textfield_scrollview'});
 	} else if (Titanium.Platform.name == 'android') {
 		data.push({title:'Soft Input Focus', hasChild:true, test:'ui/handheld/android/controls/textfield_softinputfocus'});
-	}
+	} else if (Titanium.Platform.name == 'tizen') {
+		data.push({title:'Soft Input Focus', hasChild:true, test:'ui/handheld/tizen/controls/textfield_softinputfocus'});
+	} 
 	
 	// create table view
 	var tableview = Titanium.UI.createTableView({
