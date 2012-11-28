@@ -49,9 +49,6 @@ function openEmail() {
 }
 */
 
-
-
-
 function email_dialog() {
 	var win = Ti.UI.createWindow();
 	
@@ -88,19 +85,21 @@ function email_dialog() {
 				} else {
 					emailDialog.setMessageBody('Appcelerator Titanium Rocks!');
 				}
-		
-				// attach a blob
-				emailDialog.addAttachment(event.media);
-				
-				// attach a file
-				var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'etc/cricket.wav');
-				emailDialog.addAttachment(f);
-				
+				//The attachment does not supported on Tizen yet
+				if(Ti.Platform.osname != 'tizen') {
+					// attach a blob
+					emailDialog.addAttachment(event.media);
+					
+					// attach a file
+					var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'etc/cricket.wav');
+					emailDialog.addAttachment(f);
+				}
+				//"complete" event does not support on mobileWeb base platform
 				emailDialog.addEventListener('complete',function(e)
 				{
 					if (e.result == emailDialog.SENT)
 					{
-						if (Ti.Platform.osname != 'android') {
+						if (Ti.Platform.osname != 'android' && Ti.Platform.osname != 'tizen') {
 							// android doesn't give us useful result codes.
 							// it anyway shows a toast.
 							alert("message was sent");
@@ -129,42 +128,4 @@ function email_dialog() {
 	return win;
 };
 
-
-//This function is different with function email_dialog for Android and iOS:
-//1.removed the dependency from PhotoGallery
-//2.removed the "complete" event
-//3.removed the attachment functionality (attachment does not supported on Tizen)
-function email_dialogTizenWeb() {
-	var win = Ti.UI.createWindow();
-	
-	// initialize to all modes
-	win.orientationModes = [
-		Titanium.UI.PORTRAIT,
-		Titanium.UI.LANDSCAPE_LEFT,
-		Titanium.UI.LANDSCAPE_RIGHT
-	];
-	
-	win.addEventListener('open', function() {
-		var emailDialog = Titanium.UI.createEmailDialog();
-		if (!emailDialog.isSupported()) {
-			Ti.UI.createAlertDialog({
-				title:'Error',
-				message:'Email not available'
-			}).show();
-			return;
-		}
-		emailDialog.setSubject('Hello from Titanium!');
-		emailDialog.setToRecipients(['foo@yahoo.com']);
-		emailDialog.setCcRecipients(['bar@yahoo.com']);
-		emailDialog.setBccRecipients(['blah@yahoo.com']);
-		emailDialog.setMessageBody('Appcelerator Titanium Rocks!');
-		emailDialog.open();
-	});			
-	
-	return win;
-};
-if(Ti.Platform.osname == 'tizen' || Ti.Platform.osname == 'mobileweb') {
-	module.exports = email_dialogTizenWeb;
-} else {
-	module.exports = email_dialog;
-}
+module.exports = email_dialog;
