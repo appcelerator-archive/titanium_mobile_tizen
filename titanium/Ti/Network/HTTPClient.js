@@ -37,8 +37,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						this._completed = 1;
 						c.readyState = this.DONE;
 						
-						console.log(c.allResponseHeaders);
-
 						if (!this._aborted) {
 							if (f = this.file) {
 								f = Filesystem.getFile(f);

@@ -17,7 +17,7 @@ function ControlsWindow(title) {
 		{title:'Picker', hasChild:true, test:'ui/common/controls/picker'}
 	];
 	
-	if (!(Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen')) {
+	if (!(Ti.Platform.osname === 'mobileweb')) {
 		data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});
 		data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'});
 		//data.push({title:'Picker', hasChild:true, test:'ui/common/controls/picker'});
