@@ -13,6 +13,7 @@ var ti = require('titanium-sdk'),
 	cleanCSS = require('clean-css'),
 	afs = appc.fs,
 	xml = appc.xml,
+	async = require('async'),
 	parallel = appc.async.parallel,
 	uglify = require('uglify-js'),
 	fs = require('fs'),
@@ -207,16 +208,40 @@ function build(logger, config, cli, finished) {
 					});
 				}
 			], function () {
-				this.minifyJavaScript();
-				this.createFilesystemRegistry();
-				this.createIndexHtml();
-				this.createConfigXml();
-				//finished && finished.call(this);
+				async.series([
+					function(next){
+						this.minifyJavaScript();
+						next(null, 'ok');
+					}.bind(this), function(next){
+						this.createFilesystemRegistry();
+						next(null, 'ok');
 
-				//TODO: create wgt				
-				this.wgtPackaging7z(logger, function(){
-					finished && finished.call(this);	
-				})				
+					}.bind(this), function(next){
+						this.createIndexHtml();
+						next(null, 'ok');
+
+					}.bind(this), function(next){
+						this.createConfigXml();
+						next(null, 'ok');
+
+					}.bind(this), function(next){
+						this.signTizenApp(logger, function(){
+							next(null, 'ok');
+						});
+					}.bind(this), function(next){
+						this.wgtPackaging7z(logger, function(){
+							finished && finished.call(this);	
+						});
+						next(null, 'ok');
+					}.bind(this)
+					], function(err){
+						if(err) 
+							console.log(err)
+						else {
+
+							console.log('Failed')
+						}
+				});
 			});
 		});
 	}.bind(this));
@@ -922,8 +947,7 @@ build.prototype = {
 		}
 		
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
-		
-		//this.logger.info (__("Tolik: looking into dependenciesMap '%s'.", dep[1]) + '\n');
+
 		var deps = this.dependenciesMap[dep[1]];
 		if(deps){
 			for (var i = 0, l = deps.length; i < l; i++) {
@@ -937,17 +961,11 @@ build.prototype = {
 		}
 	},
 
-	wgtPackaging7z: function(logger, packagingFinished){
-		//TODO: signing required
-		//TODO: clean up code.
-		//TODO: add Linux support
+	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));
-
 		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
-		//var cmd = '7z a ' + tizenBuildDir + '\\tizenapp.zip' + ' ' + tizenBuildDir+'\\*';
-
 		var async = require('async');
 
 		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
@@ -960,12 +978,11 @@ build.prototype = {
 				if(err != null){
 					console.log('failed packaging for tizen platform');
 					console.log(stderr);
-					packagingFinished();
 				}else{
 					console.log('compressing ok');
-					packagingFinished();
 				}
-			});		
+				callback();
+			});
 	},
 
 	find7za: function(){	
@@ -975,9 +992,28 @@ build.prototype = {
 		}else{
 			console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
 		}
+	},
+
+	signTizenApp: function(logger, callback){
+		logger.info(__('signing application in  "%s" ', this.buildDir));		
+		var packer = require('child_process');
+		var async = require('async');
+		var cmdSign = 'java -jar signapp.jar -sig_proj ' +this.buildDir;
+
+		logger.debug(__('Signer commandline: "%s" ', cmdSign));
+		packer.exec(
+			cmdSign,
+			function (err, stdout, stderr) {
+				console.log(stdout);
+				if(err != null){
+					console.log('Signing failed ');
+					console.log(stderr);
+				}else{
+					console.log('signing ok');
+				}
+				callback();
+			});
 	}
-
-
 };
 
 function badInstall(msg) {
