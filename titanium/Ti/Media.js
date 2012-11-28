@@ -1,4 +1,4 @@
-define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
+define(["Ti/_/Evented", "Ti/_/lang", "Ti/Blob"], function(Evented, lang, Blob) {
 
 	return lang.setObject("Ti.Media", Evented, {
 
@@ -41,8 +41,57 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 
 		//beep: function() {},
 		
-		openPhotoGallery: function(){
-			//TODO: need to implement;
+		openPhotoGallery: function(args){
+			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*');			 
+			var serviceReplyCB = {
+			   // callee now sends a reply
+				onsuccess: function(reply) {   // reply -> ApplicationServiceData[0]
+					var path = reply[0].value.toString();
+					var filename = path.substring(path.lastIndexOf('/')+1);
+					function readFromStream(fileStream){
+							var contents = fileStream.readBase64(fileStream.bytesAvailable);
+							fileStream.close();
+							
+							var blob = new Blob({
+								data: contents,
+								length: contents.length,
+								mimeType: 'image/jpeg'
+						    });
+							
+							var event = {
+								cropRect: null,
+								media: blob,
+								mediaType: Ti.Media.MEDIA_TYPE_PHOTO
+							}
+							args.success(event);
+					};
+					function successCB(dir) {
+						var file = dir.resolve(filename);
+						file.openStream(
+							// open for reading
+							'r',
+							// success callback - read and display the contents of the file
+							readFromStream,
+							// error callback
+							function(e) {console.log("Error with open stream" + e.message)}
+						);	
+					};
+					tizen.filesystem.resolve(
+						'images', 
+						successCB, 
+						function(e) { console.log("Error" + e.message);}, 
+						"rw");
+				},
+			   // Something went wrong 
+				onfail: args.error 
+			}
+			tizen.application.launchService(
+				service,
+				null,
+				function() { console.log("Launch service succeeded"); }, 
+				function(e) { console.log("Launch service failed. Reason : " + e.name); },  
+				serviceReplyCB	
+		   );
 		},
 		
 		createAudioPlayer: function(args) {
