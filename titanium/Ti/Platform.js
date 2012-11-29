@@ -44,9 +44,15 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback, onErrorCallback);
 		
 		//Get our application info.
-		var appInfo = tizen.application.getAppInfo();
+		//Workaround for simulator. It throws exception because id is undefined. On Emulator works fine.
+		try {
+			var appInfo = tizen.application.getAppInfo();
+			Platform.constants.__values__.id = appInfo.id; //The unique ID for an installed application. 
+		} catch (e) {
+			Platform.constants.__values__.id = "ID001"; //The unique ID for an installed application. 
+		}
 		//Applications's globally-unique ID (UUID).
-		Platform.constants.__values__.id = appInfo.id; //The unique ID for an installed application. 
+		
 	};
 
 	function onErrorCallback(error) {
@@ -64,6 +70,7 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		//};
 		try{                                                                                                      
 				Platform.constants.__values__.model = systemInfoDevice.model;
+				console.log(Platform.constants.__values__.model);
                                 //console.log("Platform.model is set to " + systemInfoDevice.model);
 
 				Platform.constants.__values__.version = systemInfoDevice.version;
