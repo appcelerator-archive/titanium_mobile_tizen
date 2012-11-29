@@ -20,23 +20,28 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 	
 	return declare("Ti.Media.Sound", Evented, {
 		_currentState: STOPPED,
+		_volume: 1.0,
+		_looping: false,
 		constructor: function() {
 			this._handles = [];
 		},
 		properties: {
 			url: {
 				set: function(value) {
+					if (!value || value === this.properties.__values__.url) {
+						return;
+					}
 					this.constants.__values__.playing 	= false;
 					this.constants.__values__.paused 	= false;
 					this._currentState = STOPPED;
 					this.properties.__values__.url = value;
-					this._createAudio();
+					this._createAudio(true/*Release*/);
 					return value;
 				}
 			},
 			volume: {
 				get: function() {
-					return this._audio ? this._audio.volume : 1.0;
+					return this._volume;
 				},
 				set: function(value) {
 					if (value > 1.0 )
@@ -44,6 +49,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					else if (value < 0)	
 						value = 0;
 					
+					this._volume = value;
 					this._audio && (this._audio.volume = value);
 					return value;
 				}
@@ -54,16 +60,15 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				},
 				set: function(value) {
 					this._audio && (this._audio.currentTime = value);
-					console.log("this._audio=" + this._audio +"; currentTime="+this._audio.currentTime + "; "+value);
-					console.dir(this._audio);
 					return value;
 				}
 			},
 			looping: {
 				get: function() {
-					return this._audio ? this._audio.loop : false; 
+					return this._looping; 
 				},
 				set: function(value) {
+					this._looping = value;
 					this._audio && (this._audio.loop = value);
 					return value;
 				}
@@ -78,7 +83,6 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this._currentState = newState;
 			this.constants.__values__.playing 	= PLAYING === newState;
 			this.constants.__values__.paused 	= PAUSED === newState;
-			
 			var evt = {};
 			evt['src'] = this;
 			switch (this._currentState) {
@@ -101,7 +105,17 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				this.constants.__values__.duration = d;
 			}
 		},
-		_createAudio: function() {
+		_error: function() {
+			var msg = "Unknown error";
+			switch (this._audio.error.code) {
+				case 1: msg = "Aborted"; break;
+				case 2: msg = "Decode error"; break;
+				case 3: msg = "Network error"; break;
+				case 4: msg = "Unsupported format";
+			}
+			this._changeState(ERROR, "error: " + msg);
+		},
+		_createAudio: function(isRelease) {
 			var audio = this._audio,
 				url = this.url;
 			
@@ -109,7 +123,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				return;
 			}
 			
-			if (audio && audio.parentNode) {
+			if (audio && audio.parentNode && !isRelease) {
 				return audio;
 			}
 			
@@ -118,8 +132,12 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			audio = this._audio = dom.create("audio");
 			
 			this._handles = [
-				on(audio, "playing", this, function() {this._changeState(PLAYING, "playing");}),
-				on(audio, "play", this, function() {this._changeState(STARTING, "starting");}),
+				on(audio, "playing", this, function() {
+					this._changeState(PLAYING, "playing");
+				}),
+				on(audio, "play", this, function() {
+					this._changeState(STARTING, "starting");
+				}),
 				on(audio, "pause", this, function() {
 					if (this._currentState === STOPPING) {
 						this._stop();
@@ -127,7 +145,6 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 						this._changeState(PAUSED, "paused");	
 					}
 				}),
-				
 				on(audio, "ended", this, function() {
 					this._changeState(ENDED, "ended");
 				}),
@@ -137,18 +154,10 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				on(audio, "timeupdate", this, function() {
 					this._currentState === STOPPING && this.pause();
 				}),
-				on(audio, "error", this, function() {
-					var msg = "Unknown error";
-					switch (audio.error.code) {
-						case 1: msg = "Aborted"; break;
-						case 2: msg = "Decode error"; break;
-						case 3: msg = "Network error"; break;
-						case 4: msg = "Unsupported format";
-					}
-					
-					this._changeState(ERROR, "error: " + msg);
-				}),
+				on(audio, "error", this, "_error"),
 				on(audio, "canplay", this, function() {
+					this.volume = this._volume;
+					this.looping = this._looping;
 					this._changeState(INITIALIZED, "initialized");
 				}),				
 				on(audio, "durationchange", this, "_durationChange")
@@ -165,7 +174,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					type: match && mimeTypes[match[1]]
 				}, audio);
 			}
-
+			
 			return audio;
 		},
 		release: function() {
@@ -181,41 +190,46 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this._audio = null;
 		},
 		pause: function() {
-			this._currentState === PLAYING && this._createAudio().pause();
+			var audio;
+			this._currentState === PLAYING && (audio = this._createAudio()) && audio.pause();
 		},
 		start: function() {
-			this._currentState !== PLAYING && this._createAudio().play();
+			var audio;
+			this._currentState !== PLAYING && (audio = this._createAudio()) && audio.play();
+		},
+		play: function() {
+			this.start();
 		},
 		_stop: function() {
-			var v = this._audio;
-			v.currentTime = 0;
+			var a = this._audio;
+			a.currentTime = 0;
 			this._changeState(STOPPED, "stopped");
-			
+
 			//fix bug related to "Stop/currentTime=0" !!!
-			if (v.currentTime !== 0) {
-				var prevVolume = this.properties.__values__.volume;
-				v.load();
-				v.volume = prevVolume;
+			if (a.currentTime !== 0) {
+				a.load();
+				this.volume = this._volume;//restore volume
+				this.looping = this._looping;
 			}
 		},
 		stop: function() {
-			var v = this._audio;
+			var a = this._audio;
 			
-			if (!v)
+			if (!a)
 				return;
 				
 			if (this._currentState === PAUSED) {
 				this._stop();
 			} else {
 				this._changeState(STOPPING, "stopping");
-				v.pause();
+				a.pause();
 			}
 		},
 		reset: function() {
-			this.stop();
+			this.time = 0;
 		},
 		isLooping: function() {
-				return this._audio ? this._audio.loop : false; 
+				return this._looping;
 		},
 		isPaused: function() {
 				return this.constants.__values__.paused; 
