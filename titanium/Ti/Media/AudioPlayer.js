@@ -16,34 +16,42 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		STOPPED = 5,
 		STOPPING = 6,
 		WAITING_FOR_DATA = 7,
-		WAITING_FOR_QUEUE = 8;
+		WAITING_FOR_QUEUE = 8,
+		ENDED = 9,
+		ABORT = 10,
+		ERROR = 11;
 	
 	return declare("Ti.Media.AudioPlayer", Evented, {
 		_currentState: STOPPED,
+		_volume: 1.0,
 		constructor: function() {
 			this._handles = [];
 		},
 		properties: {
 			url : {
 				set: function(value) {
+					if (!value || value === this.properties.__values__.url) {
+						return;
+					}
 					this.constants.__values__.playing 	= false;
 					this.constants.__values__.paused 	= false;
 					this._currentState = STOPPED;
 					this.properties.__values__.url = value;
-					this._createAudio();
+					this._createAudio(true/*Release*/);
 					return value;
 				}
 			},
 			volume : {
 				get: function() {
-					return this._audio ? this._audio.volume : 1.0;
+					return this._volume;
 				},
 				set: function(value) {
 					if (value > 1.0 )
 						value = 1.0;
 					else if (value < 0)	
 						value = 0;
-						
+					
+					this._volume = value;
 					this._audio && (this._audio.volume = value);
 					return value;
 				}
@@ -70,12 +78,12 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		},
 		_changeState: function(newState, description) {
 			this._currentState = newState;
+			this.constants.__values__.playing 	= PLAYING === newState;
+			this.constants.__values__.paused 	= PAUSED === newState;
 			var evt = {};
 			evt['state'] = this.constants.__values__.state = this._currentState;
 			evt['src'] = this;
 			evt['description'] = description;
-			this.constants.__values__.playing 	= PLAYING === newState;
-			this.constants.__values__.paused 	= PAUSED === newState;
 			this.fireEvent('change', evt);
 		},
 		
@@ -88,15 +96,16 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			}
 		},
 		*/
-		_createAudio: function() {
+		
+		_createAudio: function(isRelease) {
 			var audio = this._audio,
-				url = this.url;
-			
+			url = this.url;
+		
 			if (!url) {
 				return;
 			}
 			
-			if (audio && audio.parentNode) {
+			if (audio && audio.parentNode && !isRelease) {
 				return audio;
 			}
 			
@@ -116,22 +125,23 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				}),
 				
 				on(audio, "ended", this, function() {
-					this._changeState(STOPPED, "ended,stopped");
+					//this._changeState(ENDED, "ended");
+					this._stop();
 				}),
 				on(audio, "abort", this, function() {
-					this._changeState(STOPPED, "abort,stopped");
+					//this._changeState(ABORT, "abort");
+					this._stop();
 				}),
 				
 				on(audio, "timeupdate", this, function() {
 					var curTime = this._audio.currentTime * 1000;
 					this.constants.__values__.progress = curTime;
-					
 					this.fireEvent( 'progress', {'progress': curTime} );
 					this._currentState === STOPPING && this.pause();
 				}),
 				on(audio, "error", this, function() {
 					var msg = "Unknown error";
-					switch (audio.error.code) {
+					switch (this._audio.error.code) {
 						case 1: msg = "Aborted"; break;
 						case 2: msg = "Decode error"; break;
 						case 3: msg = "Network error"; break;
@@ -141,14 +151,13 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					Why the error event is missing in Titanium API !!! 
 					So it will be description in 'state' event
 					*/
-					this._changeState(STOPPED, "error: " + msg + ", stopped");
+					//this._changeState(ERROR, "error: " + msg);
+					this.stop();
 				}),
 				on(audio, "canplay", this, function() {
+					this.volume = this._volume;
 					this._changeState(INITIALIZED, "initialized");
-					
-					/* It is commented because the autoplay is missing in Titanium API */
 					this.autoplay && audio.play();
-					//this._currentState === STOPPED && this.autoplay && audio.play();
 				})
 				
 				/* It is commented because the duration is missing in Titanium API */
@@ -199,36 +208,39 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this._audio = null;
 		},
 		pause: function() {
-			this._currentState === PLAYING && this._createAudio().pause();
+			var audio;
+			this._currentState === PLAYING && (audio = this._createAudio()) && audio.pause();
 		},
 		start: function() {
-			this._currentState !== PLAYING && this._createAudio().play();
+			var audio;
+			this._currentState !== PLAYING && (audio = this._createAudio()) && audio.play();
+		},
+		play: function() {
+			this.start();
 		},
 		_stop: function() {
-			var v = this._audio;
-			v.currentTime = 0;
+			var a = this._audio;
+			a.currentTime = 0;
 			this._changeState(STOPPED, "stopped");
-			
+
 			//fix bug related to "Stop/currentTime=0" !!!
-			if (v.currentTime !== 0) {
-				var prevVolume = this.properties.__values__.volume;
-				v.load();
-				v.volume = prevVolume;
+			if (a.currentTime !== 0) {
+				a.load();
+				this.volume = this._volume;
 			}
 		},
 		stop: function() {
-			var v = this._audio;
+			var a = this._audio;
 			
-			if (!v)
+			if (!a)
 				return;
 				
 			if (this._currentState === PAUSED) {
 				this._stop();
 			} else {
 				this._changeState(STOPPING, "stopping");
-				v.pause();
+				a.pause();
 			}
 		}
 	});
-
 });
