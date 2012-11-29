@@ -40,35 +40,71 @@ function tv_row_insert() {
 			case 'Insert Row Below - 1':
 				var row = tableView.getIndexByName('3');
 				data = {title:'New Row After Row3'};
-				tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});	
+				} else {
+					tableView.insertRowAfter(row,data);
+				}				
+				
 				break;
 			case 'Insert Row Below - 2':
 				var row = tableView.getIndexByName('7');
 				data = {title:'New Row After Row7'};
-				tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
-	
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+				} else {
+					tableView.insertRowAfter(row,data);
+				}
+				
 				break;
 			case 'Insert Row Above - Header - 1':
 				var row = tableView.getIndexByName('8');
 				data = {title:'New row before row 8', header:'Before header (1)'};
-				tableView.insertRowBefore(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.insertRowBefore(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});	
+				} else {
+					tableView.insertRowBefore(row,data);
+				}
+				
 				break;
 			case 'Insert Row Above - Header - 2':
 				var row = tableView.getIndexByName('10');
 				data = {title:'New row before row 10', header:'Before header (2)'};
-				tableView.insertRowBefore(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
-				tableView.scrollToIndex(10,{position:Titanium.UI.iPhone.TableViewScrollPosition.MIDDLE,animated:true});
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.insertRowBefore(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+					tableView.scrollToIndex(10,{position:Titanium.UI.iPhone.TableViewScrollPosition.MIDDLE,animated:true});
+				} else {
+					tableView.insertRowBefore(row,data);
+					tableView.scrollToIndex(10);
+				}
+				
 				break;
 			case 'Insert Row Below - Header':
 				var row = tableView.getIndexByName('13');
 				data = {title:'New row after row 13', header:'After header'};
-				tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.insertRowAfter(row,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});	
+				} else {
+					tableView.insertRowAfter(row,data);
+				}
+				
 				break;
 			case 'Insert Row w/o animation (below)':
 				var row = tableView.getIndexByName('3');
 				data = {title:'New Row After Row3 w/o animation'};
 				tableView.insertRowAfter(row,data);
-				tableView.scrollToIndex(3,{position:Titanium.UI.iPhone.TableViewScrollPosition.MIDDLE,animated:false});
+				
+				if (Titanium.Platform.name == 'iPhone OS') {
+					tableView.scrollToIndex(3,{position:Titanium.UI.iPhone.TableViewScrollPosition.MIDDLE,animated:false});	
+				} else {
+					tableView.scrollToIndex(3);
+				}
+				
 				break;
 		}
 	

@@ -52,7 +52,11 @@ function tv_row_append() {
 			}
 			else
 			{
-				tableview.appendRow(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});
+				if (Ti.Platform.osname === 'iPhone OS') {
+					tableview.appendRow(data, {animationStyle:Titanium.UI.iPhone.RowAnimationStyle.LEFT});	
+				} else {
+					tableview.appendRow(data);
+				}
 			}
 			newRowCount++;
 		}
