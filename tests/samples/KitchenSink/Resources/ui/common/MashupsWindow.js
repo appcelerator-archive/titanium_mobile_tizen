@@ -4,7 +4,7 @@ function MashupsWindow(title) {
 		backgroundColor:'white'
 	});
 
-	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
+	var isMobileWeb = (Ti.Platform.osname === 'mobileweb');
 	
 	// create table view data object
 	var data = [
