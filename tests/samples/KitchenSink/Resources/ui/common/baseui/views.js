@@ -1,7 +1,7 @@
 function views(_args) {
 	var win = Ti.UI.createWindow({backgroundColor:'#fff'});
 	
-	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
+	var isMobileWeb = (Ti.Platform.osname === 'mobileweb');
 	
 	//create table view data object
 	var data = [
