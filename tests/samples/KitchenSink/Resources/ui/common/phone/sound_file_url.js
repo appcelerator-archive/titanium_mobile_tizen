@@ -2,7 +2,7 @@ function sound_file_url() {
 	var win = Titanium.UI.createWindow();
 	
 	var file = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory,'etc/cricket.wav');
-	var file2 = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,'etc/pop.caf');
+	var file2 = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,Ti.Platform.name === 'tizen'? 'etc/Kalimba.mp3':'etc/pop.caf');
 	
 	// load from file object but use the nativepath
 	var sound = Titanium.Media.createSound({url:file.nativePath});
@@ -154,6 +154,8 @@ function sound_file_url() {
 	});
 	urlChange.addEventListener('click', function()
 	{
+		Titanium.API.info(sound.url);
+		
 		if (fileNum === 0) {
 			sound.url = file2.nativePath;
 			fileNum = 1;
@@ -162,6 +164,10 @@ function sound_file_url() {
 			sound.url = file.nativePath;
 			fileNum = 0;
 		}
+		
+		pb.value = 0;
+		pb.max = sound.duration;
+		
 	});
 	win.add(urlChange);
 	
@@ -180,19 +186,22 @@ function sound_file_url() {
 	//
 	//  PROGRESS BAR TO TRACK SOUND DURATION
 	//
-	var flexSpace = Titanium.UI.createButton({
-		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-	});
+	var flexSpace = Titanium.UI.createButton();
+	Ti.Platform.name !== 'tizen' && (flexSpace.systemButton = Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE); 
+	
 	var pb = Titanium.UI.createProgressBar({
 		min:0,
 		value:0,
 		width:200
 	});
 	
-	if (Ti.Platform.name != 'android') {
+	if (Ti.Platform.name === 'tizen') {
+		pb.top = 210;
+		win.add(pb);
+	}else if (Ti.Platform.name !== 'android') {
 		win.setToolbar([flexSpace,pb,flexSpace]);
 	}
-	pb.show();
+	pb.show();	
 	
 	//
 	// INTERVAL TO UPDATE PB
@@ -213,6 +222,9 @@ function sound_file_url() {
 	win.addEventListener('close', function()
 	{
 		clearInterval(i);
+		if ( Ti.Platform.name === 'tizen') {
+			sound.release();
+		}
 	});
 	return win;
 };

@@ -15,6 +15,10 @@ var path = require('path');
 //default value, good only for default installation of Tizen SDK 2.0.0 on Windows
 var sdkpath = 'C:\\\\tizen-sdk\\';
 
+//todo: Set Real not hardcoded root (or full) path to chrome
+var chromeRootPath = 'C:\\Program Files (x86)';
+var chromePath = '"'+chromeRootPath + '\\Google\\Chrome\\Application\\chrome.exe"';
+
 //detecting current working dir
 var targetProject = process.cwd();
 
@@ -79,9 +83,18 @@ var async = require('async');
 					console.log('run on tizen emulator: ' + path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt').toString());
 					runWgtOnEmulator(myArgs[1], path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt'));
 					break;
+				case 'debugemulator':
+					console.log('debug on tizen emulator: ' + path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt').toString());
+					debugWgtOnEmulator(myArgs[1], path.join( targetProject, 'build', 'tizen', 'tizenapp.wgt'));
+					break;
 				case 'runsimulator':
 					console.log('run on tizen simulator:' + path.join( targetProject, 'build', 'tizen', 'index.html').toString());
 					runIndexOnSimulator(path.join(targetProject, 'build', 'tizen', 'index.html'));
+					break;
+				case 'debugsimulator':
+                                        //TODO: add real debug if possible? (for now it is not possible to run chrome even with active Developer Tools)
+ 					console.log('debug on tizen esimulator: ' + path.join( targetProject, 'build', 'tizen', 'index.html').toString());
+					runIndexOnSimulator(path.join( targetProject, 'build', 'tizen', 'index.html'));
 					break;
 				default:
 					console.log('Sorry, that is not something I know how to do.');
@@ -200,6 +213,58 @@ function installWgt(pathToWgt){
 				console.log(stderr);
 			}else{
 				console.log('Installed wgt: ' + pathToWgt);
+			}
+	});	
+}
+
+function debugWgtOnEmulator(widgetId, pathToWgt){
+	var runner = require("child_process");
+	var pathToWebRun = path.join(sdkpath, 'tools', 'ide', 'bin', 'web-debug.bat');
+	
+	var cmd = pathToWebRun + ' -id ' + widgetId + ' -w "' + pathToWgt +'"';
+	console.log('Debug widget cmd: ' + cmd);
+	runner.exec(cmd,
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			// Searching for URL in debugger's output.
+			var url = '';
+			// line that starts from this substring has an URL after it.
+			var urlMarker = 'DEBUG URL :';
+			var urlMarkerLength = urlMarker.length;
+			var outputLines = ("" + stdout).split("\n");
+
+			for (var i = 0; i < outputLines.length; i++) {
+				var currenLine = "" + outputLines[i];
+				if (currenLine.slice(0, urlMarkerLength) == urlMarker){
+					url = currenLine.substr(urlMarkerLength);
+				}
+			}
+
+			if (url == ''){
+				console.log('No url in output.');
+			}else{
+			        //running chrome
+				var runner2 = require("child_process");
+				var cmd2 = chromePath + ' ' + url;
+				console.log('Running chrome: ' + cmd2);
+				var child2 = runner2.exec(cmd2, function (err2, stdout2, stderr2) { 
+					console.log(stdout2);
+					if(err2 != null){
+						console.log('failed to run chrome');
+						console.log(stderr2);
+					}else{
+						console.log('Running chrome is ok ');
+					}
+				});
+				// for now we are not waiting for process (chrome) exiting. Comment next line if we do not need to exit
+                                child2.unref();
+			}
+
+			if(err != null){
+				console.log('failed run in debug mode wgt');
+				console.log(stderr);
+			}else{
+				console.log('Run in debug mode is ok ');
 			}
 	});	
 }

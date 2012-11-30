@@ -2,7 +2,7 @@ function sound_remote() {
 	var win = Titanium.UI.createWindow();
 	
 	var url = Titanium.UI.createTextField({
-		value:'http://watoo.net:8000/INTRODUCTION.mp3',
+		value:'http://iphonegu.com/wp-content/uploads/2012/06/One-Direction-What-Makes-You-Beautiful.mp3',
 		color:'#336699',
 		returnKeyType:Titanium.UI.RETURNKEY_GO,
 		keyboardType:Titanium.UI.KEYBOARD_URL,
@@ -75,49 +75,98 @@ function sound_remote() {
 	win.add(pauseButton);
 	win.add(progressLabel);
 	win.add(stateLabel);
-	if (Ti.Platform.name != 'android') {
+	if (Ti.Platform.name != 'android' && Ti.Platform.name != 'tizen') {
 		win.add(streamSize1);
 		win.add(streamSize2);
 		win.add(streamSize3);
 	}
-	var streamer = Ti.Media.createAudioPlayer();
+	var streamer = Ti.Media.createAudioPlayer({url: url.value});
+	
+	//Tizen. For other platform this test is implemented very bad. 
+	//For example, changing text in labels have to change after changing state 
+	function start_stop() {
+		if (streamer.playing || streamer.paused) {
+			Ti.API.info('start_stop:stop');
+			streamer.stop();
+	    } else {
+	    	Ti.API.info('start_stop:start');
+	    	streamer.start();
+	    }
+	}
+	
+	function pause_resume() {
+		if (streamer.paused) {
+			Ti.API.info('pause_resume:start');
+			streamer.start();
+	    } else {
+	    	Ti.API.info('pause_resume:pause');
+	    	streamer.pause();
+	    }
+	}
+	
+	function change_state(e){
+		stateLabel.text = 'State: '+e.description +' ('+e.state+')';
+		if (e.state === streamer.STATE_STOPPED) {
+			progressLabel.text = 'Stopped';
+			pauseButton.enabled = false;
+			pauseButton.title = 'Pause Streaming';
+			streamButton.title = "Start Streaming";
+		} else if (e.state === streamer.STATE_PLAYING) {
+			progressLabel.text = 'Starting ...';
+			pauseButton.enabled = true;
+			pauseButton.title = 'Pause Streaming';
+			streamButton.title = "Stop Stream";
+		} else if (e.state === streamer.STATE_PAUSED) {
+			pauseButton.enabled = true;
+			pauseButton.title = 'Resume Streaming';
+			streamButton.title = "Stop Stream";
+		}
+	}
 	
 	streamButton.addEventListener('click',function()
 	{
-		if (streamButton.title == 'Stop Stream')
-		{
-			progressLabel.text = 'Stopped';
-			streamer.stop();
-			pauseButton.enabled = false;
-			streamSize1.enabled = true;
-			streamSize2.enabled = true;
-			streamSize3.enabled = true;
-			pauseButton.title = 'Pause Streaming';
-			streamButton.title = "Start Streaming";
-		}
-		else
-		{
-			progressLabel.text = 'Starting ...';
-			streamer.url = url.value;
-			streamer.start();
-			pauseButton.enabled = true;
-			streamSize1.enabled = false;
-			streamSize2.enabled = false;
-			streamSize3.enabled = false;
-	
-			pauseButton.title = 'Pause Streaming';
-			streamButton.title = "Stop Stream";
-		}
+		//Tizen
+		if ( Ti.Platform.name === 'tizen') {
+			start_stop() ;
+		} else {
+		//Other platform ???	
+			if (streamButton.title == 'Stop Stream') {
+				progressLabel.text = 'Stopped';
+				streamer.stop();
+				pauseButton.enabled = false;
+				streamSize1.enabled = true;
+				streamSize2.enabled = true;
+				streamSize3.enabled = true;
+				pauseButton.title = 'Pause Streaming';
+				streamButton.title = "Start Streaming";
+			} else {
+				progressLabel.text = 'Starting ...';
+				//streamer.url = url.value;
+				streamer.start();
+				pauseButton.enabled = true;
+				streamSize1.enabled = false;
+				streamSize2.enabled = false;
+				streamSize3.enabled = false;
+		
+				pauseButton.title = 'Pause Streaming';
+				streamButton.title = "Stop Stream";
+			}
+		}	
 	});
 	
 	pauseButton.addEventListener('click', function()
 	{
-		streamer.pause();
-		if (streamer.paused) {
-			pauseButton.title = 'Unpause Streaming';
-		}
-		else {
-			pauseButton.title = 'Pause Streaming';
+		//Tizen
+		if ( Ti.Platform.name === 'tizen') {
+			pause_resume();
+		} else {
+		//Other platform ???	
+			streamer.pause();
+			if (streamer.paused) {
+				pauseButton.title = 'Unpause Streaming';
+			} else {
+				pauseButton.title = 'Pause Streaming';
+			}
 		}
 	});
 	
@@ -144,12 +193,18 @@ function sound_remote() {
 	
 	streamer.addEventListener('change',function(e)
 	{
-		stateLabel.text = 'State: '+e.description +' ('+e.state+')';
-		if(e.description == "stopped") {
-			progressLabel.text = 'Stopped';
-			pauseButton.enabled = false;
-			pauseButton.title = 'Pause Streaming';
-			streamButton.title = "Start Streaming";
+		
+		if ( Ti.Platform.name === 'tizen') {
+			change_state(e);
+		} else {
+		//Other platform ???	
+			stateLabel.text = 'State: '+e.description +' ('+e.state+')';
+			if(e.description == "stopped") {
+				progressLabel.text = 'Stopped';
+				pauseButton.enabled = false;
+				pauseButton.title = 'Pause Streaming';
+				streamButton.title = "Start Streaming";
+			}
 		}
 	});
 	
@@ -166,6 +221,10 @@ function sound_remote() {
 	
 		// restore previous idle state when closed
 		Ti.App.idleTimerDisabled = idleTimer;
+		
+		if ( Ti.Platform.name === 'tizen') {
+			streamer.release();
+		}
 	});
 	return win;
 };

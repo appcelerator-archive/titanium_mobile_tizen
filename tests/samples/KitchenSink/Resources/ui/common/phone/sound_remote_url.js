@@ -1,7 +1,7 @@
 function sound_remote_url() {
 	var win = Titanium.UI.createWindow();
 	
-	var url = "http://www.archive.org/download/CelebrationWav/1.wav";
+	var url = "http://iphonegu.com/wp-content/uploads/2012/06/One-Direction-What-Makes-You-Beautiful.mp3";
 	
 	// load from remote url
 	var sound = Titanium.Media.createSound({url:url});
@@ -157,19 +157,22 @@ function sound_remote_url() {
 	//
 	//  PROGRESS BAR TO TRACK SOUND DURATION
 	//
-	var flexSpace = Titanium.UI.createButton({
-		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-	});
+	var flexSpace = Titanium.UI.createButton();
+	Ti.Platform.name !== 'tizen' && (flexSpace.systemButton = Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE); 
+	
 	var pb = Titanium.UI.createProgressBar({
 		min:0,
 		value:0,
 		width:200
 	});
 	
-	if (Ti.Platform.name != 'android') {
+	if (Ti.Platform.name === 'tizen') {
+		pb.top = 210;
+		win.add(pb);
+	}else if (Ti.Platform.name !== 'android') {
 		win.setToolbar([flexSpace,pb,flexSpace]);
 	}
-	pb.show();
+	pb.show();	
 	
 	//
 	// INTERVAL TO UPDATE PB
@@ -190,6 +193,9 @@ function sound_remote_url() {
 	win.addEventListener('close', function()
 	{
 		clearInterval(i);
+		if ( Ti.Platform.name === 'tizen') {
+			sound.release();
+		}
 	});
 	return win;
 };
