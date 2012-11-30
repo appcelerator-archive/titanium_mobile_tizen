@@ -1,6 +1,6 @@
 define(
-	["Ti/_/css", "Ti/_/declare", "Ti/UI/View", "Ti/UI", "Ti/_/lang", "Ti/_/dom"], 
-	function(css, declare, View, UI, lang, dom) {		
+	["Ti/_/declare", "Ti/UI/View"], 
+	function(declare, View) {		
 		return declare("Ti.UI.Notification", View, {	
 			constructor: function(args) {					
 				this.height = 50;
@@ -23,12 +23,12 @@ define(
 				win.add(this);
 				
 				switch (this.duration) {
-					case UI.NOTIFICATION_DURATION_LONG: {
+					case Titanium.UI.NOTIFICATION_DURATION_LONG: {
 						countdown = 2;
 						break;
 					};
 					
-					case UI.NOTIFICATION_DURATION_SHORT: {
+					case Titanium.UI.NOTIFICATION_DURATION_SHORT: {
 						countdown = 1;
 						break;
 					};
