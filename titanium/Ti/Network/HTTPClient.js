@@ -38,21 +38,31 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						c.readyState = this.DONE;
 						
 						if (!this._aborted) {
-							if (f = this.file) {
-								f = Filesystem.getFile(f);
-								f.writable && f.write(xhr.responseText);
+							if (xhr.response) {
+								var uInt8Array = new Uint8Array(xhr.response);
+								var i = uInt8Array.length;
+								var binaryString = new Array(i);
+								while (i--)	{
+									binaryString[i] = String.fromCharCode(uInt8Array[i]);
+								}
+								var data = binaryString.join('');
+								var mimeType =  xhr.getResponseHeader("Content-Type");
+								var blobData = _.isBinaryMimeType(mimeType) ? window.btoa(data) : data;
+								c.responseText = data;
+								c.responseXML = data;
+								c.responseData = new Blob({
+									data: blobData,
+									length: blobData.length,
+									mimeType: mimeType || "text/plain"
+								});
+								
+								if (f = this.file) {
+									f = Filesystem.getFile(f);
+									f.writable && f.write(blobData);
+								}
 							}
-
-							c.responseText = xhr.responseText;
-							c.responseData = new Blob({
-								data: xhr.responseText,
-								length: xhr.responseText.length,
-								mimeType: xhr.getResponseHeader("Content-Type") || "text/plain"
-							});
-							c.responseXML = xhr.responseXML;
-
+														
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));
-
 							xhr.status >= 400 && (onload = this._onError);
 							is(onload, "Function") && onload.call(this);
 						}
@@ -107,6 +117,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				c.location = _.getAbsolutePath(httpURLFormatter ? httpURLFormatter(url) : url),
 				wc || async === void 0 ? true : !!async
 			);
+			this._xhr.responseType = 'arraybuffer';
 			wc && (this._xhr.withCredentials = wc);
 		},
 
