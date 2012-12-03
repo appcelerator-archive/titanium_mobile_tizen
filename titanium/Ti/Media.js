@@ -108,6 +108,29 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Blob"], function(Evented, lang, Blob) {
 
 		vibrate: function(pattern) {
 			"vibrate" in navigator && navigator.vibrate(require.is(pattern, "Array") ? pattern : [pattern | 0]);
+		},
+		
+		showCamera: function() {
+			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/create_content',null,'image/jpeg');
+			var serviceReplyCB = { 
+					   // callee now sends a reply 
+					   onsuccess: function(reply) {
+						   console.log('onsuccess:'+reply.key + ';'+reply.value);
+					   },
+					   // Something went wrong 
+					   onfail: function() {
+					      console.log('launch service failed');
+					   } 
+			};
+			
+			function succeeded() {
+				console.log('launch service succeeded');
+			} 
+			function failed(e) { 
+				console.log('launch service failed. Reason : ' + e.name);
+			}
+			
+			tizen.application.launchService(service,'org.tizen.camera-app',succeeded, failed, serviceReplyCB); 
 		}
 
 	});
