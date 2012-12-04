@@ -20,6 +20,7 @@ package com.appcelerator.tizen.signapp;
  */
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -71,13 +72,26 @@ public class CreateSignature {
 
 			KeyStore ks = KeyStore.getInstance(inputParams.getKeystoreType());
 			InputStream fis = InputProccesor.class.getClassLoader().getResourceAsStream(inputParams.getCertPath());
+			// FileInputStream fis = new FileInputStream(inputParams.getCertPath());
 
 			// load the keystore
 			ks.load(fis, keystorePass.toCharArray());
 
+			PrivateKey privateKey = null;
+	                java.util.Enumeration<String> alias = ks.aliases();
+	                while (alias.hasMoreElements()) {
+	                    String recievedAliasEntry = alias.nextElement();
+	                    if (ks.isKeyEntry(recievedAliasEntry)) {
+	                        privateKeyAlias = recievedAliasEntry;
+
+	                        privateKey = (PrivateKey)ks.getKey(recievedAliasEntry, privateKeyPass.toCharArray());
+	                    }
+	                }			
+	                if(privateKey == null){
 			// get the private key for signing.
-			PrivateKey privateKey = (PrivateKey) ks.getKey(privateKeyAlias,
-					privateKeyPass.toCharArray());
+	                    privateKey = (PrivateKey) ks.getKey(privateKeyAlias,privateKeyPass.toCharArray());
+	                }
+	                
 			javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory
 					.newInstance();
 
@@ -98,7 +112,8 @@ public class CreateSignature {
 			// Create an XML Signature object from the document, BaseURI and
 			// signature algorithm (in this case DSA)
 			XMLSignature sig = new XMLSignature(doc, BaseURI,
-					XMLSignature.ALGO_ID_SIGNATURE_DSA);
+					XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
+			
 
 			// Append the signature element to the root element before signing
 			// because
@@ -131,7 +146,7 @@ public class CreateSignature {
 				sig.addKeyInfo(cert);
 				sig.addKeyInfo(cert.getPublicKey());
 				System.out.println("Start signing");
-
+ 
 				sig.sign(privateKey);
 
 				System.out.println("Finished signing");
