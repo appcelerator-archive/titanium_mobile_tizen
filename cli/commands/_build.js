@@ -225,9 +225,11 @@ function build(logger, config, cli, finished) {
 						next(null, 'ok');
 
 					}.bind(this), function(next){
-						this.signTizenApp(logger, function(){
-							next(null, 'ok');
-						});
+						//TODO: Enable signing
+						// this.signTizenApp(logger, function(){
+						// 	next(null, 'ok');
+						// });
+						next(null, 'ok');
 					}.bind(this), function(next){
 						this.wgtPackaging7z(logger, function(){
 							finished && finished.call(this);	
