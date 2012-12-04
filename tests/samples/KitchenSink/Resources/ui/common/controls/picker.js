@@ -42,13 +42,14 @@ function picker(_args) {
 		data.push({title:'Android "useSpinner" - time (2)', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_time2'});
 	}
 	
-	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen') {
+	if (Ti.Platform.osname === 'tizen') {
 		data = [];
 		for (var i = 0; i < items.length; i++) {
 			if (!items[i].noandroid) {
 				data.push(items[i]);
 			}
 		}
+		data.push({title:'Date/Time Picker', hasChild:true, test:'ui/common/controls/picker_date3', noandroid:true});
 	}
 	
 	
