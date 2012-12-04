@@ -196,6 +196,34 @@ function switch_control() {
 	
 		win.add(checkBox);
 		win.add(titleSwitch);
+	} else if (Titanium.Platform.osname == 'tizen') {
+		//
+		// CHECKBOX
+		//
+		var checkBox = Titanium.UI.createSwitch({
+				//style:Titanium.UI.Android.SWITCH_STYLE_CHECKBOX,
+				label:"CheckBox: " + false,
+				value:false,
+				top:190,
+				//left:60
+		});
+		checkBox.addEventListener('change', function(e) {
+			checkBox.label = "CheckBox: " + e.value;
+		});
+		
+		//
+		// TOGGLEBUTTON W/ TITLE
+		//
+		var titleSwitch = Titanium.UI.createSwitch({
+				//style:Titanium.UI.Android.SWITCH_STYLE_TOGGLEBUTTON,
+				titleOff:"LO",
+				titleOn:"HI",
+				value:false,
+				top:240
+		});
+	
+		win.add(checkBox);
+		win.add(titleSwitch);
 	}
 	
 	return win;
