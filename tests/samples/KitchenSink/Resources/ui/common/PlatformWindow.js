@@ -26,7 +26,8 @@ function PlatformWindow(title) {
 		{title:'JSON', hasChild:true, test:'ui/common/platform/json'},
 		{title:'JS search', hasChild:true, test:'ui/common/platform/search_case_insensitive'},
 		{title:'Clipboard', hasChild:true, test:'ui/common/platform/clipboard'},
-		{title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"}
+		{title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
+		{title:'Locale', hasChild:true, test:'ui/common/platform/locale'}
 	];
 	
 	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
@@ -52,6 +53,7 @@ function PlatformWindow(title) {
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title:e.rowData.title,containingTab:self.containingTab});
+			win.containingTab = self.containingTab;
 			self.containingTab.open(win,{animated:true});
 		}
 	});
