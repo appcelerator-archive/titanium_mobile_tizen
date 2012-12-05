@@ -52,6 +52,7 @@ function PlatformWindow(title) {
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title:e.rowData.title,containingTab:self.containingTab});
+			win.containingTab = self.containingTab;
 			self.containingTab.open(win,{animated:true});
 		}
 	});

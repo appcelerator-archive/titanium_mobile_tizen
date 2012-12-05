@@ -14,12 +14,14 @@ function ControlsWindow(title) {
 		{title:'Label', hasChild:true, test:'ui/common/controls/label'},
 		{title:'Text Field', hasChild:true, test:'ui/common/controls/textfield'},
 		{title:'Text Area', hasChild:true, test:'ui/common/controls/textarea'},
-		{title:'Picker', hasChild:true, test:'ui/common/controls/picker'}
+		{title:'Picker', hasChild:true, test:'ui/common/controls/picker'},
+		{title:'Button States', hasChild:true, test:'ui/common/controls/button_state'},
+		{title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'}
 	];
 	
 	if (!(Ti.Platform.osname === 'mobileweb')) {
-		data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});
-		data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'});
+		//data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});
+		//data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'});
 		//data.push({title:'Picker', hasChild:true, test:'ui/common/controls/picker'});
 	}
 	
