@@ -51,6 +51,27 @@ exports.config = function (logger, config, cli) {
 				hint: __('type'),
 				values: ['production', 'development']
 			}
+			// ,
+			// 'alias': {
+			// 	abbr: 'L',
+			// 	desc: __('the alias for the keystore'),
+			// 	hint: 'alias',
+			// 	prompt: {
+			// 		label: __('Keystore alias'),
+			// 		error: __('Invalid keystore alias'),
+			// 		validator: function (alias) {
+			// 			if (!alias) {
+			// 				throw new appc.exception(__('Invalid keystore alias'));
+			// 			}
+			// 			return true;
+			// 		}
+			// 	}
+			// },
+
+
+
+
+//--------------------			
 		}		
 	};
 };
@@ -225,11 +246,9 @@ function build(logger, config, cli, finished) {
 						next(null, 'ok');
 
 					}.bind(this), function(next){
-						//TODO: Enable signing
-						// this.signTizenApp(logger, function(){
-						// 	next(null, 'ok');
-						// });
-						next(null, 'ok');
+						this.signTizenApp(logger, function(){
+							next(null, 'ok');
+						});
 					}.bind(this), function(next){
 						this.wgtPackaging7z(logger, function(){
 							finished && finished.call(this);	
