@@ -1,0 +1,1 @@
+node driver.js --mode=local --log-level=verbose --platform=mobileweb

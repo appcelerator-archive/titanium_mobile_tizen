@@ -51,6 +51,27 @@ exports.config = function (logger, config, cli) {
 				hint: __('type'),
 				values: ['production', 'development']
 			}
+			// ,
+			// 'alias': {
+			// 	abbr: 'L',
+			// 	desc: __('the alias for the keystore'),
+			// 	hint: 'alias',
+			// 	prompt: {
+			// 		label: __('Keystore alias'),
+			// 		error: __('Invalid keystore alias'),
+			// 		validator: function (alias) {
+			// 			if (!alias) {
+			// 				throw new appc.exception(__('Invalid keystore alias'));
+			// 			}
+			// 			return true;
+			// 		}
+			// 	}
+			// },
+
+
+
+
+//--------------------			
 		}		
 	};
 };
