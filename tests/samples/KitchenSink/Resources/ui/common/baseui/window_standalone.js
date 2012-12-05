@@ -207,7 +207,7 @@ function win_standalone(_args) {
 			var b = Titanium.UI.createButton({
 				title:'Close',
 			});
-			w.setLeftNavButton(b);
+			w.add(b);
 			b.addEventListener('click',function()
 			{
 				w.close();

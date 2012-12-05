@@ -9,7 +9,7 @@ function image_views(_args) {
 		{title:'Image View Positioning', hasChild:true, test:'ui/common/baseui/image_view_positioning'}
 	];
 	
-	if (!(Ti.Platform.osname === 'mobileweb')) {
+	if (Ti.Platform.osname !== 'mobileweb') {
 		data.push({title:'Animated', hasChild:true, test:'ui/common/baseui/image_view_animated'});
 		data.push({title:'Image View Encoding', hasChild:true, test:'ui/common/baseui/image_view_encoding'});
 	}

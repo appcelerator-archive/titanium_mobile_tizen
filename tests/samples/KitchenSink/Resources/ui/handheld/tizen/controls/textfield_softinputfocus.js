@@ -34,6 +34,7 @@ function textfield_soft() {
 	});	
 	tf2.addEventListener('focus', function() {
 		focused = tf2;
+		Ti.UI.createNotification({ message: 'focus'}).show(win);
 	});
 	win.add(tf2);
 	
@@ -46,6 +47,7 @@ function textfield_soft() {
 	});	
 	tf3.addEventListener('focus', function() {
 		focused = tf3;
+		Ti.UI.createNotification({ message: 'focus 2'}).show(win);
 	});
 	win.add(tf3);
 	

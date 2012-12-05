@@ -3,12 +3,16 @@ function sound(_args) {
 	// create table view data object
 	var data = [
 		{title:'Local', hasChild:true, test:'ui/common/phone/sound_local'},
-		{title:'Local with File', hasChild:true, test:'ui/common/phone/sound_file'},
 		{title:'Local with File URL', hasChild:true, test:'ui/common/phone/sound_file_url'},
 		{title:'Remote URL', hasChild:true, test:'ui/common/phone/sound_remote_url'},
 		{title:'Remote Streaming', hasChild:true, test:'ui/common/phone/sound_remote'}
 	
 	];
+	
+	//This test is incorrect because it uses property "url" of Titanium.Sound as type "File" instead of "String" 
+	if (Titanium.Platform.name !== 'tizen') {
+		data.push({title:'Local with File', hasChild:true, test:'ui/common/phone/sound_file'});
+	}
 	
 	if (Titanium.Platform.name == 'iPhone OS')
 	{

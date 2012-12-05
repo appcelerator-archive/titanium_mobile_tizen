@@ -63,38 +63,44 @@ function webviews(_args) {
 	{
 		var rowdata = e.rowData;
 		var webview = null;
+		
 		var w = Ti.UI.createWindow({
 			activity : {
 				onCreateOptionsMenu : function(e) {
 					var menuItem = e.menu.add({ title : 'Reload' });
+					
 					menuItem.addEventListener('click', function(e) {
 						webview.reload();
 					});
 				}
 			}
 		});
+		
 		w.orientationModes = [
 			Titanium.UI.PORTRAIT,
 			Titanium.UI.LANDSCAPE_LEFT,
 			Titanium.UI.LANDSCAPE_RIGHT
 		];
 	
-		if (rowdata.auto === true)
-		{
-			webview = Ti.UI.createWebView({height:Ti.UI.SIZE,width:Ti.UI.SIZE});
-		}
-		else
-		{
+		if (rowdata.auto === true) {
+			webview = Ti.UI.createWebView({
+				height:Ti.UI.SIZE,
+				width:Ti.UI.SIZE
+			});
+		} else {
 			webview = Ti.UI.createWebView();
 		}
+		
 		if ((Ti.Platform.osname === 'iphone') || (Ti.Platform.osname === 'ipad')) {
 			var reloadButton = Titanium.UI.createButton({
 				title:'Reload',
 				style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
 			});
+			
 			reloadButton.addEventListener('click',function() {
 				webview.reload();
 			});
+			
 			w.setRightNavButton(reloadButton);
 		}
 	
@@ -103,8 +109,7 @@ function webviews(_args) {
 		//		alert('singletap');
 		//	});
 		//	handle xhr to filesystem case first
-		if (e.index == 2)
-		{
+		if (e.index == 2) {
 			w.add(webview);
 			_args.containingTab.open(w);
 			var xhr = Titanium.Network.createHTTPClient();
@@ -123,56 +128,60 @@ function webviews(_args) {
 	
 			// send the data
 			xhr.send();   
-		}
-		else
-		{
+		} else {
 			//
 			// handle other cases
 			//
-			if (rowdata.url)
-			{
+			
+			if (rowdata.url) {
 				webview.url = rowdata.url;
-			}
-			else
-			{
+			} else {
 				webview.html = rowdata.innerHTML;
 			}
-			if (rowdata.scale)
-			{
+			
+			if (rowdata.scale) {
 				// override the default pinch/zoom behavior of local (or remote) webpages
 				// and either allow pinch/zoom (set to true) or not (set to false)
 				webview.scalesPageToFit = true;
 			}
 			
-			if (rowdata.username)
-			{
+			if (rowdata.username) {
 				webview.setBasicAuthentication(rowdata.username, rowdata.password);
 			}
 			
 			// test out applicationDataDir file usage in web view
 			var f1 = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'images', 'apple_logo.jpg');
-			var f2 = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'apple_logo.jpg');
-			f2.write(f1);
+			var f2 = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, 'apple_logo.jpg');
 			
-			webview.addEventListener('load',function(e)
-			{
-				Ti.API.debug("webview loaded: "+e.url);
-				if (rowdata.evaljs)
-				{
+			f2.write(f1);
+						
+			webview.addEventListener('load', function(e) {
+				Ti.API.debug("webview loaded: " + e.url);
+				
+				if (rowdata.evaljs) {
 					alert("JS result was: "+webview.evalJS("window.my_global_variable")+". should be 10");
 				}
-				if (rowdata.evalhtml)
-				{
+				
+				if (rowdata.evalhtml) {
 					alert("HTML is: "+webview.html);
 				}
-				Ti.App.fireEvent('image', {path:f2.nativePath});
+				
+				if (Titanium.Platform.name == 'tizen') {
+					Ti.App.addEventListener('image', function(d) {
+						webview.evalJS("document.getElementById('image').src = '" + d.path + "';");
+					});										
+					
+					Ti.App.fireEvent('image', {path: f1.nativePath});
+				} else {
+					Ti.App.fireEvent('image', {path: f2.nativePath});
+				}
 			});
-			if (rowdata.bgcolor)
-			{
+			
+			if (rowdata.bgcolor) {
 				webview.backgroundColor = rowdata.bgcolor;
 			}
-			if (rowdata.border)
-			{
+			
+			if (rowdata.border) {
 				webview.borderRadius=15;
 				webview.borderWidth=5;
 				webview.borderColor = 'red';
@@ -180,56 +189,63 @@ function webviews(_args) {
 			
 			var toolbar = null;
 			// create toolbar for local webiew
-			if (e.index==1)
-			{
+			if (e.index == 1) {
 				if (Titanium.Platform.name == 'iPhone OS') {
 					// test hiding/showing toolbar with web view
 					var button = Titanium.UI.createButton({
 						title:'Click above to hide me'
 					});
+					
 					w.setToolbar([button]);
 				} else {
-					toolbar = Titanium.UI.createView({backgroundColor: '#000',opacity:0.8,bottom:10,width:300,height:50,zIndex:1000});
-					toolbar.add(Ti.UI.createLabel({text: 'Click above to hide me'}));
+					toolbar = Titanium.UI.createView({
+						backgroundColor: '#000',
+						opacity:0.8,
+						bottom:10,
+						width:300,
+						height:50,
+						zIndex:1000
+					});
+					
+					toolbar.add(Ti.UI.createLabel({
+						text: 'Click above to hide me',
+						color: '#fff',
+					}));
+					
 					w.add(toolbar);
 				}
 			}
 			
-			if (rowdata.controls)
-			{
+			if (rowdata.controls) {
 				// test web controls
 				var bb2 = Titanium.UI.createButtonBar({
 					labels:['Back', 'Reload', 'Forward'],
 					backgroundColor:'#003'
 				});
+				
 				var flexSpace = Titanium.UI.createButton({
 					systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 				});
+				
 				w.setToolbar([flexSpace,bb2,flexSpace]);
-				webview.addEventListener('load',function(e)
-				{
+				
+				webview.addEventListener('load', function(e) {
 					Ti.API.debug("url = "+webview.url);
 					Ti.API.debug("event url = "+e.url);
 				});
-				bb2.addEventListener('click',function(ce)
-				{
-					if (ce.index == 0)
-					{
+				
+				bb2.addEventListener('click', function(ce) {
+					if (ce.index == 0) {
 						webview.goBack();
-					}
-					else if (ce.index == 1)
-					{
+					} else if (ce.index == 1) {
 						webview.reload();
-					}
-					else
-					{
+					} else {
 						webview.goForward();
 					}
 				});
 			}
 			
-			if (rowdata.partial)
-			{
+			if (rowdata.partial) {
 				webview.top = 100;
 				webview.bottom = 0;
 			}
@@ -237,9 +253,9 @@ function webviews(_args) {
 			w.add(webview);
 			
 	
-			function hideToolbar(e)
-			{
+			function hideToolbar(e) {
 				Ti.API.info('received hidetoolbar event, foo = ' + e.foo);
+				
 				if (Titanium.Platform.name == 'iPhone OS') {
 					w.setToolbar(null,{animated:true});
 				} else {
@@ -250,15 +266,21 @@ function webviews(_args) {
 			}
 			// hide toolbar for local web view
 			Ti.App.addEventListener('webview_hidetoolbar', hideToolbar);
+						
+			if (Titanium.Platform.name == 'tizen') {
+				toolbar.addEventListener('click', function(e) {
+					Ti.App.fireEvent('webview_hidetoolbar', {foo: 'bar'});
+				});	
+			}			
 			
-			w.addEventListener('close',function(e)
-			{
+			w.addEventListener('close',function(e) {
 				Ti.API.info("window was closed");
 				
 				// remove our global app event listener from this specific
 				// window instance when the window is closed
 				Ti.App.removeEventListener('webview_hidetoolbar',hideToolbar);
 			});
+			
 			_args.containingTab.open(w);		
 		}
 	

@@ -1,5 +1,5 @@
 function sound_local() {
-	if (Titanium.Media.audioPlaying) {
+	if (Ti.Platform.osname !== 'tizen' && Titanium.Media.audioPlaying) {
 		Titanium.Media.audioSessionMode = Titanium.Media.AUDIO_SESSION_MODE_AMBIENT;
 	}
 	
@@ -138,7 +138,7 @@ function sound_local() {
 	});
 	looping.addEventListener('click', function()
 	{
-		sound.looping = (sound.looping === false)?true:false;
+		sound.looping = (sound.isLooping() === false)?true:false;
 		looping.title = 'Looping (' + sound.isLooping() + ')';
 	});
 	win.add(looping);
@@ -158,19 +158,22 @@ function sound_local() {
 	//
 	//  PROGRESS BAR TO TRACK SOUND DURATION
 	//
-	var flexSpace = Titanium.UI.createButton({
-		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-	});
+	var flexSpace = Titanium.UI.createButton();
+	Ti.Platform.name !== 'tizen' && (flexSpace.systemButton = Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE); 
+	
 	var pb = Titanium.UI.createProgressBar({
 		min:0,
 		value:0,
 		width:200
 	});
 	
-	if (Ti.Platform.name != 'android') {
+	if (Ti.Platform.name === 'tizen') {
+		pb.top = 210;
+		win.add(pb);
+	}else if (Ti.Platform.name !== 'android') {
 		win.setToolbar([flexSpace,pb,flexSpace]);
 	}
-	pb.show();
+	pb.show();	
 	
 	//
 	// INTERVAL TO UPDATE PB
@@ -191,6 +194,9 @@ function sound_local() {
 	win.addEventListener('close', function()
 	{
 		clearInterval(i);
+		if ( Ti.Platform.name === 'tizen') {
+			sound.release();
+		}
 	});
 	return win;
 };

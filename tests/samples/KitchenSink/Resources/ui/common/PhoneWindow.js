@@ -55,6 +55,14 @@ function PhoneWindow(title) {
 		data.push({title:'Notfications', hasChild:true, test:'ui/handheld/android/phone/notification'});
 	}
 	
+	if (Titanium.Platform.name === 'tizen') {
+		data.push({
+			title: 'Notfications', 
+			hasChild: true, 
+			test: 'ui/handheld/tizen/phone/notification'
+		});
+	}
+	
 	if (Titanium.Platform.osname == 'ipad') {
 		data.push({title:'iPad Features', hasChild:true, test:'ui/handheld/ios/phone/ipad_feature'});	
 	}

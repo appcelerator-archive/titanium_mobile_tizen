@@ -19,11 +19,12 @@ public class InputProccesor {
 	private static final String ALIAS_INPUT = "-alias";
 	private static final String KEY_PASS_INPUT = "-keypass";
 
-	private static final String CERT_FILE_PATH_DEFAULT = "com/appcelerator/tizen/signapp/keystore.jks";
-	private static final String KEYSTORE_TYPE_DEFAULT = "JKS";
-	private static final String KEYSTORE_PASS_DEFAULT = "changeit";
-	private static final String ALIAS_INPUT_DEFAULT = "test";
-	private static final String KEY_PASS_INPUT_DEFAULT = "xmlsecurity";
+	private static final String CERT_FILE_PATH_DEFAULT = "com/appcelerator/tizen/signapp/samsung.devmode.sdk.cert.p12";
+	private static final String KEYSTORE_TYPE_DEFAULT = "pkcs12";
+	private static final String KEYSTORE_PASS_DEFAULT = "1234";
+	//have no any affect
+	private static final String ALIAS_INPUT_DEFAULT = "1";
+	private static final String KEY_PASS_INPUT_DEFAULT = "1234";
 
 	Map<String, String> inputMap;
 
@@ -38,7 +39,7 @@ public class InputProccesor {
 	}
 
 	public void showErrorOnConsole() throws WrongInputException {
-		System.err.println("You enter wrong parameters. Use:\nFor example java -jar signapp.jar -sig_proj C:/temp/ \n or \n java -jar signapp.jar C:/temp/");
+		System.err.println("You enter wrong parameters. Use:\n-sig_proj D:\\work\\env\\libs\\temp\\ -cert D:\\work\\project\\workspaces\\titanium-2\\titanium_mobile_tizen\\utils\\SignApp\\src\\com\\appcelerator\\tizen\\signapp\\samsung.devmode.sdk.cert.p12 -storetype pkcs12 -storepass 1234 -alias 1 -keypass 1234");
 		throw new WrongInputException();
 	}
 
