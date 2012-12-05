@@ -7,7 +7,10 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented"], function(declare, lang, Ev
 		constants: {
 			SOFT_KEYBOARD_DEFAULT_ON_FOCUS: 1,
 			SOFT_KEYBOARD_SHOW_ON_FOCUS: 2,
-			SOFT_KEYBOARD_HIDE_ON_FOCUS: 3
+			SOFT_KEYBOARD_HIDE_ON_FOCUS: 3,
+			LINKIFY_All : 1,
+			LINKIFY_EMAIL_ADDRESSES : 2,
+			LINKIFY_URL_ADDRESSES : 3,
 		}
 	});
 });
