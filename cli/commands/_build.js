@@ -50,28 +50,60 @@ exports.config = function (logger, config, cli) {
 				desc: __('the type of deployment; production performs optimizations'),
 				hint: __('type'),
 				values: ['production', 'development']
-			}
-			// ,
-			// 'alias': {
-			// 	abbr: 'L',
-			// 	desc: __('the alias for the keystore'),
-			// 	hint: 'alias',
-			// 	prompt: {
-			// 		label: __('Keystore alias'),
-			// 		error: __('Invalid keystore alias'),
-			// 		validator: function (alias) {
-			// 			if (!alias) {
-			// 				throw new appc.exception(__('Invalid keystore alias'));
-			// 			}
-			// 			return true;
-			// 		}
-			// 	}
-			// },
-
-
-
-
-//--------------------			
+			},
+			'alias': {
+				abbr: 'L',
+				desc: __('the alias for the keystore'),
+				hint: 'alias',
+				prompt: {
+					label: __('Keystore alias'),
+					error: __('Invalid keystore alias'),
+					validator: function (alias) {
+						if (!alias) {
+							throw new appc.exception(__('Invalid keystore alias'));
+						}
+						return true;
+					}
+				}
+			},
+			'avd-id': {
+				abbr: 'I',
+				desc: __('the id for the avd'),
+				hint: __('id'),
+				default: 'none'
+			},
+			'keystore': {
+				abbr: 'K',
+				desc: __('the location of the keystore file'),
+				hint: 'path',
+				prompt: {
+					label: __('Keystore File Location'),
+					error: __('Invalid keystore file'),
+					validator: function (keystorePath) {
+						keystorePath = afs.resolvePath(keystorePath);
+						if (!afs.exists(keystorePath) || !fs.lstatSync(keystorePath).isFile()) {
+							throw new appc.exception(__('Invalid keystore file location'));
+						}
+						return true;
+					}
+				}
+			},
+			'password': {
+				abbr: 'P',
+				desc: __('the password for the keystore'),
+				hint: 'alias',
+				password: true,
+				prompt: {
+					label: __('Keystore password'),
+					error: __('Invalid keystore password'),
+					validator: function (password) {
+						if (!password) {
+							throw new appc.exception(__('Invalid keystore password'));
+						}
+						return true;
+					}
+				}
+			},
 		}		
 	};
 };
@@ -148,7 +180,8 @@ function build(logger, config, cli, finished) {
 	this.appNames = {};
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
-	
+	this.tizenSdkDir = 'c:/tizen-sdk';
+
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
 		name: pkgJson.name,
@@ -156,8 +189,7 @@ function build(logger, config, cli, finished) {
 		main: pkgJson.main
 	}];
 	
-	if (!this.dependenciesMap) {
-		this.logger.info(__n('Tolik: parsing dependenciesMap %s', 'Tolik: parsing dependenciesMap %s', path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
+	if (!this.dependenciesMap) {		
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
 	
@@ -250,11 +282,18 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});
 					}.bind(this), function(next){
-						this.wgtPackaging7z(logger, function(){
+						this.wgtPackaging7z(logger, function(){							
+							next(null, 'ok');
+						});						
+					}.bind(this), function(next){
+						this.detectTizenSDK(next);
+					}.bind(this),function(next){
+						this.runOnDevice(logger, function(){
 							finished && finished.call(this);	
-						});
-						next(null, 'ok');
+							next(null, 'ok');
+						});						
 					}.bind(this)
+
 					], function(err){
 						if(err) 
 							console.log(err)
@@ -543,7 +582,7 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		//TODO: tolik, return it back, do not bypass caching
+		//TODO: tolik, return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
 		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
@@ -730,13 +769,12 @@ build.prototype = {
 		// write the titanium.css
 		fs.writeFileSync(this.buildDir + '/titanium.css', cleanCSS.process(tiCSS.join('')));
 
-		this.logger.info(__('Tolik: Assembling titanium.css finished'));
 		callback();
 	},
 	
 	createIcons: function (callback) {
 		//just show log and go to next. TODO: fix this function if we really have to use it on Tizen
-		this.logger.info(__('Tolik: Dissabled. Creating favicon and Apple touch icons'));
+		this.logger.info(__('createIcons: Dissabled. Creating favicon and Apple touch icons'));
 		afs.copyFileSync(path.join(this.projectResDir, 'mobileweb', 'appicon.png'), this.buildDir, { logger: this.logger.debug });
 		callback();
 
@@ -1006,6 +1044,60 @@ build.prototype = {
 			});
 	},
 
+	runOnDevice : function(logger, callback){
+		var runner = require("child_process");
+		var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
+		var cmd = pathToCmd + ' --id=http://yourdomain/Harness --widget=' + pathToWgt;
+		console.log('install cmd: ' + cmd);
+		runner.exec(
+			cmd,
+			function (err, stdout, stderr) {
+				console.log(stdout);
+				if(err != null){
+					console.log('failed install wgt');
+					console.log(stderr);
+				}else{
+					console.log('Installed wgt: ' + pathToWgt);
+				}
+		});			
+	},
+
+	detectTizenSDK: function(next){
+		//Detect Tizen SDK
+		//TODO: check OS, this code supporting windows only(for now useing registry to find path)
+		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
+		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
+		var keyvalue = null;
+		var reg = require('child_process');
+		var self = this;
+		reg.exec(
+			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
+			function (err, stdout, stderr) {
+
+				if(stdout !== null && (typeof stdout != 'undefined')){
+					console.log('obj type' + typeof stdout);
+					var arr = stdout.split(" ");
+					keyvalue = arr[arr.length-1];//last parameter is path
+					keyvalue = keyvalue.slice(0, -4);
+					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
+					console.log('reading file: ' + keyvalue);
+					fs.readFile(keyvalue, 'utf8', function (err,data) {
+						if (err) {
+							return console.log(err);
+						}
+						var arr = data.split("=");
+						self.tizenSdkDir =  arr[1];
+						console.log("Tizen SDK found at: " + self.tizenSdkDir);
+						next(null, 'ok');
+					});
+
+				}else{
+					console.log('error: cannot read values from windows registry');
+				}
+			});
+	},
+
 	find7za: function(){	
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if(fs.existsSync(zippath)){
@@ -1018,7 +1110,7 @@ build.prototype = {
 	signTizenApp: function(logger, callback){
 		logger.info(__('signing application in  "%s" ', this.buildDir));		
 		var packer = require('child_process');
-		var async = require('async');//
+		var async = require('async');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
 		//logger.debug(__('Signer commandline: "%s" ', cmdSign));
 		console.log('Signer commandline: ' + cmdSign);
