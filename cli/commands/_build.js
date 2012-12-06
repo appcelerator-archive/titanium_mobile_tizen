@@ -66,7 +66,7 @@ exports.config = function (logger, config, cli) {
 					}
 				}
 			},
-			'avd-id': {
+			'dev-id': {
 				abbr: 'I',
 				desc: __('the id for the avd'),
 				hint: __('id'),
@@ -181,6 +181,7 @@ function build(logger, config, cli, finished) {
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
+	this.targetDevice = cli.argv['dev-id'];
 
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
@@ -1044,22 +1045,27 @@ build.prototype = {
 			});
 	},
 
-	runOnDevice : function(logger, callback){
-		var runner = require("child_process");
-		var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
-		var cmd = pathToCmd + ' --id=' + this.url +' --widget=' + path.join(this.buildDir, 'tizenapp.wgt');
-		console.log('install cmd: ' + cmd);
-		runner.exec(
-			cmd,
-			function (err, stdout, stderr) {
-				console.log(stdout);
-				if(err != null){
-					console.log('failed install wgt');
-					console.log(stderr);
-				}else{
-					console.log('Installed wgt: ' + pathToWgt);
-				}
-		});			
+	runOnDevice : function(logger, callback){		
+		if(this.targetDevice){
+			var runner = require("child_process");
+			var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
+			var cmd = pathToCmd + ' --id=' + this.url +' --widget=' + path.join(this.buildDir, 'tizenapp.wgt');
+			console.log('install cmd: ' + cmd);
+			runner.exec(
+				cmd,
+				function (err, stdout, stderr) {
+					console.log(stdout);
+					if(err != null){
+						console.log('failed install wgt');
+						console.log(stderr);
+					}else{
+						console.log('Installed wgt: ' + pathToWgt);
+					}
+					callback();
+			});	
+		}else{
+			callback();
+		}		
 	},
 
 	detectTizenSDK: function(next){
