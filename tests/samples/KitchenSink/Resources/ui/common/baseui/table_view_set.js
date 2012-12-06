@@ -3,6 +3,8 @@ function tv_set() {
 	
 	var win = Titanium.UI.createWindow();
 	
+	var isTizen = (Ti.Platform.osname === 'tizen'), animationStyle;
+	
 	var data = [
 		{title:'Set 1 (no animation)', header:'Section 0'},
 		{title:'Set 2'},
@@ -28,6 +30,7 @@ function tv_set() {
 	
 	tableView.addEventListener('click',function(e)
 	{
+		console.log(e.index);
 		switch(e.index)
 		{
 			case 0:
@@ -40,8 +43,8 @@ function tv_set() {
 					row.backgroundColor = '#aaa';
 					data[c]=row;
 				}
-				tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.NONE;
-				tableView.setData(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.NONE});				
+				!isTizen && (tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.NONE) && (animationStyle = {animationStyle:Titanium.UI.iPhone.RowAnimationStyle.NONE});
+				tableView.setData(data, animationStyle);				
 				break;
 			case 1:
 				var data = [
@@ -53,9 +56,9 @@ function tv_set() {
 					{title:'Row 7', image:'Mail.png'}
 	
 				];
-				tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE;
+				!isTizen && (tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE) && (animationStyle = {animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
 				tableView.separatorColor = null;
-				tableView.setData(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+				tableView.setData(data,animationStyle);
 				break;
 			case 2:
 				var data = [
@@ -70,9 +73,9 @@ function tv_set() {
 					{title:'Row 9'}
 	
 				];
-				tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE;
+				!isTizen && (tableView.separatorStyle = Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE) && (animationStyle = {animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
 				tableView.separatorColor = "red";
-				tableView.setData(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
+				tableView.setData(data,animationStyle);
 				break;
 		}
 			

@@ -11,17 +11,19 @@ function xml_rss() {
 		try
 		{
 			var doc = this.responseXML.documentElement;
-			var items = doc.getElementsByTagName("item");
+			var items = doc.getElementsByTagName("item");  
 			var x = 0;
-			var doctitle = doc.evaluate("//channel/title/text()").item(0).nodeValue;
+			var doctitle = this.responseXML.evaluate("//channel/title/text()", doc, null, XPathResult.ANY_TYPE, null);
+			doctitle = doctitle.iterateNext().nodeValue;
 			for (var c=0;c<items.length;c++)
 			{
 				var item = items.item(c);
-				var thumbnails = item.getElementsByTagName("media:thumbnail");
-				if (thumbnails && thumbnails.length > 0)
+				var thumbnails =  this.responseXML.evaluate("./*[name() = 'media:thumbnail']/@url", item, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+				thumbnails = thumbnails.iterateNext();
+				if (thumbnails && thumbnails.value)
 				{
-					var media = thumbnails.item(0).getAttribute("url");
-					var title = item.getElementsByTagName("title").item(0).text;
+					var media = thumbnails.value;  
+					var title = item.getElementsByTagName("title").item(0).firstChild.nodeValue;
 					var row = Ti.UI.createTableViewRow({height:80});
 					var label = Ti.UI.createLabel({
 						text:title,
@@ -55,7 +57,7 @@ function xml_rss() {
 					}
 					row.add(img);
 					data[x++] = row;
-					row.url = item.getElementsByTagName("link").item(0).text;
+					row.url = item.getElementsByTagName("link").item(0).firstChild.nodeValue;
 				}
 			}
 			var tableview = Titanium.UI.createTableView({data:data});
@@ -63,18 +65,10 @@ function xml_rss() {
 			tableview.addEventListener('click',function(e)
 			{
 				var w = Ti.UI.createWindow({title:doctitle});
+				console.log("Created");
 				var wb = Ti.UI.createWebView({url:e.row.url});
 				w.add(wb);
-				var b = Titanium.UI.createButton({
-					title:'Close',
-					style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
-				});
-				w.setLeftNavButton(b);
-				b.addEventListener('click',function()
-				{
-					w.close();
-				});
-				w.open({modal:true});
+				win.containingTab.open(w, {animated: true})
 			});
 		}
 		catch(E)
@@ -83,6 +77,7 @@ function xml_rss() {
 		}
 	};
 	xhr.send();
+	
 	
 	return win;
 };

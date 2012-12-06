@@ -17,7 +17,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 					right: 0,
 					top: 0,
 					bottom: 0,
-					width: '90%'
+					width: '100%',
 				}
 			}, this._fieldWrapper = dom.create("span", {
 				style: {
@@ -25,19 +25,19 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 					left: 0,
 					right: 0,
 					top: 0,
-					bottom: 0
+					bottom: 0,
+					marginRight: '43px'
 				}
 			}, this.domNode));
 			
 			this._cancelButton = dom.create("button", {
 				style: {
-					background: "url('themes/default/close.png') no-repeat center",
+					background: "url('themes/default/UI/SearchBar/close.png') no-repeat 50% 50%",
 					position: "absolute",
-					left: '90%',
-					right: 0,
+					right: '-43px',
 					top: 0,
 					bottom: 0,
-					width: '10%'
+					width: '43px'
 				}			
 			}, this._fieldWrapper, this.domNode);
 			
@@ -47,23 +47,27 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			this._keyboardType();
 			this.borderStyle = UI.INPUT_BORDERSTYLE_BEZEL;
 			
-			this._addEventModifier(["cancel"], function(data) {
-				data.value = this._getInternalText();
-			});	
-
+			
 			this._cancelButton.addEventListener('click', function(e){
+				console.log("Cancel");
 				f.value = "";
 				f.blur();
 				self.fireEvent("cancel");
 			});
-
-			this._disconnectFocusEvent = require.on(f, "focus", this, function() {
-				this.clearOnEdit && (f.value = "");
+			
+			this._disconnectFocusEvent = require.on(f, "focus", this, function() {			
+				this._focused = 1;
+				this._setInternalText(this.clearOnEdit ? "" : this._getInternalText());
+			});
+			this._disconnectBlurEvent = require.on(f, "blur", this, function() {
+				this._focused = 0;
+				this._updateInternalText();
 			});
 		},
 
 		destroy: function() {
 			this._disconnectFocusEvent();
+			this._disconnectBlurEvent();
 			TextBox.prototype.destroy.apply(this, arguments);
 		},
 
@@ -142,9 +146,9 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			
 			showCancel: {
 				set: function(value) {
-					this._cancelButton.style.visibility = value ? "visible" : "hidden";
-					this._field.style.width = value ? '90%' : '100%';
-				//	this.cancelButton.style.display = value ? "block" : "none";
+				//	this._cancelButton.style.visibility = value ? "visible" : "hidden";
+					this._fieldWrapper.style.marginRight = value ? '43px' : '0';
+					this._cancelButton.style.display = value ? "block" : "none";
 					return value;
 				}
 			},
