@@ -267,7 +267,7 @@ function webviews(_args) {
 			// hide toolbar for local web view
 			Ti.App.addEventListener('webview_hidetoolbar', hideToolbar);
 						
-			if (Titanium.Platform.name == 'tizen') {
+			if ((Titanium.Platform.name == 'tizen') && (e.index == 1)) {
 				toolbar.addEventListener('click', function(e) {
 					Ti.App.fireEvent('webview_hidetoolbar', {foo: 'bar'});
 				});	
