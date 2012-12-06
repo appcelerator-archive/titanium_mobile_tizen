@@ -1047,7 +1047,7 @@ build.prototype = {
 	runOnDevice : function(logger, callback){
 		var runner = require("child_process");
 		var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
-		var cmd = pathToCmd + ' --id=http://yourdomain/Harness --widget=' + pathToWgt;
+		var cmd = pathToCmd + ' --id=' + this.url +' --widget=' + path.join(this.buildDir, 'tizenapp.wgt');
 		console.log('install cmd: ' + cmd);
 		runner.exec(
 			cmd,
