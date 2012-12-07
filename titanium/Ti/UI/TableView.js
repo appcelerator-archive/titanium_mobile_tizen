@@ -199,7 +199,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 			this._triggerLayout();
 		},
 		
-		_calculateLocation: function(index) {
+		_calculateLocation: function(index, insertAfter) {
 			var currentOffset = 0,
 				section;
 			
@@ -207,11 +207,20 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 				section = this._sections._children[i];
 				currentOffset += section.rowCount;
 				
-				if (index < currentOffset) {
-					return {
-						section: section,
-						localIndex: section.rowCount - (currentOffset - index)
-					};
+				if (insertAfter) {
+					if (index <= currentOffset) {
+						return {
+							section: section,
+							localIndex: section.rowCount - (currentOffset - index)
+						};
+					}
+				} else {
+					if (index < currentOffset) {
+						return {
+							section: section,
+							localIndex: section.rowCount - (currentOffset - index)
+						};
+					}
 				}
 			}
 			
@@ -224,11 +233,11 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 			}
 		},
 		
-		_insertRow: function(value, index) {
-			var location = this._calculateLocation(index);
+		_insertRow: function(value, index, insertAfter) {
+			var location = this._calculateLocation(index, insertAfter);
 			
 			if (location) {
-				location.section.add(value,location.localIndex); // We call the normal .add() method to hook into the sections proper add mechanism
+				location.section.add(value, location.localIndex); // We call the normal .add() method to hook into the sections proper add mechanism
 			}
 			this._publish(value);
 			this._refreshSections();
@@ -259,7 +268,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		},
 
 		insertRowAfter: function(index, value) {
-			this._insertRow(value, index + 1);
+			this._insertRow(value, index + 1, true);
 		},
 
 		insertRowBefore: function(index, value) {
@@ -329,18 +338,18 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		},
 		
 		getIndexByName: function(name) {
-			var index = -1;
+			var index = 0;
 			
 			for (var i = 0; i < this._sections._children.length; i++) {
-				for (var j = 0; j < this._sections._children[i].rows.length; j++) {
-					if (this._sections._children[i].rows[j].name === name) {						
-						if (i > 0) {
-							index = this._sections._children[i - 1].rowCount + j;
-						} else {
-							index = j;
-						}
+				if (i > 0) {
+					index += this._sections._children[i - 1].rows.length;
+				}
+
+				for (var j = 0; j < this._sections._children[i].rows.length; j++) {					
+					if (this._sections._children[i].rows[j].name === name) {
+						index += j;
 						
-						break;
+						return index;		
 					}
 				}
 			}
