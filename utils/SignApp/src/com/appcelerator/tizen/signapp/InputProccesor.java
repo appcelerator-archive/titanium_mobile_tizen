@@ -39,7 +39,11 @@ public class InputProccesor {
 	}
 
 	public void showErrorOnConsole() throws WrongInputException {
-		System.err.println("You enter wrong parameters. Use:\n-sig_proj D:\\work\\env\\libs\\temp\\ -cert D:\\work\\project\\workspaces\\titanium-2\\titanium_mobile_tizen\\utils\\SignApp\\src\\com\\appcelerator\\tizen\\signapp\\samsung.devmode.sdk.cert.p12 -storetype pkcs12 -storepass 1234 -alias 1 -keypass 1234");
+		System.err.println("You enter wrong parameters. " +
+				" Use:\n" +
+				"sig_proj D:\\work\\env\\libs\\temp\\ \n"+
+				"or\n"+
+				"-sig_proj D:\\work\\env\\libs\\temp\\ -cert D:\\work\\project\\workspaces\\titanium-2\\titanium_mobile_tizen\\utils\\SignApp\\src\\com\\appcelerator\\tizen\\signapp\\samsung.devmode.sdk.cert.p12 -storetype pkcs12 -storepass 1234 -alias 1 -keypass 1234");
 		throw new WrongInputException();
 	}
 
