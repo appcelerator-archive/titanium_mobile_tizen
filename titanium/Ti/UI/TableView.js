@@ -416,7 +416,35 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 					}
 				}
 			},
-			
+			search: {
+				set: function(searchBar) {
+
+					searchBar.setWidth(UI.INHERIT);
+					searchBar.setHeight(this.rowHeight);
+					searchBar.setTop(0);
+
+					var firstRow = this.getChildren()[0];
+					if (firstRow === searchBar) {
+						firstRow = this.getChildren()[1];
+					}
+					firstRow.setTop(this.rowHeight);
+
+					searchBar.addEventListener('change', function(e) {
+						for (var i = 0; i < this.getChildren().length; i++) {
+							var child = this.getChildren()[i];
+							if (child !== searchBar) {
+								if (child.title && child.title.match(searchBar.value)) {
+									child.setHeight(this.rowHeight);
+								} else {
+									child.setHeight(0);
+								}
+							}
+						}
+					}.bind(this));
+					this.add(searchBar);
+				}
+
+			},
 			footerTitle: {
 				set: function(value, oldValue) {
 					if (oldValue != value) {
