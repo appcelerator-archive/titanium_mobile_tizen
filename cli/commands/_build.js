@@ -1046,10 +1046,11 @@ build.prototype = {
 	},
 
 	runOnDevice : function(logger, callback){		
-		if(this.targetDevice){
+		if(this.targetDevice && this.targetDevice != 'none'){
 			var runner = require("child_process");
 			var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
-			var cmd = pathToCmd + ' --id=' + this.url +' --widget=' + path.join(this.buildDir, 'tizenapp.wgt');
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget=' + pathToWgt;
 			console.log('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
