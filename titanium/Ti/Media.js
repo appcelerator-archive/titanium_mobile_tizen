@@ -120,7 +120,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			};
 			
 			h2c([document.body], options);
-		}),
+		},
 		
 		isCameraSupported: function(){
 			try
