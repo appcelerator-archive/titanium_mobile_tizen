@@ -450,16 +450,18 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 					firstRow.setTop(this.rowHeight);
 
 					searchBar.addEventListener('change', function(e) {
-						for (var i = 0; i < this.getChildren().length; i++) {
-							var child = this.getChildren()[i];
-							if (child !== searchBar) {
-								if (child.title && child.title.match(searchBar.value)) {
-									child.setHeight(this.rowHeight);
-								} else {
-									child.setHeight(0);
+						for (var i = 0; i < this._sections._children.length; i++) {
+							for (var j = 0; j < this._sections._children[i].rows.length; j++) {
+								var child = this._sections._children[i].rows[j];
+								if (child !== searchBar) {
+									if (child.title && child.title.match(searchBar.value)) {
+										child.setHeight(this.rowHeight);
+									} else {
+										child.setHeight(0);
+									}
 								}
 							}
-						}
+						};
 					}.bind(this));
 					this.add(searchBar);
 				}
