@@ -1,4 +1,4 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Blob", "Ti/h2c"], function(Evented, lang, Blob, h2c) {
+define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c"], function(Evented, lang, photoGallery, Blob, h2c) {
 
 	return lang.setObject("Ti.Media", Evented, {
 
@@ -42,56 +42,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Blob", "Ti/h2c"], function(Evented, lan
 		//beep: function() {},
 
 		openPhotoGallery: function(args){
-			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*');			 
-			var serviceReplyCB = {
-			   // callee now sends a reply
-				onsuccess: function(reply) {   // reply -> ApplicationServiceData[0]
-					var path = reply[0].value.toString();
-					var filename = path.substring(path.lastIndexOf('/')+1);
-					function readFromStream(fileStream){
-							var contents = fileStream.readBase64(fileStream.bytesAvailable);
-							fileStream.close();
-
-							var blob = new Blob({
-								data: contents,
-								length: contents.length,
-								mimeType: 'image/jpeg'
-						    });
-
-							var event = {
-								cropRect: null,
-								media: blob,
-								mediaType: Ti.Media.MEDIA_TYPE_PHOTO
-							}
-							args.success(event);
-					};
-					function successCB(dir) {
-						var file = dir.resolve(filename);
-						file.openStream(
-							// open for reading
-							'r',
-							// success callback - read and display the contents of the file
-							readFromStream,
-							// error callback
-							function(e) {console.log("Error with open stream" + e.message)}
-						);	
-					};
-					tizen.filesystem.resolve(
-						'images', 
-						successCB, 
-						function(e) { console.log("Error" + e.message);}, 
-						"rw");
-				},
-			   // Something went wrong 
-				onfail: args.error 
-			}
-			tizen.application.launchService(
-				service,
-				null,
-				function() { console.log("Launch service succeeded"); }, 
-				function(e) { console.log("Launch service failed. Reason : " + e.name); },  
-				serviceReplyCB	
-		   );
+			photoGallery.open(args);
 		},
 
 		createAudioPlayer: function(args) {
@@ -209,6 +160,6 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Blob", "Ti/h2c"], function(Evented, lan
 				}
 				
 				tizen.application.launchService(service,'org.tizen.camera-app',succeeded, failed, serviceReplyCB); 
-		};
+		}
 	});
 });
