@@ -91,7 +91,17 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/UI/Widget", "Ti/_/style","Ti/UI/Mobil
 
 			this._refreshRows();
 		},
-		
+		//temporary back
+		_createSeparator: function() {
+			var showSeparator = this._tableView && this._tableView.separatorStyle === TableViewSeparatorStyle.SINGLE_LINE,
+				separator = UI.createView({
+					height: showSeparator ? 1 : 0,
+					width: UI.INHERIT,
+					backgroundColor: showSeparator ? this._tableView.separatorColor : "transparent"
+				});
+			setStyle(separator.domNode,"minWidth","100%"); // Temporary hack until TIMOB-8124 is completed.
+			return separator;
+		},		
 		add: function(value, index) {
 
 			var rows = this._rows._children,
@@ -102,14 +112,12 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/UI/Widget", "Ti/_/style","Ti/UI/Mobil
 			}
 			if (index < 0 || index > rowCount) {
 				return;
+			}			
+			//temporary back
+			if (rows.length === 0) {
+				this._rows._add(this._createSeparator());
 			}
 			
-			if (rowCount === 0) {		
-				if (!lang.isDef(value.declaredClass) || value.declaredClass != "Ti.UI.TableViewRow") {
-					value = UI.createTableViewRow(value);
-				}			
-				this._rows._insertAt(value, 0);	
-			} else {
 			
 				if (is(value,"Array")) {
 					for (var i in value) {
@@ -118,7 +126,7 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/UI/Widget", "Ti/_/style","Ti/UI/Mobil
 				} else {
 					this._insertHelper(value,index);
 				}
-			}
+			
 
 		},
 		
