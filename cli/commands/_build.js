@@ -283,15 +283,17 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});
 					}.bind(this), function(next){
-						this.wgtPackaging7z(logger, function(){							
+						console.log('wgtPackaging7z ')
+						this.wgtPackaging7zV2(logger, function(){							
+							console.log('wgtPackaging7z  callback')
 							next(null, 'ok');
 						});						
 					}.bind(this), function(next){
+
 						this.detectTizenSDK(next);
 					}.bind(this),function(next){
 						this.runOnDevice(logger, function(){
 							finished && finished.call(this);	
-							next(null, 'ok');
 						});						
 					}.bind(this)
 
@@ -300,7 +302,7 @@ function build(logger, config, cli, finished) {
 							console.log(err)
 						else {
 
-							console.log('Failed')
+							console.log('Failed...')
 						}
 				});
 			});
@@ -1023,7 +1025,7 @@ build.prototype = {
 
 	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));
-		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
+		var tizenBuildDir = this.buildDir;
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
 		var async = require('async');
@@ -1043,6 +1045,65 @@ build.prototype = {
 				}
 				callback();
 			});
+	},
+
+	wgtPackaging7zV2: function(logger, callback){
+		logger.info(__('Packaging application into wgt'));
+		var tizenBuildDir = this.buildDir;
+		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
+		var packer = require('child_process');
+		var async = require('async');
+		// Create the tasks to unzip each entry in the zip file
+		var child,
+		stdout = '',
+		stderr = '';
+
+		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
+		//packaging
+		logger.info(__('wgtPackaging7z  7z cmd: "%s" ', cmd7za));
+		child = packer.spawn(path.resolve(this.find7za().toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
+		child.stdout.on('data', function (data) {
+			stdout += data.toString();
+		});
+		child.on('exit', function (code, signal) {
+			if (callback) {
+				if (code) {
+					// if we're on windows, the error message is actually in stdout, so scan for it
+					if (process.platform === 'win32') {
+						var foundError = false,
+							err = [];
+						
+						stdout.split('\n').forEach(function (line) {
+							if (/^Error\:/.test(line)) {
+								foundError = true;
+							}
+							if (foundError) {
+								line && err.push(line.trim());
+							}
+						});
+						
+						if (err.length) {
+							stderr = err.join('\n') + stderr;
+						}
+					}
+					callback();
+				} else {
+					callback();
+				}
+			}
+		});		
+		// packer.exec(
+		// 	cmd7za,
+		// 	function (err, stdout, stderr) {
+		// 		console.log(stdout);
+		// 		if(err != null){
+		// 			console.log('failed packaging for tizen platform');
+		// 			console.log(stderr);
+		// 		}else{
+		// 			console.log('compressing ok');
+		// 		}
+		// 		callback();
+		// 	});
 	},
 
 	runOnDevice : function(logger, callback){		
