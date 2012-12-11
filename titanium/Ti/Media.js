@@ -1,4 +1,4 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery"], function(Evented, lang, photoGallery) {
+define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c"], function(Evented, lang, photoGallery, Blob, h2c) {
 
 	return lang.setObject("Ti.Media", Evented, {
 
@@ -40,11 +40,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery"], function(Evented,
 		},
 
 		//beep: function() {},
-		
+
 		openPhotoGallery: function(args){
 			photoGallery.open(args);
 		},
-		
+
 		createAudioPlayer: function(args) {
 			return new (require("Ti/Media/AudioPlayer"))(args);
 		},
@@ -61,8 +61,8 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery"], function(Evented,
 			"vibrate" in navigator && navigator.vibrate(require.is(pattern, "Array") ? pattern : [pattern | 0]);
 		},
 		
-		showCamera: function() {
-			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/create_content',null,'image/jpeg');
+		showMusicLibrary: function(args) {
+			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/view',null,'audio/*');
 			var serviceReplyCB = { 
 					   // callee now sends a reply 
 					   onsuccess: function(reply) {
@@ -81,9 +81,85 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery"], function(Evented,
 				console.log('launch service failed. Reason : ' + e.name);
 			}
 			
-			tizen.application.launchService(service,'org.tizen.camera-app',succeeded, failed, serviceReplyCB); 
+			tizen.application.launchService(service,'org.tizen.music-player',succeeded, failed, serviceReplyCB); 
+		},
+		
+		saveToPhotoGallery: function(media, callbacks){
+			var file = media instanceof Titanium.Blob ? media.file : media;
+			var blob = file.read();
+			
+			function errorCB(e){
+				console.log("Error" + e.message);
+			};
+			
+			function successCB(dir) {
+				var writeToStream = function (fileStream) {
+					fileStream.writeBase64(blob._data);
+					fileStream.close();
+				};
+				
+				dir.createFile(file.name);
+				dir.resolve(file.name).openStream('rw', writeToStream,errorerrorCB);
+			};
+			
+			tizen.filesystem.resolve('images', successCB, errorCB, "rw");
+		},
+		
+		takeScreenshot: function(callback) {
+			if (!callback) return;
+			
+			var options = {allowTaint:true,taintTest:false};
+			options.onrendered = function(canvasObject) {
+				var blobData = canvasObject.toDataURL().substring(22); //data:image/png;base64,
+				var blob = new Blob({
+						data: blobData,
+						length: blobData.length,
+						mimeType: "image/png"
+					});
+				callback(blob);
+			};
+			
+			h2c([document.body], options);
+		},
+		
+		isCameraSupported: function(){
+			try
+			{
+				tizen.application.getAppInfo("org.tizen.camera-app");
+				return true;
+			}
+			catch(e) {
+				return false;
+			}
+		},
+		
+		getIsCameraSupported: function(){
+			return this.isCameraSupported();
+		},
+		
+		showCamera: function() {
+				if (!this.isCameraSupported()) return;
+				
+				var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/create_content',null,'image/jpeg');
+				var serviceReplyCB = { 
+						   // callee now sends a reply 
+						   onsuccess: function(reply) {
+							   console.log('onsuccess:'+reply.key + ';'+reply.value);
+						   },
+						   // Something went wrong 
+						   onfail: function() {
+							  console.log('launch service failed');
+						   } 
+				};
+				
+				function succeeded() {
+					console.log('launch service succeeded');
+				} 
+				function failed(e) { 
+					console.log('launch service failed. Reason : ' + e.name);
+				}
+				
+				tizen.application.launchService(service,'org.tizen.camera-app',succeeded, failed, serviceReplyCB); 
 		}
-
 	});
-	
 });
