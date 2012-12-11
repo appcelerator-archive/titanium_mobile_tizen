@@ -77,6 +77,8 @@ function tv_headers() {
 			Ti.UI.Tizen.hideSoftKeyboard(search);
 		}
 	});
+	search.value = " ";
+	
 	// create table view
 	var tableview = Titanium.UI.createTableView({
 		data:data,
