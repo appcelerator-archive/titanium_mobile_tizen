@@ -869,7 +869,6 @@ build.prototype = {
 	},
 
 	addTizenToTiAppXml: function (){		
-		//var DOMParser = xmldom.DOMParser;
 		var XMLSerializer = xmldom.XMLSerializer;
 
 		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
@@ -910,7 +909,6 @@ build.prototype = {
 		var node = parsedTiXml.firstChild;
 		
 		var tizenNode;
-		//var tiId = 'http://appcelerator.com/TizenApp';		
 		this.tiapp.tizen.appid = 'change1me2';
 
 		while (node) {
@@ -1023,17 +1021,15 @@ build.prototype = {
 	},
 	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));
-		//var tizenBuildDir = this.buildDir;
+
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
-		//var async = require('async');
+
 		// Create the tasks to unzip each entry in the zip file
 		var child,
 		stdout = '',
 		stderr = '';
-		//var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
-		//packaging
-		//logger.info(__('wgtPackaging7z  7z cmd: "%s" ', cmd7za));
+
 		child = packer.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
 		child.stdout.on('data', function (data) {
 			stdout += data.toString();
@@ -1093,7 +1089,7 @@ build.prototype = {
 
 	detectTizenSDK: function(logger, next){
 		//Detect Tizen SDK
-		//TODO: check OS, this code supporting windows only(for now useing registry to find path)
+		//check OS, this code supporting windows only(for now useing registry to find path)
 		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
 		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
 		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
