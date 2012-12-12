@@ -15,9 +15,7 @@ function picker_date2() {
 	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen') {
 		picker = Ti.UI.createPicker({
 			type:Ti.UI.PICKER_TYPE_TIME,
-			value:value,
-			width: '150',
-			height: '42'
+			value:value
 		});
 	}
 	
