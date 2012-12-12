@@ -3,6 +3,12 @@ define(["Ti/_/declare", "Ti/Blob"],
 		var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
+			imgMimeType = {
+				'jpg': 'image/jpeg',
+				'gif': 'image/gif',
+				'png': 'image/png',
+				'svg': 'image/svg+xml'
+			},
 			PHOTO = 1,
 			VIDEO = 2,
 			UKNOWN = 3,
@@ -57,6 +63,7 @@ define(["Ti/_/declare", "Ti/Blob"],
         return {
 			open: function(args){
 				var path;
+				var file;
 				var readFromStream  = function(fileStream){
 					var contents = fileStream.readBase64(fileStream.bytesAvailable);
 					fileStream.close();
@@ -64,7 +71,9 @@ define(["Ti/_/declare", "Ti/Blob"],
 					var blob = new Blob({
 						data: contents,
 						length: contents.length,
-						mimeType: 'image/jpeg'
+						mimeType: imgMimeType[virtualRoot.fileExt(path)] || "text/plain",
+						file: file || null,
+						nativePath: path || null
 					});
 					
 					var event = {
@@ -77,7 +86,7 @@ define(["Ti/_/declare", "Ti/Blob"],
 								
 				var resolveFileCB = function(dir) {
 					//Resolve to file
-					var file = dir.resolve(virtualRoot.getFile(path));
+					file = dir.resolve(virtualRoot.getFile(path));
 					file.openStream(
 						// open for reading
 						'r',
