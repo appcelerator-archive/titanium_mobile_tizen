@@ -41,11 +41,9 @@ async.series([
 		if(validateArgs(scriptArgs)){
 
 			var archiveName = path.basename(scriptArgs[0]);
-			archiveName = archiveName.replace('.zip', '-tizen.zip');
 			//build name for output zip with SDK
-			//resultPath = path.join(path.dirname(scriptArgs[0]), archiveName + "-tizen.zip").toString();
+			archiveName = archiveName.replace('.zip', '-tizen.zip');
 			resultPath = path.join(path.dirname(scriptArgs[0]), archiveName);
-
 			console.log('[DEBUG] created output file name: ' + resultPath);
 			next(null, 'ok');
 		}
@@ -272,7 +270,9 @@ function find7za(){
 
 function packagingSDK7z(finish){
 	console.log('Packaging application into zip');
+/*
 	var packer = require('child_process');
+	
 	var async = require('async');
 	var cmd7za = find7za().toString() + ' a "' + resultPath + '" "' + workingDir + '/*" -tzip';
 	//packaging
@@ -289,11 +289,51 @@ function packagingSDK7z(finish){
 			}
 			finish();
 		});
+*/
+	var packer = require('child_process');
+
+	// Create the tasks to unzip each entry in the zip file
+	var child,
+	stdout = '',
+	stderr = '';
+
+	child = packer.spawn(path.resolve(find7za().toString()), ['a', resultPath, workingDir + '/*', '-tzip']);
+	child.stdout.on('data', function (data) {
+		stdout += data.toString();
+	});
+	child.on('exit', function (code, signal) {
+		if (finish) {
+			if (code) {
+				// if we're on windows, the error message is actually in stdout, so scan for it
+				if (process.platform === 'win32') {
+					var foundError = false,
+						err = [];
+					
+					stdout.split('\n').forEach(function (line) {
+						if (/^Error\:/.test(line)) {
+							foundError = true;
+						}
+						if (foundError) {
+							line && err.push(line.trim());
+						}
+					});
+					
+					if (err.length) {
+						stderr = err.join('\n') + stderr;
+					}
+				}
+				finish();
+			} else {
+				finish();
+			}
+		}
+	});
+
 }
 
 function unzip7za(src, dest, callback){
+/*	
 	var packer = require('child_process');
-	var async = require('async');
 	var cmd7za = find7za().toString() + ' x "' + src + '" -o"' + dest + '" -y -bd';
 	//unzipping
 	console.log('7z cmd: ' + cmd7za);
@@ -307,6 +347,46 @@ function unzip7za(src, dest, callback){
 				console.log('compressing ok');
 			}
 			callback(null);
+		});	
+*/		
+//----------------------
+		var packer = require('child_process');
+
+		// Create the tasks to unzip each entry in the zip file
+		var child,
+		stdout = '',
+		stderr = '';
+
+		child = packer.spawn(path.resolve(find7za().toString()), ['x', src, '-o' + dest, '-y', '-bd']);
+		child.stdout.on('data', function (data) {
+			stdout += data.toString();
+		});
+		child.on('exit', function (code, signal) {
+			if (callback) {
+				if (code) {
+					// if we're on windows, the error message is actually in stdout, so scan for it
+					if (process.platform === 'win32') {
+						var foundError = false,
+							err = [];
+						
+						stdout.split('\n').forEach(function (line) {
+							if (/^Error\:/.test(line)) {
+								foundError = true;
+							}
+							if (foundError) {
+								line && err.push(line.trim());
+							}
+						});
+						
+						if (err.length) {
+							stderr = err.join('\n') + stderr;
+						}
+					}
+					callback(null);
+				} else {
+					callback(null);
+				}
+			}
 		});	
 }
 
