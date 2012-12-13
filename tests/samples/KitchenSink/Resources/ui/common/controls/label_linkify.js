@@ -24,7 +24,7 @@ function label_linkify() {
 		top : 155
 	});
 	btnEmail.addEventListener('click', function(e) {
-		l.autoLink = Titanium.UI.Tizen.LINKIFY_EMAIL_ADDRESSES;
+		l.autoLink = Ti.UI.Tizen.LINKIFY_EMAIL_ADDRESSES;
 	});
 	win.add(btnEmail);
 	
@@ -32,17 +32,13 @@ function label_linkify() {
 		title : 'Map Addresses', width: 150, height: 40,
 		top : 200
 	});
-	btnMap.addEventListener('click', function(e) {
-		//l.autoLink = Ti.UI.Tizen.LINKIFY_MAP_ADDRESSES;
-	});
-	win.add(btnMap);
 	
 	var btnPhone = Ti.UI.createButton({
 		title : 'Phone Numbers', width: 150, height: 40,
 		top : 245
 	});
 	btnPhone.addEventListener('click', function(e) {
-		//l.autoLink = Ti.UI.Tizen.LINKIFY_PHONE_NUMBERS;
+		l.autoLink = Ti.UI.Tizen.LINKIFY_PHONE_NUMBERS;
 	});
 	win.add(btnPhone);
 	
@@ -51,7 +47,7 @@ function label_linkify() {
 		top : 290
 	});
 	btnWeb.addEventListener('click', function(e) {
-		l.autoLink = Ti.UI.Tizen.LINKIFY_URL_ADDRESSES;
+		l.autoLink = Ti.UI.Tizen.LINKIFY_WEB_URLS;
 	});
 	win.add(btnWeb);
 	
