@@ -15,8 +15,6 @@
 // output file name
 // working directory
 
-//TODO: use smarter way for logging
-
 console.log("cli args: " + process.argv);
 
 var fs = require('fs'),
@@ -31,15 +29,12 @@ var fs = require('fs'),
 	sdkRoot,
 	resultPath;
 
-console.log('[DEBUG] scriptArgs(zip, working): ' + scriptArgs);
-
-
+console.log('[DEBUG] scriptArgs(zip, working directory): ' + scriptArgs);
 
 async.series([
 	function(next){
 		//Validation
 		if(validateArgs(scriptArgs)){
-
 			var archiveName = path.basename(scriptArgs[0]);
 			//build name for output zip with SDK
 			archiveName = archiveName.replace('.zip', '-tizen.zip');
@@ -50,11 +45,9 @@ async.series([
 	}
 	, function(next){
 		console.log('Start unzip');
-		//Unzip
+		//Unzip callback
 		var resultCb = function(errorMsg){
-			if(errorMsg){
-				//TODO: do not ignore error, right now it is required for Windows since 7z return error always
-				//next('Unzip failed' + errorMsg, 'ok');				
+			if(errorMsg){				
 				console.log('[DEBUG] unzip finished with error: ' + errorMsg);
 				next(null, 'ok');
 			}else{
@@ -92,19 +85,16 @@ async.series([
 			packagingSDKLinux(function(){
 				next('Packaging on linux', null);	
 			});
-			next('Packaging on linux', null);
 		}
 	}
 	], function(err){
 		if(err) 
 			console.log(err)
-		else {
-			// Waits for defined functions to finish
-			console.log('Finished')
-		}
+		console.log('Finished.')
+
 });
 
-//validating inpup parameters
+//validating input parameters
 function validateArgs(params){
 	var workOk = true;
 	if(!fs.existsSync(params[0])){
@@ -120,7 +110,6 @@ function validateArgs(params){
 }
 
 function copymobilWebToTizen(finish){
-	//todo: need same for linux
 	var basePath = path.join(workingDir, 'mobilesdk', 'win32');
 	console.log('[DEBUG] Looking for sdk in  folder:' + basePath);
 	appc.fs.visitDirs(basePath, 
@@ -190,9 +179,8 @@ function executeDependenciesAnalyzer(finished){
 				console.log('executeDependenciesAnalyzer ok');
 			}
 			finished();
-		});		
+		});
 }
-
 
 function copyFileSync(srcFile, destFile) {
 	console.log('[DEBUG] copyFileSync from ' + srcFile + " to "+ destFile);
@@ -336,23 +324,22 @@ function unzip7za(src, dest, callback){
 }
 
 function packagingSDKLinux(finish){
-	console.log('Packaging application into zip with linux zip');
+	console.log('Packaging Titanium Mobile');
 	var packer = require('child_process');
-	var async = require('async');
-	var cmdzip = 'zip -r "' + resultPath + '" *';
-	console.log('zip cmd: ' + cmdzip);
-	packer.exec(
-		cmdzip,
+	var child = packer.spawn(
+		'zip', 
+		['-r', resultPath, '*'],
 		{
 			cwd: workingDir
-		},
-		function (err, stdout, stderr) {
-			console.log(stdout);
-			if(err != null){
-				console.log('failed packaging for tizen platform with errors:\n' + stderr);
-			}else{
-				console.log('compressing ok');
-			}
-			finish(null);
-		});	
+		});
+	var stderr = '';
+	
+	child.stderr.on('data', function (data) {
+		stderr += data;
+	});
+	
+	child.on('exit', function (code, signal) {
+		console.log(stderr);
+		finish(null);
+	});
 }
