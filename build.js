@@ -27,7 +27,8 @@ var fs = require('fs'),
 	workingDir = scriptArgs[1],
 	titaniumTizenDir = __dirname,
 	sdkRoot,
-	resultPath;
+	resultPath,
+	buildLinuxSdk = false;
 
 console.log('[DEBUG] scriptArgs(zip, working directory): ' + scriptArgs);
 
@@ -39,6 +40,10 @@ async.series([
 			//build name for output zip with SDK
 			archiveName = archiveName.replace('.zip', '-tizen.zip');
 			resultPath = path.join(path.dirname(scriptArgs[0]), archiveName);
+			if(resultPath.indexOf('linux') != -1){
+				//initialize everything for linux sdk
+				buildLinuxSdk = true;
+			}
 			console.log('[DEBUG] created output file name: ' + resultPath);
 			next(null, 'ok');
 		}
@@ -110,7 +115,12 @@ function validateArgs(params){
 }
 
 function copymobilWebToTizen(finish){
-	var basePath = path.join(workingDir, 'mobilesdk', 'win32');
+	var basePath;
+	if(buildLinuxSdk){
+		basePath = path.join(workingDir, 'mobilesdk', 'linux');
+	}else{
+		basePath = path.join(workingDir, 'mobilesdk', 'win32');
+	}
 	console.log('[DEBUG] Looking for sdk in  folder:' + basePath);
 	appc.fs.visitDirs(basePath, 
 		function(name, dpath){
@@ -231,7 +241,7 @@ function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
     }
 }
 
-function find7za(){	
+function find7za(){
 	var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));	
 	console.log('7za.exe detected. Path is ' + path.normalize(zippath));
 
@@ -270,7 +280,6 @@ function packagingSDK7z(finish){
 							line && err.push(line.trim());
 						}
 					});
-					
 					if (err.length) {
 						stderr = err.join('\n') + stderr;
 					}
