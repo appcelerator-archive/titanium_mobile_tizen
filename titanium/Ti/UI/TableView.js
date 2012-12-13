@@ -83,7 +83,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 				sections = this._sections,
 				sectionsList = sections._children,
 				len = sectionsList.length;
-			for(var i = 0; i < len; i+= 2) {
+			for(var i = 0; i < len; i+= 1) {
 
 				// Check if the section is visible
 				var section = sectionsList[i],
@@ -91,7 +91,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 					sectionOffsetBottom = section._measuredHeight - sectionOffsetTop;
 				if (sectionOffsetTop > 0 && sectionOffsetBottom > 0) {
 					var rows = section._rows._children
-					for (var j = 1; j < rows.length; j += 2) {
+					for (var j = 1; j < rows.length; j += 1) {
 						var row = rows[j],
 							rowOffsetTop = sectionOffsetTop - row._measuredTop,
 							rowOffsetBottom = row._measuredHeight - rowOffsetTop;
@@ -146,9 +146,11 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 			if (type === "click" || type === "singletap" || type === "longpress") {
 				if (row && section) {
 					
+					//TODO write tests
 					for (; i < sections.length; i += 2) {
 						localIndex = sections[i]._rows._children.indexOf(row);
 						if (localIndex !== -1) {
+							//TODO write tests
 							index += Math.floor(localIndex / 2);
 							break;
 						} else {
@@ -193,13 +195,22 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		},
 		
 		_refreshSections: function() {
-			for (var i = 0; i < this._sections._children.length; i += 2) {
+			for (var i = 0; i < this._sections._children.length; i += 1) {
 				this._sections._children[i]._refreshRows();
 			}
 			this._triggerLayout();
 		},
+		// Total Row Count in the Table
+		rowCount:function(){
+			var currentOffset = 0;
+			for(var i = 0; i < this._sections._children.length; i++) {
+				section = this._sections._children[i];
+				currentOffset += section.rowCount;			
+			}		
+			return currentOffset;	
+		},
 		
-		_calculateLocation: function(index) {
+		_calculateLocation: function(index, insertAfter) {
 			var currentOffset = 0,
 				section;
 			
@@ -207,11 +218,20 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 				section = this._sections._children[i];
 				currentOffset += section.rowCount;
 				
-				if (index < currentOffset) {
-					return {
-						section: section,
-						localIndex: section.rowCount - (currentOffset - index)
-					};
+				if (insertAfter) {
+					if (index <= currentOffset) {
+						return {
+							section: section,
+							localIndex: section.rowCount - (currentOffset - index)
+						};
+					}
+				} else {
+					if (index < currentOffset) {
+						return {
+							section: section,
+							localIndex: section.rowCount - (currentOffset - index)
+						};
+					}
 				}
 			}
 			
@@ -224,11 +244,11 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 			}
 		},
 		
-		_insertRow: function(value, index) {
-			var location = this._calculateLocation(index);
+		_insertRow: function(value, index, insertAfter) {
+			var location = this._calculateLocation(index, insertAfter);
 			
 			if (location) {
-				location.section.add(value,location.localIndex); // We call the normal .add() method to hook into the sections proper add mechanism
+				location.section.add(value, location.localIndex); // We call the normal .add() method to hook into the sections proper add mechanism
 			}
 			this._publish(value);
 			this._refreshSections();
@@ -237,7 +257,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		_removeRow: function(index) {
 			var location = this._calculateLocation(index);
 			if (location) {
-				this._unpublish(location.section._rows._children[2 * location.localIndex + 1]);
+				this._unpublish(location.section._rows._children[location.localIndex]);
 				location.section._removeAt(location.localIndex);
 			}
 		},
@@ -259,7 +279,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		},
 
 		insertRowAfter: function(index, value) {
-			this._insertRow(value, index + 1);
+			this._insertRow(value, index + 1, true);
 		},
 
 		insertRowBefore: function(index, value) {
@@ -274,7 +294,7 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		scrollToIndex: function(index) {
 			var location = this._calculateLocation(index);
 			location && this._setTranslation(0,-location.section._measuredTop -
-				location.section._rows._children[2 * location.localIndex + 1]._measuredTop);
+				location.section._rows._children[ location.localIndex + 1]._measuredTop);
 		},
 		
 		scrollToTop: function(top) {
@@ -329,18 +349,18 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 		},
 		
 		getIndexByName: function(name) {
-			var index = -1;
+			var index = 0;
 			
 			for (var i = 0; i < this._sections._children.length; i++) {
-				for (var j = 0; j < this._sections._children[i].rows.length; j++) {
-					if (this._sections._children[i].rows[j].name === name) {						
-						if (i > 0) {
-							index = this._sections._children[i - 1].rowCount + j;
-						} else {
-							index = j;
-						}
+				if (i > 0) {
+					index += this._sections._children[i - 1].rows.length;
+				}
+
+				for (var j = 0; j < this._sections._children[i].rows.length; j++) {					
+					if (this._sections._children[i].rows[j].name === name) {
+						index += j;
 						
-						break;
+						return index;		
 					}
 				}
 			}
@@ -430,16 +450,18 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 					firstRow.setTop(this.rowHeight);
 
 					searchBar.addEventListener('change', function(e) {
-						for (var i = 0; i < this.getChildren().length; i++) {
-							var child = this.getChildren()[i];
-							if (child !== searchBar) {
-								if (child.title && child.title.match(searchBar.value)) {
-									child.setHeight(this.rowHeight);
-								} else {
-									child.setHeight(0);
+						for (var i = 0; i < this._sections._children.length; i++) {
+							for (var j = 0; j < this._sections._children[i].rows.length; j++) {
+								var child = this._sections._children[i].rows[j];
+								if (child !== searchBar) {
+									if (child.title && child.title.match(searchBar.value)) {
+										child.setHeight(this.rowHeight);
+									} else {
+										child.setHeight(0);
+									}
 								}
 							}
-						}
+						};
 					}.bind(this));
 					this.add(searchBar);
 				}

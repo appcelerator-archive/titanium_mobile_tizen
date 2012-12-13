@@ -16,7 +16,7 @@ function openGallery() {
 			}
 			else
 			{
-				// is this necessary?
+				Titanium.API.info('this is video:' + event.media);
 			}
 	
 			Titanium.API.info('PHOTO GALLERY SUCCESS cropRect.x ' + cropRect.x + ' cropRect.y ' + cropRect.y  + ' cropRect.height ' + cropRect.height + ' cropRect.width ' + cropRect.width);
@@ -24,7 +24,7 @@ function openGallery() {
 		},
 		cancel:function()
 		{
-	
+			
 		},
 		error:function(error)
 		{
