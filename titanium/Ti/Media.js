@@ -87,19 +87,25 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 		saveToPhotoGallery: function(media, callbacks){
 			var file = media instanceof Titanium.Blob ? media.file : media;
 			var blob = file.read();
-			
+					
 			function errorCB(e){
-				console.log("Error" + e.message);
+				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
 			};
 			
 			function successCB(dir) {
 				var writeToStream = function (fileStream) {
 					fileStream.writeBase64(blob._data);
 					fileStream.close();
+					callbacks && typeof callbacks.success === 'function' && callbacks.success();
 				};
 				
-				dir.createFile(file.name);
-				dir.resolve(file.name).openStream('rw', writeToStream,errorerrorCB);
+				try{
+					dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
+				}catch(e){
+					errorCB(e);
+				}
+				
+				
 			};
 			
 			tizen.filesystem.resolve('images', successCB, errorCB, "rw");
@@ -116,7 +122,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 						length: blobData.length,
 						mimeType: "image/png"
 					});
-				callback(blob);
+				callback({media:blob});
 			};
 			
 			h2c([document.body], options);

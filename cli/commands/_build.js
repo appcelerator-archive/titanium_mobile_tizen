@@ -287,11 +287,14 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});						
 					}.bind(this), function(next){
-						this.detectTizenSDK(next);
+						if(!(this.targetDevice && this.targetDevice != 'none')){
+							finished && finished.call(this);
+						}else{							
+							this.detectTizenSDK(logger, next);
+						}
 					}.bind(this),function(next){
 						this.runOnDevice(logger, function(){
 							finished && finished.call(this);	
-							next(null, 'ok');
 						});						
 					}.bind(this)
 
@@ -300,7 +303,7 @@ function build(logger, config, cli, finished) {
 							console.log(err)
 						else {
 
-							console.log('Failed')
+							console.log('Failed...')
 						}
 				});
 			});
@@ -583,7 +586,7 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		//TODO: tolik, return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
+		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
 		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
@@ -865,10 +868,7 @@ build.prototype = {
 		}));
 	},
 
-	addTizenToTiAppXml: function (){
-		this.logger.info(__('addTizenToTiXml'));
-
-		//var DOMParser = xmldom.DOMParser;
+	addTizenToTiAppXml: function (){		
 		var XMLSerializer = xmldom.XMLSerializer;
 
 		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
@@ -909,7 +909,6 @@ build.prototype = {
 		var node = parsedTiXml.firstChild;
 		
 		var tizenNode;
-		//var tiId = 'http://appcelerator.com/TizenApp';		
 		this.tiapp.tizen.appid = 'change1me2';
 
 		while (node) {
@@ -1020,29 +1019,48 @@ build.prototype = {
 			this.moduleMap[mid] = deps;
 		}
 	},
-
 	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));
-		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
+
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
-		var async = require('async');
 
-		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
-		//packaging
-		logger.info(__('wgtPackaging7z  7z cmd: "%s" ', cmd7za));
-		packer.exec(
-			cmd7za,
-			function (err, stdout, stderr) {
-				console.log(stdout);
-				if(err != null){
-					console.log('failed packaging for tizen platform');
-					console.log(stderr);
-				}else{
-					console.log('compressing ok');
+		// Create the tasks to unzip each entry in the zip file
+		var child,
+		stdout = '',
+		stderr = '';
+
+		child = packer.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
+		child.stdout.on('data', function (data) {
+			stdout += data.toString();
+		});
+		child.on('exit', function (code, signal) {
+			if (callback) {
+				if (code) {
+					// if we're on windows, the error message is actually in stdout, so scan for it
+					if (process.platform === 'win32') {
+						var foundError = false,
+							err = [];
+						
+						stdout.split('\n').forEach(function (line) {
+							if (/^Error\:/.test(line)) {
+								foundError = true;
+							}
+							if (foundError) {
+								line && err.push(line.trim());
+							}
+						});
+						
+						if (err.length) {
+							stderr = err.join('\n') + stderr;
+						}
+					}
+					callback();
+				} else {
+					callback();
 				}
-				callback();
-			});
+			}
+		});		
 	},
 
 	runOnDevice : function(logger, callback){		
@@ -1051,16 +1069,16 @@ build.prototype = {
 			var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
 			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget=' + pathToWgt;
-			console.log('install cmd: ' + cmd);
+			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
 				function (err, stdout, stderr) {
-					console.log(stdout);
+					logger.info(stdout);
 					if(err != null){
-						console.log('failed install wgt');
-						console.log(stderr);
+						logger.info('wgt installation failed');
+						logger.info(stderr);
 					}else{
-						console.log('Installed wgt: ' + pathToWgt);
+						logger.info('Installed wgt: ' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1069,9 +1087,9 @@ build.prototype = {
 		}		
 	},
 
-	detectTizenSDK: function(next){
+	detectTizenSDK: function(logger, next){
 		//Detect Tizen SDK
-		//TODO: check OS, this code supporting windows only(for now useing registry to find path)
+		//check OS, this code supporting windows only(for now useing registry to find path)
 		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
 		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
 		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
@@ -1083,53 +1101,48 @@ build.prototype = {
 			function (err, stdout, stderr) {
 
 				if(stdout !== null && (typeof stdout != 'undefined')){
-					console.log('obj type' + typeof stdout);
 					var arr = stdout.split(" ");
 					keyvalue = arr[arr.length-1];//last parameter is path
 					keyvalue = keyvalue.slice(0, -4);
 					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-					console.log('reading file: ' + keyvalue);
+					logger.info(__('reading file: ' + keyvalue));
 					fs.readFile(keyvalue, 'utf8', function (err,data) {
 						if (err) {
-							return console.log(err);
+							logger.info(err);
+							return;
 						}
 						var arr = data.split("=");
 						self.tizenSdkDir =  arr[1];
-						console.log("Tizen SDK found at: " + self.tizenSdkDir);
+						logger.info("Tizen SDK found at: " + self.tizenSdkDir);
 						next(null, 'ok');
 					});
-
 				}else{
-					console.log('error: cannot read values from windows registry');
+					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
 				}
 			});
 	},
 
-	find7za: function(){	
+	find7za: function(logger){	
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if(fs.existsSync(zippath)){
 			return zippath;
 		}else{
-			console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
+			logger.error('7za.exe not found. Expected path: ' + path.normalize(zippath));
 		}
 	},
 
 	signTizenApp: function(logger, callback){
-		logger.info(__('signing application in  "%s" ', this.buildDir));		
+		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
 		var async = require('async');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
-		//logger.debug(__('Signer commandline: "%s" ', cmdSign));
-		console.log('Signer commandline: ' + cmdSign);
+		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 		packer.exec(
 			cmdSign,
-			function (err, stdout, stderr) {
-				console.log(stdout);
+			function (err, stdout, stderr) {				
 				if(err != null){
-					console.log('Signing failed ');
-					console.log(stderr);
-				}else{
-					console.log('signing ok');
+					logger.error('Signing failed ');
+					logger.error(stderr);
 				}
 				callback();
 			});

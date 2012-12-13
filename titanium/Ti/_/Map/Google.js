@@ -39,10 +39,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/App/Propertie
 
 			postscript: function() {
 				var region = this.region,
+					zoomControl = this.zoomControl,
 					gmap = this._gmap = new gmaps.Map(this.domNode, {
 						disableDefaultUI: true,
 						zoom: 2,
-						zoomControl: true,
+						zoomControl: (typeof zoomControl === "undefined")?true:zoomControl,
 						center: new gmaps.LatLng(region.latitude, region.longitude),
 						mapTypeId: mapType(this.mapType)
 					});
