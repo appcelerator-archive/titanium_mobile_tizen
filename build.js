@@ -173,20 +173,8 @@ function fixManifest(){
 
 function executeDependenciesAnalyzer(finished){
 	console.log('[DEBUG] executeDependenciesAnalyzer ');
-	
-	// copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
-	// vm = require('vm');
-	// sandbox = {	};
-	// var scriptContent = fs.readFileSync(path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js'), 'utf8').toString();
-	// var script = vm.createScript(scriptContent, 'dependencyAnalyzer.js');
-	// for (var i = 0; i < 10 ; i += 1) {
-	//   script.runInNewContext(sandbox);
-	// }
-
 	var runner = require('child_process');
-
 	var scriptpath = path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js');
-
 	var analyzerCmd = 'node "' + scriptpath + '"';
 	
 	console.log('starting dependency analyzer: ' + analyzerCmd);
@@ -250,8 +238,6 @@ function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
             fs.symlinkSync(symlinkFull, newDirLocation + "/" + files[i]);
         } else {
             /*  At this point, we've hit a file actually worth copying... so copy it on over. */
-            // var contents = fs.readFileSync(sourceDir + "/" + files[i]);
-            // fs.writeFileSync(newDirLocation + "/" + files[i], contents);
             copyFileSync(sourceDir + "/" + files[i], newDirLocation + "/" + files[i])
         }
     }
@@ -270,28 +256,7 @@ function find7za(){
 
 function packagingSDK7z(finish){
 	console.log('Packaging application into zip');
-/*
 	var packer = require('child_process');
-	
-	var async = require('async');
-	var cmd7za = find7za().toString() + ' a "' + resultPath + '" "' + workingDir + '/*" -tzip';
-	//packaging
-	console.log('7z cmd: ' + cmd7za);
-	packer.exec(
-		cmd7za,
-		function (err, stdout, stderr) {
-			console.log(stdout);
-			if(err != null){
-				console.log('failed packaging for tizen platform');
-				console.log(stderr);
-			}else{
-				console.log('compressing ok');
-			}
-			finish();
-		});
-*/
-	var packer = require('child_process');
-
 	// Create the tasks to unzip each entry in the zip file
 	var child,
 	stdout = '',
@@ -328,66 +293,46 @@ function packagingSDK7z(finish){
 			}
 		}
 	});
-
 }
 
 function unzip7za(src, dest, callback){
-/*	
 	var packer = require('child_process');
-	var cmd7za = find7za().toString() + ' x "' + src + '" -o"' + dest + '" -y -bd';
-	//unzipping
-	console.log('7z cmd: ' + cmd7za);
-	packer.exec(
-		cmd7za,
-		function (err, stdout, stderr) {
-			console.log(stdout);
-			if(err != null){
-				console.log('7za finished with errors:\n' + stderr);
-			}else{
-				console.log('compressing ok');
-			}
-			callback(null);
-		});	
-*/		
-//----------------------
-		var packer = require('child_process');
+	// Create the tasks to unzip each entry in the zip file
+	var child,
+	stdout = '',
+	stderr = '';
 
-		// Create the tasks to unzip each entry in the zip file
-		var child,
-		stdout = '',
-		stderr = '';
-
-		child = packer.spawn(path.resolve(find7za().toString()), ['x', src, '-o' + dest, '-y', '-bd']);
-		child.stdout.on('data', function (data) {
-			stdout += data.toString();
-		});
-		child.on('exit', function (code, signal) {
-			if (callback) {
-				if (code) {
-					// if we're on windows, the error message is actually in stdout, so scan for it
-					if (process.platform === 'win32') {
-						var foundError = false,
-							err = [];
-						
-						stdout.split('\n').forEach(function (line) {
-							if (/^Error\:/.test(line)) {
-								foundError = true;
-							}
-							if (foundError) {
-								line && err.push(line.trim());
-							}
-						});
-						
-						if (err.length) {
-							stderr = err.join('\n') + stderr;
+	child = packer.spawn(path.resolve(find7za().toString()), ['x', src, '-o' + dest, '-y', '-bd']);
+	child.stdout.on('data', function (data) {
+		stdout += data.toString();
+	});
+	child.on('exit', function (code, signal) {
+		if (callback) {
+			if (code) {
+				// if we're on windows, the error message is actually in stdout, so scan for it
+				if (process.platform === 'win32') {
+					var foundError = false,
+						err = [];
+					
+					stdout.split('\n').forEach(function (line) {
+						if (/^Error\:/.test(line)) {
+							foundError = true;
 						}
+						if (foundError) {
+							line && err.push(line.trim());
+						}
+					});
+					
+					if (err.length) {
+						stderr = err.join('\n') + stderr;
 					}
-					callback(null);
-				} else {
-					callback(null);
 				}
+				callback(null);
+			} else {
+				callback(null);
 			}
-		});	
+		}
+	});
 }
 
 function packagingSDKLinux(finish){
@@ -395,7 +340,6 @@ function packagingSDKLinux(finish){
 	var packer = require('child_process');
 	var async = require('async');
 	var cmdzip = 'zip -r "' + resultPath + '" *';
-	//packaging
 	console.log('zip cmd: ' + cmdzip);
 	packer.exec(
 		cmdzip,
