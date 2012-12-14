@@ -110,7 +110,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 		},
 
 		linkifyFunctions = {
-			linkifyUrls : function(text_arg){		
+			linkifyUrl : function(text_arg){		
 				var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
 				matches = text_arg.match(reg);
 				if(matches != null){
