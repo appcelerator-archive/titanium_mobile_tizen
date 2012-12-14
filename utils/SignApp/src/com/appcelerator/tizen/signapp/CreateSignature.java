@@ -228,38 +228,55 @@ public class CreateSignature {
 	return privateKey;
     }
 
-    // find files and folders of project and singnig them to the doc
-    private static void signProjectDocuments(XMLSignature signature, String pathToProject, String subFoldersPath) {
+	// find files and folders of project and singnig them to the doc
+	private static void signProjectDocuments(XMLSignature signature,
+			String pathToProject, String subFoldersPath) throws Exception {
+		File targetFolder = new File(pathToProject);
+		try {
+			for (String fileName : targetFolder.list()) {
+				// IResource projectMember = projectMembers[i];
+				String pathToFile = pathToProject + File.separator + fileName;
+				File fileInTargetFolder = new File(pathToFile);
+				if (!isFolder(fileInTargetFolder)) {
 
-	File targetFolder = new File(pathToProject);
-	for (String fileName : targetFolder.list()) {
-	    // IResource projectMember = projectMembers[i];
-	    String pathToFile = pathToProject + File.separator + fileName;
-	    File fileInTargetFolder = new File(pathToFile);
-	    if (!isFolder(fileInTargetFolder)) {
+					if (!SignatureUtility
+							.checkForDistributorSignatureFile(fileName)
+							&& !fileName.equals(".project")) { //$NON-NLS-1$
+						if (fileInTargetFolder.exists()
+								&& !fileInTargetFolder.isHidden()
+								&& !fileInTargetFolder.getName().endsWith("~") //$NON-NLS-1$
+								&& !fileInTargetFolder.getName()
+										.startsWith(".") && !SignatureUtility.checkForWgtPackage(fileName)) { //$NON-NLS-1$
+							if ((!fileName
+									.equals(SignatureUtility.AUTHOR_SIGNATURE))) {
+								// String path = ((IFile)
+								// projectMember).getProjectRelativePath().toString();
+								try {
+									signature.addDocument(subFoldersPath
+											+ fileName, null,
+											SignatureConstants.SHA256);
+								} catch (XMLSignatureException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				} else if (isFolder(fileInTargetFolder)) {
+					if (fileInTargetFolder != null
+							&& fileInTargetFolder.exists()
+							&& !fileInTargetFolder.isHidden()
+							&& !fileInTargetFolder.getName().startsWith(".")) //$NON-NLS-1$
 
-		if (!SignatureUtility.checkForDistributorSignatureFile(fileName) && !fileName.equals(".project")) { //$NON-NLS-1$
-		    if (fileInTargetFolder.exists() && !fileInTargetFolder.isHidden() && !fileInTargetFolder.getName().endsWith("~") //$NON-NLS-1$
-			    && !fileInTargetFolder.getName().startsWith(".") && !SignatureUtility.checkForWgtPackage(fileName)) { //$NON-NLS-1$
-			if ((!fileName.equals(SignatureUtility.AUTHOR_SIGNATURE))) {
-			    // String path = ((IFile)
-			    // projectMember).getProjectRelativePath().toString();
-			    try {
-				signature.addDocument(subFoldersPath + fileName, null, SignatureConstants.SHA256);
-			    } catch (XMLSignatureException e) {
-				e.printStackTrace();
-			    }
+						signProjectDocuments(signature, pathToProject
+								+ File.separator + fileName, subFoldersPath
+								+ fileName + "/");
+				}
 			}
-		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
-	    } else if (isFolder(fileInTargetFolder)) {
-		if (fileInTargetFolder != null && fileInTargetFolder.exists() && !fileInTargetFolder.isHidden()
-			&& !fileInTargetFolder.getName().startsWith(".")) //$NON-NLS-1$
-
-		    signProjectDocuments(signature, pathToProject + File.separator + fileName, subFoldersPath + fileName + "/");
-	    }
 	}
-    }
 
     private static boolean isFolder(File filePath) {
 	return filePath.list() != null;

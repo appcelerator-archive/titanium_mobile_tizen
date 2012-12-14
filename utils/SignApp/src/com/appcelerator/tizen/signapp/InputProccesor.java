@@ -1,5 +1,6 @@
 package com.appcelerator.tizen.signapp;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,8 +85,13 @@ public class InputProccesor {
 		String projectPath = inputMap.get(PROJECT_PATH_INPUT);
 		if (projectPath != null && !projectPath.endsWith("/")
 				&& !projectPath.endsWith("\\")) {
-			String newProjectPath = projectPath.concat("\\");
+			String newProjectPath = projectPath.concat(File.separator);
 			inputMap.put(PROJECT_PATH_INPUT, newProjectPath);
+		}
+		projectPath = inputMap.get(PROJECT_PATH_INPUT);
+		if (projectPath.startsWith("~" + File.separator)) {
+			projectPath = System.getProperty("user.home") + projectPath.substring(1);
+			inputMap.put(PROJECT_PATH_INPUT, projectPath);
 		}
 	}
 
