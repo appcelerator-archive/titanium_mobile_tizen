@@ -1159,7 +1159,6 @@ build.prototype = {
 	signTizenApp: function(logger, callback){
 		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
-		var async = require('async');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 		packer.exec(
