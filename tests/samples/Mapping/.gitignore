@@ -1,12 +1,9 @@
 tmp
-.sdb.devicemap
+.DS_Store
 build/*
+.settings
 build.log
 .fastdev.lock
-.DS_Store
-._*
-.settings
 build.bat
-signature1.xml
 webrun.bat
 webuninstall.bat
