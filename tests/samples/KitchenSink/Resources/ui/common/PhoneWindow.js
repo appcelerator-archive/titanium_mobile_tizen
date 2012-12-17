@@ -34,6 +34,11 @@ function PhoneWindow(title) {
 		data.push({title:'Screenshot', hasChild:true, test:'ui/handheld/ios/phone/screenshot'});
 		data.push({title:'Save to Gallery', hasChild:true, test:'ui/handheld/ios/phone/photo_gallery_save'});
 	}
+	
+	if (Titanium.Platform.name == 'tizen') {
+		data.push({title:'Screenshot', hasChild:true, test:'ui/handheld/tizen/phone/screenshot'});
+		data.push({title:'Save to Gallery', hasChild:true, test:'ui/handheld/tizen/phone/photo_gallery_save'});
+	}
 
 	if (Titanium.Platform.name !== 'android') {
 		data.push({title:'Shake', hasChild:true, test:'ui/common/phone/shake'});
