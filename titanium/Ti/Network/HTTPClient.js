@@ -50,16 +50,22 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 								var blobData = _.isBinaryMimeType(mimeType) ? window.btoa(data) : data;
 								c.responseText = data;
 								c.responseXML = data;
-								c.responseData = new Blob({
+
+								//file
+								var file;
+								this.file/*it is fileName*/ && (file = Filesystem.getFile(Filesystem.applicationDataDirectory, this.file));
+								//blob
+								var blob = new Blob({
 									data: blobData,
 									length: blobData.length,
-									mimeType: mimeType || "text/plain"
+									mimeType: mimeType || "text/plain",
+									file: file || null,
+									nativePath: (file && file.nativePath) || null,
 								});
+								c.responseData = blob;
 								
-								if (f = this.file) {
-									f = Filesystem.getFile(f);
-									f.writable && f.write(blobData);
-								}
+								//write blob to file
+								file && file.writable && file.write(blob);
 							}
 														
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));

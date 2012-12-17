@@ -12,13 +12,6 @@ function picker_date2() {
 		value:value
 	});
 	
-	if (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen') {
-		picker = Ti.UI.createPicker({
-			type:Ti.UI.PICKER_TYPE_TIME,
-			value:value
-		});
-	}
-	
 	
 	// turn on the selection indicator (off by default)
 	picker.selectionIndicator = true;
