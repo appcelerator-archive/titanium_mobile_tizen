@@ -283,9 +283,15 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});
 					}.bind(this), function(next){
-						this.wgtPackaging7z(logger, function(){							
-							next(null, 'ok');
-						});						
+						if(process.platform === 'win32'){
+							this.wgtPackaging7z(logger, function(){
+								next(null, 'ok');
+							});
+						} else{
+							this.wgtPackagingLinux(logger, function(){
+								next(null, 'ok');
+							});
+						}
 					}.bind(this), function(next){
 						if(!(this.targetDevice && this.targetDevice != 'none')){
 							finished && finished.call(this);
@@ -1062,7 +1068,27 @@ build.prototype = {
 			}
 		});		
 	},
-
+	wgtPackagingLinux : function(logger, callback){
+		logger.info('Packaging application into wgt');
+		var packer = require('child_process');
+		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
+		console.log('zip cmd: ' + cmdzip);
+		packer.exec(
+			cmdzip,
+			{
+				cwd: this.buildDir
+			},
+			function (err, stdout, stderr) {
+				logger.info(stdout);
+				if(err != null){
+					logger.info(stderr);
+				}else{
+					logger.info('compressing ok');
+				}
+				callback();
+			}
+		);			
+	},
 	runOnDevice : function(logger, callback){		
 		if(this.targetDevice && this.targetDevice != 'none'){
 			var runner = require("child_process");
@@ -1134,7 +1160,6 @@ build.prototype = {
 	signTizenApp: function(logger, callback){
 		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
-		var async = require('async');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 		packer.exec(
