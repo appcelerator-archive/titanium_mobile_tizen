@@ -333,22 +333,21 @@ function unzip7za(src, dest, callback){
 }
 
 function packagingSDKLinux(finish){
-	console.log('Packaging Titanium Mobile');
 	var packer = require('child_process');
-	var child = packer.spawn(
-		'zip', 
-		['-r', resultPath, '*'],
+	var cmdzip = 'zip -r "' + resultPath + '" *';
+	console.log('zip cmd: ' + cmdzip);
+	packer.exec(
+		cmdzip,
 		{
 			cwd: workingDir
-		});
-	var stderr = '';
-	
-	child.stderr.on('data', function (data) {
-		stderr += data;
-	});
-	
-	child.on('exit', function (code, signal) {
-		console.log(stderr);
-		finish(null);
-	});
+		},
+		function (err, stdout, stderr) {
+			console.log(stdout);
+			if(err != null){
+				console.log(stderr);
+			}else{
+				console.log('compressing ok');
+			}
+			finish(null);
+		});	
 }
