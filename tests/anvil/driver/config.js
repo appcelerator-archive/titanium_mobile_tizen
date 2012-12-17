@@ -24,7 +24,7 @@ module.exports = new function() {
 	Example: this.tiSdkDirs = path.resolve(path.sep, "Users", "ocyrus", "Library",
 		"Application Support", "Titanium", "mobilesdk", "osx");
 	*/
-	this.tiSdkDirs = path.resolve(path.sep,process.env.APPDATA,"Titanium","mobilesdk","win32");
+	this.tiSdkDirs = path.resolve(path.sep,"home","iostash",".titanium","mobilesdk","linux");
 
 	console.log(this.tiSdkDirs);
 	
