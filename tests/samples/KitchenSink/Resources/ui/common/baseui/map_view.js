@@ -74,8 +74,8 @@ function mapview() {
 		animate:true,
 		regionFit:true,
 		userLocation:true,
-		annotations:[atlanta,apple],
-		zoomControl: !isTizen
+		annotations:[atlanta,apple]
+		
 	});
 	
 	if (!isAndroid) {
@@ -223,31 +223,7 @@ function mapview() {
 			
 			wireClickHandlers();
 		};
-	} else if(isTizen) {//native buttons does not work on Tizen 
-			zoomin = Titanium.UI.createButton({
-				title:'+',
-				bottom: 80,
-				left: 15,
-				width: 30
-			});
-			// button to zoom-out
-			zoomout = Titanium.UI.createButton({
-				title:'-',
-				bottom: 40,
-				left: 15,
-				width: 30
-			});
-			
-			zoomin.addEventListener('click',function() {
-				mapview.zoom(1);
-			});
-			
-			zoomout.addEventListener('click',function() {
-				mapview.zoom(-1);
-			});
-			win.add(zoomin);
-			win.add(zoomout);
-	}
+	} 
 	
 	//
 	// EVENT LISTENERS

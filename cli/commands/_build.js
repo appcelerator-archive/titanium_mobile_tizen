@@ -1053,22 +1053,23 @@ build.prototype = {
 	wgtPackagingLinux : function(logger, callback){
 		logger.info('Packaging application into wgt');
 		var packer = require('child_process');
-		var child = packer.spawn(
-			'zip', 
-			['-r', path.join(this.buildDir, 'tizenapp.wgt'), '*'],
+		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
+		console.log('zip cmd: ' + cmdzip);
+		packer.exec(
+			cmdzip,
 			{
 				cwd: this.buildDir
-			});
-		var stderr = '';
-		
-		child.stderr.on('data', function (data) {
-			stderr += data;
-		});
-		
-		child.on('exit', function (code, signal) {
-			logger.info(stderr);
-			callback();
-		});
+			},
+			function (err, stdout, stderr) {
+				logger.info(stdout);
+				if(err != null){
+					logger.info(stderr);
+				}else{
+					logger.info('compressing ok');
+				}
+				callback();
+			}
+		);			
 	},
 	runOnDevice : function(logger, callback){		
 		if(this.targetDevice && this.targetDevice != 'none'){

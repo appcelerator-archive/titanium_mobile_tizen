@@ -4,6 +4,13 @@ function picker_basic2() {
 	
 	var picker = Ti.UI.createPicker();
 	
+	//This data is not right, in documentation we have next -  Picker Can only hold PickerRows and PickerColumns, which are added using the add method. Adding other types of views to a Picker is not supported.
+	//Should be: 
+	//data[0]=Ti.UI.createPickerRow({title:'Bananas',custom_item:'b'});
+	//data[1]=Ti.UI.createPickerRow({title:'Strawberries',custom_item:'s'});
+	//data[2]=Ti.UI.createPickerRow({title:'Mangos',custom_item:'m'});
+	//data[3]=Ti.UI.createPickerRow({title:'Grapes',custom_item:'g'});	
+	
 	var data = [
 		{title:'Bananas',custom_item:'b',fontSize:18},
 		{title:'Strawberries',custom_item:'s',fontSize:20},

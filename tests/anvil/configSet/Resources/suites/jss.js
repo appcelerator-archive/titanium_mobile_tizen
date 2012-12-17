@@ -19,7 +19,11 @@ module.exports = new function() {
 	]
 
 	this.platform_jss_dirs = function(testRun) {
-		var test = Ti.UI.createView({ id: "test" });
+		var test = Ti.UI.createView({ 
+			id: "test",
+			backgroundColor: "blue"
+		});
+		
 		valueOf(testRun, test).shouldNotBeNull();
 
 		if (Ti.Platform.name == "android") {
