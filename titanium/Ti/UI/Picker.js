@@ -15,7 +15,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 							top: unitizedBorderRadius,
 							right: unitizedBorderRadius,
 							bottom: unitizedBorderRadius,
-							position: "absolute"
+							position: "relative"
 						}
 					}, this.domNode),
 					currentValue,
@@ -89,8 +89,8 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 				inputRuler.type = type;
 			} catch(e) {}
 			inputSizes[type] = {
-				width: inputRuler.clientWidth + 2 * borderRadius,
-				height: inputRuler.clientHeight + 2 * borderRadius
+				width: inputRuler.clientWidth + 2.5 * borderRadius,
+				height: inputRuler.clientHeight + 2.5 * borderRadius
 			};
 		});
 
