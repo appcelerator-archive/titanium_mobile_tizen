@@ -66,11 +66,16 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 								
 								//write blob to file
 								file && file.writable && file.write(blob);
+							} else {
+								c.responseText = "";
+								c.responseXML  = "";
+								c.responseData = "";
 							}
 														
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));
 							xhr.status >= 400 && (onload = this._onError);
 							is(onload, "Function") && onload.call(this);
+							
 						}
 				}
 
