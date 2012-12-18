@@ -18,7 +18,6 @@ function views(_args) {
 		{title:'Email Dialog', hasChild:true, test:'ui/common/baseui/email_dialog'},
 		{title:'Point Conversion', hasChild:true, test:'ui/common/baseui/view_point_conversion'},
 		{title:'View w/ Size', hasChild:!isMobileWeb, test:'ui/common/baseui/view_with_size', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		//{title:'Map View', hasChild:!isMobileWeb, test:'ui/common/baseui/map_view', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"}
 		{title:'Map View', hasChild:true, test:'ui/common/baseui/map_view', touchEnabled:true, color:"#aaa"}
 	];
 	
@@ -47,6 +46,9 @@ function views(_args) {
 			data.push({title:'Hi-Res Image 2', wintitle:"Dog", hasChild:true, test:'ui/handheld/ios/baseui/hi_res_image2'});
 		}
 		data.push({title:'Hi-Res Image remote', wintitle:"Remote dog", hasChild:true, test:'ui/handheld/ios/baseui/hi_res_image_remote'});
+	}
+	if (Titanium.Platform.name == 'tizen') {
+		data.push({title:'Element Screenshot', hasChild:true, test:'ui/common/baseui/blob_image_view', touchEnabled:true, color:"#aaa"});	
 	}
 	
 	// create table view
