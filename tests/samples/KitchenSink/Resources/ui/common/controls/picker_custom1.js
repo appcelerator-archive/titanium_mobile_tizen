@@ -2,7 +2,12 @@ function picker_custom1() {
 	var win = Ti.UI.createWindow();
 	win.backgroundColor = 'black';
 	
-	var picker = Ti.UI.createPicker({backgroundColor:'#ff9900'});
+	var picker = Ti.UI.createPicker({
+		backgroundColor:'#ff9900',
+		width: '100',
+		height: '110',
+		color: '#fc0'
+	});
 	
 	function addRow(text)
 	{

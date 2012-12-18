@@ -8,7 +8,7 @@ function xhr_download() {
 		max:1,
 		value:0,
 		top:10,
-		message:'Downloading ' + (Ti.Platform.name == 'android'? 'PNG' : 'PDF') + ' File',
+		message:'Downloading ' + (Ti.Platform.name == 'android'||Titanium.Platform.name == 'tizen'? 'PNG' : 'PDF') + ' File',
 		font:{fontSize:12, fontWeight:'bold'},
 		color:'#888'
 	});
@@ -46,12 +46,10 @@ function xhr_download() {
 		c.onload = function()
 		{
 			Ti.API.info('IN ONLOAD ');
+			ind.value = 1.0;
 			var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,filename);
 			if (Titanium.Platform.name == 'android') {
 				f.write(this.responseData);
-			}else if (Titanium.Platform.name == 'tizen') {
-				Ti.API.info('in onload, data:' + this.responseText);
-				f.write(this.responseText);
 			}
 			
 			//WebView does`t work with HTML5-based files on Tizen/MobileWeb, only url to files on Tizen`s device or web.    
@@ -80,8 +78,12 @@ function xhr_download() {
 			c.open('GET', 'http://developer.appcelerator.com/blog/wp-content/themes/newapp/images/appcelerator_avatar.png?s=48');
 		} else if (Titanium.Platform.name == 'tizen') {
 			c.open('GET','https://mobile.twitter.com/session/new');
+			//Property "file" is path to file. It is not object "file" !!!
+			//See documentation about Titanium.Network.HTTPClient
+			c.file=filename; 
 		}else {
 			c.open('GET','http://www.appcelerator.com/assets/The_iPad_App_Wave.pdf');
+			//Maybe it is wrong because "c.file" must be 'String'.  
 			c.file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,filename);
 		}
 		
@@ -101,6 +103,8 @@ function xhr_download() {
 	b2.addEventListener('click', function()
 	{
 		ind.value = 0;
+		Titanium.Platform.name === 'tizen' && (ind.message = 'Downloading png File');
+		
 		c = Titanium.Network.createHTTPClient();
 
 		c.onload = function()
@@ -108,15 +112,16 @@ function xhr_download() {
 			var data;
 			// Android only supports data of html-string
 			if (Titanium.Platform.name == 'android') {
-				
 				//toBase64 ??? there is not this function in Blob
 				var text = "<img src=\"data:image/png;base64," + this.responseData.toBase64() + "\" />";
 				var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "test.html");
 				f.write(text);
 				data = f.read();
 			} else if (Titanium.Platform.name == 'tizen') {
+				//like Android but without "this.responseData.toBase64()" !!!
+				var text = "<img src=\"" + this.responseData + "\" />";
 				var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "test.html");
-				f.write(this.responseText);
+				f.write(text);
 				data = f.read();
 			} else {
 				data = this.responseData;
@@ -138,19 +143,15 @@ function xhr_download() {
 		};
 	
 		// open the client
-		if (Titanium.Platform.name == 'android') {
+		if (Titanium.Platform.name == 'android' || Titanium.Platform.name == 'tizen') {
 			//android's WebView doesn't support embedded PDF content
 			c.open('GET', 'http://developer.appcelerator.com/blog/wp-content/themes/newapp/images/appcelerator_avatar.png?s=48');
-		} else if ( Titanium.Platform.name == 'tizen') {
-			ind.message = 'Downloading html File';
-			c.open('GET','https://mobile.twitter.com/session/new');
 		} else {
 			c.open('GET','http://www.appcelerator.com/assets/The_iPad_App_Wave.pdf');
 		}
 	
 		// send the data
 		c.send();
-	
 	});
 	
 	win.add(b2);
@@ -191,9 +192,6 @@ function xhr_download() {
 		c.onload = function(e)
 		{
 			Ti.API.info("ONLOAD = "+e);
-			var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,'tiStudio.exe');
-			Ti.API.info(this.responseData);
-			f.write(this.responseData);
 		};
 		c.ondatastream = function(e)
 		{
@@ -207,9 +205,14 @@ function xhr_download() {
 		
 		c.open('GET','http://titanium-studio.s3.amazonaws.com/latest/Titanium_Studio.exe');
 		if ( Titanium.Platform.name !== 'tizen') {
+			//Maybe it is wrong because "c.file" must be 'String'.  
 			c.file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'tiStudio.exe');
 		} else {
 			ind.message = 'Downloading large file';
+
+			//Property "file" is path to file. It is not object "file" !!!
+			//See documentation about Titanium.Network.HTTPClient
+			c.file = 'tiStudio.exe';
 		}
 		c.send();
 	});
