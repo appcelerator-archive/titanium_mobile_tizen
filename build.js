@@ -15,8 +15,6 @@
 // output file name
 // working directory
 
-//TODO: use smarter way for logging
-
 console.log("cli args: " + process.argv);
 
 var fs = require('fs'),
@@ -29,34 +27,32 @@ var fs = require('fs'),
 	workingDir = scriptArgs[1],
 	titaniumTizenDir = __dirname,
 	sdkRoot,
-	resultPath;
+	resultPath,
+	buildLinuxSdk = false;
 
-console.log('[DEBUG] scriptArgs(zip, working): ' + scriptArgs);
-
-
+console.log('[DEBUG] scriptArgs(zip, working directory): ' + scriptArgs);
 
 async.series([
 	function(next){
 		//Validation
 		if(validateArgs(scriptArgs)){
-
 			var archiveName = path.basename(scriptArgs[0]);
-			archiveName = archiveName.replace('.zip', '-tizen.zip');
 			//build name for output zip with SDK
-			//resultPath = path.join(path.dirname(scriptArgs[0]), archiveName + "-tizen.zip").toString();
+			archiveName = archiveName.replace('.zip', '-tizen.zip');
 			resultPath = path.join(path.dirname(scriptArgs[0]), archiveName);
-
+			if(resultPath.indexOf('linux') != -1){
+				//initialize everything for linux sdk
+				buildLinuxSdk = true;
+			}
 			console.log('[DEBUG] created output file name: ' + resultPath);
 			next(null, 'ok');
 		}
 	}
 	, function(next){
 		console.log('Start unzip');
-		//Unzip
+		//Unzip callback
 		var resultCb = function(errorMsg){
-			if(errorMsg){
-				//TODO: do not ignore error, right now it is required for Windows since 7z return error always
-				//next('Unzip failed' + errorMsg, 'ok');				
+			if(errorMsg){				
 				console.log('[DEBUG] unzip finished with error: ' + errorMsg);
 				next(null, 'ok');
 			}else{
@@ -94,19 +90,16 @@ async.series([
 			packagingSDKLinux(function(){
 				next('Packaging on linux', null);	
 			});
-			next('Packaging on linux', null);
 		}
 	}
 	], function(err){
 		if(err) 
 			console.log(err)
-		else {
-			// Waits for defined functions to finish
-			console.log('Finished')
-		}
+		console.log('Finished.')
+
 });
 
-//validating inpup parameters
+//validating input parameters
 function validateArgs(params){
 	var workOk = true;
 	if(!fs.existsSync(params[0])){
@@ -122,8 +115,12 @@ function validateArgs(params){
 }
 
 function copymobilWebToTizen(finish){
-	//todo: need same for linux
-	var basePath = path.join(workingDir, 'mobilesdk', 'win32');
+	var basePath;
+	if(buildLinuxSdk){
+		basePath = path.join(workingDir, 'mobilesdk', 'linux');
+	}else{
+		basePath = path.join(workingDir, 'mobilesdk', 'win32');
+	}
 	console.log('[DEBUG] Looking for sdk in  folder:' + basePath);
 	appc.fs.visitDirs(basePath, 
 		function(name, dpath){
@@ -175,20 +172,8 @@ function fixManifest(){
 
 function executeDependenciesAnalyzer(finished){
 	console.log('[DEBUG] executeDependenciesAnalyzer ');
-	
-	// copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
-	// vm = require('vm');
-	// sandbox = {	};
-	// var scriptContent = fs.readFileSync(path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js'), 'utf8').toString();
-	// var script = vm.createScript(scriptContent, 'dependencyAnalyzer.js');
-	// for (var i = 0; i < 10 ; i += 1) {
-	//   script.runInNewContext(sandbox);
-	// }
-
 	var runner = require('child_process');
-
 	var scriptpath = path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js');
-
 	var analyzerCmd = 'node "' + scriptpath + '"';
 	
 	console.log('starting dependency analyzer: ' + analyzerCmd);
@@ -204,9 +189,8 @@ function executeDependenciesAnalyzer(finished){
 				console.log('executeDependenciesAnalyzer ok');
 			}
 			finished();
-		});		
+		});
 }
-
 
 function copyFileSync(srcFile, destFile) {
 	console.log('[DEBUG] copyFileSync from ' + srcFile + " to "+ destFile);
@@ -252,14 +236,12 @@ function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
             fs.symlinkSync(symlinkFull, newDirLocation + "/" + files[i]);
         } else {
             /*  At this point, we've hit a file actually worth copying... so copy it on over. */
-            // var contents = fs.readFileSync(sourceDir + "/" + files[i]);
-            // fs.writeFileSync(newDirLocation + "/" + files[i], contents);
             copyFileSync(sourceDir + "/" + files[i], newDirLocation + "/" + files[i])
         }
     }
 }
 
-function find7za(){	
+function find7za(){
 	var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));	
 	console.log('7za.exe detected. Path is ' + path.normalize(zippath));
 
@@ -273,49 +255,86 @@ function find7za(){
 function packagingSDK7z(finish){
 	console.log('Packaging application into zip');
 	var packer = require('child_process');
-	var async = require('async');
-	var cmd7za = find7za().toString() + ' a "' + resultPath + '" "' + workingDir + '/*" -tzip';
-	//packaging
-	console.log('7z cmd: ' + cmd7za);
-	packer.exec(
-		cmd7za,
-		function (err, stdout, stderr) {
-			console.log(stdout);
-			if(err != null){
-				console.log('failed packaging for tizen platform');
-				console.log(stderr);
-			}else{
-				console.log('compressing ok');
+	// Create the tasks to unzip each entry in the zip file
+	var child,
+	stdout = '',
+	stderr = '';
+
+	child = packer.spawn(path.resolve(find7za().toString()), ['a', resultPath, workingDir + '/*', '-tzip']);
+	child.stdout.on('data', function (data) {
+		stdout += data.toString();
+	});
+	child.on('exit', function (code, signal) {
+		if (finish) {
+			if (code) {
+				// if we're on windows, the error message is actually in stdout, so scan for it
+				if (process.platform === 'win32') {
+					var foundError = false,
+						err = [];
+					
+					stdout.split('\n').forEach(function (line) {
+						if (/^Error\:/.test(line)) {
+							foundError = true;
+						}
+						if (foundError) {
+							line && err.push(line.trim());
+						}
+					});
+					if (err.length) {
+						stderr = err.join('\n') + stderr;
+					}
+				}
+				finish();
+			} else {
+				finish();
 			}
-			finish();
-		});
+		}
+	});
 }
 
 function unzip7za(src, dest, callback){
 	var packer = require('child_process');
-	var async = require('async');
-	var cmd7za = find7za().toString() + ' x "' + src + '" -o"' + dest + '" -y -bd';
-	//unzipping
-	console.log('7z cmd: ' + cmd7za);
-	packer.exec(
-		cmd7za,
-		function (err, stdout, stderr) {
-			console.log(stdout);
-			if(err != null){
-				console.log('7za finished with errors:\n' + stderr);
-			}else{
-				console.log('compressing ok');
+	// Create the tasks to unzip each entry in the zip file
+	var child,
+	stdout = '',
+	stderr = '';
+
+	child = packer.spawn(path.resolve(find7za().toString()), ['x', src, '-o' + dest, '-y', '-bd']);
+	child.stdout.on('data', function (data) {
+		stdout += data.toString();
+	});
+	child.on('exit', function (code, signal) {
+		if (callback) {
+			if (code) {
+				// if we're on windows, the error message is actually in stdout, so scan for it
+				if (process.platform === 'win32') {
+					var foundError = false,
+						err = [];
+					
+					stdout.split('\n').forEach(function (line) {
+						if (/^Error\:/.test(line)) {
+							foundError = true;
+						}
+						if (foundError) {
+							line && err.push(line.trim());
+						}
+					});
+					
+					if (err.length) {
+						stderr = err.join('\n') + stderr;
+					}
+				}
+				callback(null);
+			} else {
+				callback(null);
 			}
-			callback(null);
-		});	
+		}
+	});
 }
 
 function packagingSDKLinux(finish){
-	console.log('Packaging application into zip with linux zip');
 	var packer = require('child_process');
-	var async = require('async');
 	var cmdzip = 'zip -r "' + resultPath + '" *';
-	//packaging
 	console.log('zip cmd: ' + cmdzip);
 	packer.exec(
 		cmdzip,
@@ -325,7 +344,7 @@ function packagingSDKLinux(finish){
 		function (err, stdout, stderr) {
 			console.log(stdout);
 			if(err != null){
-				console.log('failed packaging for tizen platform with errors:\n' + stderr);
+				console.log(stderr);
 			}else{
 				console.log('compressing ok');
 			}

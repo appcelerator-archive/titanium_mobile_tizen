@@ -69,11 +69,16 @@ function tv_headers() {
 		showCancel:false
 	});
 	search.addEventListener('blur',function(){
-		if(Ti.Platform.name === "android"){
+		if (Ti.Platform.name === "android") {
 			Ti.API.info('Going to hide soft Keyboard as we are shifting focus away from the SearchBar.');
 			Ti.UI.Android.hideSoftKeyboard();
-		}	
+		} else if (Ti.Platform.name === "tizen") {
+			Ti.API.info('Going to hide soft Keyboard as we are shifting focus away from the SearchBar.');
+			Ti.UI.Tizen.hideSoftKeyboard(search);
+		}
 	});
+	search.value = " ";
+	
 	// create table view
 	var tableview = Titanium.UI.createTableView({
 		data:data,

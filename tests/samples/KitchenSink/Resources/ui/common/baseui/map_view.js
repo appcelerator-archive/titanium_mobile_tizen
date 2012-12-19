@@ -2,11 +2,17 @@ function mapview() {
 	var win = Titanium.UI.createWindow();
 	
 	var isAndroid = false;
+	var isTizen = false;
 	if (Titanium.Platform.name == 'android') {
 		isAndroid = true;
 	}
+	if (Titanium.Platform.name == 'tizen') {
+		isTizen = true;
+	}
+	
 	
 	var isMW = ((Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen'));
+	//var isMW = ((Ti.Platform.osname === 'mobileweb'));
 	//
 	// CREATE ANNOTATIONS
 	//
@@ -69,6 +75,7 @@ function mapview() {
 		regionFit:true,
 		userLocation:true,
 		annotations:[atlanta,apple]
+		
 	});
 	
 	if (!isAndroid) {
@@ -216,7 +223,7 @@ function mapview() {
 			
 			wireClickHandlers();
 		};
-	}
+	} 
 	
 	//
 	// EVENT LISTENERS

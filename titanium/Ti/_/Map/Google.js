@@ -42,7 +42,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/App/Propertie
 					gmap = this._gmap = new gmaps.Map(this.domNode, {
 						disableDefaultUI: true,
 						zoom: 2,
-						zoomControl: true,
+						zoomControl: false,//The native google map's zoom buttons does not work and aplication fall on Tizen
 						center: new gmaps.LatLng(region.latitude, region.longitude),
 						mapTypeId: mapType(this.mapType)
 					});

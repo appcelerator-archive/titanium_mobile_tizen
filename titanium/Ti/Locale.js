@@ -471,7 +471,7 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 	        return allGroups.join(',') + '.' + (new Array(digitsAfterSign + 1)).join('#');
 	    };
 
-	    var formatCurrency = function (value, targetLocale) {
+	    var formatCurrencyInternal = function (value, targetLocale) {
 	        if (!isFinite(value)) {
 	            return value;
 	        }
@@ -524,10 +524,9 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 	        return dt.toLocaleTimeString();
 	    };
 
-	    // format a number into a locale specific currency format.
-	    String.formatCurrency = function (amt) {
-	        formatCurrency(amt, locale);
-	        return amt;
+	    // format a number into a locale specific currency format. TagretLocale i soptional and only for mobileWeb and Tizen
+	    String.formatCurrency = function (amt, tagretLocale) {
+	        return formatCurrencyInternal(amt, tagretLocale || locale) || amt;
 	    };
 
 	    return lang.setObject("Ti.Locale", Evented, {

@@ -50,28 +50,60 @@ exports.config = function (logger, config, cli) {
 				desc: __('the type of deployment; production performs optimizations'),
 				hint: __('type'),
 				values: ['production', 'development']
-			}
-			// ,
-			// 'alias': {
-			// 	abbr: 'L',
-			// 	desc: __('the alias for the keystore'),
-			// 	hint: 'alias',
-			// 	prompt: {
-			// 		label: __('Keystore alias'),
-			// 		error: __('Invalid keystore alias'),
-			// 		validator: function (alias) {
-			// 			if (!alias) {
-			// 				throw new appc.exception(__('Invalid keystore alias'));
-			// 			}
-			// 			return true;
-			// 		}
-			// 	}
-			// },
-
-
-
-
-//--------------------			
+			},
+			'alias': {
+				abbr: 'L',
+				desc: __('the alias for the keystore'),
+				hint: 'alias',
+				prompt: {
+					label: __('Keystore alias'),
+					error: __('Invalid keystore alias'),
+					validator: function (alias) {
+						if (!alias) {
+							throw new appc.exception(__('Invalid keystore alias'));
+						}
+						return true;
+					}
+				}
+			},
+			'dev-id': {
+				abbr: 'I',
+				desc: __('the id for the avd'),
+				hint: __('id'),
+				default: 'none'
+			},
+			'keystore': {
+				abbr: 'K',
+				desc: __('the location of the keystore file'),
+				hint: 'path',
+				prompt: {
+					label: __('Keystore File Location'),
+					error: __('Invalid keystore file'),
+					validator: function (keystorePath) {
+						keystorePath = afs.resolvePath(keystorePath);
+						if (!afs.exists(keystorePath) || !fs.lstatSync(keystorePath).isFile()) {
+							throw new appc.exception(__('Invalid keystore file location'));
+						}
+						return true;
+					}
+				}
+			},
+			'password': {
+				abbr: 'P',
+				desc: __('the password for the keystore'),
+				hint: 'alias',
+				password: true,
+				prompt: {
+					label: __('Keystore password'),
+					error: __('Invalid keystore password'),
+					validator: function (password) {
+						if (!password) {
+							throw new appc.exception(__('Invalid keystore password'));
+						}
+						return true;
+					}
+				}
+			},
 		}		
 	};
 };
@@ -148,7 +180,9 @@ function build(logger, config, cli, finished) {
 	this.appNames = {};
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
-	
+	this.tizenSdkDir = 'c:/tizen-sdk';
+	this.targetDevice = cli.argv['dev-id'];
+
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
 		name: pkgJson.name,
@@ -156,8 +190,7 @@ function build(logger, config, cli, finished) {
 		main: pkgJson.main
 	}];
 	
-	if (!this.dependenciesMap) {
-		this.logger.info(__n('Tolik: parsing dependenciesMap %s', 'Tolik: parsing dependenciesMap %s', path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
+	if (!this.dependenciesMap) {		
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
 	
@@ -189,6 +222,8 @@ function build(logger, config, cli, finished) {
 	this.tiapp.tizen = {
 		appid : 'change1me2',
 	};
+	this.tiapp.tizen.appid = randomString(10);
+
 	this.addTizenToTiAppXml();
 
 	// tiapp are ready now, continye
@@ -250,17 +285,33 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});
 					}.bind(this), function(next){
-						this.wgtPackaging7z(logger, function(){
+						if(process.platform === 'win32'){
+							this.wgtPackaging7z(logger, function(){
+								next(null, 'ok');
+							});
+						} else{
+							this.wgtPackagingLinux(logger, function(){
+								next(null, 'ok');
+							});
+						}
+					}.bind(this), function(next){
+						if(!(this.targetDevice && this.targetDevice != 'none')){
+							finished && finished.call(this);
+						}else{							
+							this.detectTizenSDK(logger, next);
+						}
+					}.bind(this),function(next){
+						this.runOnDevice(logger, function(){
 							finished && finished.call(this);	
-						});
-						next(null, 'ok');
+						});						
 					}.bind(this)
+
 					], function(err){
 						if(err) 
 							console.log(err)
 						else {
 
-							console.log('Failed')
+							console.log('Failed...')
 						}
 				});
 			});
@@ -543,7 +594,7 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		//TODO: tolik, return it back, do not bypass caching
+		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
 		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
@@ -730,13 +781,12 @@ build.prototype = {
 		// write the titanium.css
 		fs.writeFileSync(this.buildDir + '/titanium.css', cleanCSS.process(tiCSS.join('')));
 
-		this.logger.info(__('Tolik: Assembling titanium.css finished'));
 		callback();
 	},
 	
 	createIcons: function (callback) {
 		//just show log and go to next. TODO: fix this function if we really have to use it on Tizen
-		this.logger.info(__('Tolik: Dissabled. Creating favicon and Apple touch icons'));
+		this.logger.info(__('createIcons: Dissabled. Creating favicon and Apple touch icons'));
 		afs.copyFileSync(path.join(this.projectResDir, 'mobileweb', 'appicon.png'), this.buildDir, { logger: this.logger.debug });
 		callback();
 
@@ -826,10 +876,8 @@ build.prototype = {
 		}));
 	},
 
-	addTizenToTiAppXml: function (){
-		this.logger.info(__('addTizenToTiXml'));
-
-		//var DOMParser = xmldom.DOMParser;
+	addTizenToTiAppXml: function (tizenAppId){		
+		this.logger.info('Processing tiapp.xml for tizen node');
 		var XMLSerializer = xmldom.XMLSerializer;
 
 		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
@@ -843,49 +891,27 @@ build.prototype = {
 			if (node.nodeType == 1 && node.tagName == 'tizen'){
 				//tizen section exists, nothing to do
 				tizenTagFound = true;
+				var existingId =  node.getAttribute('appid');
+				this.logger.info('<tizen> node. tizen app id:' +  existingId);
+				if(existingId){
+					this.tiapp.tizen.appid = existingId;
+				}
 			}
 			node = node.nextSibling;
 		}
 
 		if(tizenTagFound){
+			this.logger.info('<tizen> node available.');
 			return;
 		}
-		this.logger.info(__('<tizen> node absent in tiapp.xml, adding it.'));
+		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');
 		
 		//no tizen section in xml, add it
-		var tizenSectionStr = '<tizen appid="change1me2"><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
+		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'"><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
 		var tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml');
 		parsedTiXml.appendChild(tizenSec);
 		var result = new XMLSerializer().serializeToString(doc);
 		fs.writeFileSync(xmlpath, result, 'utf8');
-	},
-
-	readConfigXmlFromTiAppXml: function () {
-		this.logger.info(__('readConfigXmlFromTiAppXml'));
-		
-		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
-		var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
-		var parsedTiXml = doc.documentElement;
-		//check for Tizen section
-		var node = parsedTiXml.firstChild;
-		
-		var tizenNode;
-		//var tiId = 'http://appcelerator.com/TizenApp';		
-		this.tiapp.tizen.appid = 'change1me2';
-
-		while (node) {
-			if (node.nodeType == 1 && node.tagName == 'tizen'){
-				//tizen section found, keep reference
-				tizenNode = node;
-				if(tizenNode.getAttribute('appid')){
-					this.tiapp.tizen.appid = tizenNode.getAttribute('appid');
-				}
-			}
-			if (node.nodeType == 1 && node.tagName == 'name'){
-				this.tiapp.tizen.widgetName = node.textContent;
-			}
-			node = node.nextSibling;
-		}
 	},
 
 	createConfigXml: function () {
@@ -981,56 +1007,149 @@ build.prototype = {
 			this.moduleMap[mid] = deps;
 		}
 	},
-
 	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));
-		var tizenBuildDir = this.buildDir; //path.join(targetProject, 'build','tizen');
+
 		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
 		var packer = require('child_process');
-		var async = require('async');
 
-		var cmd7za = this.find7za().toString() + ' a "' + path.join(this.buildDir, 'tizenapp.wgt') + '" "' + this.buildDir + '/*" -tzip';
-		//packaging
-		logger.info(__('wgtPackaging7z  7z cmd: "%s" ', cmd7za));
+		// Create the tasks to unzip each entry in the zip file
+		var child,
+		stdout = '',
+		stderr = '';
+
+		child = packer.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
+		child.stdout.on('data', function (data) {
+			stdout += data.toString();
+		});
+		child.on('exit', function (code, signal) {
+			if (callback) {
+				if (code) {
+					// if we're on windows, the error message is actually in stdout, so scan for it
+					if (process.platform === 'win32') {
+						var foundError = false,
+							err = [];
+						
+						stdout.split('\n').forEach(function (line) {
+							if (/^Error\:/.test(line)) {
+								foundError = true;
+							}
+							if (foundError) {
+								line && err.push(line.trim());
+							}
+						});
+						
+						if (err.length) {
+							stderr = err.join('\n') + stderr;
+						}
+					}
+					callback();
+				} else {
+					callback();
+				}
+			}
+		});		
+	},
+	wgtPackagingLinux : function(logger, callback){
+		logger.info('Packaging application into wgt');
+		var packer = require('child_process');
+		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
+		console.log('zip cmd: ' + cmdzip);
 		packer.exec(
-			cmd7za,
+			cmdzip,
+			{
+				cwd: this.buildDir
+			},
 			function (err, stdout, stderr) {
-				console.log(stdout);
+				logger.info(stdout);
 				if(err != null){
-					console.log('failed packaging for tizen platform');
-					console.log(stderr);
+					logger.info(stderr);
 				}else{
-					console.log('compressing ok');
+					logger.info('compressing ok');
 				}
 				callback();
+			}
+		);			
+	},
+	runOnDevice : function(logger, callback){		
+		if(this.targetDevice && this.targetDevice != 'none'){
+			var runner = require("child_process");
+			var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget=' + pathToWgt;
+			logger.info('install cmd: ' + cmd);
+			runner.exec(
+				cmd,
+				function (err, stdout, stderr) {
+					logger.info(stdout);
+					if(err != null){
+						logger.info('wgt installation failed');
+						logger.info(stderr);
+					}else{
+						logger.info('Installed wgt: ' + pathToWgt);
+					}
+					callback();
+			});	
+		}else{
+			callback();
+		}		
+	},
+
+	detectTizenSDK: function(logger, next){
+		//Detect Tizen SDK
+		//check OS, this code supporting windows only(for now useing registry to find path)
+		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
+		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
+		var keyvalue = null;
+		var reg = require('child_process');
+		var self = this;
+		reg.exec(
+			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
+			function (err, stdout, stderr) {
+
+				if(stdout !== null && (typeof stdout != 'undefined')){
+					var arr = stdout.split(" ");
+					keyvalue = arr[arr.length-1];//last parameter is path
+					keyvalue = keyvalue.slice(0, -4);
+					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
+					logger.info(__('reading file: ' + keyvalue));
+					fs.readFile(keyvalue, 'utf8', function (err,data) {
+						if (err) {
+							logger.info(err);
+							return;
+						}
+						var arr = data.split("=");
+						self.tizenSdkDir =  arr[1];
+						logger.info("Tizen SDK found at: " + self.tizenSdkDir);
+						next(null, 'ok');
+					});
+				}else{
+					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
+				}
 			});
 	},
 
-	find7za: function(){	
+	find7za: function(logger){	
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if(fs.existsSync(zippath)){
 			return zippath;
 		}else{
-			console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
+			logger.error('7za.exe not found. Expected path: ' + path.normalize(zippath));
 		}
 	},
 
 	signTizenApp: function(logger, callback){
-		logger.info(__('signing application in  "%s" ', this.buildDir));		
+		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
-		var async = require('async');//
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
-		//logger.debug(__('Signer commandline: "%s" ', cmdSign));
-		console.log('Signer commandline: ' + cmdSign);
+		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 		packer.exec(
 			cmdSign,
-			function (err, stdout, stderr) {
-				console.log(stdout);
+			function (err, stdout, stderr) {				
 				if(err != null){
-					console.log('Signing failed ');
-					console.log(stderr);
-				}else{
-					console.log('signing ok');
+					logger.error('Signing failed ');
+					logger.error(stderr);
 				}
 				callback();
 			});
@@ -1078,4 +1197,18 @@ function renderTemplate(template, props) {
 		}
 		return value;
 	});
+}
+
+function randomString(length) {
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+
+    if (! length) {
+        length = Math.floor(Math.random() * chars.length);
+    }
+
+    var str = '';
+    for (var i = 0; i < length; i++) {
+        str += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return str;
 }

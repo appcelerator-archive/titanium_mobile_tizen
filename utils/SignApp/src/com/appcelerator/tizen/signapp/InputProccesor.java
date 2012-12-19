@@ -1,5 +1,6 @@
 package com.appcelerator.tizen.signapp;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,11 @@ public class InputProccesor {
 	}
 
 	public void showErrorOnConsole() throws WrongInputException {
-		System.err.println("You enter wrong parameters. Use:\n-sig_proj D:\\work\\env\\libs\\temp\\ -cert D:\\work\\project\\workspaces\\titanium-2\\titanium_mobile_tizen\\utils\\SignApp\\src\\com\\appcelerator\\tizen\\signapp\\samsung.devmode.sdk.cert.p12 -storetype pkcs12 -storepass 1234 -alias 1 -keypass 1234");
+		System.err.println("You enter wrong parameters. " +
+				" Use:\n" +
+				"sig_proj D:\\work\\env\\libs\\temp\\ \n"+
+				"or\n"+
+				"-sig_proj D:\\work\\env\\libs\\temp\\ -cert D:\\work\\project\\workspaces\\titanium-2\\titanium_mobile_tizen\\utils\\SignApp\\src\\com\\appcelerator\\tizen\\signapp\\samsung.devmode.sdk.cert.p12 -storetype pkcs12 -storepass 1234 -alias 1 -keypass 1234");
 		throw new WrongInputException();
 	}
 
@@ -80,8 +85,13 @@ public class InputProccesor {
 		String projectPath = inputMap.get(PROJECT_PATH_INPUT);
 		if (projectPath != null && !projectPath.endsWith("/")
 				&& !projectPath.endsWith("\\")) {
-			String newProjectPath = projectPath.concat("\\");
+			String newProjectPath = projectPath.concat(File.separator);
 			inputMap.put(PROJECT_PATH_INPUT, newProjectPath);
+		}
+		projectPath = inputMap.get(PROJECT_PATH_INPUT);
+		if (projectPath.startsWith("~" + File.separator)) {
+			projectPath = System.getProperty("user.home") + projectPath.substring(1);
+			inputMap.put(PROJECT_PATH_INPUT, projectPath);
 		}
 	}
 
