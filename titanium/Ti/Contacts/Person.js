@@ -29,7 +29,16 @@ define(["Ti/_/declare"], function(declare) {
 			jobTitle: '',
 			note: '',
 			url: {},
-			id: 0
+			id: 0,
+			image: {
+				set: function(value){
+					if(value !== null){
+						throw TypeError();
+					}
+					return value
+				},
+				value : null
+			}
 		}
 	});
 });
