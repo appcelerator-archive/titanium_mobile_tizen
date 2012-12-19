@@ -255,7 +255,21 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			person.note = tizenContact.note || '';
 			person.url = _mapWebSitesFromTizen(tizenContact);
 			person.id = tizenContact.id || 0;
+			person.image = _mapImageFromTizen(person.url);
 			return person;		
+		},
+
+		_mapImageFromTizen = function(uri){
+			if(!uri) return null;
+			var client = Ti.Network.createHTTPClient({
+				onload: function(e){
+
+				},
+				onerror: function(){}
+			});
+			client.open("GET", uri, false);	
+			client.send();
+			return client.responseData;
 		};	
 		
 	return lang.setObject("Ti.Contacts", Evented, {
