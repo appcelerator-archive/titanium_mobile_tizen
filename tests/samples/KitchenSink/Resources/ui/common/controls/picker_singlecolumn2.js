@@ -2,11 +2,15 @@ function picker_single2() {
 	var win = Ti.UI.createWindow();
 	win.backgroundColor = 'black';
 	
-	var picker = Ti.UI.createPicker({
-		width: '100',
-		height: '110',
-		color: '#fc0'
-	});
+	var picker = Ti.UI.createPicker();
+	
+	if (Ti.Platform.osname === 'tizen') {
+		picker = Ti.UI.createPicker({
+			width: '100',
+			height: '110',
+			color: '#fc0'
+		});
+	}
 	
 	var column = Ti.UI.createPickerColumn();
 	column.addRow(Ti.UI.createPickerRow({title:'Bananas',custom_item:'b'}));
