@@ -22,7 +22,12 @@ module.exports = new function() {
 
 	this.textControlsTextValueInitialValue = function(testRun) {
 		var f = Ti.UI.createLabel();
-		valueOf(testRun, f.text).shouldBe('');
+
+		if (Ti.Platform.osname == 'tizen') {
+			valueOf(testRun, f.text).shouldBeUndefined();
+		} else {
+			valueOf(testRun, f.text).shouldBe('');
+		}	
 		
 		f = Ti.UI.createTextField();
 		valueOf(testRun, f.value).shouldBe('');
@@ -34,7 +39,12 @@ module.exports = new function() {
 		valueOf(testRun, f.value).shouldBe('');
 		
 		f = Ti.UI.createButton();
-		valueOf(testRun, f.title).shouldBe('');
+
+		if (Ti.Platform.osname == 'tizen') {
+			valueOf(testRun, f.title).shouldBeUndefined();
+		} else {
+			valueOf(testRun, f.title).shouldBe('');
+		}
 
 		finish(testRun);
 	}

@@ -22,6 +22,9 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		_currentState: STOPPED,
 		_volume: 1.0,
 		_looping: false,
+		_time: 0,
+		_initialized: false,
+		_nextCmd: undefined,
 		constructor: function() {
 			this._handles = [];
 		},
@@ -31,11 +34,13 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					if (!value || value === this.properties.__values__.url) {
 						return;
 					}
+					
 					this.constants.__values__.playing 	= false;
 					this.constants.__values__.paused 	= false;
 					this._currentState = STOPPED;
 					this.properties.__values__.url = value;
 					this._createAudio(true/*Release*/);
+					this.time = 0;
 					return value;
 				}
 			},
@@ -50,26 +55,29 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 						value = 0;
 					
 					this._volume = value;
-					this._audio && (this._audio.volume = value);
+					this._initialized && this._audio && (this._audio.volume = value);
 					return value;
 				}
 			},
+			
 			time: {
 				get: function() {
-					return this._audio ? this._audio.currentTime : 0; 
+					return this._initialized && this._audio ? this._audio.currentTime : this._time;
 				},
 				set: function(value) {
-					this._audio && (this._audio.currentTime = value);
+					this._time = value;
+					this._initialized && this._audio && (this._audio.currentTime = value);
 					return value;
 				}
 			},
+			
 			looping: {
 				get: function() {
 					return this._looping; 
 				},
 				set: function(value) {
 					this._looping = value;
-					this._audio && (this._audio.loop = value);
+					this._initialized && this._audio && (this._audio.loop = value);
 					return value;
 				}
 			}
@@ -78,6 +86,15 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			paused : false,
 			playing : false,
 			duration : 0
+		},
+		//used for delayed command when playback has not initiazised yet
+		_command: function(cmd) {
+			if(!this._initialized) {
+				this._nextCmd = cmd
+				return true;
+			}
+			return false;
+			//return !this._initialized && (this._nextCmd = cmd);
 		},
 		_changeState: function(newState, msg) {
 			this._currentState = newState;
@@ -152,13 +169,19 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					this._changeState(ABORT, "abort");
 				}),
 				on(audio, "timeupdate", this, function() {
+					this._time = this._audio.currentTime;
 					this._currentState === STOPPING && this.pause();
 				}),
 				on(audio, "error", this, "_error"),
 				on(audio, "canplay", this, function() {
+					this._initialized = true;
 					this.volume = this._volume;
 					this.looping = this._looping;
+					this.time = this._time;
 					this._changeState(INITIALIZED, "initialized");
+					
+					this._nextCmd && this._nextCmd();
+					this._nextCmd = null;
 				}),				
 				on(audio, "durationchange", this, "_durationChange")
 			];
@@ -183,6 +206,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this._currentState = STOPPED;
 			this.constants.playing = false;
 			this.constants.paused = false;
+			this._initialized = false;
 			if (parent) {
 				event.off(this._handles);
 				parent.removeChild(audio);
@@ -191,11 +215,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		},
 		pause: function() {
 			var audio;
-			this._currentState === PLAYING && (audio = this._createAudio()) && audio.pause();
+			!this._command(this.pause) && this._currentState === PLAYING && (audio = this._createAudio()) && audio.pause();
 		},
 		start: function() {
 			var audio;
-			this._currentState !== PLAYING && (audio = this._createAudio()) && audio.play();
+			!this._command(this.start) && this._currentState !== PLAYING && (audio = this._createAudio()) && audio.play();
 		},
 		play: function() {
 			this.start();
@@ -213,8 +237,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			}
 		},
 		stop: function() {
+			if (this._command(null)) {
+				return;
+			}
+				
 			var a = this._audio;
-			
 			if (!a)
 				return;
 				
