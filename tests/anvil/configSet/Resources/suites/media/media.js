@@ -66,19 +66,20 @@ module.exports = new function() {
 	// https://appcelerator.lighthouseapp.com/projects/32238-titanium-mobile/tickets/2586
 	this.audioPlayerAPIs = function(testRun) {
 		var isAndroid = (Ti.Platform.osname === 'android');
+		var isTizen = (Ti.Platform.osname === 'tizen');
 		valueOf(testRun, Ti.Media.createAudioPlayer).shouldBeFunction();
 		var player = Ti.Media.createAudioPlayer();
 		valueOf(testRun, player).shouldNotBeNull();
 		valueOf(testRun, player.pause).shouldBeFunction();
 		valueOf(testRun, player.start).shouldBeFunction();
 		valueOf(testRun, player.setUrl).shouldBeFunction();
-		if (!isAndroid) valueOf(testRun, player.stateDescription).shouldBeFunction();
+		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.stateDescription).shouldBeFunction();
 		valueOf(testRun, player.stop).shouldBeFunction();
-		if (!isAndroid) valueOf(testRun, player.idle).shouldBeBoolean();
+		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.idle).shouldBeBoolean();
 		if (!isAndroid) valueOf(testRun, player.state).shouldBeNumber();
 		valueOf(testRun, player.paused).shouldBeBoolean();
-		if (!isAndroid) valueOf(testRun, player.waiting).shouldBeBoolean();
-		if (!isAndroid) valueOf(testRun, player.bufferSize).shouldBeNumber();
+		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.waiting).shouldBeBoolean();
+		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.bufferSize).shouldBeNumber();
 
 		finish(testRun);
 	}
@@ -107,19 +108,33 @@ module.exports = new function() {
 	}
 
 	this.audioTimeValidation = function(testRun) {
-		var sound = Ti.Media.createSound({ url : "sound.wav" });
-		var initial_pos = 3000;
+		var sound = Ti.Media.createSound();
+		if (Ti.Platform.osname === 'tizen') {
+			var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, "suites/media/sound.wav");
+			sound.url = f.nativePath;
+		} else {
+		    sound.url = "sound.wav";
+		}
+		
+		//play at 3 sec(now time on tizen in sec)
+		var initial_pos = Ti.Platform.osname === 'tizen' ? 3: 3000;
+		
+		
 		sound.time = initial_pos;
 		sound.setTime(initial_pos);
 		valueOf(testRun, sound.getTime()).shouldBe(initial_pos);
 		valueOf(testRun, sound.time).shouldBe(initial_pos);
+		
+		//play
 		sound.play();
+		
+		//check time
 		setTimeout(function(e) {
 			var time = sound.getTime();
 			Ti.API.info("PROGRESS: " + time);
 			valueOf(testRun, time).shouldBeGreaterThan(initial_pos);
 			// assume we get an event in < 2 seconds.
-			valueOf(testRun, time).shouldBeLessThan(initial_pos + 3000); 
+			valueOf(testRun, time).shouldBeLessThan(initial_pos + initial_pos); 
 			sound.stop();
 			sound = null;
 			finish(testRun);
