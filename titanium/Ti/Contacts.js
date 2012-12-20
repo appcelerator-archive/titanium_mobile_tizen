@@ -68,13 +68,12 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return result;
 		},	
 		_mapAddressesFromTitanium = function(person) {
-			var result = undefined, address = person.address,
+			var result = [], address = person.address,
 				addressTypes = ['home', 'work'], i = 0, j= 0, currentAddress = null;
 			if (address) {
 				for (i in addressTypes) {
 					currentAddress = address[addressTypes[i]];
 					if (currentAddress) {
-						result = result || [];
 						for (j in currentAddress) {
 							result.push(new tizen.ContactAddress({
 								streetAddress: currentAddress[j].Street || '',
@@ -89,7 +88,6 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				}
 			}
 			return result;
-			
 		},
 		_mapEmailsFromTizen = function (tizenContact) {
 			var result = {}, i = 0, flag = true, email = null, type = "";
@@ -231,14 +229,30 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return result;
 		},
 		
-		_mapContactFromTizen = function(tizenContact) {
+		_mapImageFromTizen = function(uri){
+			if(!uri) return null;
+			var client = Ti.Network.createHTTPClient({
+				onload: function(e){
+
+				},
+				onerror: function(){}
+			});
+			client.open("GET", uri, false);	
+			client.send();
+			return client.responseData;
+		};		
+		
+	
+		
+	return lang.setObject("Ti.Contacts", Evented, {
+		
+		_mapContactFromTizen: function(tizenContact) {
 			var name = null,
 				person = new (require("Ti/Contacts/Person"))();
 			person.address = _mapAddressesFromTizen(tizenContact);
 			person.email = _mapEmailsFromTizen(tizenContact);
 			if (tizenContact.name) {
 				name = tizenContact.name;
-				person.prefix = name.prefix || '';
 				person.firstName = name.firstName || '';
 				person.middleName = name.middleName || '';
 				person.lastName = name.lastName || '';
@@ -255,51 +269,12 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			person.note = tizenContact.note || '';
 			person.url = _mapWebSitesFromTizen(tizenContact);
 			person.id = tizenContact.id || 0;
-			person.image = _mapImageFromTizen(person.url);
+			person.image = _mapImageFromTizen(tizenContact.photoURI);
 			return person;		
 		},
-
-		_mapImageFromTizen = function(uri){
-			if(!uri) return null;
-			var client = Ti.Network.createHTTPClient({
-				onload: function(e){
-
-				},
-				onerror: function(){}
-			});
-			client.open("GET", uri, false);	
-			client.send();
-			return client.responseData;
-		};	
 		
-	return lang.setObject("Ti.Contacts", Evented, {
-		
-		constants: {
-			AUTHORIZATION_UNKNOWN: 0,
-			AUTHORIZATION_DENIED: 1,
-			AUTHORIZATION_RESTRICTED: 2,
-			AUTHORIZATION_AUTHORIZE: 3,
-			
-			CONTACTS_SORT_FIRST_NAME: 0,
-			CONTACTS_SORT_LAST_NAME: 1,
-			
-			contactsAuthorization: AUTHORIZATION_AUTHORIZE			
-		},
-		
-		
-		_addressBook: tizen.contact.getDefaultAddressBook(),
-		
-		createGroup: function(args) {
-			
-		},
-		
-		testMapping: function() {
-			this._mapContactsFromTizen();				
-		},
-		
-		createPerson: function(person) {
-			var addressBook = tizen.contact.getDefaultAddressBook(),
-				tizenContact = new tizen.Contact({
+		_mapContactFromTitanium: function(person, groupName) {
+			var tizenContact = new tizen.Contact({
 					addresses: _mapAddressesFromTitanium(person),
 					emails: _mapEmailsFromTitanium(person),
 					name: new tizen.ContactName({
@@ -320,64 +295,59 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 					}),
 					anniversaries: _mapAnniversariesFromTitanium(person),
 					note: person.note || undefined,
-					urls: _mapWebSitesFromTitanium(person)
-				});
-
+					urls: _mapWebSitesFromTitanium(person),
+				});	
+			groupName && tizenContact.categories && (Object.prototype.toString.call(tizenContact.categories) === '[object Array]') 
+				? tizenContact.categories.push(groupName)
+				: tizenContact.categories = [groupName];
+			return tizenContact;
+		},
+		
+		constants: {
+			AUTHORIZATION_UNKNOWN: 0,
+			AUTHORIZATION_DENIED: 1,
+			AUTHORIZATION_RESTRICTED: 2,
+			AUTHORIZATION_AUTHORIZE: 3,
+			
+			CONTACTS_SORT_FIRST_NAME: 0,
+			CONTACTS_SORT_LAST_NAME: 1,
+			
+			contactsAuthorization: this.AUTHORIZATION_AUTHORIZE			
+		},
+		
+		createGroup: function(args) {
+			throw new Error('This method is not supported on Tizen.');
+		},
+		
+		createPerson: function(person) {
+			var addressBook = tizen.contact.getDefaultAddressBook(),   
+				tizenContact = this._mapContactFromTitanium(person);
 			addressBook.add(tizenContact);
 			person = new (require("Ti/Contacts/Person"))();
-			person = _mapContactFromTizen(tizenContact, person);				
+			person = _mapContactFromTizen(tizenContact, person);	
 			return person;
 		},
 		
 		getAllGroups: function() {
-			
+			var addressbook = tizen.contact.getDefaultAddressBook(), groups = [];
+			try {
+				groups = addressbook.getCategories();
+			} catch (e) {
+				console.log('Error occurs: ' + e.type + ' ' + e.message);
+			}
+			return groups;
 		},
 		
 		
 		getAllPeople: function() {
-			throw new Error('This function is not supported on Tizen. Use Async analog.');
-		},
-		
-		getAllPeopleAsync: function(successCallback, errorCallback) {
-			var self = this;
-			tizen.contact.getDefaultAddressBook().find(function(contacts){
-				var i = 0, contactsCount = contacts.length, persons = [];
-				for (i = 0; i < contactsCount; i++) {
-					persons.push(_mapContactFromTizen(contacts[i]));
-				}
-				successCallback.call(self, persons);
-			}, errorCallback);
-		},
-		
-		getContactsAuthorization: function(args) {
-			
+			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getAllPeople instead.');
 		},
 		
 		getGroupById: function(id) { 
-
-			
+			throw new Error('This function is not supported on Tizen. Use getAllGroups instead.');
 		},
 		getPeopleWithName: function(name) {
-			throw new Error('This function is not supported on Tizen. Use Async analog.');
-		},
-		
-		getPeopleWithNameAsync: function(name, successCallback, errorCallback) {
-			var names = name.trim().replace(/[ ]{2,}/g, " ").split(' '), firstNameFilter, lastNameFilter, middleNameFilter, i = 0, namesCount = names.length,
-				compositeFilters = [], resultFilter, self = this;
-			for (i = 0; i < namesCount; i++) {
-				firstNameFilter = new tizen.AttributeFilter("name.firstName", "FULLSTRING", names[i]);
-				middleNameFilter = new tizen.AttributeFilter("name.middleName", "FULLSTRING", names[i]);
-				lastNameFilter = new tizen.AttributeFilter("name.lastName", "FULLSTRING", names[i]);
-				compositeFilters.push(new tizen.CompositeFilter("UNION", [firstNameFilter, middleNameFilter, lastNameFilter]));
-			}
-			resultFilter = new tizen.CompositeFilter("INTERSECTION",  compositeFilters);
-			tizen.contact.getDefaultAddressBook().find(function(contacts){
-				var contactsCount = contacts.length, persons = [];
-				for (i = 0; i < contactsCount; i++) {
-					persons.push(_mapContactFromTizen(contacts[i]));
-				}
-				successCallback.call(self, persons);
-			}, errorCallback, resultFilter);
+			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getPeopleWithName instead.');
 		},
 		
 		getPersonById: function(id) {
@@ -392,6 +362,10 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return person;
 		},
 		
+		removeGroup: function(Group) {
+			throw new Error('This method is not supported here. Use Ti.Contacts.Tizen.removeGroup instead.');
+		},
+		
 		removePerson: function(Person) {
 			var addressBook = tizen.contact.getDefaultAddressBook();
 			try {
@@ -399,7 +373,83 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			} catch (err) {
 				console.log('The following error occurred while removing: ' +  err.name);
 			}
+		},
+		showContacts: function(values){
+			var self = this,
+				win = Ti.UI.createWindow({backgroundColor: '#81BEF7'}),
+				tableview,
+				data = [],
+				tableViewOptions,
+				closeBtn = Ti.UI.createButton({
+					title: 'Close',
+					bottom: 20,
+					right: 20,
+					height: '6%',
+					bottom: '2%'
+				});	
+				// add headers as first letter for contacts
+				function addHeaders(list) {
+					var fL,
+						l,
+						//headers can be only letter, not number or special symbol
+						iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_0123456789";
+						
+					for(var i=0, len = list.length; i<len; i++) {
+						fL = list[i]['title'].charAt(0);
+						if((iChars.indexOf(fL) === -1) && l != fL) {
+							list[i]['header'] = fL.toUpperCase();	
+						}
+						l = fL;
+					} 
+				}
+				//sorting function by title
+				function compare(a,b) {
+				  if (a.title < b.title)
+					 return -1;
+				  if (a.title > b.title)
+					return 1;
+				  return 0;
+				}
+			//success callback for getAllPeopleAsync
+			var successCB = function(persons){
+				for(var i=0, len = persons.length; i < len; i++) {
+					data.push({title: persons[i]['fullName'], hasChild:true, test: persons[i].id});	
+				}
+				
+				data.sort(compare);
+				addHeaders(data);
+				
+				tableViewOptions = {
+					data:data,
+					headerTitle:'Contacts',
+					footerTitle:persons.length + " Contacts",
+					backgroundColor:'#FFF',
+					rowBackgroundColor:'white',
+					height: '90%',
+					top:0
+				};
+				tableview = Titanium.UI.createTableView(tableViewOptions);
+				
+				tableview.addEventListener('click', function(e) {
+					e.person = self.getPersonById(e.rowData.test);
+					values.selectedPerson(e);
+					win.close();
+				});
+				closeBtn.addEventListener('click', function(e) {
+					values.cancel();
+					win.close();	
+				});
+				
+				win.add(tableview);
+				win.add(closeBtn);
+				win.open();	
+			}
+			//error callback for getAllPeopleAsync
+			var errorCB = function(e){
+				console.log('Problems with getting the contacts, Error: ' + e.message);
+			}
+			
+			this.getAllPeopleAsync(successCB, errorCB);
 		}
-		
 	});
 });
