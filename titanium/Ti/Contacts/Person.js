@@ -1,11 +1,15 @@
 define(["Ti/_/declare"], function(declare) {
 	
 	return declare("Ti.Contacts.Person", null, {
-			constructor: function(args) {
-			args && this._mapContactFromTizen(args);
-		},
 		
-
+		constants: {
+			CONTACTS_KIND_ORGANIZATION: 0,
+			CONTACTS_KIND_PERSON: 1,
+			
+			kind: CONTACTS_KIND_PERSON,
+			prefix: '',
+			fullname: this.firstName + " " + this.lastName
+		},
 		
 		properties: {
 			address: {},
@@ -16,19 +20,25 @@ define(["Ti/_/declare"], function(declare) {
 			email: {},
 			firstName: '',
 			middleName: '',
-			prefix: '',
 			lastName: '',
 			nickname: '',
 			firstPhonetic: '',
 			lastPhonetic: '',
 			phone: '',
 			organization: '',
-			department: '',
 			jobTitle: '',
-			date: {},
 			note: '',
 			url: {},
 			id: 0,
+			image: {
+				set: function(value){
+					if(value !== null){
+						throw TypeError();
+					}
+					return value
+				},
+				value : null
+			}
 		}
 	});
 });

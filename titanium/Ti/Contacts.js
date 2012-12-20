@@ -29,12 +29,10 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},
 		_getTizenWebSiteType = function(types) {
 			var i = 0, typesLength = types.length, type = "", typeName = "";
-			for (i = 0; i < typesLength; i++) {
-				typeName = types[i].toLowerCase();
+
+			typeName = types.toLowerCase();
 				if ((typeName == "homepage") || (typeName == "home") || (typeName == "work")) {
 					type = typeName;
-					break;
-				}
 			}
 			type = type || "other";
 			return type;
@@ -46,17 +44,23 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				i++;
 				if (address) {
 					type = _getTizenObjectType(address.types);
-					if (result.type) {
-						continue;
-					}
-					result[type] = {};
-					result[type].CountryCode = "";
-					result[type].Street = address.streetAddress || "";
-					result[type].City = address.city || "";
-					result[type].County = "";
-					result[type].State = address.region || "";
-					result[type].Country = address.country || "";
-					result[type].ZIP = address.postalCode || "";
+					result[type] ? result[type].push({
+						CountryCode: "",
+						Street: address.streetAddress || "",
+						City: address.city || "",
+						County: "",
+						State: address.region || "",
+						Country: address.country || "",
+						ZIP: address.postalCode || ""
+					}) : result[type] = [{
+						CountryCode: "",
+						Street: address.streetAddress || "",
+						City: address.city || "",
+						County: "",
+						State: address.region || "",
+						Country: address.country || "",
+						ZIP: address.postalCode || ""						
+					}];
 				} else {
 					flag = false;
 				}
@@ -65,20 +69,22 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},	
 		_mapAddressesFromTitanium = function(person) {
 			var result = undefined, address = person.address,
-				addressTypes = ['home', 'work'], i = 0, currentAddress = null;
+				addressTypes = ['home', 'work'], i = 0, j= 0, currentAddress = null;
 			if (address) {
 				for (i in addressTypes) {
 					currentAddress = address[addressTypes[i]];
 					if (currentAddress) {
 						result = result || [];
-						result.push(new tizen.ContactAddress({
-							streetAddress: currentAddress.Street || '',
-							city: currentAddress.City || '',
-							region: currentAddress.State || '',
-							country: currentAddress.Country || '',
-							pastalCode: currentAddress.ZIP || '',
-							types: [addressTypes[i].toUpperCase()]
-						}));
+						for (j in currentAddress) {
+							result.push(new tizen.ContactAddress({
+								streetAddress: currentAddress[j].Street || '',
+								city: currentAddress[j].City || '',
+								region: currentAddress[j].State || '',
+								country: currentAddress[j].Country || '',
+								postalCode: currentAddress[j].ZIP || '',
+								types: [addressTypes[i].toUpperCase()]
+							}));							
+						}
 					}					
 				}
 			}
@@ -96,10 +102,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				i++;
 				if (email) {
 					type = _getTizenObjectType(email.types);
-					if (result.type) {
-						continue;
-					}
-					result[type] = email.email;					
+					result[type] ? result[type].push(email.email) :result[type] = [email.email];
 				} else {
 					flag = false;
 				}
@@ -107,17 +110,19 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return result;
 		},	
 		_mapEmailsFromTitanium = function(person) {
-			var result = undefined, emails = person.email,
-				emailTypes = ['home', 'work'], i = 0, currentEmail = null;
+			var result = undefined, emails = person.email, email = "",
+				emailTypes = ['home', 'work'], i = 0, j = 0, currentEmail = null;
 			if (emails) {
 				for(i in emailTypes) {
 					currentEmail = emails[emailTypes[i]]; 
 					if (currentEmail) {
 						result = result || [];
-						result.push(new tizen.ContactEmailAddress(
-							currentEmail,
-							[emailTypes[i].toUpperCase()]
-						));
+						for (j in currentEmail) {
+							result.push(new tizen.ContactEmailAddress(
+									currentEmail[j],
+									[emailTypes[i].toUpperCase()]
+								));
+						}
 					}
 				}
 			}
@@ -134,10 +139,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				i++;
 				if (phoneNumber) {
 					type = _getTizenPhoneType(phoneNumber.types);
-					if (result.type) {
-						continue;
-					}
-					result[type] = phoneNumber.number;
+					result[type] ? result[type].push(phoneNumber.number) : result[type] = [phoneNumber.number];
 				} else {
 					flag = false;
 				}
@@ -147,16 +149,18 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},
 		_mapPhoneNumbersFromTitanium = function(person){
 			var result = undefined, phoneNumbers = person.phone,
-				numberTypes = ['work', 'home', 'mobile', 'pager'], currentNumber = null, i = 0;
+				numberTypes = ['work', 'home', 'mobile', 'pager'], currentNumber = null, i = 0, j = 0;
 			if (phoneNumbers) {
 				for (i in numberTypes) {
 					currentNumber = phoneNumbers[numberTypes[i]];
 					if (currentNumber) {
 						result = result || [];
-						result.push(new tizen.ContactPhoneNumber(
-							currentNumber,
-							[(numberTypes[i] == 'mobile') ? 'CELL' : numberTypes[i].toUpperCase()]
-						));
+						for (j in currentNumber) {
+							result.push(new tizen.ContactPhoneNumber(
+									currentNumber[j],
+									[(numberTypes[i] == 'mobile') ? 'CELL' : numberTypes[i].toUpperCase()]
+							));							
+						}
 					}
 				}
 			}
@@ -171,10 +175,10 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				}
 				anniversary = tizenContact.anniversaries[i];
 				if (anniversary) {
-					if (anniversary.label && (anniversary.label == "anniversary") && (!result.anniversary)) {
-						result.anniversary = (new Date(anniversary.date)).toUTCString();
-					} else if (!result.other) {
-						result.other = (new Date(anniversary.date)).toUTCString();
+					if (anniversary.label && (anniversary.label == "anniversary")) {
+						result.anniversary ? result.anniversary.push(new Date(anniversary.date).toUTCString()) : result.anniversary = [new Date(anniversary.date).toUTCString()];
+					} else {
+						result.other ? result.other.push(new Date(anniversary.date).toUTCString()) : result.other = [new Date(anniversary.date).toUTCString()];
 					}
 				} else {
 					flag = false;
@@ -184,17 +188,16 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return result;
 		},
 		_mapAnniversariesFromTitanium = function(person) {
-			var result = undefined, anniversaries = person.date,
-				anniversaryTypes = ['anniversary', 'other'], i = 0, currentAnniversary = null;
+			var result, anniversaries = person.date,
+				anniversaryTypes = ['anniversary', 'other'], i = 0, j= 0, currentAnniversary = null;
 			if (anniversaries) {
 				for (i in anniversaryTypes) {
 					currentAnniversary = anniversaries[anniversaryTypes[i]];
 					if (currentAnniversary) {
 						result = result || [];
-						result.push(new tizen.ContactAnniversary({
-							date: new Date(currentAnniversary),
-							label: anniversaryTypes[i]
-						}));
+						for (j in currentAnniversary) {
+							result.push(new tizen.ContactAnniversary(new Date(currentAnniversary[j]),anniversaryTypes[i]));
+						}
 					}
 				}
 			}
@@ -206,10 +209,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				webSite = tizenContact.urls[i];
 				if (webSite) {
 					type = _getTizenWebSiteType(webSite.type);
-					if (result[type]) {
-						continue;
-					}
-					result[type] = [webSite.url];
+					result[type] ? result[type].push(webSite.url) : result[type] = [webSite.url];
 				} else {
 					flag = false;
 				}
@@ -218,15 +218,14 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			return result;
 		},
 		_mapWebSitesFromTitanium = function(person) {
-			var result = undefined, webSites = person.url, currentWebSite = null;
+			var result = undefined, webSites = person.url, currentWebSite = null, i = 0;
 			if (webSites) {
 				currentWebSite = webSites.homepage;
 				if (currentWebSite) {
 					result = result || [];
-					result.push(new tizen.ContactWebSite({
-						url: currentWebSite.url,
-						type: 'homepage'
-					}));
+					for (i in currentWebSite) {
+						result.push(new tizen.ContactWebSite(currentWebSite[i], 'HOMEPAGE'));						
+					}
 				}
 			}	
 			return result;
@@ -256,8 +255,23 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			person.note = tizenContact.note || '';
 			person.url = _mapWebSitesFromTizen(tizenContact);
 			person.id = tizenContact.id || 0;
+			person.image = _mapImageFromTizen(person.url);
 			return person;		
+		},
+
+		_mapImageFromTizen = function(uri){
+			if(!uri) return null;
+			var client = Ti.Network.createHTTPClient({
+				onload: function(e){
+
+				},
+				onerror: function(){}
+			});
+			client.open("GET", uri, false);	
+			client.send();
+			return client.responseData;
 		};	
+		
 	return lang.setObject("Ti.Contacts", Evented, {
 		
 		constants: {
@@ -266,18 +280,12 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			AUTHORIZATION_RESTRICTED: 2,
 			AUTHORIZATION_AUTHORIZE: 3,
 			
-			CONTACTS_KIND_ORGANIZATION: 0,
-			CONTACTS_KIND_PERSON: 1,
-			
 			CONTACTS_SORT_FIRST_NAME: 0,
 			CONTACTS_SORT_LAST_NAME: 1,
 			
-			
+			contactsAuthorization: AUTHORIZATION_AUTHORIZE			
 		},
 		
-		properties: {
-			contactsAuthorization: 3
-		},
 		
 		_addressBook: tizen.contact.getDefaultAddressBook(),
 		
@@ -310,13 +318,12 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 						department: person.department || undefined,
 						title: person.jobTitle || undefined,
 					}),
-					//anniversaries: _mapAnniversariesFromTitanium(person),
+					anniversaries: _mapAnniversariesFromTitanium(person),
 					note: person.note || undefined,
 					urls: _mapWebSitesFromTitanium(person)
 				});
 
 			addressBook.add(tizenContact);
-			//contact.id = tizenContact.id;
 			person = new (require("Ti/Contacts/Person"))();
 			person = _mapContactFromTizen(tizenContact, person);				
 			return person;
@@ -350,7 +357,6 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 
 			
 		},
-		//not tested
 		getPeopleWithName: function(name) {
 			throw new Error('This function is not supported on Tizen. Use Async analog.');
 		},
@@ -364,9 +370,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				lastNameFilter = new tizen.AttributeFilter("name.lastName", "FULLSTRING", names[i]);
 				compositeFilters.push(new tizen.CompositeFilter("UNION", [firstNameFilter, middleNameFilter, lastNameFilter]));
 			}
-			console.log(compositeFilters);
 			resultFilter = new tizen.CompositeFilter("INTERSECTION",  compositeFilters);
-			console.log(resultFilter);
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
 				var contactsCount = contacts.length, persons = [];
 				for (i = 0; i < contactsCount; i++) {
