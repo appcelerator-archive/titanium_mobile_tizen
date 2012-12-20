@@ -399,7 +399,83 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			} catch (err) {
 				console.log('The following error occurred while removing: ' +  err.name);
 			}
+		},
+		showContacts: function(values){
+			var self = this,
+				win = Ti.UI.createWindow({backgroundColor: '#81BEF7'}),
+				tableview,
+				data = [],
+				tableViewOptions,
+				closeBtn = Ti.UI.createButton({
+					title: 'Close',
+					bottom: 20,
+					right: 20,
+					height: '6%',
+					bottom: '2%'
+				});	
+				// add headers as first letter for contacts
+				function addHeaders(list) {
+					var fL,
+						l,
+						//headers can be only letter, not number or special symbol
+						iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_0123456789";
+						
+					for(var i=0, len = list.length; i<len; i++) {
+						fL = list[i]['title'].charAt(0);
+						if((iChars.indexOf(fL) === -1) && l != fL) {
+							list[i]['header'] = fL.toUpperCase();	
+						}
+						l = fL;
+					} 
+				}
+				//sorting function by title
+				function compare(a,b) {
+				  if (a.title < b.title)
+					 return -1;
+				  if (a.title > b.title)
+					return 1;
+				  return 0;
+				}
+			//success callback for getAllPeopleAsync
+			var successCB = function(persons){
+				for(var i=0, len = persons.length; i < len; i++) {
+					data.push({title: persons[i]['fullName'], hasChild:true, test: persons[i].id});	
+				}
+				
+				data.sort(compare);
+				addHeaders(data);
+				
+				tableViewOptions = {
+					data:data,
+					headerTitle:'Contacts',
+					footerTitle:persons.length + " Contacts",
+					backgroundColor:'#FFF',
+					rowBackgroundColor:'white',
+					height: '90%',
+					top:0
+				};
+				tableview = Titanium.UI.createTableView(tableViewOptions);
+				
+				tableview.addEventListener('click', function(e) {
+					e.person = self.getPersonById(e.rowData.test);
+					values.selectedPerson(e);
+					win.close();
+				});
+				closeBtn.addEventListener('click', function(e) {
+					values.cancel();
+					win.close();	
+				});
+				
+				win.add(tableview);
+				win.add(closeBtn);
+				win.open();	
+			}
+			//error callback for getAllPeopleAsync
+			var errorCB = function(e){
+				console.log('Problems with getting the contacts, Error: ' + e.message);
+			}
+			
+			this.getAllPeopleAsync(successCB, errorCB);
 		}
-		
 	});
 });
