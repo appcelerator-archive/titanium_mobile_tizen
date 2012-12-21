@@ -162,7 +162,7 @@ function build(logger, config, cli, finished) {
 	this.projectDir = afs.resolvePath(cli.argv['project-dir']);
 	this.projectResDir = this.projectDir + '/Resources';
 	this.buildDir = this.projectDir + '/build/tizen';
-	this.mobilewebSdkPath = afs.resolvePath(path.dirname(module.filename) + '/../..');
+	this.mobilewebSdkPath = afs.resolvePath(path.dirname(module.filename), '..', '..');
 	this.mobilewebThemeDir = this.mobilewebSdkPath + '/themes';
 	this.mobilewebTitaniumDir = this.mobilewebSdkPath + '/titanium';
 	
