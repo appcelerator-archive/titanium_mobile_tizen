@@ -7,7 +7,9 @@
 
 // start customization here
 var suites = [
-	{name: "tizen/media_content"}
+	{name: "tizen/media_content"},
+	{name: "tizen/lbs"},
+	{name: "tizen/call"}
 ];
 
 

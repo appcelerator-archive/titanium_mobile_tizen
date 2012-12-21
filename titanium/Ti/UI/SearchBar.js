@@ -157,7 +157,19 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			} catch(e) {
 				this._field.type = "text";
 			}
-		},		
+		},	
+
+		blur: function() {
+			this._field.blur();
+		},
+
+		focus: function() {
+			this._field.focus();
+		},
+
+		cancel: function() {
+			this._field.value = "";
+		},
 						
 		properties: {
 			borderStyle: {
