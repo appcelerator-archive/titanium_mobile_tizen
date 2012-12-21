@@ -34,13 +34,14 @@ module.exports = new function() {
 		valueOf(testRun, defaultProvider.name).shouldBeString();
 		valueOf(testRun, defaultProvider.metaData).shouldBeObject();
 		valueOf(testRun, defaultProvider.geocode).shouldBeFunction();
+		valueOf(testRun, defaultProvider.connectivity).shouldBeString();
 		valueOf(testRun, defaultProvider.reverseGeocode).shouldBeFunction();
 		valueOf(testRun, function() { providers = Geocoder.getProviders() }).shouldNotThrowException();
 		valueOf(testRun, providers).shouldNotBeUndefined();
 		valueOf(testRun, providers).shouldBeArray();
 		valueOf(testRun, providers[0]).shouldBeObject();
 		valueOf(testRun, providers.length).shouldBeGreaterThan(0);
-		valueOf(testRun, defaultProvider).shouldBeOneOf(providers);	
+		valueOf(testRun, defaultProvider).shouldBeOneOf(providers);
 
 		finish(testRun);
 	}
