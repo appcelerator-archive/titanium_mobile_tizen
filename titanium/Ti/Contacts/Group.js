@@ -23,7 +23,7 @@ define(["Ti/_/declare", "Ti/Contacts"], function(declare, Contacts) {
 		},
 		
 		properties: {
-			name: '',
+			name: ''
 		}
 	});
 });
