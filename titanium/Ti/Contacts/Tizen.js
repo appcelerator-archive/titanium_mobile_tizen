@@ -43,18 +43,19 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], 
 			//to remove some category(group) we need to remove it from each contact and then saves all changes
 			addressbook.find(function(contacts) {
 				var i = 0, j = 0, categoryIndex = -1, categoriesCount = 0, contactsCount = contacts.length, categories = [];
-				alert(contactsCount);
 				for (; i < contactsCount; i++) {
 					categoryIndex = -1;
 					categories = contacts[i].categories;
 					categoriesCount = categories.length;
 					for (j = 0; j < categoriesCount; j++) {
-						if (categories) 
+						if (categories[j] === group.name) {
+							categoryIndex = j;
+							break;
+						} 
 					}
-					categories.splice(categories.indexOf(group.name), 1);
+					categories.splice(categoryIndex, 1);
 					contacts[i].categories = categories;
 				}
-				alert('start update');
 				//async update contacts
 				addressbook.updateBatch(contacts, successCallback, errorCallback);
 			}, errorCallback, categoryFilter);
