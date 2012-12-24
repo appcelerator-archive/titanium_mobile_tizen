@@ -9,7 +9,8 @@
 var suites = [
 	{name: "tizen/media_content"},
 	{name: "tizen/lbs"},
-	{name: "tizen/call"}
+	{name: "tizen/call"},
+	{name: "tizen/tizen_application"}
 ];
 
 
