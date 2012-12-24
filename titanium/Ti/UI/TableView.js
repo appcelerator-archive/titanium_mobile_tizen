@@ -146,12 +146,11 @@ define(["Ti/_/declare", "Ti/_/UI/KineticScrollView", "Ti/_/style", "Ti/_/lang", 
 			if (type === "click" || type === "singletap" || type === "longpress") {
 				if (row && section) {
 					
-					//TODO write tests
-					for (; i < sections.length; i += 2) {
+					for (; i < sections.length; i += 1) {
 						localIndex = sections[i]._rows._children.indexOf(row);
 						if (localIndex !== -1) {
 							//TODO write tests
-							index += Math.floor(localIndex / 2);
+							index += localIndex ;
 							break;
 						} else {
 							index += sections[i].rowCount;
