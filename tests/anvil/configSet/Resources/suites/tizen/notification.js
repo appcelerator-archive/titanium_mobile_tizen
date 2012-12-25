@@ -64,6 +64,8 @@ module.exports = new function() {
 
       	valueOf(testRun, notification_arr[0] instanceof tizen.StatusNotification).shouldBeTrue();
 
+        tizen.notification.removeAll();
+
       	finish(testRun);
 	}
 	
@@ -105,6 +107,8 @@ module.exports = new function() {
       	valueOf(testRun, notification_from.content).shouldBe(notificationDict.content);
       	valueOf(testRun, notification_from.statusType).shouldBe(notification.statusType);
       	valueOf(testRun, notification_from.title).shouldBe(notificationDict.title);
+
+        tizen.notification.removeAll();
 
       	finish(testRun);
 	}
@@ -148,6 +152,8 @@ module.exports = new function() {
       	}).shouldNotThrowException();
 
       	valueOf(testRun, notification_from.content).shouldBe(notification.content);
+
+        tizen.notification.removeAll();
 
       	finish(testRun);
 	}
@@ -211,12 +217,14 @@ module.exports = new function() {
       	//try to remove all notification in tray
       	valueOf(testRun, function(){      
       			tizen.notification.removeAll();
-      	}).shouldNotThrowException();
+      	}).  ();
 
       	//try to get second notification and it should be removed
       	valueOf(testRun, function(){      
       		var notification_from1 = tizen.notification.get(notId1);
       	}).shouldThrowException();
+
+        tizen.notification.removeAll();
       	
       	finish(testRun);
 	}
