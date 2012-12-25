@@ -70,7 +70,7 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/UI/Widget", "Ti/_/style","Ti/UI/Mobil
 					row._minHeight = tableView.minRowHeight;
 					row._maxHeight = tableView.maxRowHeight;
 					if (tableView.separatorStyle === TableViewSeparatorStyle.SINGLE_LINE) {
-						setStyle(row.domNode,"border-bottom","1px solid " + tableView.separatorColor);
+						setStyle(row.domNode,{borderBottom: "1px solid " + tableView.separatorColor});
 					}
 					
 					rowsData.push(row);
