@@ -69,17 +69,17 @@ module.exports = new function() {
 		tizen.contact.getAddressBooks(function(addressbooks){
 			var addressbooksCount = addressbooks.length;
 			valueOf(testRun, addressbooksCount).shouldBeGreaterThan(0);
+			finish(testRun);
 		}, function(err){
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-		finish(testRun);
+		
 	}
 	
 	this.getAddressBookInvalid = function(testRun) {
 		
 		valueOf(testRun, function(){
 			tizen.contact.getAddressBook(-1);
-			//reportError(testRun, 'The following error occured: ' + e.message);
 		}).shouldThrowException();
 		finish(testRun);
 	}
@@ -107,6 +107,7 @@ module.exports = new function() {
 			addressbook.addBatch(contacts, function(){
 				addressbook.find(function(contacts){
 					valueOf(testRun, contacts.length - contactsCount).shouldBe(10);
+					finish(testRun);
 				}, function(err){
 					reportError(testRun, 'The following error occured: ' + err.message);
 				})
@@ -116,7 +117,6 @@ module.exports = new function() {
 		}, function(err){
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-		finish(testRun);
 	}
 	
 	this.updateContact = function(testRun) {
@@ -141,19 +141,24 @@ module.exports = new function() {
 		var addressbook = tizen.contact.getDefaultAddressBook();
 		addressbook.find(function(contacts){
 			var i = 0;
-			for (; i < 10; i++) {
-				contacts[i].firstName = "John";
+			for (i = 0; i < contacts.length; i++) {
+				if ((contacts[i].name) && (contacts[i].name.firstName)) {
+					contacts[i].name.firstName = "John";
+				}
 			}
 			addressbook.updateBatch(contacts, function(){
 				addressbook.find(function(contacts){
 					var flag = true;
-					for (i = 0; i < 10; i++) {
-						if (contacts[i].firstName !== "John") {
-							flag = false;
-							break;
+					for (i = 0; i < contacts.length; i++) {
+						if ((contacts[i].name) && (contacts[i].name.firstName)) {
+							if (contacts[i].name.firstName !== "John") {
+								flag = false;
+								break;
+							}
 						}
 					}
 					valueOf(testRun, flag).shouldBeTrue();
+					finish(testRun);
 				}, function(err){
 					reportError(testRun, 'The following error occured: ' + err.message);
 				});
@@ -163,7 +168,6 @@ module.exports = new function() {
 		}, function(err){
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-		finish(testRun);
 	}
 	
 	this.removeContact = function(testRun) {
@@ -174,18 +178,23 @@ module.exports = new function() {
 			valueOf(testRun, function() {
 				addressbook.get(id)
 			}).shouldThrowException();
+			finish(testRun);
 		}, function(err) {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-		finish(testRun);
 	}
 	
 	this.removeBatch = function(testRun) {
 		var addressbook = tizen.contact.getDefaultAddressBook();
 		addressbook.find(function(contacts) {
-			addressbook.removeBatch(contacts, function() {
+			var ids = [];
+			for (var i = 0; i < contacts.length; i++) {
+				ids.push(contacts[i].id);
+			}
+			addressbook.removeBatch(ids, function() {
 				addressbook.find(function(contacts) {
 					valueOf(testRun, contacts.length).shouldBeZero();
+					finish(testRun);
 				}, function(err) {
 					reportError(testRun, 'The following error occured: ' + err.message);
 				});
@@ -195,7 +204,6 @@ module.exports = new function() {
 		},  function(err) {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		})
-		finish(testRun);
 	}
 	
 	this.find = function(testRun) {
@@ -210,10 +218,10 @@ module.exports = new function() {
 		addressbook.add(contact);
 		addressbook.find(function(contacts) {
 			valueOf(testRun,  contacts.length).shouldBe(1);
+			finish(testRun);
 		}, function(err) {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-		finish(testRun);
 	}
 	
 	this.getCategories = function(testRun) {
@@ -443,7 +451,6 @@ module.exports = new function() {
 		});
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		console.log(contact.photoURI);
 		valueOf(testRun, contact.photoURI).shouldBeString();
 		finish(testRun);
 	}
@@ -469,7 +476,6 @@ module.exports = new function() {
 		});
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		console.log(contact.isFavorite);
 		valueOf(testRun,  contact.isFavorite).shouldBeTrue();
 		finish(testRun);
 	}
@@ -483,7 +489,6 @@ module.exports = new function() {
 		});
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		console.log(contact.ringtoneURI);
 		valueOf(testRun, contact.ringtoneURI).shouldBeString();
 		finish(testRun);
 	}
