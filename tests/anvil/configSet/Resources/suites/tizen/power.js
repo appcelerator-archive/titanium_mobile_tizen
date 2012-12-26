@@ -16,14 +16,35 @@ module.exports = new function() {
 
     this.name = "power";
     this.tests = [
+        {name: "checkPower"},
         {name: "powerStateListener"}
     ]
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Test for Tizen Device API: SystemInfo
+    this.checkPower  = function(testRun) {
+        Ti.API.debug("Checking 'power' object availability.");
+        valueOf(testRun, tizen).shouldBeObject();
+        valueOf(testRun, tizen.power).shouldBeObject();
+        valueOf(testRun, tizen.power.request).shouldBeFunction();
+        valueOf(testRun, tizen.power.release).shouldBeFunction();
+        finish(testRun);
+    }
+
     this.powerStateListener = function(testRun) {
+        var stateRequest = null;
         function onSuccess(){
-            Ti.API.info("PowerStateListener is passed via 'onSuccess'.");
-            valueOf(testRun, true).shouldBeTrue(); // test passed!
-            finish(testRun);
+            Ti.API.debug("PowerStateListener is set.");
+            waitTimeout=setTimeout(function(){
+                Ti.API.debug("Test completed by timeout!");
+                valueOf(testRun, true).shouldBeTrue(); // test passed!
+                try{
+                    tizen.power.release("DISPLAY");
+                }catch (e){
+                    reportError(testRun, JSON.stringify(e));
+                }
+                finish(testRun);
+            },2000);
         }
 
         function onError(){
@@ -33,11 +54,12 @@ module.exports = new function() {
         }
 
         function onChanged(resource, actualState, requestedState) {
-            Ti.API.info("Strange, but we got onChanged event inside Anvil. You ary lucky!");
-            Ti.API.info("State changed. Resource: " + resource + ", actualState: " + actualStateual + ", requestedState: " + requestedState);
+            Ti.API.debug("Strange, but we got onChanged event inside Anvil. You ary lucky!");
+            Ti.API.debug("State changed. Resource: " + resource + ", actualState: " + actualStateual + ", requestedState: " + requestedState);
+            // we are finishing test with onSuccess\onError. So we don't need anything related to anvil here.
         }
 
-        var stateRequest = new tizen.PowerStateRequest("DISPLAY", "DISPLAY_NORMAL");
+        stateRequest = new tizen.PowerStateRequest("DISPLAY", "DISPLAY_NORMAL");
         tizen.power.request(stateRequest, onSuccess, onError, onChanged);
     }
 }
