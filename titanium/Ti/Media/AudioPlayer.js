@@ -20,10 +20,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		ENDED = 9,
 		ABORT = 10,
 		ERROR = 11;
-	
+			
 	return declare("Ti.Media.AudioPlayer", Evented, {
 		_currentState: STOPPED,
 		_volume: 1.0,
+		_initialized: false,
 		constructor: function() {
 			this._handles = [];
 		},
@@ -64,6 +65,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		constants: {
 			paused : false,
 			playing : false,
+			idle : false,
 			state: STOPPED,
 			progress: 0,
 			STATE_BUFFERING:0,
@@ -80,6 +82,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this._currentState = newState;
 			this.constants.__values__.playing 	= PLAYING === newState;
 			this.constants.__values__.paused 	= PAUSED === newState;
+			this.constants.__values__.idle = !this.constants.__values__.playing && this._initialized;
 			var evt = {};
 			evt['state'] = this.constants.__values__.state = this._currentState;
 			evt['src'] = this;
@@ -155,6 +158,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					this.stop();
 				}),
 				on(audio, "canplay", this, function() {
+					this._initialized = true;
 					this.volume = this._volume;
 					this._changeState(INITIALIZED, "initialized");
 					this.autoplay && audio.play();
@@ -241,6 +245,55 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 				this._changeState(STOPPING, "stopping");
 				a.pause();
 			}
+		},
+		isPaused: function() {
+			return this.constants.__values__.paused; 
+		},
+		isPlaying: function() {
+			return this.constants.__values__.playing;
+		},
+		stateDescription: function(stateId) {
+			var strDescription="";
+			switch(stateId){
+				case BUFFERING:
+					strDescription = "buffering";
+					break;
+				case INITIALIZED:
+					strDescription = "initialized";
+					break;
+				case PAUSED:
+					strDescription = "paused";
+					break;
+				case PLAYING:
+					strDescription = "playing";
+					break;	
+				case STARTING:
+					strDescription = "starting";
+					break;
+				case STOPPED:
+					strDescription = "stopped";
+					break;
+				case STOPPING:
+					strDescription = "stopping";
+					break;
+				case WAITING_FOR_DATA:
+					strDescription = "waiting for data";
+					break;
+				case WAITING_FOR_QUEUE:
+					strDescription = "waiting for queue";
+					break;
+				case ENDED:
+					strDescription = "ended";
+					break;
+				case ABORT:
+					strDescription = "abort";
+					break;
+				case ERROR:
+					strDescription = "error";
+					break;				
+			}
+				
+			return strDescription;
 		}
 	});
 });
