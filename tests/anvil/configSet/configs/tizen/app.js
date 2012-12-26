@@ -15,8 +15,10 @@ var suites = [
 	{name: "tizen/bluetooth"},
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
+	{name: "tizen/download"},
 	{name: "tizen/tizen_application"},
 	{name: "tizen/filesystem"},
+	{name: "tizen/ui_alert_dialog"}
 ];
 
 
