@@ -195,6 +195,8 @@ foreach $jscaprop(sort keys %jscaAll)
 # end of script
 
 
+##################################################################################
+
 #1 Process Anvil source code
 
 sub process
@@ -212,6 +214,10 @@ sub process
 
 sub processjs()
 {
+    # Process a JavaScript source file.
+    # Find all references to Titanium namespaces, properties and methods,
+    # and add them to the %calls list.
+
     my $path = shift;
     my %variables = ();
     $files++;
@@ -225,11 +231,16 @@ sub processjs()
         
         if($line =~ m/(Ti\.[a-zA-Z0-9_.]*)/)
         {
+            # This is a simple reference to a Titanium namespace, function or property.
+            # Add it to the list.
             $calls{"$1"} = " ";
         }
         
         if($line =~ m/([a-zA-Z0-9_.]*)\s?[^=]=[^=]\s?(Ti\.[^( ;]*)/ && $1 ne '')
         {
+            # This is an *assignment operation*, where on the right there is a reference
+            # to a Titanium namespace, function or property. Record it to the %variables list.
+            # (Example: var x = Ti.UI.createLabel(); )
             $variables{$1} = $2;
             $calls{"$variables{$1}"} = " "; $calls3
         }
@@ -238,17 +249,22 @@ sub processjs()
         {
             if($line =~ m/$var\.([a-zA-Z0-9_]*)/)
             {
+                # This is a reference to a function or a property of a previously declared variable.
+                # Construct the proper reference.
+                # Example: x.title = "hello";
+                # Since we know that "x = Ti.UI.createLabel()", we record this reference as
+                # Ti.UI.createLabel.title.
                 $calls{"$variables{$var}.$1"} = " ";
             }
             if($line =~ m/$var\.([a-zA-Z0-9_.]*)/)
             {
-                my $newcall = "$variables{$var}.$1";
+                # This is a reference to a function or a property of a previously declared variable.
+                # The only difference from the above dot is that if the reference has a dot at the end, 
+                # the dot will be excluded.
                 $calls{"$variables{$var}.$1"} = " ";
             }
         }
     }
-
-    close(INFO);
 }
 
 
@@ -279,6 +295,7 @@ sub parseType()
         my $proptype = $property->{type};
         if (index($proptype,"Titanium.") != -1)
         {
+            # This is a property that returns a Titanium object.
             my $propname = $type->{name} . "." . $property->{name};
             $propname =~ s/Titanium\./Ti./;
             $proptype =~ s/Titanium\./Ti./;
@@ -303,6 +320,7 @@ sub parseType()
             my $functypename = $functype->{type};
             if (index($functypename,"Titanium.") != -1)
             {
+                # This is a function that returns a Titanium object.
                 my $funcname = $type->{name} . "." . $function->{name};
                 $funcname =~ s/Titanium\./Ti./;
                 $functypename =~ s/Titanium\./Ti./;
