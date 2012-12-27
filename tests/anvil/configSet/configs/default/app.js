@@ -34,7 +34,8 @@ var suites = [
 	{name: "ui_controls"},
 	{name: "utils/utils"},
 	{name: "yahoo"},
-	{name: "ui/tableViewSection"}
+	{name: "ui/tableViewSection"},
+	{name: "ui/mobile-NavigationGroup"}
 ];
 
 if (Ti.Platform.osname === 'android') {
