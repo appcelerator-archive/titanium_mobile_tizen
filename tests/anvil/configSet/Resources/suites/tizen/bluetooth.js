@@ -13,40 +13,64 @@
 module.exports = new function() {
 	var finish;
 	var valueOf;
-	var adapter;// = tizen.bluetooth.getDefaultAdapter();
+	var reportError;
+	var adapter;
 	
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		reportError = testUtils.reportError;
 	}
 
 	this.name = "bluetooth";
 	this.tests = [
 		{name: "testObjectsAndInitialization"},
-		{name: "test2", timeout: 5000},
-		{name: "test3", timeout: 2000}
+		{name: "powerOn", timeout: 5000},
+		{name: "PowerOff", timeout: 4000}
 	]
 
-	this.test1 = function(testRun) {
-		valueOf(testRun, tizen.bluetooth).shouldBeObject();
-		
-		adapter = tizen.bluetooth.getDefaultAdapter();
-		
+	this.testObjectsAndInitialization = function(testRun) {
+		valueOf(testRun, tizen.bluetooth).shouldBeObject();		
+		adapter = tizen.bluetooth.getDefaultAdapter();		
+		valueOf(testRun, adapter).shouldBeObject();
+		finish(testRun);
+	}
+	
+	this.powerOn = function(testRun) {
 		valueOf(testRun, adapter).shouldBeObject();
 
-		finish(testRun);
-	}
-	
-	this.test2 = function(testRun) {
-		if(adapter){
+		var onBluetoothError = function(e) {
+			reportError(testRun, 'Error in powerOn test: ' + e.message);
+		}
 
+		try {
+			adapter.setPowered(true,			
+				function() {
+					finish(testRun);
+				}, 
+				onBluetoothError
+			);
+		} catch (exc) {
+			reportError(testRun, 'Exception in powerOn setPowered(): ' + exc.message);
 		}
-		finish(testRun);
 	}
-	
-	this.test3 = function(testRun) {
-		if(adapter){
+
+	this.PowerOff = function(testRun) {
+		valueOf(testRun, adapter).shouldBeObject();
+		valueOf(testRun, adapter.powered).shouldBeTrue();
+		var onBluetoothError = function(e) {
+			reportError(testRun, 'Error in powerOn test: ' + e.message);
 		}
-		finish(testRun);
+
+		try {
+			adapter.setPowered(false,			
+				function() {
+					finish(testRun);
+				}, 
+				onBluetoothError
+			);
+		} catch (exc) {
+			reportError(testRun, 'Exception in powerOn setPowered(): ' + exc.message);
+		}
 	}
 }
