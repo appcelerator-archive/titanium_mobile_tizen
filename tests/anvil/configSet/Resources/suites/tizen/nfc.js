@@ -82,6 +82,7 @@ module.exports = new function() {
 	//test setPowered(false)
 	this.powerOff = function(testRun) {
 		valueOf(testRun, adapter).shouldBeObject();
+		valueOf(testRun, adapter.powered).shouldBeTrue();
 		var onNFCPowerOn = function() {
         	finish(testRun);
     	}
