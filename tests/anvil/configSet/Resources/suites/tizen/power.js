@@ -16,8 +16,20 @@ module.exports = new function() {
 
     this.name = "power";
     this.tests = [
+        {name: "checkPower"},
         {name: "powerStateListener"}
     ]
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Test for Tizen Device API: SystemInfo
+    this.checkPower  = function(testRun) {
+        Ti.API.debug("Checking 'power' object availability.");
+        valueOf(testRun, tizen).shouldBeObject();
+        valueOf(testRun, tizen.power).shouldBeObject();
+        valueOf(testRun, tizen.power.request).shouldBeFunction();
+        valueOf(testRun, tizen.power.release).shouldBeFunction();
+        finish(testRun);
+    }
 
     this.powerStateListener = function(testRun) {
         var stateRequest = null;

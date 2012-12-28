@@ -240,6 +240,19 @@ module.exports = new function() {
 			self.reportError(this.testRun, "should be an array, was: " + typeDescription);
 		}
 	};
+	
+	Value.prototype.shouldContainDeprecated = function (expected) {
+		if (this.testRun.resultSet) {
+			return;
+		}
+
+		for (var i = 0; i < this.obj.length; i++) {
+			if (expected === this.obj[i]) {
+				return;
+			}
+		}
+		self.reportError(this.testRun, "should contain: " + expected + ", was: " + this.obj);
+	}
 
 	Value.prototype.shouldContain = function(expected) {
 		if (this.testRun.resultSet) {

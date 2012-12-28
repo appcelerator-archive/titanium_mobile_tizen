@@ -9,14 +9,17 @@
 var suites = [
 	{name: "tizen/media_content"},
 	{name: "tizen/alarm"},
+	{name: "tizen/contacts"},
 	{name: "tizen/notification"},
 	{name: "tizen/lbs"},
 	{name: "tizen/call"},
 	{name: "tizen/bluetooth"},
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
+	{name: "tizen/download"},
 	{name: "tizen/tizen_application"},
-	{name: "tizen/filesystem"}
+	{name: "tizen/filesystem"},
+	{name: "tizen/filters"}
 ];
 
 
