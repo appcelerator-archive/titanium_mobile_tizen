@@ -7,7 +7,9 @@
 
 // start customization here
 var suites = [
+	{name: "tizen/messaging"},
 	{name: "tizen/media_content"},
+	{name: "tizen/calendar"},
 	{name: "tizen/alarm"},
 	{name: "tizen/contacts"},
 	{name: "tizen/notification"},
@@ -20,7 +22,6 @@ var suites = [
 	{name: "tizen/download"},
 	{name: "tizen/tizen_application"},
 	{name: "tizen/filesystem"},
-	{name: "tizen/ui_alert_dialog"},
 	{name: "tizen/filters"}
 ];
 
