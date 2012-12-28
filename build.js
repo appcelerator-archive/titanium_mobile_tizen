@@ -153,6 +153,8 @@ function copymobilWebToTizen(finish){
 
 			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
 
+			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'themes'), path.join(sdkRoot, 'tizen', 'themes'));
+
 			//signer app for tizen
 			fs.mkdirSync(path.join(sdkRoot, 'tizen', 'utils'));
 			copyFileSync(path.join(titaniumTizenDir, 'utils', 'signapp.jar'), path.join(sdkRoot, 'tizen', 'utils', 'signapp.jar'));
