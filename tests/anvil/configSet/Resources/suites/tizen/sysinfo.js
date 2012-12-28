@@ -57,6 +57,9 @@ module.exports = new function() {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Test for Tizen Device API: do all documented properties are supported?
     this.allPropertiesSupported = function(testRun) {
+        // according to "Tizen Web App Programming" => "Programming Guide" => "Device" => "SystemInfo"
+        // Basic Supported Properties are: Power, Cpu, Storage, Display, Device, WifiNetwork, CellularNetwork.
+        // And "Network", "EthernetNetwork", "SIM", "DeviceOrientation" are NOT "Basic Supported Properties" and depends on device
         var listOfAllProperties = ["Power", "Cpu", "Storage", "Display", "Device", "Network", "WifiNetwork", "CellularNetwork", "EthernetNetwork", "SIM", "DeviceOrientation"];
 
         for (var i = 0; i < listOfAllProperties.length; i++) {
@@ -474,7 +477,6 @@ module.exports = new function() {
             Ti.API.info("Test completed by error callback - "+JSON.stringify(error));
             clearFakeTimeout();  // cancel fake timer call
             reportError(testRun, JSON.stringify(error));
-            finish(testRun);
         }
 
         //clears timeout if it was set before.
@@ -494,11 +496,21 @@ module.exports = new function() {
         },2000);
 
         try{
+            // According to documentation:
+            // "Tizen Web App Programming" => "Programming Guide" => "Device" => "Obtain Details on Basic Supported Properties"
+            // devices MAY not support all properties. Some properties vary from device to device
             id = tizen.systeminfo.addPropertyValueChangeListener(data.propertyName, onSuccessCallback, onErrorCallback, data.optionsParameter);
+
+            valueOf(testRun, id).shouldBeGreaterThanEqual(0);
+            if (id < 0)
+            {
+                clearFakeTimeout();
+                Ti.API.warn("Property '"+data.propertyName+"' did not accepted listener. This may depends on device.");
+                finish(testRun);
+            }
         } catch(e) {
             clearFakeTimeout();
             reportError(testRun, JSON.stringify(e));
-            finish(testRun);
         }
     }
 }
