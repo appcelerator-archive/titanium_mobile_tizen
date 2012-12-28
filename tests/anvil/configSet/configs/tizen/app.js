@@ -16,8 +16,7 @@ var suites = [
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
 	{name: "tizen/tizen_application"},
-	{name: "tizen/filesystem"},
-	{name: "tizen/ui_alert_dialog"}
+	{name: "tizen/filesystem"}
 ];
 
 
