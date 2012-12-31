@@ -4,6 +4,7 @@ function CountPixels(){
     var allPixels;
     this.countPixels = function(pixelColor, el, callback) {
         var options = {allowTaint:true, taintTest:false};
+        var nEl = el.domNode ? el.domNode : el; 
         options.onrendered = function(canvasObject) {
                 var count = 0,
                     c = canvasObject.getContext('2d'),
@@ -20,7 +21,7 @@ function CountPixels(){
                 }
                 callback(count);
         }
-        h2c([el.domNode], options);
+        h2c([nEl], options);
     };
     this.countPixelsPercentage = function(pixelColor, el, callback) {
         var elCB = function(count){
