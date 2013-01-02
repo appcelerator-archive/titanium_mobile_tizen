@@ -122,6 +122,37 @@ define(
 		};
 	}
 
+	if (!has("function-bind")) {
+		function Empty(){}
+		
+		Function.prototype.bind = function bind(that) {
+			var target = this,
+				slice = Array.prototype.slice,
+				args = slice.call(arguments, 1),
+				bound = function () {
+					var a = args.concat(slice.call(arguments)),
+						result;
+					if (this instanceof bound) {
+						result = target.apply(this, a);
+						if (Object(result) === result) {
+							return result;
+						}
+						return this;
+					} else {
+						return target.apply(that, a);
+					}
+				};
+
+			if (target.prototype) {
+				Empty.prototype = target.prototype;
+				bound.prototype = new Empty();
+				Empty.prototype = null;
+			}
+
+			return bound;
+		};
+	}
+
 	if (!has("js-btoa")) {
 		var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 			fromCharCode = String.fromCharCode;
@@ -373,7 +404,7 @@ define(
 			margin: 0,
 			padding: 0
 		});
-		
+
 		if (App.analytics) {
 			// enroll event
 			if (localStorage.getItem("ti:enrolled") === null) {
@@ -394,7 +425,7 @@ define(
 
 			// app start event
 			analytics.add("ti.start", "ti.start", {
-				tz: (new Date()).getTimezoneOffset(),
+				tz: (new Date).getTimezoneOffset(),
 				deploytype: deployType,
 				os: Platform.osname,
 				osver: Platform.ostype,
