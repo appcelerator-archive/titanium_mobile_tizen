@@ -4,7 +4,9 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+	Ti.include('countPixels.js');
+}
 
 module.exports = new function() {
 	var finish;
@@ -15,16 +17,23 @@ module.exports = new function() {
 	}
 
 	this.name = "ui_activity_indicator.js";
-	this.tests = [
-		{name: "testProperties"},
-		{name: "testProgress"}
-	]
+	this.tests = (function(){
+			var arr = [
+			{name: "testProperties"},
+		]
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+			arr.push({name: "testProgress"});
+		}
+		return arr;
+	}())
 
 	this.testProperties = function(testRun) {
-		//create object instance, a parasitic subclass of Observable
-		var wind = Ti.UI.createWindow();
+	
+		var wind = Ti.UI.createWindow({
+			backgroundColor :'#660000'
+		});
 		
-		//create object instance, a parasitic subclass of Observable
+	
 		var style = Ti.UI.ActivityIndicatorStyle.DARK;
 		if (Ti.Platform.name === 'iPhone OS'){
 		  style = Ti.UI.iPhone.ActivityIndicatorStyle.DARK;
@@ -58,17 +67,20 @@ module.exports = new function() {
 	}
 
 	this.testProgress = function(testRun){
-		//create object instance, a parasitic subclass of Observable
+
+		// Verify that the activity indicator indeed appears
+		
 		var wind = Ti.UI.createWindow();
 		
-		//create object instance, a parasitic subclass of Observable
-		
+		var cp = new CountPixels();
+
 		var style = Ti.UI.ActivityIndicatorStyle.DARK;
 		if (Ti.Platform.name === 'iPhone OS'){
 		  style = Ti.UI.iPhone.ActivityIndicatorStyle.DARK;
 		}
 		var activityIndicator = Ti.UI.createActivityIndicator({
-		  color: 'green',
+		  color: '#00ff00',		// color value will be checked later
+		  backgroundColor: '#00ffff',
 		  font: {fontFamily:'Helvetica Neue', fontSize:26, fontWeight:'bold'},
 		  message: 'Loading...',
 		  style:style,
@@ -78,24 +90,36 @@ module.exports = new function() {
 		  width:Ti.UI.SIZE
 		});
 
-		wind.add(activityIndicator);
+		activityIndicator.addEventListener('postlayout', function(){
+			// The activity indicator should now be drawn. Check if it is
+			// (criteria: there must be enough pixels of the foreground color)
+			cp.countPixels([0, 255, 0], wind, checkFontColor);
+		});
+
+		function checkFontColor(count){
+			console.log(count);
+			valueOf(testRun, count).shouldBeGreaterThan(250);
+			cp.countPixels([0, 255, 255], wind, checkBackColor);
+		}
+		
+		function checkBackColor(count){
+			console.log(count);
+			valueOf(testRun, count).shouldBeGreaterThan(2000);
+			wind.close();
+			finish(testRun);
+		}
 
 		function progress(){
 			activityIndicator.show();
-			setTimeout(function(){
-				checkValue();
-			},6000);		
 		};
 
-		function checkValue(){
-			wind.close();
-		};
 
-		wind.addEventListener('open', progress);
+		wind.add(activityIndicator);
+
+		wind.addEventListener('postlayout', progress);
 
 		wind.open();
-
-		finish(testRun); 
+		 
 	}
 
 }

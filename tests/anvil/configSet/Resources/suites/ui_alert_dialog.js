@@ -5,7 +5,9 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+	Ti.include('countPixels.js');
+}
 module.exports = new function() {
 	var finish;
 	var valueOf;
@@ -15,16 +17,32 @@ module.exports = new function() {
 	}
 
 	this.name = "ui_alert_dialog";
-	this.tests = [
-		{name: "showHide"},
-		{name: "testButtons"},
-		{name: "testCancel"},
-		{name: "testOk"},
-		{name: "testMessage"},
-		{name: "testTitle"}
-	]
+	this.tests = (function(){
+		var arr = [
+			{name: "testButtons"},
+			{name: "testCancel"},
+			{name: "testOk"},
+			{name: "testMessage"},
+			{name: "testTitle"}
+		];
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+			arr.push({name: "showHide"});
+		}
+		return arr;
+	}())
 
 	this.showHide = function(testRun) {
+
+		// Show a red full-screen window that will be a test background for the
+		// alert dialog. Then show the alert dialog, and verify the number of
+		// background-colored pixels has decreased, as the alert dialog covered them.
+		// (There is no direct way of setting colours for the alert dialog.)
+		// Afterwards, hide and show dialog again, checking the colours again.
+		
+		var wind = Ti.UI.createWindow({
+			backgroundColor: '#ff0000'
+		});
+
 		var dialog = Ti.UI.createAlertDialog({
 		    cancel: 1,
 		    buttonNames: ['Confirm', 'Cancel', 'Help'],
@@ -32,16 +50,47 @@ module.exports = new function() {
 		    title: 'Delete'
 		});
 
-		console.log(dialog.message);
-
-		valueOf(testRun, function(){
-			dialog.show();
-		}).shouldNotThrowException();
-		valueOf(testRun, function(){
-			dialog.hide();
-		}).shouldNotThrowException();
 		
-      	finish(testRun);
+		wind.addEventListener('open', showDialog);
+
+		wind.open();
+		
+		function showDialog(){
+			var cp = new CountPixels();
+
+			cp.countPixelsPercentage([255, 0, 0], document.body, callback1);
+
+			function callback1(count){
+				console.log(count);
+				
+				valueOf(testRun, function(){
+					dialog.show();
+				}).shouldNotThrowException();
+				
+				setTimeout(function(){
+					cp.countPixelsPercentage([255, 0, 0], document.body, callback2);
+				}, 500)	
+			}
+
+			function callback2(count){
+				console.log(count);
+				valueOf(testRun, count).shouldBe(0);
+				valueOf(testRun, function(){	
+					dialog.hide();
+				}).shouldNotThrowException();
+				setTimeout(function(){
+					cp.countPixelsPercentage([255, 0, 0], document.body, callback3);
+				}, 500);
+			}	
+
+			function callback3(count){
+				console.log(count);
+				valueOf(testRun, count).shouldBe(100);
+				wind.close();
+				finish(testRun);
+			}	
+
+		}
 	}
 
 	this.testButtons = function(testRun) {
