@@ -204,13 +204,10 @@ module.exports = new function() {
                     longitudeDelta:0.05
                 });
                 
-            //Fail-------------------------------->
             valueOf(testRun, map.latitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.longitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.region.latitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.region.longitudeDelta).shouldBeEqual(0.05);
-            //Fail-------------------------------->
-
             valueOf(testRun, map.animated).shouldBeTrue();
             valueOf(testRun, map.mapType).shouldBeEqual(Titanium.Map.STANDARD_TYPE);
             valueOf(testRun, map.regionFit).shouldBeTrue();
