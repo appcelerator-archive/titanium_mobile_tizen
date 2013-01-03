@@ -425,7 +425,7 @@ module.exports = new function() {
             }).shouldNotThrowException();
             
             valueOf(testRun, function(){ 
-                annotation.setImage('file:///suites/map/image.jpg');
+                annotation.setImage('file:///suites/map/image.png');
             }).shouldNotThrowException();
             
             valueOf(testRun, function(){ 
@@ -442,7 +442,7 @@ module.exports = new function() {
             valueOf(testRun, annotation.getPincolor()).shouldBeEqual(Titanium.Map.ANNOTATION_GREEN);
             valueOf(testRun, annotation.getSubtitle()).shouldBeEqual('New test subtitle');
             valueOf(testRun, annotation.getTitle()).shouldBeEqual('New test title');
-            valueOf(testRun, annotation.getImage()).shouldBeEqual('file:///suites/map/image.jpg'); 
+            valueOf(testRun, annotation.getImage()).shouldBeEqual('file:///suites/map/image.png'); 
             valueOf(testRun, annotation.getSubtitleid()).shouldBeEqual('newSubtitleiD');
             valueOf(testRun, annotation.getTitleid()).shouldBeEqual('newtitleiD');
             
