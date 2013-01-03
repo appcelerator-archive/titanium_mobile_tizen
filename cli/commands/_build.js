@@ -51,6 +51,28 @@ exports.config = function (logger, config, cli) {
 				hint: __('type'),
 				values: ['production', 'development']
 			},
+			'dev-id': {
+				abbr: 'I',
+				desc: __('the id for the avd'),
+				hint: __('id'),
+				default: 'none'
+			},
+			'cert': {
+				abbr: 'C',
+				desc: __('the location of the certificate file'),
+				hint: 'path',
+				prompt: {
+					label: __('Certificate File Location'),
+					error: __('Invalid file'),
+					validator: function (keystorePath) {
+						keystorePath = afs.resolvePath(keystorePath);
+						if (!afs.exists(keystorePath) || !fs.lstatSync(keystorePath).isFile()) {
+							throw new appc.exception(__('Invalid certificate file location'));
+						}
+						return true;
+					}
+				}
+			},
 			'alias': {
 				abbr: 'L',
 				desc: __('the alias for the keystore'),
@@ -61,28 +83,6 @@ exports.config = function (logger, config, cli) {
 					validator: function (alias) {
 						if (!alias) {
 							throw new appc.exception(__('Invalid keystore alias'));
-						}
-						return true;
-					}
-				}
-			},
-			'dev-id': {
-				abbr: 'I',
-				desc: __('the id for the avd'),
-				hint: __('id'),
-				default: 'none'
-			},
-			'keystore': {
-				abbr: 'K',
-				desc: __('the location of the keystore file'),
-				hint: 'path',
-				prompt: {
-					label: __('Keystore File Location'),
-					error: __('Invalid keystore file'),
-					validator: function (keystorePath) {
-						keystorePath = afs.resolvePath(keystorePath);
-						if (!afs.exists(keystorePath) || !fs.lstatSync(keystorePath).isFile()) {
-							throw new appc.exception(__('Invalid keystore file location'));
 						}
 						return true;
 					}
@@ -104,7 +104,23 @@ exports.config = function (logger, config, cli) {
 					}
 				}
 			},
-		}		
+			'keypass': {
+				abbr: 'K',
+				desc: __('the password for the key'),
+				hint: 'alias',
+				password: true,
+				prompt: {
+					label: __('Keystore password'),
+					error: __('Invalid key password'),
+					validator: function (password) {
+						if (!password) {
+							throw new appc.exception(__('Invalid keys password'));
+						}
+						return true;
+					}
+				}
+			}
+		}	
 	};
 };
 
@@ -182,6 +198,11 @@ function build(logger, config, cli, finished) {
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
 	this.targetDevice = cli.argv['dev-id'];
+	this.tizenCert = cli.argv['cert'];
+	this.storeType = 'pkcs12';
+	this.alias = cli.argv['alias'];
+	this.storePasword = cli.argv['password'];
+	this.keypass = cli.argv['keypass'];
 
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
@@ -1094,7 +1115,6 @@ build.prototype = {
 			callback();
 		}		
 	},
-
 	detectTizenSDK: function(logger, next){
 		//Detect Tizen SDK
 		//check OS, this code supporting windows only(for now useing registry to find path)
@@ -1143,7 +1163,27 @@ build.prototype = {
 		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
+
+
+		logger.info("this.tizenCert = " + this.tizenCert);
+		if(this.tizenCert){
+			//use user`s certificate to sign application
+			cmdSign = cmdSign + ' -cert ' + this.tizenCert;
+			if(this.storeType){
+				cmdSign = cmdSign + ' -storetype ' + this.storeType;
+			}
+			if(this.storePasword){
+				cmdSign = cmdSign + ' -storepass ' + this.storePasword;
+			}
+			if(this.alias){
+				cmdSign = cmdSign + ' -alias ' + this.alias;
+			}
+			if(this.keypass){
+				cmdSign = cmdSign + ' -keypass ' + this.keypass;
+			}
+		}
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
+
 		packer.exec(
 			cmdSign,
 			function (err, stdout, stderr) {				
