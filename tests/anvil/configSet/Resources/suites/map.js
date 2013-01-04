@@ -45,12 +45,16 @@ module.exports = new function() {
             // Verify the map really appears on the screen: it should cover the
             // red background window. This is checked by counting pixels of the
             // background color.
-            
+            var cp;
             var map;
             var win = Titanium.UI.createWindow({
                 backgroundColor: '#FF0000'
             });
-            var cp = new CountPixels();
+            
+            if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+                cp = new CountPixels();
+            }
+            
             var onMapComplete = function(count){
                     // check that the map covered its background
                     valueOf(testRun, count).shouldBeLessThan(100);
@@ -73,6 +77,7 @@ module.exports = new function() {
                     animated: true
                 });
             }).shouldNotThrowException();
+            
             if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
                 cp.countPixelsPercentage([255, 0, 0], win, onTestStarted);
             }
