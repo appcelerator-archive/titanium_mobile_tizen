@@ -4,8 +4,9 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-
-
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+	Ti.include('countPixels.js');
+}
 module.exports = new function() {
 	var finish;
 	var valueOf;
@@ -15,17 +16,20 @@ module.exports = new function() {
 	}
 
 	this.name = "ui_progress_bar";
-	this.tests = [
-		{name: "testProperties"},
-		{name: "testProgress"}
-	]
+	this.tests = (function(){
+		var arr = [
+			{name: "testProperties"}
+		]
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+			arr.push({name: "testProgress"});
+		}
+		return arr;
+	}())
 
 	this.testProperties = function(testRun) {
-		//create object instance, a parasitic subclass of Observable
+
 		var wind = Ti.UI.createWindow();
-		
-		//create object instance, a parasitic subclass of Observable
-		
+				
 		var pb=Titanium.UI.createProgressBar({
 		    top:10,
 		    width:250,
@@ -55,36 +59,45 @@ module.exports = new function() {
 	}
 
 	this.testProgress = function(testRun){
-		//create object instance, a parasitic subclass of Observable
+
 		var wind = Ti.UI.createWindow();
-		
-		//create object instance, a parasitic subclass of Observable
 		
 		var pb=Titanium.UI.createProgressBar({
 		    top:10,
 		    width:250,
 		    height:'auto',
 		    min:0,
-		    max:100,
+		    max:10,
 		    value:0,
-		    color:'#fff',
+		    color :'#ff0000',
 		    message:'Downloading 0 of 10',
 		    font:{fontSize:14, fontWeight:'bold'},
 		   
 		});
 		wind.add(pb);
 
-		pb.show();
+		var cp = new CountPixels();
+		var prev_count = -1;
 
-		valueOf(testRun, pb.value).shouldBe(0);
+		// Verify the operation of the progress bar by incrementing its value in a loop and checking
+		// (by counting pixels of foreground colour) that the progress section is increasing.
 
-		function progress(){
+		function start(){
+			pb.show();
+			valueOf(testRun, pb.value).shouldBe(0);
+			cp.countPixels([204, 204, 204], wind, progress);
+		};
+
+		// Progress incrementation loop
+		function progress(count){
+			console.log(count)
 			if(pb.value < pb.max){
 				pb.value++;
-				console.log(pb.value);
+				valueOf(testRun, count).shouldBeGreaterThan(prev_count);
+				prev_count = count;
 				setTimeout(function(){
-					progress();
-				},50);
+					cp.countPixels([204, 204, 204], wind, progress);
+				},100);
 			} else {
 				checkValue();
 			} 
@@ -92,16 +105,15 @@ module.exports = new function() {
 		};
 
 		function checkValue(){
-			console.log('>>>>>>>>>>>>' + pb.value);
 			valueOf(testRun, pb.value).shouldBe(pb.max);
 			wind.close();
+			finish(testRun); 
 		};
 
-		wind.addEventListener('postlayout', progress);
+		wind.addEventListener('postlayout', start);
 
 		wind.open();
-
-		finish(testRun); 
+		
 	}
 
 }
