@@ -5,7 +5,9 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+	Ti.include('countPixels.js');
+}
 module.exports = new function() {
 	var finish;
 	var valueOf;
@@ -15,17 +17,31 @@ module.exports = new function() {
 	}
 
 	this.name = "ui_option_dialog";
-	this.tests = [
-		{name: "showHide"},
-		{name: "testOptions"},
-		{name: "testCancel"},
-		{name: "testDestructive"},
-		{name: "testTizenView"},
-		{name: "testTitle"}
-	]
+	this.tests = (function(){
+		var arr = [	
+			{name: "testOptions"},
+			{name: "testCancel"},
+			{name: "testDestructive"},
+			{name: "testTitle"}
+		]
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+			arr.push({name: "showHide"});
+			if(Ti.Platform.osname === 'tizen'){
+				arr.push({name: "testTizenView"});
+			}
+		}
+		return arr;
+	}())
 
 	this.showHide = function(testRun) {
-		var wind = Ti.UI.createWindow();
+
+		// Show a red full-screen window that will be a test background for the
+		// option dialog. Then show the option dialog, and verify the number of
+		// background-colored pixels has decreased, as the alert dialog covered them.
+
+		var wind = Ti.UI.createWindow({
+			backgroundColor: '#ff0000' //this color will be checked
+		});
 
 		var optionsDialogOpts = {
 			options:['Option 1', 'Option 2', 'Option 3', 'Option 4'],
@@ -36,25 +52,48 @@ module.exports = new function() {
 		
 		var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
 
-		wind.addEventListener('open', function(){
-			console.log(testRun.resultSet);
-			valueOf(testRun, function(){
-				dialog.show();
-			}).shouldNotThrowException();
-			hide();
-		});
+		var showDialog = function(){
+			console.log('it work')
+			var cp = new CountPixels();
+
+			cp.countPixelsPercentage([255, 0, 0], document.body, callback1);
+
+			function callback1(count){
+				valueOf(testRun, function(){
+					dialog.show();
+				}).shouldNotThrowException();
+				setTimeout(function(){
+					cp.countPixelsPercentage([255, 0, 0], document.body, callback2);
+				}, 500)
+			}
+
+			function callback2(count){
+				// there are 0 red pixels, because the option dialog dims the surrounding screen,
+				// and the pixels become dark-red (different colour).
+				valueOf(testRun, count).shouldBe(0);	
+				valueOf(testRun, function(){	
+					dialog.hide();
+				}).shouldNotThrowException();
+				setTimeout(function(){
+					cp.countPixelsPercentage([255, 0, 0], document.body, callback3);
+				}, 500);
+			}	
+
+			function callback3(count){
+				valueOf(testRun, count).shouldBe(100);
+				wind.close();
+				
+			}
+
+		}
+
+		wind.addEventListener('open', showDialog);
+
+		wind.addEventListener('close', function(){
+			finish(testRun);
+		})
 
 		wind.open();
-		
-		function hide(){
-			setTimeout(function(){
-				valueOf(testRun, function(){
-				 	dialog.hide();
-				}).shouldNotThrowException();
-				wind.close();
-				finish(testRun);
-			}, 2000);
-		}
 
 	}
 
@@ -120,51 +159,63 @@ module.exports = new function() {
 	}
 
 	this.testTizenView = function(testRun) {
-		var wind = Ti.UI.createWindow();
+
+		//create custom view for option dialog, that will be include label with black background 
+		//and then, after dialog show, veryfy the number of black pixels; 
+
+		var wind = Ti.UI.createWindow({
+			backgroundColor: '#00ff00'
+		});
+
+		var cp = new CountPixels();
 				
 		var dialog = Titanium.UI.createOptionDialog();
 
 		var root = Ti.UI.createView({
-				width : "100%", 
-				height : 110
+				width : 250, 
+				height : 130
 		});
 			
-		var view = Ti.UI.createView({
-				width : 300, height: '100'
-		});
-		root.add(view);
+		
+		
 		var l = Ti.UI.createLabel({
-				text : 'I am a label',
+				//text : 'I am a label',
 				top: 10, left: 10, bottom: 10, right: 10,
 				color : 'white',
-				borderRadius : 10,
-				backgroundColor : 'blue'
+				backgroundColor : '#000000',
+				widht : 200,
+				heigth : 100
 		}); 
-		view.add(l);
+
+		root.add(l);
 			
 		dialog.title = 'Tizen with a View';
 		dialog.options = ['OK'];
 		dialog.tizenView = root;
 
 		valueOf(testRun, dialog.tizenView).shouldBeObject();
+
 		wind.addEventListener('open', function(){
 			dialog.show();
-			hide();
+			setTimeout(function(){
+				cp.countPixels([0, 0, 0], document.body, hideDialog);
+			}, 500);
 		});
 
 		wind.open();
 
-		function hide(){
-			setTimeout(function(){
+		function hideDialog(count){
+				console.log(count)
+				valueOf(testRun, count).shouldBeGreaterThan(20000);
 				try{
-					dialog.hide();
+						dialog.hide();
 				} catch (e){ 
-					console.log(e.message);
+						console.log(e.message);
 				}
 				wind.close();
 				finish(testRun);
-			}, 2000);
 		}
+		
 	}
 
 	this.testTitle = function(testRun) {

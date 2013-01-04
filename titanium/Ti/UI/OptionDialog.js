@@ -101,6 +101,16 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 			optionsWindow.open();
 		},
 
+		hide: function(){
+					this._optionsWindow.close();
+					this._optionsWindow = void 0;
+					this.fireEvent("click", {
+						index: this.cancel,
+						cancel: this.cancel,
+						destructive: this.destructive
+					});
+		},
+
 		properties: {
 			cancel: -1,
 			destructive: -1,

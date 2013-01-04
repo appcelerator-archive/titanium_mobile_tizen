@@ -4,7 +4,9 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-Ti.include('countPixels.js');
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+    Ti.include('countPixels.js');
+}
 module.exports = new function() {
 	var finish;
 	var valueOf;
@@ -22,7 +24,6 @@ module.exports = new function() {
 		{name: "simple_map_methods", timeout: 10000},
 		{name: "route", timeout: 10000},
                 {name: "annotation", timeout: 10000},
-                {name: "annotation_property", timeout: 10000},
                 {name: "annotation_methods", timeout: 10000}
 	]
 
@@ -41,19 +42,27 @@ module.exports = new function() {
 	}
 	
 	this.mapView = function(testRun) {
+            // Verify the map really appears on the screen: it should cover the
+            // red background window. This is checked by counting pixels of the
+            // background color.
+            var cp;
             var map;
             var win = Titanium.UI.createWindow({
                 backgroundColor: '#FF0000'
             });
-            var cp = new CountPixels();
-            var callback = function(count){
-                    //check if count of red pixels is not 100%;
+            
+            if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+                cp = new CountPixels();
+            }
+            
+            var onMapComplete = function(count){
+                    // check that the map covered its background
                     valueOf(testRun, count).shouldBeLessThan(100);
                     win.close();
                     finish(testRun);
                 }
-            var callbackBefore = function(count){
-                    //check if count of red pixels is 100%;
+            var onTestStarted = function(count){
+                    //check if the map's red background window is OK
                     valueOf(testRun, count).shouldBeEqual(100);
                 }
             //try to create map view
@@ -64,21 +73,29 @@ module.exports = new function() {
                             latitudeDelta:0.5, longitudeDelta:0.5},
                     animate:true,
                     regionFit:true,
-                    userLocation:true,
+                    userLocation:false,
                     animated: true
                 });
             }).shouldNotThrowException();
-            cp.countPixelsPercentage([255, 0, 0], win, callbackBefore);
+            
+            if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+                cp.countPixelsPercentage([255, 0, 0], win, onTestStarted);
+            }
             
             map.addEventListener('complete', function(){
-                cp.countPixelsPercentage([255, 0, 0], win, callback);
+                if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+                    cp.countPixelsPercentage([255, 0, 0], win, onMapComplete);
+                } else {
+                    win.close();
+                    finish(testRun);
+                }
             });
             
             win.add(map);
             win.open();
-            
-            
-	}
+	};
+
+
         this.add_annotation = function(testRun) {
             var annotationList;
             var annotation1;
@@ -93,12 +110,12 @@ module.exports = new function() {
                         latitudeDelta:3, longitudeDelta:3},
                 animate:true,
                 regionFit:true,
-                userLocation:true
+                userLocation:false
             });
                 
             valueOf(testRun, map.annotations.length).shouldBeEqual(0);
             
-            
+            //Create annotations
             annotation1 = Titanium.Map.createAnnotation({
                 latitude:37.390749,
                 longitude:-122.081651,
@@ -106,8 +123,7 @@ module.exports = new function() {
                 subtitle:'Test1, CA',
                 pincolor:Titanium.Map.ANNOTATION_RED,
                 animate:true,
-                leftButton: '../images/appcelerator_small.png',
-                myid:1 // Custom property to uniquely identify this annotation.
+                myid:1 // Custom property to uniquely identify this annotation.                
             });
             annotation2 = Titanium.Map.createAnnotation({
                 latitude:39.390749,
@@ -116,7 +132,6 @@ module.exports = new function() {
                 subtitle:'Test2, CA',
                 pincolor:Titanium.Map.ANNOTATION_RED,
                 animate:true,
-                leftButton: '../images/appcelerator_small.png',
                 myid:2 // Custom property to uniquely identify this annotation.
             });
             annotation3 = Titanium.Map.createAnnotation({
@@ -126,18 +141,24 @@ module.exports = new function() {
                 subtitle:'Test3, CA',
                 pincolor:Titanium.Map.ANNOTATION_RED,
                 animate:true,
-                leftButton: '../images/appcelerator_small.png',
                 myid:3 // Custom property to uniquely identify this annotation.
             });
-            
-            map.addAnnotation(annotation1);
+            //add one
+            valueOf(testRun, function(){
+                map.addAnnotation(annotation1);
+            }).shouldNotThrowException();
             valueOf(testRun, map.annotations.length).shouldBeEqual(1);
             
-            map.addAnnotations([annotation2, annotation3]);
+            //add array of annotations
+            valueOf(testRun, function(){
+                map.addAnnotations([annotation2, annotation3]);
+            }).shouldNotThrowException();
             valueOf(testRun, map.annotations.length).shouldBeEqual(3);
             
-            annotationList = map.getAnnotations();
-           
+            valueOf(testRun, function(){
+                annotationList = map.getAnnotations();
+            }).shouldNotThrowException();
+            //check the annotations objects
             for(var i=0, len=annotationList.length; i<len; i++){
                 valueOf(testRun, annotationList[i]).shouldBeObject();
             } 
@@ -150,13 +171,19 @@ module.exports = new function() {
                 map.deselectAnnotation("Test2");
             }).shouldNotThrowException();
             
-            map.removeAnnotation(annotation2)
+            valueOf(testRun, function(){
+                map.removeAnnotation(annotation2)
+            }).shouldNotThrowException();
             valueOf(testRun, map.annotations.length).shouldBeEqual(2);
             
-            map.removeAnnotations([annotation3]);
+            valueOf(testRun, function(){
+                map.removeAnnotations([annotation3]);
+            }).shouldNotThrowException();
             valueOf(testRun, map.annotations.length).shouldBeEqual(1);
             
-            map.removeAllAnnotations();
+            valueOf(testRun, function(){
+                map.removeAllAnnotations();
+            }).shouldNotThrowException();
             valueOf(testRun, map.annotations.length).shouldBeEqual(0);
             
             win.add(map);
@@ -164,6 +191,8 @@ module.exports = new function() {
             win.close();
             finish(testRun);
 	};
+        
+        
         this.map_properties = function(testRun){
             var win = Titanium.UI.createWindow({
                 backgroundColor: '#FF0000'
@@ -174,31 +203,27 @@ module.exports = new function() {
                             latitudeDelta:0.05, longitudeDelta:0.05},
                     animate:true,
                     regionFit:true,
-                    userLocation:true,
-                    animated: true
+                    userLocation:false,
+                    animated: true,
+                    latitudeDelta:0.05,
+                    longitudeDelta:0.05
                 });
-            map.addEventListener('complete', function(){
                 
-                //Fail-------------------------------->
-                //valueOf(testRun, map.latitudeDelta).shouldBeEqual(33.74511);
-                //valueOf(testRun, map.longitudeDelta).shouldBeEqual(-84.38993);
-                //valueOf(testRun, map.region.latitudeDelta).shouldBeEqual(0.05);
-                //valueOf(testRun, map.region.longitudeDelta).shouldBeEqual(0.05);
-                //Fail-------------------------------->
-                
-                valueOf(testRun, map.animated).shouldBeTrue();
-                valueOf(testRun, map.mapType).shouldBeEqual(Titanium.Map.STANDARD_TYPE);
-                valueOf(testRun, map.regionFit).shouldBeTrue();
-                valueOf(testRun, Math.round(map.region.latitude)).shouldBeEqual(34);
-                valueOf(testRun, Math.round(map.region.longitude)).shouldBeEqual(-84);
-                valueOf(testRun, map.regionFit).shouldBeTrue();
-                valueOf(testRun, map.userLocation).shouldBeTrue();
-                win.close();
-                finish(testRun);
-            });
+            valueOf(testRun, map.latitudeDelta).shouldBeEqual(0.05);
+            valueOf(testRun, map.longitudeDelta).shouldBeEqual(0.05);
+            valueOf(testRun, map.region.latitudeDelta).shouldBeEqual(0.05);
+            valueOf(testRun, map.region.longitudeDelta).shouldBeEqual(0.05);
+            valueOf(testRun, map.animated).shouldBeTrue();
+            valueOf(testRun, map.mapType).shouldBeEqual(Titanium.Map.STANDARD_TYPE);
+            valueOf(testRun, map.regionFit).shouldBeTrue();
+            valueOf(testRun, map.region.latitude.toFixed(1)).shouldBeEqual(33.7);
+            valueOf(testRun, map.region.longitude.toFixed(1)).shouldBeEqual(-84.4);
+            valueOf(testRun, map.regionFit).shouldBeTrue();
+            valueOf(testRun, map.userLocation).shouldBeFalse();
             win.add(map);
             win.open();
-            
+            win.close();
+            finish(testRun);
         };
         this.simple_map_methods = function(testRun){
             var win = Titanium.UI.createWindow({
@@ -210,55 +235,59 @@ module.exports = new function() {
                         latitudeDelta:0.05, longitudeDelta:0.05},
                 animate:true,
                 regionFit:true,
-                userLocation:true,
-                animated: true
+                userLocation:false,
+                animated: true,
+                latitudeDelta:0.05,
+                longitudeDelta:0.05
             });
             
-            //Fail-------------------------------->
-            //valueOf(testRun, map.getLatitudeDelta()).shouldBeEqual(0.05);
-            //valueOf(testRun, map.getLongitudeDelta()).shouldBeEqual(0.05);
-            //Fail-------------------------------->
-            
             valueOf(testRun, map.getAnimated()).shouldBeTrue();
-            map.setAnimated(false);
+            valueOf(testRun, function(){
+                map.setAnimated(false);
+            }).shouldNotThrowException();
             valueOf(testRun, map.getAnimated()).shouldBeFalse();
             valueOf(testRun, map.getMapType()).shouldBeEqual(Titanium.Map.STANDARD_TYPE);
-            valueOf(testRun, Math.round(map.getRegion().latitude)).shouldBeEqual(34);
-            valueOf(testRun, Math.round(map.getRegion().longitude)).shouldBeEqual(-84);
+            valueOf(testRun, map.getRegion().latitude.toFixed(1)).shouldBeEqual(33.7);
+            valueOf(testRun, map.getRegion().longitude.toFixed(1)).shouldBeEqual(-84.4);
             valueOf(testRun, map.getRegion().latitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.getRegion().longitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.getRegionFit()).shouldBeTrue();
-            valueOf(testRun, map.getUserLocation()).shouldBeTrue();
+            valueOf(testRun, map.getUserLocation()).shouldBeFalse();
+            valueOf(testRun, map.getLatitudeDelta()).shouldBeEqual(0.05);
+            valueOf(testRun, map.getLongitudeDelta()).shouldBeEqual(0.05);
             
-            map.setLocation({
-                latitude:37.337681, longitude:-122.038193, animate:true,
-                latitudeDelta:0.04, longitudeDelta:0.04});
+            valueOf(testRun, function(){
+                map.setLocation({
+                    latitude:37.337681, longitude:-122.038193, animate:true,
+                    latitudeDelta:0.04, longitudeDelta:0.04});
+            }).shouldNotThrowException();
             
-            valueOf(testRun, Math.round(map.getRegion().latitude)).shouldBeEqual(37);
-            valueOf(testRun, Math.round(map.getRegion().longitude)).shouldBeEqual(-122);
+            valueOf(testRun, map.getRegion().latitude.toFixed(1)).shouldBeEqual(37.3);
+            valueOf(testRun, map.getRegion().longitude.toFixed(1)).shouldBeEqual(-122.0);
             valueOf(testRun, map.getRegion().latitudeDelta).shouldBeEqual(0.04);
             valueOf(testRun, map.getRegion().longitudeDelta).shouldBeEqual(0.04);
             
-            map.setMapType(Ti.Map.TERRAIN_TYPE);
+            valueOf(testRun, function(){
+                map.setMapType(Ti.Map.TERRAIN_TYPE);
+            }).shouldNotThrowException();
             
             valueOf(testRun, map.getMapType()).shouldBeEqual(Titanium.Map.TERRAIN_TYPE);
             
-            map.setRegion({latitude:33.74511, longitude:-84.38993, 
-                           latitudeDelta:0.05, longitudeDelta:0.05});
+            valueOf(testRun, function(){
+                map.setRegion({latitude:33.74511, longitude:-84.38993, 
+                               latitudeDelta:0.05, longitudeDelta:0.05});
+            }).shouldNotThrowException();           
                        
-            valueOf(testRun, Math.round(map.getRegion().latitude)).shouldBeEqual(34);
-            valueOf(testRun, Math.round(map.getRegion().longitude)).shouldBeEqual(-84);
+            valueOf(testRun, map.getRegion().latitude.toFixed(1)).shouldBeEqual(33.7);
+            valueOf(testRun, map.getRegion().longitude.toFixed(1)).shouldBeEqual(-84.4);
             valueOf(testRun, map.getRegion().latitudeDelta).shouldBeEqual(0.05);
             valueOf(testRun, map.getRegion().longitudeDelta).shouldBeEqual(0.05);
             
-            map.setRegionFit(false);
+            valueOf(testRun, function(){
+                map.setRegionFit(false);
+            }).shouldNotThrowException();
             
             valueOf(testRun, map.getRegionFit()).shouldBeFalse();
-            
-            //Fail-------------------------------->
-            //map.setUserLocation(false);
-            //valueOf(testRun, map.getUserLocation()).shouldBeFalse();
-            //Fail-------------------------------->
             
             map.addEventListener('complete', function(){
                 valueOf(testRun, function(){
@@ -271,8 +300,7 @@ module.exports = new function() {
             win.add(map);
             win.open();
         };
-            
-            
+                       
         
         this.route = function(testRun){
             var win = Titanium.UI.createWindow({
@@ -284,11 +312,11 @@ module.exports = new function() {
                             latitudeDelta:5, longitudeDelta:5},
                     animate:true,
                     regionFit:true,
-                    userLocation:true,
+                    userLocation:false,
                     animated: true
                 });
-            //create rout    
-            var rout = {
+            //create route    
+            var route = {
                     color: '#FF0000',
                     name: 'testRout',
                     points:[{'latitude':37.390749, 'longitude':-122.081651}, {'latitude':39.390749, 'longitude':-84.38993}],
@@ -300,50 +328,20 @@ module.exports = new function() {
             }); 
             
             valueOf(testRun, function(){ 
-                map.addRoute(rout); 
+                map.addRoute(route); 
             }).shouldNotThrowException();
             
             valueOf(testRun, function(){ 
-                map.removeRoute(rout); 
+                map.removeRoute(route); 
             }).shouldNotThrowException();
             
            win.add(map);
            win.open();
         };
-        this.annotation = function(testRun) {
+
+        
+        this.annotation = function(testRun){
             var annotation;
-            var win = Titanium.UI.createWindow();
-                
-            var map =  Titanium.Map.createView({
-                mapType: Titanium.Map.STANDARD_TYPE,
-                region: {latitude:33.74511, longitude:-84.38993, 
-                        latitudeDelta:0.01, longitudeDelta:0.01},
-                animate:true,
-                regionFit:true,
-                userLocation:true
-            });
-                
-            valueOf(testRun, function(){
-                annotation = Titanium.Map.createAnnotation({
-                    latitude:37.390749,
-                    longitude:-122.081651,
-                    title:"Test",
-                    subtitle:'Test, CA',
-                    pincolor:Titanium.Map.ANNOTATION_RED,
-                    animate:true,
-                    leftButton: '../images/appcelerator_small.png',
-                    myid:1 // Custom property to uniquely identify this annotation.
-                });
-            }).shouldNotThrowException();
-            map.addEventListener('complete', function(){
-                win.close();
-                finish(testRun);
-            });
-            map.addAnnotation(annotation);
-            win.add(map);
-            win.open();
-	}
-        this.annotation_property = function(testRun){
             var win = Titanium.UI.createWindow();
             var map =  Titanium.Map.createView({
                     mapType: Titanium.Map.STANDARD_TYPE,
@@ -351,29 +349,29 @@ module.exports = new function() {
                             latitudeDelta:0.01, longitudeDelta:0.01},
                     animate:true,
                     regionFit:true,
-                    userLocation:true
+                    userLocation:false
                 });
-            var annotation = Titanium.Map.createAnnotation({
-                latitude:33.74511,
-                longitude:-84.38993,
-                title:"Test",
-                subtitle:'Test, CA',
-                pincolor:Titanium.Map.ANNOTATION_RED,
-                animate:true,
-                leftButton: '../images/appcelerator_small.png',
-                myid:1 // Custom property to uniquely identify this annotation.
-            });
+            valueOf(testRun, function(){    
+                annotation = Titanium.Map.createAnnotation({
+                    latitude:33.74511,
+                    longitude:-84.38993,
+                    title:"Test",
+                    subtitle:'Test, CA',
+                    pincolor:Titanium.Map.ANNOTATION_RED,
+                    animate:true,
+                    myid:1 // Custom property to uniquely identify this annotation.
+                });
+            }).shouldNotThrowException();
                 
             valueOf(testRun, annotation.animate).shouldBeTrue();
             valueOf(testRun, annotation.image).shouldBeUndefined();
-            valueOf(testRun, annotation.latitude).shouldBeEqual(33.74511);
-            valueOf(testRun, annotation.longitude).shouldBeEqual(-84.38993);
+            valueOf(testRun, annotation.latitude.toFixed(1)).shouldBeEqual(33.7);
+            valueOf(testRun, annotation.longitude.toFixed(1)).shouldBeEqual(-84.4);
             valueOf(testRun, annotation.pincolor).shouldBeEqual(Titanium.Map.ANNOTATION_RED);
             valueOf(testRun, annotation.subtitle).shouldBeEqual('Test, CA');
             valueOf(testRun, annotation.title).shouldBeEqual('Test');
-            
-            //console.log(annotation.subtitleid);
-            //console.log(annotation.titleid);
+            valueOf(testRun, annotation.subtitleid).shouldBeUndefined();
+            valueOf(testRun, annotation.titleid).shouldBeUndefined();
             
             map.addEventListener('complete', function(){
                 map.addAnnotation(annotation);
@@ -383,6 +381,8 @@ module.exports = new function() {
                 finish(testRun);
             });
         }
+        
+        
         this.annotation_methods = function(testRun){
             var annotation;
             
@@ -393,38 +393,63 @@ module.exports = new function() {
                 subtitle:'Test, CA',
                 pincolor:Titanium.Map.ANNOTATION_RED,
                 animate:true,
-                leftButton: 'file:///opt/media/Images/image10.jpg',
                 myid:1 // Custom property to uniquely identify this annotation.
                 
             });
             valueOf(testRun, annotation.getAnimate()).shouldBeTrue();
             valueOf(testRun, annotation.getImage()).shouldBeUndefined(); 
-            valueOf(testRun, annotation.getLatitude()).shouldBeEqual(33.74511);
-            valueOf(testRun, annotation.getLongitude()).shouldBeEqual(-84.38993);
+            valueOf(testRun, annotation.getLatitude().toFixed(1)).shouldBeEqual(33.7);
+            valueOf(testRun, annotation.getLongitude().toFixed(1)).shouldBeEqual(-84.4);
             valueOf(testRun, annotation.getPincolor()).shouldBeEqual(Titanium.Map.ANNOTATION_RED);
             valueOf(testRun, annotation.getSubtitle()).shouldBeEqual('Test, CA');
             valueOf(testRun, annotation.getTitle()).shouldBeEqual('Test');
             
-            //console.log(annotation.getSubtitleid());
-            //console.log(annotation.getTitleid());
             
-            annotation.setAnimate(false);
-            annotation.setLatitude(34.74511);
-            annotation.setLongitude(-85.38993);
-            annotation.setPincolor(Titanium.Map.ANNOTATION_GREEN);
-            annotation.setSubtitle('New test subtitle');
-            annotation.setTitle('New test title');
-            annotation.setImage('file:///opt/media/Images/image10.jpg');
-            //console.log(annotation.setSubtitleid());
-            //console.log(annotation.setTitleid());
+            valueOf(testRun, function(){ 
+                annotation.setAnimate(false);
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setLatitude(34.74511);
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setLongitude(-85.38993);
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setPincolor(Titanium.Map.ANNOTATION_GREEN);
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setSubtitle('New test subtitle');
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setTitle('New test title');
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setImage('file:///suites/map/image.png');
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setSubtitleid('newSubtitleiD')
+            }).shouldNotThrowException();
+            
+            valueOf(testRun, function(){ 
+                annotation.setTitleid('newtitleiD')
+            }).shouldNotThrowException();
             
             valueOf(testRun, annotation.getAnimate()).shouldBeFalse();
-            valueOf(testRun, annotation.getLatitude()).shouldBeEqual(34.74511);
-            valueOf(testRun, annotation.getLongitude()).shouldBeEqual(-85.38993);
+            valueOf(testRun, annotation.getLatitude().toFixed(1)).shouldBeEqual(34.7);
+            valueOf(testRun, annotation.getLongitude().toFixed(1)).shouldBeEqual(-85.4);
             valueOf(testRun, annotation.getPincolor()).shouldBeEqual(Titanium.Map.ANNOTATION_GREEN);
             valueOf(testRun, annotation.getSubtitle()).shouldBeEqual('New test subtitle');
             valueOf(testRun, annotation.getTitle()).shouldBeEqual('New test title');
-            valueOf(testRun, annotation.getImage()).shouldBeEqual('file:///opt/media/Images/image10.jpg'); 
+            valueOf(testRun, annotation.getImage()).shouldBeEqual('file:///suites/map/image.png'); 
+            valueOf(testRun, annotation.getSubtitleid()).shouldBeEqual('newSubtitleiD');
+            valueOf(testRun, annotation.getTitleid()).shouldBeEqual('newtitleiD');
             
             finish(testRun);
         }
