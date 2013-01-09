@@ -44,7 +44,8 @@ var suites = [
 	{name: "ui/tableViewSection"},
 	{name: "ui/mobile-NavigationGroup"},
 	{name: "map"},
-	{name: "ui/image_view"}
+	{name: "ui/image_view"},
+	{name: "ui/switch"}
 ];
 
 if (Ti.Platform.osname === 'android') {
