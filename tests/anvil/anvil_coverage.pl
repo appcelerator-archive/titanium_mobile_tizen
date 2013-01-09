@@ -166,7 +166,6 @@ my %frequencies = ();
 
 foreach $type(sort keys %anvilTypesMembers)
 {
-    #print OUTPUT "Type $type: coverage " . $anvilTypesMembers{$type} . " out of " . $jscaTypesMembers{$type} . "\n";
     if($jscaTypesMembers{$type}==0)
     {
         next;
@@ -236,11 +235,12 @@ sub processjs()
             $calls{"$1"} = " ";
         }
         
-        if($line =~ m/([a-zA-Z0-9_.]*)\s?[^=]=[^=]\s?(Ti\.[^( ;]*)/ && $1 ne '')
+        if($line =~ m/([a-zA-Z0-9_.]*)\s?=\s?(Ti\.[^( ;]*)/ && $1 ne '')
         {
             # This is an *assignment operation*, where on the right there is a reference
             # to a Titanium namespace, function or property. Record it to the %variables list.
             # (Example: var x = Ti.UI.createLabel(); )
+            print DEBUG "var($1) = $2\n";
             $variables{$1} = $2;
             $calls{"$variables{$1}"} = " "; $calls3
         }
