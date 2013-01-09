@@ -129,7 +129,10 @@ foreach $call(keys %calls)
             last;
         }
     }
-    $calls3{$call} = '';
+    if(defined($jscaAll{$call}))
+    {
+        $calls3{$call} = '';
+    }
 }
 
 # Write out the references.
