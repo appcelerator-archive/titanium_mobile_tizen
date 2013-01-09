@@ -106,7 +106,7 @@ define(function() {
 	function formatJapaneseNumber(s) {
 		if (!japanesePhoneNumberFormatter)
 		{
-			japanesePhoneNumberFormatter = require("Ti/_/LocaleUtils/JapanesePhoneNumberFormatter");
+			japanesePhoneNumberFormatter = require("Ti/_/Locale/JapanesePhoneNumberFormatter");
 		}
 		return japanesePhoneNumberFormatter.formatJapaneseNumber(s);
 	}
