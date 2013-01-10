@@ -3,7 +3,7 @@ function label_linkify() {
 	win.backgroundColor = 'white';
 	
 	var l = Ti.UI.createLabel({
-		autoLink : Ti.UI.Tizen.LINKIFY_ALL,
+		autoLink : Ti.UI.LINKIFY_ALL,
 		left : 5, top : 5, right : 5, height : 100,
 		backgroundColor : '#222',
 		text : 'Contact\n test@test.com\n 817-555-5555\n http://bit.ly\n 444 Castro Street, Mountain View, CA'
@@ -15,16 +15,16 @@ function label_linkify() {
 		top : 110
 	});
 	btnAll.addEventListener('click', function(e) {
-		l.autoLink = Ti.UI.Tizen.LINKIFY_ALL;
+		l.autoLink = Ti.UI.LINKIFY_ALL;
 	});
 	win.add(btnAll);
 	
 	var btnEmail = Ti.UI.createButton({
 		title : 'Email Addresses', width: 150, height: 40,
-		top : 155
+		top : 200
 	});
 	btnEmail.addEventListener('click', function(e) {
-		l.autoLink = Ti.UI.Tizen.LINKIFY_EMAIL_ADDRESSES;
+		l.autoLink = Ti.UI.LINKIFY_EMAIL_ADDRESSES;
 	});
 	win.add(btnEmail);
 	
@@ -33,12 +33,23 @@ function label_linkify() {
 		top : 200
 	});
 	
+	var btnNONE = Ti.UI.createButton({
+		title : 'None', width: 150, height: 40,
+		top : 155
+	});
+	
+	btnNONE.addEventListener('click', function(){
+		l.autoLink = Ti.UI.LINKIFY_NONE;
+	});
+	
+	win.add(btnNONE);
+	
 	var btnPhone = Ti.UI.createButton({
 		title : 'Phone Numbers', width: 150, height: 40,
 		top : 245
 	});
 	btnPhone.addEventListener('click', function(e) {
-		l.autoLink = Ti.UI.Tizen.LINKIFY_PHONE_NUMBERS;
+		l.autoLink = Ti.UI.LINKIFY_PHONE_NUMBERS;
 	});
 	win.add(btnPhone);
 	
@@ -47,7 +58,7 @@ function label_linkify() {
 		top : 290
 	});
 	btnWeb.addEventListener('click', function(e) {
-		l.autoLink = Ti.UI.Tizen.LINKIFY_WEB_URLS;
+		l.autoLink = Ti.UI.LINKIFY_WEB_URLS;
 	});
 	win.add(btnWeb);
 	

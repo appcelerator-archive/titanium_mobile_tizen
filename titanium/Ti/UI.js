@@ -380,7 +380,11 @@ define(
 			UNIT_CM: "cm",
 			UNIT_IN: "in",
 			UNIT_DIP: "dp", // We don't have DIPs, so we treat them as pixels
-			
+			LINKIFY_ALL : 1,
+			LINKIFY_EMAIL_ADDRESSES : 2,
+			LINKIFY_WEB_URLS : 3,
+			LINKIFY_NONE : 0,
+
 			// Hidden constants
 			_LAYOUT_COMPOSITE: "composite",
 			_LAYOUT_VERTICAL: "vertical",
