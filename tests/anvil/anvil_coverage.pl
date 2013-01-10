@@ -339,7 +339,8 @@ sub processjs()
             if($line =~ m/$var\.([a-zA-Z0-9_]*)/)
             {
                 # This is a reference to a function or a property of a previously declared variable.
-                # Remember the reference.
+                # Resolve the type of the variable, and remember the reference.
+                
                 my $type = "$variables{$var}.$1";
                 if(defined($jscaAll{$type}) || defined ($jscaTypes{$type}))
                 {
@@ -353,6 +354,7 @@ sub processjs()
             if($line =~ m/([a-zA-Z0-9_]*)\s?=\s?$var\.([a-zA-Z0-9_]*)/ && $1 ne '')
             {
                 #print DEBUG "recursive var in: $line\n";
+                
                 # This is an *assignment operation*, where on the right there is a reference
                 # to a previously declared variable, plus a call.
                 # For example, variable "db" may have been declared previously like this:
