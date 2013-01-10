@@ -292,14 +292,8 @@ define(function() {
 	}
 
 	return {
-		getNumberInfoForLocale: function (locale) {
-			return getNumberInfoForLocaleInternal(locale);
-		},
-		getCurrencyInfoByLocale: function (locale) {
-			return getCurrencyInfoByLocaleInternal(locale);
-		},
-		getCurrencyInfoByCode: function (currencyCode) {
-			return getCurrencyInfoByCodeInternal(currencyCode);
-		}
+		getNumberInfoForLocale: getNumberInfoForLocaleInternal,
+		getCurrencyInfoByLocale: getCurrencyInfoByLocaleInternal,
+		getCurrencyInfoByCode: getCurrencyInfoByCodeInternal
 	};
 });
