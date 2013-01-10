@@ -48,10 +48,11 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 							
 							mimeType =  xhr.getResponseHeader("Content-Type");
 							
-							//parse arraybuffer`s response in async mode
 							if (this._isArrayBuffer) {
+								//parse arraybuffer`s response in async mode
 								c.responseXML  = c.responseText = "";
 								if (xhr.response) {
+									//prepare Base64-encoded string required by Blob
 									var uInt8Array = new Uint8Array(xhr.response),
 										i = uInt8Array.length,
 										binaryString = new Array(i);
@@ -60,7 +61,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 										binaryString[i] = String.fromCharCode(uInt8Array[i]);
 									}
 									
-									//responseText, responseXML
 									c.responseText = c.responseXML = binaryString.join('');
 									blobData = _.isBinaryMimeType(mimeType) ? window.btoa(c.responseText) : c.responseText;
 								} 
@@ -68,9 +68,8 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 								//sync mode
 								c.responseXML = xhr.responseXML;
 								c.responseText = blobData = xhr.responseText;
-								
 								//to do: encode binary data as in async mode!!!
-								//..
+								//because responseType='arraybuffer' is not supported in sync mode (throws exception)
 							}
 							
 							//responseData = Blob
@@ -141,7 +140,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				this._isArrayBuffer = wc || async === void 0 ? true : !!async
 			);
 			
-			//for async mode
+			//in async mode we are using 'responseType=arraybuffer'
 			if (this._isArrayBuffer) {
 				this._xhr.responseType = 'arraybuffer';
 			}
