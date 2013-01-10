@@ -5,7 +5,10 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 		on = require.on;
 
 	return declare("Ti.Network.HTTPClient", Evented, {
-
+		//This variable shows that responseType of XMLHttpRequest is 'arraybuffer'
+		//This type is valid only for async mode
+		_isArrayBuffer: void 0,
+		
 		constructor: function() {
 			var xhr = this._xhr = new XMLHttpRequest;
 
@@ -24,7 +27,9 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 
 			xhr.onreadystatechange = lang.hitch(this, function() {
 				var c = this.constants,
-					f,
+					file,
+					mimeType,
+					blobData = "",
 					onload = this.onload;
 
 				switch (xhr.readyState) {
@@ -38,44 +43,51 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						c.readyState = this.DONE;
 						
 						if (!this._aborted) {
-							if (xhr.response) {
-								var uInt8Array = new Uint8Array(xhr.response);
-								var i = uInt8Array.length;
-								var binaryString = new Array(i);
-								while (i--)	{
-									binaryString[i] = String.fromCharCode(uInt8Array[i]);
-								}
-								var data = binaryString.join('');
-								var mimeType =  xhr.getResponseHeader("Content-Type");
-								var blobData = _.isBinaryMimeType(mimeType) ? window.btoa(data) : data;
-								c.responseText = data;
-								c.responseXML = data;
-
-								//file
-								var file;
-								this.file/*it is fileName*/ && (file = Filesystem.getFile(Filesystem.applicationDataDirectory, this.file));
-								//blob
-								var blob = new Blob({
-									data: blobData,
-									length: blobData.length,
-									mimeType: mimeType || "text/plain",
-									file: file || null,
-									nativePath: (file && file.nativePath) || null,
-								});
-								c.responseData = blob;
-								
-								//write blob to file
-								file && file.writable && file.write(blob);
+							//create file by name
+							this.file && (file = Filesystem.getFile(Filesystem.applicationDataDirectory, this.file));
+							
+							mimeType =  xhr.getResponseHeader("Content-Type");
+							
+							//parse arraybuffer`s response in async mode
+							if (this._isArrayBuffer) {
+								c.responseXML  = c.responseText = "";
+								if (xhr.response) {
+									var uInt8Array = new Uint8Array(xhr.response),
+										i = uInt8Array.length,
+										binaryString = new Array(i);
+										
+									while (i--)	{
+										binaryString[i] = String.fromCharCode(uInt8Array[i]);
+									}
+									
+									//responseText, responseXML
+									c.responseText = c.responseXML = binaryString.join('');
+									blobData = _.isBinaryMimeType(mimeType) ? window.btoa(c.responseText) : c.responseText;
+								} 
 							} else {
-								c.responseText = "";
-								c.responseXML  = "";
-								c.responseData = "";
+								//sync mode
+								c.responseXML = xhr.responseXML;
+								c.responseText = blobData = xhr.responseText;
+								
+								//to do: encode binary data as in async mode!!!
+								//..
 							}
+							
+							//responseData = Blob
+							c.responseData = new Blob({
+								data: blobData,
+								length: blobData.length,
+								mimeType: mimeType || "text/plain",
+								file: file || null,
+								nativePath: (file && file.nativePath) || null,
+							});
+								
+							//write Blob to file
+							file && file.writable && file.write(c.responseData);
 														
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));
 							xhr.status >= 400 && (onload = this._onError);
 							is(onload, "Function") && onload.call(this);
-							
 						}
 				}
 
@@ -126,9 +138,14 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 			this._xhr.open(
 				c.connectionType = method,
 				c.location = _.getAbsolutePath(httpURLFormatter ? httpURLFormatter(url) : url),
-				wc || async === void 0 ? true : !!async
+				this._isArrayBuffer = wc || async === void 0 ? true : !!async
 			);
-			this._xhr.responseType = 'arraybuffer';
+			
+			//for async mode
+			if (this._isArrayBuffer) {
+				this._xhr.responseType = 'arraybuffer';
+			}
+				
 			wc && (this._xhr.withCredentials = wc);
 		},
 
@@ -155,8 +172,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 		},
 
 		properties: {
-			autoEncodeURL: true,
-			autoRedirect: true,
 			ondatastream: void 0,
 			onerror: void 0,
 			onload: void 0,
@@ -178,8 +193,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 			UNSENT: 1,
 			
 			allResponseHeaders: function() {
-				var headers = this._xhr.getAllResponseHeaders();
-				return headers ? headers : "";
+				return this._xhr.getAllResponseHeaders() || "";
 			},
 
 			connected: function() {
