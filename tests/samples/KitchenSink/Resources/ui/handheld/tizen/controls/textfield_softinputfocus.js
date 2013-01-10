@@ -1,6 +1,7 @@
 function textfield_soft() {
-	var win = Ti.UI.createWindow();
-	var focused = null;
+	var win = Ti.UI.createWindow(),
+		focused = null;
+	
 	win.backgroundColor = 'white';
 	
 	var label = Ti.UI.createLabel({
@@ -17,8 +18,7 @@ function textfield_soft() {
 		top: 50, 
 		left: 10, 
 		right: 10, 
-		height:40,
-		softKeyboardOnFocus : Ti.UI.Tizen.SOFT_KEYBOARD_SHOW_ON_FOCUS
+		height:40
 	});	
 	tf1.addEventListener('focus', function() {
 		focused = tf1;
@@ -29,8 +29,7 @@ function textfield_soft() {
 		top: 95, 
 		left: 10, 
 		right: 10, 
-		height:40,
-		softKeyboardOnFocus : Ti.UI.Tizen.SOFT_KEYBOARD_DEFAULT_ON_FOCUS
+		height:40
 	});	
 	tf2.addEventListener('focus', function() {
 		focused = tf2;
@@ -42,8 +41,7 @@ function textfield_soft() {
 		top: 140, 
 		left: 10, 
 		right: 10, 
-		height:40,
-		softKeyboardOnFocus : Ti.UI.Tizen.SOFT_KEYBOARD_SHOW_ON_FOCUS
+		height:40
 	});	
 	tf3.addEventListener('focus', function() {
 		focused = tf3;
@@ -56,12 +54,11 @@ function textfield_soft() {
 		top: 185, 
 		left: 10, 
 		right: 10, 
-		height:40,
-		softKeyboardOnFocus : Ti.UI.Tizen.SOFT_KEYBOARD_HIDE_ON_FOCUS
+		height:40
 	});
 	btn.addEventListener("click", function(e) {
 		if (focused) {
-			Ti.UI.Tizen.hideSoftKeyboard(focused);	
+			focused.blur();	
 		}
 		
 		win.close();
