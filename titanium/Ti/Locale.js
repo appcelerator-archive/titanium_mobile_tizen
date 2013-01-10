@@ -7,7 +7,8 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			strings = {},
 			cfg = require.config,
 			app = cfg.app,
-			localeInfoStorage = null, // expandable object with  all available locale data.
+			localeNumberCurrencyInfo = null, // expandable object with  all available locale data.
+			localeCalendarInfo = null, //lazy loaded object with formatting rulers for data\time
 			formatterHelpers = null, //lazy loaded functions to format decimals, currency e.t.c.
 			phoneFormatter = null; //phoneFormatter used to format phone numbers.
 
@@ -25,17 +26,28 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 
 		//lazy initialization of locale oriented formatters.
 		function initFormatterHelpers(){
-			if (!formatterHelpers)  formatterHelpers = require("Ti/_/LocaleUtils/FormatterHelpers");
+			if (!formatterHelpers)  formatterHelpers = require("Ti/_/Locale/FormatterHelpers");
 		}
 
-		//lazy initialization of locale storage.
-		function initLocaleInfoStorage(){
-			if (!localeInfoStorage) localeInfoStorage = require("Ti/_/LocaleUtils/LocaleInfoStorage");
+		//lazy initialization of locale number nad currency format storage.
+		function initCurrentCalendarData(){
+			if (!localeCalendarInfo) localeCalendarInfo = require("Ti/_/Locale/Calendar/"+locale);
+
+			if (locale!="en-US")
+				API.warn("Loading default locale (en-US) instead of "+locale);
+
+			//if we can't load target's locale calendar - we are using default (en-US)
+			if (!localeCalendarInfo) localeCalendarInfo = require("Ti/_/Locale/defaultCalendar");
+		}
+
+		//lazy initialization of locale number nad currency format storage.
+		function initNumberCurrencyFormat(){
+			if (!localeNumberCurrencyInfo) localeNumberCurrencyInfo = require("Ti/_/Locale/NumberCurrencyFormatStorage");
 		}
 
 		// lazy initialization of Phone number formatter
 		function initPhoneFormatter(){
-			if (!phoneFormatter) phoneFormatter = require("Ti/_/LocaleUtils/PhoneFormatter");
+			if (!phoneFormatter) phoneFormatter = require("Ti/_/Locale/PhoneFormatter");
 		}
 
 		// Format a number into a locale specific decimal format. May use pattern.
@@ -63,15 +75,15 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			if (!localeName) {
 				localeName = locale;
 			}
-
+			// if we are sure that parameter named "localeName" should contain name of target locale but it does not match rfc4647 we cant continue
 			if (!isValidLocaleName(localeName)) {
 				// in case you passed 3 parameters and second parameter is not valid locale name.
 				throw "Invalid locale name."; //todo: Do we need to localize error message?
 			}
-			initLocaleInfoStorage();
+			initNumberCurrencyFormat();
 			initFormatterHelpers();
 
-			var numberInfo = localeInfoStorage.getNumberInfoForLocale(localeName);
+			var numberInfo = localeNumberCurrencyInfo.getNumberInfoForLocale(localeName);
 			// if no pattern in parameters - create "default pattern" based on locale's data
 			if (!pattern) {
 				//to unify we just generating custom pattern if no one provided. like ###.###.###.###.###.###.###.###.###.###,#####################
@@ -83,9 +95,9 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 
 		// format a number into a locale specific currency format. TagretLocale i soptional and only for mobileWeb and Tizen
 		String.formatCurrency = function (amt, targetLocale) {
-			initLocaleInfoStorage();
+			initNumberCurrencyFormat();
 			initFormatterHelpers();
-			return formatterHelpers.formatCurrency(amt, localeInfoStorage.getCurrencyInfoByLocale(targetLocale || locale)) || amt;
+			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(targetLocale || locale)) || amt;
 		};
 
 		// expands format name into the full pattern.
@@ -95,20 +107,30 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 
 		// format a date into a locale specific date format. Optionally pass a second argument (string) as either "short" (default), "medium" or "long" for controlling the date format.
 		String.formatDate = function (dt, fmt) {
-			// todo: For now "MEDIUM" value of format not supported!
-			initLocaleInfoStorage();
+			// For now "MEDIUM" value of format not supported! Only short - "d", and long - "D"
 			initFormatterHelpers();
-			var cal = localeInfoStorage.getCalendarByLocale(locale);
-			return formatterHelpers.formatDate(dt, expandFormat(cal, (fmt == "long")?"D":"d"), cal);
+			initCurrentCalendarData();
+
+			if (!localeCalendarInfo){
+				API.warn("Calendar info for locale '"+locale+"' is not loaded. Formatting date with default JS functions.");
+				return [('0'+dt.getDate()).slice(-2),('0'+(dt.getMonth()+1)).slice(-2),dt.getFullYear()].join('/');
+			}
+			else
+				return formatterHelpers.formatDate(dt, expandFormat(localeCalendarInfo, (fmt == "long")?"D":"d"), localeCalendarInfo);
 		};
 
 		// format a date into a locale specific time format.
 		String.formatTime = function (dt, fmt) {
-			// todo: For now "MEDIUM" value of format not supported!
-			initLocaleInfoStorage();
+			// For now "MEDIUM" value of format not supported! Only short - "t", and long - "T"
 			initFormatterHelpers();
-			var cal = localeInfoStorage.getCalendarByLocale(locale);
-			return formatterHelpers.formatDate(dt, expandFormat(cal, (fmt == "long")?"T":"t"), cal);
+			initCurrentCalendarData();
+
+			if (!localeCalendarInfo){
+				API.warn("Calendar info for locale '"+locale+"' is not loaded. Formatting time with default JS functions.");
+				return [('0'+dt.getHours()).slice(-2),('0'+dt.getMinutes()).slice(-2),('0'+dt.getSeconds()).slice(-2)].join(':');
+			}
+			else
+				return formatterHelpers.formatDate(dt, expandFormat(localeCalendarInfo, (fmt == "long")?"T":"t"), localeCalendarInfo);
 		};
 
 		return lang.setObject("Ti.Locale", Evented, {
@@ -119,6 +141,7 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 				currentLocale: locale
 			},
 
+			// Adds dashes to phone number. Result is unified with same function on Android 4.1.1
 			formatTelephoneNumber: function (s) {
 				initPhoneFormatter();
 				return (phoneFormatter && phoneFormatter.formatTelephoneNumber)?phoneFormatter.formatTelephoneNumber(s, locale): s;
@@ -126,20 +149,20 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 
 			// locale = "en-US" => "USD"
 			getCurrencyCode: function (locale) {
-				initLocaleInfoStorage();
-				return localeInfoStorage.getCurrencyInfoByLocale(locale).currencyCode;
+				initNumberCurrencyFormat();
+				return localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale).currencyCode;
 			},
 
 			// currencyCode = "USD" => "$"
 			getCurrencySymbol: function (currencyCode) {
-				initLocaleInfoStorage();
-				return localeInfoStorage.getCurrencyInfoByCode(currencyCode).currencySymbol;
+				initNumberCurrencyFormat();
+				return localeNumberCurrencyInfo.getCurrencyInfoByCode(currencyCode).currencySymbol;
 			},
 
 			// locale = "en-US" => "$"
 			getLocaleCurrencySymbol: function (locale) {
-				initLocaleInfoStorage();
-				return localeInfoStorage.getCurrencyInfoByLocale(locale).currencySymbol;
+				initNumberCurrencyFormat();
+				return localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale).currencySymbol;
 			},
 
 			getString: getString,

@@ -163,7 +163,6 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 				protocolIndex = url.indexOf('//');
 			url = url.substring(0, protocolIndex + 2) + username + ":" + password + "@" + url.substring(protocolIndex + 2, url.length);
 			this.url = url;
-			console.log(this.url);
 		},
 		
 		reload: function() {

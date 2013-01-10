@@ -50,39 +50,30 @@ my $jsca;                               # Titanium JSCA file as a perl object
 # Parsed out of the JSCA file.
 my %jscaFunctionsAndProperties = ();
 
+# All Titanium types in the format Ti.XXXX.YYYY.
+my %jscaTypes = ();
+
 # All Titanium entities (functions, properties, namespaces, etc) in the format Ti.XXXX.YYYY.
 my %jscaAll = ();
 
 # Hash: Titanium namespace -> Number of properties and functions in the namespace.
 # For all Titanium namespaces.
+# Purpose: generation of Anvil coverage stats.
 my %jscaTypesMembers = ();
 
 # Hash: Titanium namespace -> Number of properties and functions of that namespace, referenced in Anvil.
 # For all Titanium namespaces. 
+# Purpose: generation of Anvil coverage stats.
 my %anvilTypesMembers = ();
 
+
+# ============================================================================== #
 
 #1 Main logic
 
 #2 Parse Anvil source code and generate a list of calls
 
-open DEBUG, ">debug.txt";
-
 my $dir = getcwd();
-
-print "Parsing Anvil source code...\n";
-find(\&process, $dir);
-print "     Parsed $files files\n";
-
-# %calls is now initialized.
-
-# Now, for each reference like Ti.createXXXXXX, we also add a reference like
-# Ti.XXXXXX, where XXXXXX is a type.
-foreach $call(sort keys %calls)
-{
-    $call =~ s/create([\w\d]*)/\1/;
-    $calls{$call} = " ";
-}
 
 #2 Read and parse JSCA
 
@@ -97,51 +88,34 @@ print "     Read " . length($jsca_content) . " bytes\n";
 print "\nParsing JSCA (20 seconds)...\n";
 $jsca = decode_json($jsca_content);
 
-
-#2 Substitute functions to respective returned types
-
-# Substitute items like Ti.UI.function.property (where function returns some type Ti.XXXXX)
-# into Ti.UI.XXXXX.property. For that, a hash is created which maps function names to their
-# return types (same for properties).
-
-#3 Generate dictionary: Functions --> Return types
+# Generate dictionary: Functions --> Return types
 
 print "\nAnalyzing JSCA...\n";
 genJscaFuncDictionary();
 print "     Found $countFunctionsAndProperties functions and properties\n";
 
 
-#3 Substitute function calls with types
+#2 Parse Anvil source code and generate a list of calls
 
-# Find references to functions, and substitute them with returned types.
+open DEBUG, ">debug.txt";
 
-my %calls3 = ();        # final list of all Titanium calls in Anvil
+my $dir = getcwd();
 
-foreach $call(keys %calls)
-{
-    foreach $functionOrProperty(keys %jscaFunctionsAndProperties)
-    {
-        if(index($call, "$functionOrProperty.")!=-1)
-        {
-            my $was = $call;
-            my $subst = $jscaFunctionsAndProperties{$functionOrProperty};
-            $call =~ s/$functionOrProperty/$subst/;
-            last;
-        }
-    }
-    $calls3{$call} = '';
-}
-
-# Write out the references.
+print "\nParsing Anvil source code...\n";
+find(\&process, $dir);
+print "     Parsed $files files\n";
+print "     Found references to " . scalar(keys %calls) . " entities \n";
 
 open ALLANVIL, ">anvil_all_references.txt";
-foreach $call(sort keys %calls3)
+foreach $call(sort keys %calls)
 {
     print ALLANVIL "$call\n";
 }
 
 
 #2 Count Anvil references
+
+print "\nGenerating stats...\n";
 
 # To know Anvil coverage statistics, for each namespace, we compare the number of methods and properties
 # referenced in Anvil to the total number of methods and properties in Titanium.
@@ -151,28 +125,33 @@ foreach $type(keys %jscaTypesMembers)
     $anvilTypesMembers{$type} = 0;
 }
 
-foreach $call(keys %calls3)
+# Count how many methods and properties were referenced for each type. (O(n*n))
+
+foreach $call(keys %calls)
 {
     foreach $type(keys %jscaTypesMembers)
     {
-        if(index($call, $type) != -1)
+        if($call =~ m/$type\.[a-zA-Z0-9_]+$/)
         {
             $anvilTypesMembers{$type}++;
         }
     }
 }
 
+# Sort by frequency
+
 my %frequencies = ();
 
 foreach $type(sort keys %anvilTypesMembers)
 {
-    #print OUTPUT "Type $type: coverage " . $anvilTypesMembers{$type} . " out of " . $jscaTypesMembers{$type} . "\n";
     if($jscaTypesMembers{$type}==0)
     {
         next;
     }
     $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} = $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} . " $type";
 }
+
+# Write out
 
 open(OUTPUT, ">anvil_coverage_stats.txt");
 foreach $frequency(sort keys %frequencies)
@@ -186,6 +165,8 @@ foreach $frequency(sort keys %frequencies)
     print OUTPUT "\n";
 }
 
+# Write out all Titanium references
+
 open ALLJSCAF, ">titanium_all_symbols.txt";
 foreach $jscaprop(sort keys %jscaAll)
 {
@@ -195,80 +176,12 @@ foreach $jscaprop(sort keys %jscaAll)
 # end of script
 
 
-##################################################################################
 
-#1 Process Anvil source code
-
-sub process
-{
-    my $file = $_;
-    if($file eq '.' || $file eq '..')
-    {
-        return;
-    }
-    if($file =~ m/\.js$/)
-    {
-        processjs($File::Find::name);
-    }
-}
-
-sub processjs()
-{
-    # Process a JavaScript source file.
-    # Find all references to Titanium namespaces, properties and methods,
-    # and add them to the %calls list.
-
-    my $path = shift;
-    my %variables = ();
-    $files++;
-
-    open(JS, $path) or return;
-
-    foreach $line (<JS>)  
-    {   
-        chomp($line);
-        $line =~ s/Titanium\./Ti./g;
-        
-        if($line =~ m/(Ti\.[a-zA-Z0-9_.]*)/)
-        {
-            # This is a simple reference to a Titanium namespace, function or property.
-            # Add it to the list.
-            $calls{"$1"} = " ";
-        }
-        
-        if($line =~ m/([a-zA-Z0-9_.]*)\s?[^=]=[^=]\s?(Ti\.[^( ;]*)/ && $1 ne '')
-        {
-            # This is an *assignment operation*, where on the right there is a reference
-            # to a Titanium namespace, function or property. Record it to the %variables list.
-            # (Example: var x = Ti.UI.createLabel(); )
-            $variables{$1} = $2;
-            $calls{"$variables{$1}"} = " "; $calls3
-        }
-
-        foreach $var(sort keys %variables)
-        {
-            if($line =~ m/$var\.([a-zA-Z0-9_]*)/)
-            {
-                # This is a reference to a function or a property of a previously declared variable.
-                # Construct the proper reference.
-                # Example: x.title = "hello";
-                # Since we know that "x = Ti.UI.createLabel()", we record this reference as
-                # Ti.UI.createLabel.title.
-                $calls{"$variables{$var}.$1"} = " ";
-            }
-            if($line =~ m/$var\.([a-zA-Z0-9_.]*)/)
-            {
-                # This is a reference to a function or a property of a previously declared variable.
-                # The only difference from the above dot is that if the reference has a dot at the end, 
-                # the dot will be excluded.
-                $calls{"$variables{$var}.$1"} = " ";
-            }
-        }
-    }
-}
-
+# =========================================================================================== #
 
 #1 Process JSCA
+
+# Generate %jscaFunctionsAndProperties from $jsca
 
 sub genJscaFuncDictionary()
 {
@@ -280,11 +193,18 @@ sub genJscaFuncDictionary()
     }
 }
 
+
+# genJscaFuncDictionary() worker
+
 sub parseType()
 {
     my %type = %{shift};
     my $typename = $type->{name};
-    $typename =~ s/Titanium\./Ti./;
+    if(!($typename =~ s/Titanium\./Ti./))
+    {
+        return;
+    }
+    $jscaTypes{$typename} = ' ';
     $jscaTypesMembers{$typename} = 0;
 
     my @properties = @{$type->{properties}};
@@ -314,9 +234,11 @@ sub parseType()
     {
         $countFunctionsAndProperties++;
         my @functypes = @{$function->{returnTypes}};
-        if( scalar(@functypes)>0 )
+        my $return_types = scalar(@functypes);
+
+        # Functions can return several different types. Find a Titanium type among them.
+        foreach $functype(@functypes)
         {
-            my $functype = $functypes[0];
             my $functypename = $functype->{type};
             if (index($functypename,"Titanium.") != -1)
             {
@@ -325,6 +247,7 @@ sub parseType()
                 $funcname =~ s/Titanium\./Ti./;
                 $functypename =~ s/Titanium\./Ti./;
                 $jscaFunctionsAndProperties{$funcname} = $functypename;
+                last;
             }
         }
         my $funcname = $type->{name} . "." . $function->{name};
@@ -333,3 +256,130 @@ sub parseType()
         $jscaTypesMembers{$typename}++;
     }
 }
+
+
+#1 Process Anvil source code
+
+
+# Process an ANvil source file.
+
+sub process
+{
+    my $file = $_;
+    if($file eq '.' || $file eq '..')
+    {
+        return;
+    }
+    if($file =~ m/\.js$/)
+    {
+        processjs($File::Find::name);
+    }
+}
+
+
+# Process an ANvil source file (process() worker)
+
+sub processjs()
+{
+    # Process a JavaScript source file.
+    # Find all references to Titanium namespaces, properties and methods,
+    # and add them to the %calls list.
+    # Processing is sophisticated: for example, the following code will be processed
+    # as expected:
+    #
+    # var x = Ti.UI.createButton();
+    # x.label = "hello";
+    #
+    # In this case, the script will report that Ti.UI.Button.label is referenced 
+    # (covered by tests).
+
+    my $path = shift;
+    #print DEBUG "\n\n$path\n\n";
+    my %variables = ();
+    $files++;
+
+    open(JS, $path) or return;
+
+    foreach $line (<JS>)  
+    {   
+        chomp($line);
+        $line =~ s/Titanium\./Ti./g;
+        
+        if($line =~ m/(Ti\.[a-zA-Z0-9_.]*)/)
+        {
+            # This is a simple reference to a Titanium namespace, function or property.
+            # Add it to the list of references.
+            if(defined($jscaAll{$1}) || defined ($jscaTypes{$1}))
+            {
+                $calls{"$1"} = " ";
+            }
+            else
+            {
+                #print DEBUG "Garbage: $1\n";
+            }
+        }
+        
+        if($line =~ m/([a-zA-Z0-9_]*)\s?=\s?(Ti\.[^( ;]*)/ && $1 ne '')
+        {
+            # This is an *assignment operation*, where on the right there is a reference
+            # to a Titanium namespace, function or property, and on the left, the variable name.
+            # The goal of this block is to remember the type of the variable, so that if it's references
+            # later, we know its type and can resolve the statement properly.
+            
+            if(defined($jscaFunctionsAndProperties{$2}))
+            {
+                my $type = $jscaFunctionsAndProperties{$2};
+                $variables{$1} = $type;
+                $calls{$type} = " ";
+            }
+        }
+
+        foreach $var(sort keys %variables)
+        {
+            if($line =~ m/$var\.([a-zA-Z0-9_]*)/)
+            {
+                # This is a reference to a function or a property of a previously declared variable.
+                # Resolve the type of the variable, and remember the reference.
+                
+                my $type = "$variables{$var}.$1";
+                if(defined($jscaAll{$type}) || defined ($jscaTypes{$type}))
+                {
+                    $calls{$type} = " ";
+                }
+                else
+                {
+                }
+            }
+
+            if($line =~ m/([a-zA-Z0-9_]*)\s?=\s?$var\.([a-zA-Z0-9_]*)/ && $1 ne '')
+            {
+                #print DEBUG "recursive var in: $line\n";
+                
+                # This is an *assignment operation*, where on the right there is a reference
+                # to a previously declared variable, plus a call.
+                # For example, variable "db" may have been declared previously like this:
+                # var db   = Ti.Database.open('Test');
+                # and now we're processing the following line:
+                # resultSet = db.execute('SELECT * FROM stuff');
+                # In this block, we know that db's type is Ti.Database.DB, and the return type
+                # of execute is Ti.Database.ResultSet, so we remember that resultSet's type is
+                # Ti.Database.ResultSet. 
+
+                my $tmp = "$variables{$var}.$2";
+                my $type = $jscaFunctionsAndProperties{$tmp};
+                if(defined ($jscaTypes{$type}))
+                {
+                    #print DEBUG "    var $1 = $type;\n";
+                    $variables{$1} = $type;
+                }
+                else
+                {
+                    #print DEBUG "     Garbage: var $1 = $type;\n";
+                    #print DEBUG "    (type of $var is " . $variables{$var} . ")\n";
+                }
+            }
+        }
+    }
+}
+
+

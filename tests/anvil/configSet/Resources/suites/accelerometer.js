@@ -18,6 +18,7 @@ module.exports = new function() {
     this.name = "accelerometer";
     this.tests = [
         {name: "accelerometerBasic"},
+        {name: "accelerometerWrongEvent"},
         {name: "accelerometerEvent"}
     ]
 
@@ -52,4 +53,21 @@ module.exports = new function() {
         Ti.Accelerometer.addEventListener('update', accelerometerTestCallback);
         Ti.Accelerometer.fireEvent("update", { x: 1, y: 2, z: 3, source: this, timestamp: 0});
     }
+
+
+    this.accelerometerWrongEvent = function(testRun) {
+        var accelerometerTestCallback = function(e) {
+            reportError(testRun, "Event fired but should not!");
+        };
+
+        Ti.Accelerometer.addEventListener('update', accelerometerTestCallback);
+        Ti.Accelerometer.removeEventListener('update', accelerometerTestCallback);
+        Ti.Accelerometer.fireEvent("update", { x: 1, y: 2, z: 3, source: this, timestamp: 0});
+
+        setTimeout(function(){
+            valueOf(testRun, true).shouldBeTrue();
+            finish(testRun);
+        },1000);
+    }
+
 }
