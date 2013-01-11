@@ -17,12 +17,13 @@ define(function() {
 		var vArray = ('' + Math.abs(intValue)).split(''),
 		    pArray = ('' + simplePattern).split(''),
 		    valueIndex = vArray.length - 1,
-		    result = '';
-		//we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
-		var cachedGroupDevider = '';
+		    result = '',
+			patternChar,
+			i,
+			cachedGroupDevider = ''; //we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
 
-		for (var i = (pArray.length - 1); i >= 0; i--) {
-			var patternChar = pArray[i];
+		for (i = (pArray.length - 1); i >= 0; i--) {
+			patternChar = pArray[i];
 			switch (patternChar) {
 				case '0':
 					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDevider + result;
