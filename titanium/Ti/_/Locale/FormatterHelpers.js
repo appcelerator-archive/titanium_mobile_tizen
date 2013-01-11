@@ -3,7 +3,7 @@ define(function() {
 	// a - target array
 	// i - index of element ot get
 	// d - default value if no such element in array
-	var getItemFromArray = function (a, i, d) {
+	function getItemFromArray (a, i, d) {
 		return (!a || isNaN(i) || (i < 0)) ? d : (i < a.length) ? a[i] : d;
 	};
 
@@ -13,11 +13,11 @@ define(function() {
 	// groupDevider - locale specific group devider.
 	// negativeSignSymbol - If pattern has "-" symbol it will be replaces with this string. For positive values should be empty string.
 	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter allow or truncate string or overflow pattern
-	var formatSimpleIntegerInternal = function (simplePattern, intValue, groupDevider, negativeSignSymbol, limitResultToPatternLength) {
-		var vArray = ("" + Math.abs(intValue)).split('');
-		var pArray = ("" + simplePattern).split('');
-		var valueIndex = vArray.length - 1;
-		var result = "";
+	function formatSimpleInteger(simplePattern, intValue, groupDevider, negativeSignSymbol, limitResultToPatternLength) {
+		var vArray = ('' + Math.abs(intValue)).split(''),
+		    pArray = ('' + simplePattern).split(''),
+		    valueIndex = vArray.length - 1,
+		    result = '';
 		//we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
 		var cachedGroupDevider = '';
 
@@ -25,13 +25,13 @@ define(function() {
 			var patternChar = pArray[i];
 			switch (patternChar) {
 				case '0':
-					result = getItemFromArray(vArray, valueIndex--, "0") + cachedGroupDevider + result;
+					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDevider + result;
 					cachedGroupDevider = '';
 					break;
 				case '#':
-					var currentChar = getItemFromArray(vArray, valueIndex--, "");
+					var currentChar = getItemFromArray(vArray, valueIndex--, '');
 					// adding cachedGroupDevider only in case we have anything to add except it.
-					if (currentChar != "") {
+					if (currentChar != '') {
 						currentChar = currentChar + cachedGroupDevider;
 					}
 					result = currentChar + result;
@@ -52,12 +52,11 @@ define(function() {
 		//if we are not limited to pattern Lenght - add all not added digits
 		if (!limitResultToPatternLength) {
 			for (var j = valueIndex; j >= 0; j--) {
-				result = getItemFromArray(vArray, j, "") + result;
+				result = getItemFromArray(vArray, j, '') + result;
 			}
 		}
 		return result;
 	};
-
 
 	// pattern format
 	// '0' - Digit
@@ -65,14 +64,14 @@ define(function() {
 	// '.' - Decimal separator or monetary decimal separator
 	// '-' - Minus sign
 	// ',' - Grouping separator
-	//in pattern "," is group separator, "." is decimal separator!!!
+	// in pattern "," is group separator, "." is decimal separator!
 
-	/// v - value
-	/// p - pattern
-	/// localeNumberInfo - object with localisation info
-	var formatDecimalInternal = function (v, p, localeNumberInfo) {
-		var reverseStirng = function (s) {
-			return s.split("").reverse().join("");
+	// v - value
+	// p - pattern
+	// localeNumberInfo - object with localisation info
+	function formatDecimalInternal(v, p, localeNumberInfo) {
+		function reverseString(s) {
+			return s.split('').reverse().join('');
 		};
 
 		if (!p || isNaN(+v)) {
@@ -81,26 +80,26 @@ define(function() {
 
 		var negativeSign = (v < 0) ? '-' : '', //process only abs(), and turn on flag.
 			valueParts = ('' + v).replace('-', '').split('.'),  //safe remove sign as Math.abs has some accuracy for very small floats
-			vInt = (valueParts.length > 0) ? valueParts[0] : '',   // getting integer part.
-			vFract = (valueParts.length > 1) ? valueParts[1] : '', // getting fractional part.
+			vInt = valueParts[0] || '',   // getting integer part.
+			vFract = valueParts[1] || '', // getting fractional part.
 			resFract = '', //fractional part result
 			resInt = '', //integer part result
 			ma = p.split('.'); //split pattern for fractional and integer pattern parts
 
 		if (ma.length > 1) {
 			//ma[1] - decimal part pattern
-			var fractPatternReversed = reverseStirng("" + ma[1]),
-				fractValueReversed = reverseStirng(vFract + "");
+			var fractPatternReversed = reverseString('' + ma[1]),
+				fractValueReversed = reverseString('' +vFract);
 
 			// 1) fractional part has no group deviders!
 			// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
-			var fractResultReversed = formatSimpleIntegerInternal(fractPatternReversed, fractValueReversed, '', negativeSign, true);
-			resFract = localeNumberInfo.decimalSeparator + reverseStirng(fractResultReversed);
+			var fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
+			resFract = localeNumberInfo.decimalSeparator + reverseString(fractResultReversed);
 		}
 
 		if (ma.length > 0) {
 			//ma[0] - integer part pattern
-			resInt = formatSimpleIntegerInternal(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false);
+			resInt = formatSimpleInteger(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false);
 		}
 
 		var result = (resInt.length > 0) ? (resInt + resFract) : ((resFract.length > 0) ? resFract : 0);
@@ -113,8 +112,8 @@ define(function() {
 		return result;
 	};
 
-	/// based on http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
-	var generatePatternFromDotNetNotation = function (groupSizes, maxDigitsInPattern) {
+	// based on http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
+	function generatePatternFromGroupSizes(groupSizes, maxDigitsInPattern) {
 		var gIndex = 0,
 			digitsBeforeSign = maxDigitsInPattern || 20,
 			digitsAfterSign = maxDigitsInPattern || 20,
@@ -133,8 +132,8 @@ define(function() {
 		return allGroups.join(',') + '.' + (new Array(digitsAfterSign + 1)).join('#');
 	};
 
-	//formats provided value as currency
-	var formatCurrencyInternal = function (value, currencyFormatInfo) {
+	// formats provided value as currency
+	function formatCurrencyInternal(value, currencyFormatInfo) {
 		if (!isFinite(value)) {
 			return value;
 		}
@@ -144,7 +143,7 @@ define(function() {
 			patternParts = /n|\$|-|%/g,
 			res = '';
 
-		number = formatDecimalInternal(number, generatePatternFromDotNetNotation(currencyFormatInfo.groupSizes), currencyFormatInfo);
+		number = formatDecimalInternal(number, generatePatternFromGroupSizes(currencyFormatInfo.groupSizes), currencyFormatInfo);
 
 		for (; ; ) {
 			var index = patternParts.lastIndex,
@@ -178,17 +177,16 @@ define(function() {
 	// value - js Date object.
 	// format - mask for date\time (like: dd-MM-yy, HH:mm:ss e.t.c. )
 	// cal - localized calendar object from Titanium localeStorage
-	formatDateInternal = function( value, format, cal) {
-		console.log("X: value = "+value+"; format="+format+"; cal="+JSON.stringify(cal));
+	function formatDateInternal( value, format, cal) {
 		if ( !cal || !format || !format.length) {
-			return (value)?value.toString():"";
+			return (value)?value.toString():'';
 		}
 
 		// Start with an empty string
 		var ret = [],
 			hour,
 			part,
-			zeros = [ "0", "00", "000" ],
+			zeros = [ '0', '00', '000' ],
 			foundDay,
 			checkedDay,
 			dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
@@ -196,7 +194,7 @@ define(function() {
 			tokenRegExp = getTokenRegExp();
 
 		function padZeros( num, c ) {
-			var r, s = num + "";
+			var r, s = num + '';
 			if ( c > 1 && s.length < c ) {
 				r = ( zeros[c - 2] + s);
 				return r.substr( r.length - c, c );
@@ -225,7 +223,7 @@ define(function() {
 				case 2:
 					return date.getDate();
 				default:
-					throw "Invalid part value " + part;
+					throw 'Invalid part value ' + part;
 			}
 		}
 
@@ -236,8 +234,7 @@ define(function() {
 
 		function appendPreOrPostMatch( preMatch, strings ) {
 			// appends pre- and post- token match strings while removing escaped characters.
-			// Returns a single quote count which is used to determine if the token occurs
-			// in a string literal.
+			// Returns a single quote count which is used to determine if the token occurs in a string literal.
 			var quoteCount = 0,
 				escaped = false,
 				i;
@@ -254,9 +251,9 @@ define(function() {
 						}
 						escaped = false;
 						break;
-					case "\\":
+					case '\\':
 						if ( escaped ) {
-							strings.push( "\\" );
+							strings.push( '\\' );
 						}
 						escaped = !escaped;
 						break;
@@ -393,12 +390,12 @@ define(function() {
 					throw "Invalid date format pattern \'" + current + "\'.";
 			}
 		}
-		return ret.join( "" );
+		return ret.join('');
 	};
 
 	return {
 		formatDecimal: formatDecimalInternal,
-		generatePatternFromGroupSizes: generatePatternFromDotNetNotation,
+		generatePatternFromGroupSizes: generatePatternFromGroupSizes,
 		formatCurrency: formatCurrencyInternal,
 		formatDate: formatDateInternal
 	};
