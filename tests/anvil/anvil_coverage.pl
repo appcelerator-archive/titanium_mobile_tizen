@@ -30,6 +30,9 @@ use File::Basename;
 use Cwd;
 use Data::Dumper;
 use JSON;
+use List::Util qw(first);
+#use warnings;
+#use strict;
 
 
 #1 Global data
@@ -56,6 +59,9 @@ my %jscaTypes = ();
 # All Titanium entities (functions, properties, namespaces, etc) in the format Ti.XXXX.YYYY.
 my %jscaAll = ();
 
+# Hash: { Titanium Type } --> { array of types it inherits from, including all grand-ancestors }
+my %inheritance = ();
+
 # Hash: Titanium namespace -> Number of properties and functions in the namespace.
 # For all Titanium namespaces.
 # Purpose: generation of Anvil coverage stats.
@@ -66,6 +72,14 @@ my %jscaTypesMembers = ();
 # Purpose: generation of Anvil coverage stats.
 my %anvilTypesMembers = ();
 
+#All Titanium namespaces that appear in inheritance tree
+my @allNamespaces;
+
+my %formatedInherited;
+
+# FIXME !!!
+my %hash;
+
 
 # ============================================================================== #
 
@@ -73,7 +87,15 @@ my %anvilTypesMembers = ();
 
 #2 Parse Anvil source code and generate a list of calls
 
+open DEBUG, ">debug.txt";
+
 my $dir = getcwd();
+
+#2 Get inheritance info
+
+print "Reading inheritance info...\n";
+getInheritanceInfo();
+
 
 #2 Read and parse JSCA
 
@@ -90,14 +112,20 @@ $jsca = decode_json($jsca_content);
 
 # Generate dictionary: Functions --> Return types
 
+print "\nRemoving inherited types\n";
+
+getAllNamespacesFromInheritance();
+createFormatedHash();
+removeInheritedTypes();
+
+
+#removeInheritedTypes();
 print "\nAnalyzing JSCA...\n";
 genJscaFuncDictionary();
 print "     Found $countFunctionsAndProperties functions and properties\n";
 
 
 #2 Parse Anvil source code and generate a list of calls
-
-open DEBUG, ">debug.txt";
 
 my $dir = getcwd();
 
@@ -179,14 +207,258 @@ foreach $jscaprop(sort keys %jscaAll)
 
 # =========================================================================================== #
 
+#1 Get inheritance info
+
+sub getInheritanceInfo()
+{
+    my $dir = "./titanium";
+    my @files = ();
+
+    my $file_pattern = ".*js";
+
+#Content of the file
+    my $content;
+#Variable for storing namespace. It will be key of the resulting hash
+    my $key;
+#Parent naespace for given namespace. It will be the value of hash
+    my $value;
+#Parent object for current  namespace
+    my $parent;
+#Array of all namespaces from define function
+    my @namespaces;
+#All objects representing namespaces from define function
+    my @objects;
+    my $index;
+
+
+    find(sub{ push @files, $File::Find::name if (m/^(.*)$file_pattern$/) }, $dir);
+
+    foreach my $file (@files) 
+    {
+    	open(my $fh, '<', $file) or die "cannot open file $file";
+    	{
+            local $/;
+            $content = <$fh>;
+    		
+    		#remove all new lines and tabs for easier parsing
+    		$content =~ s/\n\t//g;
+    		#find declaring new namespace and its parent
+    		if ($content =~ m/declare\("((.)*?)",[ ]([A-Za-z_]*?)(,|\))/)
+    		{
+    			$key = $1;
+    			$parent = $3;
+    		} 
+    		#if declare is not used try to find setObject with new namespace and its parent
+    		elsif ($content =~ m/lang\.setObject\("((.)*?)",[ ]*?([A-Za-z_]*?)(,|\)|\{)/)
+    		{
+    			$key = $1;
+    			$parent = $3;
+    		}
+    		else
+    		{
+    			$key = "";
+    			$parent = "";
+    		}
+    		#parsing namespaces in define function and appropriate objects
+    		if ($content =~ m/define\(\[((.)*?)\].*?function\(((.)*?)\)/)
+    		{
+    			@namespaces = split(',', $1);
+    			@objects = split(', ', $3);
+    		}
+    		else
+    		{
+    			$namespaces = "";
+    			$objects = "";
+    		}
+    	}
+    	#if file creates new namespace then find its parent namespace
+    	if (($key ne "") && ($parent ne "null") && ($parent ne "")) 
+    	{
+    		#next two rows find parent namespace for given one
+    		$index = first { $objects[$_] eq $parent } 0..$#objects;		
+    		$value = @namespaces[$index];
+    		#remove spaces
+    		$value =~ s/[ ]*//g;
+    		#save namespaces into hash in format namespace => its parent
+    		$hash{$key} = $value;
+    	}
+    	close($fh);	
+    }
+
+#loop through all namespaces and find all parents
+    foreach my $k (keys %hash)
+    {
+    	my $res = get_all_parent_namespaces($hash{$k});
+    	$inheritance{$k} = [split(" => ", $res)];
+    }
+}
+
+#get all parent namespaces recursively
+sub get_all_parent_namespaces
+{
+	my $val = $_[0];
+	
+	$val =~ s/\//\./g;
+	$val =~ s/"*//g;
+	
+	my $new_val = $hash{$val};
+	
+	if ($new_val ne "")
+	{
+		$val = $val . " => " . get_all_parent_namespaces($new_val);
+	}
+	else
+	{
+		$val
+	}
+}
+
+
+
 #1 Process JSCA
+
+sub removeInheritedTypes()
+{
+	my @parents;
+	my %obj;
+	#All properties of the object
+	my @properties;
+	#All functions of the object
+	my @functions;	
+	#Property object
+	my %property;
+	#Function object
+	my %function = ();
+	#All propreties of parent obj
+	my @parent_properties = [];
+	#All functions of parent obj
+	my @parent_functions = [];
+	#Property object of parent obj
+	my %parent_property = ();
+	#Function object of parent obj
+	my %parent_function = ();
+	my $name = "";
+	my $parent_name = "";
+	my $index = 0;
+	
+	my @types = @{$jsca->{types}};
+	
+	foreach my $key(keys %inheritance)
+	{
+		@parents = @{$inheritance{$key}};
+		%obj = %{$formatedInherited{$key}};
+		#All propreties of namespace
+		@propreties = @{$obj{properties}};
+		#Allfunctions of the namespace
+		@functions = @{$obj{functions}};
+		#Index of namespace in JSCA
+		$index = $obj{index};
+		for my $i(0 .. $#propreties)
+		{
+			%property = %{$propreties[$i]};
+			$name = $property{name};
+
+			foreach my $parent (@parents)
+			{
+				%obj = %{$formatedInherited{$parent}};
+				@parent_properties = @{$obj{properties}};
+				for my $j(0 .. $#parent_properties)
+				{
+					%parent_property = %{$parent_properties[$j]};
+					
+					if ($name eq $parent_property{name})
+					{
+						print DEBUG "Remove property " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
+						print DEBUG "Index = " . $index . " property index = " . $i . "\n";
+						my %o = %{$types[$index]};
+						delete $o{properties}[$i];
+						goto AFTER_PROPERTIES;
+					}
+				}
+			}
+			AFTER_PROPERTIES:
+		}
+		#Looping through parents
+		for my $i(0 .. $#functions)
+		{
+			%function = %{$functions[$i]};
+			$name = $function{name};
+			foreach my $parent (@parents)
+			{
+				%obj = %{$formatedInherited{$parent}};
+				@parent_functions = @{$obj{functions}};
+				for my $j(0 .. $#parent_functions)
+				{
+					%parent_function = %{$parent_functions[$j]};
+					
+					if ($name eq $parent_function{name})
+					{
+						print DEBUG "Remove function " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
+						print DEBUG "Index = " . $index . " function index = " . $i . "\n";
+						my %o = %{$types[$index]};
+						delete $o{functions}[$i];
+						goto AFTER_FUNCTIONS;
+					}
+				}
+			}
+			AFTER_FUNCTIONS:
+		}		
+	}
+}
+
+sub getAllNamespacesFromInheritance()
+{
+	#array of parents for each namespace
+	my @parents;
+	my $index;
+	
+	foreach my $namespace (keys %inheritance)
+	{
+		#Adding namespaces if the don't exist in array
+		$index = first { $allNamespaces[$_] eq $namespace } 0..$#allNamespaces;	
+		push(@allNamespaces, $namespace) if ($index eq "");
+		
+		#Adding parents if they don't exist in array
+		@parents = @{$inheritance{$namespace}};
+		foreach my $parent (@parents)
+		{
+			$index = first { $allNamespaces[$_] eq $parent } 0..$#allNamespaces;	
+			push(@allNamespaces, $parent) if ($index eq "");
+		}
+	}
+}
+
+sub createFormatedHash()
+{
+	#All titanium types
+	my @types = @{$jsca->{types}};
+	#Titanium namespace
+	my $name;
+	my $index;
+	my %type;
+	
+	my %tempObj = ();
+	
+	for my $i(0 .. $#types)
+	{
+		%type = %{$types[$i]};
+		#Get namespace name
+		$name = $type{name};
+		$name =~ s/Titanium/Ti/;
+		$index = first { $allNamespaces[$_] eq $name } 0..$#allNamespaces;	
+		$formatedInherited{$name} = {properties => $type{properties}, functions => $type{functions}, index => $i} if ($index ne "");
+	}
+	#print Dumper(\%formatedInherited);
+}
 
 # Generate %jscaFunctionsAndProperties from $jsca
 
 sub genJscaFuncDictionary()
 {
+    print DEBUG "genJscaFuncDictionary\n";
     my @types = @{$jsca->{types}};
     print "     Found " . scalar (@types) . " types\n";
+
     foreach $type(@types)
     {
         parseType($type);
@@ -211,6 +483,10 @@ sub parseType()
 
     foreach $property(@properties)
     {
+        if(!defined($property))
+        {
+            next;
+        }
         $countFunctionsAndProperties++;
         my $proptype = $property->{type};
         if (index($proptype,"Titanium.") != -1)
@@ -232,6 +508,10 @@ sub parseType()
 
     foreach $function(@functions)
     {
+        if(!defined($function))
+        {
+            next;
+        }
         $countFunctionsAndProperties++;
         my @functypes = @{$function->{returnTypes}};
         my $return_types = scalar(@functypes);
