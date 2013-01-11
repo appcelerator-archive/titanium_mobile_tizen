@@ -563,7 +563,7 @@ module.exports = new function() {
 				valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: "email subject", plainBody: "plain_body text", htmlBody: "html_body text", to: recipientsList}); }).shouldNotThrowException();
 				valueOf(testRun, message).shouldNotBeNull();
 				valueOf(testRun, message).shouldBeObject();
-				valueOf(testRun, function() { message.attachments = [new tizen.MessageAttachment("images/img1_for_anvil.png", "image/png")]; }).shouldNotThrowException();
+				valueOf(testRun, function() { message.attachments = [new tizen.MessageAttachment("suites/tizen/images/img1_for_anvil.png", "image/png")]; }).shouldNotThrowException();
 		        valueOf(testRun, function() { emailService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
 	        }, 5000);
 	    }
