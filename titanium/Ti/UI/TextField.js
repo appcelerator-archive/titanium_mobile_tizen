@@ -1,5 +1,5 @@
-define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", "Ti/_/style", "Ti/UI", "Ti/UI/Tizen"],
-	function(declare, TextBox, css, dom, lang, style, UI, Tizen) {
+define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", "Ti/_/style", "Ti/UI"],
+	function(declare, TextBox, css, dom, lang, style, UI) {
 
 	var borderStyles = ["None", "Line", "Bezel", "Rounded"],
 		keyboardPost = {
@@ -123,9 +123,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 
 			keyboardType: keyboardPost,
 
-			passwordMask: keyboardPost,
-			
-			softKeyboardOnFocus: Tizen.SOFT_KEYBOARD_DEFAULT_ON_FOCUS
+			passwordMask: keyboardPost
 		}
 
 	});
