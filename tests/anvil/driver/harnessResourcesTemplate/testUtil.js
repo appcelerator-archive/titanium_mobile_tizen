@@ -361,7 +361,7 @@ module.exports = new function() {
 				this.obj();
 
 			} catch (e) { 
-				self.reportError(this.testRun, "should not throw exception, but did");	
+				self.reportError(this.testRun, "should not throw exception, but did. Exception: " + e.message + ".");	
 			}
 
 		} else {
