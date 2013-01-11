@@ -90,11 +90,10 @@ define(function() {
 		if (ma.length > 1) {
 			//ma[1] - decimal part pattern
 			var fractPatternReversed = reverseString('' + ma[1]),
-				fractValueReversed = reverseString('' +vFract);
-
-			// 1) fractional part has no group deviders!
-			// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
-			var fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
+				fractValueReversed = reverseString('' + vFract),
+				// 1) fractional part has no group deviders!
+				// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
+			    fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
 			resFract = localeNumberInfo.decimalSeparator + reverseString(fractResultReversed);
 		}
 
@@ -238,10 +237,11 @@ define(function() {
 			// Returns a single quote count which is used to determine if the token occurs in a string literal.
 			var quoteCount = 0,
 				escaped = false,
-				i;
+				i,
+				c;
 
 			for (i = 0, il = preMatch.length; i < il; i++ ) {
-				var c = preMatch.charAt( i );
+				c = preMatch.charAt( i );
 				switch ( c ) {
 					case "\'":
 						if ( escaped ) {
@@ -270,11 +270,11 @@ define(function() {
 		for ( ; ; ) {
 			// Save the current index
 			var index = tokenRegExp.lastIndex,
-			// Look for the next pattern
-				ar = tokenRegExp.exec( format );
+				// Look for the next pattern
+				ar = tokenRegExp.exec( format),
+				// Append the text before the pattern (or the end of the string if not found)
+				preMatch = format.slice( index, ar ? ar.index : format.length );
 
-			// Append the text before the pattern (or the end of the string if not found)
-			var preMatch = format.slice( index, ar ? ar.index : format.length );
 			quoteCount += appendPreOrPostMatch( preMatch, ret );
 
 			if ( !ar ) {
@@ -291,33 +291,33 @@ define(function() {
 				clength = current.length;
 
 			switch ( current ) {
-				case "ddd":  //Day of the week, as a three-letter abbreviation
-				case "dddd": // Day of the week, using the full name
+				case 'ddd':  //Day of the week, as a three-letter abbreviation
+				case 'dddd': // Day of the week, using the full name
 					var names = ( clength === 3 ) ? cal.days.namesAbbr : cal.days.names;
 					ret.push( names[value.getDay()] );
 					break;
-				case "d":  // Day of month, without leading zero for single-digit days
-				case "dd": // Day of month, with leading zero for single-digit days
+				case 'd':  // Day of month, without leading zero for single-digit days
+				case 'dd': // Day of month, with leading zero for single-digit days
 					foundDay = true;
 					ret.push(
 						padZeros( getPart(value, 2), clength )
 					);
 					break;
-				case "MMM":  // Month, as a three-letter abbreviation
-				case "MMMM": // Month, using the full name
-					var name = (clength === 3) ? "namesAbbr" : "names";
-					var names = cal.monthsGenitive && hasDay()?cal.monthsGenitive[name]:cal.months[name];
+				case 'MMM':  // Month, as a three-letter abbreviation
+				case 'MMMM': // Month, using the full name
+					var name = (clength === 3) ? 'namesAbbr' : 'names';
+						names = cal.monthsGenitive && hasDay()?cal.monthsGenitive[name]:cal.months[name];
 					ret.push( names[getPart( value, 1 )]);
 					break;
-				case "M":  // Month, as digits, with no leading zero for single-digit months
-				case "MM": // Month, as digits, with leading zero for single-digit months
+				case 'M':  // Month, as digits, with no leading zero for single-digit months
+				case 'MM': // Month, as digits, with leading zero for single-digit months
 					ret.push(
 						padZeros( getPart(value, 1) + 1, clength )
 					);
 					break;
-				case "y":    // Year, as two digits, but with no leading zero for years less than 10
-				case "yy":   // Year, as two digits, with leading zero for years less than 10
-				case "yyyy": // Year represented by four full digits
+				case 'y':    // Year, as two digits, but with no leading zero for years less than 10
+				case 'yy':   // Year, as two digits, with leading zero for years less than 10
+				case 'yyyy': // Year represented by four full digits
 					part = value.getFullYear();
 					if ( clength < 4 ) {
 						part = part % 100;
@@ -326,69 +326,69 @@ define(function() {
 						padZeros( part, clength )
 					);
 					break;
-				case "h":   // Hours with no leading zero for single-digit hours, using 12-hour clock
-				case "hh":  // Hours with leading zero for single-digit hours, using 12-hour clock
+				case 'h':   // Hours with no leading zero for single-digit hours, using 12-hour clock
+				case 'hh':  // Hours with leading zero for single-digit hours, using 12-hour clock
 					hour = value.getHours() % 12;
 					if ( hour === 0 ) hour = 12;
 					ret.push(
 						padZeros( hour, clength )
 					);
 					break;
-				case "H":  // Hours with no leading zero for single-digit hours, using 24-hour clock
-				case "HH": // Hours with leading zero for single-digit hours, using 24-hour clock
+				case 'H':  // Hours with no leading zero for single-digit hours, using 24-hour clock
+				case 'HH': // Hours with leading zero for single-digit hours, using 24-hour clock
 					ret.push(
 						padZeros( value.getHours(), clength )
 					);
 					break;
-				case "m":  // Minutes with no leading zero for single-digit minutes
-				case "mm": // Minutes with leading zero for single-digit minutes
+				case 'm':  // Minutes with no leading zero for single-digit minutes
+				case 'mm': // Minutes with leading zero for single-digit minutes
 					ret.push(
 						padZeros( value.getMinutes(), clength )
 					);
 					break;
-				case "s":  // Seconds with no leading zero for single-digit seconds
-				case "ss": // Seconds with leading zero for single-digit seconds
+				case 's':  // Seconds with no leading zero for single-digit seconds
+				case 'ss': // Seconds with leading zero for single-digit seconds
 					ret.push(
 						padZeros( value.getSeconds(), clength )
 					);
 					break;
-				case "t":  // One character am/pm indicator ("a" or "p")
-				case "tt": // Multicharacter am/pm indicator
-					part = (value.getHours() < 12 ? cal.AM  : cal.PM) || " ";
+				case 't':  // One character am/pm indicator ("a" or "p")
+				case 'tt': // Multicharacter am/pm indicator
+					part = (value.getHours() < 12 ? cal.AM  : cal.PM) || ' ';
 					ret.push( clength === 1 ? part.charAt(0) : part );
 					break;
-				case "f":   // Deciseconds
-				case "ff":  // Centiseconds
-				case "fff": // Milliseconds
+				case 'f':   // Deciseconds
+				case 'ff':  // Centiseconds
+				case 'fff': // Milliseconds
 					ret.push(
 						padZeros( value.getMilliseconds(), 3 ).substr( 0, clength )
 					);
 					break;
-				case "z":  // Time zone offset, no leading zero
-				case "zz": // Time zone offset with leading zero
+				case 'z':  // Time zone offset, no leading zero
+				case 'zz': // Time zone offset with leading zero
 					hour = value.getTimezoneOffset() / 60;
 					ret.push(
-						( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), clength )
+						( hour <= 0 ? '+' : '-' ) + padZeros( Math.floor(Math.abs(hour)), clength )
 					);
 					break;
-				case "zzz": // Time zone offset with leading zero
+				case 'zzz': // Time zone offset with leading zero
 					hour = value.getTimezoneOffset() / 60;
 					ret.push(
-						( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), 2 ) +
+						( hour <= 0 ? '+' : '-' ) + padZeros( Math.floor(Math.abs(hour)), 2 ) +
 							// Hard coded ":" separator, rather than using cal.TimeSeparator
 							// Repeated here for consistency, plus ":" was already assumed in date parsing.
-							":" + padZeros( Math.abs(value.getTimezoneOffset() % 60), 2 )
+							':' + padZeros( Math.abs(value.getTimezoneOffset() % 60), 2 )
 					);
 					break;
-				case "g":
-				case "gg":
+				case 'g':
+				case 'gg':
 					//todo: do we need it at all? Fro now skipped.
 					break;
-				case "/":
-					ret.push( cal["/"] );
+				case '/':
+					ret.push( cal['/'] );
 					break;
 				default:
-					throw "Invalid date format pattern \'" + current + "\'.";
+					throw 'Invalid date format pattern \"' + current + '\".';
 			}
 		}
 		return ret.join('');
