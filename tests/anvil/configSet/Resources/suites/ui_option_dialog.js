@@ -98,15 +98,18 @@ module.exports = new function() {
 	}
 
 	this.testOptions = function(testRun) {
+		var wind = Ti.UI.createWindow();
+
 		var optionsDialogOpts = {
 			destructive:1,
 			cancel:2,
 			title:'I am a title'
 		};
 		
+		//create option dialog
 		var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
 
-		var buttons = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+		var buttons = ['Option 1', 'Option 2', 'Option 3', 'Option 4']; //this options will be cecked
 		dialog.options = buttons;
 
 		var gotten_options = dialog.getOptions();
@@ -114,8 +117,39 @@ module.exports = new function() {
 		for(var i = 0; i < gotten_options.length; i++){
 			buttons[i] && valueOf(testRun, gotten_options[i]).shouldBe(buttons[i]);
 		}
-		
-      	finish(testRun);
+
+		wind.addEventListener('open', function(){
+			dialog.show();
+			setTimeout(checkOptions, 500);
+		});
+
+		wind.addEventListener('close', function(){
+			finish(testRun);
+		});
+
+		wind.open();
+
+		//in this test we found buttons of option dialog in DOM structure and combare their labels with 
+		//apropriate options, wich we assigned above
+		function checkOptions(){
+			var dialog_node = document.getElementsByClassName('TiUIWindow')[1];
+			var button_nodes = dialog_node.getElementsByClassName('TiUIButton');
+			console.log(button_nodes.length);
+			if(button_nodes.length < 4){
+				valueOf(testRun, false).shouldBeTrue();
+			}else{
+				for(var i = 0; i < button_nodes.length; i++){
+					var label_node = button_nodes[i].getElementsByClassName('TiUILabel')[0];
+					var label_view = label_node.getElementsByClassName('TiUIView')[0];
+					valueOf(testRun, label_view.innerHTML).shouldBe[buttons[i]];
+				}
+			}
+			dialog.hide();
+			setTimeout(function(){
+				wind.close();
+			}, 500)
+		}
+		      	
 	}
 
 	this.testCancel = function(testRun) {

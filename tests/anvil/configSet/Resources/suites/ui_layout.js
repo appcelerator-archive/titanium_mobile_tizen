@@ -4,6 +4,9 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
+if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+	Ti.include('countPixels.js');
+}
 
 module.exports = new function() {
 	var finish;
@@ -28,42 +31,52 @@ module.exports = new function() {
 	};
 
 	this.name = "ui_layout";
-	this.tests = [
-		{name: "viewSizeAndRectPx"},
-		{name: "viewLeft"},
-		{name: "viewTop"},
-		{name: "viewCenter"},
-		{name: "viewWidth"},
-		{name: "viewError"},
-		{name: "undefinedWidth"},
-		{name: "undefinedLeft"},
-		{name: "undefinedCenter"},
-		{name: "undefinedRight"},
-		{name: "undefinedHeight"},
-		{name: "undefinedTop"},
-		{name: "undefinedBottom"},
-		{name: "widthPrecedence"},
-		{name: "leftPrecedence"},
-		{name: "centerXPrecedence"},
-		{name: "heightPrecedence"},
-		{name: "topPrecedence"},
-		{name: "centerYPrecedence"},
-		{name: "scrollViewSize"},
-		{name: "zIndexMultiple"},
-		{name: "fillInVerticalLayout"},
-		{name: "sizeFillConflict"},
-		{name: "systemMeasurement"},
-		{name: "unitMeasurements"},
-		{name: "scrollViewAutoContentHeight"},
-		{name: "scrollViewLargeContentHeight"},
-		{name: "scrollViewMinimumContentHeight"},
-		{name: "horizontalScrollViewMinimumContentHeight"},
-		{name: "horizontalScrollViewLargeContentHeight"},
-		{name: "scrollViewWithSIZE"},
-		{name: "scrollViewWithLargeVerticalLayoutChild"},
-		{name: "convertUnits"},
-		{name: "fourPins"}
-	];
+	this.tests = (function(){
+		var arr = [
+			{name: "viewSizeAndRectPx"},
+			{name: "viewLeft"},
+			{name: "viewTop"},
+			{name: "viewCenter"},
+			{name: "viewWidth"},
+			{name: "viewError"},
+			{name: "undefinedWidth"},
+			{name: "undefinedLeft"},
+			{name: "undefinedCenter"},
+			{name: "undefinedRight"},
+			{name: "undefinedHeight"},
+			{name: "undefinedTop"},
+			{name: "undefinedBottom"},
+			{name: "widthPrecedence"},
+			{name: "leftPrecedence"},
+			{name: "centerXPrecedence"},
+			{name: "heightPrecedence"},
+			{name: "topPrecedence"},
+			{name: "centerYPrecedence"},
+			{name: "scrollViewSize"},
+			{name: "zIndexMultiple"},
+			{name: "fillInVerticalLayout"},
+			{name: "sizeFillConflict"},
+			{name: "systemMeasurement"},
+			{name: "unitMeasurements"},
+			{name: "scrollViewAutoContentHeight"},
+			{name: "scrollViewLargeContentHeight"},
+			{name: "scrollViewMinimumContentHeight"},
+			{name: "horizontalScrollViewMinimumContentHeight"},
+			{name: "horizontalScrollViewLargeContentHeight"},
+			{name: "scrollViewWithSIZE"},
+			{name: "scrollViewWithLargeVerticalLayoutChild"},
+			{name: "convertUnits"},
+			{name: "fourPins"}
+		];
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+			arr = arr.concat([
+					{name: "viewPixelTest"}, 
+					{name: "viewBorderPixelTest"},
+					{name: "viewOpacityPixelTest"}
+			]);
+		}
+		return arr;
+	}())
 
 	// functional test cases #1010, #1011, #1025, #1025a
 	//rect and size properties should not be undefined
@@ -1162,5 +1175,234 @@ module.exports = new function() {
 			finish(testRun);
 		});
 		win.open();
+	}
+
+	this.viewPixelTest = function(testRun){
+		var cp = new CountPixels();
+
+		//create white window which will be used as background
+		var win = Ti.UI.createWindow({
+			backgroundColor : '#ffffff',
+			width: 320,
+			height: 510
+		});
+
+		//create black view wich will be checked later
+		var view = Ti.UI.createView({
+			top: 20,
+			left: 30,
+			height: 100,
+			width: 200,
+			backgroundColor: '#000000'
+		});
+
+		//this is the expected number of black pixels of view
+		var expected = 20000
+
+		win.add(view);
+		view.addEventListener('postlayout', checkViewColor);
+		win.addEventListener('close', function(){
+			finish(testRun);
+		});
+		win.open();
+
+		//this is the final function wich will be called after colors are checked
+		var fin = (function(){
+			var repeat = true;
+			return function(){
+				if(repeat){ 			//on the first call, it will change the view size and repeat the test again
+					expected = 45000;
+					repeat = false;
+
+					view.applyProperties({
+						top : 30,
+						left : 45,
+						width : 150,
+						height : 300
+					})
+				} else {				//on the second call, it finish will finish the test
+					win.close();
+				} 
+			}
+		}())
+
+		//check black bixel count in the rectangle where the view is placed
+		function checkViewColor(){
+			cp.countPixels([0, 0, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expected);
+					checkWindowWhite();	
+				},
+				// this is position object
+				{
+					top: view.top,
+					left: view.left,
+					height: view.height,
+					width: view.width
+				}
+			);
+
+			//check all white pixels on window
+			//the number should be equal to the expected number of white pixels on window
+			function checkWindowWhite(){
+				cp.countPixels([255, 255, 255], 
+					win, 
+					function(count){
+						valueOf(testRun, count).shouldBe(win.width * win.height - expected);
+						checkWindowBlack();	
+					}
+				);
+			}
+
+			//check all black pixels on window
+			//the number should be equal to the number of view's pixels
+			//it will mean that the view appers in the specified place with thes specified size
+			function checkWindowBlack(){
+				cp.countPixels([0, 0, 0], 
+					win, 
+					function(count){
+						valueOf(testRun, count).shouldBe(expected);
+						fin();	
+					}
+				);
+			}
+
+		}
+	}
+
+	this.viewBorderPixelTest = function(testRun){
+		var cp = new CountPixels();
+
+		//create white window which be used as background
+		var win = Ti.UI.createWindow({
+			backgroundColor : '#ffffff',
+			width: 320,
+			height: 510
+		});
+
+		//create black view with red border wich will be checked later
+		var view = Ti.UI.createView({
+			top: 20,
+			left: 30,
+			height: 100,
+			width: 200,
+			backgroundColor: '#000000',
+			borderColor: '#ff0000', 
+			borderWidth: 10,
+		});
+
+		//this is the expected number of colored pixels in the view
+		var expectedBlack = 14400,
+			expectedRed = 5600,
+			expectedWhite = win.width * win.height - expectedRed - expectedBlack;
+
+		win.add(view);
+		view.addEventListener('postlayout', checkViewColor);
+		win.addEventListener('close', function(){
+			finish(testRun);
+		});
+		win.open();
+
+		function fin(){ 				
+			win.close();
+		}
+
+		//check black bixel count in the rectangle where the view should be placed
+		//if all of the follow functions succeed, then it is guaranteed that the border has the right location and the right width 
+		function checkViewColor(){
+			cp.countPixels([0, 0, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expectedBlack);
+					checkWindowWhite();	
+				},
+				// this is position object
+				{
+					top: view.top + view.borderWidth,
+					left: view.left + view.borderWidth,
+					height: view.height - 2 * view.borderWidth,
+					width: view.width - 2 * view.borderWidth
+				}
+			);
+
+			//check red pixels of the view
+			//their number should be equal to the expected number of red pixels in the window
+			function checkViewRed(){
+				cp.countPixels([255, 0, 0], 
+					win, 
+					function(count){
+						valueOf(testRun, count).shouldBe(expectedRed);
+						checkWindowBlack();	
+					},
+					{
+						top: view.top,
+						left: view.left,
+						height: view.height,
+						width: view.width
+					}
+				);
+			}
+
+			//check all white pixels in the window
+			//their number should be equal to the number of view's pixels
+			function checkWindowWhite(){
+				cp.countPixels([255, 255, 255], 
+					win, 
+					function(count){
+						valueOf(testRun, count).shouldBe(expectedWhite);
+						fin();	
+					}
+				);
+			}
+
+		}
+	}
+
+	this.viewOpacityPixelTest = function(testRun){
+		var cp = new CountPixels();
+
+		//create white window which  will be used as background
+		var win = Ti.UI.createWindow({
+			backgroundColor : '#ffffff',
+			width: 320,
+			height: 510
+		});
+
+		//create black view wich will be checked later
+		var view = Ti.UI.createView({
+			top: 20,
+			left: 30,
+			height: 100,
+			width: 200,
+			backgroundColor: '#000000',
+			opacity: 0.5
+		});
+
+		//this is the expected number of colored pixels in the view
+		var expected = 20000;
+
+		win.add(view);
+		view.addEventListener('postlayout', checkViewColor);
+		win.addEventListener('close', function(){
+			finish(testRun);
+		});
+		win.open();
+
+		function fin(){ 				
+			win.close();
+		}
+
+		//check grey pixel count where the view should be located
+		
+		function checkViewColor(){
+			cp.countPixels([127, 127, 127], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expected);
+					fin();	
+				}
+			);
+		}
 	}
 };
