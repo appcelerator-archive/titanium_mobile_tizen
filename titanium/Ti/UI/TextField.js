@@ -21,7 +21,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			this._setKeyboardType();
 			this.borderStyle = UI.INPUT_BORDERSTYLE_BEZEL;
 
-			this._disconnectFocusEvent = on(field, "focus", this, function() {			
+			this._disconnectFocusEvent = on(field, "focus", this, function() {
 				this._focused = 1;
 				this._setInternalText(this.clearOnEdit ? "" : this._getInternalText());
 			});
@@ -77,6 +77,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 						type = "email";
 						break;
 					case UI.KEYBOARD_NUMBER_PAD:
+					case UI.KEYBOARD_NUMBERS_PUNCTUATION:
 						type = "number";
 						break;
 					case UI.KEYBOARD_PHONE_PAD:
@@ -85,10 +86,6 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 					case UI.KEYBOARD_URL:
 						type = "url";
 						break;
-					case UI.KEYBOARD_NUMBERS_PUNCTUATION: {
-						type = "number";
-						break;
-					}
 				}
 			}
 			// Note: IE9 throws an exception if you don't set an input type it supports
@@ -97,8 +94,8 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			} catch(e) {
 				this._field.type = "text";
 			}
-		},		
-						
+		},
+
 		properties: {
 			borderStyle: {
 				set: function(value, oldValue) {
