@@ -49,7 +49,8 @@ var suites = [
 	{name: "ui/image_view"},
 	{name: "ui/switch"},
 	{name: "ui/button"},
-	{name: "ui/picker"}
+	{name: "ui/picker"},
+	{name: "ui/ScrollView"}
 ];
 
 if (Ti.Platform.osname === 'android') {
