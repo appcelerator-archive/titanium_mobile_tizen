@@ -46,7 +46,8 @@ var suites = [
 	{name: "ui/tabGroup"},
 	{name: "map"},
 	{name: "ui/image_view"},
-	{name: "ui/switch"}
+	{name: "ui/switch"},
+	{name: "ui/button"}
 ];
 
 if (Ti.Platform.osname === 'android') {
