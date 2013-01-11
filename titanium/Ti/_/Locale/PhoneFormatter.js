@@ -49,32 +49,6 @@ define(function() {
 		return FORMAT_UNKNOWN;
 	}
 
-	// Formats a phone number in-place. Currently "FORMAT_JAPAN" and "FORMAT_NANP" are supported as a second argument.
-	//
-	// s - phone number to be formatted
-	// defaultFormattingType - default formatting rules to apply if the number does not begin with +[country_code]
-	function formatTelephoneNumberInternal(s, defaultFormattingType) {
-		var formatType = defaultFormattingType;
-		if (s.length > 2 && s.charAt(0) == '+') {
-			if (s.charAt(1) == '1') {
-				formatType = FORMAT_NANP;
-			} else if (s.charAt(1) == '8' && s.charAt(2) == '1') { //+81 JP
-				formatType = FORMAT_JAPAN;
-			} else {
-				formatType = FORMAT_UNKNOWN;
-			}
-		}
-
-		switch (formatType) {
-			case FORMAT_NANP:
-				return formatNanpNumber(s);
-			case FORMAT_JAPAN:
-				return formatJapaneseNumber(s);
-			default:
-				return removeDashesAndSpaces(s);
-		}
-	}
-
 	// Formats a phone number using the NANP formatting rules. Numbers will be formatted as:
 	// +1-xxx-xxx-xxxx, 1-xxx-xxx-xxxx, xxx-xxx-xxxx, xxx-xxxx, xxxxx
 	function formatNanpNumber(s) {
@@ -117,9 +91,31 @@ define(function() {
 	}
 
 	return {
+		// Formats a phone number in-place. Currently "FORMAT_JAPAN" and "FORMAT_NANP" are supported as a second argument.
+		// phoneNumber - phone number to be formatted
 		formatTelephoneNumber : function(phoneNumber, currentLocale){
 			var localeParts = (currentLocale)?currentLocale.split(/-/):[];
-			return formatTelephoneNumberInternal(phoneNumber, getFormatTypeFromCountryCode(localeParts[localeParts.length-1]));
+			//default formatting rules to apply if the number does not begin with +[country_code]
+			var formatType  = getFormatTypeFromCountryCode(localeParts[localeParts.length-1]);
+
+			if (phoneNumber.length > 2 && phoneNumber.charAt(0) == '+') {
+				if (phoneNumber.charAt(1) == '1') {
+					formatType = FORMAT_NANP;
+				} else if (phoneNumber.charAt(1) == '8' && phoneNumber.charAt(2) == '1') { //+81 JP
+					formatType = FORMAT_JAPAN;
+				} else {
+					formatType = FORMAT_UNKNOWN;
+				}
+			}
+
+			switch (formatType) {
+				case FORMAT_NANP:
+					return formatNanpNumber(phoneNumber);
+				case FORMAT_JAPAN:
+					return formatJapaneseNumber(phoneNumber);
+				default:
+					return removeDashesAndSpaces(phoneNumber);
+			}
 		}
 	}
 });

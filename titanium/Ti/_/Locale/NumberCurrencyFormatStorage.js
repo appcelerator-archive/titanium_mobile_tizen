@@ -1,19 +1,24 @@
 define(function() {
-// Packed data
-//[0] element - Number negative pattern
-//[1] element - Number group sizes (as all value are simple digits - joined as string like
-//[2] element - Number decimal separator
-//[3] element - Number group separator
 
-//[0] element - Currency ISO Code
-//[1] element - Currency symbol
-//[2] element - Currency negative pattern
-//[3] element - Currency positive pattern
-//[4] element - Currency decimal digits
-//[5] element - Currency decimal separator
-//[6] element - Currency group separator
-//[7] element - Currency  group sizes
-	var numberCurrencyDefaultLocaleItem = [["-n","3",".",","],["USD","$","($n)","$n","2",".",",","3"]];
+	// Packed data:
+	// First array - Number localization data
+	//[0] negative pattern
+	//[1] group sizes (as all value are simple digits - joined as string like
+	//[2] decimal separator
+	//[3] group separator
+
+	// Second array - Currency localization data
+	//[0] ISO Code
+	//[1] symbol
+	//[2] negative pattern
+	//[3] positive pattern
+	//[4] decimal digits
+	//[5] decimal separator
+	//[6] group separator
+	//[7] group sizes
+
+	//Default number and currency localization item
+	var defaultItem = [["-n","3",".",","],["USD","$","($n)","$n","2",".",",","3"]];
 
 	var numberCurrencyLocalizer = {"ar-SA":[["n-"],["SAR","\u0631.\u0633.\u200f","$n-","$ n"]],
 		"bg-BG":[[,,",","\u00a0"],["BGN","\u043b\u0432.","-n $","n $"]],
@@ -227,20 +232,20 @@ define(function() {
 
 	function expandLocaleData(localeItem){
 		if (!localeItem[0]) localeItem[0] = [];
-		if (!localeItem[0][0]) localeItem[0][0] = numberCurrencyDefaultLocaleItem[0][0];
-		if (!localeItem[0][1]) localeItem[0][1] = numberCurrencyDefaultLocaleItem[0][1];
-		if (!localeItem[0][2]) localeItem[0][2] = numberCurrencyDefaultLocaleItem[0][2];
-		if (!localeItem[0][3]) localeItem[0][3] = numberCurrencyDefaultLocaleItem[0][3];
+		if (!localeItem[0][0]) localeItem[0][0] = defaultItem[0][0];
+		if (!localeItem[0][1]) localeItem[0][1] = defaultItem[0][1];
+		if (!localeItem[0][2]) localeItem[0][2] = defaultItem[0][2];
+		if (!localeItem[0][3]) localeItem[0][3] = defaultItem[0][3];
 
 		if (!localeItem[1]) localeItem[1] = [];
-		if (!localeItem[1][1]) localeItem[1][1] = numberCurrencyDefaultLocaleItem[1][1];
-		if (!localeItem[1][2]) localeItem[1][2] = numberCurrencyDefaultLocaleItem[1][2];
-		if (!localeItem[1][3]) localeItem[1][3] = numberCurrencyDefaultLocaleItem[1][3];
-		if (!localeItem[1][4]) localeItem[1][4] = numberCurrencyDefaultLocaleItem[1][4];
+		if (!localeItem[1][1]) localeItem[1][1] = defaultItem[1][1];
+		if (!localeItem[1][2]) localeItem[1][2] = defaultItem[1][2];
+		if (!localeItem[1][3]) localeItem[1][3] = defaultItem[1][3];
+		if (!localeItem[1][4]) localeItem[1][4] = defaultItem[1][4];
 
-		if (!localeItem[1][5]) localeItem[1][5] = numberCurrencyDefaultLocaleItem[0][2];
-		if (!localeItem[1][6]) localeItem[1][6] = numberCurrencyDefaultLocaleItem[0][3];
-		if (!localeItem[1][7]) localeItem[1][7] = numberCurrencyDefaultLocaleItem[0][1];
+		if (!localeItem[1][5]) localeItem[1][5] = localeItem[0][2];
+		if (!localeItem[1][6]) localeItem[1][6] = localeItem[0][3];
+		if (!localeItem[1][7]) localeItem[1][7] = localeItem[0][1];
 
 		return localeItem;
 	}
@@ -258,6 +263,7 @@ define(function() {
 			groupSizes: ((lc[7] + "").split("")).map(function (a) { return parseInt(a, 10); }) //converting string like "320" to array [3,2,1]
 		}
 	}
+
 	function unpackNumberInfo(localeItem){
 		var lc = expandLocaleData(localeItem)[0];
 		return  {
@@ -267,33 +273,28 @@ define(function() {
 			groupSeparator: lc[3]}
 	}
 
-	function getCurrencyInfoByLocaleInternal(locale) {
-		return unpackCurrencyInfo(numberCurrencyLocalizer[locale] || numberCurrencyDefaultLocaleItem);
-	};
+	return {
+		getNumberInfoForLocale: function (locale) {
+			return unpackNumberInfo( numberCurrencyLocalizer[locale] || defaultItem);
+		},
+		getCurrencyInfoByLocale: function (locale) {
+			return unpackCurrencyInfo(numberCurrencyLocalizer[locale] || defaultItem);
+		},
+		getCurrencyInfoByCode: function (currencyCode) {
+			var targetCode = currencyCode.toUpperCase(),
+				result = defaultItem,
+				i;
 
-	function getCurrencyInfoByCodeInternal(currencyCode) {
-		var targetCode = currencyCode.toUpperCase(),
-			result = numberCurrencyDefaultLocaleItem;
-
-		for (var index in numberCurrencyLocalizer) {
-			var localeItem = numberCurrencyLocalizer[index];
-			if (localeItem && localeItem[1]) {
-				if (("" + localeItem[1][0]).toUpperCase() == targetCode) {
-					result = localeItem;
-					break;
+			for (i in numberCurrencyLocalizer) {
+				var localeItem = numberCurrencyLocalizer[i];
+				if (localeItem && localeItem[1]) {
+					if (("" + localeItem[1][0]).toUpperCase() == targetCode) {
+						result = localeItem;
+						break;
+					}
 				}
 			}
+			return unpackCurrencyInfo(result);
 		}
-		return unpackCurrencyInfo(result);
-	};
-
-	function getNumberInfoForLocaleInternal(locale) {
-		return unpackNumberInfo( numberCurrencyLocalizer[locale] || numberCurrencyDefaultLocaleItem);
-	}
-
-	return {
-		getNumberInfoForLocale: getNumberInfoForLocaleInternal,
-		getCurrencyInfoByLocale: getCurrencyInfoByLocaleInternal,
-		getCurrencyInfoByCode: getCurrencyInfoByCodeInternal
 	};
 });
