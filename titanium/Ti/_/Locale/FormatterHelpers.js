@@ -382,7 +382,7 @@ define(function() {
 					break;
 				case 'g':
 				case 'gg':
-					//todo: do we need it at all? Fro now skipped.
+					// For now skipped. Right now Era is not supported.
 					break;
 				case '/':
 					ret.push( cal['/'] );

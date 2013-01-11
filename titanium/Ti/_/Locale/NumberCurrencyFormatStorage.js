@@ -274,7 +274,7 @@ define(function() {
 	}
 
 	return {
-		getNumberInfoForLocale: function (locale) {
+		getNumberInfoByLocale: function (locale) {
 			return unpackNumberInfo( numberCurrencyLocalizer[locale] || defaultItem);
 		},
 		getCurrencyInfoByLocale: function (locale) {
