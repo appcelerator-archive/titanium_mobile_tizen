@@ -2,7 +2,7 @@ define(function() {
 	// ======================== Phone Number formatting ========================
 	//  General rules basically based on Android 4.1.1 code to match the results
 
-	var japanesePhoneNumberFormatter = null, // special formatter of JS numbers
+	var japanesePhoneFormatter = null, // special formatter of JS numbers
 		FORMAT_UNKNOWN = 0, //use country code or don't format
 		FORMAT_NANP = 1, // NANP formatting
 		FORMAT_JAPAN = 2; // Japanese formatting
@@ -55,9 +55,9 @@ define(function() {
 		// Strip the dashes first, as we're going to add them back
 		s = removeDashesAndSpaces(s);
 
-		// Nanp number validator: (general validator may checks allowable values of "N" in +1-NPA-NXX-xxxx)
+		// NANP number validator: (general validator may checks allowable values of "N" in +1-NPA-NXX-xxxx)
 		// general: ^(((\+){0,1}1){0,1}([2-9](([0-9]{2})||(?!)))){0,1}([2-9][0-9]{2})([0-9]{4})$
-		// simplifyed: ^(((\+){0,1}1){0,1}([\d]{3})){0,1}([\d]{3})([\d]{4})$
+		// simplified: ^(((\+){0,1}1){0,1}([\d]{3})){0,1}([\d]{3})([\d]{4})$
 		if (!s.match(/^(((\+){0,1}1){0,1}([\d]{3})){0,1}([\d]{3})([\d]{4})$/)) {
 			return s;
 		}
@@ -78,11 +78,11 @@ define(function() {
 	// 03-xxxx-xxxx, 090-xxxx-xxxx, 0120-xxx-xxx, +81-3-xxxx-xxxx, +81-90-xxxx-xxxx
 	// s - number to be formatted, will be modified with the formatting
 	function formatJapaneseNumber(s) {
-		if (!japanesePhoneNumberFormatter)
+		if (!japanesePhoneFormatter)
 		{
-			japanesePhoneNumberFormatter = require("Ti/_/Locale/JapanesePhoneNumberFormatter");
+			japanesePhoneFormatter = require("Ti/_/Locale/JapanesePhoneFormatter");
 		}
-		return japanesePhoneNumberFormatter.formatJapaneseNumber(s);
+		return japanesePhoneFormatter.formatJapaneseNumber(s);
 	}
 
 	// Removes dashes and spaces from the string.
