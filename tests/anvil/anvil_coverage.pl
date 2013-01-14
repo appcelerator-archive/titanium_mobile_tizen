@@ -113,17 +113,18 @@ print "\nRemoving inherited entities...\n";
 removeInheritedTypes();
 
 
-#2 Remove non-MobileWeb entities from $jsca
-
 print "\nRemoving non-MobileWeb entities...\n";
 removeNonMobileWeb();
-
 
 #2 Generate intermediate structures from $jsca
 
 print "\nAnalyzing JSCA...\n";
 genJscaFuncDictionary();
 print "     Found $countFunctionsAndProperties functions and properties\n";
+
+#print Dumper (\%calls);
+
+print "\nRemoving setters and getters for tested properties\n";
 
 
 #2 Parse Anvil source code and generate a list of references to Titanium
@@ -135,11 +136,15 @@ find(\&process, $dir);
 print "     Parsed $files files\n";
 print "     Found references to " . scalar(keys %calls) . " entities \n";
 
+removeGettersAndSetters();
+
 open ALLANVIL, ">anvil_all_references.txt";
 foreach $call(sort keys %calls)
 {
     print ALLANVIL "$call\n";
 }
+
+#(%calls <---> %jscaXXXXX)
 
 #2 Count Anvil references
 
@@ -471,6 +476,68 @@ sub removeInheritedTypes()
 			}
 			AFTER_FUNCTIONS:
 		}		
+	}
+}
+
+# Remove getters and setters from tested properties
+sub removeGettersAndSetters()
+{
+	my (@properties, @functions);
+	my (%property, %function);
+	my ($name, $namespace, $getter, $setter);
+	@properties = @functions = [];
+	%property = %function = ();
+	$name = $namespace = $getter = $setter = "";
+	my @types = @{$jsca->{types}};
+		
+	foreach my $type (@types)
+	{
+		$namespace = $type->{name};
+
+        if(!($namespace =~ s/Titanium\./Ti./))
+        {
+            next;
+        }		
+		@properties = @{$type->{properties}};
+		@functions = @{$type->{functions}};
+
+		foreach $property (@properties)
+		{	
+			$name = $namespace . "." . $property->{name};
+			$getter = $namespace . ".get" . ucfirst($property->{name});
+			$setter = $namespace . ".set" . ucfirst($property->{name});
+
+			if (exists $calls{$name})
+			{
+				print DEBUG "Added methods " . $getter . "  from " . $name . " property\n";
+				if(defined($jscaAll{$getter}))
+				{
+					$calls{$getter} = " ";
+				}
+				if(defined($jscaAll{$setter}))
+				{
+					$calls{$setter} = " ";
+				}				
+			}
+			#if getter exists then add proprety
+			elsif (exists $calls{$getter})
+			{
+				print DEBUG "Added property " . $name . " from method " . $getter . "\n";
+				$calls{$name} = " ";
+				#if proprty is not readonly - add setter
+				if (defined($jscaAll{$setter}))
+				{
+					$calls{$setter} = " ";
+				}
+			}
+			#if setter exists - add property and getter
+			elsif (exists $calls{$setter})
+			{
+				print DEBUG "Added property " . $name . " from method " . $setter . "\n";
+				$calls{$name} = " ";
+				$calls{$getter} = " ";
+			}
+		}
 	}
 }
 
