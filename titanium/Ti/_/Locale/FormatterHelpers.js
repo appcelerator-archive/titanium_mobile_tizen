@@ -1,5 +1,6 @@
 define(function() {
-	// Function return value from array with provided index (even value is undefined) but if index is wrong - returns provided default vaule.
+	// Function returns a value from the array with the provided index (even if the value is undefined),
+	// bug if the index is wrong - returns provided default vaule.
 	// a - target array
 	// i - index of element ot get
 	// d - default value if no such element in array
@@ -8,46 +9,50 @@ define(function() {
 	};
 
 	// Internal function!
-	// simplePattern - pattern that may have only '#', '0', and '-' as valued symbols
+	// simplePattern - pattern that may have only '#', '0', and '-' as value symbols
 	// intValue - integer value to format
-	// groupDevider - locale specific group devider.
-	// negativeSignSymbol - If pattern has "-" symbol it will be replaces with this string. For positive values should be empty string.
-	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter allow or truncate string or overflow pattern
-	function formatSimpleInteger(simplePattern, intValue, groupDevider, negativeSignSymbol, limitResultToPatternLength) {
+	// groupDivider - locale specific group divider.
+	// negativeSignSymbol - If the pattern has "-" symbol, it will be replaced with this string. 
+	//      For positive values should be empty string.
+	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter 
+	//      allows to select what to do:
+	//      - if true, the number will be truncated;
+	//      - if false, the size of the pattern will be overruled.
+	function formatSimpleInteger(simplePattern, intValue, groupDivider, negativeSignSymbol, limitResultToPatternLength) {
 		var vArray = ('' + Math.abs(intValue)).split(''),
 		    pArray = ('' + simplePattern).split(''),
 		    valueIndex = vArray.length - 1,
 		    result = '',
 			patternChar,
 			i,
-			cachedGroupDevider = ''; //we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
+			cachedGroupDivider = ''; //we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
 
 		for (i = (pArray.length - 1); i >= 0; i--) {
 			patternChar = pArray[i];
 			switch (patternChar) {
 				case '0':
-					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDevider + result;
-					cachedGroupDevider = '';
+					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDivider + result;
+					cachedGroupDivider = '';
 					break;
 				case '#':
 					var currentChar = getItemFromArray(vArray, valueIndex--, '');
-					// adding cachedGroupDevider only in case we have anything to add except it.
+					// adding cachedGroupDivider only in case we have anything to add except it.
 					if (currentChar != '') {
-						currentChar = currentChar + cachedGroupDevider;
+						currentChar = currentChar + cachedGroupDivider;
 					}
 					result = currentChar + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 					break;
 				case '-':
 					result = negativeSignSymbol + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 					break;
 				case ',':
-					cachedGroupDevider = groupDevider;
+					cachedGroupDivider = groupDivider;
 					break;
 				default:
 					result = patternChar + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 			}
 		}
 		//if we are not limited to pattern Lenght - add all not added digits
@@ -59,7 +64,7 @@ define(function() {
 		return result;
 	};
 
-	// pattern format
+	// Pattern format:
 	// '0' - Digit
 	// '#' - Digit, zero shows as absent
 	// '.' - Decimal separator or monetary decimal separator
@@ -79,10 +84,13 @@ define(function() {
 			return v; //return as it is.
 		}
 
-		var negativeSign = (v < 0) ? '-' : '', //process only abs(), and turn on flag.
-			valueParts = ('' + v).replace('-', '').split('.'),  //safe remove sign as Math.abs has some accuracy for very small floats
-			vInt = valueParts[0] || '',   // getting integer part.
-			vFract = valueParts[1] || '', // getting fractional part.
+		// This function will work with the absolute value of the number, even if it's negative. 
+		// If the number is negative, "negativeSign" flag is turned on, and the minus sign is 
+		// later inserted in the correct location.
+		var negativeSign = (v < 0) ? '-' : '', 
+			valueParts = ('' + v).replace('-', '').split('.'), 
+			vInt = valueParts[0] || '',   // integer part.
+			vFract = valueParts[1] || '', // fractional part.
 			resFract = '', //fractional part result
 			resInt = '', //integer part result
 			ma = p.split('.'); //split pattern for fractional and integer pattern parts
@@ -91,7 +99,7 @@ define(function() {
 			//ma[1] - decimal part pattern
 			var fractPatternReversed = reverseString('' + ma[1]),
 				fractValueReversed = reverseString('' + vFract),
-				// 1) fractional part has no group deviders!
+				// 1) fractional part has no group dividers!
 				// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
 			    fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
 			resFract = localeNumberInfo.decimalSeparator + reverseString(fractResultReversed);
@@ -112,7 +120,11 @@ define(function() {
 		return result;
 	};
 
-	// based on http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
+	// Group sizes are used to convert large numbers like 123456789 into more readable numbers like 123,456,789.
+	// Format of group sizes is similar to this:
+	// http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
+	// For the pattern format, see comment in NumberCurrencyFormatStorage.js.
+	// Note: Function is used only with regular numbers (not phone numbers).
 	function generatePatternFromGroupSizes(groupSizes, maxDigitsInPattern) {
 		var gIndex = 0,
 			digitsBeforeSign = maxDigitsInPattern || 20,
@@ -132,7 +144,7 @@ define(function() {
 		return allGroups.join(',') + '.' + (new Array(digitsAfterSign + 1)).join('#');
 	};
 
-	// formats provided value as currency
+	// Formats provided value as currency.
 	function formatCurrencyInternal(value, currencyFormatInfo) {
 		if (!isFinite(value)) {
 			return value;
@@ -190,7 +202,12 @@ define(function() {
 			foundDay,
 			checkedDay,
 			dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
+
+			// If the format contains a string in quotes, the string must go to the
+			// output date string verbatim. 'quoteCount" is used in this logic.
 			quoteCount = 0,
+
+			// a "token" is a logical part of the date string (for example, year or month)
 			tokenRegExp = getTokenRegExp();
 
 		function padZeros( num, c ) {

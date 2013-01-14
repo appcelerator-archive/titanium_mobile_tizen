@@ -1,8 +1,14 @@
 define(function() {
 
-	// Packed data:
+	// For the sake of memory efficiency, locale data is stored in a packed format. When locale
+	// infrastructure is used first, it is prepared by expandLocaleData(), which fills
+	// empty placeholders with default values, and unpackXXXXXXInfo(), which fills out
+	// a convenient high-level structure used later for parsing or generating text.
+
+	// Data format:
+	
 	// First array - Number localization data
-	//[0] negative pattern
+	//[0] negative pattern (pattern for negative numbers)
 	//[1] group sizes (as all value are simple digits - joined as string like
 	//[2] decimal separator
 	//[3] group separator
@@ -10,8 +16,8 @@ define(function() {
 	// Second array - Currency localization data
 	//[0] ISO Code
 	//[1] symbol
-	//[2] negative pattern
-	//[3] positive pattern
+	//[2] negative pattern (pattern for negative numbers)
+	//[3] positive pattern (pattern for positive numbers)
 	//[4] decimal digits
 	//[5] decimal separator
 	//[6] group separator
