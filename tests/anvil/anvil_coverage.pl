@@ -228,7 +228,7 @@ sub getInheritanceInfo()
     	my $val = $_[0];
     	
     	$val =~ s/\//\./g;
-    	$val =~ s/"*//g;
+    	$val =~ s/["']+//g;
     	
     	my $new_val = $hash{$val};
     	
@@ -242,7 +242,12 @@ sub getInheritanceInfo()
     	}
     }
 
-    my $dir = "c:/Users/Y.Pidstryhach/AppData/Roaming/Titanium/mobilesdk/win32/3.0.0_/mobileweb/titanium";
+    my $dir = "./titanium";
+	if (!(-d $dir)) {
+		print "\nError:\n";
+		print "Cannot find directory with SDK\n";
+		exit;
+	}
     my @files = ();
 
     my $file_pattern = ".*js";
@@ -274,13 +279,13 @@ sub getInheritanceInfo()
     		#remove all new lines and tabs for easier parsing
     		$content =~ s/\n\t//g;
     		#find declaring new namespace and its parent
-    		if ($content =~ m/declare\("((.)*?)",[ ]([A-Za-z_]*?)(,|\))/)
+    		if ($content =~ m/declare\(["']((.)*?)["'],[ ]([A-Za-z_]*?)(,|\))/)
     		{
     			$key = $1;
     			$parent = $3;
     		} 
     		#if declare is not used try to find setObject with new namespace and its parent
-    		elsif ($content =~ m/lang\.setObject\("((.)*?)",[ ]*?([A-Za-z_]*?)(,|\)|\{)/)
+    		elsif ($content =~ m/lang\.setObject\(["']((.)*?)["'],[ ]*?([A-Za-z_]*?)(,|\)|\{)/)
     		{
     			$key = $1;
     			$parent = $3;
@@ -302,6 +307,8 @@ sub getInheritanceInfo()
     			$objects = "";
     		}
     	}
+		
+		#print "@namespaces\n";
     	#if file creates new namespace then find its parent namespace
     	if (($key ne "") && ($parent ne "null") && ($parent ne "")) 
     	{
@@ -316,6 +323,8 @@ sub getInheritanceInfo()
     	close($fh);	
     }
 
+	#print Dumper(\%hash);
+	
 #loop through all namespaces and find all parents
     foreach my $k (keys %hash)
     {
