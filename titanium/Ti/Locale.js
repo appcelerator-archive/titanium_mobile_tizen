@@ -22,7 +22,7 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			return strings[key] || hint || key || "";
 		}
 
-		Object.defineProperty(window, "L", { value: getString, enumarable: true });
+		Object.defineProperty(window, "L", { value: getString, enumerable: true });
 
 		//lazy initialization of locale oriented formatters.
 		function initFormatterHelpers(){
@@ -78,12 +78,12 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			// if we are sure that parameter named "localeName" should contain name of target locale but it does not match rfc4647 we cant continue
 			if (!isValidLocaleName(localeName)) {
 				// in case you passed 3 parameters and second parameter is not valid locale name.
-				throw "Invalid locale name."; //todo: Do we need to localize error message?
+				throw "Invalid locale name.";
 			}
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
 
-			var numberInfo = localeNumberCurrencyInfo.getNumberInfoForLocale(localeName);
+			var numberInfo = localeNumberCurrencyInfo.getNumberInfoByLocale(localeName);
 			// if no pattern in parameters - create "default pattern" based on locale's data
 			if (!pattern) {
 				//to unify we just generating custom pattern if no one provided. like ###.###.###.###.###.###.###.###.###.###,#####################

@@ -44,11 +44,15 @@ var suites = [
 	{name: "ui/tableViewSection"},
 	{name: "ui/mobile-NavigationGroup"},
 	{name: "ui/tabGroup"},
+	{name: "ui/tab"},	
 	{name: "map"},
 	{name: "ui/image_view"},
 	{name: "ui/switch"},
 	{name: "ui/button"},
-	{name: "ui/picker"}
+	{name: "ui/picker"},
+	{name: "ui_TextArea"},
+	{name: "ui_TextField"},
+	{name: "ui/ScrollView"}
 ];
 
 if (Ti.Platform.osname === 'android') {
