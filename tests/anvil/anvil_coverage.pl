@@ -85,16 +85,8 @@ my %hash;
 
 #1 Main logic
 
-#2 Parse Anvil source code and generate a list of calls
-
 open DEBUG, ">debug.txt";
-
 my $dir = getcwd();
-
-#2 Get inheritance info
-
-print "Reading inheritance info...\n";
-getInheritanceInfo();
 
 
 #2 Read and parse JSCA
@@ -107,25 +99,34 @@ my $jsca_content = do {
     <JSCA>;
 };
 print "     Read " . length($jsca_content) . " bytes\n";
+
 print "\nParsing JSCA (20 seconds)...\n";
 $jsca = decode_json($jsca_content);
 
-# Generate dictionary: Functions --> Return types
 
-print "\nRemoving inherited types\n";
+#2 Remove inherited entities from $jsca
 
-getAllNamespacesFromInheritance();
-createFormatedHash();
+print "Reading inheritance info...\n";
+getInheritanceInfo();
+
+print "\nRemoving inherited entities...\n";
 removeInheritedTypes();
 
 
-#removeInheritedTypes();
+#2 Remove non-MobileWeb entities from $jsca
+
+print "\nRemoving non-MobileWeb entities...\n";
+removeNonMobileWeb();
+
+
+#2 Generate intermediate structures from $jsca
+
 print "\nAnalyzing JSCA...\n";
 genJscaFuncDictionary();
 print "     Found $countFunctionsAndProperties functions and properties\n";
 
 
-#2 Parse Anvil source code and generate a list of calls
+#2 Parse Anvil source code and generate a list of references to Titanium
 
 my $dir = getcwd();
 
@@ -138,8 +139,7 @@ open ALLANVIL, ">anvil_all_references.txt";
 foreach $call(sort keys %calls)
 {
     print ALLANVIL "$call\n";
-}
-
+}
 
 #2 Count Anvil references
 
@@ -157,6 +157,12 @@ foreach $type(keys %jscaTypesMembers)
 
 foreach $call(keys %calls)
 {
+    # don't count references to pure types; only count references to methods and functions.
+    if(defined($jscaTypes{$call}))
+    {
+        next;
+    }
+    
     foreach $type(keys %jscaTypesMembers)
     {
         if($call =~ m/$type\.[a-zA-Z0-9_]+$/)
@@ -175,8 +181,7 @@ foreach $type(sort keys %anvilTypesMembers)
     if($jscaTypesMembers{$type}==0)
     {
         next;
-    }
-    $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} = $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} . " $type";
+    }    $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} = $frequencies{$anvilTypesMembers{$type}/$jscaTypesMembers{$type}} . " $type";
 }
 
 # Write out
@@ -196,10 +201,16 @@ foreach $frequency(sort keys %frequencies)
 # Write out all Titanium references
 
 open ALLJSCAF, ">titanium_all_symbols.txt";
+open NONCOVERED, ">anvil_not_covered.txt";
 foreach $jscaprop(sort keys %jscaAll)
 {
     print ALLJSCAF "$jscaprop\n";
+    if(!defined($calls{$jscaprop}))
+    {
+        print NONCOVERED "$jscaprop\n";
+    }
 }
+
 
 # end of script
 
@@ -211,22 +222,42 @@ foreach $jscaprop(sort keys %jscaAll)
 
 sub getInheritanceInfo()
 {
-    my $dir = "./titanium";
+#get all parent namespaces recursively
+    sub get_all_parent_namespaces
+    {
+    	my $val = $_[0];
+    	
+    	$val =~ s/\//\./g;
+    	$val =~ s/"*//g;
+    	
+    	my $new_val = $hash{$val};
+    	
+    	if ($new_val ne "")
+    	{
+    		$val = $val . " => " . get_all_parent_namespaces($new_val);
+    	}
+    	else
+    	{
+    		$val
+    	}
+    }
+
+    my $dir = "c:/Users/Y.Pidstryhach/AppData/Roaming/Titanium/mobilesdk/win32/3.0.0_/mobileweb/titanium";
     my @files = ();
 
     my $file_pattern = ".*js";
 
-#Content of the file
+    #Content of the file
     my $content;
-#Variable for storing namespace. It will be key of the resulting hash
+    #Variable for storing namespace. It will be key of the resulting hash
     my $key;
-#Parent naespace for given namespace. It will be the value of hash
+    #Parent naespace for given namespace. It will be the value of hash
     my $value;
-#Parent object for current  namespace
+    #Parent object for current  namespace
     my $parent;
-#Array of all namespaces from define function
+    #Array of all namespaces from define function
     my @namespaces;
-#All objects representing namespaces from define function
+    #All objects representing namespaces from define function
     my @objects;
     my $index;
 
@@ -293,32 +324,59 @@ sub getInheritanceInfo()
     }
 }
 
-#get all parent namespaces recursively
-sub get_all_parent_namespaces
-{
-	my $val = $_[0];
-	
-	$val =~ s/\//\./g;
-	$val =~ s/"*//g;
-	
-	my $new_val = $hash{$val};
-	
-	if ($new_val ne "")
-	{
-		$val = $val . " => " . get_all_parent_namespaces($new_val);
-	}
-	else
-	{
-		$val
-	}
-}
-
-
 
 #1 Process JSCA
 
 sub removeInheritedTypes()
 {
+    sub getAllNamespacesFromInheritance()
+    {
+    	#array of parents for each namespace
+    	my @parents;
+    	my $index;
+    	
+    	foreach my $namespace (keys %inheritance)
+    	{
+    		#Adding namespaces if the don't exist in array
+    		$index = first { $allNamespaces[$_] eq $namespace } 0..$#allNamespaces;	
+    		push(@allNamespaces, $namespace) if ($index eq "");
+    		
+    		#Adding parents if they don't exist in array
+    		@parents = @{$inheritance{$namespace}};
+    		foreach my $parent (@parents)
+    		{
+    			$index = first { $allNamespaces[$_] eq $parent } 0..$#allNamespaces;	
+    			push(@allNamespaces, $parent) if ($index eq "");
+    		}
+    	}
+    }
+
+    sub createFormatedHash()
+    {
+    	#All titanium types
+    	my @types = @{$jsca->{types}};
+    	#Titanium namespace
+    	my $name;
+    	my $index;
+    	my %type;
+    	
+    	my %tempObj = ();
+    	
+    	for my $i(0 .. $#types)
+    	{
+    		%type = %{$types[$i]};
+    		#Get namespace name
+    		$name = $type{name};
+    		$name =~ s/Titanium/Ti/;
+    		$index = first { $allNamespaces[$_] eq $name } 0..$#allNamespaces;	
+    		$formatedInherited{$name} = {properties => $type{properties}, functions => $type{functions}, index => $i} if ($index ne "");
+    	}
+    	#print Dumper(\%formatedInherited);
+    }
+
+    getAllNamespacesFromInheritance();
+    createFormatedHash();
+
 	my @parents;
 	my %obj;
 	#All properties of the object
@@ -383,6 +441,7 @@ sub removeInheritedTypes()
 		{
 			%function = %{$functions[$i]};
 			$name = $function{name};
+
 			foreach my $parent (@parents)
 			{
 				%obj = %{$formatedInherited{$parent}};
@@ -406,63 +465,90 @@ sub removeInheritedTypes()
 	}
 }
 
-sub getAllNamespacesFromInheritance()
+
+# Remove non-MobileWeb types, properties and methods from %jsca.
+# Sets members of $jsca->types array to undef if they are not advertising
+# MobileWeb support.
+
+sub removeNonMobileWeb()
 {
-	#array of parents for each namespace
-	my @parents;
-	my $index;
-	
-	foreach my $namespace (keys %inheritance)
-	{
-		#Adding namespaces if the don't exist in array
-		$index = first { $allNamespaces[$_] eq $namespace } 0..$#allNamespaces;	
-		push(@allNamespaces, $namespace) if ($index eq "");
-		
-		#Adding parents if they don't exist in array
-		@parents = @{$inheritance{$namespace}};
-		foreach my $parent (@parents)
-		{
-			$index = first { $allNamespaces[$_] eq $parent } 0..$#allNamespaces;	
-			push(@allNamespaces, $parent) if ($index eq "");
-		}
-	}
+    sub isMW
+    {
+        my $hash = $_[0];
+        my @useragents = @{$hash->{userAgents}};
+        foreach $useragent(@useragents)
+        {
+            my $useragentstring = ${$useragent}{platform};
+            #print DEBUG "      usaragent=$useragentstring\n";
+            if($useragentstring eq 'mobileweb')
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    my @types = @{$jsca->{types}};
+    my $i = -1;
+    foreach $type(@types)
+    {
+        $i++;
+        my $typename = $type->{name};
+        if(!($typename =~ s/Titanium\./Ti./))
+        {
+            next;
+        }
+
+        if(isMW($type)==0)
+        {
+            ${$jsca->{types}}[$i] = undef;
+            #print DEBUG "         Deleted non-MW: $typename\n";
+            next;
+        }
+
+        # This type supports MobileWeb. Now, filter its methods and properties that don't.
+        my @properties = @{$type->{properties}};
+        my $j = -1;
+        foreach $property(@properties)
+        {
+            $j++;
+            if(isMW($property)==0)
+            {
+                delete ${$jsca->{types}}[$i]->{properties}[$j];
+            }
+        }
+
+        my @functions = @{$type->{functions}};
+        $j = -1;
+        foreach $function(@functions)
+        {
+            $j++;
+            if(isMW($function)==0)
+            {
+                delete ${$jsca->{types}}[$i]->{functions}[$j];
+            }
+        }
+    }
 }
 
-sub createFormatedHash()
-{
-	#All titanium types
-	my @types = @{$jsca->{types}};
-	#Titanium namespace
-	my $name;
-	my $index;
-	my %type;
-	
-	my %tempObj = ();
-	
-	for my $i(0 .. $#types)
-	{
-		%type = %{$types[$i]};
-		#Get namespace name
-		$name = $type{name};
-		$name =~ s/Titanium/Ti/;
-		$index = first { $allNamespaces[$_] eq $name } 0..$#allNamespaces;	
-		$formatedInherited{$name} = {properties => $type{properties}, functions => $type{functions}, index => $i} if ($index ne "");
-	}
-	#print Dumper(\%formatedInherited);
-}
 
 # Generate %jscaFunctionsAndProperties from $jsca
 
 sub genJscaFuncDictionary()
 {
-    print DEBUG "genJscaFuncDictionary\n";
+    #print DEBUG "genJscaFuncDictionary\n";
     my @types = @{$jsca->{types}};
-    print "     Found " . scalar (@types) . " types\n";
+    my $typecount = 0;
 
     foreach $type(@types)
     {
-        parseType($type);
+        if(defined($type))
+        {
+            $typecount++;
+            parseType($type);
+        }
     }
+    print "     Found $typecount types\n";
 }
 
 
@@ -549,12 +635,10 @@ sub process
     if($file eq '.' || $file eq '..')
     {
         return;
-    }
-    if($file =~ m/\.js$/)
+    }    if($file =~ m/\.js$/)
     {
         processjs($File::Find::name);
-    }
-}
+    }}
 
 
 # Process an ANvil source file (process() worker)
@@ -660,6 +744,5 @@ sub processjs()
             }
         }
     }
-}
-
+}
 
