@@ -1,6 +1,6 @@
 define(function() {
 	// ======================== Phone Number formatting ========================
-	//  General rules basically based on Android 4.1.1 code to match the results
+	// Based on Android 4.1.1 code
 
 	var japanesePhoneFormatter = null, // special formatter of JS numbers
 		FORMAT_UNKNOWN = 0, //use country code or don't format
