@@ -36,10 +36,17 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 
 		// Lazy initialization of locale number and currency format storage.
 		function initCurrentCalendarData(){
-			if (!localeCalendarInfo) localeCalendarInfo = require("Ti/_/Locale/Calendar/"+locale);
+			if (!localeCalendarInfo) {
+				localeCalendarInfo = require("Ti/_/Locale/Calendar/"+locale);
+				//if we did not loaded valid calendar with patterns - try load it from general
+				// Example: if no "ru-RU.js" file we can try to load "ru.js"
+				if (!localeCalendarInfo || !localeCalendarInfo.patterns){
+					localeCalendarInfo = require("Ti/_/Locale/Calendar/"+(locale.split('-')[0]));
+				}
+			}
 
 			//if we can't load target's locale calendar - use the default (en-US)
-			if (!localeCalendarInfo) 
+			if (!localeCalendarInfo || !localeCalendarInfo.patterns)
 			{
 				localeCalendarInfo = require("Ti/_/Locale/defaultCalendar");
 
@@ -67,7 +74,7 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			// with advanced validation of the first sub-tag.
 			// It does not validate name against ISO 639-1, ISO 639-2, ISO 639-3 and ISO 639-5.
 			function isValidLocaleName(localeName) {
-				var rfc4647Basic = "^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})+$";
+				var rfc4647Basic = "^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$"; //we accept only 2 letters code too.
 				return (('' + localeName).match(rfc4647Basic) != null);
 			};
 			if (!pattern) {

@@ -283,12 +283,30 @@ define(function() {
 			decimalDigits: lc[4]}
 	}
 
+	// retrieves item by name from numberCurrencyLocalizer. If provided only culture name (like de, not de-DE)
+	// first acceptable match will be returned. If localeName can't be resolved in any cale - defaultItem will be returned.
+	function getLocaleItem(localeName)	{
+		var result = numberCurrencyLocalizer[localeName];
+
+		if (!result){
+			// trying to match localeName as a first part of name (no country code in locale)
+			localeName += "-";
+			for (var lName in numberCurrencyLocalizer) {
+				if (lName.slice(0, localeName) == localeName){
+					result = numberCurrencyLocalizer[lName];
+					break;
+				}
+			}
+		}
+		return result || defaultItem;
+	}
+
 	return {
 		getNumberInfoByLocale: function (locale) {
-			return unpackNumberInfo( numberCurrencyLocalizer[locale] || defaultItem);
+			return unpackNumberInfo(getLocaleItem(locale));
 		},
 		getCurrencyInfoByLocale: function (locale) {
-			return unpackCurrencyInfo(numberCurrencyLocalizer[locale] || defaultItem);
+			return unpackCurrencyInfo(getLocaleItem(locale));
 		},
 		getCurrencyInfoByCode: function (currencyCode) {
 			var targetCode = currencyCode.toUpperCase(),
