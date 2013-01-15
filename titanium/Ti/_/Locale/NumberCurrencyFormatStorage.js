@@ -292,7 +292,7 @@ define(function() {
 			// trying to match localeName as a first part of name (no country code in locale)
 			localeName += "-";
 			for (var lName in numberCurrencyLocalizer) {
-				if (lName.slice(0, localeName) == localeName){
+				if (lName.slice(0, localeName.length) == localeName){
 					result = numberCurrencyLocalizer[lName];
 					break;
 				}
