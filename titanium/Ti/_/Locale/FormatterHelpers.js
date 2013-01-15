@@ -55,7 +55,7 @@ define(function() {
 					cachedGroupDivider = '';
 			}
 		}
-		//if we are not limited to pattern Lenght - add all not added digits
+		//if we are not limited to pattern Lengths - add all not added digits
 		if (!limitResultToPatternLength) {
 			for (var j = valueIndex; j >= 0; j--) {
 				result = getItemFromArray(vArray, j, '') + result;
@@ -127,8 +127,8 @@ define(function() {
 	// see comments in NumberCurrencyFormatStorage.js.
 	// Note: Function is used only with regular numbers (not phone numbers).
 	function generateFormatPattern(formatInfo, maxDigitsInPattern) {
-		function stringOfChar(char, lenght){
-			return (lenght > 0) ? (new Array(lenght + 1)).join(char): '';
+		function stringOfChar(char, l){
+			return (l > 0) ? (new Array(l + 1)).join(char): '';
 		}
 
 		// Group sizes are used to convert large numbers like 123456789 into locale specific format like 123,456,789.
@@ -259,9 +259,9 @@ define(function() {
 			return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
 		};
 
-		function appendPreOrPostMatch( preMatch, strings ) {
+		function appendPreOrPostMatch( preMatch, result ) {
 			// appends pre- and post- token match strings (text from pattern between known pattern parts)
-			// escaped chars adding to "ret" object after unescapin).
+			// escaped chars ("\" and "'") adding to "result" object after unescape).
 			// Returns a single quote count which is used to determine if the token occurs in a string literal.
 			var quoteCount = 0,
 				escaped = false,
@@ -273,7 +273,7 @@ define(function() {
 				switch ( c ) {
 					case "\'":
 						if ( escaped ) {
-							strings.push( "\'" );
+							result.push( c );
 						}
 						else {
 							quoteCount++;
@@ -282,12 +282,12 @@ define(function() {
 						break;
 					case '\\':
 						if ( escaped ) {
-							strings.push( '\\' );
+							result.push( '\\' );
 						}
 						escaped = !escaped;
 						break;
 					default:
-						strings.push( c );
+						result.push( c );
 						escaped = false;
 						break;
 				}
