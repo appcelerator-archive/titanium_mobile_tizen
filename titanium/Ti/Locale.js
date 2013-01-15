@@ -97,16 +97,16 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			// If there is no pattern in the parameters, create a "default pattern" based on locale's data,
 			// using group sizes.
 			if (!pattern) {
-				pattern = formatterHelpers.generatePatternFromGroupSizes(numberInfo.groupSizes, (""+numberValue).length * 2);
+				pattern = formatterHelpers.generateFormatPattern(numberInfo, (""+numberValue).length * 2);
 			}
 			return formatterHelpers.formatDecimal(numberValue, pattern, numberInfo);
 		};
 
-		// Format a number into a locale specific currency format. TargetLocale is optional and only for mobileWeb-based platforms
-		String.formatCurrency = function (amt, targetLocale) {
+		// Format a number into a locale specific currency format. 
+		String.formatCurrency = function (amt) {
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
-			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(targetLocale || locale)) || amt;
+			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale)) || amt;
 		};
 
 		// Expands a format name (for example, "d" or "D") into the full pattern string.

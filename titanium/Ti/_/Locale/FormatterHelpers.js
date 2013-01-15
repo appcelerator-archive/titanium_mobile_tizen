@@ -19,7 +19,7 @@ define(function() {
 	//      - if true, the number will be truncated;
 	//      - if false, the size of the pattern will be overruled.
 	function formatSimpleInteger(simplePattern, intValue, groupDivider, negativeSignSymbol, limitResultToPatternLength) {
-		var vArray = ('' + Math.abs(intValue)).split(''),
+		var vArray = (intValue=='')?[]:('' + Math.abs(intValue)).split(''),
 		    pArray = ('' + simplePattern).split(''),
 		    valueIndex = vArray.length - 1,
 		    result = '',
@@ -80,13 +80,15 @@ define(function() {
 			return s.split('').reverse().join('');
 		};
 
-		if (!p || isNaN(+v)) {
+		// we are not formatting anything if:  no string pattern provided or provided value is not a number
+		// or provided value is too big to format it without exponent.
+		if (!p  || isNaN(+v) || !(''+v).match(/^[-]{0,1}\d+[,.]{0,1}\d+$/) ) {
 			return v; //return as it is.
 		}
 
 		// This function will work with the absolute value of the number, even if it's negative. 
-		// If the number is negative, "negativeSign" flag is turned on, and the minus sign is 
-		// later inserted in the correct location.
+		// If the number is negative, "negativeSign" flag is turned on, and the negative pattern
+		// will be used to make in correct for specified locale.
 		var negativeSign = (v < 0) ? '-' : '', 
 			valueParts = ('' + v).replace('-', '').split('.'), 
 			vInt = valueParts[0] || '',   // integer part.
@@ -102,7 +104,8 @@ define(function() {
 				// 1) fractional part has no group dividers!
 				// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
 			    fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
-			resFract = localeNumberInfo.decimalSeparator + reverseString(fractResultReversed);
+
+			resFract = (fractResultReversed ? localeNumberInfo.decimalSeparator : "") + reverseString(fractResultReversed) ;
 		}
 
 		if (ma.length > 0) {
@@ -110,7 +113,7 @@ define(function() {
 			resInt = formatSimpleInteger(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false);
 		}
 
-		var result = (resInt.length > 0) ? (resInt + resFract) : ((resFract.length > 0) ? resFract : 0);
+		var result = ((resInt.length > 0)?resInt:"0")+resFract;
 
 		//if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
 		if (negativeSign && (result.indexOf('-') == -1)) {
@@ -120,28 +123,36 @@ define(function() {
 		return result;
 	};
 
-	// Group sizes are used to convert large numbers like 123456789 into more readable numbers like 123,456,789.
-	// Format of group sizes is similar to this:
-	// http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
-	// For the pattern format, see comment in NumberCurrencyFormatStorage.js.
+	// formatInfo - currency or number format info object. For the pattern format,
+	// see comments in NumberCurrencyFormatStorage.js.
 	// Note: Function is used only with regular numbers (not phone numbers).
-	function generatePatternFromGroupSizes(groupSizes, maxDigitsInPattern) {
+	function generateFormatPattern(formatInfo, maxDigitsInPattern) {
+		function stringOfChar(char, lenght){
+			return (lenght > 0) ? (new Array(lenght + 1)).join(char): '';
+		}
+
+		// Group sizes are used to convert large numbers like 123456789 into locale specific format like 123,456,789.
+		// Format of group sizes is similar to this:
+		// http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
 		var gIndex = 0,
+			groupSizes = formatInfo.groupSizes,
+			mandatoryDecimalDigits = formatInfo.decimalDigits,
 			digitsBeforeSign = maxDigitsInPattern || 20,
-			digitsAfterSign = maxDigitsInPattern || 20,
+			digitsAfterSign = (maxDigitsInPattern || 20) - mandatoryDecimalDigits,
 			allGroups = [];
 
-		//converting Micorsoft's notation to pattern
 		while (0 < digitsBeforeSign) {
 			var currentGroupSize = (groupSizes[gIndex++] || 0) || digitsBeforeSign;
-			allGroups.unshift((new Array(currentGroupSize + 1)).join('#'));
+			allGroups.unshift(stringOfChar('#', currentGroupSize));
 			digitsBeforeSign -= currentGroupSize;
 
 			if (groupSizes.length >= gIndex) {
 				gIndex = groupSizes.length - 1;
 			}
 		}
-		return allGroups.join(',') + '.' + (new Array(digitsAfterSign + 1)).join('#');
+
+		var fractionalPattern = stringOfChar('0', mandatoryDecimalDigits) + stringOfChar('#', digitsAfterSign);
+		return allGroups.join(',') + '.' + fractionalPattern;
 	};
 
 	// Formats provided value as currency.
@@ -155,7 +166,7 @@ define(function() {
 			patternParts = /n|\$|-|%/g,
 			res = '';
 
-		number = formatDecimalInternal(number, generatePatternFromGroupSizes(currencyFormatInfo.groupSizes), currencyFormatInfo);
+		number = formatDecimalInternal(number, generateFormatPattern(currencyFormatInfo), currencyFormatInfo);
 
 		for (; ; ) {
 			var index = patternParts.lastIndex,
@@ -202,11 +213,9 @@ define(function() {
 			foundDay,
 			checkedDay,
 			dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
-
 			// If the format contains a string in quotes, the string must go to the
-			// output date string verbatim. 'quoteCount" is used in this logic.
+			// output date string verbatim. 'quoteCount' is used in this logic.
 			quoteCount = 0,
-
 			// a "token" is a logical part of the date string (for example, year or month)
 			tokenRegExp = getTokenRegExp();
 
@@ -246,11 +255,13 @@ define(function() {
 
 		function getTokenRegExp() {
 			// regular expression for matching date and time tokens in format strings.
+			//'g' key allow us do multiply searches on regExp in a loop
 			return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
 		};
 
 		function appendPreOrPostMatch( preMatch, strings ) {
-			// appends pre- and post- token match strings while removing escaped characters.
+			// appends pre- and post- token match strings (text from pattern between known pattern parts)
+			// escaped chars adding to "ret" object after unescapin).
 			// Returns a single quote count which is used to determine if the token occurs in a string literal.
 			var quoteCount = 0,
 				escaped = false,
@@ -413,7 +424,7 @@ define(function() {
 
 	return {
 		formatDecimal: formatDecimalInternal,
-		generatePatternFromGroupSizes: generatePatternFromGroupSizes,
+		generateFormatPattern: generateFormatPattern,
 		formatCurrency: formatCurrencyInternal,
 		formatDate: formatDateInternal
 	};

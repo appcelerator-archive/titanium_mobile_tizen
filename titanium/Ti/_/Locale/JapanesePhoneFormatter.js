@@ -143,7 +143,7 @@ define(function() {
 			s = s + "";
 			// validate basic rules: number starts from +81 or starts from 0. Number has only digits, dashes or spaces
 			if (!s.match(/^(([\+][8][1])|([0]))([\d -]{3,15})$/)) {
-				//console.log("Phone number '" + s + "' is not valid Japanese phone number.");
+				//provided phone number is not valid Japanese phone number.
 				return s;
 			}
 
