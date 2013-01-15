@@ -259,21 +259,26 @@ define(function() {
 			return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
 		};
 
-		function appendPreOrPostMatch( preMatch, result ) {
-			// appends pre- and post- token match strings (text from pattern between known pattern parts)
-			// escaped chars ("\" and "'") adding to "result" object after unescape).
-			// Returns a single quote count which is used to determine if the token occurs in a string literal.
-			var quoteCount = 0,
-				escaped = false,
-				i,
+		var quoteCount = 0,
+			escaped = false;
+
+		for ( ; ; ) {
+			// Save the current index
+			var index = tokenRegExp.lastIndex,
+				// Look for the next pattern
+				ar = tokenRegExp.exec( format),
+				// Append the text before the pattern (or the end of the string if not found)
+				preMatch = format.slice( index, ar ? ar.index : format.length),
 				c;
 
-			for (i = 0, il = preMatch.length; i < il; i++ ) {
+			// add to result part from pattern before match, unescape (and count) single quotes, and '\'
+			// single quote count is used to determine if the token occurs in a string literal.
+			for (var i = 0, il = preMatch.length; i < il; i++ ) {
 				c = preMatch.charAt( i );
 				switch ( c ) {
 					case "\'":
 						if ( escaped ) {
-							result.push( c );
+							ret.push( c );
 						}
 						else {
 							quoteCount++;
@@ -282,28 +287,16 @@ define(function() {
 						break;
 					case '\\':
 						if ( escaped ) {
-							result.push( '\\' );
+							ret.push( '\\' );
 						}
 						escaped = !escaped;
 						break;
 					default:
-						result.push( c );
+						ret.push( c );
 						escaped = false;
 						break;
 				}
 			}
-			return quoteCount;
-		};
-
-		for ( ; ; ) {
-			// Save the current index
-			var index = tokenRegExp.lastIndex,
-				// Look for the next pattern
-				ar = tokenRegExp.exec( format),
-				// Append the text before the pattern (or the end of the string if not found)
-				preMatch = format.slice( index, ar ? ar.index : format.length );
-
-			quoteCount += appendPreOrPostMatch( preMatch, ret );
 
 			if ( !ar ) {
 				break;

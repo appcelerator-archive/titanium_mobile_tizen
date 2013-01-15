@@ -27,7 +27,8 @@ function PlatformWindow(title) {
 		{title:'JS search', hasChild:true, test:'ui/common/platform/search_case_insensitive'},
 		{title:'Clipboard', hasChild:true, test:'ui/common/platform/clipboard'},
 		{title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Locale', hasChild:true, test:'ui/common/platform/locale'}
+		{title:'Locale selectable', hasChild:true, test:'ui/common/platform/locale'},
+		{title:'Locale system', hasChild:true, test:'ui/common/platform/localeStatic'}
 	];
 	
 	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
