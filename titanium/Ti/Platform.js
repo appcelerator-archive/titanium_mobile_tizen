@@ -18,9 +18,8 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 	function saveMid() {
 		if (!unloaded) {
 			unloaded = 1;
-			var d = new Date();
-			d.setTime(d.getTime() + 63072e7); // forever in mobile terms
-			doc.cookie = midName + "=" + encodeURIComponent(mid) + "; expires=" + d.toUTCString();
+			// expire cookie in 20 years... forever in mobile terms
+			doc.cookie = midName + "=" + encodeURIComponent(mid) + "; expires=" + (new Date(Date.now() + 63072e7)).toUTCString();
 			localStorage.setItem(midName, mid);
 		}
 	};
@@ -110,13 +109,13 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 			Platform.constants.__values__.address = undefined;
 		}
 	}
-	
+
 	on(window, "beforeunload", saveMid);
 	on(window, "unload", saveMid);
 
-	var nav = navigator;
-	var battery = nav.battery || nav.webkitBattery || nav.mozBattery;
-	var Platform = lang.setObject("Ti.Platform", Evented, {
+	var nav = navigator,
+		battery = nav.battery || nav.webkitBattery || nav.mozBattery,
+		Platform = lang.setObject("Ti.Platform", Evented, {
 
 			canOpenURL: function(url) {
 				return !!url;
@@ -167,8 +166,8 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				BATTERY_STATE_UNKNOWN: -1,
 				BATTERY_STATE_UNPLUGGED: 0,
 				address: void 0,
-				architecture: void 0, // not possible on Tizen? 
-				availableMemory: void 0, // not possible on Tizen?
+				architecture: void 0,
+				availableMemory: void 0,
 				batteryLevel: function() {
 					return this.batteryMonitoring && battery ? battery.level * 100 : -1;
 				},
@@ -180,9 +179,9 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				locale: Locale,
 				macaddress: void 0,
 				model: nav.userAgent,
-                                name: "tizen",
+				name: "tizen",
 				netmask: void 0,
-                                osname: "tizen",
+				osname: "tizen",
 				ostype: nav.platform,
 				runtime: browser.runtime,
 				processorCount: void 0,
@@ -201,4 +200,5 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 
 	InitPlatformData();
 	return Platform;
+
 });
