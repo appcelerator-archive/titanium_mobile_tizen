@@ -441,8 +441,9 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/lang', 'Ti/App/Propertie
 
 		onload();
 	};
-
-	require(['//maps.googleapis.com/maps/api/js?key=' + Properties.getString('ti.map.apikey', '') + '&sensor=true&callback=TiMapViewInit'], 0, onload);
+	
+	//added http: because we need to load this page from http or https protocol and do not from file: (file: will be default if we load current page from local) 
+	require(['http://maps.googleapis.com/maps/api/js?key=' + Properties.getString('ti.map.apikey', '') + '&sensor=true&callback=TiMapViewInit'], 0, onload);
 
 	return MapView;
 
