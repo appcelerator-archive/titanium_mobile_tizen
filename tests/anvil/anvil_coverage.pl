@@ -46,6 +46,8 @@ my $countFunctionsAndProperties = 0;    # counter of processed properties
 
 my $jsca;                               # Titanium JSCA file as a perl object
 
+my $superclasses;
+
 # All Titanium functions and properties.
 # Hash: "Ti.XXXX.YYYY" --> "Ti.AAAA.BBBB", where Ti.XXXX.YYYY is a function/property,
 # and Ti.AAAA.BBBB is its return type. Only for functions/properties that have
@@ -100,8 +102,19 @@ my $jsca_content = do {
 };
 print "     Read " . length($jsca_content) . " bytes\n";
 
+my $superclasses_content = do {
+	local $/ = undef;
+	open SUPERCLASSES, "superclasses.json" or die "could not open $file $!";
+	<SUPERCLASSES>
+};
+
+$superclasses = decode_json($superclasses_content);
+
+
+
 print "\nParsing JSCA (20 seconds)...\n";
 $jsca = decode_json($jsca_content);
+
 
 
 #2 Remove inherited entities from $jsca
@@ -136,7 +149,7 @@ find(\&process, $dir);
 print "     Parsed $files files\n";
 print "     Found references to " . scalar(keys %calls) . " entities \n";
 
-removeGettersAndSetters();
+unifyPropertyCalls();
 
 open ALLANVIL, ">anvil_all_references.txt";
 foreach $call(sort keys %calls)
@@ -387,6 +400,78 @@ sub removeInheritedTypes()
     	}
     	#print Dumper(\%formatedInherited);
     }
+	
+	my %super_properties = ();
+	my %super_functions = ();
+	
+	#create and fill list with properties from superclass
+	foreach my $prop (@{$superclasses->{properties}})
+	{
+		
+		$super_properties{$prop->{name}} = " ";
+	}
+	
+	#create and fill list with methods from superclass
+	foreach my $func (@{$superclasses->{functions}})
+	{
+		
+		$super_functions{$func->{name}} = " ";
+	}		
+	
+	# Removes methods and properties from superclasses.json 
+	# (in case the inheritance information is incomplete, this file allows to specify a "virtual ancestor"
+	# for all Titanium namespaces).
+	sub removeSuperProperties
+	{
+		my @types = @{$jsca->{types}};
+		#all properties for current namespace
+		my @properties = [];
+		#all functions for current namespace
+		my @functions = [];
+		#property or function name
+		my $name = "";
+		my $namespace = "";
+		my $i = -1;
+		my $j = 0;
+		foreach my $type (@types)
+		{
+			$i++;
+			$namespace = $type->{name};
+			if(!($namespace =~ s/Titanium\./Ti./))
+			{
+				next;
+			}
+
+			@properties = @{$type->{properties}};
+			@functions = @{$type->{functions}};
+			$j = -1;
+			foreach my $property(@properties)
+			{
+				$j++;
+				$name = $property->{name};
+				#if property is inherited from superclass - remove it
+				if (exists $super_properties{$name})
+				{
+					delete $jsca->{types}[$i]->{properties}[$j];
+				}
+			}
+			
+			$j = -1;
+			foreach my $function(@functions)
+			{
+				$j++;
+				$name = $function->{name};
+				#if method is inherited from superclass - remove it
+				if (exists $super_functions{$name})
+				{
+					delete $jsca->{types}[$i]->{functions}[$j];
+				}
+			}			
+		}
+
+	}
+	
+	
 
     getAllNamespacesFromInheritance();
     createFormatedHash();
@@ -413,6 +498,9 @@ sub removeInheritedTypes()
 	my $parent_name = "";
 	my $index = 0;
 	
+	
+	removeSuperProperties();
+	
 	my @types = @{$jsca->{types}};
 	
 	foreach my $key(keys %inheritance)
@@ -429,19 +517,20 @@ sub removeInheritedTypes()
 		{
 			%property = %{$propreties[$i]};
 			$name = $property{name};
-
+			
+			#loop through all pparents
 			foreach my $parent (@parents)
 			{
 				%obj = %{$formatedInherited{$parent}};
+				#get parent properties
 				@parent_properties = @{$obj{properties}};
+				#loop through all parent properties
 				for my $j(0 .. $#parent_properties)
 				{
 					%parent_property = %{$parent_properties[$j]};
-					
-					if ($name eq $parent_property{name})
+					#if property is inherited - remove it
+					if (($name eq $parent_property{name}) or (exists $super_properties{$name}))
 					{
-						print DEBUG "Remove property " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
-						print DEBUG "Index = " . $index . " property index = " . $i . "\n";
 						my %o = %{$types[$index]};
 						delete $o{properties}[$i];
 						goto AFTER_PROPERTIES;
@@ -450,24 +539,25 @@ sub removeInheritedTypes()
 			}
 			AFTER_PROPERTIES:
 		}
-		#Looping through parents
+		#looping through all functions
 		for my $i(0 .. $#functions)
 		{
 			%function = %{$functions[$i]};
 			$name = $function{name};
-
+			
+			#Looping through parents
 			foreach my $parent (@parents)
 			{
 				%obj = %{$formatedInherited{$parent}};
 				@parent_functions = @{$obj{functions}};
+				#find all parent functions
 				for my $j(0 .. $#parent_functions)
 				{
 					%parent_function = %{$parent_functions[$j]};
 					
-					if ($name eq $parent_function{name})
+					#if function is inherited - remove it
+					if (($name eq $parent_function{name}) or (exists $super_functions{$name}))
 					{
-						print DEBUG "Remove function " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
-						print DEBUG "Index = " . $index . " function index = " . $i . "\n";
 						my %o = %{$types[$index]};
 						delete $o{functions}[$i];
 						goto AFTER_FUNCTIONS;
@@ -479,8 +569,10 @@ sub removeInheritedTypes()
 	}
 }
 
-# Remove getters and setters from tested properties
-sub removeGettersAndSetters()
+# If reference to Ti.x are referenced (where x is a property), assume Ti.getX and Ti.getX are also referenced.
+# If reference to either Ti.getX or Ti.setX is referenced, assume Ti.x is also referenced.
+# (Referenced = is contained in %calls.)
+sub unifyPropertyCalls()
 {
 	my (@properties, @functions);
 	my (%property, %function);
@@ -507,9 +599,9 @@ sub removeGettersAndSetters()
 			$getter = $namespace . ".get" . ucfirst($property->{name});
 			$setter = $namespace . ".set" . ucfirst($property->{name});
 
+			#if property is tested then add getter and setter
 			if (exists $calls{$name})
 			{
-				print DEBUG "Added methods " . $getter . "  from " . $name . " property\n";
 				if(defined($jscaAll{$getter}))
 				{
 					$calls{$getter} = " ";
@@ -522,7 +614,6 @@ sub removeGettersAndSetters()
 			#if getter exists then add proprety
 			elsif (exists $calls{$getter})
 			{
-				print DEBUG "Added property " . $name . " from method " . $getter . "\n";
 				$calls{$name} = " ";
 				#if proprty is not readonly - add setter
 				if (defined($jscaAll{$setter}))
@@ -533,7 +624,6 @@ sub removeGettersAndSetters()
 			#if setter exists - add property and getter
 			elsif (exists $calls{$setter})
 			{
-				print DEBUG "Added property " . $name . " from method " . $setter . "\n";
 				$calls{$name} = " ";
 				$calls{$getter} = " ";
 			}

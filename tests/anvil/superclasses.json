@@ -1,0 +1,13 @@
+{
+	"functions": [
+		{"name": "addEventListener"},
+		{"name": "applyProperties"},
+		{"name": "fireEvent"},
+		{"name": "getBubbleParent"},
+		{"name": "removeEventListener"},
+		{"name": "setBubbleParent"}
+	],
+	"properties": [
+		{"name": "bubbleParent"}
+	]
+}
