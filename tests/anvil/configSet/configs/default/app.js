@@ -52,7 +52,8 @@ var suites = [
 	{name: "ui/picker"},
 	{name: "ui_TextArea"},
 	{name: "ui_TextField"},
-	{name: "ui/ScrollView"}
+	{name: "ui/ScrollView"},
+	{name: "ui_animation"}
 ];
 
 if (Ti.Platform.osname === 'android') {
