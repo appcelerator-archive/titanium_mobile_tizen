@@ -6,34 +6,36 @@ function PlatformWindow(title) {
 	
 	var isMobileWeb = Ti.Platform.osname === 'mobileweb';
 	
+	var data = [];
+	
+	if (Titanium.Platform.osname === 'tizen') {
+		data.push({title: 'Tizen', hasChild: true,  test: 'ui/common/platform/tizen'});
+	}	
 	// create table view data object
-	var data = [
-		{title:'XHR', hasChild:true, test:'ui/common/platform/xhr'},
-		{title:'Network', hasChild:true, test:'ui/common/platform/network'},
-		{title:'Common JS', hasChild:true, test:'ui/common/platform/commonjs'},
-		{title:'Logging', hasChild:true, test:'ui/common/platform/logging'},
-		{title:'Application Data', hasChild:!isMobileWeb, test:'ui/common/platform/app_data', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Application Events', hasChild:!isMobileWeb, test:'ui/common/platform/app_events', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Properties API', hasChild:true, test:'ui/common/platform/properties'},
-		{title:'Database', hasChild:!isMobileWeb, test:'ui/common/platform/database', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Platform Data', hasChild:true, test:'ui/common/platform/platform'},
-		{title:'Filesystem', hasChild:true, test:'ui/common/platform/filesystem'},
-		{title:'JS Includes', hasChild:true, test:'ui/common/platform/js_include'},
-		{title:'Set Timeout (timer)', hasChild:true, test:'ui/common/platform/set_timeout'},
-		{title:'Set Interval (timer)', hasChild:true, test:'ui/common/platform/set_interval'},
-		{title:'XML RSS', hasChild:!isMobileWeb, test:'ui/common/platform/xml_rss', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Utils', hasChild:true, test:'ui/common/platform/utils'},
-		{title:'JSON', hasChild:true, test:'ui/common/platform/json'},
-		{title:'JS search', hasChild:true, test:'ui/common/platform/search_case_insensitive'},
-		{title:'Clipboard', hasChild:true, test:'ui/common/platform/clipboard'},
-		{title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
-		{title:'Locale selectable', hasChild:true, test:'ui/common/platform/locale'},
-		{title:'Locale system', hasChild:true, test:'ui/common/platform/localeStatic'}
-	];
+	data.push({title:'XHR', hasChild:true, test:'ui/common/platform/xhr'});
+	data.push({title:'Network', hasChild:true, test:'ui/common/platform/network'});
+	data.push({title:'Common JS', hasChild:true, test:'ui/common/platform/commonjs'});
+	data.push({title:'Logging', hasChild:true, test:'ui/common/platform/logging'});
+	data.push({title:'Application Data', hasChild:!isMobileWeb, test:'ui/common/platform/app_data', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	data.push({title:'Application Events', hasChild:!isMobileWeb, test:'ui/common/platform/app_events', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	data.push({title:'Properties API', hasChild:true, test:'ui/common/platform/properties'});
+	data.push({title:'Database', hasChild:!isMobileWeb, test:'ui/common/platform/database', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	data.push({title:'Platform Data', hasChild:true, test:'ui/common/platform/platform'});
+	data.push({title:'Filesystem', hasChild:true, test:'ui/common/platform/filesystem'});
+	data.push({title:'JS Includes', hasChild:true, test:'ui/common/platform/js_include'});
+	data.push({title:'Set Timeout (timer)', hasChild:true, test:'ui/common/platform/set_timeout'});
+	data.push({title:'Set Interval (timer)', hasChild:true, test:'ui/common/platform/set_interval'});
+	data.push({title:'XML RSS', hasChild:!isMobileWeb, test:'ui/common/platform/xml_rss', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	data.push({title:'Utils', hasChild:true, test:'ui/common/platform/utils'});
+	data.push({title:'JSON', hasChild:true, test:'ui/common/platform/json'});
+	data.push({title:'JS search', hasChild:true, test:'ui/common/platform/search_case_insensitive'});
+	data.push({title:'Clipboard', hasChild:true, test:'ui/common/platform/clipboard'});
+	data.push({title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
 	
 	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
 		data.push({title:'Passing Data (windows)', hasChild:true, test:'ui/common/platform/custom_properties'});
 	}
+	
 	
 	if (Titanium.Platform.name == 'iPhone OS') {
 		data.push({title:'Bonjour', hasChild:true, test:'ui/handheld/ios/platform/bonjour'});
@@ -42,6 +44,7 @@ function PlatformWindow(title) {
 	if (Titanium.Platform.osname === 'android') {
 		data.push({title: 'Android services', hasChild:true, test:'ui/handheld/android/platform/android_services'});
 	}
+	
 	
 	// create table view
 	for (var i = 0; i < data.length; i++ ) { data[i].color = '#000'; data[i].font = {fontWeight:'bold'} };
@@ -54,7 +57,6 @@ function PlatformWindow(title) {
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title:e.rowData.title,containingTab:self.containingTab});
-			win.containingTab = self.containingTab;
 			self.containingTab.open(win,{animated:true});
 		}
 	});
