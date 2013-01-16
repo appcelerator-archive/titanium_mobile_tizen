@@ -223,13 +223,11 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget
 					return value;
 				}
 			},
-			
+
 			defaultImage: {
 				set: function(value) {
 					if (this._children.length == 0) {
-						this._removeAllChildren();
-						this._images = void 0;
-						
+						this._images = void 0;						
 						this._add(this._createImage(
 							value, 
 							function() {

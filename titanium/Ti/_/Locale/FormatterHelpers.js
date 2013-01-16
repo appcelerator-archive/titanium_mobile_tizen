@@ -1,5 +1,6 @@
 define(function() {
-	// Function return value from array with provided index (even value is undefined) but if index is wrong - returns provided default vaule.
+	// Function returns a value from the array with the provided index (even if the value is undefined),
+	// bug if the index is wrong - returns provided default vaule.
 	// a - target array
 	// i - index of element ot get
 	// d - default value if no such element in array
@@ -8,49 +9,53 @@ define(function() {
 	};
 
 	// Internal function!
-	// simplePattern - pattern that may have only '#', '0', and '-' as valued symbols
+	// simplePattern - pattern that may have only '#', '0', and '-' as value symbols
 	// intValue - integer value to format
-	// groupDevider - locale specific group devider.
-	// negativeSignSymbol - If pattern has "-" symbol it will be replaces with this string. For positive values should be empty string.
-	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter allow or truncate string or overflow pattern
-	function formatSimpleInteger(simplePattern, intValue, groupDevider, negativeSignSymbol, limitResultToPatternLength) {
-		var vArray = ('' + Math.abs(intValue)).split(''),
+	// groupDivider - locale specific group divider.
+	// negativeSignSymbol - If the pattern has "-" symbol, it will be replaced with this string. 
+	//      For positive values should be empty string.
+	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter 
+	//      allows to select what to do:
+	//      - if true, the number will be truncated;
+	//      - if false, the size of the pattern will be overruled.
+	function formatSimpleInteger(simplePattern, intValue, groupDivider, negativeSignSymbol, limitResultToPatternLength) {
+		var vArray = (intValue=='')?[]:('' + Math.abs(intValue)).split(''),
 		    pArray = ('' + simplePattern).split(''),
 		    valueIndex = vArray.length - 1,
 		    result = '',
 			patternChar,
 			i,
-			cachedGroupDevider = ''; //we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
+			cachedGroupDivider = ''; //we can add it only with "next digit", not alone as ",000,001.1" is wrong. should be "000,001.1". so we only cache it not adding.
 
 		for (i = (pArray.length - 1); i >= 0; i--) {
 			patternChar = pArray[i];
 			switch (patternChar) {
 				case '0':
-					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDevider + result;
-					cachedGroupDevider = '';
+					result = getItemFromArray(vArray, valueIndex--, '0') + cachedGroupDivider + result;
+					cachedGroupDivider = '';
 					break;
 				case '#':
 					var currentChar = getItemFromArray(vArray, valueIndex--, '');
-					// adding cachedGroupDevider only in case we have anything to add except it.
+					// adding cachedGroupDivider only in case we have anything to add except it.
 					if (currentChar != '') {
-						currentChar = currentChar + cachedGroupDevider;
+						currentChar = currentChar + cachedGroupDivider;
 					}
 					result = currentChar + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 					break;
 				case '-':
 					result = negativeSignSymbol + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 					break;
 				case ',':
-					cachedGroupDevider = groupDevider;
+					cachedGroupDivider = groupDivider;
 					break;
 				default:
 					result = patternChar + result;
-					cachedGroupDevider = '';
+					cachedGroupDivider = '';
 			}
 		}
-		//if we are not limited to pattern Lenght - add all not added digits
+		//if we are not limited to pattern Lengths - add all not added digits
 		if (!limitResultToPatternLength) {
 			for (var j = valueIndex; j >= 0; j--) {
 				result = getItemFromArray(vArray, j, '') + result;
@@ -59,7 +64,7 @@ define(function() {
 		return result;
 	};
 
-	// pattern format
+	// Pattern format:
 	// '0' - Digit
 	// '#' - Digit, zero shows as absent
 	// '.' - Decimal separator or monetary decimal separator
@@ -75,14 +80,19 @@ define(function() {
 			return s.split('').reverse().join('');
 		};
 
-		if (!p || isNaN(+v)) {
+		// we are not formatting anything if:  no string pattern provided or provided value is not a number
+		// or provided value is too big to format it without exponent.
+		if (!p  || isNaN(+v) || !(''+v).match(/^[-]{0,1}\d+[,.]{0,1}\d+$/) ) {
 			return v; //return as it is.
 		}
 
-		var negativeSign = (v < 0) ? '-' : '', //process only abs(), and turn on flag.
-			valueParts = ('' + v).replace('-', '').split('.'),  //safe remove sign as Math.abs has some accuracy for very small floats
-			vInt = valueParts[0] || '',   // getting integer part.
-			vFract = valueParts[1] || '', // getting fractional part.
+		// This function will work with the absolute value of the number, even if it's negative. 
+		// If the number is negative, "negativeSign" flag is turned on, and the negative pattern
+		// will be used to make in correct for specified locale.
+		var negativeSign = (v < 0) ? '-' : '', 
+			valueParts = ('' + v).replace('-', '').split('.'), 
+			vInt = valueParts[0] || '',   // integer part.
+			vFract = valueParts[1] || '', // fractional part.
 			resFract = '', //fractional part result
 			resInt = '', //integer part result
 			ma = p.split('.'); //split pattern for fractional and integer pattern parts
@@ -91,10 +101,11 @@ define(function() {
 			//ma[1] - decimal part pattern
 			var fractPatternReversed = reverseString('' + ma[1]),
 				fractValueReversed = reverseString('' + vFract),
-				// 1) fractional part has no group deviders!
+				// 1) fractional part has no group dividers!
 				// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
 			    fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
-			resFract = localeNumberInfo.decimalSeparator + reverseString(fractResultReversed);
+
+			resFract = (fractResultReversed ? localeNumberInfo.decimalSeparator : "") + reverseString(fractResultReversed) ;
 		}
 
 		if (ma.length > 0) {
@@ -102,7 +113,7 @@ define(function() {
 			resInt = formatSimpleInteger(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false);
 		}
 
-		var result = (resInt.length > 0) ? (resInt + resFract) : ((resFract.length > 0) ? resFract : 0);
+		var result = ((resInt.length > 0)?resInt:"0")+resFract;
 
 		//if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
 		if (negativeSign && (result.indexOf('-') == -1)) {
@@ -112,27 +123,39 @@ define(function() {
 		return result;
 	};
 
-	// based on http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
-	function generatePatternFromGroupSizes(groupSizes, maxDigitsInPattern) {
+	// formatInfo - currency or number format info object. For the pattern format,
+	// see comments in NumberCurrencyFormatStorage.js.
+	// Note: Function is used only with regular numbers (not phone numbers).
+	function generateFormatPattern(formatInfo, maxDigitsInPattern) {
+		function stringOfChar(char, l){
+			return (l > 0) ? (new Array(l + 1)).join(char): '';
+		}
+
+		// Group sizes are used to convert large numbers like 123456789 into locale specific format like 123,456,789.
+		// Format of group sizes is similar to this:
+		// http://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.numbergroupsizes.aspx
 		var gIndex = 0,
+			groupSizes = formatInfo.groupSizes,
+			mandatoryDecimalDigits = formatInfo.decimalDigits,
 			digitsBeforeSign = maxDigitsInPattern || 20,
-			digitsAfterSign = maxDigitsInPattern || 20,
+			digitsAfterSign = (maxDigitsInPattern || 20) - mandatoryDecimalDigits,
 			allGroups = [];
 
-		//converting Micorsoft's notation to pattern
 		while (0 < digitsBeforeSign) {
 			var currentGroupSize = (groupSizes[gIndex++] || 0) || digitsBeforeSign;
-			allGroups.unshift((new Array(currentGroupSize + 1)).join('#'));
+			allGroups.unshift(stringOfChar('#', currentGroupSize));
 			digitsBeforeSign -= currentGroupSize;
 
 			if (groupSizes.length >= gIndex) {
 				gIndex = groupSizes.length - 1;
 			}
 		}
-		return allGroups.join(',') + '.' + (new Array(digitsAfterSign + 1)).join('#');
+
+		var fractionalPattern = stringOfChar('0', mandatoryDecimalDigits) + stringOfChar('#', digitsAfterSign);
+		return allGroups.join(',') + '.' + fractionalPattern;
 	};
 
-	// formats provided value as currency
+	// Formats provided value as currency.
 	function formatCurrencyInternal(value, currencyFormatInfo) {
 		if (!isFinite(value)) {
 			return value;
@@ -143,7 +166,7 @@ define(function() {
 			patternParts = /n|\$|-|%/g,
 			res = '';
 
-		number = formatDecimalInternal(number, generatePatternFromGroupSizes(currencyFormatInfo.groupSizes), currencyFormatInfo);
+		number = formatDecimalInternal(number, generateFormatPattern(currencyFormatInfo), currencyFormatInfo);
 
 		for (; ; ) {
 			var index = patternParts.lastIndex,
@@ -190,7 +213,10 @@ define(function() {
 			foundDay,
 			checkedDay,
 			dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
+			// If the format contains a string in quotes, the string must go to the
+			// output date string verbatim. 'quoteCount' is used in this logic.
 			quoteCount = 0,
+			// a "token" is a logical part of the date string (for example, year or month)
 			tokenRegExp = getTokenRegExp();
 
 		function padZeros( num, c ) {
@@ -229,23 +255,30 @@ define(function() {
 
 		function getTokenRegExp() {
 			// regular expression for matching date and time tokens in format strings.
+			//'g' key allow us do multiply searches on regExp in a loop
 			return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
 		};
 
-		function appendPreOrPostMatch( preMatch, strings ) {
-			// appends pre- and post- token match strings while removing escaped characters.
-			// Returns a single quote count which is used to determine if the token occurs in a string literal.
-			var quoteCount = 0,
-				escaped = false,
-				i,
+		var quoteCount = 0,
+			escaped = false;
+
+		for ( ; ; ) {
+			// Save the current index
+			var index = tokenRegExp.lastIndex,
+				// Look for the next pattern
+				ar = tokenRegExp.exec( format),
+				// Append the text before the pattern (or the end of the string if not found)
+				preMatch = format.slice( index, ar ? ar.index : format.length),
 				c;
 
-			for (i = 0, il = preMatch.length; i < il; i++ ) {
+			// add to result part from pattern before match, unescape (and count) single quotes, and '\'
+			// single quote count is used to determine if the token occurs in a string literal.
+			for (var i = 0, il = preMatch.length; i < il; i++ ) {
 				c = preMatch.charAt( i );
 				switch ( c ) {
 					case "\'":
 						if ( escaped ) {
-							strings.push( "\'" );
+							ret.push( c );
 						}
 						else {
 							quoteCount++;
@@ -254,28 +287,16 @@ define(function() {
 						break;
 					case '\\':
 						if ( escaped ) {
-							strings.push( '\\' );
+							ret.push( '\\' );
 						}
 						escaped = !escaped;
 						break;
 					default:
-						strings.push( c );
+						ret.push( c );
 						escaped = false;
 						break;
 				}
 			}
-			return quoteCount;
-		};
-
-		for ( ; ; ) {
-			// Save the current index
-			var index = tokenRegExp.lastIndex,
-				// Look for the next pattern
-				ar = tokenRegExp.exec( format),
-				// Append the text before the pattern (or the end of the string if not found)
-				preMatch = format.slice( index, ar ? ar.index : format.length );
-
-			quoteCount += appendPreOrPostMatch( preMatch, ret );
 
 			if ( !ar ) {
 				break;
@@ -396,7 +417,7 @@ define(function() {
 
 	return {
 		formatDecimal: formatDecimalInternal,
-		generatePatternFromGroupSizes: generatePatternFromGroupSizes,
+		generateFormatPattern: generateFormatPattern,
 		formatCurrency: formatCurrencyInternal,
 		formatDate: formatDateInternal
 	};

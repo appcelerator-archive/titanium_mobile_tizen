@@ -74,7 +74,9 @@ module.exports = new function() {
 				{name: "viewBorderPixelTest"},
 				{name: "viewOpacityPixelTest"},
 				{name: "viewImagePixelTest"},
-				{name: "viewAddRemovePixelTest"}
+				{name: "viewAddRemovePixelTest"},
+                {name: "viewZindex"},
+                {name: "viewVisible"}
 			]);
 		}
 		return arr;
@@ -1583,4 +1585,174 @@ module.exports = new function() {
 			);
 		}
 	}
+        
+        this.viewZindex = function(testRun){
+            
+            //Verify if second view's green pixels is presents
+            //Change the zIndex for first view
+            //Verify if first view's red pixels is presents
+            
+            var cp = new CountPixels();
+            
+            var win = Ti.UI.createWindow({
+                backgroundColor : '#ffffff'
+            });
+            
+            var view1 = Ti.UI.createView({
+                backgroundColor : '#ff0000'
+            });
+            
+            var view2 = Ti.UI.createView({
+                backgroundColor : '#00ff00'
+            });
+            
+            var onChangedZindex = function(count){
+                var zi;
+                valueOf(testRun, count).shouldBeEqual(100);
+                
+                valueOf(testRun, function(){
+                    zi = view1.getZIndex();
+                }).shouldNotThrowException();
+                
+                valueOf(testRun, view1.zIndex).shouldBeEqual(5);
+                valueOf(testRun, zi).shouldBeEqual(5);
+                
+                win.close();
+                finish(testRun);
+            }
+            
+            var onStartTest = function(count){
+                valueOf(testRun, count).shouldBeEqual(100);
+                
+                valueOf(testRun, function(){
+                    view1.setZIndex(5);
+                }).shouldNotThrowException();
+                
+                setTimeout(function(){
+                    cp.countPixelsPercentage([255, 0, 0], win, onChangedZindex);
+                }, 1000);
+            }
+            
+            win.addEventListener('postlayout', function(){
+                var zi;
+                
+                valueOf(testRun, function(){
+                    zi = view1.getZIndex();
+                }).shouldNotThrowException();
+                
+                valueOf(testRun, view1.zIndex).shouldBeUndefined();
+                valueOf(testRun, zi).shouldBeUndefined();
+                
+                cp.countPixelsPercentage([0, 255, 0], win, onStartTest);
+            });
+            win.add(view1);
+            win.add(view2);
+            win.open();
+            
+        }
+        
+        this.viewVisible = function(testRun){
+            
+            //Verify if view's green pixels is presents
+            //Change the visible for view to false
+            //Verify if green view's red pixels is not presents
+            //Change the visible for view to true
+            //Verify if green view's red pixels is presents
+            
+            var cp = new CountPixels();
+            
+            var win = Ti.UI.createWindow({
+                backgroundColor : '#ff0000'
+            });
+            
+            var view1 = Ti.UI.createView({
+                backgroundColor : '#00ff00'
+            });
+            
+            var onShow = function(count){
+                valueOf(testRun, count).shouldBeEqual(100);
+                win.close();
+                finish(testRun);
+            }
+            
+            var onHide  = function(count) {
+                 valueOf(testRun, count).shouldBeEqual(0);
+                 
+                 valueOf(testRun, function(){
+                    view1.show();
+                }).shouldNotThrowException();
+                
+                setTimeout(function(){
+                    cp.countPixelsPercentage([0, 255, 0], win, onShow);
+                }, 1000);
+            }
+            
+            var onChangedVisibleToTrue = function(count){
+                var zi;
+                valueOf(testRun, count).shouldBeEqual(100);
+                
+                valueOf(testRun, function(){
+                    zi = view1.getVisible();
+                }).shouldNotThrowException();
+                
+                valueOf(testRun, view1.visible).shouldBeTrue();
+                valueOf(testRun, zi).shouldBeTrue();
+                
+                valueOf(testRun, function(){
+                    view1.hide();
+                }).shouldNotThrowException();
+                
+                setTimeout(function(){
+                    cp.countPixelsPercentage([0, 255, 0], win, onHide);
+                }, 1000);
+            }
+            
+            var onChangedVisibleToFalse = function(count){
+                var zi;
+                valueOf(testRun, count).shouldBeEqual(100);
+                
+                valueOf(testRun, function(){
+                    zi = view1.getVisible();
+                }).shouldNotThrowException();
+                
+                valueOf(testRun, view1.visible).shouldBeFalse();
+                valueOf(testRun, zi).shouldBeFalse();
+                
+                valueOf(testRun, function(){
+                    view1.setVisible(true);
+                }).shouldNotThrowException();
+                
+                setTimeout(function(){
+                    cp.countPixelsPercentage([0, 255, 0], win, onChangedVisibleToTrue);
+                }, 1000);
+            }
+            
+            var onStartTest = function(count){
+                valueOf(testRun, count).shouldBeEqual(100);
+                
+                valueOf(testRun, function(){
+                    view1.setVisible(false);
+                }).shouldNotThrowException();
+                
+                setTimeout(function(){
+                    cp.countPixelsPercentage([255, 0, 0], win, onChangedVisibleToFalse);
+                }, 1000);
+            }
+            
+            win.addEventListener('postlayout', function(){
+                var zi;
+                
+                valueOf(testRun, function(){
+                    zi = view1.getVisible();
+                }).shouldNotThrowException();
+                
+                valueOf(testRun, view1.visible).shouldBeUndefined();
+                valueOf(testRun, zi).shouldBeUndefined();
+                
+                cp.countPixelsPercentage([0, 255, 0], win, onStartTest);
+            });
+            win.add(view1);
+            win.open();
+        }
+        
 };
