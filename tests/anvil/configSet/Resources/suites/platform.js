@@ -15,7 +15,8 @@ module.exports = new function() {
 
 	this.name = "platform";
 	this.tests = [
-		{name: "apiPoints"}
+		{name: "apiPoints"},
+		{name: "displayCaps"}
 	]
 
 	this.apiPoints = function(testRun) {
@@ -58,4 +59,64 @@ module.exports = new function() {
 
 		finish(testRun);
 	}
+/*	
+	//Test check the ratio Ti.Platform.displayCaps methods to tizen.systeminfo
+	this.displayCaps = function(testRun) {
+		if(Ti.Platform.osname === 'tizen'){			
+			function onSuccessCallback(systemInfoDisplay) {
+				Ti.API.debug("Display info: " + JSON.stringify(systemInfoDisplay));
+				valueOf(testRun, systemInfoDisplay).shouldBeObject();
+				//Absolute width of the display				
+				valueOf(testRun, Ti.Platform.displayCaps.platformWidth).shouldBeEqual(systemInfoDisplay.resolutionWidth);
+				//Absolute height of the display
+				valueOf(testRun, Ti.Platform.displayCaps.platformHeight).shouldBeEqual(systemInfoDisplay.physicalHeight);
+				//Logical density of the display.
+				valueOf(testRun, Ti.Platform.displayCaps.density).shouldNotBeUndefined();
+				//Display density expressed as dots-per-inch
+				valueOf(testRun, Ti.Platform.displayCaps.dpi).shouldBeEqual(systemInfoDisplay.dotsPerInchWidth);
+			
+				finish(testRun);
+			}			
+			
+			function onErrorCallback(error) {
+				Ti.API.info("An error occurred on 'Display' property:" + error.message);
+				valueOf(testRun, false).shouldBeTrue();
+				finish(testRun);
+			}
+			//This property reflects the information of the Display.
+			tizen.systeminfo.getPropertyValue("Display", onSuccessCallback, onErrorCallback);
+		}else{
+			//OS diferent from tizen
+			finish(testRun);
+		}
+	}*/
+	
+	
+	//This test check width height and dpi of BROWSER. This values is diferent from scren(Tizen)values.
+	this.displayCaps = function(testRun) {
+		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){	
+			//Absolute width of the display		
+			valueOf(testRun, Ti.Platform.displayCaps.platformWidth).shouldBeEqual(window.innerWidth);
+			//Absolute height of the display
+			valueOf(testRun, Ti.Platform.displayCaps.platformHeight).shouldBeEqual(window.innerHeight);
+			
+			var body = document.body,
+				measureDiv = document.createElement('div'),
+				dpi;
+
+			measureDiv.style.width = "1in";
+			measureDiv.style.visibility = "hidden";
+			body.appendChild(measureDiv);
+			dpi = parseInt(measureDiv.clientWidth);
+			body.removeChild(measureDiv);
+
+			//Display density expressed as dots-per-inch
+			valueOf(testRun, Ti.Platform.displayCaps.dpi).shouldBeEqual(dpi);
+			
+			finish(testRun);			
+		}else{
+			//OS diferent from tizen
+			finish(testRun);
+		}
+	}	
 }

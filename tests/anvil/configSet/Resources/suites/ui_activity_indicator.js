@@ -74,21 +74,40 @@ module.exports = new function() {
 		
 		var cp = new CountPixels();
 
-		var style = Ti.UI.ActivityIndicatorStyle.DARK;
-		if (Ti.Platform.name === 'iPhone OS'){
-		  style = Ti.UI.iPhone.ActivityIndicatorStyle.DARK;
-		}
 		var activityIndicator = Ti.UI.createActivityIndicator({
-		  color: '#00ff00',		// color value will be checked later
-		  backgroundColor: '#00ffff',
-		  font: {fontFamily:'Helvetica Neue', fontSize:26, fontWeight:'bold'},
-		  message: 'Loading...',
-		  style:style,
-		  top:10,
-		  left:10,
-		  height:Ti.UI.SIZE,
-		  width:Ti.UI.SIZE
+			color: '#00ff00',		// color value will be checked later
+			indicatorColor : '#ff0000',// indicatorColor value will be checked later
+			indicatorDiameter: '40',   //this value will be checked with using comparing count of colored pixel with one in greater indicator;
+			backgroundColor: '#00ffff',
+			font: {fontFamily:'Helvetica Neue', fontSize:26, fontWeight:'bold'},
+			message: 'Loading...',
+			top:10,
+			left:10,
+			height:Ti.UI.SIZE,
+			width:Ti.UI.SIZE
 		});
+		// Postlayout is triggered here for the first time.
+
+		var expectCount = 30;
+
+		// Function is designed to be called twice, after each cycle
+		// began by postlayout handler.
+		var fin = (function(){
+			var repeat = true;		// whether this is the first or the second run
+			return function(count){
+				if(repeat){ 				
+					repeat = false;
+					activityIndicator.applyProperties({
+						indicatorDiameter: '60'
+					})
+					// At this point, postlayout is triggered for the second time
+					// (because activity indicator changed its appearance)
+					// and the whole cycle begins again.
+				} else {
+					wind.close();
+				} 
+			}
+		}())
 
 		activityIndicator.addEventListener('postlayout', function(){
 			// The activity indicator should now be drawn. Check if it is
@@ -97,16 +116,23 @@ module.exports = new function() {
 		});
 
 		function checkFontColor(count){
-			console.log(count);
 			valueOf(testRun, count).shouldBeGreaterThan(250);
 			cp.countPixels([0, 255, 255], wind, checkBackColor);
 		}
 		
 		function checkBackColor(count){
-			console.log(count);
 			valueOf(testRun, count).shouldBeGreaterThan(2000);
-			wind.close();
-			finish(testRun);
+			checkIndicatorColor();
+		}
+
+		function checkIndicatorColor(){
+			cp.countPixels([255, 0, 0], wind, function(count){
+				valueOf(testRun, count).shouldBeGreaterThan(expectCount);
+				// Remember the current count of red pixels to compare it with
+				// the count when the diameter is bigger.
+				expectcount = count;
+				fin()
+			});
 		}
 
 		function progress(){
@@ -115,9 +141,10 @@ module.exports = new function() {
 
 
 		wind.add(activityIndicator);
-
 		wind.addEventListener('postlayout', progress);
-
+		wind.addEventListener('close', function(){
+			finish(testRun);
+		})
 		wind.open();
 		 
 	}
