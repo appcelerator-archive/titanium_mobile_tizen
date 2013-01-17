@@ -13,7 +13,7 @@
 //input parameters:
 // path to zip
 // output file name
-// working directory
+// working directory unzip original sdk
 
 console.log("cli args: " + process.argv);
 
@@ -23,8 +23,9 @@ var fs = require('fs'),
 	appc = require('node-appc'),
 	xmldom = require('xmldom'),
 	wrench = require('wrench'),
+	tmpFileUtil = require ("file-utils").File,
 	scriptArgs = process.argv.slice(2),
-	workingDir = scriptArgs[1],
+	workingDir = void 0,//scriptArgs[1],
 	titaniumTizenDir = __dirname,
 	sdkRoot,
 	resultPath,
@@ -45,11 +46,22 @@ async.series([
 				buildLinuxSdk = true;
 			}
 			console.log('[DEBUG] created output file name: ' + resultPath);
-			next(null, 'ok');
+			//create temporary dir to unzip and modify sdk content. The dir is removed when the process finishes
+			var settings = {
+					directory: scriptArgs[1]
+			};
+			tmpFileUtil.createTempFolder (settings, function (error, folder){
+				if(folder == null){
+					next("Cannot create temporary directory", 'failed');
+				}
+				console.log ('[DEBUG] created temporary directory:' + folder.toString()); 
+				workingDir = folder.toString();
+				next(null, 'ok');
+			});			
 		}
 	}
 	, function(next){
-		console.log('Start unzip');
+		console.log('[DEBUG] Start unzip');
 		//Unzip callback
 		var resultCb = function(errorMsg){
 			if(errorMsg){				
@@ -60,9 +72,9 @@ async.series([
 			}
 		};
 		if(process.platform === 'win32'){
-			unzip7za(scriptArgs[0], scriptArgs[1], resultCb);
+			unzip7za(scriptArgs[0], workingDir, resultCb);
 		}else{
-			appc.zip.unzip(scriptArgs[0], scriptArgs[1], resultCb);
+			appc.zip.unzip(scriptArgs[0], workingDir, resultCb);
 		}
 	}
 	, function(next){
@@ -88,7 +100,7 @@ async.series([
 			});
 		} else {
 			packagingSDKLinux(function(){
-				next('Packaging on linux', null);	
+				next(null, 'Packaging on linux ok');	
 			});
 		}
 	}
@@ -128,7 +140,7 @@ function copymobilWebToTizen(finish){
 			console.log('[DEBUG] Full path to SDK folder:' + sdkRoot);
 		}, 
 		function(){
-			//visitDirs finished, sdk root detected, do copy
+			//visitDirs finished, sdk root detected, create initiali version of tizen directory that really is copy of mobileweb
 			console.log('[DEBUG] wrench.copyDirSyncRecursive from ' + path.join(sdkRoot, 'mobileweb') + " to "+ path.join(sdkRoot, 'tizen'));
 			wrench.copyDirSyncRecursive(path.join(sdkRoot, 'mobileweb'), path.join(sdkRoot, 'tizen'));
 			
@@ -162,6 +174,15 @@ function copymobilWebToTizen(finish){
 			finish();
 		}
 	);
+}
+
+function applyPatches(){
+	//make temp dir
+
+	//generate patche
+
+	//apply patch
+
 }
 
 function fixManifest(){
