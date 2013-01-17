@@ -7,6 +7,8 @@ build.log
 ._*
 .settings
 build.bat
+run.bat
+uninstall.bat
 signature1.xml
 webrun.bat
 webuninstall.bat

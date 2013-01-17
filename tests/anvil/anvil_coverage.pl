@@ -260,7 +260,7 @@ sub getInheritanceInfo()
     	}
     }
 
-    my $dir = "./titanium";
+    my $dir = "c:/Users/Roman.Kamenetskyi/AppData/Roaming/Titanium/mobilesdk/win32/3.0.1.v20121218130634/mobileweb/titanium/";
 	if (!(-d $dir)) {
 		print "\nError:\n";
 		print "Cannot find directory with SDK\n";
@@ -804,9 +804,139 @@ sub process
     }    if($file =~ m/\.js$/)
     {
         processjs($File::Find::name);
-    }}
+		findAllProp($File::Find::name);
+    }
+}
 
+# Find all properties set in creators in Anvil tests
+# like this:
+# Ti.UI.createActivityIndicator({
+#		  color: '#00ff00',	
+#		  backgroundColor: '#00ffff',
+#		});
+# and add them to list of all anvil calls
+# (for example: Ti.UI.ActivityIndicator.color, Ti.UI.ActivityIndicator.backgroundColor).
+# It also adds getters and setters (if exist) for found properties to the list of anvil
 
+sub findAllProp
+{
+	my $path = shift;
+	my $content = "";
+	my $param_str = "";
+	my $i = -1;
+	my $type = ""; #Titanium type for creator
+	#Array of all properties that are set in object creator
+	my @properties = [];
+	# All params passes to creator
+	my @params = [];
+	#setter for property
+	my $setter = "";
+	#getter for property
+	my $getter = "";
+	
+	open(my $fh, '<', $path) or die "cannot open file $path";
+	{
+		local $/;
+		$content = <$fh>;	
+		# Remove line comments
+		$content =~ s/[^:]\/\/.*//g;
+		# Remove tabs
+		$content =~ s/[\t]*//g;
+		# Remove new lines
+		$content =~ s/[\n]*//g;
+		# Remove spaces
+		$content =~ s/[ ]{1,}//g;
+		
+		# Check for consrtuctions like this: = Ti.XXXX.YYYY.createYYYY({params})
+		
+		while ($content =~ /=\s*?(Ti\.[a-zA-Z0-9_.]*)\({(.*?)}\)/g)
+		{
+			$i++;
+			if (($1 eq "") or ($2 eq ""))
+			{
+				next;
+			}
+			if (defined($jscaFunctionsAndProperties{$1}))
+			{
+				$type = $jscaFunctionsAndProperties{$1};
+				$param_str = $2;
+				$param_str =~ s/{[a-zA-Z0-9_.,'":]*?},/object_str,/g;
+				@params = split(",", $param_str);
+				foreach my $param (@params)
+				{
+					@properties = split(":", $param);
+					if (isMWProperty($type,  $properties[0]) == 0)
+					{
+						next;
+					}
+					$setter = $type . ".set" . ucfirst($properties[0]);
+					$getter = $type . ".get" . ucfirst($properties[0]);
+					$calls{$type . "." . $properties[0]} = " ";
+					if(defined($jscaAll{$getter}))
+					{
+						$calls{$getter} = " ";
+					}
+					if(defined($jscaAll{$setter}))
+					{
+						$calls{$setter} = " ";
+					}				
+				}				
+			}
+		}
+	}
+	
+	# Check if property is MobileWeb property
+	# First parameter namespace, second parameter - property name
+	# Returns 1 if it is MW property, otherwise returns 0
+	sub isMWProperty
+	{
+		my @types = @{$jsca->{types}};
+		my (@properties, @user_agents);
+		my @properties = @user_agents = [];
+		my %user_agent = ();
+		my ($namespace, $platform);
+		$namespace = $platform = "";
+		my $property_name = $_[1];
+		foreach my $type(@types)
+		{
+			$namespace = $type->{name};
+
+			if(!($namespace =~ s/Titanium\./Ti./))
+			{
+				next;
+			}
+			if ($namespace ne $_[0])
+			{
+				next;
+			}
+			@properties = @{$type->{properties}};
+			foreach my $property(@properties)
+			{
+				if (!defined($property))
+				{
+					next;
+				}
+				if ($property->{name} ne $property_name)
+				{
+					next;
+				}
+				@user_agents = @{$property->{userAgents}};
+				foreach $user_agent (@user_agents)
+				{
+					$platform = $user_agent->{platform};
+					if ($platform eq "mobileweb")
+					{
+						return 1;
+					}
+				}
+				return 0;
+			}
+		}
+		return 0;
+	}
+	
+}	
+	
 # Process an ANvil source file (process() worker)
 
 sub processjs()

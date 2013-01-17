@@ -81,7 +81,9 @@ function mapview() {
 	if (!isAndroid) {
 		mapview.addAnnotation(atlanta);
 	}
-	mapview.selectAnnotation(atlanta);
+        if(!isMW) {//temporary workaround for selectAnnotation
+            mapview.selectAnnotation(atlanta);
+        }
 	win.add(mapview);
 	
 	//
