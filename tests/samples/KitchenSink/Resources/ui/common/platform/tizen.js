@@ -1,5 +1,5 @@
-function tizen() {
-	var win = Titanium.UI.createWindow(),
+function tizen(_args) {
+	var self = Titanium.UI.createWindow(),
 		data = [
 			{title: 'Contacts', hasChild: true, test: 'ui/common/platform/tizen_contacts'}
 		],
@@ -7,16 +7,17 @@ function tizen() {
 			data: data
 		});
 	
-	// initialize to all modes
-	win.orientationModes = [
-		Titanium.UI.PORTRAIT,
-		Titanium.UI.LANDSCAPE_LEFT,
-		Titanium.UI.LANDSCAPE_RIGHT
-	]; 
+	tableview.addEventListener('click', function(e){
+		if (e.rowData.test) {
+			var ContactsWindow = require(e.rowData.test),
+				win = new ContactsWindow();
+			_args.containingTab.open(win, {animated: true});
+		}
+	});
 	
-	win.add(tableview);
+	self.add(tableview);
 	
-	return win;
+	return self;
 };
 
 module.exports = tizen;
