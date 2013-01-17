@@ -53,6 +53,7 @@ var suites = [
 	{name: "ui_TextArea"},
 	{name: "ui_TextField"},
 	{name: "ui/ScrollView"},
+	{name: "ui/ScrollableView"},
 	{name: "ui_animation"}
 ];
 
