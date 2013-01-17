@@ -158,7 +158,7 @@ module.exports = new function() {
 		//Create new window
 		var yellowWin = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB});
 		//Open new window in current tab
-		firstTab.open(yellowWin);
+		valueOf(testRun, function(){firstTab.open(yellowWin)}).shouldNotThrowException();
 		
 		wind.addEventListener('postlayout', function (){			
 			cp.countPixelsPercentage(RED_RGB_ARRAY, document.body,function(count){ 
@@ -196,7 +196,7 @@ module.exports = new function() {
 		});	
 		setTimeout(function() {		
 			//close yellow window to the first tab
-			firstTab.close(yellowWin);
+			valueOf(testRun, function(){firstTab.close(yellowWin)}).shouldNotThrowException();
 		}, 1000);		
 		
 		setTimeout(function() {

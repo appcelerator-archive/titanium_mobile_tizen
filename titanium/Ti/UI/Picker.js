@@ -7,7 +7,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 		inputSizes = {},
 		on = require.on,
 		DateTimeInput = declare(Widget, {
-		
+
 			constructor: function() {
 				var input = this._input = dom.create("input", {
 						style: {

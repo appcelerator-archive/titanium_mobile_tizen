@@ -7,10 +7,15 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			strings = {},
 			cfg = require.config,
 			app = cfg.app,
-			localeNumberCurrencyInfo = null, // expandable object with  all available locale data.
-			localeCalendarInfo = null, //lazy loaded object with formatting rulers for data\time
-			formatterHelpers = null, //lazy loaded functions to format decimals, currency e.t.c.
-			phoneFormatter = null; //phoneFormatter used to format phone numbers.
+			
+			// Lazily loaded object with all available locale data for numbers and currencies.
+			localeNumberCurrencyInfo = null,
+			// Lazily loaded object with formatting rules for date/time.
+			localeCalendarInfo = null,
+			// Lazily loaded object with functions to format decimals, currency, etc. 
+			formatterHelpers = null, 
+			// Lazily loaded object with functions to format phone numbers.
+			phoneFormatter = null;
 
 		document.title = app.name = app.names[language] || app.name;
 
@@ -22,47 +27,58 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			return strings[key] || hint || key || "";
 		}
 
-		Object.defineProperty(window, "L", { value: getString, enumarable: true });
+		Object.defineProperty(window, "L", { value: getString, enumerable: true });
 
-		//lazy initialization of locale oriented formatters.
+		// Lazy initialization of locale oriented formatters.
 		function initFormatterHelpers(){
 			if (!formatterHelpers)  formatterHelpers = require("Ti/_/Locale/FormatterHelpers");
 		}
 
-		//lazy initialization of locale number nad currency format storage.
+		// Lazy initialization of locale number and currency format storage.
 		function initCurrentCalendarData(){
-			if (!localeCalendarInfo) localeCalendarInfo = require("Ti/_/Locale/Calendar/"+locale);
+			if (!localeCalendarInfo) {
+				localeCalendarInfo = require("Ti/_/Locale/Calendar/"+locale);
+				//if we did not loaded valid calendar with patterns - try load it from general
+				// Example: if no "ru-RU.js" file we can try to load "ru.js"
+				if (!localeCalendarInfo || !localeCalendarInfo.patterns){
+					localeCalendarInfo = require("Ti/_/Locale/Calendar/"+(locale.split('-')[0]));
+				}
+			}
 
-			if (locale!="en-US")
-				API.warn("Loading default locale (en-US) instead of "+locale);
+			//if we can't load target's locale calendar - use the default (en-US)
+			if (!localeCalendarInfo || !localeCalendarInfo.patterns)
+			{
+				localeCalendarInfo = require("Ti/_/Locale/defaultCalendar");
 
-			//if we can't load target's locale calendar - we are using default (en-US)
-			if (!localeCalendarInfo) localeCalendarInfo = require("Ti/_/Locale/defaultCalendar");
+				// if the locale wanted by the user is not en-US, warn them
+				if (locale!="en-US") API.warn("Loading default locale (en-US) instead of "+locale);
+			}
 		}
 
-		//lazy initialization of locale number nad currency format storage.
+		// Lazy initialization of locale number and currency format storage.
 		function initNumberCurrencyFormat(){
 			if (!localeNumberCurrencyInfo) localeNumberCurrencyInfo = require("Ti/_/Locale/NumberCurrencyFormatStorage");
 		}
 
-		// lazy initialization of Phone number formatter
+		// Lazy initialization of Phone number formatter
 		function initPhoneFormatter(){
 			if (!phoneFormatter) phoneFormatter = require("Ti/_/Locale/PhoneFormatter");
 		}
 
-		// Format a number into a locale specific decimal format. May use pattern.
-		// Hint: According to documentation both parameters localeName and pattern are optional.
-		//       So if second parameter is not valid locale name - it will be used as pattern.
+		// Format a number into a locale specific decimal format. May use a number pattern.
+		// According to the documentation, both parameters - localeName and pattern - are optional.
+		// So if the second parameter is not a valid locale name,  it will be used as a pattern.
 		String.formatDecimal = function (numberValue, localeName, pattern) {
 
-			// Function checks name according to basic rfc4647 validation rules, with advanced validation of first sub-tag.
-			// It do not validate name against ISO 639-1, ISO 639-2, ISO 639-3 and ISO 639-5);
+			// Function checks the locale name according to basic rfc4647 validation rules, 
+			// with advanced validation of the first sub-tag.
+			// It does not validate name against ISO 639-1, ISO 639-2, ISO 639-3 and ISO 639-5.
 			function isValidLocaleName(localeName) {
-				var rfc4647Basic = "^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})+$";
+				var rfc4647Basic = "^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$"; //we accept only 2 letters code too.
 				return (('' + localeName).match(rfc4647Basic) != null);
 			};
 			if (!pattern) {
-				//in this case parameter named as localName can be pattern (as both are optional parameters according to documentation)
+				// In this case, parameter named as localName can be a pattern.
 				if (localeName) {
 					if (!isValidLocaleName(localeName)) {
 						//if second parameter is NOT valid locale name - it is is a pattern.
@@ -71,38 +87,38 @@ define(["require", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 					}
 				}
 			}
-			// if locale was not set from parameters - use current.
+			// If a locale was not specified in the parameters, use current.
 			if (!localeName) {
 				localeName = locale;
 			}
-			// if we are sure that parameter named "localeName" should contain name of target locale but it does not match rfc4647 we cant continue
+			// If we are sure that parameter named "localeName" should contain name of target locale,
+			// but it does not match rfc4647, we cannot continue.
 			if (!isValidLocaleName(localeName)) {
 				// in case you passed 3 parameters and second parameter is not valid locale name.
-				throw "Invalid locale name."; //todo: Do we need to localize error message?
+				throw "Invalid locale name.";
 			}
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
 
-			var numberInfo = localeNumberCurrencyInfo.getNumberInfoForLocale(localeName);
-			// if no pattern in parameters - create "default pattern" based on locale's data
+			var numberInfo = localeNumberCurrencyInfo.getNumberInfoByLocale(localeName);
+			// If there is no pattern in the parameters, create a "default pattern" based on locale's data,
+			// using group sizes.
 			if (!pattern) {
-				//to unify we just generating custom pattern if no one provided. like ###.###.###.###.###.###.###.###.###.###,#####################
-				//acording to numberInfo.groupSizes
-				pattern = formatterHelpers.generatePatternFromGroupSizes(numberInfo.groupSizes, (""+numberValue).length * 2);
+				pattern = formatterHelpers.generateFormatPattern(numberInfo, (""+numberValue).length * 2);
 			}
 			return formatterHelpers.formatDecimal(numberValue, pattern, numberInfo);
 		};
 
-		// format a number into a locale specific currency format. TagretLocale i soptional and only for mobileWeb and Tizen
-		String.formatCurrency = function (amt, targetLocale) {
+		// Format a number into a locale specific currency format. 
+		String.formatCurrency = function (amt) {
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
-			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(targetLocale || locale)) || amt;
+			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale)) || amt;
 		};
 
-		// expands format name into the full pattern.
+		// Expands a format name (for example, "d" or "D") into the full pattern string.
 		expandFormat = function( cal, format ) {
-			return (!format || !format.length) ? format : cal.patterns[ format ] || format;
+			return cal.patterns[ format ];
 		};
 
 		// format a date into a locale specific date format. Optionally pass a second argument (string) as either "short" (default), "medium" or "long" for controlling the date format.
