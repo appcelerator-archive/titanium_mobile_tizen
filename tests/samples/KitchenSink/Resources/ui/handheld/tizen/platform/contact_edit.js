@@ -1,14 +1,19 @@
-function add_contacts(_args) {
+function edit_contact(_args) {
 	var win = Ti.UI.createWindow({
 			title: _args.title
 		}),
+		person = Ti.Contacts.getPersonByID(_args.contactId),
 		labelLeftPos = 10,
 		labelWidth = '40%',
 		height = 30,
 		top = 10,
 		inputLeftPos = '45%',
-		inputWidth = '50%';
-		
+		inputWidth = '50%',
+		address = (person.address.home &&  (person.address.home.length > 0)) ? person.address.home[0] : {},
+		email = (person.email.home && (person.email.home.length > 0)) ? person.email.home[0] : '',
+		phoneNumber = (person.phone.home && (person.phone.home.length > 0)) ? person.phone.home[0] : '';
+	
+	
 	// Add controls for first name
 	var firstNameLabel = Ti.UI.createLabel({
 		left: labelLeftPos,
@@ -25,7 +30,8 @@ function add_contacts(_args) {
 		top: top,
 		left: inputLeftPos,
 		width: inputWidth,
-		height: height
+		height: height,
+		value: person.firstName || ''		
 	});
 	win.add(firstNameInput);
 	
@@ -47,7 +53,8 @@ function add_contacts(_args) {
 		top: top,
 		left: inputLeftPos,
 		width: inputWidth,
-		height: height		
+		height: height,
+		value: person.lastName || ''		
 	});
 	win.add(lastNameInput);
 	
@@ -70,7 +77,8 @@ function add_contacts(_args) {
 		left: inputLeftPos,
 		width: inputWidth,
 		height: height	,
-		keyboardType: Ti.UI.KEYBOARD_EMAIL	
+		keyboardType: Ti.UI.KEYBOARD_EMAIL,
+		value: email
 	});
 	win.add(emailInput);
 	
@@ -93,7 +101,8 @@ function add_contacts(_args) {
 		left: inputLeftPos,
 		width: inputWidth,
 		height: height	,
-		keyboardType: Ti.UI.KEYBOARD_NUMBER_PAD	
+		keyboardType: Ti.UI.KEYBOARD_NUMBER_PAD,
+		value: phoneNumber
 	});
 	win.add(phoneNumberInput);
 	
@@ -115,7 +124,8 @@ function add_contacts(_args) {
 		top: top,
 		left: inputLeftPos,
 		width: inputWidth,
-		height: height
+		height: height,
+		value: address.City || ''
 	});
 	win.add(cityInput);
 	
@@ -137,7 +147,8 @@ function add_contacts(_args) {
 		top: top,
 		left: inputLeftPos,
 		width: inputWidth,
-		height: height
+		height: height,
+		value: address.Street || ''
 	});
 	win.add(streetInput);
 	
@@ -161,19 +172,20 @@ function add_contacts(_args) {
 		left: inputLeftPos,
 		width: inputWidth,
 		height: height,
+		value: address.ZIP || '',
 		keyboardType: Ti.UI.KEYBOARD_NUMBER_PAD	
 	});
 	win.add(zipInput);
 	
 	top += height + 20;	
 	
-	var saveButton = Ti.UI.createButton({
-		title: 'Add contact',
+	var updateButton = Ti.UI.createButton({
+		title: 'Update contact',
 		top: top
 	});	
-	win.add(saveButton);
+	win.add(updateButton);			
 	
-	saveButton.addEventListener('click', function(e) {
+	updateButton.addEventListener('click', function(e) {
 		var firstName = firstNameInput.value.trim(),
 			lastName = lastNameInput.value.trim(),
 			phoneNumber = phoneNumberInput.value.trim(),
@@ -186,34 +198,29 @@ function add_contacts(_args) {
 			alert('At least one field should not be empty');
 			return false;
 		} else {
-			var person = Ti.Contacts.createPerson({
-				firstName: firstName,
-				lastName: lastName,
-				address: {
-					home: [{
-						City: city,
-						Street: street,
-						ZIP: zip
-					}]
-				},
-				email: {
-					home: [email]
-				},
-				phone: {
-					home: [phoneNumber]
-				}
-			});
-			firstNameInput.value = "";
-			lastNameInput.value = "";
-			phoneNumberInput.value = "";
-			emailInput.value = "";
-			cityInput.value = "";
-			streetInput.value = "";
-			zipInput.value = "";
-			alert('Contact was added successfully. Contact ID = ' + person.id);
+			
+			person.firstName = firstName;
+			person.lastName = lastName;
+			if (Object.prototype.toString.call(person.address.home) === '[object Array]') {
+				person.address.home[0].City = city
+				person.address.home[0].Street = street;
+				person.address.home[0].ZIP = zip;				
+			} else {
+				person.address.home = [{
+					City: city,
+					Street: street,
+					ZIP: zip					
+				}];
+			}
+			(Object.prototype.toString.call(person.email.home) === '[object Array]') ? person.email.home[0] = email : person.email.home = [email];
+			(Object.prototype.toString.call(person.phone.home) === '[object Array]') ? person.phone.home[0] = phoneNumber : person.phone.home = [phoneNumber];
+			
+			Ti.Contacts.save([person]);
+						
+			alert('Contact was updated successfully. Contact ID = ' + person.id);
 		}
-	});
+	});	
 	
-	return win;
+	return win;		
 }
-module.exports = add_contacts;
+module.exports = edit_contact;

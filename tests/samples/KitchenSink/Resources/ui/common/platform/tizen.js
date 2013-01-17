@@ -10,7 +10,7 @@ function tizen(_args) {
 	tableview.addEventListener('click', function(e){
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
-				win = new ExampleWindow({title: e.rowData.title, containingTab: self.containingTab});
+				win = new ExampleWindow({title: e.rowData.title, containingTab: _args.containingTab});
 			_args.containingTab.open(win, {animated: true});
 		}
 	});
