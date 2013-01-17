@@ -1,5 +1,11 @@
 function tizen() {
-	var win = Titanium.UI.createWindow();
+	var win = Titanium.UI.createWindow(),
+		data = [
+			{title: 'Contacts', hasChild: true, test: 'ui/common/platform/tizen_contacts'}
+		],
+		tableview = Ti.UI.createTableView({
+			data: data
+		});
 	
 	// initialize to all modes
 	win.orientationModes = [
@@ -7,6 +13,8 @@ function tizen() {
 		Titanium.UI.LANDSCAPE_LEFT,
 		Titanium.UI.LANDSCAPE_RIGHT
 	]; 
+	
+	win.add(tableview);
 	
 	return win;
 };
