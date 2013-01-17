@@ -126,7 +126,10 @@ exports.config = function (logger, config, cli) {
 
 exports.validate = function (logger, config, cli) {
 	ti.validateProjectDir(logger, cli, cli.argv, 'project-dir');
-	if (!ti.validateCorrectSDK(logger, config, cli)) {
+	
+	ti.validateTiappXml(logger, cli.tiapp);
+	
+	if (!ti.validateCorrectSDK(logger, config, cli, 'build')) {
 		// we're running the build command for the wrong SDK version, gracefully return
 		return false;
 	}
@@ -148,7 +151,7 @@ exports.run = function (logger, config, cli, finished) {
 					name: cli.tiapp.name,
 					publisher: cli.tiapp.publisher,
 					url: cli.tiapp.url,
-					image: cli.tiapp.image,
+					image: cli.tiapp.icon,
 					appid: cli.tiapp.id,
 					description: cli.tiapp.description,
 					type: cli.argv.type,
@@ -182,6 +185,11 @@ function build(logger, config, cli, finished) {
 	this.mobilewebThemeDir = this.mobilewebSdkPath + '/themes';
 	this.mobilewebTitaniumDir = this.mobilewebSdkPath + '/titanium';
 	
+	this.moduleSearchPaths = [ this.projectDir, afs.resolvePath(this.mobilewebSdkPath, '..', '..', '..', '..') ];
+	if (config.paths && Array.isArray(config.paths.modules)) {
+		this.moduleSearchPaths = this.moduleSearchPaths.concat(config.paths.modules);
+	}
+	
 	this.projectDependencies = [];
 	this.modulesToLoad = [];
 	this.tiModulesToLoad = [];
@@ -211,7 +219,7 @@ function build(logger, config, cli, finished) {
 		main: pkgJson.main
 	}];
 	
-	if (!this.dependenciesMap) {		
+	if (!this.dependenciesMap) {
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
 	
@@ -460,7 +468,7 @@ build.prototype = {
 		}
 		
 		this.logger.info(__n('Searching for %s Titanium Module', 'Searching for %s Titanium Modules', this.tiapp.modules.length));
-		appc.timodule.find(this.tiapp.modules, 'mobileweb', this.deployType, this.titaniumSdkVersion, this.projectDir, this.logger, function (modules) {
+		appc.timodule.find(this.tiapp.modules, 'mobileweb', this.deployType, this.titaniumSdkVersion, this.moduleSearchPaths, this.logger, function (modules) {
 			if (modules.missing.length) {
 				this.logger.error(__('Could not find all required Titanium Modules:'))
 				modules.missing.forEach(function (m) {
@@ -614,6 +622,7 @@ build.prototype = {
 			requireCacheWritten = false,
 			moduleCounter = 0;
 		
+		//For tize: following code uncommented, now it bypass caching
 		// uncomment next line to bypass module caching (which is ill advised):
 		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
 		this.modulesToCache = [];
@@ -1015,18 +1024,16 @@ build.prototype = {
 		}
 		
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
-
+		
 		var deps = this.dependenciesMap[dep[1]];
-		if(deps){
-			for (var i = 0, l = deps.length; i < l; i++) {
-				dep = deps[i];
-				ref = mid.split('/');
-				ref.pop();
-				ref = ref.join('/') + '/';
-				this.parseModule(dep, ref);
-			}
-			this.moduleMap[mid] = deps;
+		for (var i = 0, l = deps.length; i < l; i++) {
+			dep = deps[i];
+			ref = mid.split('/');
+			ref.pop();
+			ref = ref.join('/') + '/';
+			this.parseModule(dep, ref);
 		}
+		this.moduleMap[mid] = deps;
 	},
 	wgtPackaging7z: function(logger, callback){
 		logger.info(__('Packaging application into wgt'));

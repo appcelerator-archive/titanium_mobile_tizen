@@ -46,6 +46,8 @@ my $countFunctionsAndProperties = 0;    # counter of processed properties
 
 my $jsca;                               # Titanium JSCA file as a perl object
 
+my $superclasses;
+
 # All Titanium functions and properties.
 # Hash: "Ti.XXXX.YYYY" --> "Ti.AAAA.BBBB", where Ti.XXXX.YYYY is a function/property,
 # and Ti.AAAA.BBBB is its return type. Only for functions/properties that have
@@ -100,8 +102,19 @@ my $jsca_content = do {
 };
 print "     Read " . length($jsca_content) . " bytes\n";
 
+my $superclasses_content = do {
+	local $/ = undef;
+	open SUPERCLASSES, "superclasses.json" or die "could not open $file $!";
+	<SUPERCLASSES>
+};
+
+$superclasses = decode_json($superclasses_content);
+
+
+
 print "\nParsing JSCA (20 seconds)...\n";
 $jsca = decode_json($jsca_content);
+
 
 
 #2 Remove inherited entities from $jsca
@@ -136,7 +149,7 @@ find(\&process, $dir);
 print "     Parsed $files files\n";
 print "     Found references to " . scalar(keys %calls) . " entities \n";
 
-removeGettersAndSetters();
+unifyPropertyCalls();
 
 open ALLANVIL, ">anvil_all_references.txt";
 foreach $call(sort keys %calls)
@@ -247,7 +260,7 @@ sub getInheritanceInfo()
     	}
     }
 
-    my $dir = "./titanium";
+    my $dir = "c:/Users/Roman.Kamenetskyi/AppData/Roaming/Titanium/mobilesdk/win32/3.0.1.v20121218130634/mobileweb/titanium/";
 	if (!(-d $dir)) {
 		print "\nError:\n";
 		print "Cannot find directory with SDK\n";
@@ -387,6 +400,78 @@ sub removeInheritedTypes()
     	}
     	#print Dumper(\%formatedInherited);
     }
+	
+	my %super_properties = ();
+	my %super_functions = ();
+	
+	#create and fill list with properties from superclass
+	foreach my $prop (@{$superclasses->{properties}})
+	{
+		
+		$super_properties{$prop->{name}} = " ";
+	}
+	
+	#create and fill list with methods from superclass
+	foreach my $func (@{$superclasses->{functions}})
+	{
+		
+		$super_functions{$func->{name}} = " ";
+	}		
+	
+	# Removes methods and properties from superclasses.json 
+	# (in case the inheritance information is incomplete, this file allows to specify a "virtual ancestor"
+	# for all Titanium namespaces).
+	sub removeSuperProperties
+	{
+		my @types = @{$jsca->{types}};
+		#all properties for current namespace
+		my @properties = [];
+		#all functions for current namespace
+		my @functions = [];
+		#property or function name
+		my $name = "";
+		my $namespace = "";
+		my $i = -1;
+		my $j = 0;
+		foreach my $type (@types)
+		{
+			$i++;
+			$namespace = $type->{name};
+			if(!($namespace =~ s/Titanium\./Ti./))
+			{
+				next;
+			}
+
+			@properties = @{$type->{properties}};
+			@functions = @{$type->{functions}};
+			$j = -1;
+			foreach my $property(@properties)
+			{
+				$j++;
+				$name = $property->{name};
+				#if property is inherited from superclass - remove it
+				if (exists $super_properties{$name})
+				{
+					delete $jsca->{types}[$i]->{properties}[$j];
+				}
+			}
+			
+			$j = -1;
+			foreach my $function(@functions)
+			{
+				$j++;
+				$name = $function->{name};
+				#if method is inherited from superclass - remove it
+				if (exists $super_functions{$name})
+				{
+					delete $jsca->{types}[$i]->{functions}[$j];
+				}
+			}			
+		}
+
+	}
+	
+	
 
     getAllNamespacesFromInheritance();
     createFormatedHash();
@@ -413,6 +498,9 @@ sub removeInheritedTypes()
 	my $parent_name = "";
 	my $index = 0;
 	
+	
+	removeSuperProperties();
+	
 	my @types = @{$jsca->{types}};
 	
 	foreach my $key(keys %inheritance)
@@ -429,19 +517,20 @@ sub removeInheritedTypes()
 		{
 			%property = %{$propreties[$i]};
 			$name = $property{name};
-
+			
+			#loop through all pparents
 			foreach my $parent (@parents)
 			{
 				%obj = %{$formatedInherited{$parent}};
+				#get parent properties
 				@parent_properties = @{$obj{properties}};
+				#loop through all parent properties
 				for my $j(0 .. $#parent_properties)
 				{
 					%parent_property = %{$parent_properties[$j]};
-					
-					if ($name eq $parent_property{name})
+					#if property is inherited - remove it
+					if (($name eq $parent_property{name}) or (exists $super_properties{$name}))
 					{
-						print DEBUG "Remove property " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
-						print DEBUG "Index = " . $index . " property index = " . $i . "\n";
 						my %o = %{$types[$index]};
 						delete $o{properties}[$i];
 						goto AFTER_PROPERTIES;
@@ -450,24 +539,25 @@ sub removeInheritedTypes()
 			}
 			AFTER_PROPERTIES:
 		}
-		#Looping through parents
+		#looping through all functions
 		for my $i(0 .. $#functions)
 		{
 			%function = %{$functions[$i]};
 			$name = $function{name};
-
+			
+			#Looping through parents
 			foreach my $parent (@parents)
 			{
 				%obj = %{$formatedInherited{$parent}};
 				@parent_functions = @{$obj{functions}};
+				#find all parent functions
 				for my $j(0 .. $#parent_functions)
 				{
 					%parent_function = %{$parent_functions[$j]};
 					
-					if ($name eq $parent_function{name})
+					#if function is inherited - remove it
+					if (($name eq $parent_function{name}) or (exists $super_functions{$name}))
 					{
-						print DEBUG "Remove function " . $name . " from " . $key . ". Inherited from " . $parent . ".\n";
-						print DEBUG "Index = " . $index . " function index = " . $i . "\n";
 						my %o = %{$types[$index]};
 						delete $o{functions}[$i];
 						goto AFTER_FUNCTIONS;
@@ -479,8 +569,10 @@ sub removeInheritedTypes()
 	}
 }
 
-# Remove getters and setters from tested properties
-sub removeGettersAndSetters()
+# If reference to Ti.x are referenced (where x is a property), assume Ti.getX and Ti.getX are also referenced.
+# If reference to either Ti.getX or Ti.setX is referenced, assume Ti.x is also referenced.
+# (Referenced = is contained in %calls.)
+sub unifyPropertyCalls()
 {
 	my (@properties, @functions);
 	my (%property, %function);
@@ -507,9 +599,9 @@ sub removeGettersAndSetters()
 			$getter = $namespace . ".get" . ucfirst($property->{name});
 			$setter = $namespace . ".set" . ucfirst($property->{name});
 
+			#if property is tested then add getter and setter
 			if (exists $calls{$name})
 			{
-				print DEBUG "Added methods " . $getter . "  from " . $name . " property\n";
 				if(defined($jscaAll{$getter}))
 				{
 					$calls{$getter} = " ";
@@ -522,7 +614,6 @@ sub removeGettersAndSetters()
 			#if getter exists then add proprety
 			elsif (exists $calls{$getter})
 			{
-				print DEBUG "Added property " . $name . " from method " . $getter . "\n";
 				$calls{$name} = " ";
 				#if proprty is not readonly - add setter
 				if (defined($jscaAll{$setter}))
@@ -533,7 +624,6 @@ sub removeGettersAndSetters()
 			#if setter exists - add property and getter
 			elsif (exists $calls{$setter})
 			{
-				print DEBUG "Added property " . $name . " from method " . $setter . "\n";
 				$calls{$name} = " ";
 				$calls{$getter} = " ";
 			}
@@ -714,9 +804,139 @@ sub process
     }    if($file =~ m/\.js$/)
     {
         processjs($File::Find::name);
-    }}
+		findAllProp($File::Find::name);
+    }
+}
 
+# Find all properties set in creators in Anvil tests
+# like this:
+# Ti.UI.createActivityIndicator({
+#		  color: '#00ff00',	
+#		  backgroundColor: '#00ffff',
+#		});
+# and add them to list of all anvil calls
+# (for example: Ti.UI.ActivityIndicator.color, Ti.UI.ActivityIndicator.backgroundColor).
+# It also adds getters and setters (if exist) for found properties to the list of anvil
 
+sub findAllProp
+{
+	my $path = shift;
+	my $content = "";
+	my $param_str = "";
+	my $i = -1;
+	my $type = ""; #Titanium type for creator
+	#Array of all properties that are set in object creator
+	my @properties = [];
+	# All params passes to creator
+	my @params = [];
+	#setter for property
+	my $setter = "";
+	#getter for property
+	my $getter = "";
+	
+	open(my $fh, '<', $path) or die "cannot open file $path";
+	{
+		local $/;
+		$content = <$fh>;	
+		# Remove line comments
+		$content =~ s/[^:]\/\/.*//g;
+		# Remove tabs
+		$content =~ s/[\t]*//g;
+		# Remove new lines
+		$content =~ s/[\n]*//g;
+		# Remove spaces
+		$content =~ s/[ ]{1,}//g;
+		
+		# Check for consrtuctions like this: = Ti.XXXX.YYYY.createYYYY({params})
+		
+		while ($content =~ /=\s*?(Ti\.[a-zA-Z0-9_.]*)\({(.*?)}\)/g)
+		{
+			$i++;
+			if (($1 eq "") or ($2 eq ""))
+			{
+				next;
+			}
+			if (defined($jscaFunctionsAndProperties{$1}))
+			{
+				$type = $jscaFunctionsAndProperties{$1};
+				$param_str = $2;
+				$param_str =~ s/{[a-zA-Z0-9_.,'":]*?},/object_str,/g;
+				@params = split(",", $param_str);
+				foreach my $param (@params)
+				{
+					@properties = split(":", $param);
+					if (isMWProperty($type,  $properties[0]) == 0)
+					{
+						next;
+					}
+					$setter = $type . ".set" . ucfirst($properties[0]);
+					$getter = $type . ".get" . ucfirst($properties[0]);
+					$calls{$type . "." . $properties[0]} = " ";
+					if(defined($jscaAll{$getter}))
+					{
+						$calls{$getter} = " ";
+					}
+					if(defined($jscaAll{$setter}))
+					{
+						$calls{$setter} = " ";
+					}				
+				}				
+			}
+		}
+	}
+	
+	# Check if property is MobileWeb property
+	# First parameter namespace, second parameter - property name
+	# Returns 1 if it is MW property, otherwise returns 0
+	sub isMWProperty
+	{
+		my @types = @{$jsca->{types}};
+		my (@properties, @user_agents);
+		my @properties = @user_agents = [];
+		my %user_agent = ();
+		my ($namespace, $platform);
+		$namespace = $platform = "";
+		my $property_name = $_[1];
+		foreach my $type(@types)
+		{
+			$namespace = $type->{name};
+
+			if(!($namespace =~ s/Titanium\./Ti./))
+			{
+				next;
+			}
+			if ($namespace ne $_[0])
+			{
+				next;
+			}
+			@properties = @{$type->{properties}};
+			foreach my $property(@properties)
+			{
+				if (!defined($property))
+				{
+					next;
+				}
+				if ($property->{name} ne $property_name)
+				{
+					next;
+				}
+				@user_agents = @{$property->{userAgents}};
+				foreach $user_agent (@user_agents)
+				{
+					$platform = $user_agent->{platform};
+					if ($platform eq "mobileweb")
+					{
+						return 1;
+					}
+				}
+				return 0;
+			}
+		}
+		return 0;
+	}
+	
+}	
+	
 # Process an ANvil source file (process() worker)
 
 sub processjs()
