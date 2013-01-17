@@ -19,9 +19,14 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 					type = typeName;
 					break;
 				}
-				if (typeName == "pref") {
-					type = "main";
-					break;
+			}
+			if (!type) {
+				for (i = 0; i < typesLength; i++) {
+					typeName = types[i].toLowerCase();
+					if (typeName == "pref") {
+						type = "main";
+						break;
+					}
 				}
 			}
 			type = type || "other";
@@ -382,14 +387,14 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getAllPeople instead.');
 		},
 		
-		getGroupById: function(id) { 
+		getGroupByID: function(id) { 
 			throw new Error('This function is not supported on Tizen. Use getAllGroups instead.');
 		},
 		getPeopleWithName: function(name) {
 			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getPeopleWithName instead.');
 		},
 		
-		getPersonById: function(id) {
+		getPersonByID: function(id) {
 			var addressBook = null, contact = null, result = {}, person = {};
 			addressBook = tizen.contact.getDefaultAddressBook();
 			contact = addressBook.get(id);	
