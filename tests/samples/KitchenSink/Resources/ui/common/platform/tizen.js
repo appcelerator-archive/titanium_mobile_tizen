@@ -1,7 +1,7 @@
 function tizen(_args) {
 	var self = Titanium.UI.createWindow(),
 		data = [
-			{title: 'Contacts', hasChild: true, test: 'ui/common/platform/tizen_contacts'}
+			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_contacts'}
 		],
 		tableview = Ti.UI.createTableView({
 			data: data
@@ -9,8 +9,8 @@ function tizen(_args) {
 	
 	tableview.addEventListener('click', function(e){
 		if (e.rowData.test) {
-			var ContactsWindow = require(e.rowData.test),
-				win = new ContactsWindow();
+			var ExampleWindow = require(e.rowData.test),
+				win = new ExampleWindow({title: e.rowData.title, containingTab: self.containingTab});
 			_args.containingTab.open(win, {animated: true});
 		}
 	});
