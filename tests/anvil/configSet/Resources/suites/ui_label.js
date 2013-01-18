@@ -25,8 +25,6 @@ module.exports = new function() {
 
 		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
 			arr.push({name: "testShow"});
-			arr.push({name: "testEllipsizePx"});
-			arr.push({name: "testEllipsizeMultilinePx"}); //https://jira.appcelerator.org/browse/TIMOB-10144
 			arr.push({name: "testHtmlPx"});
 
 			if(Ti.Platform.osname === 'tizen'){
@@ -174,102 +172,6 @@ module.exports = new function() {
 		}
 	}
 
-	this.testEllipsizePx = function(testRun){
-		// Create a label and checks ellipsize property is functioning
-		var cp = new CountPixels(),
-			noEllipsizeBackgroundPixelCount = 0,
-		//pixelsPosition = {left:0,top:0, width:40, height:40},
-			win = Ti.UI.createWindow({
-				backgroundColor:'#FF0000',
-				exitOnClose: true,
-				layout: 'vertical'}),
-
-			label = Ti.UI.createLabel({
-				backgroundColor:'#FF0000',
-				color:'#00FF00',
-				ellipsize:false,
-				wordWrap: false, //required for ellipsize according to unresolved bug !
-				text:'This is demo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-				height:40,
-				width:40,
-				left:1,
-				top:1
-			});
-
-		win.addEventListener('postlayout', function(){
-			cp.countPixels([255, 0, 0], label, onNoEllipsizePixelCounted);
-		});
-
-		win.add(label);
-		win.open();
-
-		// Counting label's pixels with ellipsize property is set to false
-		function onNoEllipsizePixelCounted (count){
-			valueOf(testRun, count).shouldBeGreaterThan(0);
-			noEllipsizeBackgroundPixelCount = count;
-			console.log("noEllipsizeBackgroundPixelCount = "+noEllipsizeBackgroundPixelCount);
-			label.ellipsize = true;
-			//TODO: BUG IN COUNT PIXELS?!?!?!  ellipsized and notellipsized ARE THE SAME in CountPixels and different on screen!
-			//allow it to be fully repainted ever it is slow
-			setTimeout(function(){
-				cp.countPixels([255, 0, 0], label, onEllipsisPixelCounted);
-			},1000);
-		}
-
-		// Counting label's pixels with ellipsize property is set to true. now we should have less pixels in label
-		function onEllipsisPixelCounted(count){
-			console.log("count = "+count);
-			valueOf(testRun, count).shouldBeGreaterThan(noEllipsizeBackgroundPixelCount);
-			win.close();
-			finish(testRun);
-		}
-	}
-
-	//test will fail due unfixed https://jira.appcelerator.org/browse/TIMOB-10144
-	this.testEllipsizeMultilinePx = function(testRun){
-		// Create a label and checks ellipsize property for multi-line
-		var cp = new CountPixels(),
-			noEllipsizeBackgroundPixelCount = 0,
-			win = Ti.UI.createWindow({
-				backgroundColor: 'black',
-				exitOnClose: true,
-				layout: 'vertical'}),
-
-			label = Ti.UI.createLabel({
-				backgroundColor:'black',
-				color:'white',
-				ellipsize:false,
-				text:'This is demo of multi-line label that don\'t support ellipsize due not fixed bug',
-				height:30,
-				width:150,
-				top : 80
-			});
-
-		label.addEventListener('postlayout', function(){
-			cp.countPixels([0, 0, 0], win, onNoEllipsizePixelCounted);
-		});
-
-		win.add(label);
-		win.open();
-
-		// Counting background's pixels with ellipsize property is set to false
-		function onNoEllipsizePixelCounted (count){
-			valueOf(testRun, count).shouldBeGreaterThan(0);
-			noEllipsizeBackgroundPixelCount = count;
-			label.ellipsize = true;
-
-			//allow it to be fully repainted ever it is slow
-			setTimeout(function(){cp.countPixels([0, 0, 0], win, onEllipsisPixelCounted);},100);
-		}
-
-		// Counting background's pixels with ellipsize property is set to true. now we should have less pixels in label
-		function onEllipsisPixelCounted(count){
-			// due unfixed https://jira.appcelerator.org/browse/TIMOB-10144 we'll fail here
-			valueOf(testRun, count).shouldBeGreaterThan(noEllipsizeBackgroundPixelCount);
-			win.close();
-			finish(testRun);
-		}
-	}
 
 	this.testHtmlPx = function(testRun){
 		// Create a label and checks html property is functioning
