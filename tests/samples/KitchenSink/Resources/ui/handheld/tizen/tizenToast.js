@@ -1,3 +1,4 @@
+//"helper" object. Just to show toast-like messages on tizen
 function initToast() {
 	var currentCloseTimeout = null,
 		toastWin = Titanium.UI.createWindow({
