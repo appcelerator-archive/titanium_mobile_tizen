@@ -70,6 +70,7 @@ module.exports = new function() {
         win.addEventListener("postlayout", function() {
         	Ti.API.info("Test basic_test end.");
 
+			win.close();
             finish(testRun);
         });
 
@@ -221,6 +222,7 @@ module.exports = new function() {
 
 							Ti.API.info("Test pixel_test end.");
 
+							win.close();
 			    			finish(testRun);
 		            	};
 

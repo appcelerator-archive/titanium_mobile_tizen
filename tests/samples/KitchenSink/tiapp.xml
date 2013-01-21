@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
+    <sdk-version>3.0.1.v20130114133207</sdk-version>
     <deployment-targets>
         <target device="mobileweb">true</target>
         <target device="iphone">true</target>
         <target device="ipad">true</target>
         <target device="android">true</target>
         <target device="blackberry">false</target>
-    </deployment-targets>    
+    </deployment-targets>
     <id>com.appcelerator.kitchensink</id>
     <name>KitchenSink</name>
     <version>3.0.1</version>
@@ -61,7 +62,7 @@
             <inline-css-images>false</inline-css-images>
         </splash>
         <theme>default</theme>
-    </mobileweb>    
+    </mobileweb>
     <tizen appid="nmgg3ski3z">
         <feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>
@@ -89,8 +90,10 @@
         <feature name="http://tizen.org/api/systeminfo" required="true"/>
         <feature name="http://tizen.org/api/mediacontent" required="true"/>
         <feature name="http://tizen.org/api/alarm" required="true"/>
+	<feature name="http://tizen.org/api/download" required="true"/>
+	<feature name="http://tizen.org/api/nfc" required="true"/>
         <access origin="*"/>
-        <access origin="http://www.appcelerator.com" subdomains="true"/> 
+        <access origin="http://www.appcelerator.com" subdomains="true"/>
         <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
         <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>

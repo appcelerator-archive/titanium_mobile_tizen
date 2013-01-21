@@ -53,7 +53,19 @@ exports.config = function (logger, config, cli) {
 			},
 			'dev-id': {
 				abbr: 'I',
-				desc: __('the id for the avd'),
+				desc: __('id for Tizen device or emulator where install a widget'),
+				hint: __('id'),
+				default: 'none'
+			},
+			'run-dev-id': {
+				abbr: 'R',
+				desc: __('run widget on this device'),
+				hint: __('id'),
+				default: 'none'
+			},			
+			'debug-dev-id': {
+				abbr: 'B',
+				desc: __('debug widget on this device'),
 				hint: __('id'),
 				default: 'none'
 			},
@@ -205,7 +217,9 @@ function build(logger, config, cli, finished) {
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
-	this.targetDevice = cli.argv['dev-id'];
+	this.targetDevice = cli.argv['dev-id'];	
+	this.debugDevice = cli.argv['debug-dev-id'];
+	this.runDevice = cli.argv['run-dev-id'];
 	this.tizenCert = cli.argv['cert'];
 	this.storeType = 'pkcs12';
 	this.alias = cli.argv['alias'];
@@ -324,24 +338,37 @@ function build(logger, config, cli, finished) {
 							});
 						}
 					}.bind(this), function(next){
-						if(!(this.targetDevice && this.targetDevice != 'none')){
-							finished && finished.call(this);
-						}else{							
+							//find Tizen SDK location. Needs it to use Tizen CLI
 							this.detectTizenSDK(logger, next);
+					}.bind(this), function(next){
+						if(this.runDevice && this.runDevice != 'none'){
+							this.runOnDevice(logger, function(){
+									next(null, 'ok');
+								});
+						}else{							
+							next(null, 'ok');
 						}
 					}.bind(this),function(next){
-						this.runOnDevice(logger, function(){
-							finished && finished.call(this);	
-						});						
+						if(this.targetDevice && this.targetDevice != 'none'){
+							this.installOnDevice(logger, function(){
+									next(null, 'ok');
+								});
+						}else{							
+							next(null, 'ok');
+						}
+					}.bind(this),function(next){
+						if(this.debugDevice && this.debugDevice != 'none'){
+							this.debugOnDevice(logger, function(){
+									next(null, 'ok');
+								});
+						}else{							
+							next(null, 'ok');
+						}
 					}.bind(this)
-
 					], function(err){
 						if(err) 
-							console.log(err)
-						else {
-
-							console.log('Failed...')
-						}
+							console.log('Failed:' + err)						
+						finished && finished.call(this);
 				});
 			});
 		});
@@ -1099,12 +1126,49 @@ build.prototype = {
 			}
 		);			
 	},
-	runOnDevice : function(logger, callback){		
+	// implementations of  installOnDevice/runOnDevice/debugOnDevice are very close
+	// but do not move code for all into "common" functions. These functions seems to be subject of change in next TizenSDK versions.
+	// I belive that at least parameter --id will be changed since it can be ease received from config.xml also web-install really needs only path to wgt
+	// but current tizen implementation does not work without --id parameter
+	installOnDevice : function(logger, callback){	
 		if(this.targetDevice && this.targetDevice != 'none'){
 			var runner = require("child_process");
-			var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
+			var pathToCmd;
+			if(process.platform === 'win32'){
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
+			}else{
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install');
+			}
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget=' + pathToWgt;
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.targetDevice;
+			logger.info('install cmd: ' + cmd);
+			runner.exec(
+				cmd,
+				function (err, stdout, stderr) {
+					logger.info(stdout);
+					if(err != null){
+						logger.info('wgt installation failed');
+						logger.info(stderr);
+					}else{
+						logger.info('Installed wgt: ' + pathToWgt);
+					}
+					callback();
+			});	
+		}else{
+			callback();
+		}		
+	},		
+	runOnDevice : function(logger, callback){		
+		if(this.runDevice && this.runDevice != 'none'){
+			var runner = require("child_process");
+			var pathToCmd;
+			if(process.platform === 'win32'){
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run.bat');
+			} else{
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run');
+			}
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.runDevice;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1122,6 +1186,34 @@ build.prototype = {
 			callback();
 		}		
 	},
+	debugOnDevice : function(logger, callback){
+		if(this.debugDevice && this.debugDevice != 'none'){
+			var runner = require("child_process");			
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');			
+			var pathToCmd;
+			if(process.platform === 'win32'){
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug.bat');
+			} else{
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug');
+			}
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.debugDevice;
+			logger.info('install cmd: ' + cmd);
+			runner.exec(
+				cmd,
+				function (err, stdout, stderr) {
+					logger.info(stdout);
+					if(err != null){
+						logger.info('wgt installation failed');
+						logger.info(stderr);
+					}else{
+						logger.info('Installed wgt: ' + pathToWgt);
+					}
+					callback();
+			});	
+		}else{
+			callback();
+		}		
+	},	
 	detectTizenSDK: function(logger, next){
 		//Detect Tizen SDK
 		//check OS, this code supporting windows only(for now useing registry to find path)
