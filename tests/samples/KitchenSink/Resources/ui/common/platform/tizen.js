@@ -1,7 +1,7 @@
 function tizen(_args) {
 	var self = Titanium.UI.createWindow(),
 		data = [
-			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_contacts'},
+			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/contacts'},
 			{title: 'Geocoder', hasChild: true, test: 'ui/handheld/tizen/platform/geocoder'},
 		],
 		tableview = Ti.UI.createTableView({

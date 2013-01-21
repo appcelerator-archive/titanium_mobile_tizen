@@ -29,6 +29,11 @@ function find_contacts(_args) {
 			var contactsCount = persons.length,
 				i = 0,
 				tableData = [];
+			if (contactsCount === 0) {
+				searchInput.value = "";
+				alert('Contact(s) not found');
+				return false;
+			}
 			for (; i < contactsCount; i++) {
 				var row = Ti.UI.createTableViewRow({
 						height: 40
@@ -66,7 +71,9 @@ function find_contacts(_args) {
 					});
 					editButton.addEventListener('click', function(e){
 						wnd = new  (require('ui/handheld/tizen/platform/contact_edit'))({title: 'Edit contact details', contactId: persons[index].id});
-						_args.containingTab.open(wnd, {animated: true});						
+						_args.containingTab.open(wnd, {animated: true});
+						contactsTable.data = [];
+						searchInput.value = "";						
 					});
 				})(i);
 				
