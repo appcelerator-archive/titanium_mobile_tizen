@@ -78,7 +78,7 @@ function tizen_filesystem() {
             Ti.API.info(e.message);
         }
         try {
-            titleStatus.setText('deleting');
+            titleStatus.setText('deleting...');
             directory.virtualRoot.deleteFile(
                 directory.virtualRoot.path + '/' + name,
                 success,
