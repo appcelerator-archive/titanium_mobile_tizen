@@ -417,8 +417,9 @@ function tizen_alarm() {
 
 			}
 
-			var i = 0;
-			for(; i < dictionary.length; i++){
+			var i = 0,
+				l = dictionary.length;
+			for(; i < l; i++){
 				if(dictionary[i].alarmId == id){
 					dictionary.splice(i, 1);
 					tabView.setData(dictionary);
