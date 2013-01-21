@@ -73,9 +73,9 @@ module.exports = new function() {
 		valueOf(testRun, player.pause).shouldBeFunction();
 		valueOf(testRun, player.start).shouldBeFunction();
 		valueOf(testRun, player.setUrl).shouldBeFunction();
-		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.stateDescription).shouldBeFunction();
+		if ( !isAndroid ) valueOf(testRun, player.stateDescription).shouldBeFunction();
 		valueOf(testRun, player.stop).shouldBeFunction();
-		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.idle).shouldBeBoolean();
+		if ( !isAndroid ) valueOf(testRun, player.idle).shouldBeBoolean();
 		if (!isAndroid) valueOf(testRun, player.state).shouldBeNumber();
 		valueOf(testRun, player.paused).shouldBeBoolean();
 		if ( !(isAndroid || isTizen) ) valueOf(testRun, player.waiting).shouldBeBoolean();
@@ -116,8 +116,8 @@ module.exports = new function() {
 		    sound.url = "sound.wav";
 		}
 		
-		//play at 3 sec(now time on tizen in sec)
-		var initial_pos = Ti.Platform.osname === 'tizen' ? 3: 3000;
+		//play at 3 sec
+		var initial_pos = 3000;
 		
 		
 		sound.time = initial_pos;
