@@ -1,7 +1,7 @@
 function tizen(_args) {
 	var self = Titanium.UI.createWindow(),
 		data = [
-			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_contacts'},
+			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/contacts'},
 			{title: 'Call', hasChild: true, test: 'ui/handheld/tizen/platform/call/call'},
 			{title: 'Geocoder', hasChild: true, test: 'ui/handheld/tizen/platform/geocoder'},		
 			{title: 'Application', hasChild: true, test: 'ui/common/platform/tizen_application'},
