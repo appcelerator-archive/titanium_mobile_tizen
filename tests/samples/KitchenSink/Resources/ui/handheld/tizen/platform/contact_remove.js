@@ -10,7 +10,8 @@ function remove_contact(_args) {
 			data = [];
 		for (; i < contactsCount; i++) {
 				var row = Ti.UI.createTableViewRow({
-						height: 40
+						height: 40,
+						id: i
 					}),
 					contactLabel = Ti.UI.createLabel({
 						top: 5,
@@ -31,11 +32,23 @@ function remove_contact(_args) {
 				
 				(function(index){
 					delButton.addEventListener('click', function(e) {
+						var rowsCount = data.length,
+							i = 0,
+							row;
+						for (; i < rowsCount; i++) {
+							row = data[i];
+							if (row.id !== index) {
+								continue;
+							}
+							data.splice(i, 1);
+							contactsTable.data = data;
+							break;
+						}
 						Ti.Contacts.removePerson(persons[index]);
+						contactsTable.data = data;
 						alert('Contact was removed successfully');
 					});
 				})(i);
-				
 				data.push(row);
 		}
 		contactsTable.data = data;
