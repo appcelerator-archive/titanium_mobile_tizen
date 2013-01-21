@@ -35,7 +35,6 @@ function tizenDownload(title) {
 		pauseButton = createButton('pause download', 110, function(){if (downloadId) tizen.download.pause(downloadId);}),
 		resumeButton = createButton('resume download', 150, function(){if (downloadId) tizen.download.resume(downloadId);}),
 		stopButton = createButton('stop download', 190, function(){if (downloadId) tizen.download.abort(downloadId);}),
-		startButton = createButton('stop download', 190, function(){if (downloadId) tizen.download.abort(downloadId);}),
 //		statusButton= createButton('check status', 230, function(){checkState();}),
 		urlTextField = Titanium.UI.createTextField({
 			value:"http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin",
@@ -64,31 +63,30 @@ function tizenDownload(title) {
 		//listener object must be "local" for call "tizen.download.start". Don't move this declaration it out of this function.
 		var listener = {
 			onprogress : function(id, receivedSize, totalSize) {
-				console.log("'onprogress' event. id=" + id + ", receivedSize=" + receivedSize + ", totalSize=" + totalSize);
-
+				Titanium.API.info("'onprogress' event. id=" + id + ", receivedSize=" + receivedSize + ", totalSize=" + totalSize);
 				var percentString = (totalSize > 0) ? String.formatDecimal((receivedSize * 100 / totalSize), "##.##" ) + "% " : '';
 				statusLabel.text = "Completed " + percentString + '['+receivedSize +'/'+totalSize+' bytes]';
 				checkState();
 			},
 			onpaused : function(id) {
-				console.log("'onpaused' event.");
+				Titanium.API.info("'onpaused' event.");
 				messageWin.showToast("Download paused. ", 3000);
 				checkState();
 			},
 			onaborted : function(id) {
-				console.log("'onaborted' event.");
+				Titanium.API.info("'onaborted' event.");
 				messageWin.showToast("Download aborted. ", 3000);
 				downloadId = undefined;
 				checkState();
 			},
 			oncompleted : function(id, fileName) {
-				console.log("'oncompleted' event.");
+				Titanium.API.info("'oncompleted' event.");
 				messageWin.showToast("Download completed. Saved to file: "+fileName, 5000);
 				downloadId = undefined;
 				checkState();
 			},
 			onfailed : function(id, error) {
-				console.log("'onfailed' event.");
+				Titanium.API.info("'onfailed' event.");
 				messageWin.showToast("Download failed with error: "+error.name, 3000);
 				downloadId = undefined;
 				checkState();
@@ -102,21 +100,15 @@ function tizenDownload(title) {
 				var urlDownload = new tizen.URLDownload(urlTextField.value, "wgt-private-tmp", "tmp"+(new Date().getTime()));
 				statusLabel.text = "Starting...";
 				downloadId = tizen.download.start(urlDownload, listener);
-				console.log("Download started. downloadId="+downloadId);
-				console.log("Download started. State="+tizen.download.getState(downloadId));
+				Titanium.API.info("Download started. downloadId="+downloadId);
+				Titanium.API.info("Download started. State=" + tizen.download.getState(downloadId));
 			}
 		}catch(e) {
 			messageWin.showToast("Exception on start download! /n" + e.message, 2500);
 		}
 
 		checkState();
-	}
-
-	function download(url) {
-		console.log('Going to download: ' + url);
-		var urlDownload = new tizen.URLDownload(url, "wgt-private-tmp", "tmp"+(new Date().getTime()));
-		downloadId = tizen.download.start(urlDownload, listener);
-		console.log('Download started: ' + downloadId);
+		//setInterval(function(){Titanium.API.info("checking state by timer..."); checkState()}, 1000);
 	}
 
 	// checks current download state and updates buttons and messages states according to it.
@@ -128,8 +120,9 @@ function tizenDownload(title) {
 			stopButton.enabled = !!downloadId;
 
 			// state can be: "PAUSED", "DOWNLOADING", "ABORTED", "COMPLETED", "DOWNLOADING", "QUEUED"
-			var state = (downloadId)?tizen.download.getState(downloadId):"NONE";
+			var state =  downloadId ? tizen.download.getState(downloadId) : "NONE";
 			stateLabel.text = "current download state: " + state;
+			Titanium.API.info("current download state: " + state);
 
 			pauseButton.enabled = (state == "DOWNLOADING");
 			resumeButton.enabled = (state == "PAUSED");

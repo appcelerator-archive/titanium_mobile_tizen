@@ -15,10 +15,6 @@ function initToast() {
 			]
 		});
 
-	if (Ti.Platform.osname === 'iphone') {
-		toastWin.orientationModes = [Ti.UI.PORTRAIT]
-	}
-
 	var toastView = Titanium.UI.createView({
 		height:30,
 		width:250,

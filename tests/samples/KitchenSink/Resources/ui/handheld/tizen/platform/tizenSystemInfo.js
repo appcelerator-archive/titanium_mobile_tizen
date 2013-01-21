@@ -1,6 +1,6 @@
 function tizenSystemInfo(title) {
 	var messageWin = require('ui/handheld/tizen/tizenToast'),
-		//alertWin = require('ui/handheld/tizen/tizenAlert'),
+	    alertWin = require('ui/handheld/tizen/tizenAlert'),
 		gBatteryListener;
 
 
@@ -31,9 +31,7 @@ function tizenSystemInfo(title) {
 				try {
 					gBatteryListener = tizen.systeminfo.addPropertyValueChangeListener("Power",
 						function (power) {messageWin.showToast("Battery level: " + power.level,1500);},
-						function (e) {messageWin.showToast("Battery monitoring error! \n" + e.message,2500);},
-						// SystemInfoOptions object with threshold values
-						{highThreshold: 0.9,lowThreshold: 0.2});
+						function (e) {messageWin.showToast("Battery monitoring error! \n" + e.message,2500);});
 
 					e.rowData.title = batteryMonitoring.onCaption;
 					messageWin.showToast(batteryMonitoring.onCaption,1500);
@@ -46,17 +44,11 @@ function tizenSystemInfo(title) {
 	}
 
 	function showDetailsDialog(propertyName, propertyDetailsHtml){
-		var a = Titanium.UI.createAlertDialog({
-			title: propertyName + ' details',
-			message: propertyDetailsHtml,
-			buttonNames: ['Go back to list']
-		});
-		a.show();
-		//alertWin.showAlert(propertyName + ' details', propertyDetailsHtml, 'Go back to list')
+		alertWin.showAlert(propertyName + ' details', propertyDetailsHtml, 'Go back to list');
 	}
 
 	var win = Ti.UI.createWindow({backgroundColor:'#fff'}),
-		batteryMonitoring = {isOn: false, onCaption: 'Battery monitoring is on', offCaption:'Battery monitoring is off' },
+		batteryMonitoring = {isOn:false, onCaption:'Battery monitoring is on', offCaption:'Battery monitoring is off'},
 		data = [
 			{title:'Storage information', propertyName:'Storage', propertyCallback:onStorageSuccess},
 			{title:'Power state', propertyName:'Power', propertyCallback:onPowerSuccess},
@@ -70,28 +62,33 @@ function tizenSystemInfo(title) {
 			{title:'SIM information', propertyName:'SIM', propertyCallback:onSimSuccess}
 		];
 	// create table view
-	for (var i = 0; i < data.length; i++ ) { data[i].color = '#000'; data[i].font = {fontWeight:'bold'} };
+	for (var i = 0; i < data.length; i++ ) {
+		data[i].color = '#000';
+		data[i].font = {fontWeight:'bold'}
+	};
 	var tableview = Titanium.UI.createTableView({data:data});
 
 	// create table view event listener
 	tableview.addEventListener('click', function(e){
-		if (e)
-		{
-			if (e.rowData){
-				var pName = e.rowData.propertyName;
-				if (pName){
-					getSystemProperty(pName, e.rowData.propertyCallback, function(er){showDetailsDialog(pName, '<b>API error:</b><br/>'+ er.message);})
-				}else{
-					if (e.rowData.clickCallback) e.rowData.clickCallback(e);
-				}
-			}}
+		if (e && e.rowData) {
+			var pName = e.rowData.propertyName;
+			if (pName) {
+				getSystemProperty(pName, e.rowData.propertyCallback, function (er) {
+					showDetailsDialog(pName, '<b>API error:</b><br/>' + er.message);
+				})
+			} else {
+				if (e.rowData.clickCallback) e.rowData.clickCallback(e);
+			}
+		}
 	});
 
 	win.add(tableview);
 	return win;
 
 	function onPowerSuccess(power) {
-		showDetailsDialog('Power', formatSubLines(['Current level: ' + power.level, 'Charging: ' + (power.isCharging ? "Yes" : "No")]));
+		showDetailsDialog('Power', formatSubLines(
+			['Current level: ' + power.level,
+				'Charging: ' + (power.isCharging ? "Yes" : "No")]));
 	}
 
 	function onCpuInfoSuccess(cpu) {
@@ -99,43 +96,50 @@ function tizenSystemInfo(title) {
 	}
 
 	function onStorageSuccess(storages) {
-		var gInfo = '';
+		var storagesInfo = '';
 
 		for (var i = 0; i < storages.length; i++) {
-			gInfo += formatHeader('Storage #' + (i + 1))+
-				formatSubLine('Type: '+storages[i].type_)+
-				formatSubLine('Capacity: ' + Math.floor(storages[i].capacity / 1000000) + ' MB')+
-				formatSubLine('Available capacity: ' + Math.floor(storages[i].availableCapacity / 1000000) + ' MB')+
-				formatSubLine('Removable: ' + (storages[i].isRemoveable ? "Yes" : "No"));
+			storagesInfo += formatHeader('Storage #' + (i + 1))+
+				formatSubLines(['Type: '+storages[i].type,
+					'Capacity: ' + Math.floor(storages[i].capacity / 1000000) + ' MB',
+					'Available capacity: ' + Math.floor(storages[i].availableCapacity / 1000000) + ' MB',
+					'Removable: ' + (storages[i].isRemoveable ? "Yes" : "No")]);
 		}
 
-		showDetailsDialog('Storage', gInfo);
+		showDetailsDialog('Storage', storagesInfo);
 	}
 
 	function onDisplaySuccess(display) {
-		var gInfo = formatHeader('Resolution')
-			+ formatSubLines(['Width: ' + display.resolutionWidth, 'Height: ' + display.resolutionHeight])
-			+ formatHeader('Dots per inch (DPI)')
-			+ formatSubLines(['Horizontal: ' + display.dotsPerInchWidth, 'Vertical: ' + display.dotsPerInchHeight])
-			+ formatHeader('Physical size')
-			+ formatSubLines(['Width: ' + display.physicalWidth, 'Height: ' + display.physicalHeight])
-			+ formatHeader('Brightness')
-			+ formatSubLine('Current brightness: '+display.brightness);
-
-		showDetailsDialog('Display', gInfo);
+		var displayInfo = formatHeader('Resolution') +
+			formatSubLines(['Width: ' + display.resolutionWidth, 'Height: ' + display.resolutionHeight]) +
+			formatHeader('Dots per inch (DPI)') +
+			formatSubLines(['Horizontal: ' + display.dotsPerInchWidth, 'Vertical: ' + display.dotsPerInchHeight]) +
+			formatHeader('Physical size') +
+			formatSubLines(['Width: ' + display.physicalWidth, 'Height: ' + display.physicalHeight]) +
+			formatHeader('Brightness') +
+			formatSubLines(['Current brightness: '+display.brightness]);
+		showDetailsDialog('Display', displayInfo);
 	}
 
 	function onDeviceSuccess(device) {
-		showDetailsDialog('Device', formatSubLines(['IMEI: ' + device.imei, 'Model: ' + device.model, 'Version: ' + device.version, 'Vendor: ' + device.vendor]));
+		showDetailsDialog('Device', formatSubLines(
+			['IMEI: ' + device.imei,
+				'Model: ' + device.model,
+				'Version: ' + device.version,
+				'Vendor: ' + device.vendor]));
 	}
 
 	function onNetworkSuccess(network) {
 		var networkTypes = ["NONE", "2G", "2.5G","3G", "4G", "WIFI", "ETHERNET", "UNKNOWN"];
-		showDetailsDialog('Network', formatSubLine("Current data network type: " + networkTypes[network.networkType]));
+		showDetailsDialog('Network', formatSubLines(["Current data network type: " + networkTypes[network.networkType]]));
 	}
 
 	function onWifiSuccess(wifi) {
-		showDetailsDialog('Wifi network', formatSubLines(["Status: " + wifi.status, "SSID: " + wifi.ssid, "IP address: " + wifi.ipAddress, "Signal strength: " + wifi.signalStrength]));
+		showDetailsDialog('Wifi network', formatSubLines(
+			["Status: " + wifi.status,
+				"SSID: " + wifi.ssid,
+				"IP address: " + wifi.ipAddress,
+				"Signal strength: " + wifi.signalStrength]));
 	}
 
 	function onCellSuccess(cell) {
@@ -165,16 +169,12 @@ function tizenSystemInfo(title) {
 		return  '<b>' + headerName + '</b> <br />';
 	}
 
-	function formatSubLine(line){
-		return  '<div style="text-align: left; width: 100%">' + line + '</div> <br/>';
-	}
-
 	function formatSubLines(lineArray){
-		var result = '';
+		var result = '<div style="text-align: left; width: 100%">';
 		for (var i = 0; i < lineArray.length; i++) {
-			result += formatSubLine(lineArray[i]);
+			result +=  lineArray[i] + '<br/>'
 		}
-		return  result;
+		return  result + '</div>';
 	}
 };
 
