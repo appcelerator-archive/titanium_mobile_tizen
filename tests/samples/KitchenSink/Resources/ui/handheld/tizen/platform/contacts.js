@@ -3,7 +3,7 @@ function tizen_contacts(_args) {
 		title: _args.title
 	}),
 		data = [
-			{title: 'Add contact', test: 'ui/handheld/tizen/platform/tizen_contacts_add'},
+			{title: 'Add contact', test: 'ui/handheld/tizen/platform/contacts_add'},
 			{title: 'Find contacts',  test: 'ui/handheld/tizen/platform/contacts_find'},
 			{title: 'Remove contacts', test: 'ui/handheld/tizen/platform/contact_remove'}
 		],
