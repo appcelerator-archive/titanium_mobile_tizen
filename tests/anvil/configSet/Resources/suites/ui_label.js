@@ -20,11 +20,13 @@ module.exports = new function() {
 	this.name = "ui_label";
 	this.tests = (function(){
 		var arr = [
-			{name: "testProperties"},
-			
+			{name: "testProperties"}
 		]
+
 		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
 			arr.push({name: "testShow"});
+			arr.push({name: "testHtmlPx"});
+
 			if(Ti.Platform.osname === 'tizen'){
 				arr.push({name: "testAutolink"});
 			}
@@ -33,7 +35,7 @@ module.exports = new function() {
 	}())
 
 	this.testProperties = function(testRun) {
-		
+
 		var win = Ti.UI.createWindow({
 			backgroundColor: 'white',
 			exitOnClose: true,
@@ -41,9 +43,9 @@ module.exports = new function() {
 			layout: 'vertical',
 			title: 'Label Demo'
 		});
-		
-		
-		
+
+
+
 		var label1 = Ti.UI.createLabel({
 			color: '#900',
 			font: { fontSize:48 },
@@ -71,16 +73,16 @@ module.exports = new function() {
 		})
 
 		win.open();
-     	
+
 	}
 
 	this.testShow = function(testRun){
 
 		// Create a label and verify its appearance (background, foreground color)
 		// by verifying the presence of pixels of these colours on the screen.
-		
+
 		var win = Ti.UI.createWindow({
-			backgroundColor: '00ffff',
+			backgroundColor: '00ffff'
 		});
 
 		var cp = new CountPixels();
@@ -102,7 +104,6 @@ module.exports = new function() {
 		});
 
 		win.add(label);
-
 		win.open();
 
 		function checkFontColor (count){
@@ -115,49 +116,44 @@ module.exports = new function() {
 			win.close();
 			finish(testRun);
 		}
-
-		
-
 	}
 
 	this.testAutolink = function(testRun){
 		var win = Ti.UI.createWindow({
 			backgroundColor: 'white',
 			exitOnClose: true,
-			layout: 'vertical',
+			layout: 'vertical'
 		});
-		
+
 		var label1 = Ti.UI.createLabel({
 			color: '#900',
 			font: { fontSize:14 },
 			text: 'test@test.com\n 817-555-5555\n http://bit.ly',
 			top: 30,
-			width: 'auto', height: 'auto'
+			width: 'auto',
+			height: 'auto',
+			autoLink: Ti.UI.LINKIFY_NONE
 		});
 
 		win.add(label1);
-
-		win.addEventListener('open', checkAutlinkBefore);
-
+		win.addEventListener('postlayout', checkAutolinkBefore);
 		win.open();
 
-		label1.autoLink = Ti.UI.Tizen.LINKIFY_ALL;
-
-		
-
-		function checkAutlinkBefore(){
-			var label = document.getElementsByClassName('TiUILabel')[0];
-			var anchors = label.getElementsByTagName('a');
+		//check that our label with flag LINKIFY_NONE has no links inside
+		function checkAutolinkBefore(){
+			var anchors = label1.domNode.getElementsByTagName('a');
 			valueOf(testRun, anchors.length).shouldBe(0);
-			label1.autoLink = Ti.UI.Tizen.LINKIFY_ALL;
-			checkAutlinkAfter();
 
+			label1.autoLink = Ti.UI.LINKIFY_ALL;
+			checkAutolinkAfter();
 		}
 
-		function checkAutlinkAfter(){
-			valueOf(testRun, label1.autoLink).shouldBe(Ti.UI.Tizen.LINKIFY_ALL);
-			var label = document.getElementsByClassName('TiUILabel')[0];
-			var anchors = label.getElementsByTagName('a');
+		function checkAutolinkAfter(){
+			valueOf(testRun, label1.autoLink).shouldBe(Ti.UI.LINKIFY_ALL);
+
+			var label = label1.domNode,
+				anchors = label.getElementsByTagName('a');
+
 			valueOf(testRun, anchors.length).shouldBe(3);
 			if (anchors.length >= 3){
 				var emailAnchor = anchors[0],
@@ -170,13 +166,56 @@ module.exports = new function() {
 				//valueOf(testRun, phoneAnchor.href).shouldBe("#");
 				valueOf(testRun, urlAnchor.innerHTML).shouldBe("http://bit.ly");
 				valueOf(testRun, urlAnchor.href).shouldBe("http://bit.ly/");
-
 			}
 			win.close();
 			finish(testRun);
 		}
-		
-
 	}
 
+
+	this.testHtmlPx = function(testRun){
+		// Create a label and checks html property is functioning
+		var cp = new CountPixels(),
+			backgroundPixelsCount = 0,
+			win = Ti.UI.createWindow({backgroundColor: 'black'}),
+			label = Ti.UI.createLabel({
+				html:'',
+				color:'white',
+				backgroundColor: 'black',
+				height:66,
+				width:200
+			});
+
+		label.addEventListener('postlayout', function(){
+			cp.countPixels([0, 0, 0], win, noTextOnLabelCheck);
+		});
+
+		win.add(label);
+		win.open();
+
+		// Counting background's pixels count if no visible html value is set
+		function noTextOnLabelCheck (count){
+			valueOf(testRun, count).shouldBeGreaterThan(0);
+			backgroundPixelsCount = count;
+			label.html = "|||||||||||||||||||||";
+			//allow it to be fully repainted ever it is slow
+			setTimeout(function(){cp.countPixels([0, 0, 0], win, applyHtmlTagSmallText);},50);
+		}
+
+		// Counting background's pixels count  to be sure some text is displayed
+		function applyHtmlTagSmallText (count){
+			valueOf(testRun, count).shouldBeLessThan(backgroundPixelsCount);
+			backgroundPixelsCount = count;
+			label.html = "<sup>|||||||||||||||||||||</sup>";
+			//allow it to be fully repainted ever it is slow
+			setTimeout(function(){cp.countPixels([0, 0, 0], win, onHtmlTextIsSmaller);},50);
+		}
+
+		// Counting background's pixels with <sup> text - now we should have more background pixel and less text.
+		function onHtmlTextIsSmaller(count){
+			valueOf(testRun, count).shouldBeGreaterThan(backgroundPixelsCount);
+			win.close();
+			finish(testRun);
+		}
+	}
 }
