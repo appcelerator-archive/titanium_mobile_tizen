@@ -53,7 +53,7 @@ module.exports = new function() {
 		var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
 
 		var showDialog = function(){
-			console.log('it work')
+			Ti.API.info('it work')
 			var cp = new CountPixels();
 
 			cp.countPixelsPercentage([255, 0, 0], document.body, callback1);
@@ -134,7 +134,7 @@ module.exports = new function() {
 		function checkOptions(){
 			var dialog_node = document.getElementsByClassName('TiUIWindow')[1];
 			var button_nodes = dialog_node.getElementsByClassName('TiUIButton');
-			console.log(button_nodes.length);
+			Ti.API.info(button_nodes.length);
 			if(button_nodes.length < 4){
 				valueOf(testRun, false).shouldBeTrue();
 			}else{
@@ -239,12 +239,12 @@ module.exports = new function() {
 		wind.open();
 
 		function hideDialog(count){
-				console.log(count)
+				Ti.API.info(count)
 				valueOf(testRun, count).shouldBeGreaterThan(20000);
 				try{
 						dialog.hide();
 				} catch (e){ 
-						console.log(e.message);
+						Ti.API.info(e.message);
 				}
 				wind.close();
 				finish(testRun);

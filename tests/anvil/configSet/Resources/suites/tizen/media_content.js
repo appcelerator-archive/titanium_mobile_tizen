@@ -79,9 +79,9 @@ module.exports = new function() {
 				errorCB(e);
 			}
 		};
-		console.log(destFolderName);
-		console.log(pathFrom);
-		console.log(fileName);
+		Ti.API.info(destFolderName);
+		Ti.API.info(pathFrom);
+		Ti.API.info(fileName);
 		tizen.filesystem.resolve(destFolderName, successCB, errorCB, "rw");
 	};
 		

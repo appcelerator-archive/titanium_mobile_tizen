@@ -18,11 +18,11 @@ module.exports = new function() {
 
 	this.name = "image_view";
 	this.tests = [
-		{name: "basic", timeout: 5000},
-		{name: "image_as_string", timeout: 5000},
-		{name: "image_as_file", timeout: 5000},
-		{name: "image_as_blob", timeout: 5000},
-		{name: "add_remove", timeout: 5000},
+		{name: "basic"},
+		{name: "image_as_string"},
+		{name: "image_as_file"},
+		{name: "image_as_blob"},
+		{name: "add_remove"},
 		{name: "animation", timeout: 20000}
 	]
         
@@ -274,6 +274,7 @@ module.exports = new function() {
             }
             var redPixelsCB = function(count){
                 valueOf(testRun, count).shouldBeEqual(50);
+				win.close();
                 finish(testRun);
             }
             
@@ -293,6 +294,7 @@ module.exports = new function() {
                     } 
                 })
             } else {
+				win.close();
                 finish(testRun);
             }
             win.add(image);
