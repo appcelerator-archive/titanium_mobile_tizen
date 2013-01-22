@@ -35,7 +35,6 @@ function tizenDownload(title) {
 		pauseButton = createButton('pause download', 110, function(){if (downloadId) tizen.download.pause(downloadId);}),
 		resumeButton = createButton('resume download', 150, function(){if (downloadId) tizen.download.resume(downloadId);}),
 		stopButton = createButton('stop download', 190, function(){if (downloadId) tizen.download.abort(downloadId);}),
-//		statusButton= createButton('check status', 230, function(){checkState();}),
 		urlTextField = Titanium.UI.createTextField({
 			value:"http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin",
 			top:30,
@@ -50,7 +49,6 @@ function tizenDownload(title) {
 	win.add(pauseButton);
 	win.add(resumeButton);
 	win.add(stopButton);
-	//win.add(statusButton);
 	win.add(statusLabel);
 	win.add(stateLabel);
 	win.add(urlLabel);
@@ -108,18 +106,17 @@ function tizenDownload(title) {
 		}
 
 		checkState();
-		//setInterval(function(){Titanium.API.info("checking state by timer..."); checkState()}, 1000);
 	}
 
 	// checks current download state and updates buttons and messages states according to it.
 	function checkState(){
 		try{
-			// as downloadId has value only on some download in in progress(paused or in progress)
+			// as downloadId has value only on some download in progress(or paused)
 			// we can get basic states from it
 			startButton.enabled = !downloadId;
 			stopButton.enabled = !!downloadId;
 
-			// state can be: "PAUSED", "DOWNLOADING", "ABORTED", "COMPLETED", "DOWNLOADING", "QUEUED"
+			// state can be: "PAUSED", "ABORTED", "COMPLETED", "DOWNLOADING", "QUEUED"
 			var state =  downloadId ? tizen.download.getState(downloadId) : "NONE";
 			stateLabel.text = "current download state: " + state;
 			Titanium.API.info("current download state: " + state);

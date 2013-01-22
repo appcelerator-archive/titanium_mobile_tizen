@@ -192,7 +192,7 @@ module.exports = new function() {
 				addressbook.add(contact2);
 				var filter = new tizen.AttributeFilter("name.firstName", "ENDSWITH", "Hn");
 				addressbook.find(function(contacts){
-					console.log(contacts.length);
+					Ti.API.info(contacts.length);
 					valueOf(testRun, contacts.length).shouldBe(1);
 					finish(testRun);
 				}, function(err) {
@@ -227,7 +227,7 @@ module.exports = new function() {
 				addressbook.add(contact2);
 				var filter = new tizen.AttributeFilter("name.firstName", "EXISTS");
 				addressbook.find(function(contacts){
-					console.log(contacts.length);
+					Ti.API.info(contacts.length);
 					valueOf(testRun, contacts.length).shouldBe(2);
 					finish(testRun);
 				}, function(err) {
@@ -366,7 +366,7 @@ module.exports = new function() {
 	this.rangeFilterTest = function(testRun) {
 		 var filter = new tizen.AttributeRangeFilter("startTime",new Date(2012, 0, 1),new Date());
 		tizen.call.history.find(function(results) {
-			console.log(results.length);
+			Ti.API.info(results.length);
 			valueOf(testRun, results.length).shouldBeGreaterThan(0);
 			finish(testRun);
 		}, function(err) {

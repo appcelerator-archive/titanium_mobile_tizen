@@ -70,6 +70,7 @@ module.exports = new function() {
         win.addEventListener("postlayout", function() {
         	Ti.API.info("Test basic_test end.");
 
+			win.close();
             finish(testRun);
         });
 
@@ -147,7 +148,7 @@ module.exports = new function() {
 			button.fireEvent("longpress");
 			button.fireEvent("pinch");
 
-			win.close();
+			//win.close();
 		});
 
 		win.add(button);
@@ -163,7 +164,9 @@ module.exports = new function() {
 			valueOf(testRun, pinch).shouldBeTrue();
 
 			Ti.API.info("All values are fine. Finish test.");
-
+			
+			
+			win.close();
 			finish(testRun);
 		}, 2000);
 	}
@@ -220,7 +223,8 @@ module.exports = new function() {
 							valueOf(testRun, count).shouldBeEqual(0);
 
 							Ti.API.info("Test pixel_test end.");
-
+							
+							win.close();
 			    			finish(testRun);
 		            	};
 

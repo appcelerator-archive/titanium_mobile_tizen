@@ -217,7 +217,7 @@ module.exports = new function() {
       	//try to remove all notification in tray
       	valueOf(testRun, function(){      
       			tizen.notification.removeAll();
-      	}).  ();
+      	}).shouldThrowException();
 
       	//try to get second notification and it should be removed
       	valueOf(testRun, function(){      
