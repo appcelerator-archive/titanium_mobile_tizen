@@ -64,7 +64,7 @@ module.exports = new function() {
 			cp.countPixelsPercentage([255, 0, 0], document.body, callback1);
 
 			function callback1(count){
-				console.log(count);
+				Ti.API.info(count);
 				
 				valueOf(testRun, function(){
 					dialog.show();
@@ -76,7 +76,7 @@ module.exports = new function() {
 			}
 
 			function callback2(count){
-				console.log(count);
+				Ti.API.info(count);
 				valueOf(testRun, count).shouldBe(0);
 				valueOf(testRun, function(){	
 					dialog.hide();
@@ -87,7 +87,7 @@ module.exports = new function() {
 			}	
 
 			function callback3(count){
-				console.log(count);
+				Ti.API.info(count);
 				valueOf(testRun, count).shouldBe(100);
 				wind.close();
 			}	
