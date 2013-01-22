@@ -10,10 +10,9 @@ function tizen(_args) {
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},			
             {title: 'Media content', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_media_content'},
 			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_alarm'},
-			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_notification'}
+			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_notification'},
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
 			{title: 'Calendar', hasChild: true, test: 'ui/handheld/tizen/platform/calendar'}
-
 		],
 		tableview = Ti.UI.createTableView({
 			data: data
