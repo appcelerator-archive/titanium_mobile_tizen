@@ -52,6 +52,9 @@ module.exports = new function() {
 
 		
 		wind.addEventListener('open', showDialog);
+		wind.addEventListener('close', function(){
+			finish(testRun);
+		})
 
 		wind.open();
 		
@@ -87,7 +90,6 @@ module.exports = new function() {
 				console.log(count);
 				valueOf(testRun, count).shouldBe(100);
 				wind.close();
-				finish(testRun);
 			}	
 
 		}

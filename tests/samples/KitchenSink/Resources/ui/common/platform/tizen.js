@@ -9,7 +9,8 @@ function tizen(_args) {
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenDownload'},		
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
 			{title: 'Application', hasChild: true, test: 'ui/common/platform/tizen_application'},
-			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_alarm'}
+			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_alarm'},
+			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_notification'}
 
 		],
 		tableview = Ti.UI.createTableView({

@@ -1,7 +1,7 @@
 function tizen_alarm() {
 
 	var dictionary = [],
-	    win = Titanium.UI.createWindow(),
+	    win = Titanium.UI.createWindow();
 		
 	var button_bar = Ti.UI.createView({
 			backgroundColor:'#555555',
@@ -76,10 +76,9 @@ function tizen_alarm() {
 		
 	var tabView = Ti.UI.createTableView(tableViewOptions);
 		
-		win.add(tabView);
-		win.add(button_bar);
-		//win.open();
-		return win;
+	win.add(tabView);
+	win.add(button_bar);
+	return win;
 
 	function createAbsoluteAlarm(){
 
@@ -198,7 +197,7 @@ function tizen_alarm() {
 		
 		var picker = Ti.UI.createPicker({
 			type:Ti.UI.PICKER_TYPE_DATE_AND_TIME,
-			selectionIndicator = true,// turn on the selection indicator (off by default)
+			selectionIndicator: true,// turn on the selection indicator (off by default)
 			value:new Date()
 		});
 		
