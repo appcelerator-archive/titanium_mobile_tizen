@@ -8,7 +8,7 @@ function tizen(_args) {
 			{title: 'Filesystem', hasChild: true, test: 'ui/common/platform/tizen_filesystem'},
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenDownload'},		
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
-			{title: 'Application', hasChild: true, test: 'ui/common/platform/tizen_application'}
+			{title: 'Calendar', hasChild: true, test: 'ui/handheld/tizen/platform/calendar'}
 
 		],
 		tableview = Ti.UI.createTableView({
