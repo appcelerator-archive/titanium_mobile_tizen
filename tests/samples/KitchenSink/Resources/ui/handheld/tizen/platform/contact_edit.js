@@ -1,8 +1,8 @@
-function edit_contact(_args) {
+function edit_contact(args) {
 	var win = Ti.UI.createWindow({
-			title: _args.title
+			title: args.title
 		}),
-		person = Ti.Contacts.getPersonByID(_args.contactId),
+		person = Ti.Contacts.getPersonByID(args.contactId),
 		labelLeftPos = 10,
 		labelWidth = '40%',
 		height = 30,
