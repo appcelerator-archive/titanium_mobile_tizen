@@ -301,7 +301,7 @@ module.exports = new function() {
 				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);	
 				finish(testRun);
 				//close the window
-				//wind.close();					
+				wind.close();					
 			});					
 		}, 2000);	
 		

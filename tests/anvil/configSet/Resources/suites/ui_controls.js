@@ -148,12 +148,14 @@ module.exports = new function() {
         		valueOf(testRun, scrollingEvents[numEvents - 1].view).shouldBe(view2);
 
         		Ti.API.debug('passed');
+				win.close();
         		finish(testRun);
+				
       		} catch (exception) {
-        		callback_error(exception);
-      		}
+        		callback_error(exception);      	
+			}
     	});
-
+		win.close();
 		finish(testRun);
 	}
 }
