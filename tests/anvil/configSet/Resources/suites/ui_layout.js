@@ -76,7 +76,9 @@ module.exports = new function() {
 				{name: "viewImagePixelTest"},
 				{name: "viewAddRemovePixelTest"},
                 {name: "viewZindex"},
-                {name: "viewVisible"}
+                {name: "viewVisible"},
+                {name: "viewLayoutPixelTest"},
+                {name: "viewTransformPixelTest"}
 			]);
 		}
 		return arr;
@@ -1754,5 +1756,337 @@ module.exports = new function() {
             win.add(view1);
             win.open();
         }
+
+    this.viewLayoutPixelTest = function(testRun){
+		var cp = new CountPixels();
+
+		//create window
+		var win = Ti.UI.createWindow();
+
+		//create veiw with composite layout
+		//in this view child views, which have the same coordinates and size, will overlap
+		var parentViewComposite = Ti.UI.createView({
+			backgroundColor : '#ffffff',
+			layout: 'composite'
+		});
+
+		//create veiw with composite layout
+		//in this view child views, which have the same coordinates and size, are placed one under the other
+		var parentViewVertical = Ti.UI.createView({
+			backgroundColor : '#ffffff',
+			layout: 'vertical'
+		});
+
+		//create veiw with composite layout
+		//in this view child views, which have the same coordinates and size placed next to one another
+		var parentViewHorizontal = Ti.UI.createView({
+			backgroundColor : '#ffffff',
+			layout: 'horizontal'
+		});
+
+		//these options will be used for creating the red views
+		var childViewRedOptions = {
+			top: 10,
+			left: 10,
+			height: 100,
+			width: 100,
+			backgroundColor: '#ff0000'
+		};
+
+		//these options will be used for creating the green views
+		var childViewGreenOptions = {
+			top: 10,
+			left: 10,
+			height: 100,
+			width: 100,
+			backgroundColor: '#00ff00'
+		};
+		var positionRed, positionGreen, expectedRed, expectedGreen;
+
+		parentViewComposite.add(Ti.UI.createView(childViewGreenOptions));
+		parentViewComposite.add(Ti.UI.createView(childViewRedOptions));
+
+		parentViewVertical.add(Ti.UI.createView(childViewGreenOptions));
+		parentViewVertical.add(Ti.UI.createView(childViewRedOptions));
+
+		parentViewHorizontal.add(Ti.UI.createView(childViewGreenOptions));
+		parentViewHorizontal.add(Ti.UI.createView(childViewRedOptions));
+
+		parentViewComposite.addEventListener('postlayout', prepareComposite);
+		parentViewVertical.addEventListener('postlayout' , prepareVertical);
+		parentViewHorizontal.addEventListener('postlayout' , prepareHorizontal);
+
+		win.add(parentViewComposite);
+		win.addEventListener('close', function(){
+			finish(testRun);
+		});
+		win.open();     // prepareComposite() will begin executing
+
+		function prepareComposite(){
+			// In composite layout, the red will completely cover the green
+			expectedRed = 10000,
+			expectedGreen = 0,
+			positionRed = {
+				top: 10,
+				left: 10,
+				width: 100,
+				heigth: 100,
+			};
+			positionGreen = {};
+
+			// Initiate the sequence of callbacks that will perform the following checks:
+			// - check that there are 10000 red pixels in the rectangle "positionred" (function checkRedColor)
+			// - check that there are 0 green pixels in the rectangle "positionGreen" (function checkGreenColor)
+			// - check that there are {windows_area - expectedGreen - expectedRed} white pixels (function CheckWhiteColor)
+			// - proceed to vertical layout test (function addVerticalWindow)
+			checkRedColor(addVerticalWindow);	
+		}
+
+		function prepareVertical(){
+			// In vertical layout, child views with same coordinates and sizes are placed one under the other
+			console.log('prepareVertical')
+			expectedRed = 10000,
+			expectedGreen = 10000,
+			positionRed = {
+				top: 120,
+				left: 10,
+				width: 100,
+				heigth: 100,
+			};
+			positionGreen = {
+				top: 10,
+				left: 10,
+				width: 100,
+				heigth: 100,
+			};
+
+			// Initiate the sequence of callbacks that will perform the following checks:
+			// - check that there are 10000 red pixels in the rectangle "positionred" (function checkRedColor)
+			// - check that there are 10000 green pixels in the rectangle "positionGreen" (function checkGreenColor)
+			// - check that there are {windows_area - expectedGreen - expectedRed} white pixels (function CheckWhiteColor)
+			// - proceed to horizontal layout test (function addHorizontalWindow)			
+			checkRedColor(addHorizontalWindow);	
+		}
+
+		function prepareHorizontal(){
+			// In horizontal layout, child views with same coordinates and sizes are placed one beside the other
+			expectedRed = 10000,
+			expectedGreen = 10000,
+			positionRed = {
+				top: 10,
+				left: 120,
+				width: 100,
+				heigth: 100,
+			};
+			positionGreen = {
+				top: 10,
+				left: 10,
+				width: 100,
+				heigth: 100,
+			};
+
+			// Initiate the sequence of callbacks that will perform the following checks:
+			// - check that there are 10000 red pixels in the rectangle "positionred" (function checkRedColor)
+			// - check that there are 10000 green pixels in the rectangle "positionGreen" (function checkGreenColor)
+			// - check that there are {windows_area - expectedGreen - expectedRed} white pixels (function CheckWhiteColor)
+			// - finish the test (function fin)			
+			checkRedColor(fin);	
+		}
+
+		function addVerticalWindow(){
+			win.removeEventListener('postlayout');
+			win.addEventListener('postlayout', function(){
+				setTimeout(function(){
+					win.add(parentViewVertical);    // prepareVertical will execute
+				}, 0);
+			});
+			win.remove(parentViewComposite);
+			console.log('asdfa')
+		}
+
+		function addHorizontalWindow(){
+			win.removeEventListener('postlayout');
+			win.addEventListener('postlayout', function(){
+				setTimeout(function(){
+					win.add(parentViewHorizontal);		// prepareHorizontal will execute
+				}, 0);
+			});
+			win.remove(parentViewVertical);
+		}
+
+		function fin(){
+			console.log('fin')
+			//then finish test
+			win.close()
+		}
+
+		function checkRedColor(callback){
+			cp.countPixels([255, 0, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expectedRed);
+					checkGreenColor(callback);	
+				},
+				positionRed
+			);
+		}
+
+		function checkGreenColor(callback){
+			cp.countPixels([0, 255, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expectedGreen);
+					checkWhiteColor(callback);	
+				},
+				positionGreen
+			);
+		}
+
+		function checkWhiteColor(callback){
+			cp.countPixels([255, 255, 255], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe( win.rect.width*win.rect.height - expectedRed - expectedGreen);
+					callback();	
+				}
+			);
+		}
+	}
+
+	this.viewTransformPixelTest = function(testRun){
+		var cp = new CountPixels();
+
+		//create white window which  will be used as background
+		var win = Ti.UI.createWindow({
+			backgroundColor : '#ffffff',
+			width: 320,
+			height: 510
+		});
+
+		//create black view wich will be used as container
+		//wich contain two colored bands
+		var parentView = Ti.UI.createView({
+			top: 205,
+			left: 110,
+			height: 100,
+			width: 100,
+			backgroundColor: '#000000',
+		});
+
+		//the green band
+		var greenView = Ti.UI.createView({
+			top: 0,
+			height: 50,
+			width: 100,
+			backgroundColor: '#00ff00'
+		});
+
+		//the red band
+		var redView = Ti.UI.createView({
+			bottom: 0,			
+			height: 50,
+			width: 100,
+			backgroundColor: '#ff0000'
+		})
+
+		parentView.add(redView);
+		parentView.add(greenView);
+
+		//create matrix wich will be transform our veiew
+		var matrix = Ti.UI.create2DMatrix()
+		matrix = matrix.rotate(270);
+		matrix = matrix.scale(2, 2);
+
+		//this is the expected numbers of colored pixels in the view and their expected rectangle
+		//before transformation
+		var expectedRed = 5000,
+			expectedGreen = 5000,
+			redRectangle = {
+				top: 255,
+				left: 110,
+				height: 50,
+				width: 100
+			},
+			greenRectangle = {
+				top: 205,
+				left: 110,
+				height: 50,
+				width: 100
+			};
+
+		win.add(parentView);
+		parentView.addEventListener('postlayout', checkRedColor);
+		win.addEventListener('close', function(){
+			finish(testRun);
+		});
+
+		win.open();
+
+		var fin = (function(){
+			var repeat = true;
+			return function(){
+				if(repeat){
+					repeat = false; 				//on the first call, it will transform the view,
+					expectedRed = 20000;	
+					expectedGreen = 20000;			//view should be rotated on 270 degree and scale twice
+					redRectangle = {				//that's why we specify appropriative coordinates and expected counts
+						top: 155,
+						left: 160,
+						height: 200,
+						width: 100
+					},
+					greenRectangle = {
+						top: 155,
+						left: 60,
+						height: 200,
+						width: 100
+					},
+					parentView.applyProperties({
+						transform: matrix
+					});
+
+					setTimeout(checkRedColor, 500);
+				} else {
+										//on the second call, it will finish the test
+					win.close();
+				} 
+			}
+		}())
+
+		//check red pixel count where the view should be located
+		function checkRedColor(){
+			cp.countPixels([255, 0, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expectedRed);
+					checkGreenColor();	
+				},
+				redRectangle
+			);
+		}
+
+		//check green pixel count where the view should be located
+		function checkGreenColor(){
+			cp.countPixels([0, 255, 0], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe(expectedGreen);
+					checkWhiteColor();	
+				},
+				greenRectangle
+			);
+		}
+
+		//check white pixel count on window
+		function checkWhiteColor(){
+			cp.countPixels([255, 255, 255], 
+				win, 
+				function(count){
+					valueOf(testRun, count).shouldBe( win.rect.width*win.rect.height - expectedRed - expectedGreen);
+					fin();	
+				}
+			);
+		}
+	}
         
 };
