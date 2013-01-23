@@ -41,6 +41,7 @@ var suites = [
 	{name: "ui_option_dialog"},
 	{name: "ui_activity_indicator"},
 	{name: "ui_label"},
+	{name: "ui/tableView"},
 	{name: "ui/tableViewSection"},
 	{name: "ui/mobile-NavigationGroup"},
 	{name: "ui/tabGroup"},
