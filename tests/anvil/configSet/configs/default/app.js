@@ -43,6 +43,7 @@ var suites = [
 	{name: "ui_label"},
 	{name: "ui/tableView"},
 	{name: "ui/tableViewSection"},
+	{name: "ui/tableViewRow"},
 	{name: "ui/mobile-NavigationGroup"},
 	{name: "ui/tabGroup"},
 	{name: "ui/tab"},	
