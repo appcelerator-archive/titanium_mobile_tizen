@@ -1,6 +1,6 @@
-function find_contacts(_args) {
+function find_contacts(args) {
 	var self = Ti.UI.createWindow({
-			title: _args.title
+			title: args.title
 		}),
 		contactsTable = Ti.UI.createTableView({
 			top: 50
@@ -67,11 +67,11 @@ function find_contacts(_args) {
 					var wnd;
 					viewButton.addEventListener('click', function(e){
 						wnd = new  (require('ui/handheld/tizen/platform/contact_view'))({title: 'View contact details', contactId: persons[index].id});
-						_args.containingTab.open(wnd, {animated: true});
+						args.containingTab.open(wnd, {animated: true});
 					});
 					editButton.addEventListener('click', function(e){
 						wnd = new  (require('ui/handheld/tizen/platform/contact_edit'))({title: 'Edit contact details', contactId: persons[index].id});
-						_args.containingTab.open(wnd, {animated: true});
+						args.containingTab.open(wnd, {animated: true});
 						contactsTable.data = [];
 						searchInput.value = "";						
 					});

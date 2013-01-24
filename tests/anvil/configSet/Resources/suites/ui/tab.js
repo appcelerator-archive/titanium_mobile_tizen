@@ -45,7 +45,8 @@ module.exports = new function() {
 		{name: "deactivate_tab"},
 		{name: "activate_tab"},
 		{name: "deactivate_activate_tab"},
-		{name: "active_no_pix"}
+		{name: "active_no_pix"},
+		{name: "icon"}
 	]	
 	
 	//Helper function for creating tab group with Ti.UI.Windows as parameters
@@ -95,7 +96,7 @@ module.exports = new function() {
 			valueOf(testRun, tab instanceof Ti.UI.Tab).shouldBeTrue();
 			
 			//Check properties title , active, window for the first tab
-			valueOf(testRun, tab.title).shouldBeEqual(TITLE);
+			valueOf(testRun, TITLE).shouldBeOneOf([tab.title,tab.titleid]);
 			valueOf(testRun, tab.active).shouldBeTrue();
 			valueOf(testRun, tab.window).shouldBeExactly(redWin);		
 			
@@ -301,7 +302,7 @@ module.exports = new function() {
 				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);	
 				finish(testRun);
 				//close the window
-				//wind.close();					
+				wind.close();					
 			});					
 		}, 2000);	
 		
@@ -329,5 +330,47 @@ module.exports = new function() {
 		//close the window
 		wind.close();	
 	};
+	
+	this.icon = function(testRun) {
+		//Create main window
+		var wind = Titanium.UI.createWindow();
 
+		//Create tab group with two windows
+		var tabGroup = _createTabGroupWithWindow(Titanium.UI.createWindow({
+			backgroundColor : RED_RGB
+		}), Titanium.UI.createWindow({
+			backgroundColor : GREEN_RGB
+		}));
+		
+		//Bar should have enough height because tab group bar shoud consist image
+		tabGroup.tabHeight=100;
+		//Add tab group on window
+		wind.add(tabGroup);
+		wind.open();
+		
+		wind.addEventListener('postlayout', function() {
+			tabGroup.tabs[0].icon = "/suites/ui/image_view/yellow_blue.png";
+			// Yellow color will be tested; blue will be ignored
+			valueOf(testRun, tabGroup.tabs[0].icon).shouldBeEqual("/suites/ui/image_view/yellow_blue.png");
+		});
+		
+		//Check appearance of the image
+		//Timeout is necessary because function tab.icon doesn't have callback
+		setTimeout(function(){
+			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {				
+				valueOf(testRun, count).shouldBeGreaterThan(0);	
+				tabGroup.tabs[0].icon = null;			
+			});
+		},1000);	
+		
+		//Check image dissappearance
+		//Timeout is necessary because function tab.icon doesn't have callback		
+		setTimeout(function(){
+			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {				
+				valueOf(testRun, count).shouldBeEqual(0);	
+				wind.close();
+				finish(testRun);				
+			});
+		},2000);			
+	}
 }

@@ -1,6 +1,6 @@
-function remove_contact(_args) {
+function remove_contact(args) {
 	var wnd = Ti.UI.createWindow({
-			title: _args.title
+			title: args.title
 		}),
 		contactsTable = Ti.UI.createTableView();
 	

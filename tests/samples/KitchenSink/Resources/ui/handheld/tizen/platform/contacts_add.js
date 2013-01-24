@@ -1,6 +1,6 @@
-function add_contacts(_args) {
+function add_contacts(args) {
 	var win = Ti.UI.createWindow({
-			title: _args.title
+			title: args.title
 		}),
 		labelLeftPos = 10,
 		labelWidth = '40%',

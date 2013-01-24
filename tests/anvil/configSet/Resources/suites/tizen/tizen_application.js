@@ -229,14 +229,14 @@ module.exports = new function() {
     	   onsuccess: function(reply) { 
 		   
     	      //for (var num = 0; num < reply.data.length; num++) { 
-    	         //console.log("reply.data["+num+"].key = "+ reply.data[num].key); 
-    	        // console.log("reply.data["+num+"].value = "+ reply.data[num].value); 
+    	         //Ti.API.info("reply.data["+num+"].key = "+ reply.data[num].key); 
+    	        // Ti.API.info("reply.data["+num+"].value = "+ reply.data[num].value); 
     	      //} 
 			  
     	   } ,
     	   // Something went wrong 
     	   onfail: function() { 
-    	      //console.log('Launch service failed'); 
+    	      //Ti.API.info('Launch service failed'); 
     	   } 
     	};
 		valueOf(testRun, function() {
