@@ -90,7 +90,7 @@ module.exports = new function() {
 
 		// Progress incrementation loop
 		function progress(count){
-			console.log(count)
+			Ti.API.info(count)
 			if(pb.value < pb.max){
 				pb.value++;
 				valueOf(testRun, count).shouldBeGreaterThan(prev_count);

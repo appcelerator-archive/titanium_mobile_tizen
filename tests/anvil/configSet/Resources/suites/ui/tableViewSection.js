@@ -18,12 +18,12 @@ module.exports = new function() {
 
 	this.name = "tableViewSection";
 	this.tests = [
-		{name: "createSection", timeout: 1000},
-		{name: "getProp", timeout: 1000},
-		{name: "setProp", timeout: 1000},
-		{name: "rowCount", timeout: 1000},
-		{name: "rows", timeout: 1000},
-		{name: "addRemove", timeout: 1000}
+		{name: "base"},
+		{name: "getProp"},
+		{name: "setProp"},
+		{name: "rowCount"},
+		{name: "rows"},
+		{name: "addRemove"}
 	]
 	
 

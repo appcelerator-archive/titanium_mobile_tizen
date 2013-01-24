@@ -32,7 +32,7 @@ module.exports = new function() {
 		    title: 'Delete'
 		});
 
-		console.log(dialog.message);
+		Ti.API.info(dialog.message);
 
 		valueOf(testRun, function(){
 			dialog.show();

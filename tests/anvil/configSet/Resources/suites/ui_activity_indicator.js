@@ -112,7 +112,9 @@ module.exports = new function() {
 		activityIndicator.addEventListener('postlayout', function(){
 			// The activity indicator should now be drawn. Check if it is
 			// (criteria: there must be enough pixels of the foreground color)
-			cp.countPixels([0, 255, 0], wind, checkFontColor);
+			setTimeout(function(){
+				cp.countPixels([0, 255, 0], wind, checkFontColor);
+			}, 500)
 		});
 
 		function checkFontColor(count){

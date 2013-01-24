@@ -47,7 +47,7 @@ module.exports = new function() {
 		button = domNode.getElementsByTagName('button')[0],
 		input = domNode.getElementsByTagName('input')[0],
 		span = domNode.getElementsByTagName('span')[0]
-		console.log(input.value);
+		Ti.API.info(input.value);
 
 		search.value = 'some text';
 		
@@ -56,18 +56,17 @@ module.exports = new function() {
 
 		search.hintText = 'some new text';
 
-		//console.log(span.innerHTML);
 
 		win.addEventListener('open', function(){
 			valueOf(testRun, function(){
 				search.blur();
 			}).shouldNotThrowException();
-			console.log(input.value);
+			Ti.API.info(input.value);
 			valueOf(input.value).shouldBe(search.hintText);
 			valueOf(testRun, function(){
 				search.focus();
 			}).shouldNotThrowException();
-			console.log(input.value);
+			Ti.API.info(input.value);
 			valueOf(input.value).shouldBe('');
 			setTimeout(function(){
 				win.close();
