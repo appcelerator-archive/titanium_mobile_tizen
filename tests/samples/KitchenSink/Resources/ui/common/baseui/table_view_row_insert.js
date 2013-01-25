@@ -28,7 +28,7 @@ function tv_row_insert() {
 	
 	tableView.addEventListener('click', function(e)
 	{
-	
+		var isTizen = Ti.Platform.osname === 'tizen';
 		switch(e.rowData.title)
 		{
 			case 'Insert Row Above (no anim)':
@@ -38,7 +38,7 @@ function tv_row_insert() {
 				tableView.insertRowBefore(0,row);
 				break;
 			case 'Insert Row Below - 1':
-				var row = tableView.getIndexByName('3');
+				var row = isTizen ? e.index : tableView.getIndexByName('3');
 				data = {title:'New Row After Row3'};
 				
 				if (Titanium.Platform.name == 'iPhone OS') {
@@ -49,7 +49,7 @@ function tv_row_insert() {
 				
 				break;
 			case 'Insert Row Below - 2':
-				var row = tableView.getIndexByName('7');
+				var row = isTizen ? e.index : tableView.getIndexByName('7');
 				data = {title:'New Row After Row7'};
 				
 				if (Titanium.Platform.name == 'iPhone OS') {
@@ -60,7 +60,7 @@ function tv_row_insert() {
 				
 				break;
 			case 'Insert Row Above - Header - 1':
-				var row = tableView.getIndexByName('8');
+				var row = isTizen ? e.index : tableView.getIndexByName('8');
 				data = {title:'New row before row 8', header:'Before header (1)'};
 				
 				if (Titanium.Platform.name == 'iPhone OS') {
@@ -71,7 +71,7 @@ function tv_row_insert() {
 				
 				break;
 			case 'Insert Row Above - Header - 2':
-				var row = tableView.getIndexByName('10');
+				var row = isTizen ? e.index : tableView.getIndexByName('10');
 				data = {title:'New row before row 10', header:'Before header (2)'};
 				
 				if (Titanium.Platform.name == 'iPhone OS') {
@@ -84,7 +84,7 @@ function tv_row_insert() {
 				
 				break;
 			case 'Insert Row Below - Header':
-				var row = tableView.getIndexByName('13');
+				var row = isTizen ? e.index : tableView.getIndexByName('13');
 				data = {title:'New row after row 13', header:'After header'};
 				
 				if (Titanium.Platform.name == 'iPhone OS') {
@@ -95,7 +95,7 @@ function tv_row_insert() {
 				
 				break;
 			case 'Insert Row w/o animation (below)':
-				var row = tableView.getIndexByName('3');
+				var row = isTizen ? e.index : tableView.getIndexByName('3');
 				data = {title:'New Row After Row3 w/o animation'};
 				tableView.insertRowAfter(row,data);
 				
@@ -108,8 +108,7 @@ function tv_row_insert() {
 				break;
 		}
 	
-	});
-	
+	});	
 	win.add(tableView);
 	return win;
 };
