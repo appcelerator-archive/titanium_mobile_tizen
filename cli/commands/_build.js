@@ -654,10 +654,10 @@ build.prototype = {
 			requireCacheWritten = false,
 			moduleCounter = 0;
 		
-		//For tize: following code uncommented, now it bypass caching
+		//For tizen: following code uncommented, now it bypass caching
 		// uncomment next line to bypass module caching (which is ill advised):
 		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
-		this.modulesToCache = [];
+		//this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
