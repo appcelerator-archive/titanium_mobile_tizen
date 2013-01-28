@@ -54,20 +54,17 @@ exports.config = function (logger, config, cli) {
 			'dev-id': {
 				abbr: 'I',
 				desc: __('id for Tizen device or emulator where install a widget'),
-				hint: __('id'),
-				default: 'none'
+				hint: __('device id')
 			},
 			'run-dev-id': {
 				abbr: 'R',
 				desc: __('run widget on this device'),
-				hint: __('id'),
-				default: 'none'
+				hint: __('device id')
 			},			
 			'debug-dev-id': {
 				abbr: 'B',
 				desc: __('debug widget on this device'),
-				hint: __('id'),
-				default: 'none'
+				hint: __('device id')
 			},
 			'cert': {
 				abbr: 'C',
@@ -201,7 +198,7 @@ function build(logger, config, cli, finished) {
 	if (config.paths && Array.isArray(config.paths.modules)) {
 		this.moduleSearchPaths = this.moduleSearchPaths.concat(config.paths.modules);
 	}
-	
+
 	this.projectDependencies = [];
 	this.modulesToLoad = [];
 	this.tiModulesToLoad = [];
@@ -232,11 +229,11 @@ function build(logger, config, cli, finished) {
 		location: './titanium',
 		main: pkgJson.main
 	}];
-	
+
 	if (!this.dependenciesMap) {
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
-	
+
 	// read the tiapp.xml and initialize some sensible defaults
 	applyDefaults(this.tiapp, {
 		mobileweb: {
@@ -271,10 +268,10 @@ function build(logger, config, cli, finished) {
 
 	// tiapp are ready now, continye
 	this.validateTheme();
-	
+
 	var mwBuildSettings = this.tiapp.mobileweb.build[this.buildType];
 	this.minifyJS = mwBuildSettings && mwBuildSettings.js ? !!mwBuildSettings.js.minify : this.buildType == 'production';
-	
+
 	cli.fireHook('build.pre.compile', this, function (e) {
 		parallel(this, [
 			'copyFiles',
@@ -340,6 +337,14 @@ function build(logger, config, cli, finished) {
 					}.bind(this), function(next){
 							//find Tizen SDK location. Needs it to use Tizen CLI
 							this.detectTizenSDK(logger, next);
+					}.bind(this),function(next){
+						if(this.debugDevice || this.runDevice || this.targetDevice){
+							this.uninstallWidgetForce(logger, function(){
+									next(null, 'ok');
+								});
+						}else{							
+							next(null, 'ok');
+						}
 					}.bind(this), function(next){
 						if(this.runDevice && this.runDevice != 'none'){
 							this.runOnDevice(logger, function(){
@@ -649,10 +654,10 @@ build.prototype = {
 			requireCacheWritten = false,
 			moduleCounter = 0;
 		
-		//For tize: following code uncommented, now it bypass caching
+		//For tizen: following code uncommented, now it bypass caching
 		// uncomment next line to bypass module caching (which is ill advised):
 		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
-		this.modulesToCache = [];
+		//this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
@@ -1126,11 +1131,47 @@ build.prototype = {
 			}
 		);			
 	},
+	uninstallWidgetForce: function(logger, callback){		
+		var devId;
+		if(this.debugDevice){
+			devId = this.debugDevice;
+		}else if(this.runDevice){
+			devId = this.runDevice;
+		} else if(this.targetDevice){
+			devId = this.targetDevice;
+		}
+		if(devId){
+			var runner = require("child_process");
+			var pathToCmd;
+			if(process.platform === 'win32'){
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall.bat');
+			}else{
+				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall');
+			}
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
+			var cmd = pathToCmd + ' --id=' + this.tiapp.url + ' --device=' + devId;;
+			logger.info('Forsing widget uninstall cmd: ' + cmd);
+			runner.exec(
+				cmd,
+				function (err, stdout, stderr) {
+					logger.info(stdout);
+					if(err != null){
+						logger.info('wgt uninstall failed');
+						logger.info(stderr);
+					}else{
+						logger.info('UnInstalled wgt failed');
+					}
+					callback();
+			});
+		} else{
+			callback();
+		}
+	},
 	// implementations of  installOnDevice/runOnDevice/debugOnDevice are very close
 	// but do not move code for all into "common" functions. These functions seems to be subject of change in next TizenSDK versions.
 	// I belive that at least parameter --id will be changed since it can be ease received from config.xml also web-install really needs only path to wgt
 	// but current tizen implementation does not work without --id parameter
-	installOnDevice : function(logger, callback){	
+	installOnDevice : function(logger, callback){
 		if(this.targetDevice && this.targetDevice != 'none'){
 			var runner = require("child_process");
 			var pathToCmd;

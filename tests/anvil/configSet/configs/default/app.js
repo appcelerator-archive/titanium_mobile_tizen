@@ -41,7 +41,9 @@ var suites = [
 	{name: "ui_option_dialog"},
 	{name: "ui_activity_indicator"},
 	{name: "ui_label"},
+	{name: "ui/tableView"},
 	{name: "ui/tableViewSection"},
+	{name: "ui/tableViewRow"},
 	{name: "ui/mobile-NavigationGroup"},
 	{name: "ui/tabGroup"},
 	{name: "ui/tab"},	
@@ -54,7 +56,8 @@ var suites = [
 	{name: "ui_TextField"},
 	{name: "ui/ScrollView"},
 	{name: "ui/ScrollableView"},
-	{name: "ui_animation"}
+	{name: "ui_animation"},
+	{name: "ui/window"}
 ];
 
 if (Ti.Platform.osname === 'android') {

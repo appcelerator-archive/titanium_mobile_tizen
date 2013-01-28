@@ -44,8 +44,8 @@
 		// a base url to be prepended to all urls
 		baseUrl = cfg.baseUrl || "./",
 
-		// a timeout to fetch a remote resource, defaults to 2 seconds
-		timeout = cfg.timeout || 2000,
+		// a timeout to fetch a remote resource, defaults was 2 seconds, on Tizen devices there as issue with loading big modules with lots dependencies
+		timeout = cfg.timeout || 30000,
 
 		// CommonJS paths
 		paths = cfg.paths || {},

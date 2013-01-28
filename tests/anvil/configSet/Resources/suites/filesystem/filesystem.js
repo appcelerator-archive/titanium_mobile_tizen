@@ -16,34 +16,45 @@ module.exports = new function() {
 	}
 
 	this.name = "filesystem";
-	this.tests = [
-		{name: "optionalArgAPIs"},
-		{name: "readWriteText"},
-		{name: "blobNativeFile"},
-		{name: "blobFile"},
-		{name: "dotSlash"},
-		{name: "appendStringTest"},
-		{name: "appendBlobTest"},
-		{name: "appendFileTest"},
-		{name: "fileStreamBasicTest"},
-		{name: "fileStreamWriteTest"},
-		{name: "fileStreamAppendTest"},
-		{name: "fileStreamPumpTest"},
-		{name: "fileStreamWriteStreamTest"},
-		{name: "fileStreamResourceFileTest"},
-		{name: "fileStreamTruncateTest"},
-		{name: "fileMove"},
-		{name: "tempDirTest"},
-		{name: "emptyFile"},
-		{name: "fileSize"},
-		{name: "mimeType"},
-        {name: "filesInApplicationCacheDirectoryExists"},
-        {name: "fileCopy"},
-        {name: "fileProperties"},
-        {name: "directoryListing"},
-        {name: "tempDirAndFile"},
-        {name: "fsMethodAndProp"}
-    ]
+    this.tests = (function(){
+        var arr = [
+            {name: "optionalArgAPIs"},
+            {name: "readWriteText"},
+            {name: "blobNativeFile"},
+            {name: "blobFile"},
+            {name: "dotSlash"},
+            {name: "appendStringTest"},
+            {name: "appendBlobTest"},
+            {name: "appendFileTest"},
+            {name: "fileStreamBasicTest"},
+            {name: "fileStreamWriteTest"},
+            {name: "fileStreamAppendTest"},
+            {name: "fileStreamPumpTest"},
+            {name: "fileStreamWriteStreamTest"},
+            {name: "fileStreamResourceFileTest"},
+            {name: "fileStreamTruncateTest"},
+            {name: "fileMove"},
+            {name: "tempDirTest"},
+            {name: "emptyFile"},
+            {name: "fileSize"},
+            {name: "mimeType"},
+            {name: "filesInApplicationCacheDirectoryExists"},
+            {name: "fileCopy"},
+            {name: "fileProperties"},
+            {name: "directoryListing"},
+            {name: "tempDirAndFile"},
+            {name: "fsMethodAndProp"}
+        ]
+        if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+            arr = arr.concat([
+                {name: "appendString"},
+                {name: "appendBlob"},
+                {name: "appendFile"},
+                {name: "resolveTest"}
+            ]);
+        }
+        return arr;
+    }());
         
             
 
@@ -886,6 +897,125 @@ module.exports = new function() {
             valueOf(testRun, lineEnding).shouldBeEqual('\n');
         } 
         
+        finish(testRun);
+    }
+
+
+    this.appendString = function(testRun){
+
+        //Try to append the string to a text file
+
+        var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'data.txt'),
+            appended_text = 'Some appended text',
+            previous_text = "",
+            final_blob,
+            prev_blob;
+
+        valueOf(testRun, f).shouldNotBeNull();
+
+        // Check if the file exists before trying to read from it!
+        if(f.exists()) {
+            valueOf(testRun, function() {
+                prev_blob = f.read();
+                previous_text = prev_blob.text;
+            }).shouldNotThrowException();
+        }
+        valueOf(testRun, function() {
+            f.append(appended_text);
+        }).shouldNotThrowException();
+
+        final_blob = f.read();
+        valueOf(testRun, final_blob).shouldNotBeNull();
+        valueOf(testRun, final_blob.text).shouldBe(previous_text + appended_text);
+
+        finish(testRun);
+    }
+
+
+    this.appendBlob = function(testRun){
+
+        //Try to append the blob to a text file
+
+        var blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/file.txt').read(),
+            dest = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'append_blob.txt'),
+            previous = "",
+            final_blob,
+            dest_blob;
+
+        valueOf(testRun, blob).shouldNotBeNull();
+        valueOf(testRun, dest).shouldNotBeNull();
+
+        if(dest.exists()) {
+            dest_blob = dest.read();
+            valueOf(testRun, dest_blob).shouldNotBeNull();
+            previous = dest_blob.text;
+        }
+
+        valueOf(testRun, function() {
+            dest.append(blob);
+        }).shouldNotThrowException();
+
+        final_blob = dest.read();
+        valueOf(testRun, final_blob).shouldNotBeNull();
+        valueOf(testRun, final_blob.text).shouldBe(previous + blob.text);
+
+        finish(testRun);
+    }
+
+
+    this.appendFile = function(testRun) {
+
+        //Try to append the file-source to a text file
+
+        var source = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/file.txt'),
+            dest = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'append_file.txt'),
+            previous = "Some text",
+            source_blob,
+            dest_blob;
+
+
+        valueOf(testRun, source).shouldNotBeNull();
+        valueOf(testRun, dest).shouldNotBeNull();
+
+        dest.write(previous);
+
+        valueOf(testRun, function() {
+            dest.append(source);
+        }).shouldNotThrowException();
+
+        source_blob = source.read();
+        valueOf(testRun, source_blob).shouldNotBeNull();
+
+        dest_blob = dest.read();
+        valueOf(testRun, dest_blob).shouldNotBeNull();
+
+        valueOf(testRun, dest_blob.text).shouldBe(previous + source_blob.text);
+
+        finish(testRun);
+    }
+
+
+    this.resolveTest = function(testRun) {
+
+        //Try to create not empty file and check his method - resolve()
+
+        var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'file.txt'),
+            text = 'Some text',
+            resolvedLink;
+
+        if(file.exists()) {
+            text = file.read().text;
+        } else {
+            file.write(text);
+        }
+
+        valueOf(testRun, function() {
+            resolvedLink = file.resolve();
+        }).shouldNotThrowException();
+
+        valueOf(testRun, resolvedLink).shouldBeEqual(file.nativePath);
+        valueOf(testRun, resolvedLink).shouldBeEqual(Ti.Filesystem.applicationDataDirectory + 'file.txt');
+
         finish(testRun);
     }
 }
