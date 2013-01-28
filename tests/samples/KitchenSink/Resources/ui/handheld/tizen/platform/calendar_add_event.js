@@ -90,7 +90,7 @@ function add_event(args) {
 	
 	var timePicker = Ti.UI.createPicker({
 		type: Ti.UI.PICKER_TYPE_DATE_AND_TIME,
-		value: new Date(),
+		value: new Date(), 
 		width: Ti.UI.FILL,
 		top: top
 	});
@@ -129,7 +129,7 @@ function add_event(args) {
 		locationInput.value = '';
 		timePicker.value = new Date();
 		
-	});	
+	});		
 		
 	function getCalendarStartDate(){
 		var times = timePicker.value;
