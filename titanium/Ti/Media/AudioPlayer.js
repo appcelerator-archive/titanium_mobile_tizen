@@ -14,6 +14,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 	
 	var doc = document,
 		on = require.on,
+		mimeTypes = {
+			"mp3": "audio/mpeg",
+			"ogg": "audio/ogg",
+			"wav": "audio/wav"
+		},
 		BUFFERING = 0,
 		INITIALIZED = 1,
 		PAUSED = 2,
@@ -123,21 +128,12 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			this.fireEvent('change', evt);// external (interface) event
 		},
 		
-		/* It is commented because the duration is missing in Titanium API; if needed - uncomment it. */
-		/*
-		_durationChange: function() {
-			var d = this._audio.duration * 1000;
-			if (d !== Infinity) {
-				this.constants.__values__.duration = Math.floor(d);
-			}
-		},
-		*/
-		
 		// isRelease: if true, the <audio> tag will be destroyed and recreated.
 		// if false, and the tag has been already created, nothing will happen.
 		_createAudio: function(isRelease) {
 			var audio = this._audio,
-			url = this.url;
+			url = this.url,
+			i, attr, match;
 		
 			if (!url) {
 				return;
@@ -208,9 +204,6 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 					this._nextCmd = null;
 					this.autoplay = false;
 				})
-				
-				/* It is commented because the duration is missing in Titanium API; if needed - uncomment it. */
-				//,on(audio, "durationchange", this, "_durationChange")
 			];
 			
 			doc.body.appendChild(audio);
@@ -219,8 +212,12 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			require.is(url, "Array") || (url = [url]);
 			
 			for (i = 0; i < url.length; i++) {
-				dom.create("source", {src: url[i]}, audio);
+				attr = {src: url[i]};
+				match = url[i].match(/.+\.([^\/\.]+?)$/);
+				match && mimeTypes[match[1]] && (attr.type = mimeTypes[match[1]]);
+				dom.create("source", attr, audio);
 			}
+
 
 			return audio;
 			

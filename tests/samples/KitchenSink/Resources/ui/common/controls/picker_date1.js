@@ -61,7 +61,9 @@ function picker_date1() {
 			picker.setLocale(Titanium.Platform.locale);
 		}
 	});
-	win.add(localebutton);
+	if (!Ti.Platform.osname === 'tizen') {
+		win.add(localebutton);
+	}
 	
 	return win;
 }
