@@ -8,6 +8,11 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 	
 	var doc = document,
 		on = require.on,
+		mimeTypes = {
+			"mp3": "audio/mpeg",
+			"ogg": "audio/ogg",
+			"wav": "audio/wav"
+		},
 		INITIALIZED = 1,
 		PAUSED = 2,
 		PLAYING = 3,
@@ -164,7 +169,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 		_createAudio: function(isRelease) {
 			var audio = this._audio,
 				url = this.url,
-				i;
+				i, attr, match;
 			
 			if (!url) {
 				return;
@@ -227,9 +232,12 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/Media", "Ti/_
 			require.is(url, "Array") || (url = [url]);
 			
 			for (i = 0; i < url.length; i++) {
-				dom.create("source", {src: url[i]}, audio);
+				attr = {src: url[i]};
+				match = url[i].match(/.+\.([^\/\.]+?)$/);
+				match && mimeTypes[match[1]] && (attr.type = mimeTypes[match[1]]);
+				dom.create("source", attr, audio);
 			}
-			
+
 			return audio;
 		},
 		
