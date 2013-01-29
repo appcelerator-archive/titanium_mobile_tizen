@@ -20,7 +20,9 @@ function PlatformWindow(title) {
 	data.push({title:'Application Data', hasChild:!isMobileWeb, test:'ui/common/platform/app_data', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
 	!isTizen && data.push({title:'Application Events', hasChild:!isMobileWeb, test:'ui/common/platform/app_events', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
 	data.push({title:'Properties API', hasChild:true, test:'ui/common/platform/properties'});
-	data.push({title:'Database', hasChild:!isMobileWeb, test:'ui/common/platform/database', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	if (Titanium.Platform.osname !== 'tizen') {
+		data.push({title:'Database', hasChild:!isMobileWeb, test:'ui/common/platform/database', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	}
 	data.push({title:'Platform Data', hasChild:true, test:'ui/common/platform/platform'});
 	data.push({title:'Filesystem', hasChild:true, test:'ui/common/platform/filesystem'});
 	data.push({title:'JS Includes', hasChild:true, test:'ui/common/platform/js_include'});
@@ -31,7 +33,9 @@ function PlatformWindow(title) {
 	data.push({title:'JSON', hasChild:true, test:'ui/common/platform/json'});
 	data.push({title:'JS search', hasChild:true, test:'ui/common/platform/search_case_insensitive'});
 	data.push({title:'Clipboard', hasChild:true, test:'ui/common/platform/clipboard'});
-	data.push({title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	if (Titanium.Platform.osname !== 'tizen') {
+		data.push({title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
+	}
 	
 	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
 		data.push({title:'Passing Data (windows)', hasChild:true, test:'ui/common/platform/custom_properties'});
