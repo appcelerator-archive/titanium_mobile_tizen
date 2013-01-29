@@ -6,10 +6,11 @@ function picker(_args) {
 	
 	// create table view data object
 	var isAndroid = Ti.Platform.osname === 'android';
+	var isTizen = Ti.Platform.osname === 'tizen';
 	var items = [
 		{title:'Basic Picker', hasChild:true, test:'ui/common/controls/picker_basic'},
 		
-		{title:'Basic Picker 2', hasChild:true, test:'ui/common/controls/picker_basic2', noandroid:true},
+		{title:'Basic Picker 2', hasChild:true, test:'ui/common/controls/picker_basic2', noandroid:true, notizen:true},
 		{title:'Picker w/o selection', hasChild:true, test:'ui/common/controls/picker_noselection', noandroid:true},
 	
 		{title:'Picker Single column 1', hasChild:true, test:'ui/common/controls/picker_singlecolumn1'},
@@ -18,8 +19,8 @@ function picker(_args) {
 	
 		{title:'Picker Multi column 1', hasChild:true, test:'ui/common/controls/picker_multicolumn1', noandroid:true},
 	
-		{title:'Picker custom labels', hasChild:true, test:'ui/common/controls/picker_custom1', noandroid:true},
-		{title:'Picker custom images', hasChild:true, test:'ui/common/controls/picker_custom2', noandroid:true},
+		{title:'Picker custom labels', hasChild:true, test:'ui/common/controls/picker_custom1', noandroid:true, notizen:true},
+		{title:'Picker custom images', hasChild:true, test:'ui/common/controls/picker_custom2', noandroid:true, notizen:true},
 		
 		{title:'Date Picker', hasChild:true, test:'ui/common/controls/picker_date1'},
 		{title:'Time Picker', hasChild:true, test:'ui/common/controls/picker_date2'},
@@ -40,6 +41,13 @@ function picker(_args) {
 		data.push({title:'Android "useSpinner" - date', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_date'});
 		data.push({title:'Android "useSpinner" - time', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_time'});
 		data.push({title:'Android "useSpinner" - time (2)', hasChild:true, test:'ui/handheld/android/controls/picker_android_spinner_time2'});
+	} else if(isTizen) {
+		data = [];
+		for (var i = 0; i < items.length; i++) {
+			if (!items[i].notizen) {
+				data.push(items[i]);
+			}
+		}
 	}
 	
 	// create table view
