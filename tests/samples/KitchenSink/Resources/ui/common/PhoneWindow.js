@@ -15,7 +15,7 @@ function PhoneWindow(title) {
 		data.push({title:'Geolocation', hasChild:true, test:'ui/common/phone/geolocation'});
 		data.push({title:'Accelerometer', hasChild:true, test:'ui/common/phone/accelerometer'});
 	}
-	if (Ti.Platform.model != 'Kindle Fire' && Ti.Platform.osname != 'mobileweb') {
+	if (Ti.Platform.model != 'Kindle Fire' && Ti.Platform.osname != 'mobileweb' && Ti.Platform.osname != 'tizen') {
 		data.push({title:'Contacts', hasChild:true, test:'ui/common/phone/contacts'});
 	}
 	data.push({title:'Sound', hasChild:!isMobileWeb, test:'ui/common/phone/sound', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});

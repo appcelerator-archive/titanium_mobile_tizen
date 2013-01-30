@@ -15,9 +15,11 @@ function ControlsWindow(title) {
 		{title:'Text Field', hasChild:true, test:'ui/common/controls/textfield'},
 		{title:'Text Area', hasChild:true, test:'ui/common/controls/textarea'},
 		{title:'Picker', hasChild:true, test:'ui/common/controls/picker'},
-		{title:'Button States', hasChild:true, test:'ui/common/controls/button_state'},
-		{title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'}
+		{title:'Button States', hasChild:true, test:'ui/common/controls/button_state'}
 	];
+	if(Ti.Platform.osname !== 'tizen'){
+		data.push({title:'Search Bar', hasChild:true, test:'ui/common/controls/searchbar'})
+	}
 	
 	if (!(Ti.Platform.osname === 'mobileweb')) {
 		//data.push({title:'Button States', hasChild:true, test:'ui/common/controls/button_state'});

@@ -9,26 +9,29 @@ if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
 }
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
+	var finish,
+		valueOf,
+		reportError,
+		wind, 
+		cp,
+		width = 320,
+		height = 510;
+		
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
+		cp = new CountPixels();
 	}
 
 	this.name = "ui_animation";
 	this.tests = (function(){
-		var arr = [
-			
-		]
+		var arr = [];
 		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
 			arr.push({name: "backgroundColor_test"});
 			arr.push({name: "autoreverse_test"});
 			arr.push({name: "bottom_test", timeout: 5000});
 			arr.push({name: "top_test"});
-			arr.push({name: "repeat_test", timeout: 5000});
 			arr.push({name: "left_test"});
 			arr.push({name: "right_test", timeout: 5000});
 			arr.push({name: "color_test"});
@@ -42,86 +45,71 @@ module.exports = new function() {
 			arr.push({name: "transform_test"});
 		}
 		return arr;
-	}())
+	}());
+	
+	function animationHandler(e, colors, result, testRun, wind, countPercents) {
+		countPercents 
+			? cp.countPixelsPercentage(colors, wind, function(count) {
+				valueOf(testRun, count).shouldBe(result);
+				wind.close();
+				finish(testRun);
+			})
+			: cp.countPixels(colors, wind, function(count) {
+				valueOf(testRun, count).shouldBe(result);
+				wind.close();
+				finish(testRun);
+			})
+	}
 
 	this.backgroundColor_test = function(testRun) {
-
-		var wind = Ti.UI.createWindow();
-		var view = Titanium.UI.createView({
-			  backgroundColor:'red'
-		});
-		var cp = new CountPixels();
+		var wind = Ti.UI.createWindow({
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),
+			view = Titanium.UI.createView({
+				backgroundColor:'red'
+			}),
+			animation = Titanium.UI.createAnimation({
+				backgroundColor: '#00ff00',
+				duration: 4000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.backgroundColor = 'black';
-		animation.duration = 1000;
-			
-		var animationHandler = (function(){
-				var repeat = true;
-				return	function() {
-					if(repeat){		
-						repeat = false;
-						animation.backgroundColor = '#00ff00';
-						view.animate(animation);
-					} else {
-						cp.countPixelsPercentage([0, 255, 0], 
-							wind, 
-							function(count){
-								valueOf(testRun, count).shouldBe(100);	
-								wind.close();
-								finish(testRun);
-							}
-						);
-					}
-				}
-		})();
-		animation.addEventListener('complete',animationHandler);
+		
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [0, 255, 0], 100, testRun, wind, true);
+		});
+		
 		view.addEventListener('postlayout',function(){
-				view.animate(animation);
-		})
+			view.animate(animation);
+		});
 
 		wind.open()
 	}
 
 	this.autoreverse_test = function(testRun) {
-
-		var wind = Ti.UI.createWindow();
-		var view = Titanium.UI.createView({
-			  backgroundColor:'#ff0000'
-		});
-		var cp = new CountPixels();
+		var wind = Ti.UI.createWindow({
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000'
+			}),
+			animation = Titanium.UI.createAnimation({
+				backgroundColor: '#000000',
+				duration: 2000,
+				autoreverse: true
+			});
 			
 		wind.add(view);
 
-		var animation = Titanium.UI.createAnimation();
-		animation.backgroundColor = '#000000';
-		animation.duration = 1000;
-		animation.autoreverse = true;
-			
-		var animationHandler = (function(){
-				var repeat = true;
-				return	function() {
-					if(repeat){		
-						repeat = false;
-						animation.backgroundColor = '#00ff00';
-						view.animate(animation);
-					} else {
-						cp.countPixelsPercentage([255, 0, 0], 
-							wind, 
-							function(count){
-								valueOf(testRun, count).shouldBe(100);	
-								wind.close();
-								finish(testRun);
-							}
-						);
-					}
-				}
-		})();
-		animation.addEventListener('complete',animationHandler);
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], 100, testRun, wind, true);
+		});
 		view.addEventListener('postlayout',function(){
-				view.animate(animation);
+			view.animate(animation);
 		})
 
 		wind.open()
@@ -129,80 +117,53 @@ module.exports = new function() {
 
 
 	this.bottom_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			bottom : 10
-		});
-		var cp = new CountPixels();
-		var width, height;
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),		
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				bottom : 10
+			}),
+			animation = Titanium.UI.createAnimation({
+				bottom: 50,
+				duration: 2000
+			});
 			
 		wind.add(view);
 
-		var animation = Titanium.UI.createAnimation();
-		animation.bottom = 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width* (height - 50));	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
-			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
-				width = wind.width;
-				height = wind.height;
-				view.animate(animation);
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], width * (height - 50), testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
+			view.animate(animation);
 		})
 
 		wind.open()
 	}	
 
 	this.top_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			top : 10
-		});
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				top : 10
+			}),
+			animation = Titanium.UI.createAnimation({
+				top: 50,
+				duration: 2000
+			})
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.top = 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width* (height - 50));	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], width * (height - 50), testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
 			view.animate(animation);
 		})
 
@@ -210,39 +171,27 @@ module.exports = new function() {
 	}
 
 	this.left_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			left : 10
-		});
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-			
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				left : 10
+			}),
+			animation = Titanium.UI.createAnimation({
+				left: 50,
+				duration: 2000
+			});
+
 		wind.add(view);
 
-		var animation = Titanium.UI.createAnimation();
-		animation.left = 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe((width - 50) * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
-			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			console.log('complete');
+			animationHandler(e, [255, 0, 0], (width - 50) * height, testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
 			view.animate(animation);
 		})
 
@@ -250,39 +199,26 @@ module.exports = new function() {
 	}
 
 	this.right_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			right : 10
-		});
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-			
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				right : 10
+			}),
+			animation = Titanium.UI.createAnimation({
+				right: 50,
+				duration: 1000
+			});
+
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.right = 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe((width - 50) * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], (width - 50) * height, testRun, wind);
+		});
+		view.addEventListener('postlayout',function(e){
 			view.animate(animation);
 		})
 
@@ -290,115 +226,53 @@ module.exports = new function() {
 	}
 
 	this.color_test = function(testRun) {
-
-		var wind = Ti.UI.createWindow();
-		var view = Titanium.UI.createView({
-			  color:'red'
+		var wind = Ti.UI.createWindow({
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),
+			label = Ti.UI.createLabel({
+				text: 'This is a label',
+				color: '#000000'
+			}),
+			animation = Titanium.UI.createAnimation({
+				color: '#ffffff',
+				delay: 3000
+			});
+			
+		wind.add(label);
+			
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [0, 0, 0], 100, testRun, wind, true);
 		});
-		var cp = new CountPixels();
-			
-		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.color = 'black';
-		animation.duration = 1000;
-			
-		var animationHandler = (function(){
-				var repeat = true;
-				return	function() {
-					if(repeat){		
-						repeat = false;
-						animation.color = '#00ff00';
-						view.animate(animation);
-					} else {
-						cp.countPixelsPercentage([0, 255, 0], 
-							wind, 
-							function(count){
-								valueOf(testRun, count).shouldBe(100);	
-								//wind.close();
-								finish(testRun);
-							}
-						);
-					}
-				}
-		})();
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
-				view.animate(animation);
-		})
-
-		wind.open()
-	}
-
-	this.repeat_test = function(testRun) {
-
-		var wind = Ti.UI.createWindow();
-		var view = Titanium.UI.createView({
-			  backgroundColor:'#ff0000'
-		});
-		var cp = new CountPixels();
-			
-		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.backgroundColor = '#000000';
-		animation.duration = 1000;
-		animation.repeat = 4;
-			
-		var animationHandler = function(){
-			cp.countPixelsPercentage([255, 0, 0], 
-				wind, 
-				function(count){
-					//valueOf(testRun, count).shouldBe(100);	
-					//wind.close();
-					//finish(testRun);
-				}
-			);
-		};
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
-				view.animate(animation);
+		wind.addEventListener('postlayout',function(e){
+			label.animate(animation);
 		})
 
 		wind.open()
 	}
 
 	this.height_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			height : height
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				height : height
+			}),
+			animation = Titanium.UI.createAnimation({
+				height: height - 50,
+				duration: 2000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.height = height - 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * (height - 50));	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], width * (height - 50), testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
 			view.animate(animation);
 		})
 
@@ -406,41 +280,26 @@ module.exports = new function() {
 	}	
 
 	this.width_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			width : width
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				width : width
+			}),
+			animation = Titanium.UI.createAnimation({
+				width: width - 50,
+				duration: 1000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.width = width - 50;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe((width - 50) * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], (width - 50) * height, testRun, wind);
+		});
+		view.addEventListener('postlayout',function(e){
 			view.animate(animation);
 		})
 
@@ -448,40 +307,25 @@ module.exports = new function() {
 	}
 
 	this.visible_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange'
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+			}),
+			animation = Titanium.UI.createAnimation({
+				visible: false,
+				delay: 3000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.visible = false;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(0);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 0, 0], 0, testRun, wind);
+		});
+		view.addEventListener('postlayout',function(e){
 			view.animate(animation);
 		})
 
@@ -489,42 +333,27 @@ module.exports = new function() {
 	}
 
 	this.zIndex_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: 'orange',
-			zIndex: 1000
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			zIndex: 2000
-		});
-			
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				zIndex: 999999
+			}),
+			animation = Titanium.UI.createAnimation({
+				zIndex: 1,
+				duration: 2000
+			});
+		
+		wind.zIndex = 1000;		
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.zIndex = 100;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([255, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [255, 255, 255], width * height, testRun, wind);
+		});
+		view.addEventListener('postlayout',function(e){
 			view.animate(animation);
 		})
 
@@ -532,71 +361,51 @@ module.exports = new function() {
 	}
 
 	this.opacity_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			width: width,
-			height: height
-		});
-			
+				backgroundColor: '#000000',
+				width: width,
+				height: height
+			}),			
+			view = Ti.UI.createView({
+				width: width,
+				height: height,
+				backgroundColor: '#ff0000'
+			}),
+			animation = Ti.UI.createAnimation({
+				opacity: 0.5
+			});
+		
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.opacity = 0.5;
-		animation.duration = 1000;
-
-		function animationHandler(){
-			cp.countPixels([127, 0, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * height);	
-					//wind.close();
-					finish(testRun);
-				}
-			);
-		}
-			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [127, 0, 0], width * height, testRun, wind);
+		});
+		
+		wind.addEventListener('postlayout', function(e) {
 			view.animate(animation);
-		})
-
-		wind.open()
+		});
+		
+		wind.open();
 	}	
 
 
 	this.delay_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			width: width,
-			height: height
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				width: width,
+				height: height
+			}),
+			animation = Titanium.UI.createAnimation({
+				delay: 3000,
+				backgroundColor: "#00ff00",
+				duration: 1000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.delay = 3000;
-		animation.backgroundColor = "#00ff00";
-		animation.duration = 1000;
 
 		setTimeout(function(){
 			cp.countPixels([255, 0, 0], 
@@ -606,20 +415,11 @@ module.exports = new function() {
 				}
 			);			
 		}, 1000);
-
-		function animationHandler(){
-			cp.countPixels([0, 255, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [0, 255, 0], width * height, testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
 			view.animate(animation);
 		})
 
@@ -627,28 +427,23 @@ module.exports = new function() {
 	}
 
 	this.duration_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510
-		});
-
-		var cp = new CountPixels();
-		var width = wind.width, 
-			height = wind.height;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			width: width,
-			height: height
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				width: width,
+				height: height
+			}),
+			animation = Titanium.UI.createAnimation({
+				backgroundColor: "#00ff00",
+				duration: 4000
+			});
 			
 		wind.add(view);
-
-		var animation = Titanium.UI.createAnimation();
-		animation.backgroundColor = "#00ff00";
-		animation.duration = 4000;
-
+		
 		setTimeout(function(){
 			cp.countPixels([255, 0, 0], 
 				wind, 
@@ -657,20 +452,11 @@ module.exports = new function() {
 				}
 			);			
 		}, 1000);
-
-		function animationHandler(){
-			cp.countPixels([0, 255, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * height);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
 			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [0, 255, 0], width * height, testRun, wind);
+		});
+		view.addEventListener('postlayout',function(e){
 			view.animate(animation);
 		})
 
@@ -678,47 +464,32 @@ module.exports = new function() {
 	}	
 
 	this.transform_test = function(testRun) {
-
 		var wind = Ti.UI.createWindow({
-			width: 320,
-			height: 510,
-			backgroundColor: "#000000"
-		});
-
-		var cp = new CountPixels();
-		var width = 40, 
-			height = 40;
-
-		var view = Titanium.UI.createView({
-			backgroundColor:'#ff0000',
-			width: width,
-			height: height
-		});
+				backgroundColor: '#ffffff',
+				width: width,
+				height: height
+			}),			
+			view = Titanium.UI.createView({
+				backgroundColor:'#ff0000',
+				width: 40,
+				height: 40
+			}),
+			matrix = Ti.UI.create2DMatrix(),
+			animation = Titanium.UI.createAnimation({
+				backgroundColor: "#00ff00",
+				duration: 4000,
+				repeat: 2
+			});
+		
+		matrix = matrix.scale(2, 2);		
+		animation.transform = matrix;
 			
 		wind.add(view);
 
-		var animation = Titanium.UI.createAnimation();
-		var matrix = Ti.UI.create2DMatrix();
-		matrix = matrix.scale(2, 2);
-		animation.backgroundColor = "#00ff00";
-		animation.transform = matrix;
-		animation.repeat = 4;
-		animation.duration = 4000;
-
-
-		function animationHandler(){
-			cp.countPixels([0, 255, 0], 
-				wind, 
-				function(count){
-					valueOf(testRun, count).shouldBe(width * height * 4);	
-					wind.close();
-					finish(testRun);
-				}
-			);
-		}
-			
-		animation.addEventListener('complete',animationHandler);
-		view.addEventListener('postlayout',function(){
+		animation.addEventListener('complete', function(e) {
+			animationHandler(e, [0, 255, 0], 40 * 40 * 4, testRun, wind);
+		});
+		view.addEventListener('postlayout', function(e){
 			view.animate(animation);
 		})
 
