@@ -46,18 +46,23 @@ async.series([
 				buildLinuxSdk = true;
 			}
 			console.log('[DEBUG] created output file name: ' + resultPath);
-			//create temporary dir to unzip and modify sdk content. The dir is removed when the process finishes
-			var settings = {
-					directory: scriptArgs[1]
-			};
-			tmpFileUtil.createTempFolder (settings, function (error, folder){
-				if(folder == null){
-					next("Cannot create temporary directory", 'failed');
-				}
-				console.log ('[DEBUG] created temporary directory:' + folder.toString()); 
-				workingDir = folder.toString();
+			if(process.platform === 'win32'){
+				//create temporary dir to unzip and modify sdk content. The dir is removed when the process finishes
+				var settings = {
+						directory: scriptArgs[1]
+				};
+				tmpFileUtil.createTempFolder (settings, function (error, folder){
+					if(folder == null){
+						next("Cannot create temporary directory", 'failed');
+					}
+					console.log ('[DEBUG] created temporary directory:' + folder.toString()); 
+					workingDir = folder.toString();
+					next(null, 'ok');
+				});	
+			}else{
+				workingDir = scriptArgs[1];
 				next(null, 'ok');
-			});			
+			}
 		}
 	}
 	, function(next){
