@@ -414,7 +414,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		save: function(persons) {
 			var addressbook = tizen.contact.getDefaultAddressBook(), i = 0, personsCount = persons.length;
 			for (i = 0; i < personsCount; i++) {
-				if (!persons[i].id) throw new Error('Fuck id');
+				if (!persons[i].id) throw new Error('Person with given id cannot be found');
 				var c = this._mapContactFromTitanium(persons[i])
 				addressbook.update(this._mapContactFromTitanium(persons[i]));
 			}
