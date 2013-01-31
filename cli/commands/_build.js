@@ -15,7 +15,7 @@ var ti = require('titanium-sdk'),
 	xml = appc.xml,
 	async = require('async'),
 	parallel = appc.async.parallel,
-	uglify = require('uglify-js'),
+	UglifyJS = require('uglify-js'),
 	fs = require('fs'),
 	path = require('path'),
 	wrench = require('wrench'),
@@ -40,6 +40,9 @@ var ti = require('titanium-sdk'),
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
 	};
+
+// silence uglify's default warn mechanism
+UglifyJS.AST_Node.warn_function = function () {};
 
 exports.config = function (logger, config, cli) {
 	return {
@@ -504,7 +507,7 @@ build.prototype = {
 			if (modules.missing.length) {
 				this.logger.error(__('Could not find all required Titanium Modules:'))
 				modules.missing.forEach(function (m) {
-					this.logger.error('   id: ' + m.id + '\t version: ' + (m.version || 'latest') + '\t platform: ' + m.platform);
+					this.logger.error('   id: ' + m.id + '\t version: ' + (m.version || 'latest') + '\t platform: ' + m.platform + '\t deploy-type: ' + m.deployType);
 				}, this);
 				this.logger.log();
 				process.exit(1);
@@ -514,6 +517,15 @@ build.prototype = {
 				this.logger.error(__('Found incompatible Titanium Modules:'));
 				modules.incompatible.forEach(function (m) {
 					this.logger.error('   id: ' + m.id + '\t version: ' + (m.version || 'latest') + '\t platform: ' + m.platform + '\t min sdk: ' + m.minsdk);
+				}, this);
+				this.logger.log();
+				process.exit(1);
+			}
+			
+			if (modules.conflict.length) {
+				this.logger.error(__('Found conflicting Titanium modules:'));
+				modules.conflict.forEach(function (m) {
+					this.logger.error('   ' + __('Titanium module "%s" requested for both Mobile Web and CommonJS platforms, but only one may be used at a time.', m.id));
 				}, this);
 				this.logger.log();
 				process.exit(1);
@@ -682,12 +694,37 @@ build.prototype = {
 			
 			if (/^url\:/.test(moduleName)) {
 				if (this.minifyJS) {
-					var pro = uglify.uglify,
-						source = file + '.uncompressed.js';
-					
+					var source = file + '.uncompressed.js';
 					fs.renameSync(file, source);
 					this.logger.debug(__('Minifying include %s', file));
-					fs.writeFileSync(file, pro.gen_code(pro.ast_squeeze(pro.ast_mangle(uglify.parser.parse(fs.readFileSync(source).toString())))));
+					try {
+						fs.writeFileSync(file, UglifyJS.minify(source).code);
+					} catch (ex) {
+						this.logger.error(__('Failed to minify %s', source));
+						if (ex.line) {
+							this.logger.error(__('%s [line %s, column %s]', ex.message, ex.line, ex.col));
+						} else {
+							this.logger.error(__('%s', ex.message));
+						}
+						try {
+							var contents = fs.readFileSync(source).toString().split('\n');
+							if (ex.line && ex.line <= contents.length) {
+								this.logger.error('');
+								this.logger.error('    ' + contents[ex.line-1]);
+								if (ex.col) {
+									var i = 0,
+										len = ex.col;
+										buffer = '    ';
+									for (; i < len; i++) {
+										buffer += '-';
+									}
+									this.logger.error(buffer + '^');
+								}
+								this.logger.log();
+							}
+						} catch (ex2) {}
+						process.exit(1);
+					}
 				}
 				tiJS.push('"' + moduleName + '":"' + fs.readFileSync(file).toString().trim().replace(/\\/g, '\\\\').replace(/\n/g, '\\n\\\n').replace(/"/g, '\\"') + '"');
 			} else if (isCommonJS) {
@@ -747,8 +784,7 @@ build.prototype = {
 	minifyJavaScript: function () {
 		if (this.minifyJS) {
 			this.logger.info(__('Minifying JavaScript'));
-			var pro = uglify.uglify,
-				self = this;
+			var self = this;
 			(function walk(dir) {
 				fs.readdirSync(dir).sort().forEach(function (dest) {
 					var stat = fs.statSync(dir + '/' + dest);
@@ -759,10 +795,37 @@ build.prototype = {
 						var source = dest + '.uncompressed.js';
 						fs.renameSync(dest, source);
 						self.logger.debug(__('Minifying include %s', dest));
-						fs.writeFileSync(dest, pro.gen_code(pro.ast_squeeze(pro.ast_mangle(uglify.parser.parse(fs.readFileSync(source).toString())))));
+						try {
+							fs.writeFileSync(dest, UglifyJS.minify(source).code);
+						} catch (ex) {
+							self.logger.error(__('Failed to minify %s', dest));
+							if (ex.line) {
+								self.logger.error(__('%s [line %s, column %s]', ex.message, ex.line, ex.col));
+							} else {
+								self.logger.error(__('%s', ex.message));
+							}
+							try {
+								var contents = fs.readFileSync(source).toString().split('\n');
+								if (ex.line && ex.line <= contents.length) {
+									self.logger.error('');
+									self.logger.error('    ' + contents[ex.line-1]);
+									if (ex.col) {
+										var i = 0,
+											len = ex.col;
+											buffer = '    ';
+										for (; i < len; i++) {
+											buffer += '-';
+										}
+										self.logger.error(buffer + '^');
+									}
+									self.logger.log();
+								}
+							} catch (ex2) {}
+							process.exit(1);
+						}
 					}
 				});
-			}(this.buildDir))
+			}(this.buildDir));
 		}
 	},
 	
@@ -842,45 +905,44 @@ build.prototype = {
 		
 		// write the titanium.css
 		fs.writeFileSync(this.buildDir + '/titanium.css', cleanCSS.process(tiCSS.join('')));
-
+		
 		callback();
 	},
 	
 	createIcons: function (callback) {
-		//just show log and go to next. TODO: fix this function if we really have to use it on Tizen
-		this.logger.info(__('createIcons: Dissabled. Creating favicon and Apple touch icons'));
-		afs.copyFileSync(path.join(this.projectResDir, 'mobileweb', 'appicon.png'), this.buildDir, { logger: this.logger.debug });
-		callback();
-
-		// this.logger.info(__('Creating favicon and Apple touch icons'));
+		this.logger.info(__('Creating favicon and Apple touch icons'));
 		
-		// var file = path.join(this.projectResDir, this.tiapp.icon);
-		// if (!/\.(png|jpg|gif)$/.test(file) || !afs.exists(file)) {
-		// 	file = path.join(this.projectResDir, 'mobileweb', 'appicon.png');
-		// }
+		var file = path.join(this.projectResDir, this.tiapp.icon);
+		if (!/\.(png|jpg|gif)$/.test(file) || !afs.exists(file)) {
+			file = path.join(this.projectResDir, 'mobileweb', 'appicon.png');
+		}
 		
-		// if (afs.exists(file)) {
-		// 	afs.copyFileSync(file, this.buildDir, { logger: this.logger.debug });
+		if (afs.exists(file)) {
+			afs.copyFileSync(file, this.buildDir, { logger: this.logger.debug });
 			
-		// 	appc.image.resize(file, [
-		// 		{ file: this.buildDir + '/favicon.ico', width: 16, height: 16 },
-		// 		{ file: this.buildDir + '/apple-touch-icon-precomposed.png', width: 57, height: 57 },
-		// 		{ file: this.buildDir + '/apple-touch-icon-57x57-precomposed.png', width: 57, height: 57 },
-		// 		{ file: this.buildDir + '/apple-touch-icon-72x72-precomposed.png', width: 72, height: 72 },
-		// 		{ file: this.buildDir + '/apple-touch-icon-114x114-precomposed.png', width: 114, height: 114 },
-		// 	], function (err, stdout, stderr) {
-		// 		if (err) {
-		// 			this.logger.error(__('Failed to create icons'));
-		// 			stderr && stderr.toString().split('\n').forEach(function (line) {
-		// 				line && this.logger.error(line);
-		// 			}, this);
-		// 			process.exit(1);
-		// 		}
-		// 		callback();
-		// 	}.bind(this));
-		// } else {
-		// 	callback();
-		// }
+			appc.image.resize(file, [
+				{ file: this.buildDir + '/favicon.ico', width: 16, height: 16 },
+				{ file: this.buildDir + '/apple-touch-icon-precomposed.png', width: 57, height: 57 },
+				{ file: this.buildDir + '/apple-touch-icon-57x57-precomposed.png', width: 57, height: 57 },
+				{ file: this.buildDir + '/apple-touch-icon-72x72-precomposed.png', width: 72, height: 72 },
+				{ file: this.buildDir + '/apple-touch-icon-114x114-precomposed.png', width: 114, height: 114 },
+			], function (err, stdout, stderr) {
+				if (err) {
+					this.logger.error(__('Failed to create icons'));
+					stdout && stdout.toString().split('\n').forEach(function (line) {
+						line && this.logger.error(line.replace(/^\[ERROR\]/i, '').trim());
+					}, this);
+					stderr && stderr.toString().split('\n').forEach(function (line) {
+						line && this.logger.error(line.replace(/^\[ERROR\]/i, '').trim());
+					}, this);
+					this.logger.log('');
+					process.exit(1);
+				}
+				callback();
+			}.bind(this), this.logger);
+		} else {
+			callback();
+		}
 	},
 	
 	createFilesystemRegistry: function () {
@@ -1256,27 +1318,49 @@ build.prototype = {
 		}		
 	},	
 	detectTizenSDK: function(logger, next){
-		//Detect Tizen SDK
-		//check OS, this code supporting windows only(for now useing registry to find path)
-		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
-		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
-		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
-		var keyvalue = null;
-		var reg = require('child_process');
 		var self = this;
-		reg.exec(
-			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
-			function (err, stdout, stderr) {
+		if(process.platform === 'win32'){
+			//Detect Tizen SDK
+			//check OS, this code supporting windows only(for now useing registry to find path)
+			// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+			// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
+			//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
+			var keyvalue = null;
+			var reg = require('child_process');
+			reg.exec(
+				'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
+				function (err, stdout, stderr) {
 
-				if(stdout !== null && (typeof stdout != 'undefined')){
-					var arr = stdout.split(" ");
-					keyvalue = arr[arr.length-1];//last parameter is path
-					keyvalue = keyvalue.slice(0, -4);
-					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-					logger.info(__('reading file: ' + keyvalue));
-					fs.readFile(keyvalue, 'utf8', function (err,data) {
+					if(stdout !== null && (typeof stdout != 'undefined')){
+						var arr = stdout.split(" ");
+						keyvalue = arr[arr.length-1];//last parameter is path
+						keyvalue = keyvalue.slice(0, -4);
+						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
+						logger.info(__('reading file: ' + keyvalue));
+						fs.readFile(keyvalue, 'utf8', function (err,data) {
+							if (err) {
+								logger.info(err);
+								return;
+							}
+							var arr = data.split("=");
+							self.tizenSdkDir =  arr[1];
+							logger.info("Tizen SDK found at: " + self.tizenSdkDir);
+							next(null, 'ok');
+						});
+					}else{
+						logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
+					}
+				});
+		}else{
+			//init with default path on linux first
+			self.tizenSdkDir = path.join(process.env.HOME, 'tizen-sdk');			
+			if(afs.exists(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'))){
+				fs.readFile(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'),
+					'utf8',
+					function (err,data) {
 						if (err) {
 							logger.info(err);
+							next('Failed to find Installed Tizen SDK for Linux', 'failed');
 							return;
 						}
 						var arr = data.split("=");
@@ -1284,10 +1368,10 @@ build.prototype = {
 						logger.info("Tizen SDK found at: " + self.tizenSdkDir);
 						next(null, 'ok');
 					});
-				}else{
-					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
-				}
-			});
+			}else{
+				next('Failed to find Installed Tizen SDK for Linux', 'failed');
+			}
+		}
 	},
 
 	find7za: function(logger){	
