@@ -1,11 +1,10 @@
-define(["Ti/_/declare"], function(declare) {
+define(["Ti/_/declare", "Ti/_/Evented"], function(declare, Evented) {
 	
-	return declare("Ti.Contacts.Person", null, {
+	return declare("Ti.Contacts.Person", Evented, {
 		
 		properties: {
 			address: {},
 			birthday: '',
-			created: '',
 			date: {},
 			department: '',
 			email: {},
@@ -15,12 +14,11 @@ define(["Ti/_/declare"], function(declare) {
 			nickname: '',
 			firstPhonetic: '',
 			lastPhonetic: '',
-			phone: '',
+			phone: {},
 			organization: '',
 			jobTitle: '',
 			note: '',
 			url: {},
-			id: 0,
 			image: {
 				set: function(value){
 					if(value !== null){
@@ -42,7 +40,9 @@ define(["Ti/_/declare"], function(declare) {
 				get: function() {
 					return this.firstName + " " + this.lastName;
 				}
-			}
+			},
+			created: '',
+			id: 0
 		},
 				
 	});
