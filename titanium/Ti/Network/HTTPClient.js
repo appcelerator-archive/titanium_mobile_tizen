@@ -170,8 +170,8 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				clearTimeout(this._timeoutTimer);
 				timeout && (this._timeoutTimer = setTimeout(lang.hitch(this, function() {
 					if (this.connected) {
-						this.abort();
 						!this._completed && this._onError("Request timed out");
+						this.abort();
 					}
 				}), timeout));
 			} catch (ex) {}
