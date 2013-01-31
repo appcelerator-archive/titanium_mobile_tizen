@@ -30,7 +30,8 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 					file,
 					mimeType,
 					blobData = "",
-					onload = this.onload;
+					onload = this.onload,
+					xmlParser = new DOMParser();
 
 				switch (xhr.readyState) {
 					case 0: c.readyState = this.UNSENT; break;
@@ -61,8 +62,18 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 										binaryString[i] = String.fromCharCode(uInt8Array[i]);
 									}
 									
-									c.responseText = c.responseXML = binaryString.join('');
+									c.responseText = binaryString.join('');
 									blobData = _.isBinaryMimeType(mimeType) ? window.btoa(c.responseText) : c.responseText;
+									
+									if(mimeType.indexOf('text/xml') !== -1){
+										try {
+											c.responseXML = xmlParser.parseFromString(c.responseText.substring(c.responseText.indexOf('<')), "text/xml");	
+										} catch(e) {
+											c.responseXML = null;	
+										}
+									} else {
+										c.responseXML = null;	
+									}
 								} 
 							} else {
 								//sync mode

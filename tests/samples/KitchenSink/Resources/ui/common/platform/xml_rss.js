@@ -1,4 +1,4 @@
-function xml_rss() {
+function xml_rss(args) {
 	var win = Ti.UI.createWindow();
 	
 	// create table view data object
@@ -68,7 +68,7 @@ function xml_rss() {
 				console.log("Created");
 				var wb = Ti.UI.createWebView({url:e.row.url});
 				w.add(wb);
-				win.containingTab.open(w, {animated: true})
+				args.containingTab.open(w, {animated: true})
 			});
 		}
 		catch(E)
