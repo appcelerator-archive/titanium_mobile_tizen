@@ -1318,27 +1318,49 @@ build.prototype = {
 		}		
 	},	
 	detectTizenSDK: function(logger, next){
-		//Detect Tizen SDK
-		//check OS, this code supporting windows only(for now useing registry to find path)
-		// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
-		// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
-		//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
-		var keyvalue = null;
-		var reg = require('child_process');
 		var self = this;
-		reg.exec(
-			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
-			function (err, stdout, stderr) {
+		if(process.platform === 'win32'){
+			//Detect Tizen SDK
+			//check OS, this code supporting windows only(for now useing registry to find path)
+			// read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+			// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
+			//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
+			var keyvalue = null;
+			var reg = require('child_process');
+			reg.exec(
+				'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
+				function (err, stdout, stderr) {
 
-				if(stdout !== null && (typeof stdout != 'undefined')){
-					var arr = stdout.split(" ");
-					keyvalue = arr[arr.length-1];//last parameter is path
-					keyvalue = keyvalue.slice(0, -4);
-					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-					logger.info(__('reading file: ' + keyvalue));
-					fs.readFile(keyvalue, 'utf8', function (err,data) {
+					if(stdout !== null && (typeof stdout != 'undefined')){
+						var arr = stdout.split(" ");
+						keyvalue = arr[arr.length-1];//last parameter is path
+						keyvalue = keyvalue.slice(0, -4);
+						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
+						logger.info(__('reading file: ' + keyvalue));
+						fs.readFile(keyvalue, 'utf8', function (err,data) {
+							if (err) {
+								logger.info(err);
+								return;
+							}
+							var arr = data.split("=");
+							self.tizenSdkDir =  arr[1];
+							logger.info("Tizen SDK found at: " + self.tizenSdkDir);
+							next(null, 'ok');
+						});
+					}else{
+						logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
+					}
+				});
+		}else{
+			//init with default path on linux first
+			self.tizenSdkDir = path.join(process.env.HOME, 'tizen-sdk');			
+			if(afs.exists(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'))){
+				fs.readFile(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'),
+					'utf8',
+					function (err,data) {
 						if (err) {
 							logger.info(err);
+							next('Failed to find Installed Tizen SDK for Linux', 'failed');
 							return;
 						}
 						var arr = data.split("=");
@@ -1346,10 +1368,10 @@ build.prototype = {
 						logger.info("Tizen SDK found at: " + self.tizenSdkDir);
 						next(null, 'ok');
 					});
-				}else{
-					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
-				}
-			});
+			}else{
+				next('Failed to find Installed Tizen SDK for Linux', 'failed');
+			}
+		}
 	},
 
 	find7za: function(logger){	

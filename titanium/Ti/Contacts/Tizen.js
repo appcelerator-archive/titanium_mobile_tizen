@@ -1,4 +1,4 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], function(Evented, lang, Contacts, GroupTizen) {
+define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts"], function(Evented, lang, Contacts) {
 	
 	return lang.setObject("Ti.Contacts.Tizen",  Evented, {
 		
@@ -6,8 +6,10 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], 
 			var self = this;
 			//finds and return all tizen contacts
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
-				var i = 0, contactsCount = contacts.length, persons = [];
-				for (i = 0; i < contactsCount; i++) {
+				var i = 0, 
+					contactsCount = contacts.length, 
+					persons = [];
+				for (; i < contactsCount; i++) {
 					persons.push(Contacts._mapContactFromTizen(contacts[i]));
 				}
 				successCallback.call(self, persons);
@@ -16,10 +18,16 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], 
 
 		getPeopleWithName: function(name, successCallback, errorCallback) {
 			var names = name.trim().replace(/[ ]{2,}/g, " ").split(' '), //trims input string and replaces spaces between words to one space 
-				firstNameFilter, lastNameFilter, middleNameFilter, i = 0, namesCount = names.length,
-				compositeFilters = [], resultFilter, self = this;
+				firstNameFilter, 
+				lastNameFilter, 
+				middleNameFilter, 
+				i = 0, 
+				namesCount = names.length,
+				compositeFilters = [], 
+				resultFilter, 
+				self = this;
 			//create case insensitive filter for first name, last name and middle name
-			for (i = 0; i < namesCount; i++) {
+			for (; i < namesCount; i++) {
 				firstNameFilter = new tizen.AttributeFilter("name.firstName", "FULLSTRING", names[i]);
 				middleNameFilter = new tizen.AttributeFilter("name.middleName", "FULLSTRING", names[i]);
 				lastNameFilter = new tizen.AttributeFilter("name.lastName", "FULLSTRING", names[i]);
@@ -28,8 +36,9 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], 
 			resultFilter = new tizen.CompositeFilter("INTERSECTION",  compositeFilters);
 			//find contacts with filter
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
-				var contactsCount = contacts.length, persons = [];
-				for (i = 0; i < contactsCount; i++) {
+				var contactsCount = contacts.length, 
+					persons = [];
+				for (; i < contactsCount; i++) {
 					persons.push(Contacts._mapContactFromTizen(contacts[i]));
 				}
 				successCallback.call(self, persons);
@@ -42,7 +51,12 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Contacts", "Ti/Contacts/Group/Tizen"], 
 			//tizen hasn't groups, it has string categories like tags
 			//to remove some category(group) we need to remove it from each contact and then saves all changes
 			addressbook.find(function(contacts) {
-				var i = 0, j = 0, categoryIndex = -1, categoriesCount = 0, contactsCount = contacts.length, categories = [];
+				var i = 0, 
+					j = 0, 
+					categoryIndex = -1, 
+					categoriesCount = 0, 
+					contactsCount = contacts.length, 
+					categories = [];
 				for (; i < contactsCount; i++) {
 					categoryIndex = -1;
 					categories = contacts[i].categories;
