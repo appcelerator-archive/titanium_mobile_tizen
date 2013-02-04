@@ -8,23 +8,23 @@ define(function() {
 	// Data format:
 	
 	// First array - Number localization data
-	//[0] negative pattern (pattern for negative numbers)
-	//[1] group sizes (as all value are simple digits - joined as string like
-	//[2] decimal separator
-	//[3] group separator
-	//[4] decimal digits
+	// [0] negative pattern (pattern for negative numbers)
+	// [1] group sizes (as all value are simple digits - joined as string like
+	// [2] decimal separator
+	// [3] group separator
+	// [4] decimal digits
 
 	// Second array - Currency localization data
-	//[0] ISO Code
-	//[1] symbol
-	//[2] negative pattern (pattern for negative numbers)
-	//[3] positive pattern (pattern for positive numbers)
-	//[4] decimal digits
-	//[5] decimal separator
-	//[6] group separator
-	//[7] group sizes
+	// [0] ISO Code
+	// [1] symbol
+	// [2] negative pattern (pattern for negative numbers)
+	// [3] positive pattern (pattern for positive numbers)
+	// [4] decimal digits
+	// [5] decimal separator
+	// [6] group separator
+	// [7] group sizes
 
-	//Default number and currency localization item
+	// sDefault number and currency localization item
 	var defaultItem = [['-n','3','.',',',2],['USD','$','($n)','$n',2,'.',',','3']],
 		numberCurrencyLocalizer = {
 		'ar-SA': [['n-'],['SAR','\u0631.\u0633.\u200f','$n-','$ n']],
@@ -259,7 +259,10 @@ define(function() {
 	}
 
 	function parseGroupSizes(gs) {
-		return (('' + gs).split('')).map(function (a) { return parseInt(a, 10); }) //converting string like '320' to array [3,2,1]
+		// converting string like '320' to array [3,2,1]
+		return (('' + gs).split('')).map(function (a) {
+			return parseInt(a, 10);
+		})
 	}
 
 	function unpackCurrencyInfo(localeItem) {

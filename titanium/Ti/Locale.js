@@ -9,7 +9,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			strings = {},
 			cfg = require.config,
 			app = cfg.app,
-			rfc4647BasicValidator = /^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$/, //we accept only 2 letters code too.
+			rfc4647BasicValidator = /^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$/, // we accept 2 letters codes too.
 			// Lazily loaded object with all available locale data for numbers and currencies.
 			localeNumberCurrencyInfo,
 			// Lazily loaded object with formatting rules for date/time.
@@ -30,7 +30,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			return strings[key] || hint || key || '';
 		}
 
-		Object.defineProperty(window, 'L', { value:getString, enumerable:true });
+		Object.defineProperty(window, 'L', { value: getString, enumerable: true });
 
 		// Lazy initialization of locale number and currency format storage.
 		function initNumberCurrencyFormat() {
@@ -62,7 +62,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 				}
 			}
 
-			//if we can't load target's locale calendar - use the default (en-US)
+			// if we can't load target's locale calendar - use the default (en-US)
 			if (!localeCalendarInfo || !localeCalendarInfo.patterns) {
 				API.warn('Loading default locale\'s calendar instead of ' + locale);
 				localeCalendarInfo = require('Ti/_/Locale/defaultCalendar');
@@ -78,7 +78,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 			// In this case, parameter named as localName can be a pattern.
 			if (!pattern && localeName && !isValidLocaleName(localeName)) {
-				//if second parameter is NOT valid locale name - it is is a pattern.
+				// if second parameter is NOT valid locale name - it is is a pattern.
 				pattern = localeName;
 				localeName = 0;
 			}
@@ -113,7 +113,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 		// Expands a format name (for example, 'd' or 'D') into the full pattern string.
 		expandFormat = function(cal, format) {
-			return cal.patterns[ format ];
+			return cal.patterns[format];
 		};
 
 		// format a date into a locale specific date format. Optionally pass a second argument (string) as either 'short' (default), 'medium' or 'long' for controlling the date format.
@@ -146,10 +146,10 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 		return lang.setObject('Ti.Locale', Evented, {
 
-			constants:{
-				currentCountry:languageParts[1] || '',
-				currentLanguage:languageParts[0] || '',
-				currentLocale:locale
+			constants: {
+				currentCountry: languageParts[1] || '',
+				currentLanguage: languageParts[0] || '',
+				currentLocale: locale
 			},
 
 			// Adds dashes to phone number. Result is unified with same function on Android 4.1.1
@@ -176,7 +176,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 				return localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale).currencySymbol;
 			},
 
-			getString:getString,
+			getString: getString,
 
 			_getString: function(key, hint) {
 				return lang.val(hint, getString(key, hint));

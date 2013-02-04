@@ -134,7 +134,7 @@ define(function () {
 
 	// Removes dashes and spaces from the string.
 	function removeDashesAndSpaces(s) {
-		return ('' + s).replace(/[- ]/g, ''); //do we need to remove spaces or only dashes?
+		return ('' + s).replace(/[- ]/g, ''); // do we need to remove spaces or only dashes?
 	}
 
 	return {
@@ -147,7 +147,7 @@ define(function () {
 			s = '' + s;
 			// validate basic rules: number starts from +81 or starts from 0. Number has only digits, dashes or spaces
 			if (!s.match(jpNumberRegExp)) {
-				//provided phone number is not valid Japanese phone number.
+				// provided phone number is not valid Japanese phone number.
 				return s;
 			}
 
@@ -168,7 +168,7 @@ define(function () {
 
 				if (value < 0) {
 					if (value <= -100) {
-						return result; //internal terminator
+						return result; // internal terminator
 					}
 
 					dashPos2 = rootIndex + (Math.abs(value) % 10);
