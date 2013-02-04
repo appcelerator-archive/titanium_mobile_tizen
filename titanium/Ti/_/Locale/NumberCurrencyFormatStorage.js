@@ -25,9 +25,8 @@ define(function() {
 	//[7] group sizes
 
 	//Default number and currency localization item
-	var defaultItem = [['-n','3','.',',',2],['USD','$','($n)','$n',2,'.',',','3']];
-
-	var numberCurrencyLocalizer = {
+	var defaultItem = [['-n','3','.',',',2],['USD','$','($n)','$n',2,'.',',','3']],
+		numberCurrencyLocalizer = {
 		'ar-SA':[['n-'],['SAR','\u0631.\u0633.\u200f','$n-','$ n']],
 		'bg-BG':[[,,',','\u00a0'],['BGN','\u043b\u0432.','-n $','n $']],
 		'ca-ES':[[,,',','.'],['EUR','\u20ac','-n $','n $']],
@@ -239,24 +238,28 @@ define(function() {
 		'es-US':[[,'30'],['USD',,,,,,,'3']]};
 
 	function expandLocaleData(localeItem){
-		if (!localeItem[0]) localeItem[0] = [];
-		if (!localeItem[0][0]) localeItem[0][0] = defaultItem[0][0];
-		if (!localeItem[0][1]) localeItem[0][1] = defaultItem[0][1];
-		if (!localeItem[0][2]) localeItem[0][2] = defaultItem[0][2];
-		if (!localeItem[0][3]) localeItem[0][3] = defaultItem[0][3];
-		if (!localeItem[0][4]) localeItem[0][4] = defaultItem[0][4];
+		(!localeItem[0]) && (localeItem[0] = []);
+		(!localeItem[0][0]) && (localeItem[0][0] = defaultItem[0][0]);
+		(!localeItem[0][1]) && (localeItem[0][1] = defaultItem[0][1]);
+		(!localeItem[0][2]) && (localeItem[0][2] = defaultItem[0][2]);
+		(!localeItem[0][3]) && (localeItem[0][3] = defaultItem[0][3]);
+		(!localeItem[0][4]) && (localeItem[0][4] = defaultItem[0][4]);
 
-		if (!localeItem[1]) localeItem[1] = [];
-		if (!localeItem[1][1]) localeItem[1][1] = defaultItem[1][1];
-		if (!localeItem[1][2]) localeItem[1][2] = defaultItem[1][2];
-		if (!localeItem[1][3]) localeItem[1][3] = defaultItem[1][3];
-		if (!localeItem[1][4]) localeItem[1][4] = defaultItem[1][4];
+		(!localeItem[1]) && (localeItem[1] = []);
+		(!localeItem[1][1]) && (localeItem[1][1] = defaultItem[1][1]);
+		(!localeItem[1][2]) && (localeItem[1][2] = defaultItem[1][2]);
+		(!localeItem[1][3]) && (localeItem[1][3] = defaultItem[1][3]);
+		(!localeItem[1][4]) && (localeItem[1][4] = defaultItem[1][4]);
 
-		if (!localeItem[1][5]) localeItem[1][5] = localeItem[0][2];
-		if (!localeItem[1][6]) localeItem[1][6] = localeItem[0][3];
-		if (!localeItem[1][7]) localeItem[1][7] = localeItem[0][1];
+		(!localeItem[1][5]) && (localeItem[1][5] = localeItem[0][2]);
+		(!localeItem[1][6]) && (localeItem[1][6] = localeItem[0][3]);
+		(!localeItem[1][7]) && (localeItem[1][7] = localeItem[0][1]);
 
 		return localeItem;
+	}
+
+	function parseGroupSizes(gs){
+		return (('' + gs).split('')).map(function (a) { return parseInt(a, 10); }) //converting string like '320' to array [3,2,1]
 	}
 
 	function unpackCurrencyInfo(localeItem){
@@ -269,7 +272,7 @@ define(function() {
 			decimalDigits: lc[4],
 			decimalSeparator: lc[5],
 			groupSeparator: lc[6],
-			groupSizes: ((lc[7] + "").split("")).map(function (a) { return parseInt(a, 10); }) //converting string like "320" to array [3,2,1]
+			groupSizes: parseGroupSizes(lc[7])
 		}
 	}
 
@@ -277,7 +280,7 @@ define(function() {
 		var lc = expandLocaleData(localeItem)[0];
 		return  {
 			negativePattern: lc[0],
-			groupSizes: ((lc[1]).split("")).map(function (a) { return parseInt(a, 10); }), //converting string like "320" to array [3,2,1]
+			groupSizes: parseGroupSizes(lc[1]),
 			decimalSeparator : lc[2],
 			groupSeparator: lc[3],
 			decimalDigits: lc[4]}
@@ -286,12 +289,13 @@ define(function() {
 	// retrieves item by name from numberCurrencyLocalizer. If provided only culture name (like de, not de-DE)
 	// first acceptable match will be returned. If localeName can't be resolved in any cale - defaultItem will be returned.
 	function getLocaleItem(localeName)	{
-		var result = numberCurrencyLocalizer[localeName];
+		var result = numberCurrencyLocalizer[localeName],
+			lName;
 
 		if (!result){
 			// trying to match localeName as a first part of name (no country code in locale)
-			localeName += "-";
-			for (var lName in numberCurrencyLocalizer) {
+			localeName += '-';
+			for (lName in numberCurrencyLocalizer) {
 				if (lName.slice(0, localeName.length) == localeName){
 					result = numberCurrencyLocalizer[lName];
 					break;
@@ -311,15 +315,14 @@ define(function() {
 		getCurrencyInfoByCode: function (currencyCode) {
 			var targetCode = currencyCode.toUpperCase(),
 				result = defaultItem,
+				localeItem,
 				i;
 
 			for (i in numberCurrencyLocalizer) {
-				var localeItem = numberCurrencyLocalizer[i];
-				if (localeItem && localeItem[1]) {
-					if (("" + localeItem[1][0]).toUpperCase() == targetCode) {
-						result = localeItem;
-						break;
-					}
+				localeItem = numberCurrencyLocalizer[i];
+				if (localeItem && localeItem[1] && ('' + localeItem[1][0]).toUpperCase() == targetCode) {
+					result = localeItem;
+					break;
 				}
 			}
 			return unpackCurrencyInfo(result);
