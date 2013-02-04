@@ -1,4 +1,4 @@
-define(function() {
+define(function () {
 	// Based on Android's 4.1.1 algorithm and format rules
 
 	// Japanese Phone number formatting rule is a bit complicated.
@@ -131,59 +131,55 @@ define(function() {
 
 	// Removes dashes and spaces from the string.
 	function removeDashesAndSpaces(s) {
-		return (s + "").replace(/[- ]/g, ''); //do we need to remove spaces or only dashes?
+		return ('' + s).replace(/[- ]/g, ''); //do we need to remove spaces or only dashes?
 	}
 
 	return {
-		formatJapaneseNumber: function (s) {
-			function insertSubString (s, subString, position) {
+		formatJapaneseNumber:function (s) {
+			function insertSubString(s, subString, position) {
 				return s.substr(0, position) + subString + s.substr(position);
 			}
 
-			s = s + "";
+			s = '' + s;
 			// validate basic rules: number starts from +81 or starts from 0. Number has only digits, dashes or spaces
 			if (!s.match(/^(([\+][8][1])|([0]))([\d -]{3,15})$/)) {
 				//provided phone number is not valid Japanese phone number.
 				return s;
 			}
 
-			// Here, "root" means the position of "'"  0'3, 0'90, and +81'-90 (dash will be deleted soon, so it is actually +81'90).
+			// Here, 'root' means the position of "'":  0'3, 0'90, and +81'-90 (dash will be deleted soon, so it is actually +81'90).
 			var rootIndex = (s.charAt(0) == '+') ? 3 : 1,
-				result = s;
+				i = rootIndex,
+				result = s,
+				base = 0,
+				dashPos1, dashPos2, ch, value, l;
 
 			// Strip the dashes first, as we're going to add them back
 			s = removeDashesAndSpaces(s);
-			var l = s.length,
-				i = rootIndex,
-				base = 0;
+			l = s.length;
 
 			while (i < l) {
-				var ch = parseInt(s.charAt(i)),
-					value = FORMAT_MAP[base + ch];
+				ch = parseInt(s.charAt(i));
+				value = FORMAT_MAP[base + ch];
 
 				if (value < 0) {
 					if (value <= -100) {
 						return result; //internal terminator
 					}
 
-					var dashPos2 = rootIndex + (Math.abs(value) % 10);
-					if (l > dashPos2) {
-						s = insertSubString(s, "-", dashPos2);
-					}
+					dashPos2 = rootIndex + (Math.abs(value) % 10);
+					(l > dashPos2) && (s = insertSubString(s, '-', dashPos2));
 
-					var dashPos1 = rootIndex + (Math.abs(value) / 10);
-					if (l > dashPos1) {
-						s = insertSubString(s, "-", dashPos1);
-					}
+					dashPos1 = rootIndex + (Math.abs(value) / 10);
+					(l > dashPos1) && (s = insertSubString(s, '-', dashPos1));
 					break;
 				} else {
 					base = value;
 					i++;
 				}
 			}
-			if (length > 3 && rootIndex == 3) {
-				s = insertSubString(s, "-", rootIndex);
-			}
+			(length > 3 && rootIndex == 3) && (s = insertSubString(s, '-', rootIndex));
+
 			return s;
 		}
 	};
