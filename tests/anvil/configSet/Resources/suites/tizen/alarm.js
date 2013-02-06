@@ -6,8 +6,9 @@
  */
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
+	var finish,
+		valueOf;
+	
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
@@ -23,38 +24,44 @@ module.exports = new function() {
 	]
 
 	this.alarmAdd = function(testRun) {
+		var alarm,
+			tizenArr,
+			date = new Date(2012, 11, 21, 8, 0);
+
 		tizen.alarm.removeAll();
+		
 		//Alarm in 10 seconds (relative)
-		var alarm = new tizen.AlarmRelative(10);
+		alarm = new tizen.AlarmRelative(10);
 		tizen.alarm.add(alarm, "http://tizen.org/alarm-clock");
-
-		var date = new Date(2012, 11, 21, 8, 0);
+		
 		// Set an alarm on December 21st 2012 08:00
-		var alarm1 = new tizen.AlarmAbsolute(date);
-		tizen.alarm.add(alarm1, "http://tizen.org/alarm-clock");
-		var tizenArr = tizen.alarm.getAll();
-
+		alarm = new tizen.AlarmAbsolute(date);
+		tizen.alarm.add(alarm, "http://tizen.org/alarm-clock");
+		
+		tizenArr = tizen.alarm.getAll();
 		valueOf(testRun, tizenArr.length).shouldBe(2);
 
 		finish(testRun);
 	}
 	
-	this.alarmGet = function(testRun) {
+	this.alarmGet = function(testRun) {	
+		var alarm,
+			alarm1,
+			alarm2, 
+			alarm3,
+			date = new Date(2012, 11, 21, 8, 0);
+
 		tizen.alarm.removeAll();
-		//Alarm in 10 seconds (relative)
-		var alarm = new tizen.AlarmRelative(10),
 		
+		//Alarm in 10 seconds (relative)
+		alarm = new tizen.AlarmRelative(10);
 		// Set an alarm on December 21st 2012 08:00
-			date = new Date(2012, 11, 21, 8, 0),			
-
-			alarm1 = new tizen.AlarmAbsolute(date);
-
+		alarm1 = new tizen.AlarmAbsolute(date);
 		tizen.alarm.add(alarm, "http://tizen.org/alarm-clock");
 		tizen.alarm.add(alarm1, "http://tizen.org/alarm-clock");
+		
 		var relative_id = alarm.id,
 			absolute_id = alarm1.id;
-
-			var alarm2, alarm3;
 
 		valueOf(testRun, function(){
 			alarm2 = tizen.alarm.get(relative_id);
