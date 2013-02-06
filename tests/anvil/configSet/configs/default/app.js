@@ -7,7 +7,6 @@
 
 var suites = [
 	{name: "analytics"},
-	{name: "accelerometer"},
 	{name: "blob"},
 	{name: "buffer"},
 	{name: "codec"},
@@ -37,7 +36,6 @@ var suites = [
 	{name: "utils/utils"},
 	{name: "yahoo"},
 	{name: "ui_alert_dialog"},
-	{name: "ui_searchbar"},
 	{name: "ui_progress_bar"},
 	{name: "ui_option_dialog"},
 	{name: "ui_activity_indicator"},
