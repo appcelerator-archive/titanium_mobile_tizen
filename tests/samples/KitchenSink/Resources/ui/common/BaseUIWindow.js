@@ -4,9 +4,11 @@ function BaseUIWindow(title) {
 		backgroundColor:'white'
 	});
 	
+	var isMobileWeb = Titanium.Platform.osname == 'mobileweb';
+	
 	// create table view data object
 	var data = [
-        {title:'Tab Groups', hasChild:true, test:'ui/common/baseui/tab_groups', color:"#000"},
+		{title:'Tab Groups', hasChild:!isMobileWeb, test:'ui/common/baseui/tab_groups', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"},
 		{title:'Window Properties', hasChild:true, test:'ui/common/baseui/window_properties'},
 		{title:'Window Layout', hasChild:true, test:'ui/common/baseui/window_layout'},
 		{title:'Window (Standalone)', hasChild:true, test:'ui/common/baseui/window_standalone'},
@@ -46,7 +48,14 @@ function BaseUIWindow(title) {
 	}
 	
 	// create table view
-	for (var i = 0; i < data.length; i++ ) { data[i].color = '#000'; data[i].font = {fontWeight:'bold'} };
+	for (var i = 0; i < data.length; i++ ) {
+		var d = data[i];
+		// On Android, if touchEnabled is not set explicitly, its value is undefined.
+		if (d.touchEnabled !== false) {
+			d.color = '#000';
+		}
+		d.font = {fontWeight:'bold'};
+	};
 	var tableview = Titanium.UI.createTableView({
 		data:data
 	});
