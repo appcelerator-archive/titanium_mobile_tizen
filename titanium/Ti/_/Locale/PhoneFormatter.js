@@ -8,7 +8,7 @@ define(function () {
 	var nanpNumberValidator = /^(((\+){0,1}1){0,1}([\d]{3})){0,1}([\d]{3})([\d]{4})$/,
 		dashesAndSpacesRegEx = /[- ]/g,
 		japanesePhoneFormatter, // special formatter of JS numbers
-		FORMAT_UNKNOWN = 0, //use country code or don't format
+		FORMAT_UNKNOWN = 0, // use country code or don't format
 		FORMAT_NANP = 1, // NANP formatting
 		FORMAT_JAPAN = 2, // Japanese formatting
 	// List of country codes for countries that use the NANP
@@ -56,7 +56,7 @@ define(function () {
 			return s;
 		}
 
-		var dashReversedPositions = [5, 8, 11], //index of dashes in dushless string counted from the END of string
+		var dashReversedPositions = [5, 8, 11], // index of dashes in dushless string counted from the END of string
 			l = s.length,
 			result = '',
 			i = 0;
@@ -86,13 +86,13 @@ define(function () {
 		// phoneNumber - phone number to be formatted
 		formatTelephoneNumber: function(phoneNumber, currentLocale) {
 			var localeParts = (currentLocale) ? currentLocale.split(/-/) : [],
-			//default formatting rules to apply if the number does not begin with +[country_code]
+			// default formatting rules to apply if the number does not begin with +[country_code]
 				formatType = getFormatTypeFromCountryCode(localeParts[localeParts.length - 1]);
 
 			if (phoneNumber.length > 2 && phoneNumber.charAt(0) == '+') {
 				if (phoneNumber.charAt(1) == '1') {
 					formatType = FORMAT_NANP;
-				} else if (phoneNumber.charAt(1) == '8' && phoneNumber.charAt(2) == '1') { //+81 JP
+				} else if (phoneNumber.charAt(1) == '8' && phoneNumber.charAt(2) == '1') { // +81 JP
 					formatType = FORMAT_JAPAN;
 				} else {
 					formatType = FORMAT_UNKNOWN;

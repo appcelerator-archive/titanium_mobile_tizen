@@ -1,4 +1,7 @@
 define(function () {
+	// RegEx to check is current number valid number can be formatted with current formatter
+	var formatableNumberRegExp = /^[-]{0,1}\d+[,.]{0,1}\d+$/;
+
 	// Function returns a value from the array with the provided index (even if the value is undefined),
 	// bug if the index is wrong - returns provided default vaule.
 	// a - target array
@@ -22,10 +25,10 @@ define(function () {
 		var vArray = (intValue == '') ? [] : ('' + Math.abs(intValue)).split(''),
 			pArray = ('' + simplePattern).split(''),
 			valueIndex = vArray.length - 1,
+			i = pArray.length - 1,
 			result = '',
 			patternChar, j, currentChar,
-			i = (pArray.length - 1),
-		//we can add it only with 'next digit', not alone as ',000,001.1' is wrong. should be '000,001.1'. so we only cache it not adding.
+		// we can add it only with 'next digit', not alone as ',000,001.1' is wrong. should be '000,001.1'. so we only cache it not adding.
 			cachedGroupDivider = '';
 
 		for (; i >= 0; i--) {
@@ -54,7 +57,7 @@ define(function () {
 					cachedGroupDivider = '';
 			}
 		}
-		//if we are not limited to pattern Lengths - add all not added digits
+		// if we are not limited to pattern Lengths - add all not added digits
 		if (!limitResultToPatternLength) {
 			for (j = valueIndex; j >= 0; j--) {
 				result = getItemFromArray(vArray, j, '') + result;
@@ -81,8 +84,8 @@ define(function () {
 
 		// we are not formatting anything if:  no string pattern provided or provided value is not a number
 		// or provided value is too big to format it without exponent.
-		if (!p || isNaN(+v) || !('' + v).match(/^[-]{0,1}\d+[,.]{0,1}\d+$/)) {
-			return v; //return as it is.
+		if (!p || isNaN(+v) || !formatableNumberRegExp.test(v)) {
+			return v; // return as it is.
 		}
 
 		// This function will work with the absolute value of the number, even if it's negative.
@@ -92,13 +95,13 @@ define(function () {
 			valueParts = ('' + v).replace('-', '').split('.'),
 			vInt = valueParts[0] || '', // integer part.
 			vFract = valueParts[1] || '', // fractional part.
-			resFract = '', //fractional part result
-			resInt = '', //integer part result
-			ma = p.split('.'), //split pattern for fractional and integer pattern parts
+			resFract = '', // fractional part result
+			resInt = '', // integer part result
+			ma = p.split('.'), // split pattern for fractional and integer pattern parts
 			result, fractPatternReversed, fractValueReversed, fractResultReversed;
 
 		if (ma.length > 1) {
-			//ma[1] - decimal part pattern
+			// ma[1] - decimal part pattern
 			fractPatternReversed = reverseString('' + ma[1]),
 				fractValueReversed = reverseString('' + vFract),
 				// 1) fractional part has no group dividers!
@@ -107,11 +110,11 @@ define(function () {
 			resFract = (fractResultReversed ? localeNumberInfo.decimalSeparator : '') + reverseString(fractResultReversed);
 		}
 
-		//ma[0] - integer part pattern
+		// ma[0] - integer part pattern
 		(ma.length > 0) && (resInt = formatSimpleInteger(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false));
 		result = ((resInt.length > 0) ? resInt : '0') + resFract;
 
-		//if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
+		// if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
 		(negativeSign && (result.indexOf('-') == -1)) && ( result = localeNumberInfo.negativePattern.replace('n', result));
 
 		return result;
@@ -186,7 +189,7 @@ define(function () {
 		}
 
 		return res;
-	};
+	}
 
 	// value - js Date object.
 	// format - mask for date\time (like: dd-MM-yy, HH:mm:ss e.t.c. )
@@ -269,7 +272,7 @@ define(function () {
 			clength = current.length;
 
 			switch (current) {
-				case 'ddd':  //Day of the week, as a three-letter abbreviation
+				case 'ddd':  // Day of the week, as a three-letter abbreviation
 				case 'dddd': // Day of the week, using the full name
 					names = ( clength === 3 ) ? cal.days.namesAbbr : cal.days.names;
 					ret.push(names[value.getDay()]);
