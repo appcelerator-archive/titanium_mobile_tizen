@@ -6,7 +6,8 @@ exports.run = function(testRun, valueOf) {
 	valueOf(testRun, a.a).shouldNotBeUndefined();
 	valueOf(testRun, b.b).shouldNotBeUndefined();
 	valueOf(testRun, a.a().b).shouldBeExactly(b.b);
-	valueOf(testRun, b.b().a).shouldBeExactly(a.a); //its failed on tizen, because b.b() return "./a" instead object a
+	// It fails on Tizen, because b.b() returns "./a" instead of object "a"
+	valueOf(testRun, b.b().a).shouldBeExactly(a.a);
 
 	return testRun;
 }
