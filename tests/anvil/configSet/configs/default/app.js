@@ -15,6 +15,7 @@ var suites = [
 	{name: "database"},
 	{name: "facebook"},
 	{name: "filesystem/filesystem"},
+	{name: "gesture"},
 	{name: "json"},
 	{name: "jss"},
 	{name: "kroll"},
