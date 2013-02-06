@@ -426,7 +426,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},
 		
 		createGroup: function(args) {
-			throw new Error('This method is not supported on Tizen.');
+			return new (require('Ti/Contacts/Group'))(args);
 		},
 		
 		createPerson: function(person) {

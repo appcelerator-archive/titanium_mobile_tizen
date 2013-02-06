@@ -3,7 +3,7 @@ define(["Ti/_/declare", "Ti/Contacts"], function(declare, Contacts) {
 	return declare("Ti.Contacts.Group", null, {
 		
 		constructor: function(args) {
-			this.name = args.name;
+			this.name = args.name || '';
 		},
 		
 		add: function(person) {
