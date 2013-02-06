@@ -1,10 +1,12 @@
-/*
- * Appcelerator Titanium Mobile
+/* Appcelerator Titanium Mobile
  * Copyright (c) 2011-2012 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
- * Please see the LICENSE included with this distribution for details.
- */
-if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+ * Please see the LICENSE included with this distribution for details. */
+
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
     Ti.include('countPixels.js');
 }
 
@@ -13,7 +15,6 @@ module.exports = new function() {
 		valueOf,
 		reportError;
 
-
 	this.name = "button";
 	this.tests = [
 		{name: "basic_test"},
@@ -21,13 +22,11 @@ module.exports = new function() {
 		{name: "pixel_test"}
 	];
 
-
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
 	};
-
 
 	// Test some button properties and functions
 	this.basic_test = function(testRun) {
@@ -53,6 +52,7 @@ module.exports = new function() {
 				height: 50
 			});
 		}).shouldNotThrowException();
+
 		valueOf(testRun, button).shouldNotBeNull();
 		valueOf(testRun, button).shouldBeObject();
 		valueOf(testRun, button.color).shouldBeUndefined();		
@@ -147,8 +147,6 @@ module.exports = new function() {
 			button.fireEvent("longclick");
 			button.fireEvent("longpress");
 			button.fireEvent("pinch");
-
-			//win.close();
 		});
 
 		win.add(button);
@@ -164,7 +162,6 @@ module.exports = new function() {
 			valueOf(testRun, pinch).shouldBeTrue();
 
 			Ti.API.info("All values are fine. Finish test.");
-			
 			
 			win.close();
 			finish(testRun);
@@ -198,7 +195,7 @@ module.exports = new function() {
 		valueOf(testRun, button).shouldNotBeNull();
 		valueOf(testRun, button).shouldBeObject();
 
-        if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+        if (isTizen || isMobileWeb) {
         	Ti.API.info("Get CountPixels object.");
 
             valueOf(testRun, function() { countPixel = new CountPixels(); }).shouldNotThrowException();
@@ -206,7 +203,7 @@ module.exports = new function() {
         }
 
         win.addEventListener("postlayout", function() {
-            if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+            if (isTizen || isMobileWeb) {
             	var onCompleteWithButton = function(count) {
    					valueOf(testRun, count).shouldBeGreaterThan(1000);
 
