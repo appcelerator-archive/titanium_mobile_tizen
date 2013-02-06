@@ -4,8 +4,9 @@ function PhoneWindow(title) {
 		backgroundColor:'white'
 	});
 	
-	var isMobileWeb = (Ti.Platform.osname === 'mobileweb');
-	
+	var isMobileWeb = Titanium.Platform.osname == 'mobileweb',
+		isTizen = Titanium.Platform.osname == 'tizen';
+		
 	// create table view data object
 	var data = [
 		{title:'Play Movie', hasChild:true, test:'ui/common/phone/movie'}
@@ -15,7 +16,8 @@ function PhoneWindow(title) {
 		data.push({title:'Geolocation', hasChild:true, test:'ui/common/phone/geolocation'});
 		data.push({title:'Accelerometer', hasChild:true, test:'ui/common/phone/accelerometer'});
 	}
-	if (Ti.Platform.model != 'Kindle Fire' && Ti.Platform.osname != 'mobileweb' && Ti.Platform.osname != 'tizen') {
+	
+	if ( !(Ti.Platform.model === 'Kindle Fire' || isMobileWeb || isTizen) ) {
 		data.push({title:'Contacts', hasChild:true, test:'ui/common/phone/contacts'});
 	}
 	data.push({title:'Sound', hasChild:!isMobileWeb, test:'ui/common/phone/sound', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
@@ -35,9 +37,11 @@ function PhoneWindow(title) {
 		data.push({title:'Save to Gallery', hasChild:true, test:'ui/handheld/ios/phone/photo_gallery_save'});
 	}
 	
-	if (Titanium.Platform.name == 'tizen') {
-		data.push({title:'Screenshot', hasChild:true, test:'ui/handheld/tizen/phone/screenshot'});
-		data.push({title:'Save to Gallery', hasChild:true, test:'ui/handheld/tizen/phone/photo_gallery_save'});
+	//add tizen specific tests
+	if (isTizen) {
+		data.push({title: 'Screenshot', hasChild: true, test: 'ui/handheld/tizen/phone/screenshot'});
+		data.push({title: 'Save to Gallery', hasChild: true, test: 'ui/handheld/tizen/phone/photo_gallery_save'});
+		data.push({title: 'Notifications', hasChild: true, test: 'ui/handheld/tizen/phone/notification'});
 	}
 
 	if (Titanium.Platform.name !== 'android') {
@@ -60,20 +64,19 @@ function PhoneWindow(title) {
 		data.push({title:'Notfications', hasChild:true, test:'ui/handheld/android/phone/notification'});
 	}
 	
-	if (Titanium.Platform.name === 'tizen') {
-		data.push({
-			title: 'Notfications', 
-			hasChild: true, 
-			test: 'ui/handheld/tizen/phone/notification'
-		});
-	}
-	
 	if (Titanium.Platform.osname == 'ipad') {
 		data.push({title:'iPad Features', hasChild:true, test:'ui/handheld/ios/phone/ipad_feature'});	
 	}
 
 	// create table view
-	for (var i = 0; i < data.length; i++ ) { data[i].color = '#000'; data[i].font = {fontWeight:'bold'} };
+	for (var i = 0; i < data.length; i++ ) {
+		var d = data[i];
+		// On Android, if touchEnabled is not set explicitly, its value is undefined.
+		if (d.touchEnabled !== false) {
+			d.color = '#000';
+		}
+		d.font = {fontWeight:'bold'};
+	};
 	var tableview = Titanium.UI.createTableView({
 		data:data
 	});
