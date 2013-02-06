@@ -9,7 +9,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			strings = {},
 			cfg = require.config,
 			app = cfg.app,
-
+			rfc4647BasicValidator = /^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$/, // we accept 2 letters codes too.
 			// Lazily loaded object with all available locale data for numbers and currencies.
 			localeNumberCurrencyInfo,
 			// Lazily loaded object with formatting rules for date/time.
@@ -30,7 +30,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			return strings[key] || hint || key || '';
 		}
 
-		Object.defineProperty(window, 'L', { value:getString, enumerable:true });
+		Object.defineProperty(window, 'L', { value: getString, enumerable: true });
 
 		// Lazy initialization of locale number and currency format storage.
 		function initNumberCurrencyFormat() {
@@ -62,26 +62,25 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 				}
 			}
 
-			//if we can't load target's locale calendar - use the default (en-US)
+			// if we can't load target's locale calendar - use the default (en-US)
 			if (!localeCalendarInfo || !localeCalendarInfo.patterns) {
 				API.warn('Loading default locale\'s calendar instead of ' + locale);
 				localeCalendarInfo = require('Ti/_/Locale/defaultCalendar');
 			}
 		}
 
-		String.formatDecimal = function (numberValue, localeName, pattern) {
+		String.formatDecimal = function(numberValue, localeName, pattern) {
 			// Checks the locale name according to basic rfc4647 validation rules, with advanced validation of the first sub-tag.
 			// It does not validate name against ISO 639-1, ISO 639-2, ISO 639-3 and ISO 639-5.
 			function isValidLocaleName(localeName) {
-				var rfc4647Basic = '^([A-Za-z]{2,3}|([xX])|([iI]))(-[A-Za-z0-9]{1,8})*$'; //we accept only 2 letters code too.
-				return (('' + localeName).match(rfc4647Basic) != null);
+				return rfc4647BasicValidator.test(localeName);
 			}
 
 			// In this case, parameter named as localName can be a pattern.
 			if (!pattern && localeName && !isValidLocaleName(localeName)) {
-				//if second parameter is NOT valid locale name - it is is a pattern.
+				// if second parameter is NOT valid locale name - it is is a pattern.
 				pattern = localeName;
-				localeName = undefined;
+				localeName = 0;
 			}
 
 			// If a locale was not specified in the parameters, use current.
@@ -100,26 +99,25 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			var numberInfo = localeNumberCurrencyInfo.getNumberInfoByLocale(localeName);
 			// If there is no pattern in the parameters, create a 'default pattern' based on locale's data,
 			// using group sizes.
-			if (!pattern) {
-				pattern = formatterHelpers.generateFormatPattern(numberInfo, ('' + numberValue).length * 2);
-			}
+			!pattern && (pattern = formatterHelpers.generateFormatPattern(numberInfo, ('' + numberValue).length * 2));
+
 			return formatterHelpers.formatDecimal(numberValue, pattern, numberInfo);
 		};
 
 		// Format a number into a locale specific currency format.
-		String.formatCurrency = function (amt) {
+		String.formatCurrency = function(amt) {
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
 			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale)) || amt;
 		};
 
 		// Expands a format name (for example, 'd' or 'D') into the full pattern string.
-		expandFormat = function (cal, format) {
-			return cal.patterns[ format ];
+		expandFormat = function(cal, format) {
+			return cal.patterns[format];
 		};
 
 		// format a date into a locale specific date format. Optionally pass a second argument (string) as either 'short' (default), 'medium' or 'long' for controlling the date format.
-		String.formatDate = function (dt, fmt) {
+		String.formatDate = function(dt, fmt) {
 			// For now 'MEDIUM' value of format not supported! Only short - 'd', and long - 'D'
 			initFormatterHelpers();
 			initCurrentCalendarData();
@@ -133,7 +131,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 		};
 
 		// format a date into a locale specific time format.
-		String.formatTime = function (dt, fmt) {
+		String.formatTime = function(dt, fmt) {
 			// For now 'MEDIUM' value of format not supported! Only short - 't', and long - 'T'
 			initFormatterHelpers();
 			initCurrentCalendarData();
@@ -148,39 +146,39 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 		return lang.setObject('Ti.Locale', Evented, {
 
-			constants:{
-				currentCountry:languageParts[1] || '',
-				currentLanguage:languageParts[0] || '',
-				currentLocale:locale
+			constants: {
+				currentCountry: languageParts[1] || '',
+				currentLanguage: languageParts[0] || '',
+				currentLocale: locale
 			},
 
 			// Adds dashes to phone number. Result is unified with same function on Android 4.1.1
-			formatTelephoneNumber:function (s) {
+			formatTelephoneNumber: function(s) {
 				initPhoneFormatter();
 				return (phoneFormatter && phoneFormatter.formatTelephoneNumber) ? phoneFormatter.formatTelephoneNumber(s, locale) : s;
 			},
 
 			// Returns currency code that corresponds to locale. (locale:'en-US' => 'USD')
-			getCurrencyCode:function (locale) {
+			getCurrencyCode: function(locale) {
 				initNumberCurrencyFormat();
 				return localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale).currencyCode;
 			},
 
 			// Returns currency symbol that corresponds to currency code. (currencyCode:'USD' => '$')
-			getCurrencySymbol:function (currencyCode) {
+			getCurrencySymbol: function(currencyCode) {
 				initNumberCurrencyFormat();
 				return localeNumberCurrencyInfo.getCurrencyInfoByCode(currencyCode).currencySymbol;
 			},
 
 			// Returns currency symbol that corresponds to locale. (locale:'en-US' => '$')
-			getLocaleCurrencySymbol:function (locale) {
+			getLocaleCurrencySymbol: function(locale) {
 				initNumberCurrencyFormat();
 				return localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale).currencySymbol;
 			},
 
-			getString:getString,
+			getString: getString,
 
-			_getString:function (key, hint) {
+			_getString: function(key, hint) {
 				return lang.val(hint, getString(key, hint));
 			}
 		});

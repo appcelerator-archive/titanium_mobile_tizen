@@ -1,12 +1,15 @@
 define(function () {
 	// Based on Android's 4.1.1 algorithm and format rules
 
+	// Japanese Phone number validator
+	var jpNumberRegExp = /^(([\+][8][1])|([0]))([\d -]{3,15})$/,
+
 	// Japanese Phone number formatting rule is a bit complicated.
 	// Here are some valid examples: 022-229-1234, 0223-23-1234, 022-301-9876, 015-482-7849,
 	// 0154-91-3478, 01547-5-4534, 0570-000-000, 0276-00-0000, 090-1234-1234, 080-0123-6789
 	// As you can see, there is no straight-forward rule here.
 	// In order to handle this, a big array is prepared.
-	var FORMAT_MAP = [
+	FORMAT_MAP = [
 		-100,10,220,-15,410,530,1200,670,780,1060,
 		-100,-25,20,40,70,100,150,190,200,210,
 		-36,-100,-100,-35,-35,-35,30,-100,-100,-100,
@@ -131,19 +134,20 @@ define(function () {
 
 	// Removes dashes and spaces from the string.
 	function removeDashesAndSpaces(s) {
-		return ('' + s).replace(/[- ]/g, ''); //do we need to remove spaces or only dashes?
+		return ('' + s).replace(/[- ]/g, ''); // do we need to remove spaces or only dashes?
 	}
 
 	return {
-		formatJapaneseNumber:function (s) {
+
+		formatJapaneseNumber: function(s) {
 			function insertSubString(s, subString, position) {
 				return s.substr(0, position) + subString + s.substr(position);
 			}
 
 			s = '' + s;
 			// validate basic rules: number starts from +81 or starts from 0. Number has only digits, dashes or spaces
-			if (!s.match(/^(([\+][8][1])|([0]))([\d -]{3,15})$/)) {
-				//provided phone number is not valid Japanese phone number.
+			if (!s.match(jpNumberRegExp)) {
+				// provided phone number is not valid Japanese phone number.
 				return s;
 			}
 
@@ -164,7 +168,7 @@ define(function () {
 
 				if (value < 0) {
 					if (value <= -100) {
-						return result; //internal terminator
+						return result; // internal terminator
 					}
 
 					dashPos2 = rootIndex + (Math.abs(value) % 10);

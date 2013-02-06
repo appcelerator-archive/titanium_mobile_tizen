@@ -1,4 +1,7 @@
 define(function () {
+	// RegEx to check is current number valid number can be formatted with current formatter
+	var formatableNumberRegExp = /^[-]{0,1}\d+[,.]{0,1}\d+$/;
+
 	// Function returns a value from the array with the provided index (even if the value is undefined),
 	// bug if the index is wrong - returns provided default vaule.
 	// a - target array
@@ -14,7 +17,7 @@ define(function () {
 	// groupDivider - locale specific group divider.
 	// negativeSignSymbol - If the pattern has '-' symbol, it will be replaced with this string.
 	//      For positive values should be empty string.
-	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter 
+	// limitResultToPatternLength - if intValue can't fit to pattern (int is bigger) this parameter
 	//      allows to select what to do:
 	//      - if true, the number will be truncated;
 	//      - if false, the size of the pattern will be overruled.
@@ -22,13 +25,13 @@ define(function () {
 		var vArray = (intValue == '') ? [] : ('' + Math.abs(intValue)).split(''),
 			pArray = ('' + simplePattern).split(''),
 			valueIndex = vArray.length - 1,
+			i = pArray.length - 1,
 			result = '',
-			patternChar,
-			i,
-			j,
-			cachedGroupDivider = ''; //we can add it only with 'next digit', not alone as ',000,001.1' is wrong. should be '000,001.1'. so we only cache it not adding.
+			patternChar, j, currentChar,
+		// we can add it only with 'next digit', not alone as ',000,001.1' is wrong. should be '000,001.1'. so we only cache it not adding.
+			cachedGroupDivider = '';
 
-		for (i = (pArray.length - 1); i >= 0; i--) {
+		for (; i >= 0; i--) {
 			patternChar = pArray[i];
 			switch (patternChar) {
 				case '0':
@@ -36,7 +39,7 @@ define(function () {
 					cachedGroupDivider = '';
 					break;
 				case '#':
-					var currentChar = getItemFromArray(vArray, valueIndex--, '');
+					currentChar = getItemFromArray(vArray, valueIndex--, '');
 					// adding cachedGroupDivider only in case we have anything to add except it.
 					(currentChar != '') && (currentChar += cachedGroupDivider);
 					result = currentChar + result;
@@ -54,7 +57,7 @@ define(function () {
 					cachedGroupDivider = '';
 			}
 		}
-		//if we are not limited to pattern Lengths - add all not added digits
+		// if we are not limited to pattern Lengths - add all not added digits
 		if (!limitResultToPatternLength) {
 			for (j = valueIndex; j >= 0; j--) {
 				result = getItemFromArray(vArray, j, '') + result;
@@ -81,41 +84,38 @@ define(function () {
 
 		// we are not formatting anything if:  no string pattern provided or provided value is not a number
 		// or provided value is too big to format it without exponent.
-		if (!p || isNaN(+v) || !('' + v).match(/^[-]{0,1}\d+[,.]{0,1}\d+$/)) {
-			return v; //return as it is.
+		if (!p || isNaN(+v) || !formatableNumberRegExp.test(v)) {
+			return v; // return as it is.
 		}
 
-		// This function will work with the absolute value of the number, even if it's negative. 
+		// This function will work with the absolute value of the number, even if it's negative.
 		// If the number is negative, 'negativeSign' flag is turned on, and the negative pattern
 		// will be used to make in correct for specified locale.
 		var negativeSign = (v < 0) ? '-' : '',
 			valueParts = ('' + v).replace('-', '').split('.'),
 			vInt = valueParts[0] || '', // integer part.
 			vFract = valueParts[1] || '', // fractional part.
-			resFract = '', //fractional part result
-			resInt = '', //integer part result
-			ma = p.split('.'); //split pattern for fractional and integer pattern parts
+			resFract = '', // fractional part result
+			resInt = '', // integer part result
+			ma = p.split('.'), // split pattern for fractional and integer pattern parts
+			result, fractPatternReversed, fractValueReversed, fractResultReversed;
 
 		if (ma.length > 1) {
-			//ma[1] - decimal part pattern
-			var fractPatternReversed = reverseString('' + ma[1]),
+			// ma[1] - decimal part pattern
+			fractPatternReversed = reverseString('' + ma[1]),
 				fractValueReversed = reverseString('' + vFract),
-			// 1) fractional part has no group dividers!
-			// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
+				// 1) fractional part has no group dividers!
+				// 2) in some cultures negative sign can be placed in the end of number (after fractional part) so we are passing it
 				fractResultReversed = formatSimpleInteger(fractPatternReversed, fractValueReversed, '', negativeSign, true);
-
 			resFract = (fractResultReversed ? localeNumberInfo.decimalSeparator : '') + reverseString(fractResultReversed);
 		}
 
-		//ma[0] - integer part pattern
+		// ma[0] - integer part pattern
 		(ma.length > 0) && (resInt = formatSimpleInteger(ma[0], vInt, localeNumberInfo.groupSeparator, negativeSign, false));
+		result = ((resInt.length > 0) ? resInt : '0') + resFract;
 
-		var result = ((resInt.length > 0) ? resInt : '0') + resFract;
-
-		//if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
-		if (negativeSign && (result.indexOf('-') == -1)) {
-			result = localeNumberInfo.negativePattern.replace('n', result);
-		}
+		// if value was negative and negative sign has not been set via pattern(during formatting) - set it according to locale pattern
+		(negativeSign && (result.indexOf('-') == -1)) && ( result = localeNumberInfo.negativePattern.replace('n', result));
 
 		return result;
 	};
@@ -124,8 +124,8 @@ define(function () {
 	// see comments in NumberCurrencyFormatStorage.js.
 	// Note: Function is used only with regular numbers (not phone numbers).
 	function generateFormatPattern(formatInfo, maxDigitsInPattern) {
-		function stringOfChar(char, l) {
-			return (l > 0) ? (new Array(l + 1)).join(char) : '';
+		function stringOfChar(c, l) {
+			return (l > 0) ? (new Array(l + 1)).join(c) : '';
 		}
 
 		// Group sizes are used to convert large numbers like 123456789 into locale specific format like 123,456,789.
@@ -136,8 +136,8 @@ define(function () {
 			mandatoryDecimalDigits = formatInfo.decimalDigits,
 			digitsBeforeSign = maxDigitsInPattern || 20,
 			digitsAfterSign = (maxDigitsInPattern || 20) - mandatoryDecimalDigits,
-			currentGroupSize,
-			allGroups = [];
+			allGroups = [],
+			currentGroupSize, fractionalPattern;
 
 		while (0 < digitsBeforeSign) {
 			currentGroupSize = (groupSizes[gIndex++] || 0) || digitsBeforeSign;
@@ -147,7 +147,7 @@ define(function () {
 			(groupSizes.length >= gIndex) && (gIndex = groupSizes.length - 1);
 		}
 
-		var fractionalPattern = stringOfChar('0', mandatoryDecimalDigits) + stringOfChar('#', digitsAfterSign);
+		fractionalPattern = stringOfChar('0', mandatoryDecimalDigits) + stringOfChar('#', digitsAfterSign);
 		return allGroups.join(',') + '.' + fractionalPattern;
 	}
 
@@ -160,13 +160,13 @@ define(function () {
 		var number = Math.abs(value),
 			pattern = (value < 0) ? currencyFormatInfo.negativePattern : currencyFormatInfo.positivePattern,
 			patternParts = /n|\$|-|%/g,
-			res = '';
+			res = '', ar, index;
 
 		number = formatDecimalInternal(number, generateFormatPattern(currencyFormatInfo), currencyFormatInfo);
 
 		for (; ;) {
-			var index = patternParts.lastIndex,
-				ar = patternParts.exec(pattern);
+			index = patternParts.lastIndex;
+			ar = patternParts.exec(pattern);
 
 			res += pattern.slice(index, ar ? ar.index : pattern.length);
 
@@ -189,7 +189,7 @@ define(function () {
 		}
 
 		return res;
-	};
+	}
 
 	// value - js Date object.
 	// format - mask for date\time (like: dd-MM-yy, HH:mm:ss e.t.c. )
@@ -201,31 +201,24 @@ define(function () {
 
 		// Start with an empty string
 		var ret = [],
-			hour,
-			part,
-			foundDay,
-			checkedDay,
+			names, name, hour, part, foundDay, checkedDay,
 			dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
 		// If the format contains a string in quotes, the string must go to the
 		// output date string verbatim. 'quoteCount' is used in this logic.
 			quoteCount = 0,
-		// a 'token' is a logical part of the date string (for example, year or month)
-			tokenRegExp = getTokenRegExp(),
+		// regular expression for matching date and time tokens - a logical part of the date string
+		// (for example, year or month) in format strings. 'g' key allow us do multiply searches on regExp in a loop
+			tokenRegExp = /\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g,
 			quoteCount = 0,
-			escaped = false,
-			c, clength, current, index, preMatch, ar;
+			escaped, i, c, clength, current, index, preMatch, ar, il;
 
-		// pads with one, two or three zeros.
+		// Fast pad with one, two, three or four zeros.
 		function padZeros(num, c) {
-			var zeros = [ '0', '00', '000' ],
-				s = num + '';
+			var zeros = ['', '0', '00', '000', '0000'],
+				s = '' + num,
+				prefix = zeros[c - s.length];
 
-			if (c > 1 && s.length < c) {
-				s = ( zeros[c - 2] + s);
-				s = s.substr(s.length - c, c);
-			}
-
-			return s;
+			return !prefix ? s : (prefix + s);
 		}
 
 		function hasDay() {
@@ -237,25 +230,6 @@ define(function () {
 			return foundDay;
 		}
 
-		function getPart(date, part) {
-			switch (part) {
-				case 0:
-					return date.getFullYear();
-				case 1:
-					return date.getMonth();
-				case 2:
-					return date.getDate();
-				default:
-					throw 'Invalid part value ' + part;
-			}
-		}
-
-		function getTokenRegExp() {
-			// regular expression for matching date and time tokens in format strings.
-			//'g' key allow us do multiply searches on regExp in a loop
-			return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
-		};
-
 		for (; ;) {
 			// Save the current index
 			index = tokenRegExp.lastIndex,
@@ -266,22 +240,15 @@ define(function () {
 
 			// add to result part from pattern before match, unescape (and count) single quotes, and '\'
 			// single quote count is used to determine if the token occurs in a string literal.
-			for (var i = 0, il = preMatch.length; i < il; i++) {
+			for (i = 0, il = preMatch.length; i < il; i++) {
 				c = preMatch.charAt(i);
 				switch (c) {
 					case '\'':
-						if (escaped) {
-							ret.push(c);
-						}
-						else {
-							quoteCount++;
-						}
+						!escaped ? (quoteCount++) : (ret.push(c));
 						escaped = false;
 						break;
 					case '\\':
-						if (escaped) {
-							ret.push('\\');
-						}
+						!escaped || (ret.push('\\'));
 						escaped = !escaped;
 						break;
 					default:
@@ -301,41 +268,41 @@ define(function () {
 				continue;
 			}
 
-			current = ar[ 0 ];
+			current = ar[0];
 			clength = current.length;
 
 			switch (current) {
-				case 'ddd':  //Day of the week, as a three-letter abbreviation
+				case 'ddd':  // Day of the week, as a three-letter abbreviation
 				case 'dddd': // Day of the week, using the full name
-					var names = ( clength === 3 ) ? cal.days.namesAbbr : cal.days.names;
+					names = ( clength === 3 ) ? cal.days.namesAbbr : cal.days.names;
 					ret.push(names[value.getDay()]);
 					break;
 				case 'd':  // Day of month, without leading zero for single-digit days
 				case 'dd': // Day of month, with leading zero for single-digit days
 					foundDay = true;
-					ret.push(padZeros(getPart(value, 2), clength));
+					ret.push(padZeros(value.getDate(), clength));
 					break;
 				case 'MMM':  // Month, as a three-letter abbreviation
 				case 'MMMM': // Month, using the full name
-					var name = (clength === 3) ? 'namesAbbr' : 'names';
+					name = (clength === 3) ? 'namesAbbr' : 'names';
 					names = cal.monthsGenitive && hasDay() ? cal.monthsGenitive[name] : cal.months[name];
-					ret.push(names[getPart(value, 1)]);
+					ret.push(names[value.getMonth()]);
 					break;
 				case 'M':  // Month, as digits, with no leading zero for single-digit months
 				case 'MM': // Month, as digits, with leading zero for single-digit months
-					ret.push(padZeros(getPart(value, 1) + 1, clength));
+					ret.push(padZeros(value.getMonth() + 1, clength));
 					break;
 				case 'y':    // Year, as two digits, but with no leading zero for years less than 10
 				case 'yy':   // Year, as two digits, with leading zero for years less than 10
 				case 'yyyy': // Year represented by four full digits
 					part = value.getFullYear();
-					!(clength < 4) || ( part = part % 100);
+					(clength < 4) && ( part = part % 100);
 					ret.push(padZeros(part, clength));
 					break;
 				case 'h':   // Hours with no leading zero for single-digit hours, using 12-hour clock
 				case 'hh':  // Hours with leading zero for single-digit hours, using 12-hour clock
 					hour = value.getHours() % 12;
-					!(hour === 0) || (hour = 12);
+					(hour === 0) && (hour = 12);
 					ret.push(padZeros(hour, clength));
 					break;
 				case 'H':  // Hours with no leading zero for single-digit hours, using 24-hour clock
@@ -384,12 +351,12 @@ define(function () {
 			}
 		}
 		return ret.join('');
-	};
+	}
 
 	return {
-		formatDecimal:formatDecimalInternal,
-		generateFormatPattern:generateFormatPattern,
-		formatCurrency:formatCurrencyInternal,
-		formatDate:formatDateInternal
+		formatDecimal: formatDecimalInternal,
+		generateFormatPattern: generateFormatPattern,
+		formatCurrency: formatCurrencyInternal,
+		formatDate: formatDateInternal
 	};
 });
