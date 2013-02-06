@@ -15,7 +15,7 @@
 	<fullscreen>false</fullscreen>
 	<navbar-hidden>false</navbar-hidden>
 	<analytics>false</analytics>
-	<guid></guid>
+	<guid>dcb1b056-6036-4a65-ba5c-9d3c4b7f4ebd</guid>
 	<android>
 		<screens small="false" normal="true" large="true" anyDensity="false" />
 		<manifest>
@@ -32,8 +32,7 @@
 	<property name="ti.android.threadstacksize" type="int">32768</property>
 	<property name="ti.ios.enablecoverage" type="bool">true</property>
 	<property name="ti.ios.enablemdfind" type="bool">false</property>
-	
-	 <tizen appid="zhrTuDSwYV">
+	<tizen appid="zhrTuDSwYV">
         <feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>
         <feature name="http://tizen.org/api/geocoder" required="true"/>
@@ -65,5 +64,4 @@
         <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
         <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>
-	
 </ti:app>

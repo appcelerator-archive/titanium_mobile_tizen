@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
 	<id>org.appcelerator.titanium.testharness</id>
-	 <name>test_harness</name>
+	<name>test_harness</name>
     <version>1.0.1</version>
     <publisher>test publisher</publisher>
     <url>http://www.test.com</url>
@@ -27,8 +27,7 @@
 		</manifest>
 	</android>
 	<mobileweb>
-		<precache>
-		</precache>
+		<precache></precache>
 		<splash>
 			<enabled>true</enabled>
 			<inline-css-images>true</inline-css-images>
@@ -41,7 +40,6 @@
 	<property name="ti.android.threadstacksize" type="int">102400</property>
 	<property name="ti.ios.enablecoverage" type="bool">true</property>
 	<property name="ti.ios.enablemdfind" type="bool">false</property>
-	
 	<tizen appid="zhrTuDSwYV">
         <feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>

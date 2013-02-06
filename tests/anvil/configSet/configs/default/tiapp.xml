@@ -15,7 +15,7 @@
 	<fullscreen>false</fullscreen>
 	<navbar-hidden>false</navbar-hidden>
 	<analytics>false</analytics>
-	<guid></guid>
+	<guid>8eb7e3bd-0b2e-4822-ae4d-2a0105498974</guid>
 	<property name="ti.ui.defaultunit">system</property>
 	<iphone>
 		<orientations device="iphone">
@@ -47,8 +47,8 @@
 		</splash>
 		<theme>default</theme>
 	</mobileweb>
-	 <tizen appid="zhrTuDSwYV">
-        <feature name="http://tizen.org/api/tizen" required="true"/>
+	<tizen appid="zhrTuDSwYV">
+    	<feature name="http://tizen.org/api/tizen" required="true"/>
         <feature name="http://tizen.org/api/lbs" required="true"/>
         <feature name="http://tizen.org/api/geocoder" required="true"/>
         <feature name="http://tizen.org/api/application" required="true"/>
@@ -79,7 +79,6 @@
         <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
         <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>
-	
 	<modules>
 	</modules>
 </ti:app>
