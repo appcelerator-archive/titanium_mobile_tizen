@@ -185,7 +185,7 @@ function build(logger, config, cli, finished) {
 	logger.info(__('Compiling "%s" build', cli.argv['deploy-type']));
 	
 	this.logger = logger;
-	this.buildType = cli.argv['deploy-type'];
+	this.deployType = cli.argv['deploy-type'];
 	this.os = cli.env.os;
 	this.tiapp = cli.tiapp;
 	
@@ -201,7 +201,7 @@ function build(logger, config, cli, finished) {
 	if (config.paths && Array.isArray(config.paths.modules)) {
 		this.moduleSearchPaths = this.moduleSearchPaths.concat(config.paths.modules);
 	}
-
+	
 	this.projectDependencies = [];
 	this.modulesToLoad = [];
 	this.tiModulesToLoad = [];
@@ -232,11 +232,11 @@ function build(logger, config, cli, finished) {
 		location: './titanium',
 		main: pkgJson.main
 	}];
-
+	
 	if (!this.dependenciesMap) {
 		this.dependenciesMap = JSON.parse(fs.readFileSync(path.join(this.mobilewebTitaniumDir, 'dependencies.json')));
 	}
-
+	
 	// read the tiapp.xml and initialize some sensible defaults
 	applyDefaults(this.tiapp, {
 		mobileweb: {
@@ -271,10 +271,10 @@ function build(logger, config, cli, finished) {
 
 	// tiapp are ready now, continye
 	this.validateTheme();
-
-	var mwBuildSettings = this.tiapp.mobileweb.build[this.buildType];
-	this.minifyJS = mwBuildSettings && mwBuildSettings.js ? !!mwBuildSettings.js.minify : this.buildType == 'production';
-
+	
+	var mwBuildSettings = this.tiapp.mobileweb.build[this.deployType];
+	this.minifyJS = mwBuildSettings && mwBuildSettings.js ? !!mwBuildSettings.js.minify : this.deployType == 'production';
+	
 	cli.fireHook('build.pre.compile', this, function (e) {
 		parallel(this, [
 			'copyFiles',
@@ -417,12 +417,12 @@ build.prototype = {
 		afs.copyDirSyncRecursive(this.mobilewebTitaniumDir, this.buildDir + '/titanium', { preserve: true, logger: this.logger.debug });
 		afs.copyDirSyncRecursive(this.projectResDir, this.buildDir, { preserve: true, logger: this.logger.debug, rootIgnore: ti.filterPlatforms('mobileweb') });
 		if (afs.exists(this.projectResDir, 'mobileweb')) {
-			afs.copyDirSyncRecursive(this.projectResDir + '/mobileweb', this.buildDir + '/mobileweb', { preserve: true, logger: this.logger.debug, rootIgnore: ['apple_startup_images', 'splash'] });
+			afs.copyDirSyncRecursive(this.projectResDir + '/mobileweb', this.buildDir, { preserve: true, logger: this.logger.debug, rootIgnore: ['apple_startup_images', 'splash'] });
 			['Default.jpg', 'Default-Portrait.jpg', 'Default-Landscape.jpg'].forEach(function (file) {
 				file = this.projectResDir + '/mobileweb/apple_startup_images/' + file;
 				if (afs.exists(file)) {
 					afs.copyFileSync(file, this.buildDir, { logger: this.logger.debug });
-					afs.copyFileSync(file, this.buildDir + '/mobileweb/apple_startup_images', { logger: this.logger.debug });
+					afs.copyFileSync(file, this.buildDir + '/apple_startup_images', { logger: this.logger.debug });
 				}
 			}, this);
 		}
@@ -637,7 +637,7 @@ build.prototype = {
 					app_publisher: tiapp.publisher,
 					app_url: tiapp.url,
 					app_version: tiapp.version,
-					deploy_type: this.buildType,
+					deploy_type: this.deployType,
 					locales: JSON.stringify(this.locales),
 					packages: JSON.stringify(this.packages),
 					project_id: tiapp.id,
@@ -648,7 +648,7 @@ build.prototype = {
 					ti_timestamp: ti.manifest.timestamp,
 					ti_version: ti.manifest.version,
 					has_analytics_use_xhr: tiapp.mobileweb.analytics ? tiapp.mobileweb.analytics['use-xhr'] === true : false,
-					has_show_errors: this.buildType != 'production' && tiapp.mobileweb['disable-error-screen'] !== true,
+					has_show_errors: this.deployType != 'production' && tiapp.mobileweb['disable-error-screen'] !== true,
 					has_instrumentation: !!tiapp.mobileweb.instrumentation
 				}),
 				
@@ -666,10 +666,8 @@ build.prototype = {
 			requireCacheWritten = false,
 			moduleCounter = 0;
 		
-		//For tizen: following code uncommented, now it bypass caching
 		// uncomment next line to bypass module caching (which is ill advised):
-		// return it back, do not bypass caching. Does we need pre-caching in Tizen app at all? Needs more tests, do not see any profit fron this for now.
-		//this.modulesToCache = [];
+		// this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
