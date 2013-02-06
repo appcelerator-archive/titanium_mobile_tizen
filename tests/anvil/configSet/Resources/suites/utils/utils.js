@@ -31,7 +31,7 @@ module.exports = new function() {
 	this.base64decode = function(testRun) {
 		valueOf(testRun, Ti.Utils.base64decode).shouldBeFunction();
 		valueOf(testRun, Ti.Utils.base64decode('SGVsbG8sIHdvcmxkIQ==')).shouldBe('Hello, world!');
-                
+
 		var f = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'suites/utils/encodedFile.txt');
 		var contents = f.read();
 		valueOf(testRun, Ti.Utils.base64decode(contents)).shouldBe('Decoding successful!');
@@ -75,7 +75,7 @@ module.exports = new function() {
     this.md5 = function(testRun) {
 		valueOf(testRun, Ti.Utils.md5HexDigest).shouldBeFunction();
         valueOf(testRun, Ti.Utils.md5HexDigest("Hello, world!")).shouldBe('6cd3556deb0da54bca060b4c39479839');
-                
+
 		var f = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'suites/utils/decodedFile.txt');
 		var contents = f.read();
 		valueOf(testRun, Ti.Utils.md5HexDigest(contents)).shouldBe('86bd3c0247976528f3b7559d38cfb405');
