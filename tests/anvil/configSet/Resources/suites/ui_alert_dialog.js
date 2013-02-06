@@ -5,12 +5,17 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
+
 module.exports = new function() {
-	var finish;
-	var valueOf;
+	var finish,
+		valueOf;
+
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
@@ -25,73 +30,70 @@ module.exports = new function() {
 			{name: "testMessage"},
 			{name: "testTitle"}
 		];
-		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+
+		if (isTizen || isMobileWeb) {
 			arr.push({name: "showHide"});
 		}
+
 		return arr;
-	}())
+	}());
 
 	this.showHide = function(testRun) {
-
 		// Show a red full-screen window that will be a test background for the
 		// alert dialog. Then show the alert dialog, and verify the number of
 		// background-colored pixels has decreased, as the alert dialog covered them.
 		// (There is no direct way of setting colours for the alert dialog.)
-		// Afterwards, hide and show dialog again, checking the colours again.
-		
+		// Afterwards, hide and show dialog again, checking the colours again.		
 		var wind = Ti.UI.createWindow({
-			backgroundColor: '#ff0000'
-		});
-
-		var dialog = Ti.UI.createAlertDialog({
-		    cancel: 1,
-		    buttonNames: ['Confirm', 'Cancel', 'Help'],
-		    message: 'Would you like to delete the file?',
-		    title: 'Delete'
-		});
-
+				backgroundColor: '#ff0000'
+			}),
+			dialog = Ti.UI.createAlertDialog({
+			    cancel: 1,
+			    buttonNames: ['Confirm', 'Cancel', 'Help'],
+			    message: 'Would you like to delete the file?',
+			    title: 'Delete'
+			});
 		
 		wind.addEventListener('open', showDialog);
-		wind.addEventListener('close', function(){
+		wind.addEventListener('close', function() {
 			finish(testRun);
-		})
+		});
 
 		wind.open();
 		
-		function showDialog(){
+		function showDialog() {
 			var cp = new CountPixels();
 
 			cp.countPixelsPercentage([255, 0, 0], document.body, callback1);
 
-			function callback1(count){
+			function callback1(count) {
 				Ti.API.info(count);
 				
-				valueOf(testRun, function(){
+				valueOf(testRun, function() {
 					dialog.show();
 				}).shouldNotThrowException();
 				
-				setTimeout(function(){
+				setTimeout(function() {
 					cp.countPixelsPercentage([255, 0, 0], document.body, callback2);
 				}, 500)	
 			}
 
-			function callback2(count){
+			function callback2(count) {
 				Ti.API.info(count);
 				valueOf(testRun, count).shouldBe(0);
-				valueOf(testRun, function(){	
+				valueOf(testRun, function() {	
 					dialog.hide();
 				}).shouldNotThrowException();
-				setTimeout(function(){
+				setTimeout(function() {
 					cp.countPixelsPercentage([255, 0, 0], document.body, callback3);
 				}, 500);
 			}	
 
-			function callback3(count){
+			function callback3(count) {
 				Ti.API.info(count);
 				valueOf(testRun, count).shouldBe(100);
 				wind.close();
-			}	
-
+			}
 		}
 	}
 
@@ -106,7 +108,7 @@ module.exports = new function() {
 
 		var gotten_buttons = dialog.getButtonNames();
 
-		for(var i = 0; i < gotten_buttons.length; i++){
+		for(var i = 0, len = gotten_buttons.length; i < len; i++){
 			buttons[i] && valueOf(testRun, gotten_buttons[i]).shouldBe(buttons[i]);
 		}
 		
@@ -184,5 +186,4 @@ module.exports = new function() {
 
       	finish(testRun);
 	}
-
 }

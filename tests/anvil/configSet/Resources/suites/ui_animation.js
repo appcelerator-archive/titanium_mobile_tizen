@@ -3,7 +3,10 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details. */
 
-if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
 
@@ -24,10 +27,10 @@ module.exports = new function() {
 	}
 
 	this.name = "ui_animation";
-	this.tests = (function(){
+	this.tests = (function() {
 		var arr = [];
 
-		if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+		if (isTizen || isMobileWeb) {
 			arr.push({name: "backgroundColor_test"});
 			arr.push({name: "autoreverse_test"});
 			arr.push({name: "bottom_test", timeout: 5000});
@@ -44,6 +47,7 @@ module.exports = new function() {
 			arr.push({name: "duration_test"});
 			arr.push({name: "transform_test"});
 		}
+
 		return arr;
 	}());
 	
@@ -143,7 +147,7 @@ module.exports = new function() {
 			view.animate(animation);
 		});
 
-		wind.open()
+		wind.open();
 	}	
 
 	this.top_test = function(testRun) {
@@ -171,7 +175,7 @@ module.exports = new function() {
 			view.animate(animation);
 		});
 
-		wind.open()
+		wind.open();
 	}
 
 	this.left_test = function(testRun) {
@@ -200,7 +204,7 @@ module.exports = new function() {
 			view.animate(animation);
 		});
 
-		wind.open()
+		wind.open();
 	}
 
 	this.right_test = function(testRun) {

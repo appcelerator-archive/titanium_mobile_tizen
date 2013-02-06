@@ -1,26 +1,27 @@
-/*
- * Appcelerator Titanium Mobile
+/* Appcelerator Titanium Mobile
  * Copyright (c) 2011-2013 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
- * Please see the LICENSE included with this distribution for details.
- */
+ * Please see the LICENSE included with this distribution for details. */
 
-if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
-	var guiReadyEventName;
+	var finish,
+		valueOf,
+		reportError,
+		guiReadyEventName;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		// for Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = (Ti.Platform.osname === 'tizen')||(Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
+		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
+		guiReadyEventName = (isTizen || isMobileWeb) ? "postlayout" : "open";
 	}
 
 	this.name = "ui_TextField";
@@ -28,37 +29,36 @@ module.exports = new function() {
 		{name: "testBasicProperties"},
 		{name: "testValue"},
 		{name: "testEventsBlur"}
-	]
+	];
 
 	this.testBasicProperties = function(testRun) {
-		//create windows instance
+		// Create windows instance
 		var win = Ti.UI.createWindow({
-			backgroundColor: '#FFFFFF',
-			exitOnClose: true,
-			layout: 'vertical',
-			title: 'Anvil UI TextField test'
-		});
-
-		//create test object instance
-		var tempTextField= Ti.UI.createTextField({
-			value:'TextField from Anvil',
-			hintText:'TextField\'s hint text',
-			height:200,
-			width:150,
-			top:50,
-			left:20,
-			autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_ALL,
-			borderStyle:Ti.UI.INPUT_BORDERSTYLE_LINE,
-			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			clearOnEdit: true,
-			color:'#000000',
-			maxLength:99,
-			autocorrect:true,
-			editable:true,
-			enableReturnKey:true,
-			suppressReturn:false,
-			enabled:true
-		});
+				backgroundColor: '#FFFFFF',
+				exitOnClose: true,
+				layout: 'vertical',
+				title: 'Anvil UI TextField test'
+			}),
+			// Create test object instance
+			tempTextField = Ti.UI.createTextField({
+				value: 'TextField from Anvil',
+				hintText: 'TextField\'s hint text',
+				height: 200,
+				width: 150,
+				top: 50,
+				left: 20,
+				autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_ALL,
+				borderStyle: Ti.UI.INPUT_BORDERSTYLE_LINE,
+				textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+				clearOnEdit: true,
+				color: '#000000',
+				maxLength: 99,
+				autocorrect: true,
+				editable: true,
+				enableReturnKey: true,
+				suppressReturn: false,
+				enabled: true
+			});
 
 		win.add(tempTextField);
 
@@ -123,26 +123,24 @@ module.exports = new function() {
 		})
 
 		win.open();
-
-	} //keyboardType
+	}
 
 	this.testValue = function(testRun) {
-		//create windows instance
+		// Create windows instance
 		var win = Ti.UI.createWindow({
-			backgroundColor: '#FFFFFF',
-			exitOnClose: true,
-			layout: 'vertical',
-			title: 'Anvil UI TextField test'
-		});
-
-		//create test object instance
-		var tempTextField = Ti.UI.createTextField({
-			value:'value1'
-		});
+				backgroundColor: '#FFFFFF',
+				exitOnClose: true,
+				layout: 'vertical',
+				title: 'Anvil UI TextField test'
+			}),
+			// Create test object instance
+			tempTextField = Ti.UI.createTextField({
+				value:'value1'
+			});
 
 		win.add(tempTextField);
 
-		win.addEventListener(guiReadyEventName, function(){
+		win.addEventListener(guiReadyEventName, function() {
 			Ti.API.info('Checking "value" property. Pass #1. Current value: ' + tempTextField.value);
 			valueOf(testRun, tempTextField.value).shouldBe('value1');
 
@@ -164,8 +162,9 @@ module.exports = new function() {
 			Ti.API.info('Checking "setValue()" and "getValue()" methods.');
 			valueOf(testRun, tempTextField.getValue()).shouldBe('value3');
 
-			setTimeout(function(){
+			setTimeout(function() {
 				win.close();
+
 				finish(testRun);
 			}, 100)
 		})
@@ -174,32 +173,34 @@ module.exports = new function() {
 	}
 
 	this.testEventsBlur = function(testRun) {
-		//create windows instance
+		// Create windows instance
 		var win = Ti.UI.createWindow({
-			backgroundColor: '#FFFFFF',
-			exitOnClose: true,
-			layout: 'vertical',
-			title: 'Anvil UI TextArea test'
-		});
-
-		//create test object instances
-		var tempTextField = Ti.UI.createTextField({value:'TF1'}),
+				backgroundColor: '#FFFFFF',
+				exitOnClose: true,
+				layout: 'vertical',
+				title: 'Anvil UI TextArea test'
+			}),
+			// Create test object instances
+			tempTextField = Ti.UI.createTextField({value:'TF1'}),
 			tempTextField2 = Ti.UI.createTextField({value:'TF2'}),
 			focusEventExpected = false,
 			blurEventExpected = false,
 			focusEventReceived = false,
 			blurEventReceived = false;
 
-		tempTextField.addEventListener('focus',function(e){
+		tempTextField.addEventListener('focus',function(e) {
 			Ti.API.info("focus event received. e.value:"+ e.value);
-			if (focusEventExpected)
-			{
+
+			if (focusEventExpected) {
 				valueOf(testRun, e.value).shouldBe('TF1');
+
 				focusEventReceived = true;
 			}
 		})
-		tempTextField.addEventListener('blur',function(e){
+
+		tempTextField.addEventListener('blur',function(e) {
 			Ti.API.info("blur event received. e.value:"+ e.value);
+
 			if (blurEventExpected) {
 				valueOf(testRun, e.value).shouldBe('TF1');
 				blurEventReceived = true;
@@ -209,24 +210,24 @@ module.exports = new function() {
 		win.add(tempTextField2);
 		win.add(tempTextField);
 
-		win.addEventListener(guiReadyEventName, function(){
-			tempTextField2.focus(); // setting focus to another control
+		win.addEventListener(guiReadyEventName, function() {
+			// Setting focus to another control
+			tempTextField2.focus();
 			focusEventExpected = true;
-			tempTextField.focus(); // checking focus.
+			// Checking focus.
+			tempTextField.focus();
 
 			blurEventExpected = true;
 			tempTextField.blur();
 
-			setTimeout(function(){
+			setTimeout(function() {
 				valueOf(testRun, (blurEventReceived)).shouldBe(true);
 				valueOf(testRun, (focusEventReceived)).shouldBe(true);
 				win.close();
 				finish(testRun);
-			}, 100)
+			}, 100);
 		})
 
 		win.open();
 	}
-
-
 }

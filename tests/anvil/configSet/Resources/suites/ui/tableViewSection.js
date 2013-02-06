@@ -86,14 +86,14 @@ module.exports = new function() {
 		window.add(tv);
 		
 		// POSITIVE scenario check existing correct values from filled section
-		valueOf(testRun,tv.sections[0].footerTitle===FOOTER_TITLE).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getFooterTitle()===FOOTER_TITLE).shouldBeTrue();	
-		valueOf(testRun,tv.sections[0].headerTitle===HEADER_TITLE).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getHeaderTitle()===HEADER_TITLE).shouldBeTrue();	
-		valueOf(testRun,tv.sections[0].headerView===headerViewExam).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getHeaderView()===headerViewExam).shouldBeTrue();	
-		valueOf(testRun,tv.sections[0].footerView===footerViewExam).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getFooterView()===footerViewExam).shouldBeTrue();				
+		valueOf(testRun,tv.sections[0].footerTitle === FOOTER_TITLE).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getFooterTitle() === FOOTER_TITLE).shouldBeTrue();	
+		valueOf(testRun,tv.sections[0].headerTitle === HEADER_TITLE).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getHeaderTitle() === HEADER_TITLE).shouldBeTrue();	
+		valueOf(testRun,tv.sections[0].headerView === headerViewExam).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getHeaderView() === headerViewExam).shouldBeTrue();	
+		valueOf(testRun,tv.sections[0].footerView === footerViewExam).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getFooterView() === footerViewExam).shouldBeTrue();				
 
 		//NEGATIVE scenario check NOT existing values from empty section
 		valueOf(testRun,tv.sections[1].footerTitle).shouldBeUndefined();
@@ -152,23 +152,23 @@ module.exports = new function() {
 
 		// Check setHeaderTitle function
 		valueOf(testRun,tv.sections[0].headerTitle).shouldBe(newHeaderTitle);
-		valueOf(testRun,tv.sections[0].getHeaderTitle()===newHeaderTitle).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getHeaderTitle() === newHeaderTitle).shouldBeTrue();
 
 		// Check setFooterTitle function
 		valueOf(testRun,tv.sections[0].footerTitle).shouldBe(newFooterTitle);
 		valueOf(testRun,tv.sections[0].getFooterTitle()).shouldBe(newFooterTitle);
 		
 		// Check setHeaderView function
-		valueOf(testRun,tv.sections[0].headerView===headerViewExam).shouldBeFalse();
-		valueOf(testRun,tv.sections[0].getHeaderView()===headerViewExam).shouldBeFalse();
-		valueOf(testRun,tv.sections[0].headerView===headerViewExam2).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getHeaderView()===headerViewExam2).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].headerView === headerViewExam).shouldBeFalse();
+		valueOf(testRun,tv.sections[0].getHeaderView() === headerViewExam).shouldBeFalse();
+		valueOf(testRun,tv.sections[0].headerView === headerViewExam2).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getHeaderView() === headerViewExam2).shouldBeTrue();
 			
 		// Check setFooterView function
-		valueOf(testRun,tv.sections[0].footerView===footerViewExam).shouldBeFalse();
-		valueOf(testRun,tv.sections[0].getFooterView()===footerViewExam).shouldBeFalse();
-		valueOf(testRun,tv.sections[0].footerView===footerViewExam2).shouldBeTrue();
-		valueOf(testRun,tv.sections[0].getFooterView()===footerViewExam2).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].footerView === footerViewExam).shouldBeFalse();
+		valueOf(testRun,tv.sections[0].getFooterView() === footerViewExam).shouldBeFalse();
+		valueOf(testRun,tv.sections[0].footerView === footerViewExam2).shouldBeTrue();
+		valueOf(testRun,tv.sections[0].getFooterView() === footerViewExam2).shouldBeTrue();
 		
 		// Close window
 		window.close();
@@ -370,7 +370,7 @@ module.exports = new function() {
 		valueOf(testRun,existRemovedRow).shouldBeFalse();	
 		existRemovedRow = false;
 		
-		for(var i = 0, len = section2.getRows().length; i < len; i++ ){
+		for(var i = 0, len = section2.getRows().length; i < len; i++){
 			if (section1.getRows()[i] === lastRow) {
 				existRemovedRow = true;
 			}
