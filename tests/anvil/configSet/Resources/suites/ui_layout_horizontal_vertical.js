@@ -12,10 +12,11 @@ module.exports = new function() {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 	};
-	var isTizen;
-    var isMobileWeb;
-	var isAndroid;
-	var guiReadyEventName;
+
+	var isTizen,
+    	isMobileWeb,
+		isAndroid,
+		guiReadyEventName;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
@@ -25,9 +26,12 @@ module.exports = new function() {
 		isMobileWeb = (Ti.Platform.osname === 'mobileweb'); 
 		isAndroid = (Ti.Platform.osname === 'android');     
 
-		// for Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = function(){ return (isTizen || isMobileWeb) ? "postlayout" : "open"; };
+		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
+		guiReadyEventName = function() {
+			return (isTizen || isMobileWeb) ? "postlayout" : "open"; 
+		};
 	};
+
 	this.name = "ui_layout_horizontal_vertical";
 	this.tests = [
 		{name: "horizontalTopBottomUndefinedHeight"},
