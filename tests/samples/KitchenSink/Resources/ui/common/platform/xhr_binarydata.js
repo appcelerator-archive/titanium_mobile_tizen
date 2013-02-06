@@ -1,5 +1,4 @@
 function xhr_binary() {
-	
 	var win = Titanium.UI.createWindow();
 	
 	var l = Titanium.UI.createLabel({
@@ -23,12 +22,10 @@ function xhr_binary() {
 	
 	xhr.onload = function()
 	{
-		Ti.API.info('blob:'+this.responseData);
 		var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,'ti.png');
 		f.write(this.responseData);
 		imageView.image = f.nativePath;
 	};
-	
 	// open the client (and test HTTPS)
 	xhr.open('GET','http://developer.appcelerator.com/blog/wp-content/themes/newapp/images/appcelerator_avatar.png?s=48');
 	
