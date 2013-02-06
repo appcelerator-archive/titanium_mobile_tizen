@@ -36,15 +36,18 @@ module.exports = new function() {
 
 		valueOf(testRun, person.id).shouldBeGreaterThan(0);
 		valueOf(testRun, person.firstName).shouldBe('John');
-		valueOf(testRun, person.lastName).shouldBe('Doe')
+		valueOf(testRun, person.lastName).shouldBe('Doe');
+
 		finish(testRun);
 	}
 
 	this.getAllGroups = function(testRun) {
 		// We need to add contact with category through tizen, because titaium doesn't support it
 		var group = Ti.Contacts.createGroup({name: "friends"});
+
 		group.add({firstName: "John", lastName: "Smith"});
 		groups = Ti.Contacts.getAllGroups();
+		
 		valueOf(testRun,  groups).shouldContainDeprecated("friends");
 
 		finish(testRun);
@@ -68,7 +71,8 @@ module.exports = new function() {
 	}
 
 	this.getContactsAuthorization = function(testRun) {
-		valueOf(testRun,  Ti.Contacts.getContactsAuthorization()).shouldBe(Ti.Contacts.AUTHORIZATION_AUTHORIZED)
+		valueOf(testRun,  Ti.Contacts.getContactsAuthorization()).shouldBe(Ti.Contacts.AUTHORIZATION_AUTHORIZED);
+		
 		finish(testRun);
 	}
 

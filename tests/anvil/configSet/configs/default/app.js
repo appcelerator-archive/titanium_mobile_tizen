@@ -12,7 +12,6 @@ var suites = [
 	{name: "codec"},
 	{name: "commonjs/commonjs"},
 	{name: "console"},
-	{name: "contacts"},
 	{name: "database"},
 	{name: "facebook"},
 	{name: "filesystem/filesystem"},
