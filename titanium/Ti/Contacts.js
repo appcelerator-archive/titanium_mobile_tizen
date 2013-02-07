@@ -426,7 +426,7 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 		},
 		
 		createGroup: function(args) {
-			throw new Error('This method is not supported on Tizen.');
+			return new (require('Ti/Contacts/Group'))(args);
 		},
 		
 		createPerson: function(person) {
@@ -482,7 +482,6 @@ define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {
 				i = 0, 
 				personsCount = persons.length;
 			for (; i < personsCount; i++) {
-				if (!persons[i].id) throw new Error('Person with given id cannot be found');
 				addressbook.update(this._mapContactFromTitanium(persons[i]));
 			}
 		}

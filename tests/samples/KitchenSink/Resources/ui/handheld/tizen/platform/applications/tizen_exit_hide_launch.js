@@ -1,8 +1,11 @@
 function tizen_exit_hide_launch(_args) {
 
-	var win = Ti.UI.createWindow();
-
-	var CALC_APP_ID = "org.tizen.calculator", butttonHeightOffset = 10, butttonHeight = 40, butttonWidth = 200;
+	var win = Ti.UI.createWindow(),
+		CALC_APP_ID = "org.tizen.calculator", 
+		butttonHeightOffset = 10, 
+		butttonHeight = 40, 
+		butttonWidth = 200;
+	
 	// Create button for Exit
 	var buttonExit = Titanium.UI.createButton({
 		title : 'Exit Kitchen Sink',
@@ -53,23 +56,6 @@ function tizen_exit_hide_launch(_args) {
 		}
 	});
 	win.add(buttonLaunch);
-
-	// Create button for Launch
-	var buttonKill = Titanium.UI.createButton({
-		title : 'Kill Calculator',
-		height : butttonHeight,
-		width : butttonWidth,
-		top : 3 * butttonHeightOffset + 3 * butttonHeight + butttonHeightOffset
-	});
-	// Call tizen.application.exit when button has been pressed
-	buttonKill.addEventListener('click', function() {
-		try {
-			tizen.application.kill(CALC_APP_ID); 
-		} catch (e) {
-			_args.showErrorDialog(e, "Could not Kill Calculator");
-		}
-	});
-	win.add(buttonKill);
 	
 	
 	return win;

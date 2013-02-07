@@ -8,42 +8,31 @@
 module.exports = new function() {
 	var finish;
 	var valueOf;
-
-	// to simplify platform checks we are adding this variables
-	var isTizen;
-        var isMobileWeb;
-	var isAndroid;
-        var isApple; 
-
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
-
-		isTizen = (Ti.Platform.osname === 'tizen');         
-		isMobileWeb = (Ti.Platform.osname === 'mobileweb'); 
-		isAndroid = (Ti.Platform.osname === 'android');     
-		isApple = (Ti.Platform.osname === 'iphone' || Ti.Platform.osname === 'ipad' );
 	}
 
 	this.name = "network_httpclient";
 	this.tests = [
 		{name: "apiTest"},
+		{name: "secureValidateProperty"},
 		{name: "largeFileWithRedirect", timeout: 60000},
 		{name: "emptyPOSTSend", timeout: 30000},
 		{name: "responseHeadersBug", timeout: 30000},
 		{name: "requestHeaderMethods", timeout: 30000},
-		{name: "clearCookiePositiveTest", timeout: 30000},
-		{name: "clearCookieUnaffectedCheck", timeout: 30000},
-		{name: "setCookieClearCookieWithMultipleHTTPClients", timeout: 30000}
-	];
-	
-	if (Ti.Platform.osname != 'tizen')
-		this.tests.push({name: "secureValidateProperty"});
+		{name: "setCookieClearCookieWithMultipleHTTPClients", timeout: 30000},
+		{name: "callbackTestForGETMethod", timeout: 30000},
+		{name: "callbackTestForPOSTMethod", timeout: 30000}
+	]
+
+	// Ti.Network.HTTPClient.clearCookies is not supported on Tizen
+	if (Ti.Platform.osname !== 'tizen') {
+		this.tests.push({name: "clearCookiePositiveTest", timeout: 30000});		
+		this.tests.push({name: "clearCookieUnaffectedCheck", timeout: 30000});
+	}
 
 	this.apiTest = function(testRun) {
-		
-		Ti.API.info("apiTest");
-		
 		valueOf(testRun, Ti.Network.createHTTPClient).shouldNotBeNull();
 
 		finish(testRun);
@@ -51,8 +40,6 @@ module.exports = new function() {
 
 	// Test for TIMOB-4513
 	this.secureValidateProperty = function(testRun) {
-		Ti.API.info("secureValidateProperty");
-		
 		var xhr = Ti.Network.createHTTPClient();
 		valueOf(testRun, xhr).shouldBeObject();
 		valueOf(testRun, xhr.validatesSecureCertificate).shouldBeFalse();
@@ -73,7 +60,6 @@ module.exports = new function() {
 	// https://appcelerator.lighthouseapp.com/projects/32238/tickets/2156-android-invalid-redirect-alert-on-xhr-file-download
 	// https://appcelerator.lighthouseapp.com/projects/32238/tickets/1381-android-buffer-large-xhr-downloads
 	this.largeFileWithRedirect = function(testRun) {
-		Ti.API.info("largeFileWithRedirect");
 		var callback_error = function(e){
 			Ti.API.debug(e);
 			valueOf(testRun, true).shouldBeFalse();
@@ -121,7 +107,7 @@ module.exports = new function() {
 		var xhr = Ti.Network.createHTTPClient();
 		xhr.setTimeout(30000);
 		xhr.onload = function(e) {
-			if (isAndroid) {
+			if (Ti.Platform.osname !== 'iphone') {
 				// not implemented yet for iOS, see https://appcelerator.lighthouseapp.com/projects/32238-titanium-mobile/tickets/2535
 				var allHeaders = xhr.getAllResponseHeaders();
 				valueOf(testRun, allHeaders.indexOf('Server:')).shouldBeGreaterThanEqual(0);
@@ -142,7 +128,6 @@ module.exports = new function() {
 	}
 
 	this.requestHeaderMethods = function(testRun) {
-		Ti.API.info("requestHeaderMethods Start");
 		var callback_error = function(e){
 			Ti.API.debug(e);
 			valueOf(testRun, true).shouldBeFalse();
@@ -165,19 +150,10 @@ module.exports = new function() {
 			xhr.setRequestHeader('clearedHeader',null);
 		}).shouldNotThrowException();
 		xhr.send();
-		Ti.API.info("requestHeaderMethods End");
 	}
 
 	// Confirms that only the selected cookie is deleted
 	this.clearCookiePositiveTest = function(testRun) {
-		Ti.API.info("clearCookiePositiveTest Start");
-		if (!(isAndroid || isApple)){
-			Ti.API.info("clearCookiePositiveTest not supported by platform. Skipped.");
-			valueOf(testRun, true).shouldBeTrue();
-			finish(testRun);
-			return;
-		}
-
 		var callback_error = function(e){
 			Ti.API.debug(e);
 			valueOf(testRun, true).shouldBeFalse();
@@ -214,21 +190,10 @@ module.exports = new function() {
 		};
 		xhr.open('GET','https://my.appcelerator.com/auth/login');
 		xhr.send();
-		
-		Ti.API.info("clearCookiePositiveTest End");
 	}
 
 	// Confirms that only the selected cookie is deleted
 	this.clearCookieUnaffectedCheck = function(testRun) {
-		Ti.API.info("clearCookieUnaffectedCheck Start");
-
-		if (!(isAndroid || isApple)){
-			Ti.API.info("clearCookieUnaffectedCheck not supported by platform. Skipped.");
-			valueOf(testRun, true).shouldBeTrue();
-			finish(testRun);
-			return;
-		}
-
 		var callback_error = function(e){
 			Ti.API.debug(e);
 			valueOf(testRun, true).shouldBeFalse();
@@ -265,12 +230,10 @@ module.exports = new function() {
 		};
 		xhr.open('GET','https://my.appcelerator.com/auth/login');
 		xhr.send();
-		Ti.API.info("clearCookieUnaffectedCheck End");
 	}
 
 	// http://jira.appcelerator.org/browse/TIMOB-2849
 	this.setCookieClearCookieWithMultipleHTTPClients = function(testRun) {
-		Ti.API.info("setCookieClearCookieWithMultipleHTTPClients Start");
 		var callback_error = function(e){
 			Ti.API.debug(e);
 			valueOf(testRun, true).shouldBeFalse();
@@ -302,6 +265,73 @@ module.exports = new function() {
 
 		xhr.open('GET', testServer + '?count=2&clear=false');
 		xhr.send();
-		Ti.API.info("setCookieClearCookieWithMultipleHTTPClients End");
+	}
+
+	// http://jira.appcelerator.org/browse/TIMOB-11751
+	this.callbackTestForGETMethod = function(testRun) {
+		var callback_error = function(e){
+			Ti.API.debug(e);
+			valueOf(testRun, true).shouldBeFalse();
+		};
+		var xhr = Ti.Network.createHTTPClient();
+		xhr.setTimeout(30000);
+		var dataStreamFinished = false;
+		xhr.onreadystatechange = function(e) {
+			if (this.readyState == this.DONE && dataStreamFinished) {
+				finish(testRun);
+			}
+		};
+		xhr.ondatastream = function(e) {
+			if (!e.progress) {
+				callback_error("Errors in ondatastream");
+			}
+			if (e.progress >= 0.99) {
+				dataStreamFinished = true;
+			}
+		};
+		xhr.onerror = function(e) {
+			callback_error(e);
+		};
+
+		xhr.open('GET','http://www.appcelerator.com/assets/The_iPad_App_Wave.pdf');
+		xhr.send();
+	}
+
+	this.callbackTestForPOSTMethod = function(testRun) {
+		var callback_error = function(e){
+			Ti.API.debug(e);
+			valueOf(testRun, true).shouldBeFalse();
+		};
+		var xhr = Ti.Network.createHTTPClient();
+		xhr.setTimeout(30000);
+		var sendStreamFinished = false;
+		xhr.onreadystatechange = function(e) {
+			if (this.readyState == this.DONE && sendStreamFinished) {
+				finish(testRun);
+			}
+		};
+		xhr.onsendstream = function(e) {
+			if (!e.progress) {
+				callback_error("Errors in onsendstream");
+			}
+			if (e.progress >= 0.99) {
+				sendStreamFinished = true;
+			}
+		};
+		xhr.onerror = function(e) {
+			callback_error(e);
+		};
+
+		var buffer = Ti.createBuffer({
+			length : 1024 * 10
+		}).toBlob();
+
+		xhr.open('POST', 'https://twitpic.com/api/uploadAndPost');
+		xhr.send({
+			data : buffer,
+			username : 'fgsandford1000',
+			password : 'sanford1000',
+			message : 'check me out'
+		});
 	}
 }

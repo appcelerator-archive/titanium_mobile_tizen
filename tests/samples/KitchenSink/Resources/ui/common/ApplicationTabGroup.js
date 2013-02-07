@@ -24,9 +24,13 @@ function ApplicationTabGroup() {
 		window: baseUIWin
 	});
 	baseUIWin.containingTab = baseUITab;
-	var isMobileWeb = (Ti.Platform.osname === 'mobileweb' || Ti.Platform.osname === 'tizen');
-	if(isMobileWeb)
-	   baseUIWin.tabGroup = self;
+	
+	// On Tizen, the tabGroup property must be initialized manually.
+	// It remembers the tab group control that hosts the window.
+	// It is needed for the tab group-related tests to access the
+	// main tab group control.
+	Ti.Platform.osname === 'tizen' && (baseUIWin.tabGroup = self);
+	
 	self.addTab(baseUITab);
 	
 	var controlsTab = Ti.UI.createTab({
@@ -106,20 +110,15 @@ function ApplicationTabGroup() {
 	});
 	messageWin.add(messageView);
 	messageWin.add(messageLabel);
-	/*
+
 	self.addEventListener('close', function(e) {
-		messageLabel.text = 'tab group close event';
-		messageWin.open();
-		
-		if (Ti.Platform.osname == "iphone") {
-			self.open();
+		if (e.source == self){
+			if (Ti.Platform.osname === 'iphone' || Ti.Platform.osname === 'ipad') {
+				self.open();
+			}
 		}
-		
-		setTimeout(function() {
-			messageWin.close({opacity:0,duration:500});
-		},1000);
 	});
-	*/
+
 	self.addEventListener('open',function(e) {
 		if (e.source == self){
 			Titanium.UI.setBackgroundColor('#fff');

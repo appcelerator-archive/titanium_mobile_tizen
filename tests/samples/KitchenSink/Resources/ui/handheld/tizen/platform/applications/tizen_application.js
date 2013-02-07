@@ -1,25 +1,13 @@
 function tizen_application(_args) {
-	var self = Titanium.UI.createWindow(), data = [{
-		title : 'Installed App Info',
-		hasChild : true,
-		test : 'ui/common/platform/tizen_appsinfo'
-	}, {
-		title : 'Running App Info',
-		hasChild : true,
-		test : 'ui/common/platform/tizen_appscontext'
-	}, {
-		title : 'Kill Running App',
-		hasChild : true,
-		test : 'ui/common/platform/tizen_apps_kill'
-	}, {
-		title : 'Exit / Hide / Launch / Kill',
-		hasChild : true,
-		test : 'ui/common/platform/tizen_exit_hide_launch'
-	}
-
-	], tableview = Ti.UI.createTableView({
-		data : data
-	});
+	var self = Titanium.UI.createWindow(), 
+		tableview = Ti.UI.createTableView({
+			data : [
+			   {title: 'Installed App Info', hasChild: true, test: 'ui/handheld/tizen/platform/applications/tizen_appsinfo'}, 
+			   {title: 'Running App Info', hasChild: true, test: 'ui/handheld/tizen/platform/applications/tizen_appscontext'}, 
+			   {title: 'Kill Running App', hasChild: true, test: 'ui/handheld/tizen/platform/applications/tizen_apps_kill'}, 
+			   {title: 'Exit / Hide / Launch', hasChild: true, test: 'ui/handheld/tizen/platform/applications/tizen_exit_hide_launch'}
+			]
+		});
 
 	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {

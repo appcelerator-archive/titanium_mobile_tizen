@@ -5,20 +5,24 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
+	var finish,
+		valueOf;
+
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 	}
 
 	this.name = "ui_label";
-	this.tests = (function(){
+	this.tests = (function() {
 		var arr = [
 			{name: "testProperties"},
 			{name: "testTextId"},
@@ -27,39 +31,37 @@ module.exports = new function() {
 			{name: "testVerticalAlign"}
 		]
 
-		if(Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+		if (isTizen || isMobileWeb) {
 			arr.push({name: "testShow"});
 			arr.push({name: "testHtmlPx"});
 
-			if(Ti.Platform.osname === 'tizen'){
+			if (isTizen) {
 				arr.push({name: "testAutolink"});
 			}
 		}
+
 		return arr;
-	}())
+	}());
 
 	this.testProperties = function(testRun) {
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white',
-			exitOnClose: true,
-			fullscreen: false,
-			layout: 'vertical',
-			title: 'Label Demo'
-		});
-
-
-
-		var label1 = Ti.UI.createLabel({
-			color: '#900',
-			font: { fontSize:48 },
-			shadowColor: '#aaa',
-			shadowOffset: {x:5, y:5},
-			text: 'A simple label',
-			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			top: 30,
-			width: 'auto', height: 'auto'
-		});
+				backgroundColor: 'white',
+				exitOnClose: true,
+				fullscreen: false,
+				layout: 'vertical',
+				title: 'Label Demo'
+			}),
+			label1 = Ti.UI.createLabel({
+				color: '#900',
+				font: { fontSize:48 },
+				shadowColor: '#aaa',
+				shadowOffset: {x: 5, y: 5},
+				text: 'A simple label',
+				textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+				top: 30,
+				width: 'auto', 
+				height: 'auto'
+			});
 
 		win.add(label1);
 
@@ -71,73 +73,68 @@ module.exports = new function() {
 		valueOf(testRun, label1.font).shouldBeObject();
 		valueOf(testRun, label1.font.fontSize).shouldBe('48px');
 
-		win.addEventListener('open', function(){
+		win.addEventListener('open', function() {
 			win.close();
 			finish(testRun);
-		})
+		});
 
 		win.open();
-
 	}
 
-	this.testShow = function(testRun){
-
+	this.testShow = function(testRun) {
 		// Create a label and verify its appearance (background, foreground color)
 		// by verifying the presence of pixels of these colours on the screen.
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: '00ffff'
-		});
+				backgroundColor: '00ffff'
+			}),
+			cp = new CountPixels(),
+			label = Ti.UI.createLabel({
+				color: '#ff0000',
+				font: { fontSize:48 },
+				shadowColor: '#aaaaaa',
+				shadowOffset: {x:5, y:5},
+				text: 'A simple label',
+				textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+				top: 30,
+				width: 'auto', 
+				height: 'auto',
+				backgroundColor: '#00ff00'
+			});
 
-		var cp = new CountPixels();
-
-		var label = Ti.UI.createLabel({
-			color: '#ff0000',
-			font: { fontSize:48 },
-			shadowColor: '#aaaaaa',
-			shadowOffset: {x:5, y:5},
-			text: 'A simple label',
-			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			top: 30,
-			width: 'auto', height: 'auto',
-			backgroundColor: '#00ff00'
-		});
-
-		label.addEventListener('postlayout', function(){
+		label.addEventListener('postlayout', function() {
 			cp.countPixels([255, 0, 0], win, checkFontColor);
 		});
 
 		win.add(label);
 		win.open();
 
-		function checkFontColor (count){
+		function checkFontColor(count) {
 			valueOf(testRun, count).shouldBeGreaterThan(1000);
 			cp.countPixels([0, 255, 0], win, checkBackColor);
 		}
 
-		function checkBackColor(count){
+		function checkBackColor(count) {
 			valueOf(testRun, count).shouldBeGreaterThan(5000);
 			win.close();
 			finish(testRun);
 		}
 	}
 
-	this.testAutolink = function(testRun){
+	this.testAutolink = function(testRun) {
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white',
-			exitOnClose: true,
-			layout: 'vertical'
-		});
-
-		var label1 = Ti.UI.createLabel({
-			color: '#900',
-			font: { fontSize:14 },
-			text: 'test@test.com\n 817-555-5555\n http://bit.ly',
-			top: 30,
-			width: 'auto',
-			height: 'auto',
-			autoLink: Ti.UI.LINKIFY_NONE
-		});
+				backgroundColor: 'white',
+				exitOnClose: true,
+				layout: 'vertical'
+			}),
+			label1 = Ti.UI.createLabel({
+				color: '#900',
+				font: { fontSize:14 },
+				text: 'test@test.com\n 817-555-5555\n http://bit.ly',
+				top: 30,
+				width: 'auto',
+				height: 'auto',
+				autoLink: Ti.UI.LINKIFY_NONE
+			});
 
 		win.add(label1);
 		win.addEventListener('postlayout', checkAutolinkBefore);
@@ -152,7 +149,7 @@ module.exports = new function() {
 			checkAutolinkAfter();
 		}
 
-		function checkAutolinkAfter(){
+		function checkAutolinkAfter() {
 			valueOf(testRun, label1.autoLink).shouldBe(Ti.UI.LINKIFY_ALL);
 
 			var label = label1.domNode,
@@ -163,19 +160,18 @@ module.exports = new function() {
 				var emailAnchor = anchors[0],
 					phoneAnchor = anchors[1],
 					urlAnchor   = anchors[2];
+
 				valueOf(testRun, emailAnchor.innerHTML).shouldBe("test@test.com");
 				valueOf(testRun, emailAnchor.href).shouldBe("mailto:test@test.com");
 				valueOf(testRun, phoneAnchor.innerHTML).shouldBe("817-555-5555");
-				// Linkifying of phone numbers not implemented in tizen
-				//valueOf(testRun, phoneAnchor.href).shouldBe("#");
 				valueOf(testRun, urlAnchor.innerHTML).shouldBe("http://bit.ly");
 				valueOf(testRun, urlAnchor.href).shouldBe("http://bit.ly/");
 			}
+
 			win.close();
 			finish(testRun);
 		}
 	}
-
 
 	this.testHtmlPx = function(testRun){
 		// Create a label and checks html property is functioning
@@ -190,7 +186,7 @@ module.exports = new function() {
 				width:200
 			});
 
-		label.addEventListener('postlayout', function(){
+		label.addEventListener('postlayout', function() {
 			cp.countPixels([0, 0, 0], win, noTextOnLabelCheck);
 		});
 
@@ -198,7 +194,7 @@ module.exports = new function() {
 		win.open();
 
 		// Counting background's pixels count if no visible html value is set
-		function noTextOnLabelCheck (count){
+		function noTextOnLabelCheck (count) {
 			valueOf(testRun, count).shouldBeGreaterThan(0);
 			backgroundPixelsCount = count;
 			label.html = "|||||||||||||||||||||";
@@ -207,7 +203,7 @@ module.exports = new function() {
 		}
 
 		// Counting background's pixels count  to be sure some text is displayed
-		function applyHtmlTagSmallText (count){
+		function applyHtmlTagSmallText (count) {
 			valueOf(testRun, count).shouldBeLessThan(backgroundPixelsCount);
 			backgroundPixelsCount = count;
 			label.html = "<sup>|||||||||||||||||||||</sup>";
@@ -216,7 +212,7 @@ module.exports = new function() {
 		}
 
 		// Counting background's pixels with <sup> text - now we should have more background pixel and less text.
-		function onHtmlTextIsSmaller(count){
+		function onHtmlTextIsSmaller(count) {
 			valueOf(testRun, count).shouldBeGreaterThan(backgroundPixelsCount);
 			win.close();
 			finish(testRun);
@@ -224,14 +220,12 @@ module.exports = new function() {
 	}
 
 	this.testTextId = function(testRun) {
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white'
-		});
+				backgroundColor: 'white'
+			}),
+			test_text = 'this is label text',
+			file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'test.txt');
 
-		var test_text = 'this is label text'
-
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'test.txt');
 		file.write(test_text);
 
 		var label1 = Ti.UI.createLabel({
@@ -243,120 +237,120 @@ module.exports = new function() {
 		label1.addEventListener('postlayout', checkText);
 
 		win.add(label1);
-		win.addEventListener('close', function(){
+		win.addEventListener('close', function() {
 			finish(testRun);
 		})
 
 		win.open();
 
 		function checkText(){
-			var dom_node = label1.domNode;
-			var text_view = dom_node.getElementsByClassName('TiUIView')[0];
-			var text = text_view.innerHTML;
+			var dom_node = label1.domNode,
+				text_view = dom_node.getElementsByClassName('TiUIView')[0],
+				text = text_view.innerHTML;
+
 			valueOf(testRun, text).shouldBe(test_text);
-			//win.close();
 		}
 	}
 
 	this.testElipsize = function(testRun) {
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white'
-		});
-
-		var label1 = Ti.UI.createLabel({
-			text: 'very very long text',
-			top: 30,
-			ellipsize: true,
-			width: '60', height: 'auto'
-		});
+				backgroundColor: 'white'
+			}),
+			label1 = Ti.UI.createLabel({
+				text: 'very very long text',
+				top: 30,
+				ellipsize: true,
+				width: '60', height: 'auto'
+			});
 				
 		label1.addEventListener('postlayout', checkLabel);
 
 		win.add(label1);
-		win.addEventListener('close', function(){
+		win.addEventListener('close', function() {
 			finish(testRun);
 		})
 
 		win.open();
 
-		function checkLabel(){
-			var dom_node = label1.domNode;
-			var text_view = dom_node.getElementsByClassName('TiUIView')[0];
+		function checkLabel() {
+			var dom_node = label1.domNode,
+				text_view = dom_node.getElementsByClassName('TiUIView')[0];
+
 			valueOf(testRun, text_view.style.textOverflow).shouldBe('ellipsis');
+
 			win.close();
 		}
 	}
 
 	this.testWordWrap = function(testRun) {
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white'
-		});
-
-		var label1 = Ti.UI.createLabel({
-			text: 'very very long text',
-			top: 30,
-			wordWrap: false,
-			width: '60', height: 'auto'
-		});
+				backgroundColor: 'white'
+			}),
+			label1 = Ti.UI.createLabel({
+				text: 'very very long text',
+				top: 30,
+				wordWrap: false,
+				width: '60', height: 'auto'
+			});
 				
 		label1.addEventListener('postlayout', checkLabel);
 
 		win.add(label1);
-		win.addEventListener('close', function(){
+		win.addEventListener('close', function() {
 			finish(testRun);
 		})
 
 		win.open();
 
-		function checkLabel(){
-			var dom_node = label1.domNode;
-			var text_view = dom_node.getElementsByClassName('TiUIView')[0];
+		function checkLabel() {
+			var dom_node = label1.domNode,
+				text_view = dom_node.getElementsByClassName('TiUIView')[0];
+
 			valueOf(testRun, text_view.style.whiteSpace).shouldBe('nowrap');
+
 			win.close();
 		}
 	}
 
 	this.testVerticalAlign = function(testRun) {
-
 		var win = Ti.UI.createWindow({
-			backgroundColor: 'white',
-			layout: 'vertical'
-		}),
+				backgroundColor: 'white',
+				layout: 'vertical'
+			}),
+			label1 = Ti.UI.createLabel({
+				top: 10,
+				width: 160,
+				height: 50,
+				backgroundColor: '#ff55ff',
+				verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
+				text: 'some text'
+			}),
+			label2 = Ti.UI.createLabel({
+				top: 10,
+				width: 160,
+				height: 50,
+				backgroundColor: '#ff55ff',
+				verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
+				text: 'some text'
+			}),
+			label3 = Ti.UI.createLabel({
+				top: 10,
+				width: 160,
+				height: 50,
+				backgroundColor: '#ff55ff',
+				verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
+				text: 'some text'
+			});
 
-		label1 = Ti.UI.createLabel({
-			top: 10,
-			width: 160,
-			height: 50,
-			backgroundColor: '#ff55ff',
-			verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
-			text: 'some text'
-		}),
-		label2 = Ti.UI.createLabel({
-			top: 10,
-			width: 160,
-			height: 50,
-			backgroundColor: '#ff55ff',
-			verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-			text: 'some text'
-		}),
-		label3 = Ti.UI.createLabel({
-			top: 10,
-			width: 160,
-			height: 50,
-			backgroundColor: '#ff55ff',
-			verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
-			text: 'some text'
-		});
-
-		label1.addEventListener('postlayout', function(){
+		label1.addEventListener('postlayout', function() {
 			checkLabel(label1, checkAlignBottom);
 		});
-		label1.addEventListener('postlayout', function(){
+
+		label1.addEventListener('postlayout', function() {
 			checkLabel(label2, checkAlignCenter);
 		});
-		label1.addEventListener('postlayout', function(){
+
+		label1.addEventListener('postlayout', function() {
 			checkLabel(label3, checkAlignTop);
 		});
 
@@ -365,20 +359,21 @@ module.exports = new function() {
 		win.add(label3);
 		win.open();
 
-		win.addEventListener('close', function(){
+		win.addEventListener('close', function() {
 			finish(testRun);
 		})
 
-		function checkAlignBottom(view_top, view_bottom){
+		function checkAlignBottom(view_top, view_bottom) {
 			valueOf(testRun, view_top).shouldBeGreaterThan(view_bottom);
 		}
 
-		function checkAlignCenter(view_top, view_bottom){
+		function checkAlignCenter(view_top, view_bottom) {
 			valueOf(testRun, Math.abs(view_top - view_bottom)).shouldBeLessThanEqual(1);
 		}
 
-		function checkAlignTop(view_top, view_bottom){
+		function checkAlignTop(view_top, view_bottom) {
 			valueOf(testRun, view_top).shouldBeLessThan(view_bottom);
+
 			win.close()
 		}
 
@@ -386,10 +381,15 @@ module.exports = new function() {
 			var dom_node = testLabel.domNode,
 				text_view = dom_node.getElementsByClassName('TiUIView')[0],
 				view_top = text_view.style.top;
-			view_top = view_top.slice(0,-2);
+
+			view_top = view_top.slice(0, -2);
+			
 			var v_height = text_view.style.height;
-			v_height = v_height.slice(0,-2);
+
+			v_height = v_height.slice(0, -2);
+			
 			var view_bottom = testLabel.height - view_top - v_height;
+			
 			callback(view_top, view_bottom);
 		}
 	}

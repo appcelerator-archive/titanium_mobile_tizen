@@ -185,7 +185,9 @@ function textfield_rest() {
 				break;
 		}
 	});
-	win.add(b7);
+	if(Ti.Platform.osname !== 'tizen'){
+		win.add(b7);
+	}
 	
 	var b8 = Titanium.UI.createButton({
 		title:'Text Align',
@@ -250,7 +252,9 @@ function textfield_rest() {
 				break;
 		}
 	});
-	win.add(b8);
+	if(Ti.Platform.osname !== 'tizen'){
+		win.add(b8);
+	}
 	
 	var b9 = Titanium.UI.createButton({
 		title:'Allow resizing',
@@ -272,7 +276,9 @@ function textfield_rest() {
 			resizing = false;
 		}
 	});
-	win.add(b9);
+	if(Ti.Platform.osname !== 'tizen'){
+		win.add(b9);
+	}
 	
 	// Only TextArea has 'editable' in iOS, not TextField
 	if (Ti.Platform.osname === 'android') {
