@@ -103,9 +103,6 @@ module.exports = new function() {
 
 	this.add_annotation = function(testRun) {
 		var annotationList,
-			annotation1,
-			annotation2,
-			annotation3,
 			win = Titanium.UI.createWindow(),
 			map =  Titanium.Map.createView({
 				mapType: Titanium.Map.STANDARD_TYPE,
@@ -113,41 +110,39 @@ module.exports = new function() {
 				animate: true,
 				regionFit: true,
 				userLocation: false
+			}),
+			annotation1 = Titanium.Map.createAnnotation({
+				latitude: 37.390749,
+				longitude: -122.081651,
+				title: "Test1",
+				subtitle: "Test1, CA",
+				pincolor: Titanium.Map.ANNOTATION_RED,
+				animate: true,
+				// Custom property to uniquely identify this annotation.
+				myid: 1
+			}),
+			annotation2 = Titanium.Map.createAnnotation({
+				latitude: 39.390749,
+				longitude: -121.081651,
+				title: "Test2",
+				subtitle: "Test2, CA",
+				pincolor: Titanium.Map.ANNOTATION_RED,
+				animate: true,
+				// Custom property to uniquely identify this annotation.
+				myid: 2
+			}),
+			annotation3 = Titanium.Map.createAnnotation({
+				latitude: 38.390749,
+				longitude: -120.081651,
+				title: "Test3",
+				subtitle: "Test3, CA",
+				pincolor: Titanium.Map.ANNOTATION_RED,
+				animate: true,
+				// Custom property to uniquely identify this annotation.
+				myid: 3
 			});
-			
+
 		valueOf(testRun, map.annotations.length).shouldBeEqual(0);
-		
-		// Create annotations
-		annotation1 = Titanium.Map.createAnnotation({
-			latitude: 37.390749,
-			longitude: -122.081651,
-			title: "Test1",
-			subtitle: "Test1, CA",
-			pincolor: Titanium.Map.ANNOTATION_RED,
-			animate: true,
-			// Custom property to uniquely identify this annotation.
-			myid: 1
-		});
-		annotation2 = Titanium.Map.createAnnotation({
-			latitude: 39.390749,
-			longitude: -121.081651,
-			title: "Test2",
-			subtitle: "Test2, CA",
-			pincolor: Titanium.Map.ANNOTATION_RED,
-			animate: true,
-			// Custom property to uniquely identify this annotation.
-			myid: 2
-		});
-		annotation3 = Titanium.Map.createAnnotation({
-			latitude: 38.390749,
-			longitude: -120.081651,
-			title: "Test3",
-			subtitle: "Test3, CA",
-			pincolor: Titanium.Map.ANNOTATION_RED,
-			animate: true,
-			// Custom property to uniquely identify this annotation.
-			myid: 3
-		});
 		
 		// Add one
 		valueOf(testRun, function() {
@@ -165,15 +160,15 @@ module.exports = new function() {
 			annotationList = map.getAnnotations();
 		}).shouldNotThrowException();
 		
-		//Check the annotations objects
-		for(var i = 0, len = annotationList.length; i < len; i++){
+		// Check the annotations objects
+		for (var i = 0, len = annotationList.length; i < len; i++){
 			valueOf(testRun, annotationList[i]).shouldBeObject();
-		} 
-		
+		}
+
 		valueOf(testRun, function() {
 			map.selectAnnotation("Test2");
 		}).shouldNotThrowException();
-		
+
 		valueOf(testRun, function() {
 			map.deselectAnnotation("Test2");
 		}).shouldNotThrowException();
@@ -318,15 +313,13 @@ module.exports = new function() {
 				regionFit: true,
 				userLocation: false,
 				animated: true
-			});
-
-		// Create route
-		var route = {
-			color: '#FF0000',
-			name: 'testRout',
-			points:[{'latitude':37.390749, 'longitude':-122.081651}, {'latitude':39.390749, 'longitude':-84.38993}],
-			width: 10
-		};
+			}),
+			route = {
+				color: '#FF0000',
+				name: 'testRout',
+				points:[{'latitude':37.390749, 'longitude':-122.081651}, {'latitude':39.390749, 'longitude':-84.38993}],
+				width: 10
+			};
 
 		map.addEventListener('complete', function() {
 			win.close();
