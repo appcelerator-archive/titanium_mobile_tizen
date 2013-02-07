@@ -4,19 +4,12 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-/**
- 1. Check tizen.nfc avalability
- tizen.nfc.getDefaultAdapter
- 2. Power on/off NFC
- 3. set NFC Listener
-
-*/
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
-	var adapter;
+	var finish,
+	 	valueOf,
+		reportError,
+		adapter;
 	
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
@@ -38,9 +31,9 @@ module.exports = new function() {
 		valueOf(testRun, adapter).shouldBeObject();
 		finish(testRun);
 	}
-	
-	//test setPowered
+
 	this.powerOnTest = function(testRun) {
+		//test setPowered property
 		valueOf(testRun, adapter).shouldBeObject();
 		var onNFCPowerOn = function() {
         	finish(testRun);
@@ -79,7 +72,6 @@ module.exports = new function() {
 		},9000);
 	}
 
-	//test setPowered(false)
 	this.powerOff = function(testRun) {
 		valueOf(testRun, adapter).shouldBeObject();
 		valueOf(testRun, adapter.powered).shouldBeTrue();
