@@ -86,14 +86,16 @@ module.exports = new function() {
 		// Try to create and add to picker two columns (green and blue)
 		// Verify if green and red column's pixels appear in the red window
 		// Check the picker's methods setColumns() and getColumns() 
-		var fruit = [ 'Bananas', 'Grapes', 'Blueberries', 'Strawberries' ],
-			color = [ 'blue', 'red', 'yellow', 'white' ],
+		var fruit = ['Bananas', 'Grapes', 'Blueberries', 'Strawberries'],
+			color = ['blue', 'red', 'yellow', 'white'],
 			column1,
 			column2,
 			win = Ti.UI.createWindow({
 				backgroundColor: '#FF0000'
 			}),
-			picker = Ti.UI.createPicker();
+			picker = Ti.UI.createPicker(),
+			i = 0, 
+			ilen = fruit.length;
 		
 		valueOf(testRun, function(){
 			column1 = Ti.UI.createPickerColumn({
@@ -101,7 +103,7 @@ module.exports = new function() {
 			});
 		}).shouldNotThrowException();
 		
-		for (var i = 0, ilen = fruit.length; i < ilen; i++) {
+		for (; i < ilen; i++) {
 			var row = Ti.UI.createPickerRow({
 				title: fruit[i]
 			});
@@ -395,11 +397,11 @@ module.exports = new function() {
 	}
 
 	this.column = function(testRun) {
-		// Check all methdos and properties for column
-		var fruit = [ 'Bananas', 'Grapes', 'Blueberries', 'Strawberries' ], 
-			column1 = Ti.UI.createPickerColumn();
+		var fruit = ['Bananas', 'Grapes', 'Blueberries', 'Strawberries'], 
+			column1 = Ti.UI.createPickerColumn(),
+			i = 0, ilen = fruit.length;
 		
-		for (var i = 0, ilen = fruit.length; i < ilen; i++){
+		for (; i < ilen; i++){
 			var row = Ti.UI.createPickerRow({
 			  title: fruit[i]
 			});

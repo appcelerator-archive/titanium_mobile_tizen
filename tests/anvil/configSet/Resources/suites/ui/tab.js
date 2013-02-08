@@ -46,11 +46,13 @@ module.exports = new function() {
 	
 	// Helper function for creating tab group with Ti.UI.Windows as parameters
 	function _createTabGroupWithWindow() {
-		// Create TabGroup and set two tab with a windows
-		var tabGroup = Titanium.UI.createTabGroup();
+		var tabGroup = Titanium.UI.createTabGroup(),
+			i = 0, 
+			len = arguments.length,
+			baseUITab;
 	
-		for (var i = 0, len = arguments.length; i < len; i++) {
-			var baseUITab = Ti.UI.createTab({
+		for (; i < len; i++) {
+			baseUITab = Ti.UI.createTab({
 				title: i==0 ? TITLE : "title-" + i,
 				window: arguments[i]
 			});

@@ -6,30 +6,23 @@
  */
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
+	var finish,
+		valueOf,
+		isTizen = (Ti.Platform.osname === 'tizen'),
+		isMobileWeb = (Ti.Platform.osname === 'mobileweb'),
+		isAndroid = (Ti.Platform.osname === 'android'),
+		guiReadyEventName = function() {
+			return (isTizen || isMobileWeb) ? "postlayout" : "open"; 
+		};
+
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 	};
 
-	var isTizen,
-    	isMobileWeb,
-		isAndroid,
-		guiReadyEventName;
-
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
-
-		isTizen = (Ti.Platform.osname === 'tizen');         
-		isMobileWeb = (Ti.Platform.osname === 'mobileweb'); 
-		isAndroid = (Ti.Platform.osname === 'android');     
-
-		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = function() {
-			return (isTizen || isMobileWeb) ? "postlayout" : "open"; 
-		};
 	};
 
 	this.name = "ui_layout_horizontal_vertical";

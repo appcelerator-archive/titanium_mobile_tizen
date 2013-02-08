@@ -94,7 +94,7 @@ module.exports = new function() {
 		valueOf(testRun, player.add).shouldBeFunction();
 		valueOf(testRun, player.pause).shouldBeFunction();
 		valueOf(testRun, player.play).shouldBeFunction(); // this is the documented way to start playback.
-		!isTizen && valueOf(testRun, player.start).shouldBeFunction(); // backwards compat.
+		isTizen || valueOf(testRun, player.start).shouldBeFunction(); // backwards compat.
 		valueOf(testRun, player.stop).shouldBeFunction();
 		if (!isAndroid) valueOf(testRun, player.setUrl).shouldBeFunction();
 		valueOf(testRun, player.hide).shouldBeFunction();

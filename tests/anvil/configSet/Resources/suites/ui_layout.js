@@ -18,9 +18,7 @@ module.exports = new function() {
 	var finish,
 		valueOf,
 		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = function() { 
-			return (isTizen || isMobileWeb) ? "postlayout" : "open";
-		};
+		openEvent = isTizen || isMobileWeb ? "postlayout" : "open";
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
@@ -97,7 +95,7 @@ module.exports = new function() {
 		});
 		win.add(view);
 		win.add(label);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.size).shouldNotBeUndefined();
 			valueOf(testRun, view.size.width).shouldNotBeUndefined();
 			valueOf(testRun, view.size.height).shouldNotBeUndefined();
@@ -156,7 +154,7 @@ module.exports = new function() {
 		});
 		win.add(view);
 		win.add(view2);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.left).shouldBe(10);
 			valueOf(testRun, view.rect.x).shouldBe(10);
 			valueOf(testRun, view.rect.width).shouldBe(10);
@@ -184,7 +182,7 @@ module.exports = new function() {
 		});
 		win.add(view);
 		win.add(view2);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.top).shouldBe(10);
 			valueOf(testRun, view.rect.y).shouldBe(10);
 			valueOf(testRun, view.rect.height).shouldBe(10);
@@ -212,7 +210,7 @@ module.exports = new function() {
 		win.add(view);
 
 		// this test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.rect.x).shouldBe(30);
 			valueOf(testRun, view.rect.y).shouldBe(30);
 
@@ -233,7 +231,7 @@ module.exports = new function() {
 			width: 10, height: 10
 		});
 		win.add(view);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.width).shouldBe(10);
 			valueOf(testRun, view.size.width).shouldBe(10);
 			valueOf(testRun, view.height).shouldBe(10);
@@ -309,7 +307,7 @@ module.exports = new function() {
 			right: 10
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view1.width).shouldBeUndefined();
 			valueOf(testRun, view2.width).shouldBeUndefined();
 			valueOf(testRun, view3.width).shouldBeUndefined();
@@ -345,7 +343,7 @@ module.exports = new function() {
 			width: 120
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view1.left).shouldBeUndefined();
 			valueOf(testRun, view2.left).shouldBeUndefined();
 			valueOf(testRun, view3.left).shouldBeUndefined();
@@ -400,7 +398,7 @@ module.exports = new function() {
 			left:10
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view.right).shouldBeUndefined();
 			valueOf(testRun, view.rect.width).shouldBe(80);
 			valueOf(testRun, view.rect.x).shouldBe(10);
@@ -434,7 +432,7 @@ module.exports = new function() {
 			bottom: 10
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view1.height).shouldBeUndefined();
 			valueOf(testRun, view2.height).shouldBeUndefined();
 			valueOf(testRun, view3.height).shouldBeUndefined();
@@ -470,7 +468,7 @@ module.exports = new function() {
 			height: 100
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			//Static Tops
 			valueOf(testRun, view1.top).shouldBeUndefined();
 			valueOf(testRun, view2.top).shouldBeUndefined();
@@ -533,7 +531,7 @@ module.exports = new function() {
 			width: 10
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view.size.width).shouldBe(10);
 
 			finish(testRun);
@@ -554,7 +552,7 @@ module.exports = new function() {
 			center: {x:30}
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view.size.width).shouldBe(40);
 
 			finish(testRun);
@@ -579,7 +577,7 @@ module.exports = new function() {
 			right: 50
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, viewChild.size.width).shouldBe(100);
 
 			finish(testRun);
@@ -601,7 +599,7 @@ module.exports = new function() {
 			height: 10
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view.size.height).shouldBe(10);
 
 			finish(testRun);
@@ -622,7 +620,7 @@ module.exports = new function() {
 			center: {y: 30}
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, view.size.height).shouldBe(40);
 
 			finish(testRun);
@@ -647,7 +645,7 @@ module.exports = new function() {
 			bottom: 50
 		});
 
-		win.addEventListener(guiReadyEventName(), function(e){
+		win.addEventListener(openEvent, function(e){
 			valueOf(testRun, viewChild.size.height).shouldBe(100);
 
 			finish(testRun);
@@ -742,7 +740,7 @@ module.exports = new function() {
 		});
 
 		// this test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, label2.size.height).shouldNotBe(0);
 			valueOf(testRun, label2.size.width).shouldNotBe(0);
 
@@ -801,7 +799,7 @@ module.exports = new function() {
 		parent.add(child);
 		win.add(parent);
 		// this test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, parent.size.width).shouldBe(40);
 			valueOf(testRun, parent.size.height).shouldBe(50);
 			valueOf(testRun, child.size.width).shouldBe(40);
@@ -838,7 +836,7 @@ module.exports = new function() {
 		grandParent.add(parent);
 		win.add(grandParent);
 		// this test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, grandParent.size.width).shouldBe(200);
 			valueOf(testRun, grandParent.size.height).shouldBe(300);
 
@@ -909,7 +907,7 @@ module.exports = new function() {
 		win.add(child);
 		win.add(child1);
 		win.add(child2);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, child.size.width).shouldNotBe(0);
 			valueOf(testRun, child.size.height).shouldNotBe(0);
 			
@@ -962,7 +960,7 @@ module.exports = new function() {
 		var view2 = Ti.UI.createView({
 		});
 		scrollView.add(view2);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view2.size.width).shouldBe(scrollView.size.width);
 			valueOf(testRun, view2.size.height).shouldBe(2000);
 
@@ -1068,7 +1066,7 @@ module.exports = new function() {
 		scrollView.add(button);
 		win.add(NavBarView);
 		win.add(scrollView);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, scrollView.size.height).shouldBe(50);
 			valueOf(testRun, scrollView.size.width).shouldBe(100);
 
@@ -1103,7 +1101,7 @@ module.exports = new function() {
 		        top: 20
 		    }));
 		}
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, innerView.size.height).shouldBe(1200);
 			valueOf(testRun, innerView.size.width).shouldBe(scrollView.size.width);
 
@@ -1165,7 +1163,7 @@ module.exports = new function() {
 			top: 10, bottom: 10
 		});
 		win.add(label);
-		win.addEventListener(guiReadyEventName(), function(e) {
+		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, label.size.width).shouldBe(80);
 			valueOf(testRun, label.size.height).shouldBe(80);
 			valueOf(testRun, label.left).shouldBe(10);

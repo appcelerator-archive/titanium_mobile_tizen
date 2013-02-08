@@ -27,7 +27,6 @@ module.exports = new function() {
 	]
 
 	this.testBasicProperties = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -35,7 +34,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		// Create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
 			value: 'Textarea from Anvil',
 			height: 100,
@@ -57,7 +55,6 @@ module.exports = new function() {
 		win.add(tempTextArea);
 
 		win.addEventListener(guiReadyEventName, function() {
-			//Ti.API.debug
 			Ti.API.info('Checking "color" property. Current value: ' + tempTextArea.color);
 			valueOf(testRun, tempTextArea.color).shouldBe('#000000');
 
@@ -110,7 +107,6 @@ module.exports = new function() {
 	}
 
 	this.testBasicPropertiesMore = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -118,7 +114,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test 2'
 		});
 
-		// Create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
 			value: 'Textarea from Anvil',
 			font: {fontFamily:'Areal', fontWeight: 'bold'},
@@ -132,7 +127,6 @@ module.exports = new function() {
 		win.add(tempTextArea);
 
 		win.addEventListener(guiReadyEventName, function() {
-			// Ti.API.debug
 			Ti.API.info('Checking "editable" property. Current value: ' + tempTextArea.editable);
 			valueOf(testRun, tempTextArea.editable).shouldBe(false);
 
@@ -161,7 +155,6 @@ module.exports = new function() {
 	}
 
 	this.testValue = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -208,7 +201,6 @@ module.exports = new function() {
 	}
 
 	this.testEventsBlur = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -216,7 +208,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		// Create test object instances
 		var tempTextArea = Ti.UI.createTextArea({value:'ta1'}),
 			tempTextArea2 = Ti.UI.createTextArea({value:'ta2'}),
 			focusEventExpected = false,
@@ -265,7 +256,6 @@ module.exports = new function() {
 	}
 
 	this.testGettersSetters = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 				backgroundColor: '#FFFFFF',
 				exitOnClose: true,
