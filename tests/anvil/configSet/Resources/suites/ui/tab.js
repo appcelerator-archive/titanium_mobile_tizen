@@ -46,11 +46,13 @@ module.exports = new function() {
 	
 	// Helper function for creating tab group with Ti.UI.Windows as parameters
 	function _createTabGroupWithWindow() {
-		// Create TabGroup and set two tab with a windows
-		var tabGroup = Titanium.UI.createTabGroup();
+		var tabGroup = Titanium.UI.createTabGroup(),
+			i = 0, 
+			len = arguments.length,
+			baseUITab;
 	
-		for (var i = 0, len = arguments.length; i < len; i++) {
-			var baseUITab = Ti.UI.createTab({
+		for (; i < len; i++) {
+			baseUITab = Ti.UI.createTab({
 				title: i==0 ? TITLE : "title-" + i,
 				window: arguments[i]
 			});
@@ -63,21 +65,19 @@ module.exports = new function() {
 	
 	// Helper function for creating tab group standard for this test
 	function _createTabGroup() {	
-		var redWindow = Titanium.UI.createWindow({ backgroundColor: RED_RGB});
-		var greenWindow = Titanium.UI.createWindow({ backgroundColor: GREEN_RGB});		
+		var redWindow = Titanium.UI.createWindow({ backgroundColor: RED_RGB}),
+			greenWindow = Titanium.UI.createWindow({ backgroundColor: GREEN_RGB});
+
 		return _createTabGroupWithWindow(redWindow,greenWindow);
 	};	
 	
 	// Test base functionality WITHOUT pixel checking	
 	this.base_no_pix = function(testRun) {
-		// Create main window
 		var wind = Titanium.UI.createWindow(),
-			// Create tab group with two windows 
 			redWin = Titanium.UI.createWindow({ backgroundColor: RED_RGB}),
 			greenWin = Titanium.UI.createWindow({ backgroundColor: GREEN_RGB}),
 			tabGroup =  _createTabGroupWithWindow(redWin,greenWin);
 		
-		// Add tab group on window		
 		wind.add(tabGroup);
 		wind.open();
 		
@@ -110,9 +110,7 @@ module.exports = new function() {
 
 	// Test base functionality WITH pixel checking	
 	this.base = function(testRun) {	
-		//Create main window
 		var wind = Titanium.UI.createWindow(),
-			//Create standard tab group and add it into the main window
 			tabGroup = _createTabGroup();
 
 		wind.add(tabGroup);
@@ -138,9 +136,7 @@ module.exports = new function() {
 	
 	// Test open function with pixels calculating
 	this.open = function(testRun) {
-		//Create main window
 		var wind = Titanium.UI.createWindow(),
-			//Create standard tab group and add it into the main window
 			tabGroup = _createTabGroup();
 
 		wind.add(tabGroup);
@@ -165,25 +161,20 @@ module.exports = new function() {
 				});
 			});
 		});				
-
 	}
 	
 	// Test open window in the tab and close it(with pixels calculating)
 	this.open_close = function(testRun) {
-		//Create main window
 		var wind = Titanium.UI.createWindow({ backgroundColor: BLACK_RGB}),
 			tabGroup = _createTabGroup();
 		
-		// Add tab group on window		
 		wind.add(tabGroup);
 		wind.open();
 		
 		var firstTab = tabGroup.tabs[0],
-			// Create new window
 			yellowWin = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB});		
 			
 		wind.addEventListener('postlayout', function () {	
-			// Open yellow window to the first tab
 			firstTab.open(yellowWin);
 		});
 
@@ -207,20 +198,16 @@ module.exports = new function() {
 	
 	// Test setting active property(with pixels calculating)
 	this.deactivate_tab = function(testRun) {
-		//Create main window
 		var wind = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB}),
 			tabGroup = _createTabGroup();
 		
-		// Add tab group on window
 		wind.add(tabGroup);
 		wind.open();
 		
 		var firstTab = tabGroup.tabs[0];
 		
 		wind.addEventListener('postlayout', function () {
-			// Curent active tab set active to false			
 			firstTab.active = false;	
-			// firstTab.setActive(false);			
 		});			
 
 		setTimeout(function() {
@@ -250,7 +237,6 @@ module.exports = new function() {
 		var firstTab = tabGroup.tabs[0],
 			secondTab = tabGroup.tabs[1];
 
-		//Set second (not active) tab in active state
 		secondTab.active = true;		
 		
 		wind.addEventListener('postlayout', function () {		
@@ -268,7 +254,6 @@ module.exports = new function() {
 		var wind = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB}),		
 			tabGroup = _createTabGroup();
 		
-		// Add tab group on window		
 		wind.add(tabGroup);
 		wind.open();		
 		
@@ -324,9 +309,8 @@ module.exports = new function() {
 				})
 			);
 		
-		//Bar should have enough height because tab group bar shoud consist image
 		tabGroup.tabHeight = 100;
-		//Add tab group on window
+
 		wind.add(tabGroup);
 		wind.open();
 		

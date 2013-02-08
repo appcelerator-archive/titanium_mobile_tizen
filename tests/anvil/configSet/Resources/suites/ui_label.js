@@ -380,16 +380,15 @@ module.exports = new function() {
 		function checkLabel(testLabel, callback){
 			var dom_node = testLabel.domNode,
 				text_view = dom_node.getElementsByClassName('TiUIView')[0],
-				view_top = text_view.style.top;
+				view_top = text_view.style.top,
+				v_height,
+				view_bottom;
 
-			view_top = view_top.slice(0, -2);
-			
-			var v_height = text_view.style.height;
-
+			view_top = view_top.slice(0, -2);			
+			v_height = text_view.style.height;
 			v_height = v_height.slice(0, -2);
-			
-			var view_bottom = testLabel.height - view_top - v_height;
-			
+			view_bottom = testLabel.height - view_top - v_height;
+
 			callback(view_top, view_bottom);
 		}
 	}

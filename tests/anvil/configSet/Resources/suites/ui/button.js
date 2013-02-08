@@ -38,7 +38,7 @@ module.exports = new function() {
 				width: 300,
 				height: 200
 			}),
-			button = null,
+			button,
 			label = Ti.UI.createLabel({
 				text: "LabelTitle",
 				top: 10
@@ -179,8 +179,8 @@ module.exports = new function() {
 				width: 300,
 				height: 200
 			}),
-			button = null,
-			countPixel = null;
+			button,
+			countPixel;
 
 		valueOf(testRun, function() {
 			button = Ti.UI.createButton({

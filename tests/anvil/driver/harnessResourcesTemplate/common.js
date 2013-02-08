@@ -84,23 +84,17 @@ module.exports = new function() {
 
 	this.connectToDriver = function() {
 		var connectMessage = {type: "ready"};
-		
-		Ti.API.info("Platform: "+Ti.Platform.name);
-				
 		if (Ti.Platform.name == "mobileweb" || Ti.Platform.name == "tizen") {
 			Ti.API.info("connecting to driver...");
 			harnessGlobal.util.sendData(connectMessage);
+
 		} else {
 			Ti.API.info("listening for driver connection...");
 			harnessGlobal.util.socketListen(connectMessage);
 		}
-		
 	};
 
 	this.processDriverData = function(data) {
-		
-		Ti.API.info("processDriverData = "+data);
-	
 		var elements = data.split("|");
 
 		if (elements[0] == "getSuites") {
@@ -148,10 +142,6 @@ module.exports = new function() {
 
 					} catch(e) {
 						var exceptionDetails;
-						var exceptionMessage = "";
-                                                if (e.message) {
-							var exceptionMessage = " Message:" + e.message;
-						}
 
 						if (e.stack) {
 							exceptionDetails = e.stack;
@@ -172,7 +162,7 @@ module.exports = new function() {
 							exceptionDetails = "unable to get exception details";
 						}
 
-						setResult(testRun, "exception", "<" + exceptionDetails + ">" + " "+exceptionMessage);
+						setResult(testRun, "exception", "<" + exceptionDetails + ">" + " " + (e.message ? " Message:" + e.message : ""));
 						sendResult();
 					}
 				}

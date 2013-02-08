@@ -7,14 +7,12 @@ module.exports = new function() {
 	var finish,
 		valueOf,
 		reportError,
-		guiReadyEventName;
+		openEvent = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 	}
 
 	this.name = "ui_TextArea";
@@ -27,7 +25,6 @@ module.exports = new function() {
 	]
 
 	this.testBasicProperties = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -35,7 +32,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		// Create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
 			value: 'Textarea from Anvil',
 			height: 100,
@@ -56,8 +52,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
-			//Ti.API.debug
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "color" property. Current value: ' + tempTextArea.color);
 			valueOf(testRun, tempTextArea.color).shouldBe('#000000');
 
@@ -110,7 +105,6 @@ module.exports = new function() {
 	}
 
 	this.testBasicPropertiesMore = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -118,7 +112,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test 2'
 		});
 
-		// Create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
 			value: 'Textarea from Anvil',
 			font: {fontFamily:'Areal', fontWeight: 'bold'},
@@ -131,8 +124,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
-			// Ti.API.debug
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "editable" property. Current value: ' + tempTextArea.editable);
 			valueOf(testRun, tempTextArea.editable).shouldBe(false);
 
@@ -161,7 +153,6 @@ module.exports = new function() {
 	}
 
 	this.testValue = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -176,7 +167,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "value" property. Pass #1. Current value: ' + tempTextArea.value);
 			valueOf(testRun, tempTextArea.value).shouldBe('value1');
 
@@ -208,7 +199,6 @@ module.exports = new function() {
 	}
 
 	this.testEventsBlur = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -216,7 +206,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		// Create test object instances
 		var tempTextArea = Ti.UI.createTextArea({value:'ta1'}),
 			tempTextArea2 = Ti.UI.createTextArea({value:'ta2'}),
 			focusEventExpected = false,
@@ -245,7 +234,7 @@ module.exports = new function() {
 		win.add(tempTextArea2);
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			tempTextArea2.focus();
 			focusEventExpected = true;
 			tempTextArea.focus();
@@ -265,7 +254,6 @@ module.exports = new function() {
 	}
 
 	this.testGettersSetters = function(testRun) {
-		// Create windows instance
 		var win = Ti.UI.createWindow({
 				backgroundColor: '#FFFFFF',
 				exitOnClose: true,
@@ -276,7 +264,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
+		win.addEventListener(openEvent, function(){
 			Ti.API.info('Checking setAutocorrect/getAutocorrect property.');
 			tempTextArea.setAutocorrect(true);
 			valueOf(testRun, tempTextArea.getAutocorrect()).shouldBe(true);

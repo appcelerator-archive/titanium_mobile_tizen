@@ -94,7 +94,7 @@ module.exports = new function() {
 		valueOf(testRun, player.add).shouldBeFunction();
 		valueOf(testRun, player.pause).shouldBeFunction();
 		valueOf(testRun, player.play).shouldBeFunction(); // this is the documented way to start playback.
-		!isTizen && valueOf(testRun, player.start).shouldBeFunction(); // backwards compat.
+		isTizen || valueOf(testRun, player.start).shouldBeFunction(); // backwards compat.
 		valueOf(testRun, player.stop).shouldBeFunction();
 		if (!isAndroid) valueOf(testRun, player.setUrl).shouldBeFunction();
 		valueOf(testRun, player.hide).shouldBeFunction();
@@ -108,6 +108,7 @@ module.exports = new function() {
 
 	this.audioTimeValidation = function(testRun) {
 		var sound = Ti.Media.createSound();
+
 		if (isTizen) {
 			var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, "suites/media/sound.wav");
 			sound.url = f.nativePath;
@@ -131,7 +132,7 @@ module.exports = new function() {
 			var time = sound.getTime();
 			Ti.API.info("PROGRESS: " + time);
 			valueOf(testRun, time).shouldBeGreaterThan(initial_pos);
-			// Assume we get an event in < 2 seconds.
+			// assume we get an event in < 2 seconds.
 			valueOf(testRun, time).shouldBeLessThan(initial_pos + initial_pos); 
 			sound.stop();
 			sound = null;
