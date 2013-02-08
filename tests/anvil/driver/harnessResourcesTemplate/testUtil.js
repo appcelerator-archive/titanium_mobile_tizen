@@ -246,7 +246,7 @@ module.exports = new function() {
 			return;
 		}
 
-		for (var i = 0, len < this.obj.length; i < len; i++) {
+		for (var i = 0, len = this.obj.length; i < len; i++) {
 			if (expected === this.obj[i]) {
 				return;
 			}
