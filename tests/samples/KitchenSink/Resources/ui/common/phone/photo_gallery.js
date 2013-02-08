@@ -24,7 +24,7 @@ function openGallery() {
 		},
 		cancel:function()
 		{
-			
+
 		},
 		error:function(error)
 		{

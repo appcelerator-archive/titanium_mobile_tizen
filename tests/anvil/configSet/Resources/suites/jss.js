@@ -19,16 +19,13 @@ module.exports = new function() {
 	]
 
 	this.platform_jss_dirs = function(testRun) {
-		var test = Ti.UI.createView({ 
-			id: "test"			
-		});
-		
+		var test = Ti.UI.createView({ id: "test" });
 		valueOf(testRun, test).shouldNotBeNull();
 
 		if (Ti.Platform.name == "android") {
 			valueOf(testRun, test.backgroundColor).shouldBe("red");
 		} else if (Ti.Platform.name == "tizen") {
-			// for tizen test.backgroundColor is undefined by default
+			// In Tizen, test.backgroundColor is undefined by default.
 			valueOf(testRun, test.backgroundColor).shouldBeUndefined();
 		} else {
 			valueOf(testRun, test.backgroundColor).shouldBe("blue");

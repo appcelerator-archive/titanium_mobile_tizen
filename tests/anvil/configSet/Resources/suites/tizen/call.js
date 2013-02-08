@@ -5,26 +5,18 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-
-
 // This test depends on call history already being present. If call history is empty, the test will
 // still succeed, but will not test much. Currently it is not possible to add calls programmatically.
-
-
-
-
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
-
+	var finish,
+		valueOf,
+		reportError;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
 	}
-
 
 	this.name = "call";
 	this.tests = [
@@ -38,10 +30,10 @@ module.exports = new function() {
 
 	// Search for history of call
 	this.call_history = function(testRun) {
-	    var tFilter = new tizen.AttributeFilter("callType", "EXACTLY", "tizen.tel"), 	// type of call
-			sortMode = new tizen.SortMode("startTime", "DESC"), 	// sort output
-			numberFilter = new tizen.AttributeFilter("remoteParties.remoteParty", "EXACTLY", "12345678"), // from number
-			iFilter = new tizen.CompositeFilter("INTERSECTION", [numberFilter, tFilter]), // add filters
+	    var tFilter = new tizen.AttributeFilter("callType", "EXACTLY", "tizen.tel"),// type of call
+			sortMode = new tizen.SortMode("startTime", "DESC"), // sort output
+			numberFilter = new tizen.AttributeFilter("remoteParties.remoteParty", "EXACTLY", "12345678"), //from number
+			iFilter = new tizen.CompositeFilter("INTERSECTION", [numberFilter, tFilter]), //add filters
 			tizenHistory = tizen.call.history; 
 
 		valueOf(testRun, tizenHistory).shouldBeObject();
@@ -68,7 +60,7 @@ module.exports = new function() {
 	    }
 
 	    // find call history
-    	valueOf(testRun, function() { tizenHistory.find(onSuccess, onError, tFilter, sortMode); }).shouldNotThrowException();
+    	valueOf(testRun, function() { tizenHistory.find(onSuccess, onError, tFilter, sortMode);}).shouldNotThrowException();
 
     	setTimeout(
     		function() {
@@ -78,7 +70,7 @@ module.exports = new function() {
     	);
 	}
 
-	// remove: Deletes a call history entry. 
+	//remove: Deletes a call history entries. 
 	this.remove = function(testRun) {
 		var tizenHistory = tizen.call.history;
 
@@ -125,7 +117,8 @@ module.exports = new function() {
 		valueOf(testRun, tizenHistory).shouldBeObject();
 		// search for call history
 	    valueOf(testRun, function() { tizenHistory.find(onSuccess, onError); }).shouldNotThrowException();
-
+		
+		//device needs some time for execution
     	setTimeout(
     		function() {
 				finish(testRun);
@@ -144,6 +137,7 @@ module.exports = new function() {
 		// delete all call history
 		valueOf(testRun, function() { tizen.call.history.removeAll(null, onError); }).shouldNotThrowException();
     	
+    	//device needs some time for execution
     	setTimeout(
     		function() {
 				finish(testRun);
@@ -155,11 +149,10 @@ module.exports = new function() {
 	// Deletes the recorded media associated to the call history item. 
 	this.delete_recording = function(testRun) {
 		var tizenHistory = tizen.call.history,
-			filter = new tizen.AttributeFilter("tags", "EXACTLY", "call.video"); 	// filter for call.video
+			filter = new tizen.AttributeFilter("tags", "EXACTLY", "call.video"); // filter for call.video
 
 		function onSuccess(results) {
 			valueOf(testRun, results).shouldBeObject();
-
 			if (results.length > 0) {
 				// delete recording for this call
 				valueOf(testRun, function() { tizenHistory.deleteRecording(results[0], null, onError); }).shouldNotThrowException();
@@ -174,6 +167,7 @@ module.exports = new function() {
 		valueOf(testRun, filter).shouldBeObject();
 		valueOf(testRun, function() { tizenHistory.find(onSuccess, onError, filter); }).shouldNotThrowException();
 		
+		//device needs some time for execution
 		setTimeout(
     		function() {
 				finish(testRun);
@@ -208,6 +202,7 @@ module.exports = new function() {
 		    reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
 
+		//device needs some time for execution
 		setTimeout(
     		function() {
 				finish(testRun);

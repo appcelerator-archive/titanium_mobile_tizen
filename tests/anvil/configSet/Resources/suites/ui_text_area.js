@@ -1,23 +1,20 @@
-/*
- * Appcelerator Titanium Mobile
+/* Appcelerator Titanium Mobile
  * Copyright (c) 2011-2013 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
- * Please see the LICENSE included with this distribution for details.
- */
-
+ * Please see the LICENSE included with this distribution for details. */
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
-	var guiReadyEventName;
+	var finish,
+		valueOf,
+		reportError,
+		guiReadyEventName;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		// for Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = (Ti.Platform.osname === 'tizen')||(Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
+		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
+		guiReadyEventName = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 	}
 
 	this.name = "ui_TextArea";
@@ -26,12 +23,10 @@ module.exports = new function() {
 		{name: "testBasicPropertiesMore"},
 		{name: "testValue"},
 		{name: "testEventsBlur"},
-		//{name: "testEventsChange"},
 		{name: "testGettersSetters"}
 	]
 
 	this.testBasicProperties = function(testRun) {
-		//create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -39,29 +34,27 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		//create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
-			value:'Textarea from Anvil',
-			height:100,
-			width:200,
-			top:20,
-			left:10,
+			value: 'Textarea from Anvil',
+			height: 100,
+			width: 200,
+			top: 20,
+			left: 10,
 			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			color:'#000000',
-			textAlign:'left',
-			borderWidth:5,
-			borderColor:'#787878',
-			autocorrect:true,
-			editable:true,
-			enableReturnKey:true,
-			suppressReturn:false,
-			enabled:true
+			color: '#000000',
+			textAlign: 'left',
+			borderWidth: 5,
+			borderColor: '#787878',
+			autocorrect: true,
+			editable: true,
+			enableReturnKey: true,
+			suppressReturn: false,
+			enabled: true
 		});
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
-			//Ti.API.debug
+		win.addEventListener(guiReadyEventName, function() {
 			Ti.API.info('Checking "color" property. Current value: ' + tempTextArea.color);
 			valueOf(testRun, tempTextArea.color).shouldBe('#000000');
 
@@ -104,18 +97,16 @@ module.exports = new function() {
 			Ti.API.info('Checking "value" property. Current value: ' + tempTextArea.value);
 			valueOf(testRun, tempTextArea.value).shouldBe('Textarea from Anvil');
 
-			setTimeout(function(){
+			setTimeout(function() {
 				win.close();
 				finish(testRun);
-			}, 100)
-		})
+			}, 100);
+		});
 
 		win.open();
-
 	}
 
 	this.testBasicPropertiesMore = function(testRun) {
-		//create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -123,21 +114,19 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test 2'
 		});
 
-		//create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
-			value:'Textarea from Anvil',
-			font:{fontFamily:'Areal', fontWeight:'bold'},
-			autocorrect:false,
-			editable:false,
-			enableReturnKey:false,
-			suppressReturn:true,
-			enabled:false
+			value: 'Textarea from Anvil',
+			font: {fontFamily:'Areal', fontWeight: 'bold'},
+			autocorrect: false,
+			editable: false,
+			enableReturnKey: false,
+			suppressReturn: true,
+			enabled: false
 		});
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
-			//Ti.API.debug
+		win.addEventListener(guiReadyEventName, function() {
 			Ti.API.info('Checking "editable" property. Current value: ' + tempTextArea.editable);
 			valueOf(testRun, tempTextArea.editable).shouldBe(false);
 
@@ -156,18 +145,16 @@ module.exports = new function() {
 			Ti.API.info('Checking "font.fontWeight" property. Current value: ' + tempTextArea.font.fontWeight);
 			valueOf(testRun, tempTextArea.font.fontWeight).shouldBe('bold');
 
-			setTimeout(function(){
+			setTimeout(function() {
 				win.close();
 				finish(testRun);
-			}, 100)
-		})
+			}, 100);
+		});
 
 		win.open();
-
 	}
 
 	this.testValue = function(testRun) {
-		//create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -175,14 +162,14 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		//create test object instance
+		// Create test object instance
 		var tempTextArea= Ti.UI.createTextArea({
 			value:'value1'
 		});
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
+		win.addEventListener(guiReadyEventName, function() {
 			Ti.API.info('Checking "value" property. Pass #1. Current value: ' + tempTextArea.value);
 			valueOf(testRun, tempTextArea.value).shouldBe('value1');
 
@@ -204,17 +191,16 @@ module.exports = new function() {
 			Ti.API.info('Checking "setValue()" and "getValue()" methods.');
 			valueOf(testRun, tempTextArea.getValue()).shouldBe('value3');
 
-			setTimeout(function(){
+			setTimeout(function() {
 				win.close();
 				finish(testRun);
-			}, 100)
-		})
+			}, 100);
+		});
 
 		win.open();
 	}
 
 	this.testEventsBlur = function(testRun) {
-		//create windows instance
 		var win = Ti.UI.createWindow({
 			backgroundColor: '#FFFFFF',
 			exitOnClose: true,
@@ -222,7 +208,6 @@ module.exports = new function() {
 			title: 'Anvil UI TextArea test'
 		});
 
-		//create test object instances
 		var tempTextArea = Ti.UI.createTextArea({value:'ta1'}),
 			tempTextArea2 = Ti.UI.createTextArea({value:'ta2'}),
 			focusEventExpected = false,
@@ -230,91 +215,56 @@ module.exports = new function() {
 			focusEventReceived = false,
 			blurEventReceived = false;
 
-		tempTextArea.addEventListener('focus',function(e){
+		tempTextArea.addEventListener('focus', function(e) {
 			Ti.API.info("focus event received. e.value:"+ e.value);
-			if (focusEventExpected)
-			{
+
+			if (focusEventExpected) {
 				valueOf(testRun, e.value).shouldBe('ta1');
 				focusEventReceived = true;
 			}
-		})
-		tempTextArea.addEventListener('blur',function(e){
+		});
+
+		tempTextArea.addEventListener('blur', function(e) {
 			Ti.API.info("blur event received. e.value:"+ e.value);
+
 			if (blurEventExpected) {
 				valueOf(testRun, e.value).shouldBe('ta1');
 				blurEventReceived = true;
 			}
-		})
+		});
 
 		win.add(tempTextArea2);
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
-			tempTextArea2.focus(); // setting focus to another control
+		win.addEventListener(guiReadyEventName, function() {
+			tempTextArea2.focus();
 			focusEventExpected = true;
-			tempTextArea.focus(); // checking focus.
-
+			tempTextArea.focus();
 			blurEventExpected = true;
 			tempTextArea.blur();
 
-			setTimeout(function(){
+			setTimeout(function() {
 				valueOf(testRun, (blurEventReceived)).shouldBe(true);
 				valueOf(testRun, (focusEventReceived)).shouldBe(true);
-				win.close();
+
+				win.close();				
 				finish(testRun);
-			}, 100)
-		})
+			}, 100);
+		});
 
 		win.open();
 	}
-
-/*
-	this.testEventsChange = function(testRun) {
-		//create windows instance
-		var win = Ti.UI.createWindow({
-			backgroundColor: '#FFFFFF',
-			exitOnClose: true,
-			layout: 'vertical',
-			title: 'Anvil UI TextArea test'
-		});
-
-		//create test object instances
-		var tempTextArea = Ti.UI.createTextArea({value:'value#1'}),
-			changeEventReceived = false;
-
-		tempTextArea.addEventListener('change',function(e){
-			Ti.API.info("change event received. e.value:"+ e.value);
-			valueOf(testRun, e.value).shouldBe('v1');
-			changeEventReceived = true;
-		});
-
-		win.add(tempTextArea);
-
-		win.addEventListener(guiReadyEventName, function(){
-			tempTextArea.setValue('v1');
-			setTimeout(function(){
-				valueOf(testRun, (changeEventReceived)).shouldBe(true);
-				win.close();
-				finish(testRun);
-			}, 100)
-		})
-
-		win.open();
-	}
-	*/
 
 	this.testGettersSetters = function(testRun) {
-		//create windows instance
 		var win = Ti.UI.createWindow({
-			backgroundColor: '#FFFFFF',
-			exitOnClose: true,
-			layout: 'vertical',
-			title: 'Anvil UI TextArea test'
-		});
-		//create test object instance
-		var tempTextArea= Ti.UI.createTextArea({});
-		win.add(tempTextArea);
+				backgroundColor: '#FFFFFF',
+				exitOnClose: true,
+				layout: 'vertical',
+				title: 'Anvil UI TextArea test'
+			}),
+			tempTextArea = Ti.UI.createTextArea();
 
+		win.add(tempTextArea);
 
 		win.addEventListener(guiReadyEventName, function(){
 			Ti.API.info('Checking setAutocorrect/getAutocorrect property.');
@@ -341,8 +291,6 @@ module.exports = new function() {
 			tempTextArea.setEnabled(true);
 			valueOf(testRun, tempTextArea.getEnabled()).shouldBe(true);
 
-			// Ti.API.info('Checking setFont/getFont property.'); ? Check it as font object in font tests
-
 			Ti.API.info('Checking setSuppressReturn/getSuppressReturn property.');
 			tempTextArea.setSuppressReturn(false);
 			valueOf(testRun, tempTextArea.getSuppressReturn()).shouldBe(false);
@@ -367,9 +315,8 @@ module.exports = new function() {
 				win.close();
 				finish(testRun);
 			}, 100)
-		})
+		});
 
 		win.open();
 	}
-
 }
