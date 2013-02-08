@@ -6,9 +6,9 @@
  */
 
 module.exports = new function() {
-	var finish;
-	var valueOf;
-	var reportError;
+	var finish,
+		valueOf,
+		reportError;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
@@ -16,11 +16,11 @@ module.exports = new function() {
 		reportError = testUtils.reportError;
 	}
 
-	this.name = "local-based service";
+	this.name = 'local-based service';
 	this.tests = [
-		{name: "providers"},
-		{name: "geocode"},
-		{name: "options"}
+		{name: 'providers'},
+		{name: 'geocode'},
+		{name: 'options'}
 	]
 
 	this.providers = function(testRun) {
@@ -54,32 +54,31 @@ module.exports = new function() {
 	this.geocode = function(testRun) {
 		var defaultProvider = tizen.lbs.geocoder.getDefaultProvider(),
 			inLatitude = 37.5665,
-    		inLongitude = 126.9779,
-    		coordinates = new tizen.SimpleCoordinates(inLatitude, inLongitude), // Seoul, South Korea
-	    	options = {
-	    		resultType: 'STRUCTURED'
-	    	},
-	    	address = 'Seoul, South Korea';
+			inLongitude = 126.9779,
+			coordinates = new tizen.SimpleCoordinates(inLatitude, inLongitude), // Seoul, South Korea
+			options = {
+				resultType: 'STRUCTURED'
+			},
+			address = 'Seoul, South Korea';
 
 		valueOf(testRun, defaultProvider).shouldBeObject();
 		valueOf(testRun, coordinates).shouldBeObject();
-    	valueOf(testRun, defaultProvider.geocode).shouldBeFunction();
-    	valueOf(testRun, defaultProvider.reverseGeocode).shouldBeFunction();
+		valueOf(testRun, defaultProvider.geocode).shouldBeFunction();
+		valueOf(testRun, defaultProvider.reverseGeocode).shouldBeFunction();
 
-    	// invokes when error
-    	function errorCB(e) {
-    		reportError(testRun, 'The following error occurred: ' +  e.message);
-
-    		finish(testRun);
+		// invoke on error
+		function errorCB(e) {
+			reportError(testRun, 'The following error occurred: ' +  e.message);
+			finish(testRun);
 		}
 
-    	// Get the position
-	    function getPositionCB(results) {
-	    	var isLatitudeEqual = false,
-	    		isLongitudeEqual = false,
+		// Get the position
+		function getPositionCB(results) {
+			var isLatitudeEqual = false,
+				isLongitudeEqual = false,
 				geoJSON = results[0].toGeoJSON();
 
-	    	isLatitudeEqual = parseInt(inLatitude, 0) == parseInt(results[0].coordinates.latitude, 0);
+			isLatitudeEqual = parseInt(inLatitude, 0) == parseInt(results[0].coordinates.latitude, 0);
 			isLongitudeEqual = parseInt(inLongitude, 0) == parseInt(results[0].coordinates.longitude, 0);
 
 			valueOf(testRun, isLatitudeEqual).shouldBeTrue();
@@ -87,29 +86,28 @@ module.exports = new function() {
 			valueOf(testRun, geoJSON).shouldBeString();
 
 			finish(testRun);
-	    }
-		
+		}
+
 		defaultProvider.geocode(address, getPositionCB, errorCB);
 
 		// get address by coordinates
 		function getAddressCB(results) {
 			valueOf(testRun, results).shouldBeArray();
 			valueOf(testRun, results.length).shouldBeGreaterThan(0);
-        	valueOf(testRun, results[0].region).shouldBeString();
-        	valueOf(testRun, results[0].region).shouldBe('Seoul');
-	    }
-	    
-	    defaultProvider.reverseGeocode(coordinates, getAddressCB, errorCB, options);
-	}
+			valueOf(testRun, results[0].region).shouldBeString();
+			valueOf(testRun, results[0].region).shouldBe('Seoul');
+		}
 
+		defaultProvider.reverseGeocode(coordinates, getAddressCB, errorCB, options);
+	}
 
 	this.options = function(testRun) {
 		var defaultProvider = null,
 			option = {
-	          "ID": "Your registered ID",
-	          "PASSWORD": "Your registered password"
-	        };
-		
+			  'ID': 'Your registered ID',
+			  'PASSWORD': 'Your registered password'
+			};
+
 		valueOf(testRun, function() { defaultProvider = tizen.lbs.geocoder.getDefaultProvider(); }).shouldNotThrowException();
 		valueOf(testRun, defaultProvider.supportedOptions).shouldBeObject();
 		valueOf(testRun, defaultProvider.supportedOptions).shouldBeArray();
@@ -118,19 +116,19 @@ module.exports = new function() {
 			valueOf(testRun, typeof(defaultProvider.supportedOptions[i]) == 'string').shouldBeTrue();
 		}
 
-	  	function successCB(result) {
-	  		valueOf(testRun, result).shouldNotBeNull();
-	  		valueOf(testRun, result).shouldNotBeUndefined();
-	  		valueOf(testRun, result).shouldBeObject();
+		function successCB(result) {
+			valueOf(testRun, result).shouldNotBeNull();
+			valueOf(testRun, result).shouldNotBeUndefined();
+			valueOf(testRun, result).shouldBeObject();
 
-	  		finish(testRun);
+			finish(testRun);
 		}
 
-  		function errorCB(e) {
-  			reportError(testRun, 'The following error occurred: ' + e.message);
+		function errorCB(e) {
+			reportError(testRun, 'The following error occurred: ' + e.message);
 
-  			finish(testRun);
-  		}
+			finish(testRun);
+		}
 
 		valueOf(testRun, defaultProvider.setOptions).shouldNotBeUndefined();
 		valueOf(testRun, defaultProvider.setOptions).shouldBeFunction();
