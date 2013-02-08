@@ -37,7 +37,7 @@ function PlatformWindow(title) {
 		data.push({title:'Sockets', hasChild:!isMobileWeb, test:'ui/common/platform/sockets', touchEnabled:!isMobileWeb, color:isMobileWeb?"#aaa":"#000"});
 	}
 	
-	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
+	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb || isTizen) {
 		data.push({title:'Passing Data (windows)', hasChild:true, test:'ui/common/platform/custom_properties'});
 	}
 	
