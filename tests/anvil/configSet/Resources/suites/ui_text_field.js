@@ -3,25 +3,17 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details. */
 
-var isTizen = Ti.Platform.osname === 'tizen',
-	isMobileWeb = Ti.Platform.osname === 'mobileweb';
-
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
 
 module.exports = new function() {
 	var finish,
 		valueOf,
 		reportError,
-		guiReadyEventName;
+		openEvent = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = (isTizen || isMobileWeb) ? "postlayout" : "open";
 	}
 
 	this.name = "ui_TextField";
@@ -62,8 +54,8 @@ module.exports = new function() {
 
 		win.add(tempTextField);
 
-		win.addEventListener(guiReadyEventName, function(){
-			Ti.API.info('Event "' + guiReadyEventName + '" fired.');
+		win.addEventListener(openEvent, function(){
+			Ti.API.info('Event "' + openEvent + '" fired.');
 
 			Ti.API.info('Checking "autocapitalization" property. Current value: ' + tempTextField.autocapitalization);
 			valueOf(testRun, tempTextField.autocapitalization).shouldBe(Ti.UI.TEXT_AUTOCAPITALIZATION_ALL);
@@ -140,7 +132,7 @@ module.exports = new function() {
 
 		win.add(tempTextField);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "value" property. Pass #1. Current value: ' + tempTextField.value);
 			valueOf(testRun, tempTextField.value).shouldBe('value1');
 
@@ -210,7 +202,7 @@ module.exports = new function() {
 		win.add(tempTextField2);
 		win.add(tempTextField);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			// Setting focus to another control
 			tempTextField2.focus();
 			focusEventExpected = true;

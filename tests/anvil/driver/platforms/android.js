@@ -71,9 +71,6 @@ module.exports = new function() {
 			argString = argString.replace(/\\/g, "\\\\");
 		}
 
-		//sea log; remove next row
-		console.log("sea:"+driverGlobal.config.currentTiSdkDir);
-		
 		common.createHarness(
 			"android",
 			"\"" + path.resolve(driverGlobal.config.currentTiSdkDir, "titanium.py") + "\" " + argString,
@@ -291,14 +288,10 @@ module.exports = new function() {
 	};
 
 	this.deviceIsConnected = function(callback) {
-	    driverUtils.runCommand("adb devices", driverGlobal.logLevels.quiet, function(error, stdout, stderr) {
+		driverUtils.runCommand("adb devices", driverGlobal.logLevels.quiet, function(error, stdout, stderr) {
 			var searchString = "List of devices attached";
 			var deviceListString = "";
 
-			//remove next row
-			//console.log("sea log: driverUtils.runCommand('adb devices') stdout=" + stdout.substring(0, stdout.length) );
-			//console.log("sea log: driverUtils.runCommand('adb devices') stderr=" + stderr.substring(0, stderr.length) );
-			
 			var startPos = stdout.indexOf(searchString);
 			if (startPos > -1) {
 				var deviceListString = stdout.substring(startPos + searchString.length, stdout.length);

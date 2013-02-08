@@ -296,7 +296,6 @@ module.exports = new function() {
 	}
 
 	this.fileStreamWriteTest = function(testRun) {
-		//Ti.Stream  does not suppotred on mobileweb and Tizen
 		if (!isTizen && !isMobileWeb) {
 			var infile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/stream_test_in.txt'),
 				instream = infile.open(Ti.Filesystem.MODE_READ),
@@ -310,6 +309,7 @@ module.exports = new function() {
 				outstream.write(buffer, 0, size);
 				totalWriteSize += size;
 			}
+
 			instream.close();
 			outstream.close();
 		
@@ -327,7 +327,6 @@ module.exports = new function() {
 	}
 
 	this.fileStreamAppendTest = function(testRun) {
-		// Ti.Stream does not suppotred on mobileweb and Tizen
 		if(!isTizen && !isMobileWeb) {
 			var infile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/stream_test_in.txt'),
 				instream = infile.open(Ti.Filesystem.MODE_READ),
@@ -339,11 +338,13 @@ module.exports = new function() {
 
 			var outstream = outfile.open(Ti.Filesystem.MODE_WRITE),
 				bytesStreamed = Ti.Stream.writeStream(instream, outstream, 40);
+
 			instream.close();
 			outstream.close();
 
 			infile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/stream_test_in.txt');
 			instream = infile.open(Ti.Filesystem.MODE_READ);
+
 			var appendfile = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'fsappendtest.jpg'),
 				appendstream = appendfile.open(Ti.Filesystem.MODE_APPEND);
 
@@ -406,7 +407,6 @@ module.exports = new function() {
 	}
 
 	this.fileStreamWriteStreamTest = function(testRun) {
-		// Ti.Stream  does not suppotred on mobileweb and Tizen
 		if (!isTizen && !isMobileWeb) {
 			var inBuffer = Ti.createBuffer({value:"huray for data, lets have a party for data1 huray for data, lets have a party for data2 huray for data, lets have a party for data3"});
 			valueOf(testRun, inBuffer).shouldBeObject();
@@ -418,6 +418,7 @@ module.exports = new function() {
 
 			// writes all data from inBufferStream to outFileStream in chunks of 30
 			var bytesWritten = Ti.Stream.writeStream(inStream, outFileStream, 30);
+
 			Ti.API.info('<' + bytesWritten + '> bytes written, closing both streams');
 
 			// assert that the length of the outBuffer is equal to the amount of bytes that were written
@@ -443,7 +444,6 @@ module.exports = new function() {
 	}
 
 	this.fileStreamTruncateTest = function(testRun) {
-		// Ti.Stream  does not suppotred on mobileweb and Tizen
 		if (!isTizen && !isMobileWeb) {
 			var inBuffer = Ti.createBuffer({value:"huray for data, lets have a party for data1 huray for data, lets have a party for data2 huray for data, lets have a party for data3"});
 			valueOf(testRun, inBuffer).shouldBeObject();
@@ -515,8 +515,8 @@ module.exports = new function() {
 		tempFileOutStream.write(outBuffer); //write inBuffer to outfile
 		tempFileOutStream.close();
 
-		var inBuffer = Ti.createBuffer({length:200}); // have to set length on read buffer or no data will be read
-		var tempFileInStream = Ti.Filesystem.openStream(Ti.Filesystem.MODE_READ, Ti.Filesystem.tempDirectory, filename),
+		var inBuffer = Ti.createBuffer({length:200}), // have to set length on read buffer or no data will be read
+			tempFileInStream = Ti.Filesystem.openStream(Ti.Filesystem.MODE_READ, Ti.Filesystem.tempDirectory, filename),
 			bytesRead = tempFileInStream.read(inBuffer); //read 200 byes of data from outfile into outBuffer
 		tempFileInStream.close();
 
@@ -620,7 +620,6 @@ module.exports = new function() {
         // Try to create file and folder
         // Copy this file to this directory 
         // Viryfy if file is present in the both places
-
         var f = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'suites/filesystem/text.txt'),
             contents = f.read(),
             isFile,
@@ -670,7 +669,6 @@ module.exports = new function() {
     this.fileProperties = function(testRun) {
         // Try to create not empty file
         // Check the properties and methods for this file
-
         var f = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'suites/filesystem/text.txt'),
             contents = f.read(),
             hid,
@@ -797,7 +795,6 @@ module.exports = new function() {
         // Try to create directory and file
         // Try to create two directory in just created directory
         // Check the getDirectoryListing() method for directory and file
-
         var dirList,
             fileList,
             file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, 'someFile.txt');
@@ -899,7 +896,6 @@ module.exports = new function() {
 
     this.appendString = function(testRun){
         // Try to append the string to a text file
-
         var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'data.txt'),
             appended_text = 'Some appended text',
             previous_text = "",
@@ -929,7 +925,6 @@ module.exports = new function() {
 
     this.appendBlob = function(testRun){
         // Try to append the blob to a text file
-
         var blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'suites/filesystem/file.txt').read(),
             dest = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'append_blob.txt'),
             previous = "",

@@ -23,9 +23,6 @@ module.exports = new function() {
 				// to too many open connections or the error callbacks being invoked once the 
 				// driver shuts down the http server at the end of the test run
 				var responseText = this.responseText;
-				
-				Ti.API.info("httpClient.onload="+responseText);
-				
 				setTimeout(function() {
 					harnessGlobal.common.processDriverData(responseText);
 				}, 10);
@@ -36,11 +33,8 @@ module.exports = new function() {
 			timeout: 10000
 		});
 
-		Ti.API.info("httpClient.open");
 		httpClient.open("POST", harnessGlobal.httpHost + ":" + harnessGlobal.httpPort + "/message.anvil");
 		httpClient.send(JSON.stringify(data));
-		Ti.API.info("httpClient.send="+JSON.stringify(data));
-		
 	};
 
 	var sendSocketData = function(data) {
@@ -90,7 +84,7 @@ module.exports = new function() {
 	};
 
 	this.sendData = function(data) {
-                if ((Ti.Platform.name == "mobileweb") || (Ti.Platform.name == "tizen")) {
+		if (Ti.Platform.name == "mobileweb" || Ti.Platform.name == "tizen") {
 			sendHttpData(data);
 
 		} else {

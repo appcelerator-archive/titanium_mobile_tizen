@@ -45,7 +45,7 @@ module.exports = new function() {
 				errorDetails = "unable to get exception details";
 			}
 
-			self.callback(testRun, "error", "<" + errorDetails + ">" + " Message: "+message);
+			self.callback(testRun, "error", "<" + errorDetails + ">" + " Message: " + message);
 		}
 	};
 
@@ -240,13 +240,13 @@ module.exports = new function() {
 			self.reportError(this.testRun, "should be an array, was: " + typeDescription);
 		}
 	};
-	
-	Value.prototype.shouldContainDeprecated = function (expected) {
+
+	Value.prototype.shouldContainDeprecated = function(expected) {
 		if (this.testRun.resultSet) {
 			return;
 		}
 
-		for (var i = 0; i < this.obj.length; i++) {
+		for (var i = 0, len < this.obj.length; i < len; i++) {
 			if (expected === this.obj[i]) {
 				return;
 			}
@@ -361,7 +361,7 @@ module.exports = new function() {
 				this.obj();
 
 			} catch (e) { 
-				self.reportError(this.testRun, "should not throw exception, but did. Exception: " + e.message + ".");	
+				self.reportError(this.testRun, "should not throw exception, but did. Exception: " + e.message + ".");
 			}
 
 		} else {

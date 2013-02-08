@@ -107,7 +107,6 @@ module.exports = new function() {
 					});
 				});
 			},
-			//Create test env
 			testEnv = new createTestEnv(postLayotCallback);
 		
 		// Use setTimeout because 
@@ -137,8 +136,8 @@ module.exports = new function() {
 					//Save number of Red pixels into variable
 					countPixelsBeforChild = count;
 					//Add child button into the tableViewRow
-					testEnv.firstRow.hasChild=true;
-					testEnv.secondRow.hasChild=true;
+					testEnv.firstRow.hasChild = true;
+					testEnv.secondRow.hasChild = true;
 				});			
 			});
 		
@@ -163,6 +162,7 @@ module.exports = new function() {
 				//Check NO existting Yellow and green color on the screen
 				cp.countPixels(YELLOW_RGB_ARRAY, document.body, function(count) {
 					valueOf(testRun, count).shouldBeEqual(0);
+
 					cp.countPixels(GREEN_RGB_ARRAY, document.body, function(count) {
 						valueOf(testRun, count).shouldBeEqual(0);
 						// Add right and left image into the row
@@ -181,8 +181,10 @@ module.exports = new function() {
 			cp.countPixels(YELLOW_RGB_ARRAY, document.body,function(count) {
 				//Check appearence yellow and green colors on the screen
 				valueOf(testRun, count).shouldBeGreaterThan(0);
+				
 				cp.countPixels(GREEN_RGB_ARRAY, document.body,function(count) {
 					valueOf(testRun, count).shouldBeGreaterThan(0);
+
 					testEnv.win.close();
 					finish(testRun);
 				});

@@ -7,14 +7,12 @@ module.exports = new function() {
 	var finish,
 		valueOf,
 		reportError,
-		guiReadyEventName;
+		openEvent = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		// For Tizen and mobileWeb all valued based on rendering results are avalible only on "postlayout" event.
-		guiReadyEventName = (Ti.Platform.osname === 'tizen') || (Ti.Platform.osname === 'mobileweb') ? "postlayout" : "open";
 	}
 
 	this.name = "ui_TextArea";
@@ -54,7 +52,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "color" property. Current value: ' + tempTextArea.color);
 			valueOf(testRun, tempTextArea.color).shouldBe('#000000');
 
@@ -126,7 +124,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "editable" property. Current value: ' + tempTextArea.editable);
 			valueOf(testRun, tempTextArea.editable).shouldBe(false);
 
@@ -169,7 +167,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			Ti.API.info('Checking "value" property. Pass #1. Current value: ' + tempTextArea.value);
 			valueOf(testRun, tempTextArea.value).shouldBe('value1');
 
@@ -236,7 +234,7 @@ module.exports = new function() {
 		win.add(tempTextArea2);
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function() {
+		win.addEventListener(openEvent, function() {
 			tempTextArea2.focus();
 			focusEventExpected = true;
 			tempTextArea.focus();
@@ -266,7 +264,7 @@ module.exports = new function() {
 
 		win.add(tempTextArea);
 
-		win.addEventListener(guiReadyEventName, function(){
+		win.addEventListener(openEvent, function(){
 			Ti.API.info('Checking setAutocorrect/getAutocorrect property.');
 			tempTextArea.setAutocorrect(true);
 			valueOf(testRun, tempTextArea.getAutocorrect()).shouldBe(true);

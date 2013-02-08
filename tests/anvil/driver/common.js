@@ -455,7 +455,7 @@ module.exports = new function() {
 
 	this.deleteHarness = function(platform, callback) {
 		var harnessDir = path.resolve(driverGlobal.harnessDir, platform, "harness");
-		
+
 		if (path.existsSync(harnessDir)) {
 			wrench.rmdirSyncRecursive(harnessDir, true);
 			driverUtils.log("harness deleted");
@@ -593,12 +593,7 @@ module.exports = new function() {
 			clearTimeout(timer);
 
 			addResult(message.result, message.description, message.duration);
-			var messageDescription = "";
-			if (message.description)
-			{
-				messageDescription = " Description: " + message.description;
-			}
-			driverUtils.log("suite<" + message.suite + "> test<" + message.test + "> result<" + message.result + ">" + messageDescription);
+			driverUtils.log("suite<" + message.suite + "> test<" + message.test + "> result<" + message.result + ">" + (message.description ? " Description: " + message.description : ""));
 
 			if (selectedSuiteArg && selectedTestArg) {
 				/*
