@@ -35,7 +35,7 @@ function PlatformWindow(title) {
 		data.push({title: 'Tizen', hasChild: true,  test: 'ui/common/platform/tizen'});
 	}	
 	
-	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb) {
+	if (Titanium.Platform.name == 'iPhone OS' || isMobileWeb || isTizen) {
 		data.push({title:'Passing Data (windows)', hasChild:true, test:'ui/common/platform/custom_properties'});
 	}
 		

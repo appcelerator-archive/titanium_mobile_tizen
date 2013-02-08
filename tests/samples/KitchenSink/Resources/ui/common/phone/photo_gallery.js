@@ -18,9 +18,11 @@ function openGallery() {
 			{
 				Titanium.API.info('this is video:' + event.media);
 			}
-	
-			Titanium.API.info('PHOTO GALLERY SUCCESS cropRect.x ' + cropRect.x + ' cropRect.y ' + cropRect.y  + ' cropRect.height ' + cropRect.height + ' cropRect.width ' + cropRect.width);
-	
+			if(cropRect) {
+				Titanium.API.info('PHOTO GALLERY SUCCESS cropRect.x ' + cropRect.x + ' cropRect.y ' + cropRect.y  + ' cropRect.height ' + cropRect.height + ' cropRect.width ' + cropRect.width);
+			} else {
+				Titanium.API.info('THE PHOTO OPENED SUCCESSFULLY');
+			}
 		},
 		cancel:function()
 		{
