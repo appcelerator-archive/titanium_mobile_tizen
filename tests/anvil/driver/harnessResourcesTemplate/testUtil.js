@@ -241,6 +241,8 @@ module.exports = new function() {
 		}
 	};
 
+	// This function is required for Tizen's browser which does not support
+	// indexOf for arrays.
 	Value.prototype.shouldContainDeprecated = function(expected) {
 		if (this.testRun.resultSet) {
 			return;
@@ -251,6 +253,7 @@ module.exports = new function() {
 				return;
 			}
 		}
+
 		self.reportError(this.testRun, "should contain: " + expected + ", was: " + this.obj);
 	}
 
@@ -361,7 +364,7 @@ module.exports = new function() {
 				this.obj();
 
 			} catch (e) { 
-				self.reportError(this.testRun, "should not throw exception, but did. Exception: " + e.message + ".");
+				self.reportError(this.testRun, "should not throw exception, but did. Exception: " + e.message);
 			}
 
 		} else {

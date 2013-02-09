@@ -23,7 +23,7 @@ module.exports = new function() {
 	this.tests = (function() {
 		var arr = [];
 
-		if (isTizen === 'tizen' || isMobileWeb) {
+		if (isTizen || isMobileWeb) {
 			arr = arr.concat([
 				{name: "basic"},
 				{name: "add_remove"},
