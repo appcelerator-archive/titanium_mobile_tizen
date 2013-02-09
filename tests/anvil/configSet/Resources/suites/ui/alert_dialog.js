@@ -1,9 +1,7 @@
-/*
- * Appcelerator Titanium Mobile
+/* Appcelerator Titanium Mobile
  * Copyright (c) 2011-2012 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
- * Please see the LICENSE included with this distribution for details.
- */
+ * Please see the LICENSE included with this distribution for details. */
 
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
@@ -22,7 +20,7 @@ module.exports = new function() {
 	}
 
 	this.name = "alert_dialog";
-	this.tests = (function(){
+	this.tests = (function() {
 		var arr = [
 			{name: "testButtons"},
 			{name: "testCancel"},
@@ -99,91 +97,87 @@ module.exports = new function() {
 
 	this.testButtons = function(testRun) {
 		var dialog = Ti.UI.createAlertDialog({
-		    message: 'Would you like to delete the file?',
-		    title: 'Delete'
-		});
+				message: 'Would you like to delete the file?',
+				title: 'Delete'
+			}),
+			buttons = [ 'Confirm', 'Cancel', 'Help' ],
+			gotten_buttons;
 
-		var buttons = ['Confirm', 'Cancel', 'Help'];
 		dialog.buttonNames = buttons;
+		gotten_buttons = dialog.getButtonNames();
 
-		var gotten_buttons = dialog.getButtonNames();
-
-		for(var i = 0, len = gotten_buttons.length; i < len; i++){
+		for (var i = 0, len = gotten_buttons.length; i < len; i++) {
 			buttons[i] && valueOf(testRun, gotten_buttons[i]).shouldBe(buttons[i]);
 		}
 		
-      	finish(testRun);
+		finish(testRun);
 	}
 
 	this.testCancel = function(testRun) {
 		var dialog = Ti.UI.createAlertDialog({
-		    buttonNames: ['Confirm', 'Cancel', 'Help'],
-		    message: 'Would you like to delete the file?',
-		    title: 'Delete'
-		});
-
-		var cancel = 1;
+				buttonNames: [ 'Confirm', 'Cancel', 'Help' ],
+				message: 'Would you like to delete the file?',
+				title: 'Delete'
+			}),
+			cancel = 1,
+			gotten_cancel;
 
 		dialog.cancel = cancel;
-
-		var gotten_cancel = dialog.getCancel();
+		gotten_cancel = dialog.getCancel();
 		
 		valueOf(testRun, gotten_cancel).shouldBe(cancel);
 
-      	finish(testRun);
+		finish(testRun);
 	}
 
 	this.testOk = function(testRun) {
 		var dialog = Ti.UI.createAlertDialog({
-		    buttonNames: ['Confirm', 'Cancel', 'Help'],
-		    message: 'Would you like to delete the file?',
-		    title: 'Delete'
-		});
-
-		var ok = 'Delete';
+			buttonNames: [ 'Confirm', 'Cancel', 'Help' ],
+			message: 'Would you like to delete the file?',
+			title: 'Delete'
+		}),
+		ok = 'Delete',
+		gotten_ok;
 
 		dialog.ok = ok;
-
-		var gotten_ok = dialog.getOk();
+		gotten_ok = dialog.getOk();
 
 		valueOf(testRun, gotten_ok).shouldBe(ok);
 
-      	finish(testRun);
+		finish(testRun);
 	}
 
 	this.testMessage = function(testRun) {
 		var dialog = Ti.UI.createAlertDialog({
-		    cancel: 1,
-		    buttonNames: ['Confirm', 'Cancel', 'Help'],
-		    title: 'Delete'
-		});
-
-		var message = "my message";
+			cancel: 1,
+			buttonNames: [ 'Confirm', 'Cancel', 'Help' ],
+			title: 'Delete'
+		}),
+		message = "my message",
+		gotten_message;
 
 		dialog.message = message;
-
-		var gotten_message = dialog.getMessage();
+		gotten_message = dialog.getMessage();
 
 		valueOf(testRun, gotten_message).shouldBe(message);
 
-      	finish(testRun);
+		finish(testRun);
 	}
 
 	this.testTitle = function(testRun) {
 		var dialog = Ti.UI.createAlertDialog({
-		    cancel: 1,
-		    buttonNames: ['Confirm', 'Cancel', 'Help'],
-		    message: 'Would you like to delete the file?',
-		});
-
-		var title = 'ALERT';
+			cancel: 1,
+			buttonNames: [ 'Confirm', 'Cancel', 'Help' ],
+			message: 'Would you like to delete the file?',
+		}),
+		title = 'ALERT',
+		gotten_title;
 
 		dialog.title = title;
-
-		var gotten_title = dialog.getTitle();
+		gotten_title = dialog.getTitle();
 		
 		valueOf(testRun, gotten_title).shouldBe(title);
 
-      	finish(testRun);
+		finish(testRun);
 	}
 }

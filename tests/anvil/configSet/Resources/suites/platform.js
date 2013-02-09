@@ -64,10 +64,8 @@ module.exports = new function() {
 	}
 
 	this.displayCaps = function(testRun) {
-	
 		// In Mobile Web-based platforms, the platform's reported display capabilities
 		// correspond to those of the browser that hosts the running application.
-
 		var body = document.body,
 			measureDiv = document.createElement('div'),
 			dpi;
@@ -85,7 +83,7 @@ module.exports = new function() {
 
 		// Display density expressed as dots-per-inch
 		valueOf(testRun, Ti.Platform.displayCaps.dpi).shouldBeEqual(dpi);
-		
+
 		finish(testRun);
 	}
 }

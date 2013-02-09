@@ -132,7 +132,7 @@ module.exports = new function() {
 			var time = sound.getTime();
 			Ti.API.info("PROGRESS: " + time);
 			valueOf(testRun, time).shouldBeGreaterThan(initial_pos);
-			// assume we get an event in < 2 seconds.
+			// Assume we get an event in < 2 seconds.
 			valueOf(testRun, time).shouldBeLessThan(initial_pos + initial_pos); 
 			sound.stop();
 			sound = null;

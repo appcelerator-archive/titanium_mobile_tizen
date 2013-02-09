@@ -209,7 +209,7 @@ module.exports = new function() {
 		});
 		win.add(view);
 
-		// this test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
+		// This test runs on "open" event for Android\iOS and on "postlayout" on tizen and mobileweb
 		win.addEventListener(openEvent, function(e) {
 			valueOf(testRun, view.rect.x).shouldBe(30);
 			valueOf(testRun, view.rect.y).shouldBe(30);
@@ -274,7 +274,7 @@ module.exports = new function() {
 			valueOf(testRun, view.width).shouldBe("widthString");
 			valueOf(testRun, view.height).shouldBe("heightString");
 
-			if (!(isTizen || isMobileWeb)) {			
+			if (!(isTizen || isMobileWeb)) {
 				valueOf(testRun, view.center.y).shouldBe("centerYString");
 				valueOf(testRun, view.center.x).shouldBe("centerXString");
 			};
@@ -723,7 +723,7 @@ module.exports = new function() {
 				valueOf(testRun, label.size.height).shouldBe(0);
 				// Adding a scroll view to a label does not work in android: TIMOB-7817
 				valueOf(testRun, scrollView.size.width).shouldBe(0);
-				valueOf(testRun, scrollView.size.height).shouldBe(0);   
+				valueOf(testRun, scrollView.size.height).shouldBe(0);
 
 				valueOf(testRun, label2.size.width).shouldBe(scrollView2.size.width);
 				valueOf(testRun, label2.size.height).shouldBe(scrollView2.size.height);

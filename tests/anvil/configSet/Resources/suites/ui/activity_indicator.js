@@ -21,7 +21,7 @@ module.exports = new function() {
 	}
 
 	this.name = "activity_indicator";
-	this.tests = (function(){
+	this.tests = (function() {
 		var arr = [
 			{name: "testProperties"},
 		];

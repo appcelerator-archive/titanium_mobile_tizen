@@ -168,7 +168,6 @@ module.exports = new function() {
 		}, 2000);
 	}
 
-
 	// Check view color on the screen
 	this.pixel_test = function(testRun) {
 		Ti.API.info("Start test pixel_test.");

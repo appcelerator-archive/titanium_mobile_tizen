@@ -9,7 +9,7 @@ var isTizen = Ti.Platform.osname === 'tizen',
 if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
- 
+
 module.exports = new function() {
 	var finish,
 		valueOf,
@@ -23,10 +23,9 @@ module.exports = new function() {
 		YELLOW_RGB = '#ffff00',
 		BLACK_RGB = '#ffffff',
 		TITLE = 'base_ui_title',
-		cp;	
+		cp = new CountPixels();
 
 	this.init = function(testUtils) {
-		cp = new CountPixels();
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 	}
@@ -34,7 +33,7 @@ module.exports = new function() {
 	this.name = "tab";
 	this.tests = [
 		{name: "base_no_pix"},
-		{name: "base"},		
+		{name: "base"},
 		{name: "open"},
 		{name: "open_close"},
 		{name: "deactivate_tab"},
@@ -47,13 +46,13 @@ module.exports = new function() {
 	// Helper function for creating tab group with Ti.UI.Windows as parameters
 	function _createTabGroupWithWindow() {
 		var tabGroup = Titanium.UI.createTabGroup(),
-			i = 0, 
+			i = 0,
 			len = arguments.length,
 			baseUITab;
 	
 		for (; i < len; i++) {
 			baseUITab = Ti.UI.createTab({
-				title: i==0 ? TITLE : "title-" + i,
+				title: i == 0 ? TITLE : "title-" + i,
 				window: arguments[i]
 			});
 
@@ -86,27 +85,22 @@ module.exports = new function() {
 			// Check existing first tab in TabGroup
 			valueOf(testRun, tab).shouldNotBeUndefined();
 			valueOf(testRun, tab instanceof Ti.UI.Tab).shouldBeTrue();
-			
-			// Check properties title , active, window for the first tab
 			valueOf(testRun, TITLE).shouldBeOneOf([tab.title,tab.titleid]);
 			valueOf(testRun, tab.active).shouldBeTrue();
 			valueOf(testRun, tab.window).shouldBeExactly(redWin);		
 			
-			// Check existing second tab in TabGroup
 			var tab2 = tabGroup.tabs[1];
+
 			valueOf(testRun, tab2).shouldNotBeUndefined();
 			valueOf(testRun, tab2 instanceof Ti.UI.Tab).shouldBeTrue();
-
-			// Check properties active and window for the first tab			
 			valueOf(testRun, tab2.active).shouldBeFalse();	
 			valueOf(testRun, tab2.window).shouldBeExactly(greenWin);	
 			
-			// Close main window
 			wind.close();
 
 			finish(testRun);
 		});		
-	}	
+	}
 
 	// Test base functionality WITH pixel checking	
 	this.base = function(testRun) {	
@@ -126,8 +120,7 @@ module.exports = new function() {
 				cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body,function(count) {
 					valueOf(testRun, count).shouldBeZero();	
 					finish(testRun);
-					
-					//Close main window
+
 					wind.close();
 				});
 			});					
@@ -148,7 +141,7 @@ module.exports = new function() {
 
 		//Open new window in current tab
 		valueOf(testRun, function(){firstTab.open(yellowWin)}).shouldNotThrowException();
-		
+
 		wind.addEventListener('postlayout', function () {			
 			cp.countPixelsPercentage(RED_RGB_ARRAY, document.body,function(count) { 
 				valueOf(testRun, count).shouldBeZero();
@@ -160,20 +153,20 @@ module.exports = new function() {
 					finish(testRun);						
 				});
 			});
-		});				
+		});
 	}
-	
+
 	// Test open window in the tab and close it(with pixels calculating)
 	this.open_close = function(testRun) {
 		var wind = Titanium.UI.createWindow({ backgroundColor: BLACK_RGB}),
 			tabGroup = _createTabGroup();
-		
+
 		wind.add(tabGroup);
 		wind.open();
-		
+
 		var firstTab = tabGroup.tabs[0],
 			yellowWin = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB});		
-			
+
 		wind.addEventListener('postlayout', function () {	
 			firstTab.open(yellowWin);
 		});
@@ -182,30 +175,30 @@ module.exports = new function() {
 			// Close yellow window to the first tab
 			valueOf(testRun, function(){firstTab.close(yellowWin)}).shouldNotThrowException();
 		}, 1000);		
-		
+
 		setTimeout(function() {
-		// Red window should appeare
+			// Red window should appeare
 			cp.countPixelsPercentage(RED_RGB_ARRAY, document.body, function(count) { 
 				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);				
 				cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) { 
 					valueOf(testRun, count).shouldBeZero();
 					finish(testRun);
-					wind.close();						
+					wind.close();
 				});
 			});
 		}, 2000);
 	}
-	
+
 	// Test setting active property(with pixels calculating)
 	this.deactivate_tab = function(testRun) {
 		var wind = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB}),
 			tabGroup = _createTabGroup();
-		
+
 		wind.add(tabGroup);
 		wind.open();
-		
+
 		var firstTab = tabGroup.tabs[0];
-		
+
 		wind.addEventListener('postlayout', function () {
 			firstTab.active = false;	
 		});			
@@ -221,61 +214,60 @@ module.exports = new function() {
 				});
 
 				finish(testRun);
-				wind.close();					
-			});					
-		}, 1000);	
+				wind.close();
+			});
+		}, 1000);
 	}
 
 	// Test active functionality with pixels calculating
 	this.activate_tab = function(testRun) {
-		var wind = Titanium.UI.createWindow(),		
+		var wind = Titanium.UI.createWindow(),
 			tabGroup = _createTabGroup();
 
 		wind.add(tabGroup);
 		wind.open();
-		
+
 		var firstTab = tabGroup.tabs[0],
 			secondTab = tabGroup.tabs[1];
 
-		secondTab.active = true;		
-		
-		wind.addEventListener('postlayout', function () {		
+		secondTab.active = true;
+
+		wind.addEventListener('postlayout', function () {
 			// Check if color of second tab(green) is setted on the screen
 			cp.countPixelsPercentage(GREEN_RGB_ARRAY, document.body, function(count) {
 				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);
 				finish(testRun);
 				wind.close();	
-			});	
+			});
 		});
 	}
-	
+
 	// Test setting active property(with pixels calculating)
 	this.deactivate_activate_tab = function(testRun) {
-		var wind = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB}),		
+		var wind = Titanium.UI.createWindow({ backgroundColor: YELLOW_RGB}),
 			tabGroup = _createTabGroup();
-		
+
 		wind.add(tabGroup);
-		wind.open();		
-		
+		wind.open();
+
 		var firstTab = tabGroup.tabs[0];
 
 		firstTab.active = false;
-		
+
 		setTimeout(function() {
 			firstTab.active = true;
-		}, 1000);			
-		
+		}, 1000);
+
 		setTimeout(function() {
 			// Red color should appear because we set active property of first tab(with red color window) to true
 			cp.countPixelsPercentage(RED_RGB_ARRAY, document.body, function(count) {
-				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);	
-				
+				valueOf(testRun, count).shouldBeGreaterThan(MIN_WIND_PERCENT);
+
 				finish(testRun);
-				wind.close();					
-			});			
-		}, 2000);	
-		
-	}	
+				wind.close();
+			});
+		}, 2000);
+	}
 	
 	// Failed - https://jira.appcelerator.org/browse/TC-1740
 	this.active_no_pix = function(testRun) {
@@ -297,7 +289,7 @@ module.exports = new function() {
 		finish(testRun);
 		wind.close();	
 	};
-	
+
 	this.icon = function(testRun) {
 		var wind = Titanium.UI.createWindow(),
 			tabGroup = _createTabGroupWithWindow(
@@ -308,35 +300,35 @@ module.exports = new function() {
 					backgroundColor : GREEN_RGB
 				})
 			);
-		
+
 		tabGroup.tabHeight = 100;
 
 		wind.add(tabGroup);
 		wind.open();
-		
+
 		wind.addEventListener('postlayout', function() {
 			tabGroup.tabs[0].icon = "/suites/ui/image_view/yellow_blue.png";
 			// Yellow color will be tested; blue will be ignored
 			valueOf(testRun, tabGroup.tabs[0].icon).shouldBeEqual("/suites/ui/image_view/yellow_blue.png");
 		});
-		
+
 		//Check appearance of the image
 		//Timeout is necessary because function tab.icon doesn't have callback
 		setTimeout(function(){
-			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {				
-				valueOf(testRun, count).shouldBeGreaterThan(0);	
-				tabGroup.tabs[0].icon = null;			
+			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {
+				valueOf(testRun, count).shouldBeGreaterThan(0);
+				tabGroup.tabs[0].icon = null;
 			});
-		},1000);	
-		
+		},1000);
+
 		//Check image dissappearance
-		//Timeout is necessary because function tab.icon doesn't have callback		
+		//Timeout is necessary because function tab.icon doesn't have callback
 		setTimeout(function(){
-			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {				
-				valueOf(testRun, count).shouldBeEqual(0);	
+			cp.countPixelsPercentage(YELLOW_RGB_ARRAY, document.body, function(count) {
+				valueOf(testRun, count).shouldBeEqual(0);
 				wind.close();
-				finish(testRun);				
+				finish(testRun);
 			});
-		},2000);			
+		},2000);
 	}
 }

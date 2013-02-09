@@ -17,7 +17,7 @@ module.exports = new function() {
 		BLUE_RGB_ARRAY = [0, 0, 255],
 		GREEN_RGB = '#00ff00',
 		BLUE_RGB = '#0000ff',
-		cp;	
+		cp;
 
 	this.init = function(testUtils) {
 		cp = new CountPixels();
@@ -67,11 +67,11 @@ module.exports = new function() {
 		this.mainWindow = win;
 		this.scrollView = scrollView;
 	}
-	
+
 	// Test check in appearance of createScrollView on the screen(with pixel calculation)
 	this.base = function(testRun) {
 		var testObject = new TestObjects();
-		
+
 		testObject.mainWindow.open();
 
 		testObject.mainWindow.addEventListener('postlayout',  function () {

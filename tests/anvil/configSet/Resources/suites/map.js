@@ -43,7 +43,7 @@ module.exports = new function() {
 				
 		finish(testRun);
 	}
-	
+
 	this.mapView = function(testRun) {
 		// Verify the map really appears on the screen: it should cover the
 		// red background window. This is checked by counting pixels of the
@@ -82,11 +82,11 @@ module.exports = new function() {
 				animated: true
 			});
 		}).shouldNotThrowException();
-		
+
 		if (isTizen || isMobileWeb) {
 			cp.countPixelsPercentage([255, 0, 0], win, onTestStarted);
 		}
-		
+
 		map.addEventListener('complete', function() {
 			if (isTizen || isMobileWeb) {
 				cp.countPixelsPercentage([255, 0, 0], win, onMapComplete);
@@ -95,7 +95,7 @@ module.exports = new function() {
 				finish(testRun);
 			}
 		});
-		
+
 		win.add(map);
 		win.open();
 	};

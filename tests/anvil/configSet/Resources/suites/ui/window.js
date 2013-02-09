@@ -33,6 +33,7 @@ module.exports = new function() {
 				{name: "titleControl"}
 			]);
 		}
+
 		return arr;
 	}());	
 
@@ -130,8 +131,7 @@ module.exports = new function() {
 				backgroundColor: '#0000FF'
 			}),
 			win1 = Titanium.UI.createWindow({
-				//this is green squares, and we can check if this squares are present
-				// in window with pixel tests
+				// This is green squares, and we can check if this squares are present in window with pixel tests
 				title:'&#9607;&#9607;&#9607;&#9607;&#9607;&#9607;&#9607',
 				backgroundColor: '#FFFFFF',
 				leftNavButton: leftNavBtn,
@@ -314,7 +314,7 @@ module.exports = new function() {
 			cp.countPixels([255, 0, 0], document.body, onTabsCompleteBarImage);
 		});
 
-		tabGroup.addEventListener('close', function(){
+		tabGroup.addEventListener('close', function() {
 			finish(testRun);
 		});
 
