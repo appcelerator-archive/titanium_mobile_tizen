@@ -3,9 +3,10 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details. */
 	
-if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb'){
-   Ti.include('countPixels.js');
-}
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+(isTizen || isMobileWeb) && (Ti.include('countPixels.js'));
  
 module.exports = new function() {
 	var finish,
@@ -27,25 +28,32 @@ module.exports = new function() {
 		cp;
 
 	this.init = function(testUtils) {
-		cp = new CountPixels();
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 	}
 
-	this.name = "tabGroup";
-	this.tests = [
-		{name: "base"},
-		{name: "active"},
-		{name: "active_negative"},
-		{name: "base_no_pix"},
-		{name: "color_properties"},
-		{name: "height"},
-		{name: "open"},
-		{name: "close"},
-		{name: "divide"},
-		{name: "images"},
-		{name: "tabsAtBottom"}
-	];
+	this.name = "tab_roup";
+	this.tests = (function() {
+		var arr = [
+			{name: "base_no_pix"}
+		];
+
+		if (isTizen || isMobileWeb) {
+			arr.push({name: "base"}),
+			arr.push({name: "active"}),
+			arr.push({name: "active_negative"}),
+			arr.push({name: "color_properties"}),
+			arr.push({name: "height"}),
+			arr.push({name: "open"}),
+			arr.push({name: "close"}),
+			arr.push({name: "divide"}),
+			arr.push({name: "images"}),
+			arr.push({name: "tabsAtBottom"})
+		}
+
+		return arr;
+	}());
 	
 	// Helper function for creating tab group standart for this tests
 	function _createTabGroup() {
@@ -74,9 +82,8 @@ module.exports = new function() {
 
 	// Test base functionality with pixels calculation
 	this.base = function(testRun) {
-		// Create main window	
 		var wind = Titanium.UI.createWindow();
-		// Add tab group on window			
+
 		wind.add(_createTabGroup());
 		wind.open();
 		
@@ -129,10 +136,8 @@ module.exports = new function() {
 		var wind = Titanium.UI.createWindow(),
 			tabGroup = _createTabGroup();
 
-		// Set NOT existed tab as an active
 		valueOf(testRun,function(){tabGroup.setActiveTab(2)}).shouldNotThrowException();
-
-		// Add tab group on window			
+		
 		wind.add(tabGroup);
 		wind.open();			
 				
@@ -165,12 +170,9 @@ module.exports = new function() {
 			});
 
 		tabGroup.addTab(secondUITab);
-		
-		//Add tab group on window
 		wind.add(tabGroup);
 		wind.open();
 		
-		// Check properties
 		wind.addEventListener('postlayout',  function () {
 			valueOf(testRun, tabGroup.tabs).shouldBeArray();
 			valueOf(testRun, tabGroup.tabs.length).shouldBeEqual(2);
@@ -197,12 +199,9 @@ module.exports = new function() {
 			tabGroup = _createTabGroup();
 		
 		// Change function setActiveTabBackgroundColor
-		valueOf(testRun,function(){tabGroup.setActiveTabBackgroundColor(BLUE_RGB)}).shouldNotThrowException();	
-		
-		// Change function setTabsBackgroundColor
-		valueOf(testRun,function(){tabGroup.setTabsBackgroundColor(YELLOW_RGB)}).shouldNotThrowException();	
-		
-		// Add tab group on window			
+		valueOf(testRun,function() {tabGroup.setActiveTabBackgroundColor(BLUE_RGB)}).shouldNotThrowException();	
+		valueOf(testRun,function() {tabGroup.setTabsBackgroundColor(YELLOW_RGB)}).shouldNotThrowException();	
+	
 		wind.add(tabGroup);
 		wind.open();
 
@@ -270,8 +269,6 @@ module.exports = new function() {
 			});
 
 		tabGroup.addTab(secondUITab);
-		
-		// Add tab group on window
 		wind.add(tabGroup);
 		
 		wind.open();
@@ -301,8 +298,7 @@ module.exports = new function() {
 	this.close = function(testRun) {
 		var wind = Titanium.UI.createWindow(),
 			tabGroup = _createTabGroup();
-
-		// Add tab group on window			
+	
 		wind.add(tabGroup);		
 		wind.open();
 		
@@ -391,9 +387,7 @@ module.exports = new function() {
 
 		tabGroup.setActiveTabBackgroundColor(BLUE_RGB);		
 		
-		// Change function setTabsBackgroundColor
 		tabGroup.setTabsBackgroundColor(BLUE_RGB);		
-		// Add tab group on window			
 		wind.add(tabGroup);
 		wind.open();
 		

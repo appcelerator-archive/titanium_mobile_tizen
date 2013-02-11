@@ -16,7 +16,7 @@ module.exports = new function() {
 		valueOf = testUtils.valueOf;
 	}
 
-	this.name = "tableViewSection";
+	this.name = "table_view_section";
 	this.tests = [
 		{name: "base"},
 		{name: "getProp"},

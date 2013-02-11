@@ -5,7 +5,10 @@
 
 // unfinished due to failure of base_no_pix
 
-if (Ti.Platform.osname === 'tizen' || Ti.Platform.osname === 'mobileweb') {
+var isTizen = Ti.Platform.osname === 'tizen',
+	isMobileWeb = Ti.Platform.osname === 'mobileweb';
+
+if (isTizen || isMobileWeb) {
 	Ti.include('countPixels.js');
 }
  
@@ -20,16 +23,23 @@ module.exports = new function() {
 		cp;
 
 	this.init = function(testUtils) {
-		cp = new CountPixels();
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 	}
 
-	this.name = "ScrollView";
-	this.tests = [
-		{name: "base"},
-		{name: "base_no_pix" ,timeout: 1000}
-	];
+	this.name = "scroll_view";
+	this.tests = (function() {
+		var arr = [
+			{name: "base"}
+		];
+
+		if (isTizen || isMobileWeb) {
+			arr.push({name: "base_no_pix", timeout: 1000})
+		}
+
+		return arr;
+	}());
 	
 	// Helper function create Main window createScrollView and View
 	function TestObjects() {

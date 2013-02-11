@@ -25,9 +25,7 @@ module.exports = new function() {
 			{name: "testProperties"}
 		];
 
-		if (isTizen || isMobileWeb) {
-			arr.push({name: "testProgress"});
-		}
+		(isTizen || isMobileWeb) && (arr.push({name: "testProgress"}));
 
 		return arr;
 	}());

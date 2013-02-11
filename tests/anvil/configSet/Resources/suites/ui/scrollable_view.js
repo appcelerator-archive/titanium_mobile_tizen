@@ -8,10 +8,8 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
- 
+(isTizen || isMobileWeb) && (Ti.include('countPixels.js'));
+
 module.exports = new function() {
 	var finish,
 		valueOf,
@@ -28,12 +26,12 @@ module.exports = new function() {
 		cp;
 
 	this.init = function(testUtils) {
-		cp = new CountPixels();
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 	}
 
-	this.name = "ScrollableView";
+	this.name = "scrollable_view";
 	this.tests = [
 		{name: "base"},
 		{name: "pagingControlTimeout"},

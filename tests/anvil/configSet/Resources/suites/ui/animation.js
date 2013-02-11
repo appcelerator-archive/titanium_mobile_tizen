@@ -3,12 +3,7 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details. */
 
-var isTizen = Ti.Platform.osname === 'tizen',
-	isMobileWeb = Ti.Platform.osname === 'mobileweb';
-
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+Ti.include('countPixels.js');
 
 module.exports = new function() {
 	var finish,
@@ -27,29 +22,23 @@ module.exports = new function() {
 	}
 
 	this.name = "animation";
-	this.tests = (function() {
-		var arr = [];
-
-		if (isTizen || isMobileWeb) {
-			arr.push({name: "backgroundColor_test"});
-			arr.push({name: "autoreverse_test"});
-			arr.push({name: "bottom_test", timeout: 5000});
-			arr.push({name: "top_test"});
-			arr.push({name: "left_test"});
-			arr.push({name: "right_test", timeout: 5000});
-			arr.push({name: "color_test"});
-			arr.push({name: "height_test"});
-			arr.push({name: "width_test"});
-			arr.push({name: "visible_test", timeout: 5000});
-			arr.push({name: "zIndex_test", timeout: 5000});
-			arr.push({name: "opacity_test"});
-			arr.push({name: "delay_test"});
-			arr.push({name: "duration_test"});
-			arr.push({name: "transform_test"});
-		}
-
-		return arr;
-	}());
+	this.tests = [
+		{name: "backgroundColor_test"},
+		{name: "autoreverse_test"},
+		{name: "bottom_test", timeout: 5000},
+		{name: "top_test"},
+		{name: "left_test"},
+		{name: "right_test", timeout: 5000},
+		{name: "color_test"},
+		{name: "height_test"},
+		{name: "width_test"},
+		{name: "visible_test", timeout: 5000},
+		{name: "zIndex_test", timeout: 5000},
+		{name: "opacity_test"},
+		{name: "delay_test"},
+		{name: "duration_test"},
+		{name: "transform_test"}
+	];
 	
 	function animationHandler(e, colors, result, testRun, wind, countPercents) {
 		if (countPercents) {

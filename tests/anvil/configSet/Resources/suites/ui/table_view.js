@@ -20,7 +20,7 @@ module.exports = new function() {
 		valueOf = testUtils.valueOf;
 	}
 
-	this.name = "tableView";
+	this.name = "table_view";
 	this.tests = [
 		{name: "background"},
 		{name: "separatorColor"}

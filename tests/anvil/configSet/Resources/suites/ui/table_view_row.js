@@ -24,7 +24,7 @@ module.exports = new function() {
 		valueOf = testUtils.valueOf;
 	}
 
-	this.name = "tableViewRow";
+	this.name = "table_view_row";
 	this.tests = [
 		{name: "baseNoPix"},
 		{name: "color"},
