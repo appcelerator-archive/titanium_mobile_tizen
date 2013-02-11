@@ -108,6 +108,7 @@ module.exports = new function() {
 
 	this.audioTimeValidation = function(testRun) {
 		var sound = Ti.Media.createSound();
+
 		if (isTizen) {
 			var f = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, "suites/media/sound.wav");
 			sound.url = f.nativePath;
