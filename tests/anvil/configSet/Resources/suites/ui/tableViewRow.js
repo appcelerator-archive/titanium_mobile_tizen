@@ -181,7 +181,7 @@ module.exports = new function() {
 			cp.countPixels(YELLOW_RGB_ARRAY, document.body,function(count) {
 				//Check appearence yellow and green colors on the screen
 				valueOf(testRun, count).shouldBeGreaterThan(0);
-				
+
 				cp.countPixels(GREEN_RGB_ARRAY, document.body,function(count) {
 					valueOf(testRun, count).shouldBeGreaterThan(0);
 
