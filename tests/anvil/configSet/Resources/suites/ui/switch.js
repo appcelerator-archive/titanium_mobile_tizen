@@ -6,9 +6,7 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+(isTizen || isMobileWeb) && Ti.include('countPixels.js');
 
 module.exports = new function() {
 	var finish,
@@ -33,7 +31,8 @@ module.exports = new function() {
 		var win = Ti.UI.createWindow({
 				backgroundColor: '#FF0000'
 			}),
-			basicSwitch;
+			basicSwitch,
+			cp;
 		
 		valueOf(testRun, function() {
 			basicSwitch = Ti.UI.createSwitch({
@@ -44,9 +43,8 @@ module.exports = new function() {
 			});
 		}).shouldNotThrowException();
 		
-		if (isTizen || isMobileWeb) {
-			var cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
+
 		var onSwitchComplete = function(count) {
 			valueOf(testRun, count).shouldBeGreaterThan(1000);
 
@@ -178,11 +176,10 @@ module.exports = new function() {
 				backgroundColor: '#0000FF',
 				height: 50,
 				width: 50
-			});
+			}),
+			cp;
 		
-		if (isTizen || isMobileWeb) {
-			var cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 
 		var bluePixelsAfterRemovingCB = function(count) {
 			valueOf(testRun, count).shouldBeEqual(0);

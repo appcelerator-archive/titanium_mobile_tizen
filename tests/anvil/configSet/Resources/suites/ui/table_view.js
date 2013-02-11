@@ -49,9 +49,7 @@ module.exports = new function() {
 
 		this.win.add(this.tableView);
 			
-		if (postLayotCallback) {
-			this.win.addEventListener('postlayout',  postLayotCallback);
-		}
+		postLayotCallback && this.win.addEventListener('postlayout',  postLayotCallback);
 
 		this.win.open();
 	}

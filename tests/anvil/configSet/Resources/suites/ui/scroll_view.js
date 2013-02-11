@@ -8,9 +8,7 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+(isTizen || isMobileWeb) && Ti.include('countPixels.js');
  
 module.exports = new function() {
 	var finish,
@@ -34,9 +32,7 @@ module.exports = new function() {
 			{name: "base"}
 		];
 
-		if (isTizen || isMobileWeb) {
-			arr.push({name: "base_no_pix", timeout: 1000})
-		}
+		(isTizen || isMobileWeb) && arr.push({name: "base_no_pix", timeout: 1000});
 
 		return arr;
 	}());
@@ -103,7 +99,7 @@ module.exports = new function() {
 		wind.open();
 
 		wind.addEventListener('postlayout',  function () {
-			var properties = "contentHeight,contentOffset,contentWidth,disableBounce,horizontalBounce,scrollingEnabled,showHorizontalScrollIndicator,showVerticalScrollIndicator,verticalBounce";
+			var properties = "contentHeight, contentOffset, contentWidth, disableBounce, horizontalBounce, scrollingEnabled, showHorizontalScrollIndicator, showVerticalScrollIndicator, verticalBounce";
 
 			properties.split(',').forEach(function(property) {
 				valueOf(testRun,scrollView[property]).shouldNotBeUndefined()

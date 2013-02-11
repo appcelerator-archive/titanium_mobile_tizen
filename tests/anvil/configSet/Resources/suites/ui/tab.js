@@ -6,9 +6,7 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+(isTizen || isMobileWeb) && Ti.include('countPixels.js');
 
 module.exports = new function() {
 	var finish,
@@ -319,7 +317,7 @@ module.exports = new function() {
 				valueOf(testRun, count).shouldBeGreaterThan(0);
 				tabGroup.tabs[0].icon = null;
 			});
-		},1000);
+		}, 1000);
 
 		//Check image dissappearance
 		//Timeout is necessary because function tab.icon doesn't have callback
@@ -329,6 +327,6 @@ module.exports = new function() {
 				wind.close();
 				finish(testRun);
 			});
-		},2000);
+		}, 2000);
 	}
 }

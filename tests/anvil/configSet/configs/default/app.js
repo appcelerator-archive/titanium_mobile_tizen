@@ -40,7 +40,6 @@ var suites = [
 	{name: "ui/option_dialog"},
 	{name: "ui/picker"},
 	{name: "ui/progress_bar"},
-	{name: "ui/scroll_view"},
 	{name: "ui/switch"},
 	{name: "ui/tab"},
 	{name: "ui/tab_group"},
@@ -82,6 +81,7 @@ if (Ti.Platform.osname === 'android') {
 	suites = suites.concat([
 		{name: "ui/animation"},
 		{name: "ui/scrollable_view"},
+		{name: "ui/scroll_view"},
 	]);
 }
 

@@ -6,9 +6,7 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+(isTizen || isMobileWeb) && Ti.include('countPixels.js');
 
 module.exports = new function() {
 	var finish,
@@ -29,9 +27,7 @@ module.exports = new function() {
 			{name: "testTitle"}
 		];
 
-		if (isTizen || isMobileWeb) {
-			arr.push({name: "showHide"});
-		}
+		(isTizen || isMobileWeb) && arr.push({name: "showHide"});
 
 		return arr;
 	}());

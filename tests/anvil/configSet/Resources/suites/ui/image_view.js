@@ -8,9 +8,7 @@
 var isTizen = Ti.Platform.osname === 'tizen',
 	isMobileWeb = Ti.Platform.osname === 'mobileweb';
 
-if (isTizen || isMobileWeb) {
-	Ti.include('countPixels.js');
-}
+(isTizen || isMobileWeb) && Ti.include('countPixels.js');
 
 module.exports = new function() {
 	var finish,
@@ -45,9 +43,7 @@ module.exports = new function() {
 				height: 100
 			});
 		
-		if (isTizen || isMobileWeb) {
-			cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 		
 		var onImageViewCompleteBluePx = function(count) {
 			valueOf(testRun, count).shouldBeEqual(4900);
@@ -90,9 +86,7 @@ module.exports = new function() {
 				backgroundColor: '#FFFFFF'
 			});
 		
-		if (isTizen || isMobileWeb) {
-			cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 
 		var onStartTest = function(count) {
 			valueOf(testRun, count).shouldBeEqual(0);
@@ -112,9 +106,7 @@ module.exports = new function() {
 			});
 		}).shouldNotThrowException();
 		
-		if (isTizen || isMobileWeb) {
-			cp.countPixelsPercentage([255, 0, 0], win, onStartTest);
-		}
+		(isTizen || isMobileWeb) && (cp.countPixelsPercentage([255, 0, 0], win, onStartTest));
 		
 		win.addEventListener('postlayout', function() {
 			if (isTizen || isMobileWeb) {
@@ -175,9 +167,7 @@ module.exports = new function() {
 			image.add(btn);
 		}).shouldNotThrowException();
 		
-		if (isTizen || isMobileWeb) {
-			cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 		
 		var onIVcompleteAfterRemoving = function(count) {
 			valueOf(testRun, count).shouldBeEqual(100);
@@ -216,9 +206,7 @@ module.exports = new function() {
 			Check the presents of blue pixels, after one sec check the presents of red pixels */
 		var cp;
 
-		if (isTizen || isMobileWeb) {
-			cp = new CountPixels();
-		}
+		(isTizen || isMobileWeb) && (cp = new CountPixels());
 		
 		var images = ['file:///suites/ui/image_view/image.png', 'file:///suites/ui/image_view/image1.png'],
 			win = Ti.UI.createWindow({
