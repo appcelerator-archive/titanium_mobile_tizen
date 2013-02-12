@@ -48,8 +48,8 @@ module.exports = new function() {
 		// Verify the map really appears on the screen: it should cover the
 		// red background window. This is checked by counting pixels of the
 		// background color.
-		var cp;
-			map;
+		var cp,
+			map,
 			win = Titanium.UI.createWindow({
 				backgroundColor: '#FF0000'
 			});
@@ -373,12 +373,12 @@ module.exports = new function() {
 		valueOf(testRun, annotation.titleid).shouldBeUndefined();
 		
 		map.addEventListener('complete', function() {
-			map.addAnnotation(annotation);
-			win.add(map);
-			win.open();
 			win.close();
 			finish(testRun);
 		});
+		map.addAnnotation(annotation);
+		win.add(map);
+		win.open();
 	}
 		
 		
