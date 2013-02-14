@@ -62,29 +62,35 @@ define(["Ti/_/declare", "Ti/Blob"],
 			};
         return {
 			open: function(args){
-				var path;
-				var file;
-				var readFromStream  = function(fileStream){
-					var contents = fileStream.readBase64(fileStream.bytesAvailable);
+				var path,
+					file,
+					serviceReplyCB = {
+						// callee now sends a reply
+						onsuccess: pickToItemCB,
+						// Something went wrong 
+						onfail: args.error ? args.error : function(){Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
+					};
+					
+				function readFromStream(fileStream){
+					var contents = fileStream.readBase64(fileStream.bytesAvailable),
+						blob = new Blob({
+							data: contents,
+							length: contents.length,
+							mimeType: imgMimeType[virtualRoot.fileExt(path)] || "text/plain",
+							file: file || null,
+							nativePath: path || null
+						}),					
+						event = {
+							cropRect: null,
+							media: blob,
+							mediaType: Ti.Media.MEDIA_TYPE_PHOTO
+						};
+						
 					fileStream.close();
-					
-					var blob = new Blob({
-						data: contents,
-						length: contents.length,
-						mimeType: imgMimeType[virtualRoot.fileExt(path)] || "text/plain",
-						file: file || null,
-						nativePath: path || null
-					});
-					
-					var event = {
-						cropRect: null,
-						media: blob,
-						mediaType: Ti.Media.MEDIA_TYPE_PHOTO
-					}
-					args.success(event);
+					args.success && args.success(event);
 				};
 								
-				var resolveFileCB = function(dir) {
+				function resolveFileCB(dir) {
 					//Resolve to file
 					file = dir.resolve(virtualRoot.getFile(path));
 					file.openStream(
@@ -94,41 +100,35 @@ define(["Ti/_/declare", "Ti/Blob"],
 						readFromStream,
 						// error callback
 						function(e) {
-							console.log("Error with open stream" + e.message)
+							Titanium.API.error("Error with open stream" + e.message)
 							}
 						);	
 				};
-				var pickToItemCB = function(reply) {   // reply -> ApplicationServiceData[0]
+				function pickToItemCB(reply) {   // reply -> ApplicationServiceData[0]
 					path = reply[0].value.toString();
 					//Check if this file is image - return blob
-					if(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
+					if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
 						//Resolve to directory
 						tizen.filesystem.resolve(
 							virtualRoot.getRoot(path), 
 							//'removable1',
 							resolveFileCB, 
 							function(e) {
-								console.log("Error" + e.message);
+								Titanium.API.error("Error" + e.message);
 							}, 
 							"rw");
 					//Check if this file is video - return path(string)		
-					} else if(virtualRoot.fileType(virtualRoot.fileExt(path)) == VIDEO) {
+					} else if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == VIDEO) {
 						var event = {
 								cropRect: null,
 								media: path,
 								mediaType: Ti.Media.MEDIA_TYPE_VIDEO
 							}		
-						args.success(event);
+						args.success && args.success(event);
 					} else {
-						console.log('This format of file does not supported');
+						Titanium.API.error('This format of file does not supported');
 					}	
-				}
-				var serviceReplyCB = {
-                    // callee now sends a reply
-                    onsuccess: pickToItemCB,
-                    // Something went wrong 
-                    onfail: args.error 
-                };
+				};
 				//START
                 //Launch PhotoGallery for tizen
                 tizen.application.launchService(
