@@ -241,7 +241,7 @@ function build(logger, config, cli, finished) {
 	applyDefaults(this.tiapp, {
 		mobileweb: {
 			analytics: {
-				'use-xhr': false
+				'use-xhr': true
 			},
 			build: {},
 			'disable-error-screen': false,

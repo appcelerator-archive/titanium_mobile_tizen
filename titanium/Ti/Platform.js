@@ -7,13 +7,11 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		mid = matches ? decodeURIComponent(matches[1]) : void 0,
 		unloaded,
 		on = require.on,
-		hiddenIFrame = dom.create("iframe",{id: "urlOpener", style: {display: "none"} },doc.body);
+		hiddenIFrame = dom.create("iframe",{id: "urlOpener", style: {display: "none"} },doc.body),
+		wifiNetworkPropertyValueChangeListenerId;
 
 	mid || (mid = localStorage.getItem(midName));
 	mid || localStorage.setItem(midName, mid = _.uuid());
-
-	// Id of listener to be able to unsbscribe from listening this property
-	var wifiNetworkPropertyValueChangeListenerId = null;
 
 	function saveMid() {
 		if (!unloaded) {
@@ -25,77 +23,59 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 	};
 	
 	// Do we need to unsubsctibe? Do we need ot call it anywhere?
-	//function DeinitPlatformData()
-	//{
+	//function deInitPlatformData(){
 	//	if (wifiNetworkPropertyValueChangeListenerId != null) 
 	//		tizen.systeminfo.removePropertyValueChangeListener(wifiNetworkPropertyValueChangeListenerId);
 	//};
 
 	// initialize values that should be initialized via fucntions with callbacks
-	function InitPlatformData()
-	{
+	function initPlatformData(){
 		// subscribing to WiFi property changes
-		wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener("WifiNetwork", onSuccessWifiNetworkCallback);		
+		wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WifiNetwork', onSuccessWifiNetworkCallback);
 		// but anyway we need to get cuurent value
-		tizen.systeminfo.getPropertyValue("WifiNetwork", onSuccessWifiNetworkCallback, onErrorCallback);
+		tizen.systeminfo.getPropertyValue('WifiNetwork', onSuccessWifiNetworkCallback, onErrorCallback);
 
-		// we are not expexting that device specific data like device model or version can be changed during application is running so we are not monitoring it
-		tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback, onErrorCallback);
-		
+		// we are not expexting that device specific data like device model or version can be changed during 
+		//application is running so we are not monitoring it
+		// uncomment next line after Tizen fixed https://bugs.tizen.org/jira/browse/TDIST-175, 
+		// this bug cause 30 sec freeze on start
+		//tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback, onErrorCallback);
+		//Default values
+		Platform.constants.__values__.version = '2.0';
+		Platform.constants.__values__.model = 'Tizen Device';
+
 		//Get our application info.
 		//Workaround for simulator. It throws exception because id is undefined. On Emulator works fine.
 		try {
-			var appInfo = tizen.application.getAppInfo();
-			Platform.constants.__values__.id = appInfo.id; //The unique ID for an installed application. 
+			Platform.constants.__values__.id = tizen.application.getAppInfo().id; //The unique ID for an installed application. 
 		} catch (e) {
 			Platform.constants.__values__.id = "ID001"; //The unique ID for an installed application. 
 		}
-		//Applications's globally-unique ID (UUID).
-		
 	};
 
 	function onErrorCallback(error) {
-	    //console.log("An error occurred " + error.message);
+		//console.log("An error occurred " + error.message);
 	};
 	
 	// Callback to update device model\version
-	function onSuccessSystemInfoDeviceCallback(systemInfoDevice)
-	{
-		//[NoInterfaceObject] interface SystemInfoDevice : SystemInfoProperty {
-		//    readonly attribute DOMString imei;
-		//    readonly attribute DOMString model;
-		//    readonly attribute DOMString version;
-		//    readonly attribute DOMString vendor;
-		//};
+	function onSuccessSystemInfoDeviceCallback(systemInfoDevice){
 		try{                                                                                                      
-				Platform.constants.__values__.model = systemInfoDevice.model;
-				console.log(Platform.constants.__values__.model);
-                                //console.log("Platform.model is set to " + systemInfoDevice.model);
-
-				Platform.constants.__values__.version = systemInfoDevice.version;
-				//console.log("Platform.version is set to " + systemInfoDevice.version);
+			Platform.constants.__values__.model = systemInfoDevice.model;
+			//console.log("Platform.model is set to " + systemInfoDevice.model);
+			Platform.constants.__values__.version = systemInfoDevice.version;
+			//console.log("Platform.version is set to " + systemInfoDevice.version);
 		}
 		catch (e) {
 			//console.log("Error on getting device info. Error: " + e.message);
 			Platform.constants.__values__.model = undefined;
-                        Platform.constants.__values__.version = undefined;
+			Platform.constants.__values__.version = undefined;
 		}
 	}
 	
 	// Callback to update WiFi's IP address
-	function onSuccessWifiNetworkCallback(wifiNetwork)
-	{
-		// [NoInterfaceObject] 
-		// interface SystemInfoWifiNetwork : SystemInfoProperty {
-		//   readonly attribute DOMString status; (ON or OFF) 
-		//   readonly attribute DOMString ssid;
-		//   readonly attribute DOMString ipAddress;
-		//   readonly attribute DOMString ipv6Address;
-		//   readonly attribute double signalStrength;
-		// };
+	function onSuccessWifiNetworkCallback(wifiNetwork){
 		try{
-                        //console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
-
+			//console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
 			if (wifiNetwork.status == "ON"){
 				Platform.constants.__values__.address = wifiNetwork.ipAddress;	
 			}
@@ -198,7 +178,7 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		});
 	});
 
-	InitPlatformData();
+	initPlatformData();
 	return Platform;
 
 });
