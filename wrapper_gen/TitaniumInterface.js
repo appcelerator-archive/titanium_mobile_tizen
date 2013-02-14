@@ -2,7 +2,7 @@ exports.TitaniumInterface = (function(){
     var fs = require('fs');
     var options = {
         jsStubsFolder: 'output/jsStubs/',
-        titaniumFolder: 'Ti/Tizen/Ti.Tizen/',
+        titaniumFolder: 'Ti/Tizen/',
         pytonPath: 'Ti/Tizen/Ti.Tizen/'
         
     };
