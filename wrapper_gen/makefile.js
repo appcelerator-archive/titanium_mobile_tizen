@@ -16,7 +16,7 @@ function ParseFiles(){
         jsParcerFolder: './node_modules/',
         idlFolder: 'idlFolder/',
         jsStubsFolder: 'output/jsStubs/',
-        pytonPath: 'Ti/Tizen/Ti.Tizen/'
+        pytonPath: 'Ti/Tizen/'
         
     };
     
