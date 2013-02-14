@@ -1,0 +1,265 @@
+module Bluetooth {
+    typedef DOMString BluetoothAddress;
+    
+    typedef DOMString BluetoothUUID;
+    
+    enum BluetoothSecurityLevel { "LOW", "MEDIUM", "HIGH" };
+    
+    enum BluetoothSocketType { "RFCOMM", "L2CAP" };
+    
+    enum BluetoothSocketState { "CLOSED", "OPEN" };
+    
+    [NoInterfaceObject] interface BluetoothManagerObject {
+        readonly attribute BluetoothManager bluetooth;
+    };
+    Tizen implements BluetoothManagerObject;
+
+    [NoInterfaceObject] interface BluetoothManager {
+        readonly attribute BluetoothClassDeviceMajor deviceMajor;
+        readonly attribute BluetoothClassDeviceMinor deviceMinor;
+        readonly attribute BluetoothClassDeviceService deviceService;
+        BluetoothAdapter getDefaultAdapter();
+    };
+
+
+    [NoInterfaceObject] interface BluetoothAdapter {
+        readonly attribute DOMString name;
+        readonly attribute BluetoothAddress address;
+        readonly attribute boolean powered; 
+        readonly attribute boolean visible;
+
+        void setName(DOMString name,
+                     optional SuccessCallback? successCallback, 
+                     optional ErrorCallback? errorCallback);
+ 
+        void setPowered(boolean state,
+                        optional SuccessCallback? successCallback, 
+                        optional ErrorCallback? errorCallback);
+
+        
+        void setVisible(boolean mode,
+                        optional SuccessCallback? successCallback, 
+                        optional ErrorCallback? errorCallback,
+                        optional unsigned short? timeout);
+
+
+
+
+        void discoverDevices(BluetoothDiscoverDevicesSuccessCallback successCallback, 
+                             optional ErrorCallback? errorCallback);
+
+        void stopDiscovery(optional SuccessCallback? successCallback, 
+                           optional ErrorCallback? errorCallback);
+
+        void getKnownDevices(BluetoothDeviceArraySuccessCallback successCallback, 
+                             optional ErrorCallback? errorCallback);
+
+
+
+
+        void getDevice(BluetoothAddress address,
+                       BluetoothDeviceSuccessCallback successCallback, 
+                       optional ErrorCallback? errorCallback);
+
+
+
+
+        void createBonding(BluetoothAddress address,
+                           BluetoothDeviceSuccessCallback successCallback, 
+                           optional ErrorCallback? errorCallback);
+
+        void destroyBonding(BluetoothAddress address,
+                            optional SuccessCallback? successCallback, 
+                            optional ErrorCallback? errorCallback);
+
+
+
+        void registerRFCOMMServiceByUUID(BluetoothUUID uuid,
+                                         DOMString name,
+                                         BluetoothServiceSuccessCallback successCallback, 
+                                         optional ErrorCallback? errorCallback,
+                                         optional BluetoothSecurityLevel? securityLevel);
+
+             };
+    [NoInterfaceObject] interface BluetoothDevice {
+        readonly attribute DOMString name;
+        readonly attribute BluetoothAddress address;
+        readonly attribute BluetoothClass deviceClass;
+        readonly attribute boolean isBonded;
+        readonly attribute boolean isTrusted;
+        readonly attribute boolean isConnected;
+        readonly attribute BluetoothUUID[] uuids;
+
+        void connectToServiceByUUID(BluetoothUUID uuid,
+                                    BluetoothSocketSuccessCallback successCallback, 
+                                    optional ErrorCallback? errorCallback,
+                                    optional BluetoothSocketType? protocol);
+    };
+    [NoInterfaceObject] interface BluetoothSocket {
+        readonly attribute BluetoothUUID uuid;
+        readonly attribute BluetoothSocketType protocol; 
+        readonly attribute BluetoothSocketState state;
+        readonly attribute BluetoothDevice peer;
+        [TreatNonCallableAsNull] attribute SuccessCallback? onmessage;
+        [TreatNonCallableAsNull] attribute SuccessCallback? onclose;
+        [TreatNonCallableAsNull] attribute ErrorCallback? onerror;
+        unsigned long writeData(byte[] data);
+
+
+        byte[] readData();
+
+
+        void close();
+    };
+
+    [NoInterfaceObject] interface BluetoothClass {
+        readonly attribute octet major;
+        
+        readonly attribute octet minor;
+        
+        readonly attribute unsigned short [] services ;
+        
+        boolean hasService(octet service);
+    };
+
+    [NoInterfaceObject] interface BluetoothClassDeviceMajor {
+
+        const octet MISC = 0x00;
+        const octet COMPUTER = 0x01;
+        const octet PHONE = 0x02;
+        const octet NETWORK = 0x03;
+        const octet AUDIO_VIDEO = 0x04;
+        const octet PERIPHERAL = 0x05;
+        const octet IMAGING = 0x06;
+        const octet WEARABLE = 0x07;
+        const octet TOY = 0x08;
+        const octet HEALTH = 0x09;
+        const octet UNCATEGORIZED = 0x1F;
+    };
+
+    [NoInterfaceObject] interface BluetoothClassDeviceMinor {
+        const octet COMPUTER_UNCATEGORIZED = 0x00;
+        const octet COMPUTER_DESKTOP = 0x01;
+        const octet COMPUTER_SERVER = 0x02;
+        const octet COMPUTER_LAPTOP = 0x03;
+        const octet COMPUTER_HANDHELD_PC_OR_PDA = 0x04;
+        const octet COMPUTER_PALM_PC_OR_PDA = 0x05;
+        const octet COMPUTER_WEARABLE = 0x06;
+
+        const octet PHONE_UNCATEGORIZED = 0x00;
+        const octet PHONE_CELLULAR = 0x01;
+        const octet PHONE_CORDLESS = 0x02;
+        const octet PHONE_SMARTPHONE = 0x03;
+        const octet PHONE_MODEM_OR_GATEWAY = 0x04;
+        const octet PHONE_ISDN = 0x05;
+
+        const octet AV_UNRECOGNIZED = 0x00;
+        const octet AV_WEARABLE_HEADSET = 0x01;
+        const octet AV_HANDSFREE = 0x02;
+        const octet AV_MICROPHONE = 0x04;
+        const octet AV_LOUDSPEAKER = 0x05;
+        const octet AV_HEADPHONES = 0x06;
+        const octet AV_PORTABLE_AUDIO = 0x07;
+        const octet AV_CAR_AUDIO = 0x08;
+        const octet AV_SETTOP_BOX = 0x09;
+        const octet AV_HIFI = 0x0a;
+        const octet AV_VCR = 0x0b;
+        const octet AV_VIDEO_CAMERA = 0x0c;
+        const octet AV_CAMCORDER = 0x0d;
+        const octet AV_MONITOR = 0x0e;
+        const octet AV_DISPLAY_AND_LOUDSPEAKER = 0x0f;
+        const octet AV_VIDEO_CONFERENCING = 0x10;
+        const octet AV_GAMING_TOY = 0x12;
+
+        const octet PERIPHERAL_UNCATEGORIZED = 0;
+        const octet PERIPHERAL_KEYBOARD = 0x10;
+        const octet PERIPHERAL_POINTING_DEVICE = 0x20;
+        const octet PERIPHERAL_KEYBOARD_AND_POINTING_DEVICE = 0x30;
+        const octet PERIPHERAL_JOYSTICK = 0x01;
+        const octet PERIPHERAL_GAMEPAD = 0x02;
+        const octet PERIPHERAL_REMOTE_CONTROL = 0x03;
+        const octet PERIPHERAL_SENSING_DEVICE = 0x04;
+        const octet PERIPHERAL_DEGITIZER_TABLET = 0x05;
+        const octet PERIPHERAL_CARD_READER = 0x06;
+        const octet PERIPHERAL_DIGITAL_PEN = 0x07;
+        const octet PERIPHERAL_HANDHELD_SCANNER = 0x08;
+        const octet PERIPHERAL_HANDHELD_INPUT_DEVICE = 0x09;
+
+        const octet IMAGING_UNCATEGORIZED = 0x00;
+        const octet IMAGING_DISPLAY = 0x04;
+        const octet IMAGING_CAMERA = 0x08;
+        const octet IMAGING_SCANNER = 0x10;
+        const octet IMAGING_PRINTER = 0x20;
+
+        const octet WEARABLE_WRITST_WATCH = 0x01;
+        const octet WEARABLE_PAGER = 0x02;
+        const octet WEARABLE_JACKET = 0x03;
+        const octet WEARABLE_HELMET = 0x04;
+        const octet WEARABLE_GLASSES = 0x05;
+
+        const octet TOY_ROBOT = 0x01;
+        const octet TOY_VEHICLE = 0x02;
+        const octet TOY_DOLL = 0x03;
+        const octet TOY_CONTROLLER = 0x04;
+        const octet TOY_GAME = 0x05;
+
+        const octet HEALTH_UNDEFINED = 0x00;
+        const octet HEALTH_BLOOD_PRESSURE_MONITOR = 0x01;
+        const octet HEALTH_THERMOMETER = 0x02;
+        const octet HEALTH_WEIGHING_SCALE = 0x03;
+        const octet HEALTH_GLUCOSE_METER = 0x04;
+        const octet HEALTH_PULSE_OXIMETER = 0x05;
+        const octet HEALTH_PULSE_RATE_MONITOR = 0x06;
+        const octet HEALTH_DATA_DISPLAY = 0x07;
+        const octet HEALTH_STEP_COUNTER = 0x08;
+        const octet HEALTH_BODY_COMPOSITION_ANALYZER = 0x09;
+        const octet HEALTH_PEAK_FLOW_MONITOR = 0x0a;
+        const octet HEALTH_MEDICATION_MONITOR = 0x0b;
+        const octet HEALTH_KNEE_PROSTHESIS = 0x0c;
+        const octet HEALTH_ANKLE_PROSTHESIS = 0x0d;
+    };
+
+    [NoInterfaceObject] interface BluetoothClassDeviceService {
+        const unsigned short LIMITED_DISCOVERABILITY = 0x0001;
+        const unsigned short POSITIONING = 0x0008; 
+        const unsigned short NETWORKING = 0x0010; 
+        const unsigned short RENDERING = 0x0020; 
+        const unsigned short CAPTURING = 0x0040;
+        const unsigned short OBJECT_TRANSFER = 0x0080; 
+        const unsigned short AUDIO = 0x0100;
+        const unsigned short TELEPHONY = 0x0200;
+        const unsigned short INFORMATION = 0x0400;
+    };
+
+    [NoInterfaceObject] interface BluetoothServiceHandler {
+        readonly attribute BluetoothUUID uuid;
+        readonly attribute DOMString name;
+        readonly attribute boolean isConnected;
+        [TreatNonCallableAsNull] attribute BluetoothSocketSuccessCallback? onconnect;
+
+        void unregister(optional SuccessCallback? successCallback, optional ErrorCallback? errorCallback);
+    };
+
+    [Callback=FunctionOnly, NoInterfaceObject] interface BluetoothDeviceSuccessCallback {
+        void onsuccess(BluetoothDevice device);
+    };
+
+    [Callback=FunctionOnly, NoInterfaceObject] interface BluetoothDeviceArraySuccessCallback {
+        void onsuccess(BluetoothDevice[] devices);
+    };
+
+    [Callback, NoInterfaceObject] interface BluetoothDiscoverDevicesSuccessCallback {
+        void onstarted();
+        void ondevicefound(BluetoothDevice device);
+        void ondevicedisappeared(BluetoothAddress address);
+        void onfinished(BluetoothDevice[] foundDevices);
+    };
+
+    [Callback=FunctionOnly, NoInterfaceObject] interface BluetoothSocketSuccessCallback {
+        void onsuccess(BluetoothSocket socket);
+    };
+
+    [Callback=FunctionOnly, NoInterfaceObject] interface BluetoothServiceSuccessCallback {
+        void onsuccess(BluetoothServiceHandler handler);
+    };
+};

@@ -1,0 +1,146 @@
+module Time {
+  
+  enum TimeDurationUnit { "MSECS", "SECS", "MINS", "HOURS", "DAYS" };
+  
+  [NoInterfaceObject] interface TimeManagerObject {
+    readonly attribute TimeUtil time;
+  };
+  Tizen implements TimeManagerObject;
+  
+  [NoInterfaceObject] interface TimeUtil {
+    TZDate getCurrentDateTime();
+    
+    
+    void setCurrentDateTime(TZDate dt);
+    
+    DOMString getLocalTimezone();
+    
+    DOMString[] getAvailableTimezones();
+                                           
+    DOMString getDateFormat(optional boolean? shortformat);
+    
+    DOMString getTimeFormat();
+    
+    boolean isLeapYear(long year);
+  };
+
+  [Constructor(optional Date? datetime, optional DOMString? timezone),
+   Constructor(long year, long month, long day, optional long? hours, optional long? minutes, optional long? seconds, optional long? milliseconds, optional DOMString? timezone)]
+  interface TZDate {
+    long getDate();
+    
+    void setDate(long date);
+    
+    long getDay();
+    
+    long getFullYear();
+    
+    void setFullYear(long year);
+    
+    long getHours();
+    
+    void setHours(long hours);
+    
+    long getMilliseconds();
+    
+    void setMilliseconds(long ms);
+    
+    long getMinutes();
+    
+    void setMinutes(long minutes);
+    
+    long getMonth();
+    
+    void setMonth(long month);
+    
+    long getSeconds();
+    
+    void setSeconds(long seconds);
+    
+    long getUTCDate();
+    
+    void setUTCDate(long date);
+    
+    long getUTCDay();
+    
+    long getUTCFullYear();
+    
+    void setUTCFullYear(long year);
+    
+    long getUTCHours();
+    
+    void setUTCHours(long hours);
+    
+    long getUTCMilliseconds();
+    
+    void setUTCMilliseconds(long ms);
+    
+    long getUTCMinutes();
+    
+    void setUTCMinutes(long minutes);
+    
+    long getUTCMonth();
+    
+    void setUTCMonth(long month);
+    
+    long getUTCSeconds();
+    
+    void setUTCSeconds(long seconds);
+    
+    DOMString getTimezone();
+    
+    TZDate toTimezone(DOMString tzid);
+    
+    TZDate toLocalTimezone();
+    
+    TZDate toUTC();
+    
+    TimeDuration difference(TZDate other);
+
+    boolean equalsTo(TZDate other);
+    
+    boolean earlierThan(TZDate other);
+    
+    boolean laterThan(TZDate other);
+    
+    TZDate addDuration(TimeDuration duration);
+    
+    DOMString toLocaleDateString();
+    
+    DOMString toLocaleTimeString();
+    
+    DOMString toLocaleString();
+    
+    DOMString toDateString();
+    
+    DOMString toTimeString();
+    
+    DOMString toString();
+    
+    DOMString getTimezoneAbbreviation();
+    
+    long secondsFromUTC();
+    
+    boolean isDST();
+    
+    TZDate? getPreviousDSTTransition();
+    
+    TZDate? getNextDSTTransition();
+  };
+  
+  [Constructor(long long length, optional TimeDurationUnit? unit)]
+  interface TimeDuration
+  {   
+    attribute long long length;
+    
+    attribute TimeDurationUnit unit;
+    
+    TimeDuration difference(TimeDuration other);
+    
+    boolean equalsTo(TimeDuration other);
+    
+    boolean lessThan(TimeDuration other);
+    
+    boolean greaterThan(TimeDuration other);
+  };
+};

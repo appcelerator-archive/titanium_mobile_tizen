@@ -1,0 +1,81 @@
+module Alarm {
+
+    typedef DOMString AlarmId;
+
+
+
+    [NoInterfaceObject] interface AlarmManagerObject {
+        readonly attribute AlarmManager alarm;
+    };
+    Tizen implements AlarmManagerObject;
+
+
+    [NoInterfaceObject] interface AlarmManager {
+
+        const unsigned long long PERIOD_MINUTE = 60;
+        
+
+        const unsigned long long PERIOD_HOUR = 3600;
+         
+
+        const unsigned long long PERIOD_DAY = 86400;
+        
+
+        const unsigned long long PERIOD_WEEK = 604800;
+    
+
+        void add(Alarm alarm, ApplicationId applicationId, optional DOMString? argument);
+
+
+        void add(Alarm alarm, ApplicationId applicationId, optional ApplicationService? service);
+        
+
+        void remove(AlarmId id);
+        
+
+        void removeAll();
+        
+
+        Alarm get(AlarmId id);
+
+
+        Alarm[] getAll();
+    };
+
+
+    [NoInterfaceObject] interface Alarm {
+
+        readonly attribute AlarmId? id;
+    };
+    
+    [Constructor(unsigned long long delay, optional unsigned long long? period)]
+
+    interface AlarmRelative : Alarm {
+
+        readonly attribute unsigned long long delay;
+        
+
+        readonly attribute unsigned long long? period;
+        
+
+        unsigned long long? getRemainingSeconds();
+    };
+    
+    [Constructor(Date date),
+     Constructor(Date date, ByDayValue[] daysOfTheWeek),
+     Constructor(Date date, unsigned long long period)]
+
+    interface AlarmAbsolute : Alarm {
+
+        readonly attribute Date date;
+        
+
+        readonly attribute unsigned long long? period;
+        
+
+        readonly attribute ByDayValue[] daysOfTheWeek;
+          
+
+        Date? getNextScheduledDate();
+    };
+};

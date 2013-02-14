@@ -1,0 +1,32 @@
+module LBS {
+  typedef (DOMString or Address) AbstractAddress;
+  
+  enum AddressType { "FORMATTED", "STRUCTURED" };
+
+  typedef (SimpleCoordinates or Coordinates) AbstractCoordinates;
+  
+  [NoInterfaceObject] interface LBSObject {
+    readonly attribute LBS lbs;
+  };
+  Tizen implements LBSObject;
+
+  [NoInterfaceObject] interface LBS {
+  };
+
+  [NoInterfaceObject] interface LocationServiceProvider {
+
+    readonly attribute DOMString name;
+
+    readonly attribute object metaData;
+    
+    readonly attribute DOMString attribution;
+
+    readonly attribute DOMString[] supportedOptions;
+    
+    void setOptions(object options,
+                                optional SuccessCallback? successCallback,
+                                optional ErrorCallback? errorCallback);
+     
+    readonly attribute DOMString connectivity;
+  };
+};
