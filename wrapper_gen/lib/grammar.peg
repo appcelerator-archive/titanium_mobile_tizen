@@ -1,0 +1,420 @@
+
+// PEG.js grammar for WebIDL
+
+// change this as we define more things
+start = definitions
+
+
+// white space
+space
+  = " " / "\t" / "\r" / "\n" / "\f" / ("//" [^\n]* "\n") / ("/*" ([^*] / ("*" ! "/"))* "*/")
+s
+  = space+
+//  = [ \t\r\n\f]+
+w
+  = s?
+S "whitespace"
+  = s
+
+// basic tokens
+identifier
+    =   nmstart:[A-Z_a-z] nmchars:[0-9A-Z_a-z]*
+        { return nmstart + nmchars.join(""); }
+
+octal
+    =   "0" value:[0-7]*
+        { return "0" + value.join(""); }
+
+hex
+    =   "0" x:[Xx] value:[0-9A-Fa-f]+
+        { return "0" + x + value.join(""); }
+
+decimal
+    =   numStart:[0-9] numRest:[0-9]*
+        { return numStart + numRest.join(""); }
+
+integer
+    =   neg:"-"? num:(hex / octal / decimal)
+        { return neg + num; }
+
+floatEe
+    =   e:[Ee] sign:[+-]? exp:[0-9]+
+        { return e + sign + exp.join(""); }
+
+expFloat
+    =   num:[0-9]+ fee:floatEe
+        { return num.join("") + fee; }
+
+leadFloat
+    =   num:[0-9]+ "." dec:[0-9]* fee:floatEe?
+        { return num.join("") + "." + dec.join("") + fee; }
+
+dotFloat
+    =   num:[0-9]* "." dec:[0-9]+ fee:floatEe?
+        { return num.join("") + "." + dec.join("") + fee; }
+
+float
+    =   neg:"-"? num:(leadFloat / dotFloat / expFloat / "Infinity")
+        { return neg + num; }
+
+string
+    =   '"' str:[^""]* '"'
+        { return str.join(""); }
+
+other
+    =   other:[^\t\n\r 0-9A-Z_a-z]+
+        { return other.join(""); }
+
+type
+    =   type:TypeDesc nullable:Nullable
+        {
+            if (!type.sequence) type.sequence = false;
+            type.nullable = nullable;
+            return type; }
+
+TypeDesc
+    =   type:(Sequence / ArrayType / SimpleType / UnionType)
+        { return type; }
+
+Sequence
+    =   "sequence<" type:type ">"
+        { return { sequence: true, array: false, idlType: type, members: [] }; }
+
+ArrayType
+    =   type:SimpleType "[]"
+        {
+            type.array = true;
+            return type;
+        }
+
+UnionType
+   =    "(" w members:TypeList w ")"
+        { return { idlType: "union", members: members, sequence: false, array: false }; }
+
+
+TypeList
+   =    first:type S "or" S second:type others:TypeListRest*
+        {   var ret = [first, second];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+TypeListRest
+   =    S "or" S rest:type
+        { return rest; }
+
+SimpleType
+    =   type:(PrimitiveType / UnsignedIntegerType / FloatType / ScopedName )
+        { return { sequence: false, array: false, idlType: type, members: [] }; }
+
+PrimitiveType
+    =   type:("any" / "object" / "boolean" / "octet" / "DOMString") ![A-Za-z0-9]
+        { return type; }
+
+FloatType
+    =   unr:"unrestricted"? S kind:("float" / "double")
+         { return (unr ? "unrestricted " : "") + (kind); }
+
+UnsignedIntegerType
+    =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short" / "byte")
+        { return (uns ? "unsigned " : "") + (kind.join ? kind.join("") : kind); }
+
+ScopedNameList
+    =   first:ScopedName others:ScopedNameListRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ScopedNameListRest
+    =   w "," w rest:ScopedName
+        { return rest; }
+
+ScopedName
+    =   name:(AbsoluteScopedName / RelativeScopedName)
+        { return name; }
+
+AbsoluteScopedName
+    =   "::" rel:RelativeScopedName
+        { return "::" + rel; }
+
+RelativeScopedName
+    =   name:identifier rest:ScopedNameRest*
+        { return name + rest.join(""); }
+
+ScopedNameRest
+    =   name:("::" identifier)
+        { return name.join(""); }
+
+BooleanLiteral
+    =   value:("true" / "false")
+        { return value; }
+
+Nullable
+    =   nullable:"?"?
+        { return nullable ? true : false; }
+
+ReturnType
+    =   ret:("void" / type)
+        { return ret; }
+
+// higher-level structure
+definitions
+    =   w defs:definition*
+        { return defs; }
+
+definition
+    =   def:(partialdictionary / partialinterface / callbackinterface / module / interface / dictionary / typedef / exception / implements / enum / callback )
+        { return def; }
+
+
+// partial interface definition
+partialinterface
+    =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
+
+// partial dictionary definition
+partialdictionary
+    =   "partial" S "dictionary" S name:identifier w "{"
+        w members:dictionaryMember* w "}" w ";" w
+        {
+            return {
+                type: "partialdictionary",
+                name: name,
+                members: members
+            };
+        }
+
+// callback interface definition
+callbackinterface
+    =   extAttrs:extendedAttributeList? S? "callback" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "callbackinterface", name: name, members: mem, extAttrs: extAttrs }; }
+
+
+// module definition
+module
+    =   extAttrs:extendedAttributeList? S? "module" S name:identifier w "{" w defs:definitions w "}" w ";" w
+        { return { type: "module", name: name, definitions: defs, extAttrs: extAttrs }; }
+
+
+// implements definition
+implements
+    =   extAttrs:extendedAttributeList? S? target:ScopedName S "implements" S impl:ScopedName w ";" w
+        { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; }
+
+
+// interface definition
+interface
+    =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
+        { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
+
+// enum definition
+enum
+    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w? ","? w "}" w ";" w
+        { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
+
+// callback definition
+callback
+    =   extAttrs:extendedAttributeList? S? "callback" S name:identifier w "=" w ret:ReturnType S "(" w args:Arguments w ")" w ";" w
+        { return { type: "callback", idlType: ret, name: name, args: args, extAttrs: extAttrs }; }
+
+EnumValues
+    =   first:string others:EnumValuesRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+EnumValuesRest
+    =   w "," w rest:string
+        { return rest; }
+
+
+ifInheritance
+    =   ":" w herit:ScopedNameList
+        { return herit; }
+
+ifMember
+    =   mem:(const / attrOrOp)
+        { return mem; }
+
+const
+    =   extAttrs:extendedAttributeList? S? "const" S type:type S name:identifier w "=" w value:constExpr w ";" w
+        { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
+
+constExpr
+    =   value:(BooleanLiteral / float / integer / "NaN" / "null" / "'")
+        { return value; }
+
+attrOrOp
+    =   ao:(Stringifier / Attribute / Operation)
+        { return ao; }
+
+Stringifier
+    =   "stringifier" w rest:(Attribute / OperationRest / ";")
+        {
+            if (rest === ";") return { type: "stringifier", stringifier: true };
+            else {
+                rest.stringifier = true;
+                return rest;
+            }
+        }
+
+Attribute
+    =   extAttrs:extendedAttributeList? w ro:("readonly" S)? "attribute" S type:type S name:identifier w gr:GetRaises? w sr:SetRaises? w ";" w
+        { return { type: "attribute", extAttrs: extAttrs, idlType: type, name: name, readonly: (ro ? true : false), getraises: gr, setraises: sr }; }
+
+GetRaises
+    =   "getraises" w "(" list:ScopedNameList ")"
+        { return list; }
+
+SetRaises
+    =   "setraises" w "(" list:ScopedNameList ")"
+        { return list; }
+
+Operation
+    =   extAttrs:extendedAttributeList? w quals:Qualifiers w rest:OperationRest
+        {
+            for (var k in quals) rest[k] = quals[k];
+            if (extAttrs) rest.extAttrs = extAttrs;
+            return rest;
+        }
+
+Qualifiers
+    =   w quals:("static" / Special*)
+        {   if (typeof quals == "string") return [quals];
+		    return quals; }
+
+Special
+    =   w spe:("getter" / "setter" / "creator" / "deleter" / "legacycaller") w
+        { return spe; }
+
+OperationRest
+    =   ret:ReturnType S name:identifier? w "(" w args:Arguments? w ")" w exc:Raises? w ";" w
+        { return { type: "operation", idlType: ret, name: name, arguments: (args ? args : []), raises: exc }; }
+
+Arguments
+    =   first:Argument others:ArgumentsRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ArgumentsRest
+    =   w "," w rest:Argument
+        { return rest; }
+
+Argument
+    =   extAttrs:extendedAttributeList? w "in"? w opt:("optional")? w type:type ell:"..."? S name:identifier
+        { return { name: name, type: type, variadic: (ell ? true : false), optional: (opt ? true : false), extAttrs: extAttrs }; }
+
+Raises
+    =   "raises" S "(" w list:ScopedNameList w ")"
+        { return list; }
+
+// dictionary definition
+dictionary
+    =   "dictionary" S name:identifier w superclass:ifInheritance? w "{"
+            w members:dictionaryMember* w "}" w ";" w
+            {
+                return {
+                    type: "dictionary",
+                    name: name,
+                    inheritance: superclass,
+                    members: members
+                };
+            }
+
+dictionaryMember
+    =    extAttrs:extendedAttributeList? w type:type S name:identifier
+         w defaultValue:defaultValue? w ";" w
+         {
+             return {
+                 type: type,
+                 name: name,
+                 defaultValue: defaultValue
+             };
+         }
+
+
+defaultValue
+    =   "=" w value:(constExpr / string)
+        { return value; }
+
+
+// typedef definition
+typedef
+    =   "typedef" S type:type S name:identifier w ";" w
+        { return { type: 'typedef', name: name, idlType: type }; }
+
+// exception definition
+exception
+    =   extAttrs:extendedAttributeList? w "exception" S name:identifier w "{" w mem:exMember* w "}" w ";" w
+        { return { type: 'exception', name: name, members: mem, extAttrs: extAttrs }; }
+
+exMember
+    =   mem:(const / field)
+        { return mem; }
+
+field
+    =   extAttrs:extendedAttributeList? S? type:type S name:identifier w ";" w
+        { return { type: "field", extAttrs: extAttrs, idlType: type, name: name }; }
+
+
+// extended attributes
+extendedAttributeList
+    =   w "[" w ea:ExtAttrs w "]" w
+        { return ea; }
+
+ExtAttrs
+    =   first:ExtAttr others:ExtAttrsRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ExtAttrsRest
+    =   w "," w rest:ExtAttr
+        { return rest; }
+
+ExtAttr
+    =   ea:(ExtAttrArgList / ExtAttrNamedArgList / ExtAttrNameValue / ExtAttrNoArg)
+        { return ea; }
+
+ExtAttrNoArg
+    =   name:identifier
+        {return { name: name }; }
+
+ExtAttrNameValue
+    =   name:identifier w "=" w value:ScopedName
+        {return { name: name, value: value }; }
+
+ExtAttrNamedArgList
+    =   name:identifier w "=" w value:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, value: value, arguments: args }; }
+
+ExtAttrNamedArgList
+    =   name:identifier w "=" w value:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, value: value, arguments: args }; }
+
+ExtAttrArgList
+    =   name:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, arguments: args }; }
+
+
+// these are the definitions as per spec, but they give me grief so instead we have the most common
+// ExtAttr types predefined — it might be saner in the long run anyway
+// ExtAttr
+//     =   ( "(" inParen:ExtAttr* ")" ) / ( "[" inSq:ExtAttr* "]" ) / ( "{" inCurl:ExtAttr* "}" ) / other:Other*
+//         {
+//             if (typeof inParen !== "undefined") return { type: "paren", content: inParen };
+//             if (typeof inSq !== "undefined") return { type: "square", content: inSq };
+//             if (typeof inCurl !== "undefined") return { type: "curly", content: inCurl };
+//             if (typeof other !== "undefined") return { type: "other", content: other };
+//         };
+//
+// // this is too greedy
+// Other
+//     =   content:("," / "..." / "::" / ":" / ";" / "<" / ">" / "=" / "?" /
+//                  "false" / "true" / "object" / "any" / "attribute" / "boolean" / "caller" / "const" /
+//                  "creator" / "deleter" / "double" / "exception" / "float" / "getraises" / "setraises" /
+//                  "getter" / "setter" / "implements" / "in" / "interface" / "long" / "module" / "octet" /
+//                  "omittable" / "optional" / "raises" / "sequence" / "short" / "DOMString" / "stringifier" /
+//                  "typedef" / "unsigned" / "void" / float / integer / identifier / string / other
+//                  )
+//         { return content; }

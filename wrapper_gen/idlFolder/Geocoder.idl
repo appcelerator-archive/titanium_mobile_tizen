@@ -1,0 +1,56 @@
+module Geocoder {
+
+  [NoInterfaceObject] interface GeocoderObject {
+    readonly attribute GeocoderServiceManager geocoder;
+  };
+  LBS implements GeocoderObject;
+
+  [NoInterfaceObject] interface GeocoderServiceManager {
+    GeocoderProvider getDefaultProvider();
+
+    GeocoderProvider[] getProviders();
+  };
+
+  [NoInterfaceObject] interface GeocoderProvider : LocationServiceProvider {
+
+    void geocode(AbstractAddress address,
+                                GeocodeResultArraySuccessCallback successCallback,
+                                optional ErrorCallback? errorCallback,
+                                optional GeocodeOptions? options);
+
+    void reverseGeocode(AbstractCoordinates coordinates,
+                                                AbstractAddressArraySuccessCallback  successCallback,
+                                                optional ErrorCallback? errorCallback,
+                                                optional ReverseGeocodeOptions? options);
+
+  };
+
+
+  dictionary GeocodeOptions { 
+    SortMode sortMode;
+
+    unsigned long maxResults = 0;
+  };
+
+  [NoInterfaceObject] interface GeocodeResult {
+    readonly attribute SimpleCoordinates coordinates;
+
+    DOMString toGeoJSON();
+  };
+
+  dictionary ReverseGeocodeOptions {
+    SortMode sortMode;
+
+    AddressType resultType = "FORMATTED";
+
+    unsigned long maxResults = 0;
+  };
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface AbstractAddressArraySuccessCallback {
+    void onsuccess(AbstractAddress[] results);
+  };
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface GeocodeResultArraySuccessCallback {
+    void onsuccess(GeocodeResult[] results);
+  };
+};

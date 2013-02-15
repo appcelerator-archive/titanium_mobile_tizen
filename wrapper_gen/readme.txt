@@ -1,0 +1,1 @@
+To generate Titanium stubs for Tizen Device API, run makefile.js

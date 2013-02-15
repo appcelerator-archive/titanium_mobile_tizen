@@ -1,0 +1,90 @@
+module Call {
+    [NoInterfaceObject] interface CallApiObject {
+        readonly attribute CallManager call;
+    };
+    
+    Tizen implements CallApiObject;
+
+    [NoInterfaceObject] interface RemoteParty {
+        readonly attribute DOMString? remoteParty;
+
+        readonly attribute DOMString? displayName;
+
+        readonly attribute ContactRef? contactRef;
+
+    };
+
+    [NoInterfaceObject] interface CallHistoryEntry {
+    
+        readonly attribute DOMString uid;
+
+        readonly attribute AccountServiceId? serviceId;
+
+        readonly attribute DOMString callType;
+
+        readonly attribute DOMString[]? tags;
+
+        readonly attribute RemoteParty[] remoteParties;
+
+        readonly attribute RemoteParty? forwardedFrom;
+
+        readonly attribute Date startTime;
+
+        readonly attribute unsigned long duration;
+
+        readonly attribute DOMString? endReason;
+
+        attribute DOMString direction;
+
+        readonly attribute DOMString[]? recording;
+
+        readonly attribute unsigned long cost;
+
+        attribute DOMString? currency;
+    };
+
+    [NoInterfaceObject] interface CallHistory {
+
+        void find(CallHistoryEntryArraySuccessCallback successCallback,
+                  optional ErrorCallback? errorCallback,
+                  optional AbstractFilter? filter,
+                  optional SortMode? sortMode,
+                  optional unsigned long? limit,
+                  optional unsigned long? offset);
+
+        void remove(CallHistoryEntry entry);
+
+        void removeBatch(CallHistoryEntry[] entries,
+                         optional SuccessCallback? successCallback,
+                         optional ErrorCallback? errorCallback);
+
+        void removeAll(optional SuccessCallback? successCallback,
+                       optional ErrorCallback? errorCallback);
+
+        void deleteRecording(CallHistoryEntry historyEntry,
+                             optional SuccessCallback? successCallback,
+                             optional ErrorCallback? errorCallback);
+
+        long addListener(CallHistoryChangeCallback observer);
+
+        void removeListener(long handle);
+    };
+
+    [Callback, NoInterfaceObject] interface CallHistoryEntryArraySuccessCallback {
+        void onsuccess(CallHistoryEntry[] entries);
+    };
+
+    [Callback, NoInterfaceObject]
+    interface CallHistoryChangeCallback {
+        void onadded(CallHistoryEntry[] newItems);
+
+        void onchanged(CallHistoryEntry[] changedItems);
+    };
+
+    [NoInterfaceObject] interface CallManager {
+        readonly attribute CallHistory history;
+
+        boolean isCallInProgress();
+
+    };
+};
