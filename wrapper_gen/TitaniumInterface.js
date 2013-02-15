@@ -120,19 +120,22 @@ exports.TitaniumInterface = (function(){
     var result = {
         folderName: '',
         dA : null,
-        init: function(jsonObject){
+        genStub: function(jsonObject){
             this.folderName = jsonObject[0].name;
             fs.mkdir(options.jsStubsFolder+jsonObject[0].name);
             this.dA = jsonObject[0].definitions;
             var view = '';
             view += 'define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {\n';
             view +=this.implementation(jsonObject[0].definitions);
-            view +='});'
-            return view;
+            view +='});';
+            fs.writeFileSync(options.jsStubsFolder + jsonObject[0].name.replace(/\s/g,'') + '.js', view);
         },
+
+
         implementation: function(){
             var name = '';
             var index = null;
+
             //main loop for saparete differents parts 
             for(var i=0, len = this.dA.length; i<len; i++) {
                 if(this.dA[i] && this.dA[i].type == 'implements') {
@@ -154,8 +157,9 @@ exports.TitaniumInterface = (function(){
             methods.type = 'sync'
             methods.methods = '';
             return imp;
-            
         },
+
+
         getVaribles: function(){
             var view = '';
             var vars = [];
@@ -177,6 +181,8 @@ exports.TitaniumInterface = (function(){
             })();    
             return view;
         },
+
+
         getConstants: function(){
             var view = '';
             var constants = [];
@@ -216,6 +222,8 @@ exports.TitaniumInterface = (function(){
             })();
             return view;
         },
+
+
         findImpObject: function(name){
             var names = [];
             for(var i=0, len = this.dA.length; i<len; i++) {
@@ -227,6 +235,8 @@ exports.TitaniumInterface = (function(){
             }
             return names;
         },
+
+
         getMainInterfase: function(name){
             var view = '';
             for(var i=0, len = this.dA.length; i<len; i++) {
@@ -237,6 +247,8 @@ exports.TitaniumInterface = (function(){
             }
             return view;
         },
+
+
         getCreaters: function(){
             var view = '';
             for(var i=0, len = this.dA.length; i<len; i++) {
@@ -270,6 +282,8 @@ exports.TitaniumInterface = (function(){
             }
             return view;
         },
+
+
         createBaseInterface: function(name, inheritance, interfaceO){
             //create view
             var folderName = this.folderName+'/';
@@ -292,8 +306,9 @@ exports.TitaniumInterface = (function(){
             this.pathes.add(options.pytonPath + folderName + name);
             this.methods += methods.get();
             methods.methods = '';
-            
         },
+
+
         pathes: {
             pathes: '',
             add: function(path) {
@@ -302,7 +317,9 @@ exports.TitaniumInterface = (function(){
             get: function(){
                 return this.pathes;
             }
-        }, 
+        },
+
+
         methods:''
     }
     return result;
