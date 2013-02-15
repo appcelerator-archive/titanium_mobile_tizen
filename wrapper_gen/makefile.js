@@ -24,20 +24,21 @@ function ParseFiles(){
         var self = this;
         var code = parser.toSource();
         
-        //create js parcer
+        //create js parser
         fs.writeFile(this.options.jsParcerFolder + 'WebIDLParser.js', 'exports.Parser = ' + code, 
         
-        //callback when js parcer is ready
+        //callback when js parser is ready
         function(){
             fs.mkdirSync('output', 0755);
 			fs.mkdirSync('output/jsStubs', 0755);
-            //when js parser created we can use this modul
+            //when js parser created we can use this module
             idlparser = require(self.options.jsParcerFolder + 'WebIDLParser');  
             
             //create all js stubs
             self.createAllStubs(self.options.idlFolder);
         });
     };
+
     //create all stubs from folder
     var ti = require('./TitaniumInterface');
     
@@ -54,18 +55,24 @@ function ParseFiles(){
                     console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
                 } 
             }
+
+            //Generate auxiliary files
             fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
-            
             fs.writeFileSync(this.options.jsStubsFolder + 'methods.txt', ti.TitaniumInterface.methods);
         } else {
             console.log('Folder with .idl files is empty');
         }
     };
+
     //create one file
     this.createStub = function(name){
         var idltext = fs.readFileSync(this.options.idlFolder + name + this.options.idlExtension, 'utf8');
         var realObject = idlparser.Parser.parse(idltext);
-        fs.writeFileSync(this.options.jsStubsFolder + name.replace(/\s/g,'') + '.js', ti.TitaniumInterface.init(realObject));
+
+        // Write out the resulting stub
+        ti.TitaniumInterface.genStub(realObject);
+
+        // Auxiliary information for dependencies
         ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
     };
 }
