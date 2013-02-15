@@ -53,7 +53,6 @@ function ParseFiles(){
                     lastStub = true;
                 }
                 try {
-                    console.log('Create stub');
                     this.createStub(name);
                 } catch(err) {
                     console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
