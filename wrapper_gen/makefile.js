@@ -9,7 +9,8 @@ function ParseFiles(){
     
     
     var idlparser;
-    
+    var lastStub = false;
+
     this.options = {
         idlExtension: '.idl',
         jsExtension: '.js',
@@ -48,8 +49,11 @@ function ParseFiles(){
         if(idlFiles.length > 0) {
             for(var i = 0, len = idlFiles.length; i<len; i++ ) {
                 var name = idlFiles[i].replace(this.options.idlExtension, '');
-                
+                if(i == len-1) {
+                    lastStub = true;
+                }
                 try {
+                    console.log('Create stub');
                     this.createStub(name);
                 } catch(err) {
                     console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
@@ -57,8 +61,7 @@ function ParseFiles(){
             }
 
             //Generate auxiliary files
-            fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
-            fs.writeFileSync(this.options.jsStubsFolder + 'methods.txt', ti.TitaniumInterface.methods);
+            fs.writeFileSync('output/' + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
@@ -66,11 +69,10 @@ function ParseFiles(){
 
     //create one file
     this.createStub = function(name){
-        var idltext = fs.readFileSync(this.options.idlFolder + name + this.options.idlExtension, 'utf8');
-        var realObject = idlparser.Parser.parse(idltext);
-
+        var idlText = fs.readFileSync(this.options.idlFolder + name + this.options.idlExtension, 'utf8');
+        var realObject = idlparser.Parser.parse(idlText);
         // Write out the resulting stub
-        ti.TitaniumInterface.genStub(realObject);
+        ti.TitaniumInterface.genStub(realObject, lastStub);
 
         // Auxiliary information for dependencies
         ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
