@@ -157,8 +157,8 @@ function copymobilWebToTizen(finish){
 			copyFileSync(path.join(titaniumTizenDir, 'titanium', 'Ti.js'), path.join(sdkRoot, 'tizen', 'titanium', 'Ti.js'));
 
 			//remove tizen/templates/app/default/resources/mobileweb directory		
-			console.log('[DEBUG]rmdirSyncRecursive from ' + path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'));
-			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
+			//console.log('[DEBUG]rmdirSyncRecursive from ' + path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'));
+			//wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb'), false);
 			
 			//config.tmpl template for 
 			copyFileSync(path.join(titaniumTizenDir, 'templates', 'app', 'config.tmpl'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'config.tmpl'));
