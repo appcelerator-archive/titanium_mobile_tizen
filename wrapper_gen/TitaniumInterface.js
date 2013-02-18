@@ -96,7 +96,7 @@ exports.TitaniumInterface = (function(){
 
 						operations+=argsProto;
 						operations+=') {\n';
-						operations+= '			return tizen.' + list[k].name + '('+argsTizen+')\n';
+						operations+= '			return tizen.' + list[k].name + '('+argsTizen+');\n';
 						operations+=(!list[k+1] && lastComma)?'		}\n':'		},\n\n';
 						break;
 					case 'attribute':
