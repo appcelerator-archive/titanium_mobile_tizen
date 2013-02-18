@@ -265,7 +265,6 @@ function build(logger, config, cli, finished) {
 	this.tiapp.tizen = {
 		appid : randomString(10)
 	};
-//	this.tiapp.tizen.appid = randomString(10);
 
 	this.addTizenToTiAppXml();
 
@@ -912,7 +911,7 @@ build.prototype = {
 		
 		var file = path.join(this.projectResDir, this.tiapp.icon);
 		if (!/\.(png|jpg|gif)$/.test(file) || !afs.exists(file)) {
-			file = path.join(this.projectResDir, 'mobileweb', 'appicon.png');
+			file = path.join(this.projectResDir, 'tizen', 'appicon.png');
 		}
 		
 		if (afs.exists(file)) {
