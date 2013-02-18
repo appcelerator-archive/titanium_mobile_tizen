@@ -22,19 +22,16 @@ module Alarm {
         
 
         const unsigned long long PERIOD_WEEK = 604800;
-    
-
-        void add(Alarm alarm, ApplicationId applicationId, optional DOMString? argument);
 
 
-        void add(Alarm alarm, ApplicationId applicationId, optional ApplicationService? service);
-        
+        void add(Alarm alarm, ApplicationId applicationId, optional ApplicationControl? appControl);
+
 
         void remove(AlarmId id);
-        
+
 
         void removeAll();
-        
+
 
         Alarm get(AlarmId id);
 
@@ -47,7 +44,7 @@ module Alarm {
 
         readonly attribute AlarmId? id;
     };
-    
+
     [Constructor(unsigned long long delay, optional unsigned long long? period)]
 
     interface AlarmRelative : Alarm {
@@ -56,11 +53,11 @@ module Alarm {
         
 
         readonly attribute unsigned long long? period;
-        
+
 
         unsigned long long? getRemainingSeconds();
     };
-    
+
     [Constructor(Date date),
      Constructor(Date date, ByDayValue[] daysOfTheWeek),
      Constructor(Date date, unsigned long long period)]
@@ -68,13 +65,13 @@ module Alarm {
     interface AlarmAbsolute : Alarm {
 
         readonly attribute Date date;
-        
+
 
         readonly attribute unsigned long long? period;
-        
+
 
         readonly attribute ByDayValue[] daysOfTheWeek;
-          
+
 
         Date? getNextScheduledDate();
     };
