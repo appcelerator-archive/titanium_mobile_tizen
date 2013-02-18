@@ -3,7 +3,7 @@ exports.TitaniumInterface = (function(){
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
-		pytonPath: 'Ti/Tizen/Ti.Tizen/'
+		pytonPath: 'Ti/Tizen/'
 		
 	};
 	function loop(func, list) {
@@ -57,21 +57,13 @@ exports.TitaniumInterface = (function(){
 		}
 		return res;
 	}
-	var methods = {
-		methods: '',
-		type: 'sync ',
-		add: function(methods){
-			this.methods+= methods;
-		},
-		get: function(){
-			return this.methods;
-		}
-	}
-	function viewForInterface(interfaceO, lastComma){
+
+	function viewForInterface(interfaceO, lastComma, main){
 		var result = '';
 		var constants = '';
 		var operations = '';
-		var attributes = '';
+		var readOnlyAttr = '';
+		var attr = '';
 		var list = interfaceO.members; 
 		if(list.length>0) {
 			for(var k = 0, l = list.length; k<l; k++) {
@@ -96,12 +88,31 @@ exports.TitaniumInterface = (function(){
 
 						operations+=argsProto;
 						operations+=') {\n';
-						operations+= '			return tizen.' + list[k].name + '('+argsTizen+');\n';
+
+						if(main) {//For main classes
+							operations+= '			return tizen.' + list[k].name + '('+argsTizen+');\n';
+						} else {//For sub classes
+							operations+= '			return this.obj.' + list[k].name + '('+argsTizen+');\n';
+						}
 						operations+=(!list[k+1] && lastComma)?'		}\n':'		},\n\n';
 						break;
 					case 'attribute':
-						attributes+='		' + list[k].name + ': '+ checkValue(list[k].idlType);
-						attributes+=(!list[k+1] && lastComma)? ' //' + list[k].idlType.idlType + '\n':',' + ' //' + list[k].idlType.idlType + '\n';
+						if(list[k].readonly) {
+							readOnlyAttr +='			' + list[k].name + ': {\n';//+ checkValue(list[k].idlType);
+							readOnlyAttr +='				get: function() {\n';
+							readOnlyAttr +='					return this._obj.' + list[k].name+ ';\n';
+							readOnlyAttr +='				}\n';
+							readOnlyAttr +='			},\n';
+						} else {
+							attr +='			' + list[k].name + ': {\n';//+ checkValue(list[k].idlType);
+							attr +='				get: function() {\n';
+							attr +='					return this._obj.' + list[k].name+ ';\n';
+							attr +='				},\n';
+							attr +='				set: function(value) {\n';
+							attr +='					this._obj.' + list[k].name+ ' = value;\n';
+							attr +='				}\n';
+							attr +='			},\n';
+						}
 						break;
 					case 'const':
 						constants+='			' + list[k].name + ': '+ list[k].value;
@@ -115,9 +126,16 @@ exports.TitaniumInterface = (function(){
 			result += '		constants: {\n'
 			result += constants;
 			result += '		},\n\n';
-		}
-		if(attributes) {
-			result += attributes;
+		};
+		if(readOnlyAttr) {
+			result += '		constants: {\n'
+			result += readOnlyAttr;
+			result += '		},\n\n';
+		};
+		if(attr) {
+			result += '		properties: {\n'
+			result += attr;
+			result += '		},\n\n';
 		}
 		if(operations) {
 			result += operations;
@@ -155,8 +173,8 @@ exports.TitaniumInterface = (function(){
 			var imp = '';
 			imp +=this.getVaribles();
 			imp += '	return lang.setObject("Ti.Tizen.'+modName[1]+'", Evented, {\n\n';
-			imp+= this.getMainInterfase(modName[0]);
-			imp+= this.getCreaters();
+			imp+= this.getMainInterface(modName[0]);
+			imp+= this.getCreators();
 			imp += '	});\n';
 			return imp;
 		},
@@ -197,11 +215,11 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		getMainInterfase: function(name){
+		getMainInterface: function(name){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface' && this.dA[i].name == name) {
-					view = viewForInterface(this.dA[i], false);
+					view = viewForInterface(this.dA[i], false, true);
 					this.dA.splice(i, 1);
 				}
 			}
@@ -209,7 +227,7 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		getCreaters: function(){
+		getCreators: function(){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface') {
@@ -252,24 +270,22 @@ exports.TitaniumInterface = (function(){
 			//create view
 			var folderName = this.folderName+'/';
 			var view = 'define(["Ti/_/declare"'
-			inheritance.length == 0 && (view+=', "Ti/_/Evented"');
-			loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
+			//inheritance.length == 0 && (view+=', "Ti/_/Evented"');
+			//loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
 			view+= '], function(declare'
-			inheritance.length == 0 && (view+=', Evented');
-			loop(function(i){view+=', '+inheritance[i];}, inheritance);
+			//inheritance.length == 0 && (view+=', Evented');
+			//loop(function(i){view+=', '+inheritance[i];}, inheritance);
 			view+= '){\n'
-			view+= '	return declare("Ti.Tizen.'+ name+'", ';
-			inheritance.length == 0 && (view+='Evented, ');
-			loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", null, ';
+			//inheritance.length == 0 && (view+='Evented, ');
+			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
 			view+= '{\n';
-			view+=viewForInterface(interfaceO, true);
+			view+=viewForInterface(interfaceO, true, false);
 			view+= '	});\n';
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
 			this.pathes.add(options.pytonPath + folderName + name);
-			this.methods += methods.get();
-			methods.methods = '';
 		},
 
 
@@ -281,10 +297,7 @@ exports.TitaniumInterface = (function(){
 			get: function(){
 				return this.pathes;
 			}
-		},
-
-
-		methods:''
+		}
 	}
 	return result;
 })()
