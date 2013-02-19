@@ -41,9 +41,38 @@ function ParseFiles(){
 
     //create all stubs from folder
     var ti = require('./TitaniumInterface');
+	
+	this.getAllPrimitives = function(folder) {
+		var files = fs.readdirSync(folder),
+			i = 0,
+			filesCount = files.length;
+
+		if (filesCount > 0) {
+			for (; i < filesCount; i++) {
+				
+			}
+		}
+	}
     
     this.createAllStubs = function(folder){
         var idlFiles = fs.readdirSync(folder);
+
+        if(idlFiles.length > 0) {
+            for(var i = 0, len = idlFiles.length; i<len; i++ ) {
+                var name = idlFiles[i].replace(this.options.idlExtension, '');
+                
+                try {
+                    this.createStub(name, true); // if second parameter = true then we'll save json obhects to array
+                } catch(err) {
+                    console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
+                } 
+            }
+
+            //Generate auxiliary files
+            fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+        } else {
+            console.log('Folder with .idl files is empty');
+        }
         
         if(idlFiles.length > 0) {
             for(var i = 0, len = idlFiles.length; i<len; i++ ) {
@@ -56,23 +85,31 @@ function ParseFiles(){
                 } 
             }
 
+			console.log('Primitives:');
+			console.log(ti.TitaniumInterface.primitives.join('    '));
+			
             //Generate auxiliary files
-            fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+           // fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
     };
-
+	
     //create one file
-    this.createStub = function(name){
+    this.createStub = function(name, saveFlag /*if true - save json objects*/){
         var idltext = fs.readFileSync(this.options.idlFolder + name + this.options.idlExtension, 'utf8');
         var realObject = idlparser.Parser.parse(idltext);
 
-        // Write out the resulting stub
-        ti.TitaniumInterface.genStub(realObject);
+		if (saveFlag) {
+			ti.TitaniumInterface.jsonObjects.push(realObject);
+			ti.TitaniumInterface.getPrimitives(realObject);
+		} else {
+			// Write out the resulting stub
+			ti.TitaniumInterface.genStub(realObject);
 
-        // Auxiliary information for dependencies
-        ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
+			// Auxiliary information for dependencies
+			ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
+		}
     };
 }
 

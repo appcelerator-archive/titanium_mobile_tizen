@@ -163,6 +163,7 @@ function copymobilWebToTizen(finish){
 			wrench.copyDirSyncRecursive(path.join(titaniumTizenDir,'templates', 'app', 'default', 'Resources', 'tizen'), path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'tizen'));
 
 			copyFileSync(path.join(titaniumTizenDir, 'src', 'loader.js'), path.join(sdkRoot, 'tizen', 'src', 'loader.js'));
+			copyFileSync(path.join(titaniumTizenDir, 'src', 'index.html'), path.join(sdkRoot, 'tizen', 'src', 'index.html'));
 
 			copyDirSyncRecursiveEx(path.join(titaniumTizenDir, 'dependencyAnalyzer'), path.join(sdkRoot, 'tizen', 'dependencyAnalyzer'));
 
@@ -175,6 +176,9 @@ function copymobilWebToTizen(finish){
 			//Tizen does not support Facebook, remove module 
 			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'titanium', 'Ti','Facebook'), false);
 			fs.unlinkSync(path.join(sdkRoot, 'tizen', 'titanium', 'Ti','Facebook.js'));
+
+			//remove Apple specific resources, we using modified index.html so may remove this directory
+			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'templates', 'app', 'default', 'Resources', 'mobileweb', 'apple_startup_images'), false);
 
 			finish();
 		}
