@@ -100,7 +100,7 @@ exports.TitaniumInterface = (function(){
 						operations+=') {\n';
 
 						if(main) {//For main classes
-							var returnType = list[k].type.idlType.idlType;
+						//	var returnType = list[k].type.idlType.idlType;
 							operations+= '			return tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+');\n';
 						} else {//For sub classes
 							operations+= '			return this._obj.' + list[k].name + '('+argsTizen+');\n';
@@ -354,7 +354,7 @@ exports.TitaniumInterface = (function(){
 					view += '				}';
 				}
 				view += ' else {\n';
-				view += '					Ti.API.error(\'Constructor with given parameters doesn\'t exists\');\n'
+				view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
 				view += '				}\n';
 			} else {
 				view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
