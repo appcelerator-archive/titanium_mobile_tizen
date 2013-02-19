@@ -25,6 +25,8 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 
 	//in Tizen 2.0 wifi related api cannot be accesable via tizen.systeminfo.addPropertyValueChangeListener('WifiNetwork'
 	// and tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback
+	// probly may be implemented by usint "WIFI_NETWORK" instead of 'WifiNetwork'
+
 	// Do we need to unsubsctibe? Do we need ot call it anywhere?
 	//function deInitPlatformData(){
 	//	if (wifiNetworkPropertyValueChangeListenerId != null) 
