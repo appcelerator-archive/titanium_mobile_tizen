@@ -171,6 +171,10 @@ function copymobilWebToTizen(finish){
 			//signer app for tizen
 			fs.mkdirSync(path.join(sdkRoot, 'tizen', 'utils'));
 			copyFileSync(path.join(titaniumTizenDir, 'utils', 'signapp.jar'), path.join(sdkRoot, 'tizen', 'utils', 'signapp.jar'));
+			
+			//Tizen does not support Facebook, remove module 
+			wrench.rmdirSyncRecursive(path.join(sdkRoot, 'tizen', 'titanium', 'Ti','Facebook'), false);
+			fs.unlinkSync(path.join(sdkRoot, 'tizen', 'titanium', 'Ti','Facebook.js'));
 
 			finish();
 		}
