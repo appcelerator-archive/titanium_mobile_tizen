@@ -174,8 +174,8 @@ exports.TitaniumInterface = (function(){
 			}
 			var modName = this.findImpObject(name);
 			var imp = '';
-			imp +=this.getVaribles();
-			imp += '	return lang.setObject("Ti.Tizen.' + this.folderName + '", Evented, {\n\n';
+			//imp +=this.getVaribles();
+			imp += '	return lang.setObject("Ti.Tizen.' + this.folderName + '", {\n\n';
 			imp+= this.getMainInterface(modName[0]);
 			imp+= this.getCreators();
 			imp += '	});\n';
