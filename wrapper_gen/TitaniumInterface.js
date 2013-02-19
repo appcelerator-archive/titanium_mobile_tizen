@@ -1,11 +1,15 @@
 exports.TitaniumInterface = (function(){
 	var fs = require('fs');
+
+	var namespace = '';
+
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
-		pytonPath: 'Ti/Tizen/Ti.Tizen/'
+		pytonPath: 'Ti/Tizen/'
 		
 	};
+
 	function loop(func, list) {
 		if(list && list.length > 0) {
 			for(var i=0, len = list.length; i<len; i++) {
@@ -57,22 +61,14 @@ exports.TitaniumInterface = (function(){
 		}
 		return res;
 	}
-	var methods = {
-		methods: '',
-		type: 'sync ',
-		add: function(methods){
-			this.methods+= methods;
-		},
-		get: function(){
-			return this.methods;
-		}
-	}
-	function viewForInterface(interfaceO, lastComma){
+
+	function viewForInterface(interfaceO, lastComma, main){
 		var result = '';
 		var constants = '';
 		var operations = '';
-		var attributes = '';
-		var list = interfaceO.members; 
+		var readOnlyAttr = '';
+		var attr = '';
+		var list = interfaceO.members;
 		if(list.length>0) {
 			for(var k = 0, l = list.length; k<l; k++) {
 				switch(list[k].type) {
@@ -88,7 +84,6 @@ exports.TitaniumInterface = (function(){
 							//with comments for attributes
 							argsProto += arg[h].name + ' /*'+arg[h].type.idlType+'*/';
 							argsProto += (arg[h+1])?', ':'';
-
 							//without comments for attributes
 							argsTizen+=arg[h].name;
 							argsTizen+=(arg[h+1])?', ':'';
@@ -96,12 +91,31 @@ exports.TitaniumInterface = (function(){
 
 						operations+=argsProto;
 						operations+=') {\n';
-						operations+= '			return tizen.' + list[k].name + '('+argsTizen+');\n';
+
+						if(main) {//For main classes
+							operations+= '			return tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+');\n';
+						} else {//For sub classes
+							operations+= '			return this._obj.' + list[k].name + '('+argsTizen+');\n';
+						}
 						operations+=(!list[k+1] && lastComma)?'		}\n':'		},\n\n';
 						break;
 					case 'attribute':
-						attributes+='		' + list[k].name + ': '+ checkValue(list[k].idlType);
-						attributes+=(!list[k+1] && lastComma)? ' //' + list[k].idlType.idlType + '\n':',' + ' //' + list[k].idlType.idlType + '\n';
+						if(list[k].readonly) {
+							readOnlyAttr +='			' + list[k].name + ': {\n';//+ checkValue(list[k].idlType);
+							readOnlyAttr +='				get: function() {\n';
+							readOnlyAttr +='					return this._obj.' + list[k].name+ ';\n';
+							readOnlyAttr +='				}\n';
+							readOnlyAttr +='			},\n';
+						} else {
+							attr +='			' + list[k].name + ': {\n';//+ checkValue(list[k].idlType);
+							attr +='				get: function() {\n';
+							attr +='					return this._obj.' + list[k].name+ ';\n';
+							attr +='				},\n';
+							attr +='				set: function(value) {\n';
+							attr +='					this._obj.' + list[k].name+ ' = value;\n';
+							attr +='				}\n';
+							attr +='			},\n';
+						}
 						break;
 					case 'const':
 						constants+='			' + list[k].name + ': '+ list[k].value;
@@ -115,9 +129,16 @@ exports.TitaniumInterface = (function(){
 			result += '		constants: {\n'
 			result += constants;
 			result += '		},\n\n';
-		}
-		if(attributes) {
-			result += attributes;
+		};
+		if(readOnlyAttr) {
+			result += '		constants: {\n'
+			result += readOnlyAttr;
+			result += '		},\n\n';
+		};
+		if(attr) {
+			result += '		properties: {\n'
+			result += attr;
+			result += '		},\n\n';
 		}
 		if(operations) {
 			result += operations;
@@ -129,11 +150,11 @@ exports.TitaniumInterface = (function(){
 		folderName: '',
 		dA : null,
 		genStub: function(jsonObject){
-			this.folderName = jsonObject[0].name;
+			this.folderName = namespace = jsonObject[0].name;
 			fs.mkdir(options.jsStubsFolder+jsonObject[0].name);
 			this.dA = jsonObject[0].definitions;
 			var view = '';
-			view += 'define(["Ti/_/Evented", "Ti/_/lang"], function(Evented, lang) {\n';
+			view += 'define(["Ti/_/lang"], function(lang) {\n';
 			view +=this.implementation(jsonObject[0].definitions);
 			view +='});';
 			fs.writeFileSync(options.jsStubsFolder + jsonObject[0].name.replace(/\s/g,'') + '.js', view);
@@ -154,9 +175,9 @@ exports.TitaniumInterface = (function(){
 			var modName = this.findImpObject(name);
 			var imp = '';
 			imp +=this.getVaribles();
-			imp += '	return lang.setObject("Ti.Tizen.'+modName[1]+'", Evented, {\n\n';
-			imp+= this.getMainInterfase(modName[0]);
-			imp+= this.getCreaters();
+			imp += '	return lang.setObject("Ti.Tizen.' + this.folderName + '", Evented, {\n\n';
+			imp+= this.getMainInterface(modName[0]);
+			imp+= this.getCreators();
 			imp += '	});\n';
 			return imp;
 		},
@@ -197,11 +218,11 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		getMainInterfase: function(name){
+		getMainInterface: function(name){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface' && this.dA[i].name == name) {
-					view = viewForInterface(this.dA[i], false);
+					view = viewForInterface(this.dA[i], false, true);
 					this.dA.splice(i, 1);
 				}
 			}
@@ -209,36 +230,52 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		getCreaters: function(){
+		getCreators: function(){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface') {
-					var argsProto = '';
-					var argsTizen = '';
-					for(var q=0, s = this.dA[i].extAttrs.length; q<s; q++) {
+					var count = 0;
+					var countOfArgs = 0;
+					var cP = '';
+					var q;
+					var lenExtAttrs = this.dA[i].extAttrs.length;
+
+					for(q=0; q<lenExtAttrs; q++) {
+						if(this.dA[i].extAttrs[q].name == 'Constructor') {
+							count++;
+							(countOfArgs < this.dA[i].extAttrs[q].arguments.length) && (countOfArgs = this.dA[i].extAttrs[q].arguments.length);
+						}
+					}
+
+					for(q=0; q<lenExtAttrs; q++) {
+						//if(this.dA[i].extAttrs[q].name == 'Constructor') {
 						switch(this.dA[i].extAttrs[q].name) {
 							case 'Constructor':
-								for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
-									argsProto += this.dA[i].extAttrs[q].arguments[z].name +' /*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
-									argsProto += (q == s-1 && z == x-1) ? '' : ', ';
-
-									argsTizen += this.dA[i].extAttrs[q].arguments[z].name;
-									argsTizen += (q == s-1 && z == x-1) ? '' : ', ';
-								}
-								if(q == s-1) { // this check because interfase can has many Constructors, but js need only one
-									view+= '		create'+this.dA[i].name+': function('+ argsProto +') {\n';
-									
-									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))('+ argsTizen +');\n'
-									view+= (!this.dA[i+1])?'		}\n':'		},\n\n';
-
-									//here we create file from which we can use "require" and can create examplare of class
+//								if(count > 1) {//more than one constructor
+//									var cP = '';
+//									for(var n = 0, m = countOfArgs; n<m; n++) {
+//										cP += 'args.param'+n;
+//										cP += (q == lenExtAttrs-1 && n == m-1) ? '' : ', ';
+//									}
+//								} else {
+//									for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
+//										cP += 'args.'+this.dA[i].extAttrs[q].arguments[z].name +'/*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
+//										cP += (q == lenExtAttrs-1 && z == x-1) ? '' : ', ';
+//									}
+//								}
+								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
+									view+= '		create'+this.dA[i].name+': function(args){\n';
+									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
+									view+= '		},\n';
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
 								}
 								break;
 							case 'NoInterfaceObject':
-								if(this.dA[i].extAttrs[0].name !== 'Callback') {
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
-								} 
+//								if(this.dA[i].extAttrs[0].name !== 'Callback') {
+//									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
+//								}
+								//We have do nothing for this version
+								//It mean we do not create modules for basic classes
 								break;
 						}
 					}
@@ -252,24 +289,22 @@ exports.TitaniumInterface = (function(){
 			//create view
 			var folderName = this.folderName+'/';
 			var view = 'define(["Ti/_/declare"'
-			inheritance.length == 0 && (view+=', "Ti/_/Evented"');
-			loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
+			//inheritance.length == 0 && (view+=', "Ti/_/Evented"');
+			//loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
 			view+= '], function(declare'
-			inheritance.length == 0 && (view+=', Evented');
-			loop(function(i){view+=', '+inheritance[i];}, inheritance);
+			//inheritance.length == 0 && (view+=', Evented');
+			//loop(function(i){view+=', '+inheritance[i];}, inheritance);
 			view+= '){\n'
-			view+= '	return declare("Ti.Tizen.'+ name+'", ';
-			inheritance.length == 0 && (view+='Evented, ');
-			loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", null, ';
+			//inheritance.length == 0 && (view+='Evented, ');
+			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
 			view+= '{\n';
-			view+=viewForInterface(interfaceO, true);
+			view+=viewForInterface(interfaceO, true, false);
 			view+= '	});\n';
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
 			this.pathes.add(options.pytonPath + folderName + name);
-			this.methods += methods.get();
-			methods.methods = '';
 		},
 
 
@@ -281,10 +316,7 @@ exports.TitaniumInterface = (function(){
 			get: function(){
 				return this.pathes;
 			}
-		},
-
-
-		methods:''
+		}
 	}
 	return result;
 })()

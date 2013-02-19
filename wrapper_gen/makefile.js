@@ -58,7 +58,6 @@ function ParseFiles(){
 
             //Generate auxiliary files
             fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
-            fs.writeFileSync(this.options.jsStubsFolder + 'methods.txt', ti.TitaniumInterface.methods);
         } else {
             console.log('Folder with .idl files is empty');
         }
