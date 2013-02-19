@@ -229,40 +229,44 @@ exports.TitaniumInterface = (function(){
 			return view;
 		},
 
-
+		constructors: [],
 		getCreators: function(){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface') {
 					var count = 0;
-					var countOfArgs = 0;
+					var maxCountOfArgs = 0;
 					var cP = '';
 					var q;
 					var lenExtAttrs = this.dA[i].extAttrs.length;
-
 					for(q=0; q<lenExtAttrs; q++) {
 						if(this.dA[i].extAttrs[q].name == 'Constructor') {
 							count++;
-							(countOfArgs < this.dA[i].extAttrs[q].arguments.length) && (countOfArgs = this.dA[i].extAttrs[q].arguments.length);
+							(maxCountOfArgs < this.dA[i].extAttrs[q].arguments.length) && (maxCountOfArgs = this.dA[i].extAttrs[q].arguments.length);
 						}
 					}
-
+					this.constructors = [];
+					var res = [];
 					for(q=0; q<lenExtAttrs; q++) {
-						//if(this.dA[i].extAttrs[q].name == 'Constructor') {
 						switch(this.dA[i].extAttrs[q].name) {
 							case 'Constructor':
-//								if(count > 1) {//more than one constructor
-//									var cP = '';
-//									for(var n = 0, m = countOfArgs; n<m; n++) {
-//										cP += 'args.param'+n;
-//										cP += (q == lenExtAttrs-1 && n == m-1) ? '' : ', ';
-//									}
-//								} else {
-//									for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
-//										cP += 'args.'+this.dA[i].extAttrs[q].arguments[z].name +'/*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
-//										cP += (q == lenExtAttrs-1 && z == x-1) ? '' : ', ';
-//									}
-//								}
+								if(count > 1) {//more than one constructor
+									res = [];
+									for(var a = 0, b = this.dA[i].extAttrs[q].arguments.length; a<b; a++) {
+										res.push('args.' + this.dA[i].extAttrs[q].arguments[a].name);
+									}
+
+								} else {
+									res = [];
+									for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
+										res.push('args.'+this.dA[i].extAttrs[q].arguments[z].name);
+										cP += 'args.'+this.dA[i].extAttrs[q].arguments[z].name +'/*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
+										cP += (q == lenExtAttrs-1 && z == x-1) ? '' : ', ';
+									}
+								}
+
+								this.constructors.push(res);
+
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
 									view+= '		create'+this.dA[i].name+': function(args){\n';
 									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
@@ -299,6 +303,36 @@ exports.TitaniumInterface = (function(){
 			//inheritance.length == 0 && (view+='Evented, ');
 			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
 			view+= '{\n';
+			//Non-singleton constructor
+			view += '		constructor: function(args) {\n';
+			view += '			if(args.toString() === \'[object ' + name + ']\') {\n';
+			view += '				this._obj = args;\n';
+			view += '			} else {\n';
+			if(this.constructors.length > 1) {
+				for(var i= this.constructors.length-1; i >= 0; i--) {
+					if(i == this.constructors.length-1) {
+						view += '				if (';
+					} else {
+						view += ' else if (';
+					}
+					for(var k = 0, len = this.constructors[i].length; k<len; k++) {
+						view += '"'+this.constructors[i][k].replace('args.', '')+'" in args';
+						k !==len-1 && (view+= ' && ');
+					}
+					view += '){\n';
+					view += '					this._obj = new tizen.' + name + '('+this.constructors[i].join(', ')+');\n';
+					view += '				}';
+				}
+				view += ' else {\n';
+				view += '					Ti.API.error(\'Constructor with given parameters doesn\'t exists\');\n'
+				view += '				}\n';
+			} else {
+				view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
+				this.constructors = [];
+			}
+			view += '			}\n';
+			view += '		},\n\n';
+			//Non-singleton constructor END
 			view+=viewForInterface(interfaceO, true, false);
 			view+= '	});\n';
 			view+= '});';
