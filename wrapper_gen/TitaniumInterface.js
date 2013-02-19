@@ -62,13 +62,14 @@ exports.TitaniumInterface = (function(){
 		return res;
 	}
 
-	function viewForInterface(interfaceO, lastComma, main){
+	function viewForInterface(interfaceO, lastComma, main, primitives){
 		var result = '';
 		var constants = '';
 		var operations = '';
 		var readOnlyAttr = '';
 		var attr = '';
 		var list = interfaceO.members;
+
 		if(list.length>0) {
 			for(var k = 0, l = list.length; k<l; k++) {
 				switch(list[k].type) {
@@ -85,14 +86,21 @@ exports.TitaniumInterface = (function(){
 							argsProto += arg[h].name + ' /*'+arg[h].type.idlType+'*/';
 							argsProto += (arg[h+1])?', ':'';
 							//without comments for attributes
-							argsTizen+=arg[h].name;
-							argsTizen+=(arg[h+1])?', ':'';
+
+							if ((primitives.indexOf(arg[h].type.idlType) > -1) || (arg[h].type.idlType.indexOf('Callback') > -1)) {
+								argsTizen += arg[h].name;
+								argsTizen += arg[h+1] ? ', ' : '';
+							} else {
+								argsTizen += arg[h].name + '._obj';
+								argsTizen += arg[h+1] ? ', ' : '';
+							}
 						}
 
 						operations+=argsProto;
 						operations+=') {\n';
 
 						if(main) {//For main classes
+							var returnType = list[k].type.idlType.idlType;
 							operations+= '			return tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+');\n';
 						} else {//For sub classes
 							operations+= '			return this._obj.' + list[k].name + '('+argsTizen+');\n';
@@ -148,7 +156,29 @@ exports.TitaniumInterface = (function(){
 	
 	var result = {
 		folderName: '',
+		jsonObjects: [],
+		primitives: ['DOMString', 'unsigned long', 'unsigned long long', 'long', 'boolean', 'short', 'unsigned short', 'float', 'double', 'enum'],
 		dA : null,
+		getPrimitives: function(jsonObject) {
+			var definitions = jsonObject[0].definitions,
+				defCount = definitions.length,
+				i = 0,
+				idlType,
+				defType;
+			for (; i < defCount; i++) {
+				defType = definitions[i].type;
+				if ((defType !== 'typedef') && (defType !== 'enum') && (defType !== 'dictionary')) {
+					continue;
+				}
+				if (defType === 'enum') {
+					this.primitives.push(definitions[i].name);
+				} else if (defType === 'dictionary') {
+					this.primitives.push(definitions[i].name);
+				} else if (definitions[i].idlType.idlType === 'DOMString') {
+					this.primitives.push(definitions[i].name);
+				}
+			}
+		},
 		genStub: function(jsonObject){
 			this.folderName = namespace = jsonObject[0].name;
 			fs.mkdir(options.jsStubsFolder+jsonObject[0].name);
@@ -222,7 +252,7 @@ exports.TitaniumInterface = (function(){
 			var view = '';
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface' && this.dA[i].name == name) {
-					view = viewForInterface(this.dA[i], false, true);
+					view = viewForInterface(this.dA[i], false, true, this.primitives);
 					this.dA.splice(i, 1);
 				}
 			}
@@ -299,7 +329,7 @@ exports.TitaniumInterface = (function(){
 			//inheritance.length == 0 && (view+='Evented, ');
 			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
 			view+= '{\n';
-			view+=viewForInterface(interfaceO, true, false);
+			view+=viewForInterface(interfaceO, true, false, this.primitives);
 			view+= '	});\n';
 			view+= '});';
 			//create file
