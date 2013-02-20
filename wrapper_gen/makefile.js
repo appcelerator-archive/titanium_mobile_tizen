@@ -17,6 +17,7 @@ function ParseFiles(){
         jsParcerFolder: './node_modules/',
         idlFolder: 'idlFolder/',
         jsStubsFolder: 'output/jsStubs/',
+		outputFolder: 'output/',
         pytonPath: 'Ti/Tizen/'
         
     };
@@ -74,7 +75,7 @@ function ParseFiles(){
             }
 
             //Generate auxiliary files
-            fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+            //fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
@@ -94,7 +95,7 @@ function ParseFiles(){
 			console.log(ti.TitaniumInterface.primitives.join('    '));
 			
             //Generate auxiliary files
-           // fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+           	fs.writeFileSync(this.options.outputFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
