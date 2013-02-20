@@ -381,15 +381,15 @@ exports.TitaniumInterface = (function(){
 								}
 						} else if(this.dA[i].extAttrs[q].name == 'NoInterfaceObject') {
 								if(this.dA[i].extAttrs[0].name !== 'Callback') {
-									var indexInheritance = false;
 
+									//var indexInheritance = false;
 									//If this interface used for inheritance we should create empty module,
 									//without constructors, methods, properties and constants.
-									if(SuperBasicInterfaces.indexOf(this.dA[i].name) > -1) {
+									/*if(SuperBasicInterfaces.indexOf(this.dA[i].name) > -1) {
 										indexInheritance = true;
-									}
+									}*/
 
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], indexInheritance, true);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, true);
 								}
 						}
 					}
