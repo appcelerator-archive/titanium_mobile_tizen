@@ -105,9 +105,7 @@ exports.TitaniumInterface = (function(){
 									returnType = list[k].idlType.idlType,
 									isArray = list[k].idlType.array;
 								} catch (e) {}
-							//console.log('Name = ' + list[k].name + 'Return type = ' + returnType);
 							if ((primitives.indexOf(returnType) === -1) && (returnType) && (returnType.indexOf('Callback') === -1) && (returnType !== 'void')) {
-							//	console.log('Is array = ' + isArray);
 								if (isArray == false) {
 									operations += '			return this._wrap(tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+'));\n';
 								} else {
@@ -212,8 +210,6 @@ exports.TitaniumInterface = (function(){
 				name = definitions[i].name;
 				if (defType === 'interface') {
 					if (inheritance && (Object.prototype.toString.call(inheritance) === '[object Array]') && (inheritance.length > 0)) {
-						console.log('Inheritance for ' + name + ': ');
-						console.log('Name = ' + inheritance[0]);
 						if (Object.keys(this.inheritanceTree).length === 0) {
 							this.inheritanceTree[inheritance[0]] = [name];
 						} else {
@@ -315,8 +311,7 @@ exports.TitaniumInterface = (function(){
 							view += '			}\n';
 						}
 						view += '			return result;\n';
-						view += '		}\n';
-						console.log(view);
+						view += '		},\n';
 					}
 					this.dA.splice(i, 1);
 				}
