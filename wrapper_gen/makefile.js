@@ -1,7 +1,8 @@
 function ParseFiles(){
      //node js modules
     var fs = require('fs'),
-        PEG = require('pegjs');
+        PEG = require('pegjs'),
+		wrench = require('wrench');
     //_________________________________________________
     
     //parcer for idl files
@@ -16,7 +17,8 @@ function ParseFiles(){
         jsParcerFolder: './node_modules/',
         idlFolder: 'idlFolder/',
         jsStubsFolder: 'output/jsStubs/',
-        pytonPath: 'Ti/Tizen/'
+		outputFolder: 'output/',
+        dependenciesPaths: 'Ti/Tizen/'
         
     };
     
@@ -29,6 +31,10 @@ function ParseFiles(){
         
         //callback when js parser is ready
         function(){
+			var failSilently = function() {
+				console.log('Some problems');
+			}
+			wrench.rmdirSyncRecursive('output', failSilently);
             fs.mkdirSync('output', 0755);
 			fs.mkdirSync('output/jsStubs', 0755);
             //when js parser created we can use this module
@@ -70,7 +76,7 @@ function ParseFiles(){
             }
 
             //Generate auxiliary files
-            fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+            //fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
@@ -87,7 +93,7 @@ function ParseFiles(){
             }
 
             //Generate auxiliary files
-           // fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
+           	fs.writeFileSync(this.options.outputFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
             console.log('Folder with .idl files is empty');
         }
@@ -107,7 +113,7 @@ function ParseFiles(){
 			ti.TitaniumInterface.genStub(realObject);
 
 			// Auxiliary information for dependencies
-			ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
+			ti.TitaniumInterface.pathes.add(this.options.dependenciesPaths + name.replace(/\s/g,''));
 		}
     };
 }

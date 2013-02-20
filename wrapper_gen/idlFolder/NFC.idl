@@ -86,7 +86,7 @@ module NFC {
     readonly attribute long ndefSize;
 
 
-    readonly attribute  properties;
+    readonly attribute array properties;
 
 
     readonly attribute boolean isConnected;
@@ -117,7 +117,7 @@ module NFC {
   [NoInterfaceObject] interface NFCPeer {
 
     readonly attribute boolean isConnected;
-    
+
 
     void setReceiveNDEFListener(NDEFMessageReadCallback successCallback,
                                 optional ErrorCallback? errorCallback);
@@ -139,7 +139,7 @@ module NFC {
   interface NDEFMessage {
 
     readonly attribute long recordCount;
-    
+
 
     attribute NDEFRecord[] records;
 
@@ -159,7 +159,7 @@ module NFC {
 
 
     readonly attribute byte[] id;
-    
+
 
     readonly attribute byte[] payload;
   };
@@ -169,10 +169,10 @@ module NFC {
   interface NDEFRecordText : NDEFRecord {
 
     readonly attribute DOMString text;
-    
+
 
     readonly attribute DOMString languageCode;
-    
+
 
     readonly attribute NDEFRecordTextEncoding encoding;
   };
@@ -191,7 +191,7 @@ module NFC {
     readonly attribute DOMString mimeType;
   };
 
- 
+
 
   [Callback, NoInterfaceObject] interface NFCTagDetectCallback {
 

@@ -6,7 +6,7 @@ exports.TitaniumInterface = (function(){
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
-		pytonPath: 'Ti/Tizen/'
+		dependenciesPaths: 'Ti/Tizen/'
 		
 	};
 
@@ -324,54 +324,78 @@ exports.TitaniumInterface = (function(){
 			return view;
 		},
 
-
+		constructors: [],
 		getCreators: function(){
 			var view = '';
+			var SuperBasicInterfaces = []; //Interfaces what used for inheritances
+
+			//We should do this loop because we need to know
+			//which interfaces used for inheritances and push them
+			//to SuperBasicInterfaces array
+			for(var i=0, len = this.dA.length; i<len; i++) {
+				if(this.dA[i] && this.dA[i].type == 'interface') {
+					if(this.dA[i].inheritance.length > 0) {
+						for(var u = 0; u < this.dA[i].inheritance.length; u++) {
+							SuperBasicInterfaces.push(this.dA[i].inheritance[u]);
+						}
+					}
+				}
+			}
+
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface') {
 					var count = 0;
-					var countOfArgs = 0;
+					var maxCountOfArgs = 0;
 					var cP = '';
 					var q;
 					var lenExtAttrs = this.dA[i].extAttrs.length;
-
 					for(q=0; q<lenExtAttrs; q++) {
 						if(this.dA[i].extAttrs[q].name == 'Constructor') {
 							count++;
-							(countOfArgs < this.dA[i].extAttrs[q].arguments.length) && (countOfArgs = this.dA[i].extAttrs[q].arguments.length);
+							(maxCountOfArgs < this.dA[i].extAttrs[q].arguments.length) && (maxCountOfArgs = this.dA[i].extAttrs[q].arguments.length);
 						}
 					}
-
+					this.constructors = [];
+					var res = [];
+					//This loop for check if interface has a constructor
+					//and create a modules
 					for(q=0; q<lenExtAttrs; q++) {
-						//if(this.dA[i].extAttrs[q].name == 'Constructor') {
-						switch(this.dA[i].extAttrs[q].name) {
-							case 'Constructor':
-//								if(count > 1) {//more than one constructor
-//									var cP = '';
-//									for(var n = 0, m = countOfArgs; n<m; n++) {
-//										cP += 'args.param'+n;
-//										cP += (q == lenExtAttrs-1 && n == m-1) ? '' : ', ';
-//									}
-//								} else {
-//									for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
-//										cP += 'args.'+this.dA[i].extAttrs[q].arguments[z].name +'/*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
-//										cP += (q == lenExtAttrs-1 && z == x-1) ? '' : ', ';
-//									}
-//								}
+						if(this.dA[i].extAttrs[q].name == 'Constructor') {
+								if(count > 1) {//more than one constructor
+									res = [];
+									for(var a = 0, b = this.dA[i].extAttrs[q].arguments.length; a<b; a++) {
+										res.push('args.' + this.dA[i].extAttrs[q].arguments[a].name);
+									}
+
+								} else {
+									res = [];
+									for(var z = 0, x = this.dA[i].extAttrs[q].arguments.length; z < x; z++) {
+										res.push('args.'+this.dA[i].extAttrs[q].arguments[z].name);
+										cP += 'args.'+this.dA[i].extAttrs[q].arguments[z].name +'/*'+this.dA[i].extAttrs[q].arguments[z].type.idlType+'*/';
+										cP += (q == lenExtAttrs-1 && z == x-1) ? '' : ', ';
+									}
+								}
+
+								this.constructors.push(res);
+
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
 									view+= '		create'+this.dA[i].name+': function(args){\n';
 									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
 									view+= '		},\n';
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								}
-								break;
-							case 'NoInterfaceObject':
-//								if(this.dA[i].extAttrs[0].name !== 'Callback') {
-//									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
-//								}
-								//We have do nothing for this version
-								//It mean we do not create modules for basic classes
-								break;
+						} else if(this.dA[i].extAttrs[q].name == 'NoInterfaceObject') {
+								if(this.dA[i].extAttrs[0].name !== 'Callback') {
+									var indexInheritance = false;
+
+									//If this interface used for inheritance we should create empty module,
+									//without constructors, methods, properties and constants.
+									if(SuperBasicInterfaces.indexOf(this.dA[i].name) > -1) {
+										indexInheritance = true;
+									}
+
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], indexInheritance, true);
+								}
 						}
 					}
 				}
@@ -380,26 +404,62 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		createBaseInterface: function(name, inheritance, interfaceO){
+		createBaseInterface: function(name, inheritance, interfaceO, noInterfaceObject, withoutConstructor){
 			//create view
 			var folderName = this.folderName+'/';
 			var view = 'define(["Ti/_/declare"'
 			//inheritance.length == 0 && (view+=', "Ti/_/Evented"');
-			//loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
+			loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
 			view+= '], function(declare'
 			//inheritance.length == 0 && (view+=', Evented');
-			//loop(function(i){view+=', '+inheritance[i];}, inheritance);
+			loop(function(i){view+=', '+inheritance[i];}, inheritance);
 			view+= '){\n'
-			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", null, ';
+			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", ';
 			//inheritance.length == 0 && (view+='Evented, ');
-			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			if(inheritance.length > 0) {
+				loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			} else if(!noInterfaceObject) {
+				view += 'null, '
+			}
 			view+= '{\n';
-			view+=viewForInterface(interfaceO, true, false, this.primitives);
+			//Non-singleton constructor
+			if(!noInterfaceObject && !withoutConstructor) {
+				view += '		constructor: function(args) {\n';
+				view += '			if(args.toString() === \'[object ' + name + ']\') {\n';
+				view += '				this._obj = args;\n';
+				view += '			} else {\n';
+				if(this.constructors.length > 1) {
+					for(var i= this.constructors.length-1; i >= 0; i--) {
+						if(i == this.constructors.length-1) {
+							view += '				if (';
+						} else {
+							view += ' else if (';
+						}
+						for(var k = 0, len = this.constructors[i].length; k<len; k++) {
+							view += '"'+this.constructors[i][k].replace('args.', '')+'" in args';
+							k !==len-1 && (view+= ' && ');
+						}
+						view += '){\n';
+						view += '					this._obj = new tizen.' + name + '('+this.constructors[i].join(', ')+');\n';
+						view += '				}';
+					}
+					view += ' else {\n';
+					view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
+					view += '				}\n';
+				} else if(this.constructors.length > 0) {
+					view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
+					this.constructors = [];
+				}
+				view += '			}\n';
+				view += '		},\n\n';
+			}
+			//Non-singleton constructor END
+			!noInterfaceObject && (view+=viewForInterface(interfaceO, true, false, this.primitives));
 			view+= '	});\n';
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
-			this.pathes.add(options.pytonPath + folderName + name);
+			this.pathes.add(options.dependenciesPaths + folderName + name);
 		},
 
 

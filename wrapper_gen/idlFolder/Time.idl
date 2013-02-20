@@ -9,7 +9,7 @@ module Time {
   
   [NoInterfaceObject] interface TimeUtil {
     TZDate getCurrentDateTime();
-    
+
     
     void setCurrentDateTime(TZDate dt);
     
@@ -127,20 +127,20 @@ module Time {
     
     TZDate? getNextDSTTransition();
   };
-  
-  [Constructor(long long length, optional TimeDurationUnit? unit)]
+
+  [Constructor(long length, optional TimeDurationUnit? unit)]
   interface TimeDuration
-  {   
-    attribute long long length;
-    
+  {
+    attribute long length;
+
     attribute TimeDurationUnit unit;
-    
+
     TimeDuration difference(TimeDuration other);
-    
+
     boolean equalsTo(TimeDuration other);
-    
+
     boolean lessThan(TimeDuration other);
-    
+
     boolean greaterThan(TimeDuration other);
   };
 };
