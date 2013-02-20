@@ -1,6 +1,7 @@
 define(["Ti/_/declare", "Ti/Blob"],
     function(declare, Blob) {
-		var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*'),
+    	//TODO: fix me, tizen.ApplicationService is not avaliable anymore on Tizen 2.0. find any replacement for it
+		var service = null, //new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
