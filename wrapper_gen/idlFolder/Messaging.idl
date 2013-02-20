@@ -20,7 +20,7 @@ module Messaging {
 
     readonly attribute MessageId? id;
 
-    readonly attribute AccountServiceId? serviceId;    
+    readonly attribute AccountServiceId? serviceId;
 
     readonly attribute MessageConvId? conversationId;
 
@@ -87,13 +87,13 @@ module Messaging {
 
   [Constructor(DOMString filePath, optional DOMString mimeType)]
   interface MessageAttachment {
-    
+
     readonly attribute MessageAttachmentId? id;
-    
+
     readonly attribute MessageId? messageId;
-    
+
     readonly attribute DOMString? mimeType;
-    
+
     readonly attribute DOMString? filePath;
   };
 
@@ -118,7 +118,7 @@ module Messaging {
 
     readonly attribute MessageServiceTag type;
 
-    readonly attribute  name;
+    readonly attribute DOMString name;
                     
     void sendMessage(Message message,
                      optional MessageRecipientsCallback successCallback,
