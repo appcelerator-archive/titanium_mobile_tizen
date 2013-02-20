@@ -18,7 +18,7 @@ function ParseFiles(){
         idlFolder: 'idlFolder/',
         jsStubsFolder: 'output/jsStubs/',
 		outputFolder: 'output/',
-        pytonPath: 'Ti/Tizen/'
+        dependenciesPaths: 'Ti/Tizen/'
         
     };
     
@@ -114,7 +114,7 @@ function ParseFiles(){
 			ti.TitaniumInterface.genStub(realObject);
 
 			// Auxiliary information for dependencies
-			ti.TitaniumInterface.pathes.add(this.options.pytonPath + name.replace(/\s/g,''));
+			ti.TitaniumInterface.pathes.add(this.options.dependenciesPaths + name.replace(/\s/g,''));
 		}
     };
 }
