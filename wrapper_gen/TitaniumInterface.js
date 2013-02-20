@@ -262,6 +262,21 @@ exports.TitaniumInterface = (function(){
 		constructors: [],
 		getCreators: function(){
 			var view = '';
+			var SuperBasicInterfaces = []; //Interfaces what used for inheritances
+
+			//We should do this loop because we need to know
+			//which interfaces used for inheritances and push them
+			//to SuperBasicInterfaces array
+			for(var i=0, len = this.dA.length; i<len; i++) {
+				if(this.dA[i] && this.dA[i].type == 'interface') {
+					if(this.dA[i].inheritance.length > 0) {
+						for(var u = 0; u < this.dA[i].inheritance.length; u++) {
+							SuperBasicInterfaces.push(this.dA[i].inheritance[u]);
+						}
+					}
+				}
+			}
+
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface') {
 					var count = 0;
@@ -277,9 +292,10 @@ exports.TitaniumInterface = (function(){
 					}
 					this.constructors = [];
 					var res = [];
+					//This loop for check if interface has a constructor
+					//and create a modules
 					for(q=0; q<lenExtAttrs; q++) {
-						switch(this.dA[i].extAttrs[q].name) {
-							case 'Constructor':
+						if(this.dA[i].extAttrs[q].name == 'Constructor') {
 								if(count > 1) {//more than one constructor
 									res = [];
 									for(var a = 0, b = this.dA[i].extAttrs[q].arguments.length; a<b; a++) {
@@ -301,16 +317,20 @@ exports.TitaniumInterface = (function(){
 									view+= '		create'+this.dA[i].name+': function(args){\n';
 									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
 									view+= '		},\n';
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								}
-								break;
-							case 'NoInterfaceObject':
+						} else if(this.dA[i].extAttrs[q].name == 'NoInterfaceObject') {
 								if(this.dA[i].extAttrs[0].name !== 'Callback') {
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], true);
+									var indexInheritance = false;
+
+									//If this interface used for inheritance we should create empty module,
+									//without constructors, methods, properties and constants.
+									if(SuperBasicInterfaces.indexOf(this.dA[i].name) > -1) {
+										indexInheritance = true;
+									}
+
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], indexInheritance, true);
 								}
-								//We have do nothing for this version
-								//It mean we do not create modules for basic classes
-								break;
 						}
 					}
 				}
@@ -319,7 +339,7 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		createBaseInterface: function(name, inheritance, interfaceO, noInterfaceObject){
+		createBaseInterface: function(name, inheritance, interfaceO, noInterfaceObject, withoutConstructor){
 			//create view
 			var folderName = this.folderName+'/';
 			var view = 'define(["Ti/_/declare"'
@@ -338,7 +358,7 @@ exports.TitaniumInterface = (function(){
 			}
 			view+= '{\n';
 			//Non-singleton constructor
-			if(!noInterfaceObject) {
+			if(!noInterfaceObject && !withoutConstructor) {
 				view += '		constructor: function(args) {\n';
 				view += '			if(args.toString() === \'[object ' + name + ']\') {\n';
 				view += '				this._obj = args;\n';
@@ -361,7 +381,7 @@ exports.TitaniumInterface = (function(){
 					view += ' else {\n';
 					view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
 					view += '				}\n';
-				} else {
+				} else if(this.constructors.length > 0) {
 					view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
 					this.constructors = [];
 				}
