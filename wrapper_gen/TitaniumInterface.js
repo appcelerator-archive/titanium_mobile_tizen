@@ -26,7 +26,7 @@ exports.TitaniumInterface = (function(){
 				} else if(type.nullable) {
 					res = null; 
 				} else {
-					res = '""'; 
+					res = '\'\'';
 				}
 				break; 
 			case 'object':
@@ -228,7 +228,7 @@ exports.TitaniumInterface = (function(){
 			fs.mkdir(options.jsStubsFolder+jsonObject[0].name);
 			this.dA = jsonObject[0].definitions;
 			var view = '';
-			view += 'define(["Ti/_/lang"], function(lang) {\n';
+			view += 'define([\'Ti/_/lang\'], function(lang) {\n';
 			view +=this.implementation(jsonObject[0].definitions);
 			view +='});';
 			fs.writeFileSync(options.jsStubsFolder + jsonObject[0].name.replace(/\s/g,'') + '.js', view);
@@ -249,7 +249,7 @@ exports.TitaniumInterface = (function(){
 			var modName = this.findImpObject(name);
 			var imp = '';
 			//imp +=this.getVaribles();
-			imp += '	return lang.setObject("Ti.Tizen.' + this.folderName + '", {\n\n';
+			imp += '	return lang.setObject(\'Ti.Tizen.' + this.folderName + '\', {\n\n';
 			imp+= this.getMainInterface(modName[0]);
 			imp+= this.getCreators();
 			imp += '	});\n';
@@ -374,8 +374,8 @@ exports.TitaniumInterface = (function(){
 								this.constructors.push(res);
 
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
-									view+= '		create'+this.dA[i].name+': function(args){\n';
-									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
+									view+= '\n		create'+this.dA[i].name+': function(args){\n';
+									view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
 									view+= '		},\n';
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								}
@@ -402,14 +402,14 @@ exports.TitaniumInterface = (function(){
 		createBaseInterface: function(name, inheritance, interfaceO, noInterfaceObject, withoutConstructor){
 			//create view
 			var folderName = this.folderName+'/';
-			var view = 'define(["Ti/_/declare"'
-			//inheritance.length == 0 && (view+=', "Ti/_/Evented"');
-			loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
+			var view = 'define([\'Ti/_/declare\''
+			//inheritance.length == 0 && (view+=', \'Ti/_/Evented\'');
+			loop(function(i){view+=', \''+options.titaniumFolder+ folderName +inheritance[i] +'\'';}, inheritance);
 			view+= '], function(declare'
 			//inheritance.length == 0 && (view+=', Evented');
 			loop(function(i){view+=', '+inheritance[i];}, inheritance);
 			view+= '){\n'
-			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", ';
+			view+= '	return declare(\'Ti.Tizen.'+this.folderName+'.'+ name+'\', ';
 			//inheritance.length == 0 && (view+='Evented, ');
 			if(inheritance.length > 0) {
 				loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
@@ -431,7 +431,7 @@ exports.TitaniumInterface = (function(){
 							view += ' else if (';
 						}
 						for(var k = 0, len = this.constructors[i].length; k<len; k++) {
-							view += '"'+this.constructors[i][k].replace('args.', '')+'" in args';
+							view += '\''+this.constructors[i][k].replace('args.', '')+'\' in args';
 							k !==len-1 && (view+= ' && ');
 						}
 						view += '){\n';
