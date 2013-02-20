@@ -62,7 +62,7 @@ exports.TitaniumInterface = (function(){
 		return res;
 	}
 
-	function viewForInterface(interfaceO, lastComma, main, primitives){
+	function viewForInterface(interfaceO, lastComma, main, primitives, inheritanceTree){
 		var result = '';
 		var constants = '';
 		var operations = '';
@@ -100,8 +100,28 @@ exports.TitaniumInterface = (function(){
 						operations+=') {\n';
 
 						if(main) {//For main classes
-							var returnType = list[k].type.idlType.idlType;
-							operations+= '			return tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+');\n';
+							var returnType = 0, isArray = 0;
+								try {
+									returnType = list[k].idlType.idlType,
+									isArray = list[k].idlType.array;
+								} catch (e) {}
+							//console.log('Name = ' + list[k].name + 'Return type = ' + returnType);
+							if ((primitives.indexOf(returnType) === -1) && (returnType) && (returnType.indexOf('Callback') === -1) && (returnType !== 'void')) {
+							//	console.log('Is array = ' + isArray);
+								if (isArray == false) {
+									operations += '			return this._wrap(tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+'));\n';
+								} else {
+									operations += '			var objects = tizen.' + namespace.toLowerCase() + '.' + list[k].name + '(' + argsTizen + '),\n';
+									operations += '				i = 0,\n				objectsCount = objects.length,\n				result = [];\n';
+									operations += '			for(; i < objectsCount; i++) {\n';
+									operations += '				result.push(this._wrap(objects[i]));\n';
+									operations += '			}\n';
+									operations += '			return result;\n';
+								}
+							} else {
+								operations+= '			return tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+');\n';
+							}
+
 						} else {//For sub classes
 							operations+= '			return this._obj.' + list[k].name + '('+argsTizen+');\n';
 						}
@@ -151,6 +171,7 @@ exports.TitaniumInterface = (function(){
 		if(operations) {
 			result += operations;
 		}
+
 		return result;
 	}
 	
@@ -159,6 +180,7 @@ exports.TitaniumInterface = (function(){
 		jsonObjects: [],
 		primitives: ['DOMString', 'unsigned long', 'unsigned long long', 'long', 'boolean', 'short', 'unsigned short', 'float', 'double', 'enum'],
 		dA : null,
+		inheritanceTree: {},
 		getPrimitives: function(jsonObject) {
 			var definitions = jsonObject[0].definitions,
 				defCount = definitions.length,
@@ -176,6 +198,32 @@ exports.TitaniumInterface = (function(){
 					this.primitives.push(definitions[i].name);
 				} else if (definitions[i].idlType.idlType === 'DOMString') {
 					this.primitives.push(definitions[i].name);
+				}
+			}
+		},
+		getInheritanceTree: function(jsonObject) {
+			var definitions = jsonObject[0].definitions,
+				defCount = definitions.length,
+				i = 0,
+				defType, inheritance, name;
+			for (; i < defCount; i++) {
+				defType = definitions[i].type;
+				inheritance = definitions[i].inheritance;
+				name = definitions[i].name;
+				if (defType === 'interface') {
+					if (inheritance && (Object.prototype.toString.call(inheritance) === '[object Array]') && (inheritance.length > 0)) {
+						console.log('Inheritance for ' + name + ': ');
+						console.log('Name = ' + inheritance[0]);
+						if (Object.keys(this.inheritanceTree).length === 0) {
+							this.inheritanceTree[inheritance[0]] = [name];
+						} else {
+							if (this.inheritanceTree[inheritance[0]]) {
+								this.inheritanceTree[inheritance[0]].push(name);
+							} else {
+								this.inheritanceTree[inheritance[0]] = [name];
+							}
+						}
+					}
 				}
 			}
 		},
@@ -249,10 +297,27 @@ exports.TitaniumInterface = (function(){
 
 
 		getMainInterface: function(name){
-			var view = '';
+			var view = '',
+				j = 0,
+				parentClassName = (name.indexOf('Manager') >= 0) ? name.substring(0, name.indexOf('Manager')) : name,
+				parentClasses, parentClassesCount;
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface' && this.dA[i].name == name) {
 					view = viewForInterface(this.dA[i], false, true, this.primitives);
+					if (this.inheritanceTree[parentClassName]) {
+						parentClasses = this.inheritanceTree[parentClassName];
+						parentClassesCount = parentClasses.length;
+						view += '		_wrap: function(object) {\n';
+						view += '			var result;\n';
+						for (; j < parentClassesCount; j++) {
+							view += '			if (object.toString() === \'[object ' + parentClasses[j] + ']\') {\n';
+							view += '				result = this.create' + parentClasses[j] + '(object);\n';
+							view += '			}\n';
+						}
+						view += '			return result;\n';
+						view += '		}\n';
+						console.log(view);
+					}
 					this.dA.splice(i, 1);
 				}
 			}

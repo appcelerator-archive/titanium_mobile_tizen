@@ -62,7 +62,8 @@ function ParseFiles(){
                 var name = idlFiles[i].replace(this.options.idlExtension, '');
                 
                 try {
-                    this.createStub(name, true); // if second parameter = true then we'll save json obhects to array
+                    this.createStub(name, true); // if second parameter = true then we'll save json obects to array
+												 // get all tizen's primitive types and save inheritance tree for interfaces
                 } catch(err) {
                     console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
                 } 
@@ -85,9 +86,6 @@ function ParseFiles(){
                 } 
             }
 
-			console.log('Primitives:');
-			console.log(ti.TitaniumInterface.primitives.join('    '));
-			
             //Generate auxiliary files
            // fs.writeFileSync(this.options.jsStubsFolder + 'path.txt', ti.TitaniumInterface.pathes.get());
         } else {
@@ -103,6 +101,7 @@ function ParseFiles(){
 		if (saveFlag) {
 			ti.TitaniumInterface.jsonObjects.push(realObject);
 			ti.TitaniumInterface.getPrimitives(realObject);
+			ti.TitaniumInterface.getInheritanceTree(realObject);
 		} else {
 			// Write out the resulting stub
 			ti.TitaniumInterface.genStub(realObject);
