@@ -6,7 +6,7 @@ exports.TitaniumInterface = (function(){
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
-		pytonPath: 'Ti/Tizen/'
+		dependenciesPaths: 'Ti/Tizen/'
 		
 	};
 
@@ -301,13 +301,13 @@ exports.TitaniumInterface = (function(){
 									view+= '		create'+this.dA[i].name+': function(args){\n';
 									view+= '			return new (require("'+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'"))(args);\n'
 									view+= '		},\n';
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false);
 								}
 								break;
 							case 'NoInterfaceObject':
-//								if(this.dA[i].extAttrs[0].name !== 'Callback') {
-//									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i]);
-//								}
+								if(this.dA[i].extAttrs[0].name !== 'Callback') {
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], true);
+								}
 								//We have do nothing for this version
 								//It mean we do not create modules for basic classes
 								break;
@@ -319,56 +319,62 @@ exports.TitaniumInterface = (function(){
 		},
 
 
-		createBaseInterface: function(name, inheritance, interfaceO){
+		createBaseInterface: function(name, inheritance, interfaceO, noInterfaceObject){
 			//create view
 			var folderName = this.folderName+'/';
 			var view = 'define(["Ti/_/declare"'
 			//inheritance.length == 0 && (view+=', "Ti/_/Evented"');
-			//loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
+			loop(function(i){view+=', "'+options.titaniumFolder+ folderName +inheritance[i] +'"';}, inheritance);
 			view+= '], function(declare'
 			//inheritance.length == 0 && (view+=', Evented');
-			//loop(function(i){view+=', '+inheritance[i];}, inheritance);
+			loop(function(i){view+=', '+inheritance[i];}, inheritance);
 			view+= '){\n'
-			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", null, ';
+			view+= '	return declare("Ti.Tizen.'+this.folderName+'.'+ name+'", ';
 			//inheritance.length == 0 && (view+='Evented, ');
-			//loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			if(inheritance.length > 0) {
+				loop(function(i){view+= ''+inheritance[i] + ', ';}, inheritance);
+			} else if(!noInterfaceObject) {
+				view += 'null, '
+			}
 			view+= '{\n';
 			//Non-singleton constructor
-			view += '		constructor: function(args) {\n';
-			view += '			if(args.toString() === \'[object ' + name + ']\') {\n';
-			view += '				this._obj = args;\n';
-			view += '			} else {\n';
-			if(this.constructors.length > 1) {
-				for(var i= this.constructors.length-1; i >= 0; i--) {
-					if(i == this.constructors.length-1) {
-						view += '				if (';
-					} else {
-						view += ' else if (';
+			if(!noInterfaceObject) {
+				view += '		constructor: function(args) {\n';
+				view += '			if(args.toString() === \'[object ' + name + ']\') {\n';
+				view += '				this._obj = args;\n';
+				view += '			} else {\n';
+				if(this.constructors.length > 1) {
+					for(var i= this.constructors.length-1; i >= 0; i--) {
+						if(i == this.constructors.length-1) {
+							view += '				if (';
+						} else {
+							view += ' else if (';
+						}
+						for(var k = 0, len = this.constructors[i].length; k<len; k++) {
+							view += '"'+this.constructors[i][k].replace('args.', '')+'" in args';
+							k !==len-1 && (view+= ' && ');
+						}
+						view += '){\n';
+						view += '					this._obj = new tizen.' + name + '('+this.constructors[i].join(', ')+');\n';
+						view += '				}';
 					}
-					for(var k = 0, len = this.constructors[i].length; k<len; k++) {
-						view += '"'+this.constructors[i][k].replace('args.', '')+'" in args';
-						k !==len-1 && (view+= ' && ');
-					}
-					view += '){\n';
-					view += '					this._obj = new tizen.' + name + '('+this.constructors[i].join(', ')+');\n';
-					view += '				}';
+					view += ' else {\n';
+					view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
+					view += '				}\n';
+				} else {
+					view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
+					this.constructors = [];
 				}
-				view += ' else {\n';
-				view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
-				view += '				}\n';
-			} else {
-				view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
-				this.constructors = [];
+				view += '			}\n';
+				view += '		},\n\n';
 			}
-			view += '			}\n';
-			view += '		},\n\n';
 			//Non-singleton constructor END
-			view+=viewForInterface(interfaceO, true, false, this.primitives);
+			!noInterfaceObject && (view+=viewForInterface(interfaceO, true, false, this.primitives));
 			view+= '	});\n';
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
-			this.pathes.add(options.pytonPath + folderName + name);
+			this.pathes.add(options.dependenciesPaths + folderName + name);
 		},
 
 
