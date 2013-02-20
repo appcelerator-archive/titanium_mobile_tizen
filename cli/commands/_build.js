@@ -39,7 +39,38 @@ var ti = require('titanium-sdk'),
 		'.gif': 'image/gif',
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
-	};
+	},
+	defaultPrivilegesList = '<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/download"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/power"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/setting"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>'+
+			'<access origin="*" subdomains="true"/>';
 
 // silence uglify's default warn mechanism
 UglifyJS.AST_Node.warn_function = function () {};
@@ -666,7 +697,7 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		// this.modulesToCache = [];
+		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
@@ -999,14 +1030,12 @@ build.prototype = {
 
 	addTizenToTiAppXml: function (tizenAppId){		
 		this.logger.info('Processing tiapp.xml for tizen node');
-		var XMLSerializer = xmldom.XMLSerializer;
-
-		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
-		var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
-		var parsedTiXml = doc.documentElement;
-		//check for Tizen section
-		var tizenTagFound = false;
-		var node = parsedTiXml.firstChild;
+		var XMLSerializer = xmldom.XMLSerializer,
+			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
+			doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml'),
+			parsedTiXml = doc.documentElement;
+			tizenTagFound = false, //check for Tizen section
+			node = parsedTiXml.firstChild;
 
 		while (node) {
 			if (node.nodeType == 1 && node.tagName == 'tizen'){
@@ -1025,19 +1054,19 @@ build.prototype = {
 			this.logger.info('<tizen> node available.');
 			return;
 		}
-		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');
+
+		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');		
 		
-		//no tizen section in xml, add it
-		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'"><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
-		var tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml');
-		parsedTiXml.appendChild(tizenSec);
-		var result = new XMLSerializer().serializeToString(doc);
+		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'">' + defaultPrivilegesList + '</tizen>',
+			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
+			result;
+		parsedTiXml.appendChild(tizenSec),
+		result = new XMLSerializer().serializeToString(doc);
 		fs.writeFileSync(xmlpath, result, 'utf8');
 	},
 
 	createConfigXml: function () {
-		this.logger.info(__('createConfigXml'));
-		var allTizenFeatures = '<feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/>';
+		this.logger.info(__('createConfigXml'));		
 
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
 		if(!this.tiapp.url || 0 === this.tiapp.url){
@@ -1047,7 +1076,7 @@ build.prototype = {
 		}
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%FEATURES_LIST%%', allTizenFeatures);
+		templt = templt.replace('%%FEATURES_LIST%%', defaultPrivilegesList);
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
