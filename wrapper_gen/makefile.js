@@ -1,7 +1,8 @@
 function ParseFiles(){
      //node js modules
     var fs = require('fs'),
-        PEG = require('pegjs');
+        PEG = require('pegjs'),
+		wrench = require('wrench');
     //_________________________________________________
     
     //parcer for idl files
@@ -29,6 +30,10 @@ function ParseFiles(){
         
         //callback when js parser is ready
         function(){
+			var failSilently = function() {
+				console.log('Some problems');
+			}
+			wrench.rmdirSyncRecursive('output', failSilently);
             fs.mkdirSync('output', 0755);
 			fs.mkdirSync('output/jsStubs', 0755);
             //when js parser created we can use this module
