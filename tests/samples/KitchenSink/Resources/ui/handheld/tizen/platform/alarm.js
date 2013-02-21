@@ -184,7 +184,7 @@ function tizen_alarm() {
 	function addAbsoluteAlarm(time, period) {
 		var period = Math.floor(period),
 			alarm = Ti.Tizen.Alarm.createAlarmAbsolute({
-				delay: time, 
+				date: time, 
 				period: period
 			});
 
