@@ -2,6 +2,9 @@ exports.TitaniumInterface = (function(){
 	var fs = require('fs');
 
 	var namespace = '';
+	
+	var classesWithWrap = [],
+		wrappedTypes = [];
 
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
@@ -91,7 +94,7 @@ exports.TitaniumInterface = (function(){
 								argsTizen += arg[h].name;
 								argsTizen += arg[h+1] ? ', ' : '';
 							} else {
-								argsTizen += arg[h].name + '._obj';
+								argsTizen += arg[h].optional ? arg[h].name + ' ? ' + arg[h].name + '._obj : ' + arg[h].name : arg[h].name;
 								argsTizen += arg[h+1] ? ', ' : '';
 							}
 						}
@@ -106,6 +109,12 @@ exports.TitaniumInterface = (function(){
 									isArray = list[k].idlType.array;
 								} catch (e) {}
 							if ((primitives.indexOf(returnType) === -1) && (returnType) && (returnType.indexOf('Callback') === -1) && (returnType !== 'void')) {
+								if (wrappedTypes.indexOf(returnType) === -1) {
+									wrappedTypes.push(returnType);
+								}
+								if (classesWithWrap.indexOf(namespace.toLowerCase() + '=' + returnType) === -1) {
+									classesWithWrap.push(namespace.toLowerCase() + '=' + returnType);
+								}
 								if (isArray == false) {
 									operations += '			return this._wrap(tizen.' + namespace.toLowerCase() + '.' + list[k].name + '('+argsTizen+'));\n';
 								} else {
@@ -297,6 +306,7 @@ exports.TitaniumInterface = (function(){
 				j = 0,
 				parentClassName = (name.indexOf('Manager') >= 0) ? name.substring(0, name.indexOf('Manager')) : name,
 				parentClasses, parentClassesCount;
+
 			for(var i=0, len = this.dA.length; i<len; i++) {
 				if(this.dA[i] && this.dA[i].type == 'interface' && this.dA[i].name == name) {
 					view = viewForInterface(this.dA[i], false, true, this.primitives);
@@ -312,10 +322,33 @@ exports.TitaniumInterface = (function(){
 						}
 						view += '			return result;\n';
 						view += '		},\n';
+						for (j = 0; j < wrappedTypes.length; j++) {
+							if (classesWithWrap.indexOf(parentClassName.toLowerCase() + '=' + wrappedTypes[j]) > -1) {
+								console.log('Wrapped type = ' + wrappedTypes[j]);
+								classesWithWrap.splice(classesWithWrap.indexOf(parentClassName.toLowerCase() + '=' + wrappedTypes[j]), 1);
+							}
+						}
+					} else {
+						var s = '';
+						for (j = 0; j < wrappedTypes.length; j++) {
+							if (classesWithWrap.indexOf(parentClassName.toLowerCase() + '=' + wrappedTypes[j]) > -1) {
+								//view += '		_wrap: function(object) {\n';
+								s += '			if (object.toString() === \'[object ' + wrappedTypes[j] + ']\') {\n';
+								s += '				return this.create' + wrappedTypes[j] + '(object);\n';
+								s += '			}\n';
+								//view += '		},\n';
+							}
+						}
+						if (s.length > 0) {
+							view += '		_wrap: function(object) {\n';
+							view += s;
+							view += '		},\n';
+						}
 					}
 					this.dA.splice(i, 1);
 				}
 			}
+			//console.log(classesWithWrap);
 			return view;
 		},
 
