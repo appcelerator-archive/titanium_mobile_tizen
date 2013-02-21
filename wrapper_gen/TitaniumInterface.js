@@ -94,7 +94,7 @@ exports.TitaniumInterface = (function(){
 								argsTizen += arg[h].name;
 								argsTizen += arg[h+1] ? ', ' : '';
 							} else {
-								argsTizen += arg[h].optional ? arg[h].name + ' ? ' + arg[h].name + '._obj : ' + arg[h].name : arg[h].name;
+								argsTizen += arg[h].optional ? arg[h].name + ' ? ' + arg[h].name + '._obj : ' + arg[h].name : arg[h].name + '._obj';
 								argsTizen += arg[h+1] ? ', ' : '';
 							}
 						}
