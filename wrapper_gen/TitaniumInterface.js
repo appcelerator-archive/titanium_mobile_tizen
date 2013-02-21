@@ -516,7 +516,7 @@ exports.TitaniumInterface = (function(){
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
-			this.pathes.add(options.dependenciesPaths + folderName + name);
+			this.pathes.add('"'+options.dependenciesPaths + folderName + name+'": []');
 		},
 
 
