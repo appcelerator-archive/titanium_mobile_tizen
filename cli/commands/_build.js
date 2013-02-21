@@ -40,6 +40,7 @@ var ti = require('titanium-sdk'),
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
 	},
+	devId,
 	defaultPrivilegesList = '<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>'+
@@ -291,7 +292,15 @@ function build(logger, config, cli, finished) {
 			theme: 'default'
 		}
 	});
-	
+	//get device id
+	if(this.debugDevice){
+		devId = this.debugDevice;
+	}else if(this.runDevice){
+		devId = this.runDevice;
+	} else if(this.targetDevice){
+		devId = this.targetDevice;
+	}
+	logger.info(__('Target device Id:  "%s" ', devId));
 	//adding defauld tizen values into tiapp and create/fill tizen specific settings
 	this.tiapp.tizen = {
 		appid : randomString(10)
@@ -371,7 +380,7 @@ function build(logger, config, cli, finished) {
 							//find Tizen SDK location. Needs it to use Tizen CLI
 							this.detectTizenSDK(logger, next);
 					}.bind(this),function(next){
-						if(this.debugDevice || this.runDevice || this.targetDevice){
+						if(devId){
 							this.uninstallWidgetForce(logger, function(){
 									next(null, 'ok');
 								});
@@ -379,16 +388,16 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						}
 					}.bind(this), function(next){
-						if(this.runDevice && this.runDevice != 'none'){
-							this.runOnDevice(logger, function(){
+						if(devId && devId != 'none'){
+							this.installOnDevice(logger, function(){
 									next(null, 'ok');
 								});
-						}else{							
+						}else{
 							next(null, 'ok');
 						}
 					}.bind(this),function(next){
-						if(this.targetDevice && this.targetDevice != 'none'){
-							this.installOnDevice(logger, function(){
+						if(this.runDevice && this.runDevice != 'none'){
+							this.runOnDevice(logger, function(){
 									next(null, 'ok');
 								});
 						}else{							
@@ -1224,14 +1233,6 @@ build.prototype = {
 		);			
 	},
 	uninstallWidgetForce: function(logger, callback){		
-		var devId;
-		if(this.debugDevice){
-			devId = this.debugDevice;
-		}else if(this.runDevice){
-			devId = this.runDevice;
-		} else if(this.targetDevice){
-			devId = this.targetDevice;
-		}
 		if(devId){
 			var runner = require("child_process");
 			var pathToCmd;
@@ -1241,7 +1242,7 @@ build.prototype = {
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall');
 			}
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url + ' --device=' + devId;;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + devId;;
 			logger.info('Forsing widget uninstall cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1251,7 +1252,7 @@ build.prototype = {
 						logger.info('wgt uninstall failed');
 						logger.info(stderr);
 					}else{
-						logger.info('UnInstalled wgt failed');
+						logger.info('UnInstalled wgt: success');
 					}
 					callback();
 			});
@@ -1259,21 +1260,17 @@ build.prototype = {
 			callback();
 		}
 	},
-	// implementations of  installOnDevice/runOnDevice/debugOnDevice are very close
-	// but do not move code for all into "common" functions. These functions seems to be subject of change in next TizenSDK versions.
-	// I belive that at least parameter --id will be changed since it can be ease received from config.xml also web-install really needs only path to wgt
-	// but current tizen implementation does not work without --id parameter
 	installOnDevice : function(logger, callback){
-		if(this.targetDevice && this.targetDevice != 'none'){
-			var runner = require("child_process");
-			var pathToCmd;
+		if(devId && devId != 'none'){
+			var runner = require("child_process"),
+				pathToCmd,
+				pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
 			if(process.platform === 'win32'){
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
 			}else{
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install');
-			}
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.targetDevice;
+			}			
+			var cmd = pathToCmd + ' -t 10 ' + ' --widget="' + pathToWgt + '"' + ' --device=' + devId;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1283,7 +1280,7 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Installed on device: ' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1301,7 +1298,7 @@ build.prototype = {
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run');
 			}
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.runDevice;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1311,7 +1308,7 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Run on device:' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1329,7 +1326,7 @@ build.prototype = {
 			} else{
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug');
 			}
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.debugDevice;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.debugDevice;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1339,7 +1336,7 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Debug initiated for: ' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1495,7 +1492,6 @@ function renderTemplate(template, props) {
 
 function randomString(length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
-
     if (! length) {
         length = Math.floor(Math.random() * chars.length);
     }
