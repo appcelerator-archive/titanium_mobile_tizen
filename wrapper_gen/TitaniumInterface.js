@@ -6,6 +6,8 @@ exports.TitaniumInterface = (function(){
 	var classesWithWrap = [],
 		wrappedTypes = [];
 
+	var moduleConstants = '';
+
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
@@ -160,6 +162,11 @@ exports.TitaniumInterface = (function(){
 
 			}
 		}
+
+
+		constants += moduleConstants;
+		moduleConstants = '';
+
 		if(constants) {
 			result += '		constants: {\n'
 			result += constants;
@@ -257,7 +264,7 @@ exports.TitaniumInterface = (function(){
 			}
 			var modName = this.findImpObject(name);
 			var imp = '';
-			//imp +=this.getVaribles();
+			imp +=this.getVaribles();
 			imp += '	return lang.setObject(\'Ti.Tizen.' + this.folderName + '\', {\n\n';
 			imp+= this.getMainInterface(modName[0]);
 			imp+= this.getCreators();
@@ -265,15 +272,37 @@ exports.TitaniumInterface = (function(){
 			return imp;
 		},
 
-
 		getVaribles: function(){
 			var view = '';
 			var vars = [];
 			var list = this.dA;
 			
 			loop(function(i){
+
+
+				function genString(name, value){
+					return generateFormat(name).replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '') +'_'+ value.toUpperCase().replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '') + ': \'' + value+'\'';
+				}
+
+				function generateFormat(stringV){
+					var str = stringV;
+					var arr = str.split('');
+
+					for(var i = 0, len = arr.length; i<len; i++) {
+						if(arr[i] == arr[i].toUpperCase()) {
+							(i !== 0) && (arr[i] = '_' + arr[i]);
+						}
+					}
+					str = arr.join('').toUpperCase();
+					return str;
+				}
+
 				if(list[i] && list[i].type == 'typedef'){
-					vars.push(list[i].name);	
+					//vars.push(list[i].name);
+				} else if(list[i] && list[i].type == 'enum') {
+					for(var k = 0, l = list[i].values.length; k < l; k++) {
+						moduleConstants+='			'+genString(list[i].name, list[i].values[k])+',\n';
+					}
 				}
 			}, list);
 			(function(){
@@ -487,7 +516,7 @@ exports.TitaniumInterface = (function(){
 			view+= '});';
 			//create file
 			fs.writeFileSync(options.jsStubsFolder + folderName + name + '.js', view);
-			this.pathes.add(options.dependenciesPaths + folderName + name);
+			this.pathes.add('"'+options.dependenciesPaths + folderName + name+'": []');
 		},
 
 

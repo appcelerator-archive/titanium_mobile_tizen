@@ -113,7 +113,7 @@ function ParseFiles(){
 			ti.TitaniumInterface.genStub(realObject);
 
 			// Auxiliary information for dependencies
-			ti.TitaniumInterface.pathes.add(this.options.dependenciesPaths + name.replace(/\s/g,''));
+			ti.TitaniumInterface.pathes.add('"'+this.options.dependenciesPaths + name.replace(/\s/g,'')+'": []');
 		}
     };
 }
