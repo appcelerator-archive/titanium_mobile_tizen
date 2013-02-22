@@ -80,9 +80,9 @@ exports.TitaniumInterface = (function(){
 		function paramFormat(param){
 			var res;
 			if(param.name == 'onsuccess') {
-				res = 'function(object){on' + param.type.idlType + '(object, onsuccess, this)}';
+				res = 'function(object){ on' + param.type.idlType + '(object, onsuccess); }';
 			} else if(param.name == 'onerror'){
-				res = 'function(e) {onerror.call(null, new WebAPIError(e))}';
+				res = 'function(e) { onerror.call(null, new WebAPIError(e)); }';
 			} else {
 				res = param.name;
 			}
@@ -472,8 +472,8 @@ exports.TitaniumInterface = (function(){
 
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, true);
 								} else if(this.dA[i].extAttrs[0].name == 'Callback' && this.dA[i].extAttrs[0].value == 'FunctionOnly' && (this.dA[i].members[0].arguments[0] && this.primitives.indexOf(this.dA[i].members[0].arguments[0].type.idlType) == -1)) {
-									this.callBacksFunctionOnly += '	function on'+this.dA[i].name+'(object, onsuccess, self) \n';
-									this.callBacksFunctionOnly += '		onsuccess.call(self, new ';
+									this.callBacksFunctionOnly += '	function on'+this.dA[i].name+'(object, onsuccess) { \n';
+									this.callBacksFunctionOnly += '		onsuccess.call(null, new ';
 									if(this.dA[i].members.length == 1) {
 										this.callBacksFunctionOnly += this.dA[i].members[0].arguments[0].type.idlType +'(object));\n'
 									}
