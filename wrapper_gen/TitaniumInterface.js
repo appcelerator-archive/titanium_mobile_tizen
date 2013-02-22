@@ -470,7 +470,7 @@ exports.TitaniumInterface = (function(){
 										indexInheritance = true;
 									}*/
 
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, true);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								} else if(this.dA[i].extAttrs[0].name == 'Callback' && this.dA[i].extAttrs[0].value == 'FunctionOnly' && (this.dA[i].members[0].arguments[0] && this.primitives.indexOf(this.dA[i].members[0].arguments[0].type.idlType) == -1)) {
 									this.callBacksFunctionOnly += '	function on'+this.dA[i].name+'(object, onsuccess) { \n';
 									this.callBacksFunctionOnly += '		onsuccess.call(null, new ';
