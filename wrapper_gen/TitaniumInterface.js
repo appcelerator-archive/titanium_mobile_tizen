@@ -436,7 +436,7 @@ exports.TitaniumInterface = (function(){
 								this.constructors.push(res);
 
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
-									view+= '\n		create'+this.dA[i].name+': function(args){\n';
+									view+= '\n		create'+this.dA[i].name+': function(args) {\n';
 									view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
 									view+= '		},\n';
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
@@ -470,7 +470,7 @@ exports.TitaniumInterface = (function(){
 			view+= '], function(declare'
 			//inheritance.length == 0 && (view+=', Evented');
 			loop(function(i){view+=', '+inheritance[i];}, inheritance);
-			view+= '){\n'
+			view+= ') {\n'
 			view+= '	return declare(\'Ti.Tizen.'+this.folderName+'.'+ name+'\', ';
 			//inheritance.length == 0 && (view+='Evented, ');
 			if(inheritance.length > 0) {
@@ -496,7 +496,7 @@ exports.TitaniumInterface = (function(){
 							view += '\''+this.constructors[i][k].replace('args.', '')+'\' in args';
 							k !==len-1 && (view+= ' && ');
 						}
-						view += '){\n';
+						view += ') {\n';
 						view += '					this._obj = new tizen.' + name + '('+this.constructors[i].join(', ')+');\n';
 						view += '				}';
 					}
