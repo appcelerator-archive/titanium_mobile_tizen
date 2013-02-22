@@ -1,14 +1,14 @@
 function listeners() {
 	var win = Ti.UI.createWindow({
-			title: "Call history listeners"
+			title: 'Call history listeners'
 		}),
 		addListenerBtn = Ti.UI.createButton({
-			title: "Add listeners",
+			title: 'Add listeners',
 			top: 20,
 			left: 5
 		}),
 		removeListenerBtn = Ti.UI.createButton({
-			title: "Remove listeners",
+			title: 'Remove listeners',
 			top: 60,
 			left: 5
 		}),
@@ -21,64 +21,69 @@ function listeners() {
 		}),
 		onListenerCB = {
 			onadded: function(newItems) {
-				Ti.API.info("New Item added");
+				var i = 0,
+					itemsCount = newItems.length;
+				Ti.API.info('New Items have been added');
 
-				for (var i = 0; i < newItems.length; i++) {
-					Ti.API.info(newItems[i].remoteParties[0].remoteParty + ": " + newItems[i].startTime);
+				for (; i < itemsCount; i++) {
+					Ti.API.info(newItems[i].remoteParties[0].remoteParty + ': ' + newItems[i].startTime);
 
-					tableView.appendRow({title: newItems[i].remoteParties[0].remoteParty + ": " + newItems[i].startTime});
-		        }
+					tableView.appendRow({ title: newItems[i].remoteParties[0].remoteParty + ': ' + newItems[i].startTime });
+				}
 			},
-		    onchanged: function(changedItems) {
-		    	Ti.API.info("Items changed");
+			onchanged: function(changedItems) {
+				var i = 0,
+					itemsCount = changedItems.length;
+		    	
+				Ti.API.info('Items changed');
 
-		    	for (var i = 0; i < changedItems.length; changedItems++) {
-		    		Ti.API.info(changedItems[i].remoteParties[0].remoteParty + ": " + changedItems[i].direction);
+				for (; i < itemsCount; i++) {
+					Ti.API.info(changedItems[i].remoteParties[0].remoteParty + ': ' + changedItems[i].direction);
 
-		    		tableView.appendRow({title: changedItems[i].remoteParties[0].remoteParty + ": " + changedItems[i].direction});
-		    	}
-		    }
+					tableView.appendRow({ title: changedItems[i].remoteParties[0].remoteParty + ': ' + changedItems[i].direction });
+				}
+			}
 		};
 
-		addListenerBtn.addEventListener("click", function(e) {
+		addListenerBtn.addEventListener('click', function(e) {
+			var alertDialog = Ti.UI.createAlertDialog({
+					ok: 'Ok'
+				});
+
 			try {
-				// register a call history callback
-				var handle = tizen.call.history.addListener(onListenerCB);
+				// Register a call history callback
+				var handle = Ti.Tizen.Call.CallHistory.addListener(onListenerCB);
 
-				Ti.UI.createAlertDialog({
-					ok: "Ok",
-					message: "Listener added"
-				}).show();
+				addListenerBtn.enabled = false;
+
+				alertDialog.message = 'Listener added';
+				alertDialog.show();
 				
-				removeListenerBtn.addEventListener("click", function(re) {
+				removeListenerBtn.addEventListener('click', function(e) {
 					try {
-						// unregister a previously registered listener
-						tizen.call.history.removeListener(handle);
+						// Unregister a previously registered listener
+						Ti.Tizen.Call.CallHistory.removeListener(handle);
 						win.remove(removeListenerBtn);
-
-						Ti.UI.createAlertDialog({
-							ok: "Ok",
-							message: "Listener removed"
-						}).show();
+						
+						alertDialog.message = 'Listener removed';
+						alertDialog.show();
 					} catch (removeExc) {
-						Ti.UI.createAlertDialog({
-							ok: "Ok",
-							title: "The following error occurred: ",
-							message: "Exception - code: " + removeExc.name + " message: " + removeExc.message
-						}).show();
+						alertDialog.title = 'The following error occurred: ';
+						alertDialog.message = 'Exception - code: ' + removeExc.name + ' message: ' + removeExc.message;
+						alertDialog.show();
 					}
+					addListenerBtn.enabled = true;
+					removeListenerBtn.removeEventListener('click');
 				});
 
 				win.add(tableView);
 				win.add(removeListenerBtn);
 			} catch (error) {
-				Ti.UI.createAlertDialog({
-					ok: "Ok",
-					title: "The following error occurred: ",
-					message: "Exception - code: " + error.name + " message: " + error.message
-				}).show();
+				alertDialog.title = 'The following error occurred: ';
+				alertDialog.message = 'Exception - code: ' + error.name + ' message: ' + error.message;
+				alertDialog.show();
 				
-				Ti.API.info("Exception - code: " + error.name + " message: " + error.message);
+				Ti.API.info('Exception - code: ' + error.name + ' message: ' + error.message);
 			}
 		});
 

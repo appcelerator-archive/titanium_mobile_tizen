@@ -1,14 +1,14 @@
 function manageHistory() {
 	var win = Ti.UI.createWindow({
-			title: "All history"
+			title: 'All history'
 		}),
 		emptyHistoryLbl = Ti.UI.createLabel({
-			text: "History is empty. Add some call first.",
+			text: 'History is empty. Add some call first.',
 			top: 25,
 			left: 5
 		}),
 		removeAllHistoryBtn = Ti.UI.createButton({
-			title: "Remove all history",
+			title: 'Remove all history',
 			top: 10,
 			left: 5
 		}),
@@ -19,25 +19,34 @@ function manageHistory() {
 			top: 60
 		}),
 		delBtn = Ti.UI.createButton({
-			title: "d",
+			title: 'Delete',
 			right: 5,
 			height: 10,
 			width: 10
 		}),
-		filter = new tizen.AttributeFilter("callType", "EXACTLY", "tizen.tel"),
-		sortMode = new tizen.SortMode("startTime", "DESC");
+		filter = Ti.Tizen.createAttributeFilter({
+			attributeName: 'callType',
+			matchFlag: 'EXACTLY',
+			matchValue: 'tizen.tel'
+		}),
+		sortMode = Ti.Tizen.createSortMode({
+			attributeName: 'startTime', 
+			order: 'DESC'
+		});
 
 
 	function onSuccess(results) {
-		Ti.API.info("results.length: " + results.length);
+		var resultsCount = results.length,
+			i = 0;
+		Ti.API.info('Results length: ' + resultsCount);
 		
-		if (results.length > 0) {
+		if (resultsCount > 0) {
 			function removeRow(item) {
 				if (item.rowData.title) {
-					Ti.API.info("item.index: " + item.index);
+					Ti.API.info('item.index: ' + item.index);
 					
 					try {
-						tizen.call.history.remove(results[item.index]);
+						Ti.Tizen.Call.CallHistory.remove(results[item.index]);
 						tableView.deleteRow(item.index);
 						
 						if (tableView.sections[0].rowCount == 0) {
@@ -48,17 +57,17 @@ function manageHistory() {
 					} catch (removeExc) {
 						Ti.UI.createAlertDialog({
 						    message: removeExc.message,
-						    title: "The following error occurred: ",
-						    ok: "Ok"
+						    title: 'The following error occurred: ',
+						    ok: 'Ok'
 						}).show();
-					}					
+					}
 				}
 			}
-			
+
 			function removeAll(e) {
-				tizen.call.history.removeAll(
+				Ti.Tizen.Call.CallHistory.removeAll(
 					function() {
-						Ti.API.info("All history removed.");
+						Ti.API.info('All history removed.');
 						
 						win.remove(tableView);
 						win.remove(removeAllHistoryBtn);
@@ -67,37 +76,38 @@ function manageHistory() {
 					function(error) {
 						Ti.UI.createAlertDialog({
 						    message: removeExc.message,
-						    title: "The following error occurred: ",
-						    ok: "Ok"
+						    title: 'The following error occurred: ',
+						    ok: 'Ok'
 						}).show();
 					}
 				);
 			}
-			
-			tableView.addEventListener("click", removeRow);
+
+			tableView.addEventListener('click', removeRow);
 			removeAllHistoryBtn.addEventListener('click', removeAll);
 						
-			for (var i = 0; i < results.length; i++) {
-				tableView.appendRow({title: results[i].remoteParties[0].remoteParty + " (" + results[i].direction + ")"});
+			for (; i < resultsCount; i++) {
+				tableView.appendRow({ title: results[i].remoteParties[0].remoteParty + ' (' + results[i].direction + ')' });
 			}
-			
+
 			win.add(tableView);
 			win.add(removeAllHistoryBtn);
-		} else if (results.length == 0) {
+		} else if (resultsCount === 0) {
 			win.add(emptyHistoryLbl);
 		}
-    }
+	}
 
-    function onError(error) {
-    	Ti.UI.createAlertDialog({
-    		message: exep.message,
-    		title: "The following error occurred: ",
-    		ok: "Ok"
+	function onError(error) {
+		console.log('ERROR');
+		Ti.UI.createAlertDialog({
+			message: exep.message,
+			title: 'The following error occurred: ',
+			ok: 'Ok'
 		}).show();
-    }
-	
-	tizen.call.history.find(onSuccess, onError, filter, sortMode);
-	
+	}
+	console.log('Before find');
+	Ti.Tizen.Call.CallHistory.find(onSuccess, onError, filter, sortMode);
+
 	return win;
 }
 
