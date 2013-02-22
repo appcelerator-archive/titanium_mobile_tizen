@@ -363,9 +363,10 @@ function build(logger, config, cli, finished) {
 						next(null, 'ok');
 
 					}.bind(this), function(next){
-						this.signTizenApp(logger, function(){
-							next(null, 'ok');
-						});
+						// this.signTizenApp(logger, function(){
+						// 	next(null, 'ok');
+						// });
+						next(null, 'ok');
 					}.bind(this), function(next){
 						if(process.platform === 'win32'){
 							this.wgtPackaging7z(logger, function(){
@@ -1318,8 +1319,8 @@ build.prototype = {
 	},
 	debugOnDevice : function(logger, callback){
 		if(this.debugDevice && this.debugDevice != 'none'){
-			var runner = require("child_process");			
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');			
+			var runner = require("child_process");
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
 			var pathToCmd;
 			if(process.platform === 'win32'){
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug.bat');
@@ -1339,10 +1340,10 @@ build.prototype = {
 						logger.info('Debug initiated for: ' + pathToWgt);
 					}
 					callback();
-			});	
+			});
 		}else{
 			callback();
-		}		
+		}
 	},	
 	detectTizenSDK: function(logger, next){
 		var self = this;
@@ -1401,7 +1402,7 @@ build.prototype = {
 		}
 	},
 
-	find7za: function(logger){	
+	find7za: function(logger){
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if(fs.existsSync(zippath)){
 			return zippath;
