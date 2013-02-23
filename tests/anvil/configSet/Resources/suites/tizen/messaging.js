@@ -25,7 +25,7 @@ module.exports = new function() {
 		{name: 'removeMessages', timeout: 25000},
 		{name: 'sendSMS'},
 		{name: 'findFolders'},
-		{name: 'syncFolders', timeout: 25000},
+		{name: 'syncFolders'},
 		{name: 'messageAttach'},
 		{name: 'conversations', timeout: 25000},
 		{name: 'messageBody', timeout: 25000},
@@ -40,6 +40,8 @@ module.exports = new function() {
 
 	// Report error and finish test
 	var finishWithError = function(testRun, errorMessage) {
+		Ti.API.info('The following error occurred: ' + errorMessage);
+
 		reportError(testRun, 'The following error occurred: ' + errorMessage);
 		finish(testRun);
 	}
@@ -49,21 +51,27 @@ module.exports = new function() {
 		Ti.API.info('Get services started.');
 
 		function serviceListCB(services) {
-			if (services.length == 0) {
-				finishWithError(testRun, 
-					'To run the messaging suite, you must configure a test ' + 
-					'email account on this Tizen device. Please go to Settings, Email, Add.');
-			} else {
-				Ti.API.info(services.length + ' services found.');
+			var i = 0, 
+				len = services.length;
 
+			Ti.API.info(len + ' services found.');
+
+			if (len == 0) {
+				finishWithError(testRun, 'To run the messaging suite, you must configure a test email account on this Tizen device. Please go to Settings, Email, Add.');
+			} else {
 				valueOf(testRun, services).shouldBeObject();
 				valueOf(testRun, services).shouldNotBeNull();
 
-				for (var i = 0; i < services.length; i++) {
+				Ti.API.info('Start to test services properties.');
+
+				for (; i < len; i++) {
 					valueOf(testRun, services[i]).shouldNotBeNull();
+					valueOf(testRun, services[i]).shouldNotBeUndefined();
 					valueOf(testRun, services[i]).shouldBeObject();
+					valueOf(testRun, services[i].toString()).shouldBe('[object TiTizenMessagingMessageService]');
 					valueOf(testRun, services[i].messageStorage).shouldNotBeNull();
-					valueOf(testRun, services[i].messageStorage).shouldBeObject();
+					valueOf(testRun, services[i].messageStorage).shouldBeObject();					
+					valueOf(testRun, services[i].messageStorage.toString()).shouldBe('[object TiTizenMessagingMessageStorage]');
 				}
 
 				setTimeout(function() {
@@ -74,22 +82,19 @@ module.exports = new function() {
 			}
 		}
 
-		// Define the error callback
 		function errorCallback(error) {
 			finishWithError(testRun, error.message);
 		}
 
-		valueOf(testRun, tizen.messaging).shouldBeObject();
-		valueOf(testRun, tizen.messaging).shouldNotBeNull();
-		valueOf(testRun, function(){ 
-				tizen.messaging.getMessageServices(serviceName, serviceListCB, errorCallback);
-			}).shouldNotThrowException();
+		valueOf(testRun, Ti.Tizen.Messaging).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.Messaging).shouldNotBeNull();
+		valueOf(testRun, function() { Ti.Tizen.Messaging.getMessageServices(serviceName, serviceListCB, errorCallback); }).shouldNotThrowException();
 	}
 
 	// Get email messages of text messages from inbox
 	var getMessages = function(testRun, emailService, messagingType, callBack) {
-		Ti.API.info('Start find messages.');
-
+		Ti.API.info('Start to find messages.');
+		
 		function errorCallback(error) {
 			finishWithError(testRun, error.message);
 		}
@@ -102,17 +107,29 @@ module.exports = new function() {
 				callBack && callBack(messages);
 			}, 1000);
 		};
+		
+		var attributeFilter = Ti.Tizen.createAttributeFilter({
+			attributeName: 'type',
+			matchFlag: 'EXACTLY',
+			matchValue: messagingType
+		});
 
-		valueOf(testRun, function() { 
-				emailService.messageStorage.findMessages(
-					new tizen.AttributeFilter('type', 'EXACTLY', messagingType), 
-					messageQueryCallback, errorCallback); 
-			}).shouldNotThrowException();
+		valueOf(testRun, attributeFilter).shouldNotBeNull();
+		valueOf(testRun, attributeFilter).shouldNotBeUndefined();
+		valueOf(testRun, emailService.messageStorage).shouldNotBeNull();
+		valueOf(testRun, emailService.messageStorage.findMessages).shouldBeFunction();
+		valueOf(testRun, function() {
+			emailService.messageStorage.findMessages(
+				attributeFilter,
+				messageQueryCallback,
+				errorCallback
+			); 
+		}).shouldNotThrowException();
 	}
 
 	// Send new email to the test email account
 	var sendEmail = function(testRun, emailService, callBack) {
-		var message = null,
+		var message, 
 			recipientsList = [TEST_EMAIL];
 
 		Ti.API.info('Start send email message.');
@@ -133,7 +150,17 @@ module.exports = new function() {
 			finishWithError(testRun, error.message);
 		}			
 		
-		valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: 'email subject', plainBody: 'plain_body text', htmlBody: 'html_body text', to: recipientsList}); }).shouldNotThrowException();
+		valueOf(testRun, function() {
+			message = Ti.Tizen.Messaging.createMessage({
+				type: MESSAGING_EMAIL,
+				messageInitDict: {
+					subject: 'email subject', 
+					plainBody: 'plain_body text',
+					htmlBody: 'html_body text',
+					to: recipientsList
+				}
+			});
+		}).shouldNotThrowException();
 		valueOf(testRun, emailService).shouldBeObject();
 		valueOf(testRun, emailService).shouldNotBeNull();		        
 		valueOf(testRun, message).shouldBeObject();
@@ -143,10 +170,10 @@ module.exports = new function() {
 
 	// Get messages from test email account and remove these
 	var removeAllMessages = function(testRun, emailService, messagingType, callBack) {
-		Ti.API.info('Start to remove messages function.');
+		Ti.API.info('Start removeAllMessages function.');
 
 		function successCallback() {
-			Ti.API.info('Messages has been removed successfully.');
+			Ti.API.info('All messages has been removed successfully.');
 
 			setTimeout(function() {
 				callBack && callBack();
@@ -161,6 +188,7 @@ module.exports = new function() {
 			if (messages.length > 0) {
 				Ti.API.info(messages.length + ' message(s) found. Start to remove.');
 
+				valueOf(testRun, emailService.messageStorage.removeMessages).shouldBeFunction();
 				valueOf(testRun, function() { emailService.messageStorage.removeMessages(messages, successCallback, errorCallback); }).shouldNotThrowException();
 			} else {
 				Ti.API.info('Nothing to remove. Start to call callback function.');
@@ -170,12 +198,12 @@ module.exports = new function() {
 				}, 2000);
 			}
 		}
-		
+
 		getMessages(testRun, emailService, messagingType, removeMessages);
 	}
 
 	// Return list of folders
-	var findFolders =function(testRun, emailService, filter, callBack) {
+	var getFolders = function(testRun, emailService, filter, callBack) {
 		Ti.API.info('Start to find folders.');
 
 		function errorCallback(error) {
@@ -194,13 +222,10 @@ module.exports = new function() {
 			}, 500);
 		};
 
-		valueOf(testRun, emailService).shouldNotBeNull();
-		valueOf(testRun, emailService).shouldBeObject();
-		valueOf(testRun, emailService.messageStorage).shouldNotBeNull();
-		valueOf(testRun, emailService.messageStorage).shouldBeObject();
 		valueOf(testRun, filter).shouldNotBeNull();
 		valueOf(testRun, filter).shouldBeObject();
-
+		valueOf(testRun, filter).shouldNotBeUndefined();
+		valueOf(testRun, emailService.messageStorage.findFolders).shouldBeFunction();
 		valueOf(testRun, function() { emailService.messageStorage.findFolders(filter, folderArrayCB, errorCallback); }).shouldNotThrowException();
 	}
 
@@ -212,7 +237,7 @@ module.exports = new function() {
 
 			valueOf(testRun, services.length).shouldBeGreaterThan(0);
 
-			for (var i = 0; i < services.length; i++) {
+			for (var i = 0, len = services.length; i < len; i++) {
 				valueOf(testRun, services[i].id).shouldBeString();
 				valueOf(testRun, services[i].name).shouldNotBe('');
 				valueOf(testRun, services[i].name).shouldBeString();
@@ -232,11 +257,11 @@ module.exports = new function() {
 	this.addDraftMessage = function(testRun) {
 		function testAddDraftMessage(services) {
 			var emailService = services[0],
-				message = null,
+				message,
 				recipientsList = [TEST_EMAIL];
 
 			function allMessagesRemoved() {
-				Ti.API.info('All messages removed successfully.');
+				Ti.API.info('Start to add draft message.');
 
 				function errorCallback(error) {
 					finishWithError(testRun, error.message);
@@ -249,13 +274,18 @@ module.exports = new function() {
 						Ti.API.info('Test if new message properties are the same.');
 
 						valueOf(testRun, messages.length).shouldBeEqual(1);
-						valueOf(testRun, message).shouldNotBeNull();
-						valueOf(testRun, message).shouldBeObject();
+						valueOf(testRun, messages[0].toString()).shouldBe('[object TiTizenMessagingMessage]');
+
+						Ti.API.info('messages.length: ' + messages.length);
+						Ti.API.info('message.id: ' + message.id + ", messages[0].id: " + messages[0].id);
+						Ti.API.info('message.subject: ' + message.subject);
+						Ti.API.info('message.plainBody: ' + message.plainBody);
+
 						valueOf(testRun, message.id).shouldBeEqual(messages[0].id);
 						valueOf(testRun, message.subject).shouldBeEqual(messages[0].subject);
 						valueOf(testRun, message.plainBody).shouldBeEqual(messages[0].plainBody);
 
-						Ti.API.info('All are ok. Finish test.');
+						Ti.API.info('Finish test.');
 
 						finish(testRun);
 					}
@@ -263,28 +293,37 @@ module.exports = new function() {
 					getMessages(testRun, emailService, MESSAGING_EMAIL, allMessagesFound);
 				}
 
-				valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: 'draft email message', plainBody: 'Tizen draft email message.', to: recipientsList}); }).shouldNotThrowException();
+				valueOf(testRun, function() {
+					message	= Ti.Tizen.Messaging.createMessage({
+						type: MESSAGING_EMAIL,
+						messageInitDict: {
+							subject: 'draft email message', 
+							plainBody: 'Tizen draft email message.',
+							to: recipientsList
+						}
+					});
+				}).shouldNotThrowException();
+				valueOf(testRun, message.toString()).shouldBe('[object TiTizenMessagingMessage]');
 				valueOf(testRun, message).shouldNotBeNull();
 				valueOf(testRun, message).shouldBeObject();
+				valueOf(testRun, emailService.messageStorage.addDraftMessage).shouldBeFunction();
 				valueOf(testRun, function() { emailService.messageStorage.addDraftMessage(message, successCallback, errorCallback); }).shouldNotThrowException();
 			}
 
 			removeAllMessages(testRun, emailService, MESSAGING_EMAIL, allMessagesRemoved);
-
 		}
 
 		getServices(testRun, MESSAGING_EMAIL, testAddDraftMessage);
 	}
-
 
 	// Remove all messages from messageStorage to setup test.
 	// Add new message; check if there is one message in inbox.
 	// Remove message; check if there are no messages in inbox.
 	this.removeMessages = function(testRun) {
 		function testRemoveMessages(services) {
-			var emailService = services[0];
+			var emailService = services[0],
 				messageStorage = emailService.messageStorage,
-				message = null,
+				message,
 				recipientsList = [TEST_EMAIL];
 
 			Ti.API.info('Start testRemoveMessages test.');
@@ -300,16 +339,19 @@ module.exports = new function() {
 			// Remove all available messages
 			valueOf(testRun, function() { removeAllMessages(testRun, emailService, MESSAGING_EMAIL, messagesRemoved); }).shouldNotThrowException();
 
-
-			// Lets send new message and check if it really sent.
+			// Send new message and check if it really sent.
 			setTimeout(function() {
 				function messageSent() {
+					var attributeFilter = Ti.Tizen.createAttributeFilter({
+						attributeName: 'type',
+						matchFlag: 'EXACTLY',
+						matchValue: MESSAGING_EMAIL
+					});
+
 					function isMessageSent(messages) {
 						Ti.API.info(messages.length + ' sent message(s) found.');
 
 						valueOf(testRun, messages.length).shouldBeEqual(1);
-
-						Ti.API.info('Message sent.');
 
 						function newMessageRemoved() {
 							Ti.API.info('New messages removed.'); 
@@ -323,17 +365,33 @@ module.exports = new function() {
 							}
 							
 							setTimeout(function() {
-								valueOf(testRun, function() { messageStorage.findMessages(new tizen.AttributeFilter('type', 'EXACTLY', MESSAGING_EMAIL), successCallBack, errorCallback); }).shouldNotThrowException();
+								valueOf(testRun, function() {
+									messageStorage.findMessages(attributeFilter, successCallBack, errorCallback); 
+								}).shouldNotThrowException();
 							}, 1000);
 						}
 
 						valueOf(testRun, function() { removeAllMessages(testRun, emailService, MESSAGING_EMAIL, newMessageRemoved); }).shouldNotThrowException();
 					}
-
-					valueOf(testRun, function() { messageStorage.findMessages(new tizen.AttributeFilter('type', 'EXACTLY', MESSAGING_EMAIL), isMessageSent, errorCallback); }).shouldNotThrowException();
+					
+					valueOf(testRun, attributeFilter).shouldBe('[object TiTizenAttributeFilter]');
+					valueOf(testRun, messageStorage.findMessages).shouldBeFunction();
+					valueOf(testRun, function() { messageStorage.findMessages(attributeFilter, isMessageSent, errorCallback); }).shouldNotThrowException();
 				}
 				
-				valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: 'new email subject', plainBody: 'plain_body text for messageBody', htmlBody: 'html_body text', to: recipientsList}); }).shouldNotThrowException();
+				valueOf(testRun, function() {
+					message	= Ti.Tizen.Messaging.createMessage({
+						type: MESSAGING_EMAIL,
+						messageInitDict: {
+							subject: 'new email subject', 
+							plainBody: 'plain_body text for messageBody',
+							htmlBody: 'html_body text',
+							to: recipientsList
+						}
+					});
+				}).shouldNotThrowException();
+				valueOf(testRun, message).shouldBe('[object TiTizenMessagingMessage]');
+				valueOf(testRun, emailService.sendMessage).shouldBeFunction();
 				valueOf(testRun, function() { emailService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
 			}, 2000);
 		}
@@ -345,28 +403,20 @@ module.exports = new function() {
 	// Send new sms
 	// Check if it exists in 'sent'.
 	this.sendSMS = function(testRun) {
-		var SMSService = null,
-			message = null,
-			recipientsList = ['+00000000001', '+111111111112'];
-
 		function testSendSMS(services) {
-			Ti.API.info('Start testSendSMS test.')
+			var SMSService = services[0],
+				message,
+				recipientsList = ['+00000000001', '+111111111112'];
 
-			SMSService = services[0];
+			Ti.API.info('Start testSendSMS test.')
 
 			function errorCallback(error) {
 				finishWithError('The following error occurred: ' +  error.message);
 			}
 
 			function smsRemoved(messages) {
-				Ti.API.info('All SMS has been removed.')
-			}
+				Ti.API.info('All SMS has been removed.');
 
-			// Remove all sms before test
-			removeAllMessages(testRun, SMSService, MESSAGING_SMS, smsRemoved);
-
-
-			setTimeout(function() {
 				function messagesCB(sms) {
 					Ti.API.info(sms.length + ' sms found.');
 
@@ -385,12 +435,25 @@ module.exports = new function() {
 					}
 					
 					valueOf(testRun, sms.length).shouldBeEqual(0);
-					valueOf(testRun, function() { message = new tizen.Message(MESSAGING_SMS, {plainBody: 'SMS message body text.', to: recipientsList}); }).shouldNotThrowException();
+					valueOf(testRun, function() {
+						message	= Ti.Tizen.Messaging.createMessage({
+							type: MESSAGING_SMS,
+							messageInitDict: {
+								plainBody: 'SMS message body text.',
+								to: recipientsList
+							}
+						});
+					}).shouldNotThrowException();
+					valueOf(testRun, message).shouldBe('[object TiTizenMessagingMessage]');
+					valueOf(testRun, SMSService.sendMessage).shouldBeFunction();
 					valueOf(testRun, function() { SMSService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
 				}
 
 				valueOf(testRun, function() { getMessages(testRun, SMSService, MESSAGING_SMS, messagesCB); }).shouldNotThrowException();
-			}, 2000);
+			}
+
+			// Remove all sms before test
+			removeAllMessages(testRun, SMSService, MESSAGING_SMS, smsRemoved);
 		}
  
 		getServices(testRun, MESSAGING_SMS, testSendSMS);
@@ -400,54 +463,73 @@ module.exports = new function() {
 	this.findFolders = function(testRun) {
 		function testFindFolders(services) {
 			var emailService = services[0],
-				filter = new tizen.AttributeFilter('serviceId', 'EXACTLY', emailService.id);
+				filter = Ti.Tizen.createAttributeFilter({
+					attributeName: 'serviceId',
+					matchFlag: 'EXACTLY',
+					matchValue: emailService.id
+				});
 
 			function foldersFound(folders) {
 				Ti.API.info('Start to test properties of found folders.');
 
-				for (var i = 0; i < folders.length; i++) {
+				for (var i = 0, len = folders.length; i < len; i++) {
+					Ti.API.info('Folder ' + folders[i].name + ' found. Check properties.');
+
+					valueOf(testRun, folders[i]).shouldBe('[object TiTizenMessagingMessageFolder]');
 					valueOf(testRun, folders[i].contentType).shouldBeString();
 					valueOf(testRun, folders[i].path).shouldBeString();
 					valueOf(testRun, folders[i].id).shouldBeNumber();
 					valueOf(testRun, folders[i].name).shouldBeString();
 					valueOf(testRun, folders[i].type).shouldBeString();
 
-					Ti.API.info('Folder ' + folders[i].name + ' found.');
+					Ti.API.info(folders[i].name + ' properties had been checked.');
 				}
+
+				Ti.API.info('All folders has been checked. Finish.');
 
 				finish(testRun);
 			}			
 
-			valueOf(testRun, filter).shouldNotBeNull();
-			valueOf(testRun, filter).shouldBeObject();
+			valueOf(testRun, filter).shouldBe('[object TiTizenAttributeFilter]');
 
-			findFolders(testRun, emailService, filter, foldersFound);
+			getFolders(testRun, emailService, filter, foldersFound);
 		}
 
 		getServices(testRun, MESSAGING_EMAIL, testFindFolders);		
 	}
 
 	// Test if folder syncing works without errors. (The synced information is not verified.)
+	// Fails, see https://bugs.tizen.org/jira/browse/TDIST-165
 	this.syncFolders = function(testRun) {
 		function testSyncFolders(services) {
 			Ti.API.info('Start test sync folders.');
 
-			var emailService = services[0];
-				filter = new tizen.AttributeFilter('serviceId', 'EXACTLY', emailService.id);
+			var emailService = services[0],
+				filter = Ti.Tizen.createAttributeFilter({
+					attributeName: 'serviceId',
+					matchFlag: 'EXACTLY',
+					matchValue: emailService.id
+				}),
 				syncedFoldersCount = 0;
 
 			function foldersFound(folders) {
+				Ti.API.info('Start to sync folders.');
+
 				function errorCallback(error) {
 					finishWithError('The following error occurred: ' +  error.message);
 				}
 
 				function folderSynced() {
-					Ti.API.info('Folder syccesfully synced.');
+					Ti.API.info('Folder ' + folders[syncedFoldersCount].name + ' syccesfully synced.');
 
 					++syncedFoldersCount;
 				}
 
-				for (var i = 0; i < folders.length; i++) {
+				valueOf(testRun, emailService.syncFolder).shouldBeFunction();
+
+				for (var i = 0, len = folders.length; i < len; i++) {
+					Ti.API.info('Start to sync ' + folders[i].name + ' folder.');
+
 					valueOf(testRun, function() { emailService.syncFolder(folders[i], folderSynced, errorCallback, 30); }).shouldNotThrowException();
 				}
 
@@ -455,14 +537,14 @@ module.exports = new function() {
 					Ti.API.info('Finish syncFolders test.');
 
 					valueOf(testRun, syncedFoldersCount).shouldBeEqual(folders.length);
+
 					finish(testRun);
 				}, 6000);
 			}
 
-			valueOf(testRun, filter).shouldNotBeNull();
-			valueOf(testRun, filter).shouldBeObject();
+			valueOf(testRun, filter).shouldBe('[object TiTizenAttributeFilter]');
 
-			findFolders(testRun, emailService, filter, foldersFound);
+			getFolders(testRun, emailService, filter, foldersFound);
 		}
 
 		getServices(testRun, MESSAGING_EMAIL, testSyncFolders);
@@ -473,90 +555,135 @@ module.exports = new function() {
 	// Send message
 	// Load message attachments
 	// Fails, because Tizen currently does not support attachments.
-	// TODO: verify if the attachment received is identical to the attachment sent.
 	this.messageAttach = function(testRun) {
 		function testMessageAttach(services) {
-			var message = null,
-				emailService = services[0],
-				recipientsList = [TEST_EMAIL],
-				messageChangeCallback = {
-					messagesupdated: function(messages) {
-						Ti.API.info('Update event listener invoked.');
+			var emailService = services[0];
 
-						valueOf(testRun, messages.length).shouldBeGreaterThan(0);
-						valueOf(testRun, watchId).shouldNotBeNull();
-						messageStorage.removeChangeListener(watchId);
-
-						Ti.API.info('Update event listener removed.')
-					},
-					messagesadded: function(messages) {
-						Ti.API.info('Add event listener invoked.');
-
-						valueOf(testRun, messages.length).shouldBeGreaterThan(0);
-					},
-					messagesremoved: function(messages) {
-						Ti.API.info('Remove event listener invoked.');
-
-						valueOf(testRun, messages.length).shouldBeGreaterThan(0);
-					}
-				};
-
-			function messageSent(recipients, message) {
-				Ti.API.info('Message sent with attachment.');
-
-				function errorCallback(error) {
-					finishWithError(testRun, error.message);
-				}
-
-				function serviceSynced() {
-					Ti.API.info('Service synced.');
-
-					function messagesFoundCB(messages) {
-						Ti.API.info(messages.length + ' message(s) found.');
-
-						function attachmentLoaded(attachment) {
-							Ti.API.info('Attachment loaded.');
-
-							valueOf(testRun, attachment.id).shouldBeObject();
-							valueOf(testRun, attachment.id).shouldNotBeNull();
-							valueOf(testRun, attachment.filePath).shouldBeObject();
-							valueOf(testRun, attachment.filePath).shouldNotBeNull();
-
-							finish(testRun);
-						}
-
-						for (var i = 0; i < messages.length; i++) {				    		
-							valueOf(testRun, messages[i]).shouldBeObject();
-							valueOf(testRun, !!messages[i].attachments[0].loaded).shouldBeBoolean();
-
-							if (!messages[i].attachments[0].loaded) {
-								valueOf(testRun, function() { emailService.loadMessageAttachment(messages[i].attachments[0], attachmentLoaded, errorCallback); }).shouldNotThrowException();
-							}
-						}
-
-						setTimeout(function() {
-							Ti.API.info('Finish attachments test.');
-
-							finish(testRun);
-						}, 5000);
-					};
-
-					valueOf(testRun, function() { emailService.messageStorage.findMessages(new tizen.AttributeFilter('type', 'EXACTLY', 'messaging.email'), messagesFoundCB, errorCallback); }).shouldNotThrowException();
-				}
-
-				valueOf(testRun, function() { emailService.sync(serviceSynced, errorCallback, 30); }).shouldNotThrowException();
+			function errorCallback(error) {
+				finishWithError('The following error occurred: ' +  error.message);
 			}
 
-			// Add messages listener: doesn't work on Anvil but work in Tizen IDE
-			valueOf(testRun, function() { watchId = messageStorage.addMessagesChangeListener(messageChangeCallback); }).shouldNotThrowException();
+			function messagesRemoved() {
+				Ti.API.info('All messages has been removed.');
 
-			setTimeout(function() {
-				valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: 'email subject', plainBody: 'plain_body text', htmlBody: 'html_body text', to: recipientsList}); }).shouldNotThrowException();
-				valueOf(testRun, message).shouldNotBeNull();
-				valueOf(testRun, message).shouldBeObject();
-				valueOf(testRun, function() { message.attachments = [new tizen.MessageAttachment('suites/tizen/images/img1_for_anvil.png', 'image/png')]; }).shouldNotThrowException();
-				valueOf(testRun, function() { emailService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
-			}, 5000);
+				var message,
+					watchId,					
+					recipientsList = [TEST_EMAIL],
+					messageChangeCallback = {
+						messagesupdated: function(messages) {
+							Ti.API.info('Update event listener invoked.');
+
+							valueOf(testRun, messages.length).shouldBeGreaterThan(0);
+							valueOf(testRun, watchId).shouldNotBeNull();
+							messageStorage.removeChangeListener(watchId);
+
+							Ti.API.info('Update event listener removed.')
+						},
+						messagesadded: function(messages) {
+							Ti.API.info('Add event listener invoked.');
+
+							valueOf(testRun, messages.length).shouldBeGreaterThan(0);
+						},
+						messagesremoved: function(messages) {
+							Ti.API.info('Remove event listener invoked.');
+
+							valueOf(testRun, messages.length).shouldBeGreaterThan(0);
+						}
+					};
+
+				function messageSent(recipients, message) {
+					Ti.API.info('Message sent with attachment.');
+
+					function serviceSynced() {
+						Ti.API.info('Service synced.');
+
+						function messagesFoundCB(messages) {
+							Ti.API.info(messages.length + ' message(s) found.');
+							finish(testRun);
+
+							function attachmentLoaded(attachment) {
+								Ti.API.info('Attachment loaded.');
+
+								valueOf(testRun, attachment.id).shouldBeObject();
+								valueOf(testRun, attachment.id).shouldNotBeNull();
+								valueOf(testRun, attachment.filePath).shouldBeObject();
+								valueOf(testRun, attachment.filePath).shouldNotBeNull();
+
+								finish(testRun);
+							}
+
+							for (var i = 0, len = messages.length; i < len; i++) {				    		
+								valueOf(testRun, messages[i]).shouldBeObject();
+								valueOf(testRun, !!messages[i].attachments[0].loaded).shouldBeBoolean();
+
+								if (!messages[i].attachments[0].loaded) {
+									valueOf(testRun, function() { emailService.loadMessageAttachment(messages[i].attachments[0], attachmentLoaded, errorCallback); }).shouldNotThrowException();
+								}
+							}
+
+							setTimeout(function() {
+								Ti.API.info('Finish attachments test.');
+
+								finish(testRun);
+							}, 5000);
+						};
+
+						var filter = Ti.Tizen.createAttributeFilter({
+							attributeName: 'type',
+							matchFlag: 'EXACTLY',
+							matchValue: MESSAGING_EMAIL
+						});
+
+						valueOf(testRun, filter).shouldBe('[object TiTizenAttributeFilter]');
+						valueOf(testRun, function() { emailService.messageStorage.findMessages(filter, messagesFoundCB, errorCallback); }).shouldNotThrowException();
+					}
+
+					valueOf(testRun, emailService.sync).shouldBeFunction();
+					valueOf(testRun, function() { emailService.sync(serviceSynced, errorCallback, 30); }).shouldNotThrowException();
+				}
+
+				Ti.API.info('Start to add message listener.');
+
+				valueOf(testRun, emailService.messageStorage.addMessagesChangeListener).shouldBeFunction();
+				
+				// Add messages listener: doesn't work on Anvil but work in Tizen IDE
+				valueOf(testRun, function() { watchId = emailService.messageStorage.addMessagesChangeListener(messageChangeCallback); }).shouldNotThrowException();
+				valueOf(testRun, watchId).shouldNotBeUndefined();
+				valueOf(testRun, watchId).shouldBeNumber();
+
+				setTimeout(function() {
+					valueOf(testRun, function() {
+						message	= Ti.Tizen.Messaging.createMessage({
+							type: MESSAGING_EMAIL,
+							messageInitDict: {
+								subject: 'email subject', 
+								plainBody: 'plain_body text',
+								htmlBody: 'html_body text',
+								to: recipientsList
+							}
+						});
+					}).shouldNotThrowException();
+					valueOf(testRun, message).shouldBe('[object TiTizenMessagingMessage]');
+
+					valueOf(testRun, function() { 
+						message.attachments = [
+							Ti.Tizen.Messaging.createMessageAttachment({
+								filePath: 'suites/tizen/images/img1_for_anvil.png',
+								mimeType: 'image/png'
+							})
+						];
+					}).shouldNotThrowException();
+					valueOf(testRun, message).shouldBe('[object TiTizenMessagingMessageAttachment]');
+					
+					Ti.API.info('Start to send message');
+
+					valueOf(testRun, emailService.sendMessage).shouldBeFunction();
+					valueOf(testRun, function() { emailService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
+				}, 5000);
+			}
+
+			// Remove all available messages
+			valueOf(testRun, function() { removeAllMessages(testRun, emailService, MESSAGING_EMAIL, messagesRemoved); }).shouldNotThrowException();
 		}
 
 		getServices(testRun, MESSAGING_EMAIL, testMessageAttach);
@@ -572,10 +699,9 @@ module.exports = new function() {
 
 			var emailService = services[0],
 				messageStorage = emailService.messageStorage,
-				watchId = null,
+				watchId,
 				recipientsList = [TEST_EMAIL],
-				message = null;
-
+				message;
  
 			function errorCallback(error) {
 				finishWithError(testRun, 'The following error occurred: ' +  error.message);
@@ -585,18 +711,23 @@ module.exports = new function() {
 			function messageSent(recipients) {
 				Ti.API.info('Inbox folder synced.');
 
-				var filter = new tizen.AttributeFilter('type', 'EXACTLY', 'messaging.email');
+				var filter = Ti.Tizen.createAttributeFilter({
+					attributeName: 'type',
+					matchFlag: 'EXACTLY',
+					matchValue: MESSAGING_EMAIL
+				});
 				
 				// Define the update message success callback
 				function successCallback() {
 					Ti.API.info('All messages has been updated.');
 
 					function updatedMessageFound(updatedMessages) {
-						Ti.API.info(updatedMessages.length + ' message(s) found.');
+						Ti.API.info(updatedMessages.length + ' updated message(s) found.');
 
 						for (var i = 0; i < updatedMessages.length; i++) {
-							Ti.API.info('updatedMessages[' + i + ']: ' + updatedMessages[i].id + ', isRead: ' + updatedMessages[i].isRead);
+							Ti.API.info('updatedMessages[' + i + '].id: ' + updatedMessages[i].id + ', isRead: ' + updatedMessages[i].isRead);
 
+							valueOf(testRun, updatedMessages[i]).shouldBe('[object TiTizenMessagingMessage]');
 							valueOf(testRun, updatedMessages[i].id).shouldNotBeNull();
 							valueOf(testRun, updatedMessages[i].isRead).shouldBeTrue();
 						}
@@ -614,21 +745,35 @@ module.exports = new function() {
 					valueOf(testRun, messages).shouldBeObject();
 					valueOf(testRun, messages.length).shouldBeGreaterThan(0);
 
-					for (var i = 0; i < messages.length; i++) {
+					for (var i = 0, len = messages.length; i < len; i++) {
+						valueOf(testRun, messages[i]).shouldBe('[object TiTizenMessagingMessage]');
+
 						messages[i].isRead = true;
 					}
+
+					Ti.API.info('Start to update ' + len + ' messages.');
 
 					valueOf(testRun, function() { messageStorage.updateMessages(messages, successCallback, errorCallback); }).shouldNotThrowException();
 				}
 				
-				valueOf(testRun, filter).shouldBeObject();
+				valueOf(testRun, filter).shouldBe('[object TiTizenAttributeFilter]');
+				valueOf(testRun, messageStorage.findMessages).shouldBeFunction();
 				valueOf(testRun, function() { messageStorage.findMessages(filter, messageArrayCB, errorCallback); }).shouldNotThrowException();
 			}
-			
-			valueOf(testRun, function() { message = new tizen.Message(MESSAGING_EMAIL, {subject: 'new email subject', plainBody: 'plain_body text for messageBody', htmlBody: 'html_body text', to: recipientsList}); }).shouldNotThrowException();
+
+			valueOf(testRun, function() {
+				message	= Ti.Tizen.Messaging.createMessage({
+					type: MESSAGING_EMAIL,
+					messageInitDict: {
+						subject: 'new email subject', 
+						plainBody: 'plain_body text for messageBody',
+						htmlBody: 'html_body text',
+						to: recipientsList
+					}
+				});
+			}).shouldNotThrowException();
+			valueOf(testRun, message).shouldBe('[object TiTizenMessagingMessage]');
 			valueOf(testRun, message).shouldBeObject();
-			valueOf(testRun, emailService).shouldBeObject();
-			valueOf(testRun, emailService).shouldNotBeNull();				
 			valueOf(testRun, function() { emailService.sendMessage(message, messageSent, errorCallback); }).shouldNotThrowException();
 		}
 		
@@ -640,10 +785,15 @@ module.exports = new function() {
 	// Check if conversation added
 	this.conversations = function(testRun) {
 		function testConversations(services) {
-			Ti.API.info('Start test testConversations.')
+			Ti.API.info('Start testConversations test.')
 
 			var emailService = services[0];
-				messageStorage = emailService.messageStorage;
+				messageStorage = emailService.messageStorage,
+				attributeFilter = Ti.Tizen.createAttributeFilter({
+					attributeName: 'from',
+					matchFlag: 'CONTAINS',
+					matchValue: TEST_EMAIL
+				});
 
 			function errorCallback(error) {
 				finishWithError('The following error occurred: ' +  error.message);
@@ -661,8 +811,9 @@ module.exports = new function() {
 				}
 			}
 
-			valueOf(testRun, function() { messageStorage.findConversations(new tizen.AttributeFilter('from', 'CONTAINS', TEST_EMAIL), conversationsFound, errorCallback); }).shouldNotThrowException();
+			valueOf(testRun, attributeFilter).shouldBe('[object TiTizenAttributeFilter]');
 
+			valueOf(testRun, function() { messageStorage.findConversations(attributeFilter, conversationsFound, errorCallback); }).shouldNotThrowException();
 
 			setTimeout(function() {
 				function messageSent(recipients, message) {
@@ -675,7 +826,8 @@ module.exports = new function() {
 						finish(testRun);
 					}
 
-					valueOf(testRun, function() { messageStorage.findConversations(new tizen.AttributeFilter('from', 'CONTAINS', TEST_EMAIL), conversationsFound, errorCallback); }).shouldNotThrowException();
+					valueOf(testRun, messageStorage.findConversations).shouldBeFunction();
+					valueOf(testRun, function() { messageStorage.findConversations(attributeFilter, conversationsFound, errorCallback); }).shouldNotThrowException();
 				}
 
 				valueOf(testRun, function() { sendEmail(testRun, emailService, messageSent); }).shouldNotThrowException();
@@ -693,7 +845,7 @@ module.exports = new function() {
 		function testMessageBody(services) {
 			var emailService = services[0],
 				messageStorage = emailService.messageStorage,
-				messageId = null;
+				messageId;
 
 			Ti.API.info('Start test testMessgeBody.');
 
@@ -706,7 +858,6 @@ module.exports = new function() {
 			}
 
 			valueOf(testRun, function() { removeAllMessages(testRun, emailService, MESSAGING_EMAIL, messagesRemoved); }).shouldNotThrowException();
-
 
 			setTimeout(function() {
 				function messageSent(recipients, message) {
@@ -722,15 +873,18 @@ module.exports = new function() {
 							valueOf(testRun, messageLoaded.body['plainBody']).shouldBeEqual(message.body['plainBody']);
 							valueOf(testRun, messageLoaded.body['messageId']).shouldBeEqual(message.body['messageId']);
 							valueOf(testRun, messageLoaded.body['htmlBody']).shouldBeEqual(message.body['htmlBody']);
+
 							Ti.API.info('Finish test messageBody.');
 
 							finish(testRun);
 						}
 
-						valueOf(testRun, messages[0]).shouldBeObject();					
+						valueOf(testRun, messages[0]).shouldBeObject();
+						valueOf(testRun, messages[0]).shouldBe('[object TiTizenMessagingMessage]');
+						valueOf(testRun, messages[0].body).shouldBe('[object TiTizenMessagingMessageBody]');
 						valueOf(testRun, !!messages[0].body.loaded).shouldBeBoolean();
-						
-						if (!messages[0].body.loaded) {						
+
+						if (!messages[0].body.loaded) {
 							valueOf(testRun, messageId).shouldBeString();
 							valueOf(testRun, function() { emailService.loadMessageBody(messages[0], successCallback, errorCallback); }).shouldNotThrowException();
 						} else if (messages[0].body.loaded) {
@@ -739,14 +893,18 @@ module.exports = new function() {
 							valueOf(testRun, messages[0].body['plainBody']).shouldBeEqual(message.body['plainBody']);
 							valueOf(testRun, messages[0].body['messageId']).shouldBeEqual(message.body['messageId']);
 							valueOf(testRun, messages[0].body['htmlBody']).shouldBeEqual(message.body['htmlBody']);
+
 							finish(testRun);
 						}
 					}
+
 					valueOf(testRun, function() { getMessages(testRun, emailService, MESSAGING_EMAIL, messagesFound); }).shouldNotThrowException();
-				}				
+				}
+
 				valueOf(testRun, function() { sendEmail(testRun, emailService, messageSent) }).shouldNotThrowException();
 			}, 2000);
 		}
+
 		valueOf(testRun, function() { getServices(testRun, MESSAGING_EMAIL, testMessageBody); }).shouldNotThrowException();
 	}
 }
