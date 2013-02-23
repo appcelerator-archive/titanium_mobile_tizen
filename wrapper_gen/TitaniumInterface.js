@@ -8,6 +8,8 @@ exports.TitaniumInterface = (function(){
 
 	var moduleConstants = '';
 
+	var primitives = ['DOMString', 'unsigned long', 'unsigned long long', 'long', 'boolean', 'short', 'unsigned short', 'float', 'double', 'enum'];
+
 	var options = {
 		jsStubsFolder: 'output/jsStubs/',
 		titaniumFolder: 'Ti/Tizen/',
@@ -75,6 +77,19 @@ exports.TitaniumInterface = (function(){
 		var attr = '';
 		var list = interfaceO.members;
 
+		function paramFormat(param){
+			var res;
+			if(param.name == 'onsuccess') {
+				res = 'function(object){ on' + param.type.idlType + '(object, onsuccess); }';
+			} else if(param.name == 'onerror'){
+				res = 'function(e) { onerror.call(null, new WebAPIError(e)); }';
+			} else {
+				res = param.name;
+			}
+			return res;
+		}
+
+
 		if(list.length>0) {
 			for(var k = 0, l = list.length; k<l; k++) {
 				switch(list[k].type) {
@@ -93,7 +108,8 @@ exports.TitaniumInterface = (function(){
 							//without comments for attributes
 
 							if ((primitives.indexOf(arg[h].type.idlType) > -1) || (arg[h].type.idlType.indexOf('Callback') > -1)) {
-								argsTizen += arg[h].name;
+								argsTizen += paramFormat(arg[h]);
+
 								argsTizen += arg[h+1] ? ', ' : '';
 							} else {
 								argsTizen += arg[h].optional ? arg[h].name + ' ? ' + arg[h].name + '._obj : ' + arg[h].name : arg[h].name + '._obj';
@@ -269,6 +285,8 @@ exports.TitaniumInterface = (function(){
 			imp+= this.getMainInterface(modName[0]);
 			imp+= this.getCreators();
 			imp += '	});\n';
+			imp += this.callBacksFunctionOnly;
+			this.callBacksFunctionOnly = '';
 			return imp;
 		},
 
@@ -382,6 +400,7 @@ exports.TitaniumInterface = (function(){
 		},
 
 		constructors: [],
+		callBacksFunctionOnly: '',
 		getCreators: function(){
 			var view = '';
 			var SuperBasicInterfaces = []; //Interfaces what used for inheritances
@@ -451,7 +470,14 @@ exports.TitaniumInterface = (function(){
 										indexInheritance = true;
 									}*/
 
-									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, true);
+									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
+								} else if(this.dA[i].extAttrs[0].name == 'Callback' && this.dA[i].extAttrs[0].value == 'FunctionOnly' && (this.dA[i].members[0].arguments[0] && this.primitives.indexOf(this.dA[i].members[0].arguments[0].type.idlType) == -1)) {
+									this.callBacksFunctionOnly += '	function on'+this.dA[i].name+'(object, onsuccess) { \n';
+									this.callBacksFunctionOnly += '		onsuccess.call(null, new ';
+									if(this.dA[i].members.length == 1) {
+										this.callBacksFunctionOnly += this.dA[i].members[0].arguments[0].type.idlType +'(object));\n'
+									}
+									this.callBacksFunctionOnly += '	};\n\n';
 								}
 						}
 					}
