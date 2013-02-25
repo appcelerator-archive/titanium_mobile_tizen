@@ -78,7 +78,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Filesystem/FileStream', 'Ti/Tizen/WebAPIError'
 				get: function() {
 					return this._obj.length;
 				}
-			},
+			}
 		},
 
 		toURI: function() {
