@@ -63,7 +63,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 		},
 		
 		createFile: function(args){
-			return new (require('Ti/Tizen/Filesystem/File'))(args);
+			return new File(args);
 		}
 	});
 });
