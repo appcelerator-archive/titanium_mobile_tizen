@@ -10,13 +10,13 @@ module.exports = new function() {
 		valueOf,
 		reportError,
 		VR = 'documents',
-		errorCB = function(e, testRun, type){
+		errorCB = function(e, testRun, type) {
 			Ti.API.info('The following error occurred from - '+type+'. Error: ' +  e.message);
 			reportError(testRun,'The following error occurred from - '+type+'. Error: ' +  e.message);
 			finish(testRun);
 		};
 
-	var deleteFiles = function(dir, arrayFiles, finish){
+	var deleteFiles = function(dir, arrayFiles, finish) {
 		var n = arrayFiles.length-1;
 		function deleteFile(filePath) {
 			dir.deleteFile(
@@ -37,7 +37,7 @@ module.exports = new function() {
 		deleteFile(arrayFiles[n]);
 	}
 
-	var deleteDirectories = function(dir, arrayDirectories, finish){
+	var deleteDirectories = function(dir, arrayDirectories, finish) {
 		var n = arrayDirectories.length - 1;
 		function deleteDirectory(directoryPath) {
 			dir.deleteDirectory(
@@ -86,110 +86,93 @@ module.exports = new function() {
 			contents,
 			fNnew = 'testFile1.txt',
 			fileNew,
-			newContents;
-		
-		var readToStreamNewFile = function(stream){
-			//read from second file, delete files. Check if content from 
-			//second file is the same with a start content 
-			var startBytes = stream.bytesAvailable;
-			valueOf(testRun, stream.eof).shouldBeFalse();
-			valueOf(testRun, stream.position).shouldBeEqual(0);
-			valueOf(testRun, startBytes).shouldBeGreaterThan(0);
-			//read from stream 
-			newContents = stream.read(stream.bytesAvailable);
+			newContents,
 			
-			valueOf(testRun, stream.eof).shouldBeTrue();
-			valueOf(testRun, stream.bytesAvailable).shouldBeLessThanEqual(startBytes);
-			valueOf(testRun, stream.position).shouldBeEqual(startBytes-1);
+			readToStreamNewFile = function(stream) {
+				
+				valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+				
+				//read from second file, delete files. Check if content from 
+				//second file is the same with a start content 
+				var startBytes = stream.bytesAvailable;
+				valueOf(testRun, stream.eof).shouldBeFalse();
+				valueOf(testRun, stream.position).shouldBeEqual(0);
+				valueOf(testRun, startBytes).shouldBeGreaterThan(0);
+				//read from stream 
+				newContents = stream.read(stream.bytesAvailable);
+				
+				valueOf(testRun, stream.eof).shouldBeTrue();
+				valueOf(testRun, stream.bytesAvailable).shouldBeLessThanEqual(startBytes);
+				valueOf(testRun, stream.position).shouldBeEqual(startBytes-1);
+				
+				stream.close();
+				
+				deleteFiles(docDir, [file.fullPath, fileNew.fullPath], function() {
+					//Check if content from second file is the same with a start content
+					valueOf(testRun, newContents).shouldBeEqual(text);
+					finish(testRun);
+				});
+			},
 			
-			stream.close();
+			writeToStreamNewFile = function(stream) {
+				
+				valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+				
+				//Write the second file from String - text;
+				stream.write(contents);
+				stream.close();
+
+				fileNew.openStream('r', readToStreamNewFile, function(e) {errorCB(e, testRun, 'Read second file')});
+			},
+
+			readToStream = function(stream) {
 			
-			deleteFiles(docDir, [file.fullPath, fileNew.fullPath], function(){
-				//Check if content from second file is the same with a start content
-				valueOf(testRun, newContents).shouldBeEqual(text);
-				finish(testRun);
-			});
-		};
-		
-		var writeToStreamNewFile = function(stream){
-			//Write the second file from String - text;
-			stream.write(contents);
-			stream.close();
+				valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+					
+				//Read the first file
+				contents = stream.read(stream.bytesAvailable);
+				stream.close();
 
-			fileNew.openStream(
-				'r',
-				readToStreamNewFile,
-				function(e){
-					errorCB(e, testRun, 'Read second file')
-					} 
-				);
-		};
-
-		var readToStream = function(stream) {
-			//Read the first file
-			contents = stream.read(stream.bytesAvailable);
-			stream.close();
-
-			try {
-				fileNew = docDir.createFile(fNnew);
-			} catch (exc) {
-				if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-					fileNew = docDir.resolve(fNnew);
-				} else {
-					errorCB(exc, testRun, 'Create file');
+				try {
+					fileNew = docDir.createFile(fNnew);
+				} catch (exc) {
+					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						fileNew = docDir.resolve(fNnew);
+					} else {
+						errorCB(exc, testRun, 'Create file');
+					}
 				}
-			}
-			fileNew.openStream(
-				'w',
-				writeToStreamNewFile,
-				function(e){
-					errorCB(e, testRun, 'Write second file')
-					} 
-				);
-		}
+				fileNew.openStream('w', writeToStreamNewFile, function(e) {errorCB(e, testRun, 'Write second file')});
+			},
 
-		var writeToStream = function(stream){
-			//Write the first file from String - text
-			stream.write(text);
-			stream.close();
+			writeToStream = function(stream) {
+				//Write the first file from String - text
+				stream.write(text);
+				stream.close();
 
-			file.openStream(
-				'r',
-				readToStream,
-				function(e){
-					errorCB(e, testRun, 'Read first file')
-					} 
-				);
-		};
+				file.openStream('r', readToStream, function(e) {errorCB(e, testRun, 'Read first file')});
+			},
 
-		var resolveSCB = function(dir){
-			//resolve virtual root callback
-			docDir = dir;
-			try {
-				file = docDir.createFile(fN);
-			} catch (exc) {
-				if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-					file = docDir.resolve(fN);
-				} else {
-					errorCB(exc, testRun, 'Create file')
+			resolveSCB = function(dir) {
+				//resolve virtual root callback
+				docDir = dir;
+				
+				valueOf(testRun, docDir instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+				
+				try {
+					file = docDir.createFile(fN);
+				} catch (exc) {
+					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						file = docDir.resolve(fN);
+					} else {
+						errorCB(exc, testRun, 'Create file')
+					}
 				}
-			}
-			file.openStream(
-				'w',
-				writeToStream,
-				function(e){
-					errorCB(e, testRun, 'Write first file')
-					} 
-				); 
-		};
+				file.openStream('w', writeToStream, function(e) { errorCB(e, testRun, 'Write first file') }); 
+			};
 
-		//resolve to virtual root 
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-					errorCB(e, testRun, 'Resolve to virtual root')
-				}, 'rw');
+		//resolve to virtual root
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) { errorCB(e, testRun, 'Resolve to virtual root') }, 'rw');
 	}
 	
 	this.createDelete = function(testRun) {
@@ -197,71 +180,63 @@ module.exports = new function() {
 			file,
 			directory,
 			dN = 'testDir',
-			fN = 'textFile.txt';
+			fN = 'textFile.txt',
 	   
-		var resolveSCB = function(dir) {
-			var directory,
-				file;
-			docDir = dir;
-			
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					directory = docDir.resolve(dN);
-					deleteDirectories(docDir, [directory.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-						directory = docDir.createDirectory(dN);
-						file = directory.createFile(fN);
-						
-						function listFilesAfterRemovingCB(files){
-							valueOf(testRun, files.length).shouldBeEqual(0);
-							deleteDirectories(docDir, [directory.fullPath], function(){
-								try {
-									directory = docDir.resolve(dN);
-								} catch (exc) {
-									if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-										finish(testRun);
-									} else {
-										errorCB(exc, testRun, 'Create file');
+			resolveSCB = function(dir) {
+				var directory, file;
+				docDir = dir;
+				valueOf(testRun, docDir instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+				
+				
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						directory = docDir.resolve(dN);
+						deleteDirectories(docDir, [directory.fullPath], function() { createDir(); });
+					} catch (exc) {
+						if ( exc.type == 'IOError' && 
+							(exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+							directory = docDir.createDirectory(dN);
+							file = directory.createFile(fN);
+							
+							function listFilesAfterRemovingCB(files) {
+								valueOf(testRun, files.length).shouldBeEqual(0);
+								deleteDirectories(docDir, [directory.fullPath], function() {
+									try {
+										directory = docDir.resolve(dN);
+									} catch (exc) {
+										if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+											finish(testRun);
+										} else {
+											errorCB(exc, testRun, 'Create file');
+										}
 									}
-								}
-							});
-						}
-						
-						function listFilesAfterAddingCB(files){
-							valueOf(testRun, files.length).shouldBeEqual(1);
-								deleteFiles(docDir, [files[0].fullPath], function(){
-									//list of files after removing the file    
-									directory.listFiles(
-										listFilesAfterRemovingCB,
-										function(e){
-											errorCB(e, testRun, 'List of files after deleting the file')
-											}
-										);
 								});
+							}
+							
+							function listFilesAfterAddingCB(files) {
+								valueOf(testRun, files.length).shouldBeEqual(1);
+								
+								valueOf(testRun, files[0] instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+								
+								deleteFiles(docDir, [files[0].fullPath], function() {
+									//list of files after removing the file    
+									directory.listFiles(listFilesAfterRemovingCB, function(e) {errorCB(e, testRun, 'List of files after deleting the file')});
+								});
+							}
+							
+							valueOf(testRun, directory instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+							
+							directory.listFiles(listFilesAfterAddingCB, function(e) {errorCB(e, testRun, 'List of files after creating the file')});
+						} else {
+							errorCB(exc, testRun, 'Create file');
 						}
-						
-						directory.listFiles(
-							listFilesAfterAddingCB,
-							function(e){
-								errorCB(e, testRun, 'List of files after creating the file')
-							})
-					} else {
-						errorCB(exc, testRun, 'Create file')
 					}
 				}
-			}
-			createDir();
-		};
-		tizen.filesystem.resolve(
-			VR,
-			resolveSCB,
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 'rw');
+				createDir();
+			};
+			
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e){errorCB(e, testRun, 'Resolve to virtual root')}, 'rw');
 	}
 	
 	this.move = function(testRun) {
@@ -271,67 +246,69 @@ module.exports = new function() {
 			directory1,
 			dN = 'testDir',
 			dNInner = 'testDirInner',
-			fN = 'textFile.txt';
-		var resolveSCB = function(dir) {
-			var directory;
-			var file;
-			docDir = dir;
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					directory = docDir.resolve(dN);
-					deleteDirectories(docDir, [directory.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					var moveToCB = function(){
-						try {
-							directory.resolve(fN);
-							errorCB(exc, testRun, 'File did not deleted')
-						} catch (exc) {
-							if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-								try {
-									directory1.resolve(fN);
-									deleteDirectories(docDir, [directory.fullPath], function(){
-										finish(testRun);
-									});
-								} catch (exc) {
-									errorCB(exc, testRun, 'File does not exist');
+			fN = 'textFile.txt',
+			
+			resolveSCB = function(dir) {
+				var directory,
+					file,
+					docDir = dir;
+					
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						directory = docDir.resolve(dN);
+						deleteDirectories(docDir, [directory.fullPath], function(){
+							createDir();
+						});
+					} catch (exc) {
+						var moveToCB = function(){
+							try {
+								directory.resolve(fN);
+								errorCB(exc, testRun, 'File did not deleted')
+							} catch (exc) {
+								if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+									try {
+										directory1.resolve(fN);
+										deleteDirectories(docDir, [directory.fullPath], function(){
+											finish(testRun);
+										});
+									} catch (exc) {
+										errorCB(exc, testRun, 'File does not exist');
+									}
+								} else {
+									errorCB(exc, testRun, 'Create file');
 								}
-							} else {
-								errorCB(exc, testRun, 'Create file');
+								
 							}
 							
 						}
+						//create a new test directory 
+						directory = docDir.createDirectory(dN);
+						//create a file in this directory
+						file = directory.createFile(fN);
 						
+						valueOf(testRun, file instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+						
+						//create a new directory in this directory
+						directory1 = directory.createDirectory(dNInner);
+						
+						valueOf(testRun, directory1 instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+						
+						//move this file to new directory
+						directory.moveTo(
+							file.fullPath,
+							directory1.fullPath + '/' + file.name,
+							false,
+							moveToCB,
+							function(e){
+								errorCB(e, testRun, 'Move To')
+							})
 					}
-					//create a new test directory 
-					directory = docDir.createDirectory(dN);
-					//create a file in this directory
-					file = directory.createFile(fN);
-					//create a new directory in this directory
-					directory1 = directory.createDirectory(dNInner);
-					//move this file to new directory
-					directory.moveTo(
-						file.fullPath,
-						directory1.fullPath + '/' + file.name,
-						false,
-						moveToCB,
-						function(e){
-							errorCB(e, testRun, 'Move To')
-						})
-				}
+				};
+				createDir();
 			};
-			createDir();
-		};
 
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 
-			'rw');
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) {errorCB(e, testRun, 'Resolve to virtual root')}, 'rw');
 	}
 	
 	this.copy = function(testRun) {
@@ -341,64 +318,52 @@ module.exports = new function() {
 			directory1,
 			dN = 'testDir',
 			dNInner = 'testDirInner',
-			fN = 'textFile.txt';
+			fN = 'textFile.txt',
 
-		var resolveSCB = function(dir) {
-			docDir = dir;
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					directory = docDir.resolve(dN);
-					deleteDirectories(docDir, [directory.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-						var copyToCB = function(){
-							try {
-								directory.resolve(fN);
+			resolveSCB = function(dir) {
+				docDir = dir;
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						directory = docDir.resolve(dN);
+						deleteDirectories(docDir, [directory.fullPath], function() {
+							createDir();
+						});
+					} catch (exc) {
+						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+							var copyToCB = function(){
 								try {
-									directory1.resolve(fN);
-									deleteDirectories(docDir, [directory.fullPath], function(){
-										finish(testRun);
-									});
+									directory.resolve(fN);
+									try {
+										directory1.resolve(fN);
+										deleteDirectories(docDir, [directory.fullPath], function(){
+											finish(testRun);
+										});
+									} catch (exc) {
+										errorCB(exc, testRun, 'File does not exist after copying in new place');
+									}
 								} catch (exc) {
-									errorCB(exc, testRun, 'File does not exist after copying in new place');
+									errorCB(exc, testRun, 'File does not exist after copying in old place');
 								}
-							} catch (exc) {
-								errorCB(exc, testRun, 'File does not exist after copying in old place');
-							}
 
-						}
-						//create a new test directory 
-						directory = docDir.createDirectory(dN);
-						//create a file in this directory
-						file = directory.createFile(fN);
-						//create a new directory in this directory
-						directory1 = directory.createDirectory(dNInner);
-						//copy this file to new directory
-						directory.copyTo(
-							file.fullPath,
-							directory1.fullPath + '/' + file.name,
-							false,
-							copyToCB,
-							function(e){
-								errorCB(e, testRun, 'Move To')
 							}
-							)
-					} else {
-						errorCB(exc, testRun, 'Create file');
-					}     
+							//create a new test directory 
+							directory = docDir.createDirectory(dN);
+							//create a file in this directory
+							file = directory.createFile(fN);
+							//create a new directory in this directory
+							directory1 = directory.createDirectory(dNInner);
+							//copy this file to new directory
+							directory.copyTo(file.fullPath, directory1.fullPath + '/' + file.name, false, copyToCB, function(e) {errorCB(e, testRun, 'Move To')});
+						} else {
+							errorCB(exc, testRun, 'Create file');
+						}     
+					}
 				}
-			}
-			createDir();
-		};
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 'rw');
+				createDir();
+			};
+			
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) { errorCB(e, testRun, 'Resolve to virtual root') }, 'rw');
 	}
 
 	this.fileProperty = function(testRun) {
@@ -407,72 +372,60 @@ module.exports = new function() {
 			directory,
 			text = 'Some text',
 			dN = 'testDir',
-			fN = 'textFile.txt';
+			fN = 'textFile.txt',
 
-		var resolveSCB = function(dir) {
-			var directory;
-			docDir = dir;
+			resolveSCB = function(dir) {
+				var directory;
+				docDir = dir;
 
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					directory = docDir.resolve(dN);
-					deleteDirectories(docDir, [directory.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-						var writeToStream = function(stream){
-							stream.write(text);
-							stream.close();
-							valueOf(testRun, file.isFile).shouldBeTrue();
-							valueOf(testRun, file.isDirectory).shouldBeFalse();
-							valueOf(testRun, file.readOnly).shouldBeFalse();
-							valueOf(testRun, file.fileSize).shouldBeGreaterThan(0);
-							valueOf(testRun, file.toURI()).shouldBeEqual('file:///opt/media/Documents/testDir/textFile.txt');
-							valueOf(testRun, file.name).shouldBeEqual(fN);
-							valueOf(testRun, file.path).shouldBeEqual('documents/testDir/');
-							valueOf(testRun, file.fullPath).shouldBeEqual('documents/testDir/textFile.txt');
-							valueOf(testRun, directory.length).shouldBeEqual(1);
-							valueOf(testRun, file.length).shouldBeUndefined();
-							valueOf(testRun, file.created.constructor).shouldBeExactly(Date);
-							valueOf(testRun, file.modified.constructor).shouldBeExactly(Date);							
-							file.readAsText(
-								function(str) {
-								   valueOf(testRun, str).shouldBeEqual(text);
-								   deleteDirectories(docDir, [directory.fullPath], function(){
-										finish(testRun);
-								   });
-								},
-								function(e){
-									errorCB(e, testRun, 'Read as text Error');
-								},'UTF-8')
-						}
-						//create a new test directory 
-						directory = docDir.createDirectory(dN);
-						//create a file in this directory
-						file = directory.createFile(fN);
-						//write something to file
-						file.openStream(
-							'w',
-							writeToStream,
-							function(e){
-								errorCB(e, testRun, 'Write file')
-								});
-					} else {
-						errorCB(exc, testRun, 'Create file');
-					}          
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						directory = docDir.resolve(dN);
+						deleteDirectories(docDir, [directory.fullPath], function() { createDir(); });
+					} catch (exc) {
+						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+							var writeToStream = function(stream) {
+								stream.write(text);
+								stream.close();
+								valueOf(testRun, file.isFile).shouldBeTrue();
+								valueOf(testRun, file.isDirectory).shouldBeFalse();
+								valueOf(testRun, file.readOnly).shouldBeFalse();
+								valueOf(testRun, file.fileSize).shouldBeGreaterThan(0);
+								valueOf(testRun, file.toURI()).shouldBeEqual('file:///opt/media/Documents/testDir/textFile.txt');
+								valueOf(testRun, file.name).shouldBeEqual(fN);
+								valueOf(testRun, file.path).shouldBeEqual('documents/testDir/');
+								valueOf(testRun, file.fullPath).shouldBeEqual('documents/testDir/textFile.txt');
+								valueOf(testRun, directory.length).shouldBeEqual(1);
+								valueOf(testRun, file.length).shouldBeUndefined();
+								valueOf(testRun, file.created.constructor).shouldBeExactly(Date);
+								valueOf(testRun, file.modified.constructor).shouldBeExactly(Date);							
+								file.readAsText(
+									function(str) {
+									   valueOf(testRun, str).shouldBeEqual(text);
+									   deleteDirectories(docDir, [directory.fullPath], function(){
+											finish(testRun);
+									   });
+									},
+									function(e){
+										errorCB(e, testRun, 'Read as text Error');
+									},'UTF-8')
+							}
+							//create a new test directory 
+							directory = docDir.createDirectory(dN);
+							//create a file in this directory
+							file = directory.createFile(fN);
+							//write something to file
+							file.openStream('w', writeToStream, function(e) {errorCB(e, testRun, 'Write file')});
+						} else {
+							errorCB(exc, testRun, 'Create file');
+						}          
+					}
 				}
-			}
-			createDir();
-		};
+				createDir();
+			};
 
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 'rw');
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e){errorCB(e, testRun, 'Resolve to virtual root')}, 'rw');
 	}
 
 	this.readWriteBytes = function(testRun) {
@@ -482,68 +435,69 @@ module.exports = new function() {
 			bytes = [42, 17, 1, 3, 5, 7, 127, 250],
 			bytesA = new Uint8Array(bytes),
 			dN = 'testDir',
-			fN = 'textFile.txt';
-		var resolveSCB = function(dir) {
-			var directory;
-			docDir = dir;
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					directory = docDir.resolve(dN);s
-					deleteDirectories(docDir, [directory.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-						//read bytes
-						var readToStream = function(stream){
-							var content = stream.readBytes(stream.bytesAvailable); 
-							stream.close();
-							valueOf(testRun, content.length).shouldBeEqual(bytesA.length);
-							for(var i=0, len = content.length; i<len; i++) {
-								valueOf(testRun, content[i]).shouldBeEqual(bytesA[i]);
-							}
-							deleteDirectories(docDir, [directory.fullPath], function(){
-								finish(testRun);
-							});
-						}
-						//write bytes
-						var writeToStream = function(stream){
-							stream.writeBytes(bytes);
-							stream.close();
-							file.openStream(
-								'r',
-								readToStream,
-								function(e){
-									errorCB(e, testRun, 'Read file')
+			fN = 'textFile.txt',
+			
+			resolveSCB = function(dir) {
+				var directory;
+				docDir = dir;
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						
+						directory = docDir.resolve(dN);
+						deleteDirectories(docDir, [directory.fullPath], function() {createDir();});
+					} catch (exc) {
+						
+						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+							//read bytes
+							var readToStream = function(stream) {
+							
+								valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+								
+								var content = stream.readBytes(stream.bytesAvailable),
+									i = 0, len = content.length; 
+								stream.close();
+								valueOf(testRun, len).shouldBeEqual(bytesA.length);
+								for(; i < len; i++) {
+									valueOf(testRun, content[i]).shouldBeEqual(bytesA[i]);
+								}
+								deleteDirectories(docDir, [directory.fullPath], function() {
+									finish(testRun);
 								});
-						}
-						//create a new test directory 
-						directory = docDir.createDirectory(dN);
-						//create a file in this directory
-						file = directory.createFile(fN);
-						//write something to file
-						file.openStream(
-							'w',
-							writeToStream,
-							function(e){
-								errorCB(e, testRun, 'Write file')
-								} 
-							);
-					} else {
-						errorCB(exc, testRun, 'Create file or directory');
-					}        
+							}
+							console.log('4');
+							//write bytes
+							var writeToStream = function(stream) {
+								valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+								stream.writeBytes(bytes);
+								stream.close();
+								file.openStream('r', readToStream, function(e) {errorCB(e, testRun, 'Read file')});
+							}
+							
+							//create a new test directory 
+							directory = docDir.createDirectory(dN);
+							
+							valueOf(testRun, directory instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+							
+							valueOf(testRun, directory instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+							
+							//create a file in this directory
+							file = directory.createFile(fN);
+							
+							valueOf(testRun, file instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+							
+							//write something to file
+							
+							file.openStream('w', writeToStream, function(e) {errorCB(e, testRun, 'Write file')});
+						} else {
+							errorCB(exc, testRun, 'Create file or directory');
+						}        
+					}
 				}
-			}
-			createDir();
-		};
+				createDir();
+			};
 
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 'rw');
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) {errorCB(e, testRun, 'Resolve to virtual root')}, 'rw');
 	}
 
 	this.readWriteBytes64 = function(testRun) {
@@ -553,11 +507,12 @@ module.exports = new function() {
 		bytes = 'U29tZSB0ZXh0',
 		text = 'Some text',
 		dN = 'testDir',
-		fN = 'textFile.txt';
+		fN = 'textFile.txt',
+		
 		resolveSCB = function(dir) {
 			var directory;
 			docDir = dir;
-			function createDir(){
+			function createDir() {
 				//create directory, if exist - delete and create new
 				try {
 					directory = docDir.resolve(dN);
@@ -566,49 +521,42 @@ module.exports = new function() {
 					});
 				} catch (exc) {
 					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
-						var readToStreamBase64 = function(stream){
+						var readToStreamBase64 = function(stream) {
 							var content = stream.readBase64(stream.bytesAvailable);
 							stream.close();
 							 //checking for readBase64 
 							valueOf(testRun, content).shouldBeEqual(bytes);
-							deleteDirectories(docDir, [directory.fullPath], function(){
+							deleteDirectories(docDir, [directory.fullPath], function() {
 								finish(testRun);
 							});
-						};
-						var readToStream = function(stream){
+						},
+						readToStream = function(stream) {
+							
+							valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+						
 							var content = stream.read(stream.bytesAvailable); 
 							stream.close();
 							//checking for writeBase64 
 							valueOf(testRun, content).shouldBeEqual(text);
-								
-							file.openStream(
-								'r',
-								readToStreamBase64,
-								function(e){
-									errorCB(e, testRun, 'Read file')
-									});
-						};
-						var writeToStream = function(stream){
+							file.openStream('r', readToStreamBase64, function(e) { errorCB(e, testRun, 'Read file') });
+						},
+						writeToStream = function(stream) {
+							
+							valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
+							
 							stream.writeBase64(bytes);
 							stream.close();
-							file.openStream(
-								'r',
-								readToStream,
-								function(e){
-									errorCB(e, testRun, 'Read file')
-								});
+							file.openStream('r', readToStream, function(e) { errorCB(e, testRun, 'Read file') });
 						};
 						//create a new test directory 
 						directory = docDir.createDirectory(dN);
 						//create a file in this directory
 						file = directory.createFile(fN);
 						//write something to file
-						file.openStream(
-							'w',
-							writeToStream,
-							function(e){
-								errorCB(e, testRun, 'Write file')
-							});
+						
+						valueOf(testRun, file instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
+						
+						file.openStream('w', writeToStream, function(e) { errorCB(e, testRun, 'Write file') });
 					} else {
 						errorCB(exc, testRun, 'Create file or directory');
 					}        
@@ -616,29 +564,28 @@ module.exports = new function() {
 			}
 			createDir();
 		};
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			}, 
-			'rw');
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) {errorCB(e, testRun, 'Resolve to virtual root')}, 'rw');
 	}
 
 	this.storages = function(testRun) {
-		valueOf(testRun, tizen.filesystem.maxPathLength).shouldBeGreaterThan(0);
+		valueOf(testRun, Ti.Tizen.Filesystem.maxPathLength).shouldBeGreaterThan(0);
 		var labels = ['wgt-private-tmp', 'wgt-private', 'wgt-package', 'videos', 'music', 'images', 'downloads', 'documents', 'removable2', 'removable1', 'internal0'],
 			types = ['INTERNAL', 'EXTERNAL'],
 			states = ['MOUNTED', 'REMOVED', 'UNMOUNTABLE'],
 			allStorages;
 		
-		function checkCorruptedRemovableDrives(storages) { 
+		function checkCorruptedRemovableDrives(storages) {
+			
+			valueOf(testRun, storages[0] instanceof Ti.Tizen.Filesystem.FileSystemStorage).shouldBeTrue();
+			
 			allStorages = storages;
 			valueOf(testRun, storages.length).shouldBeGreaterThan(0);
 			checkStorages(storages);
 		}
-
-		tizen.filesystem.listStorages(checkCorruptedRemovableDrives);
+		
+		
+		
+		Ti.Tizen.Filesystem.listStorages(checkCorruptedRemovableDrives);
 		
 		function checkStorages(storages) {
 			//check the access for each storages 
@@ -646,6 +593,9 @@ module.exports = new function() {
 			
 			function checkStorage(storage){
 				var resolveSCB = function(storage) {
+					
+					valueOf(testRun, storage instanceof Ti.Tizen.Filesystem.FileSystemStorage).shouldBeTrue();
+				
 					//checking the properties for all storages
 					valueOf(testRun, (labels.indexOf(storage.label) > -1)).shouldBeTrue();
 					valueOf(testRun, (types.indexOf(storage.type) > -1)).shouldBeTrue();
@@ -658,7 +608,7 @@ module.exports = new function() {
 						finish(testRun);
 					}
 				};
-				tizen.filesystem.getStorage(
+				Ti.Tizen.Filesystem.getStorage(
 					storage.label,    
 					resolveSCB, 
 					function(e){
@@ -674,62 +624,53 @@ module.exports = new function() {
 		var docDir,
 			file,
 			text,
-			fN = 'test.mp4';
-		resolveSCB = function(dir) {
-			docDir = dir;
-			function createDir(){
-				//create directory, if exist - delete and create new
-				try {
-					file = docDir.resolve(fN);
-					deleteFiles(docDir, [file.fullPath], function(){
-						createDir();
-					});
-				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')){
-						var writeToStream = function(stream){
-							stream.write(text);
-							stream.close();
-							
-							//delete the big file
-							deleteFiles(docDir, [file.fullPath], function(){
-							   try {
-									//after deleting try to create 
-									file = docDir.createFile(fN);
-									//and delete again
-									deleteFiles(docDir, [file.fullPath], function(){
-										finish(testRun);
-									});
-								} catch (exc) {
-									if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')){
-										errorCB(exc, testRun, 'File alredy exist');
-									} else {
-										errorCB(exc, testRun, 'Problem with creating the file');
+			fN = 'test.mp4',
+			
+			resolveSCB = function(dir) {
+				docDir = dir;
+				function createDir() {
+					//create directory, if exist - delete and create new
+					try {
+						file = docDir.resolve(fN);
+						deleteFiles(docDir, [file.fullPath], function() {
+							createDir();
+						});
+					} catch (exc) {
+						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+							var writeToStream = function(stream) {
+								stream.write(text);
+								stream.close();
+								
+								//delete the big file
+								deleteFiles(docDir, [file.fullPath], function() {
+								   try {
+										//after deleting try to create 
+										file = docDir.createFile(fN);
+										//and delete again
+										deleteFiles(docDir, [file.fullPath], function() {
+											finish(testRun);
+										});
+									} catch (exc) {
+										if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+											errorCB(exc, testRun, 'File alredy exist');
+										} else {
+											errorCB(exc, testRun, 'Problem with creating the file');
+										}
 									}
-								}
-							});
-						}
-						//create a file in this directory
-						file = docDir.createFile(fN);
-						text = new Array(5000000).join('A'); 
-						 //write large content to the file
-						 file.openStream(
-							'w',
-							writeToStream,
-							function(e){
-								errorCB(e, testRun, 'Write file')
-							});
-					} else {
-						errorCB(exc, testRun, 'Create file');
-					}          
+								});
+							}
+							//create a file in this directory
+							file = docDir.createFile(fN);
+							text = new Array(5000000).join('A'); 
+							 //write large content to the file
+							 file.openStream('w', writeToStream, function(e) { errorCB(e, testRun, 'Write file') });
+						} else {
+							errorCB(exc, testRun, 'Create file');
+						}          
+					}
 				}
-			}
-			createDir();
+				createDir();
 		};
-		tizen.filesystem.resolve(
-			VR,    
-			resolveSCB, 
-			function(e){
-				errorCB(e, testRun, 'Resolve to virtual root')
-			},'rw');
+		Ti.Tizen.Filesystem.resolve(VR, resolveSCB, function(e) { errorCB(e, testRun, 'Resolve to virtual root') }, 'rw');
 	}
 }
