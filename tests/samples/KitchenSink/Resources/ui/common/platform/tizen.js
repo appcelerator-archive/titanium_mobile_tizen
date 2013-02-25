@@ -10,7 +10,7 @@ function tizen(_args) {
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
 			{title: 'NFC demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenNFC'},
 			{title: 'Messaging', hasChild: true, test: 'ui/handheld/tizen/platform/messaging/messaging'},
-			{title: 'Media content', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_media_content'},
+			{title: 'Media content', hasChild: true, test: 'ui/handheld/tizen/platform/media_content'},
 			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/alarm'},
 			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_notification'},
 			{title: 'Calendar', hasChild: true, test: 'ui/handheld/tizen/platform/calendar'}
