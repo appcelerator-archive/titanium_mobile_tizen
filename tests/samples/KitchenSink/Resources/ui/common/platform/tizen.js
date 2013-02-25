@@ -5,7 +5,7 @@ function tizen(_args) {
 			{title: 'Call', hasChild: true, test: 'ui/handheld/tizen/platform/call/call'},
 			{title: 'Geocoder', hasChild: true, test: 'ui/handheld/tizen/platform/geocoder'},		
 			{title: 'Application', hasChild: true, test: 'ui/handheld/tizen/platform/applications/tizen_application'},
-			{title: 'Filesystem', hasChild: true, test: 'ui/handheld/tizen/platform/tizen_filesystem'},
+			{title: 'Filesystem', hasChild: true, test: 'ui/handheld/tizen/platform/filesystem'},
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenDownload'},
 			{title: 'System info and Power', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
 			{title: 'NFC demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenNFC'},
