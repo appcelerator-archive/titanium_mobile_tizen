@@ -456,7 +456,8 @@ exports.TitaniumInterface = (function(){
 
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
 									view+= '\n		create'+this.dA[i].name+': function(args) {\n';
-									view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
+									//view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
+									view+= '			return new '+this.dA[i].name+'(args); //Need to add this module '+this.dA[i].name+' in define, with path '+ options.titaniumFolder+this.folderName+'/'+this.dA[i].name +'\n'
 									view+= '		},\n';
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								}
