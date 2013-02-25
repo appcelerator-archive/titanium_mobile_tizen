@@ -19,7 +19,7 @@ var suites = [
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
 	{name: "tizen/download"},
-	{name: "tizen/tizen_application"},
+	{name: "tizen/application"},
 	{name: "tizen/filesystem"},
 	{name: "tizen/filters"}
 ];
