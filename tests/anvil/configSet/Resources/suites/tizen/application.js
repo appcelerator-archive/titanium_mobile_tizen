@@ -32,11 +32,11 @@ module.exports = new function() {
 	this.apps_info = function(testRun) {
 		var isCalcAppOnEmulator,
 			appInstalledCount = 0;
-
 		valueOf(testRun, function() {
 			Ti.Tizen.Application.getAppsInfo(function(applications) {
 				appInstalledCount = applications.length;
 				for (var i = 0, len = applications.length; i < len; i++) {
+					valueOf(testRun, applications[i].toString()).shouldBe('[object TiTizenApplicationApplicationInformation]');
 					if(applications[i].id && applications[i].id === CALC_APP_ID) {
 						isCalcAppOnEmulator = true;
 					}
@@ -48,7 +48,7 @@ module.exports = new function() {
 			valueOf(testRun, appInstalledCount).shouldBeGreaterThan(0);
 			valueOf(testRun, isCalcAppOnEmulator).shouldBeTrue();
 			finish(testRun);
-		} , 1000);
+		}, 1000);
 	}
 
 	//Test - get Application info with correct info
@@ -90,7 +90,15 @@ module.exports = new function() {
 		var isSuccess,
 			runingAppArray;
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext(function(contexts) {isSuccess = true; runingAppArray = contexts});
+			Ti.Tizen.Application.getAppsContext(function(contexts) {
+				var i = 0,
+					contextsCount = contexts.length;
+				for(; i < contextsCount; i++) {
+					valueOf(testRun, contexts[i].toString()).shouldBe('[object TiTizenApplicationApplicationContext]');
+				}
+				isSuccess = true; 
+				runingAppArray = contexts;
+			});
 		}).shouldNotThrowException();
 		setTimeout(
 			function(){
@@ -118,9 +126,11 @@ module.exports = new function() {
 		var runingAppArray = [],
 			isHarness,
 			harnessId = Ti.Tizen.Application.getAppInfo().id;
-		
+
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext(function (contexts) {runingAppArray = contexts;});
+			Ti.Tizen.Application.getAppsContext(function (contexts) {
+				runingAppArray = contexts;
+			});
 		}).shouldNotThrowException();
 
 		setTimeout(
@@ -129,8 +139,7 @@ module.exports = new function() {
 				valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
 				valueOf(testRun, isHarness).shouldBeTrue();
 				finish(testRun);
-		}
-		, 1000);
+		}, 1000);
 	}
 
 	//Test - Negative scenario - Does getAppsContext catch exception with no parameters
@@ -154,9 +163,11 @@ module.exports = new function() {
 		//Call getAppsContext for recieving all running application
 		setTimeout(function() {
 			valueOf(testRun, function() {
-				Ti.Tizen.Application.getAppsContext(function (contexts) { runingAppArray = contexts; });
+				Ti.Tizen.Application.getAppsContext(function (contexts) {
+					runingAppArray = contexts;
+				});
 			}).shouldNotThrowException();
-		} , 1000);
+		}, 1000);
 
 		//Check existing calc application in list of running app
 		setTimeout(function() {
@@ -166,7 +177,7 @@ module.exports = new function() {
 				//kill Calc app
 				Ti.Tizen.Application.kill(CALC_APP_ID); 
 			}).shouldNotThrowException();
-			
+
 			//Call getAppsContext for recieving all running application
 			valueOf(testRun, function() {
 				Ti.Tizen.Application.getAppsContext(function (contexts) {runingAppArray = contexts;});
@@ -187,7 +198,9 @@ module.exports = new function() {
 	this.launch_not_exist = function(testRun) {
 		var isError;
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.launch(NOT_EXIST_APP_ID, function(){}, function() {isError = true;});
+			Ti.Tizen.Application.launch(NOT_EXIST_APP_ID, function(){}, function() {
+				isError = true;
+			});
 		}).shouldNotThrowException();
 		setTimeout(function() {
 			valueOf(testRun, isError).shouldBeTrue();
@@ -199,7 +212,9 @@ module.exports = new function() {
 	this.kill_not_exist = function(testRun) {
 		var isError;
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.kill(NOT_EXIST_APP_ID,function(){},function(){isError = true;});
+			Ti.Tizen.Application.kill(NOT_EXIST_APP_ID, function(){}, function(){
+				isError = true;
+			});
 		}).shouldNotThrowException();
 
 		setTimeout(function() {
@@ -207,7 +222,7 @@ module.exports = new function() {
 			finish(testRun);
 		}, 1000);
 	}
-	
+
 	// test - Hide harnes app - MAY HAVE PROBLEM FOR OTHER TESTS
 	this.harnes_hide = function(testRun) {
 		valueOf(testRun, function() {
@@ -218,7 +233,9 @@ module.exports = new function() {
 
 	//Test - launch image from another service
 	this.launchService = function(testRun) {
-		var serviceLaunch, isError, service;
+		var serviceLaunch, 
+			isError = false, 
+			service;
 
 		valueOf(testRun, function() {
 			service = Ti.Tizen.Application.createApplicationService({
@@ -229,7 +246,12 @@ module.exports = new function() {
 		}).shouldNotThrowException();
 		var serviceReplyCB = { 
 			// callee now sends a reply 
-			onsuccess: function(reply) {
+			onsuccess: function(replies) {
+				var i = 0,
+					repliesCount = replies.length;
+				for(; i < repliesCount; i++) {
+					valueOf(testRun, replies[i].toString()).shouldBe('[object TiTizenApplicationApplicationServiceData]');
+				} 
 			},
 			onfail: function() {
 				// Something went wrong 
