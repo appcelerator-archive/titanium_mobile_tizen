@@ -456,7 +456,8 @@ exports.TitaniumInterface = (function(){
 
 								if(q == lenExtAttrs-1) { // this check because interface can has many Constructors, but js need only one
 									view+= '\n		create'+this.dA[i].name+': function(args) {\n';
-									view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
+									//view+= '			return new (require(\''+options.titaniumFolder+this.folderName+'/'+this.dA[i].name+'\'))(args);\n'
+									view+= '			return new '+this.dA[i].name+'(args); //Need to add this module '+this.dA[i].name+' in define, with path '+ options.titaniumFolder+this.folderName+'/'+this.dA[i].name +'\n'
 									view+= '		},\n';
 									this.createBaseInterface(this.dA[i].name.replace(/\s/g,''), this.dA[i].inheritance, this.dA[i], false, false);
 								}
@@ -527,7 +528,7 @@ exports.TitaniumInterface = (function(){
 						view += '				}';
 					}
 					view += ' else {\n';
-					view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
+					view += '					Ti.API.error(\'Constructor '+ name +' with given parameters doesn\\\'t exists\');\n'
 					view += '				}\n';
 				} else if(this.constructors.length > 0) {
 					view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
