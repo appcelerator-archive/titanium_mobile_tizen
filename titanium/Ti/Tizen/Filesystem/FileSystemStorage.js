@@ -1,7 +1,7 @@
 define(['Ti/_/declare'], function(declare){
 	return declare('Ti.Tizen.Filesystem.FileSystemStorage', null, {
 		constructor: function(args) {
-				this._obj = args;
+			this._obj = args;
 		},
 		constants: {
 			label: {

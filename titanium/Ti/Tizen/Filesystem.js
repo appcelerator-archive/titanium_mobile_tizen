@@ -62,7 +62,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 			return tizen.filesystem.removeStorageStateChangeListener(watchId);
 		},
 		
-		createFile: function(args){
+		_createFile: function(args){
 			return new File(args);
 		}
 	});

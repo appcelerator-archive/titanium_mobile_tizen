@@ -10,7 +10,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Filesystem/FileStream', 'Ti/Tizen/WebAPIError'
 			i = 0;
 		
 		for (; i < len; i++) {
-			result.push(Ti.Tizen.Filesystem.createFile(objects[i]));
+			result.push(Ti.Tizen.Filesystem._createFile(objects[i]));
 		}
 		
 		onsuccess.call(null, result);
@@ -106,15 +106,15 @@ define(['Ti/_/declare', 'Ti/Tizen/Filesystem/FileStream', 'Ti/Tizen/WebAPIError'
 		},
 
 		createDirectory: function(dirPath /*DOMString*/) {
-			return Ti.Tizen.Filesystem.createFile(this._obj.createDirectory(dirPath));
+			return Ti.Tizen.Filesystem._createFile(this._obj.createDirectory(dirPath));
 		},
 
 		createFile: function(filePath /*DOMString*/) {
-			return Ti.Tizen.Filesystem.createFile(this._obj.createFile(filePath));
+			return Ti.Tizen.Filesystem._createFile(this._obj.createFile(filePath));
 		},
 
 		resolve: function(filePath /*DOMString*/) {
-			return Ti.Tizen.Filesystem.createFile(this._obj.resolve(filePath));
+			return Ti.Tizen.Filesystem._createFile(this._obj.resolve(filePath));
 		},
 
 		deleteDirectory: function(directory /*DOMString*/, recursive /*boolean*/, onsuccess /*SuccessCallback*/, onerror /*ErrorCallback*/) {
