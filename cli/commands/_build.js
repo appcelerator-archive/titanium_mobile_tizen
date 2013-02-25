@@ -363,10 +363,9 @@ function build(logger, config, cli, finished) {
 						next(null, 'ok');
 
 					}.bind(this), function(next){
-						// this.signTizenApp(logger, function(){
-						// 	next(null, 'ok');
-						// });
-						next(null, 'ok');
+						this.signTizenApp(logger, function(){
+							next(null, 'ok');
+						});						
 					}.bind(this), function(next){
 						if(process.platform === 'win32'){
 							this.wgtPackaging7z(logger, function(){
