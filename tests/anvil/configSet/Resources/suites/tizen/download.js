@@ -28,7 +28,7 @@ module.exports = new function() {
 	//clears timeout if it was set before.
 	function clearFakeTimeout(){
 		// cancel fake call if any
-		if (waitTimeout){
+		if (waitTimeout) {
 			clearTimeout(waitTimeout); 
 		}
 	}
@@ -36,71 +36,73 @@ module.exports = new function() {
 	this.checkDownload  = function(testRun) {
 		// Test for Tizen Device API: Download
 		Ti.API.debug('Checking Download object availability.');
-		valueOf(testRun, tizen).shouldBeObject();
-		valueOf(testRun, tizen.download).shouldBeObject();
-		valueOf(testRun, tizen.download.start).shouldBeFunction();
-		valueOf(testRun, tizen.download.pause).shouldBeFunction();
-		valueOf(testRun, tizen.download.abort).shouldBeFunction();
-		valueOf(testRun, tizen.download.resume).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.Download).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.Download.start).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Download.pause).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Download.abort).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Download.resume).shouldBeFunction();
+		
 		finish(testRun);
 	}
 
 	this.successDownloadFlowTest = function(testRun) {
 		var localTestRun = testRun,
 			downloadId,
-			wasResumed = false,
-			wasPaused = false;
+			wasResumed,
+			wasPaused;
 		
 		waitTimeout = null;
 		var listener = {
 			onprogress: function(id, receivedSize, totalSize) {
 				Ti.API.debug('onprogress event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
-				if (!wasPaused){
+				if (!wasPaused) {
 					wasPaused = true;
-					tizen.download.pause(downloadId);
+					Ti.Tizen.Download.pause(downloadId);
 				}
 				if (wasResumed){
-					tizen.download.abort(downloadId);
+					Ti.Tizen.Download.abort(downloadId);
 				}
 			},
 			onpaused: function(id) {
-				Ti.API.debug('onpaused event. id=' +id);
+				Ti.API.debug('onpaused event. id=' + id);
 				clearFakeTimeout();
-				waitTimeout=setTimeout(function(){
-					tizen.download.resume(downloadId);
+				waitTimeout = setTimeout(function() {
+					Ti.Tizen.Download.resume(downloadId);
 					wasResumed = true;
 				}, 500);
 			},
 			onaborted: function(id) {
-				Ti.API.debug('onaborted event. id=' +id);
+				Ti.API.debug('onaborted event. id=' + id);
 				clearFakeTimeout();
 				valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
 				finish(localTestRun);
 			},
 			oncompleted: function(id, fileName) {
-				Ti.API.debug('oncompleted event. id=' +id+', fileName=' + fileName);
+				Ti.API.debug('oncompleted event. id=' + id +', fileName=' + fileName);
 				clearFakeTimeout();
 				valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
 				finish(localTestRun);
 			},
 			onfailed: function(id, error) {
-				Ti.API.debug('onfailed event. id=' +id+', error=' + JSON.stringify(error));
+				Ti.API.debug('onfailed event. id=' + id +', error=' + JSON.stringify(error));
 				clearFakeTimeout();
 				reportError(localTestRun, JSON.stringify(error));
 			}
 		};
-		// downloading large file to test callbacks.
-		var urlDownload = new tizen.URLDownload(
-			'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin', 
-			'wgt-private-tmp', 
-			'tmp' + (new Date().getTime()));
-		downloadId = tizen.download.start(urlDownload, listener);
+		// Downloading large file to test callbacks.
+		var urlDownload = Ti.Tizen.Download.createURLDownload({
+			url: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin', 
+			destination: 'wgt-private-tmp', 
+			fileName: 'tmp' + (new Date().getTime())
+		});
+		downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0); //
 	}
 
 	this.failedDownloadTest = function(testRun) {
-		var localTestRun = testRun;
-		var listener = {
+		var localTestRun = testRun,
+			listener = {
 			onprogress: function(id, receivedSize, totalSize) {
 				reportError(localTestRun, 'onprogress may not be called in this test!');
 			},
@@ -120,51 +122,51 @@ module.exports = new function() {
 			}
 		};
 		// Start downloading large file to be able to test callbacks.
-		var urlDownload = new tizen.URLDownload(
-			'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin', 
-			'wgt-private-tmp',
-			'tmp' + (new Date().getTime())),
-			downloadId = tizen.download.start(urlDownload, listener);
+		var urlDownload = Ti.Tizen.Download.createURLDownload({
+				url: 'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin', 
+				destination: 'wgt-private-tmp',
+				fileName: 'tmp' + (new Date().getTime())
+			}),
+			downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
 
 	this.successDownloadTest = function(testRun) {
 		var localTestRun = testRun,
-			wasResumed = false,
-			wasPaused = false;
-		waitTimeout = null;
-		var listener = {
-			onprogress: function(id, receivedSize, totalSize) {
-				Ti.API.debug('onprogress event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
-				valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
-				valueOf(localTestRun, totalSize).shouldBeGreaterThanEqual(0);
+			listener = {
+				onprogress: function(id, receivedSize, totalSize) {
+					Ti.API.debug('onprogress event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
+					valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
+					valueOf(localTestRun, totalSize).shouldBeGreaterThanEqual(0);
+				},
+				onpaused: function(id) {
+					Ti.API.debug('onpaused event. id=' +id);
+					valueOf(localTestRun, 'onpaused').shouldBe('oncompleted');
+					finish(localTestRun);
+				},
+				onaborted: function(id) {
+					Ti.API.debug('onaborted event. id=' +id);
+					valueOf(localTestRun, 'onaborted').shouldBe('oncompleted');
+					finish(localTestRun);
+				},
+				oncompleted: function(id, fileName) {
+					Ti.API.debug('oncompleted event. id=' + id + ', fileName=' + fileName);
+					valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
+					finish(localTestRun);
+				},
+				onfailed: function(id, error) {
+					Ti.API.debug('onfailed event. id=' + id + ', error=' + JSON.stringify(error));
+					reportError(localTestRun, JSON.stringify(error));
+				}
 			},
-			onpaused: function(id) {
-				Ti.API.debug('onpaused event. id=' +id);
-				valueOf(localTestRun, 'onpaused').shouldBe('oncompleted');
-				finish(localTestRun);
-			},
-			onaborted: function(id) {
-				Ti.API.debug('onaborted event. id=' +id);
-				valueOf(localTestRun, 'onaborted').shouldBe('oncompleted');
-				finish(localTestRun);
-			},
-			oncompleted: function(id, fileName) {
-				Ti.API.debug('oncompleted event. id=' + id + ', fileName=' + fileName);
-				valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
-				finish(localTestRun);
-			},
-			onfailed: function(id, error) {
-				Ti.API.debug('onfailed event. id=' + id + ', error=' + JSON.stringify(error));
-				reportError(localTestRun, JSON.stringify(error));
-			}
-		};
-		// Start downloading large file to initate callbacks.
-		var urlDownload = new tizen.URLDownload(
-			'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows', 
-			'wgt-private-tmp', 
-			'tmp' + (new Date().getTime())),
-			downloadId = tizen.download.start(urlDownload, listener);
+			// Start downloading large file to initate callbacks.
+			urlDownload = Ti.Tizen.Download.createURLDownload({
+				url: 'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows', 
+				destination: 'wgt-private-tmp', 
+				fileName: 'tmp' + (new Date().getTime())
+			}),
+			downloadId = Ti.Tizen.Download.start(urlDownload, listener);
+			
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
 }
