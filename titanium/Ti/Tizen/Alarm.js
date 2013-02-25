@@ -1,4 +1,4 @@
-define(['Ti/_/lang'], function(lang) {
+define(['Ti/_/lang', 'Ti/Tizen/Alarm/AlarmRelative', 'Ti/Tizen/Alarm/AlarmAbsolute'], function(lang, AlarmRelative, AlarmAbsolute) {
 	return lang.setObject('Ti.Tizen.Alarm', {
 
 		constants: {
@@ -47,11 +47,11 @@ define(['Ti/_/lang'], function(lang) {
 		},
 
 		createAlarmRelative: function(args){
-			return new (require('Ti/Tizen/Alarm/AlarmRelative'))(args);
+			return new AlarmRelative(args);
 		},
 
 		createAlarmAbsolute: function(args){
-			return new (require('Ti/Tizen/Alarm/AlarmAbsolute'))(args);
+			return new AlarmAbsolute(args);
 		},
 	});
 });
