@@ -528,7 +528,7 @@ exports.TitaniumInterface = (function(){
 						view += '				}';
 					}
 					view += ' else {\n';
-					view += '					Ti.API.error(\'Constructor with given parameters doesn\\\'t exists\');\n'
+					view += '					Ti.API.error(\'Constructor '+ name +' with given parameters doesn\\\'t exists\');\n'
 					view += '				}\n';
 				} else if(this.constructors.length > 0) {
 					view += '				this._obj = new tizen.'+ name + '('+ this.constructors[0].join(', ')+');\n';
