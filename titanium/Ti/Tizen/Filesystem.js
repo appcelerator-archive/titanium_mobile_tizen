@@ -31,7 +31,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 			FILE_SYSTEM_STORAGE_TYPE_EXTERNAL: 'EXTERNAL',
 			FILE_SYSTEM_STORAGE_STATE_MOUNTED: 'MOUNTED',
 			FILE_SYSTEM_STORAGE_STATE_REMOVED: 'REMOVED',
-			FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE: 'UNMOUNTABLE',
+			FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE: 'UNMOUNTABLE'
 		},
 
 		constants: {
@@ -39,7 +39,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 				get: function() {
 					return tizen.filesystem.maxPathLength;
 				}
-			},
+			}
 		},
 
 		resolve: function(location /*DOMString*/, onsuccess /*FileSuccessCallback*/, onerror /*ErrorCallback*/, mode /*FileMode*/) {
