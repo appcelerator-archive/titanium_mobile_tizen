@@ -5,7 +5,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Alarm/AlarmRelative', 'Ti/Tizen/Alarm/AlarmAbsolu
 			PERIOD_MINUTE: 60, //unsigned long long
 			PERIOD_HOUR: 3600, //unsigned long long
 			PERIOD_DAY: 86400, //unsigned long long
-			PERIOD_WEEK: 604800, //unsigned long long
+			PERIOD_WEEK: 604800 //unsigned long long
 		},
 
 		add: function(alarm /*Alarm*/, applicationId /*ApplicationId*/, appControl /*ApplicationControl*/) {
@@ -52,6 +52,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Alarm/AlarmRelative', 'Ti/Tizen/Alarm/AlarmAbsolu
 
 		createAlarmAbsolute: function(args){
 			return new AlarmAbsolute(args);
-		},
+		}
 	});
 });
