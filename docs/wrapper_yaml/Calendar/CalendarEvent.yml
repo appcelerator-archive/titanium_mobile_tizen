@@ -1,0 +1,96 @@
+---
+name: Titanium.Tizen.Calendar.CalendarEvent
+summary:  An interface that implements the calendarEvent object.
+extends: Titanium.Tizen.Calendar.CalendarItem
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+        // Gets the default calendar
+        var calendar = tizen.calendar.getDefaultCalendar("EVENT");
+        try {
+            var ev = new tizen.CalendarEvent("BEGIN:VCALENDAR\r\n" +
+                          "BEGIN:VEVENT\r\n" +
+                          "DTSTAMP:19970901T1300Z\r\n" +
+                          "DTSTART:19970903T163000Z\r\n" +
+                          "DTEND:19970903T190000Z\r\n" +
+                          "SUMMARY:Annual Employee Review\r\n" +
+                          "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
+                          "END:VEVENT\r\n" +
+                          "END:VCALENDAR", "ICALENDAR_20");
+                           
+            calendar.add(ev);
+            console.log('Event added with UID ' + ev.id.uid);
+        } catch (err) {
+            console.log("Failed to add VEVENT to the calendar, error: " + err.name);
+        }
+
+methods:
+  - name: expandRecurrence
+    summary: |
+        This method takes into consideration all the parameters of the event recurrence rule to generate the instances occurring in a given time interval.
+        The call involves retrieving from the database detached instances of an event to replace their corresponding virtual instances in the returned list. 
+        The client can then use CalendarEvent.isDetached attribute to identify detached instances.
+        If the event is not saved to a calendar yet, only virtual instances will be returned.
+        
+        The errorCallback is launched with these error types:
+            - InvalidValuesError - if the event given in argument is not a recurring event.
+            - UnknownError - if any other error occurs.
+    
+    parameters:
+      - name: startDate
+        summary:  The start date/ time of an event(inclusive).
+        type: Titanium.Tizen.Time.TZDate
+
+      - name: endDate 
+        summary:   The end date/ time of an event (inclusive).
+        type: Titanium.Tizen.Time.TZDate
+        
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.
+        type: Callback<Titanium.Tizen.Calendar.CalendarEvent[]>
+        
+      - name: errorCallback
+        summary:  The method to invoke when the request fails.
+        type: Callback<WebAPIError>        
+        optional: true        
+  
+properties:
+  - name: isDetached 
+    type: Boolean
+    summary: An attribute that behaves like a flag to indicates if an instance of a recurring event is detached and if it has been modified and saved to the calendar.
+    permission: read-only
+    
+  - name: endDate 
+    type: Titanium.Tizen.Date.TZDate
+    summary: |
+        An attribute to store the end date/time of an event.(see RFC 5545 - Section 3.8.2.2).
+        This endDate must be in the same time zone as the startDate. 
+        Note that duration and endDate are mutually exclusive, only one of them can be non-null.
+        
+        This attribute is precise to the second. Milliseconds are ignored.
+        
+        The default value for this attribute is null.
+        
+  - name: availability
+    type: String
+    summary: |
+        An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
+        The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
+        
+        The default value is 'BUSY'.
+        
+  - name: recurrenceRule 
+    type: Titanium.Tizen.Date.TZDate
+    summary: |
+        An attribute to denote the recurrence rule for the event.
+        
+        The generated instances of a recurring event will have the same recurrence rule as their parent.
+        This is useful when editing a particular event instance and choosing to update all instances from it.
+        
+        The detached instances (specific instances that have been modified as saved to the calendar) of a recurring event will not have any recurrence rule. 
+        No recurrence rule can be set on detached instances either. If one tries to set a recurrence rule on a detached event, 
+        a NotSupportedError should be thrown. Detached instances can be distinguished by checking their isDetached attribute. (See RFC 5545, Section 3.3.10.)
+        

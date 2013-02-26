@@ -1,0 +1,97 @@
+---
+name: Titanium.Tizen.SystemSetting
+summary: This Module provides interfaces and methods providing web applications with access to various values of the system.
+description: |
+    This API provides interface and method through features such as:
+    
+        HOME_SCREEN
+        LOCK_SCREEN
+        INCOMING_CALL
+        NOTIFICATION_EMAIL
+        
+    The `SystemSetting` module is a thin wrapper on the Tizen `SystemSetting` class.	
+
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+        // Define the success callback
+        function successCallback() {
+            console.log("Success to setProperty");
+        }
+        
+        // Define the error callback.
+        function errorCallback(error) {
+            console.log("Fail to setProperty" + error.message);
+        }
+        tizen.systemsetting.setProperty("HOME_SCREEN", "images/image1.jpg", successCallback, errorCallback);
+	  
+methods:
+  - name: setProperty
+    summary: Sets the setting of the device
+    description: |
+        This method allows the user to set a value according to a given type.
+        The ErrorCallback is launched with these error types:
+        - TypeMismatchError: If any input parameter is not compatible with the expected type for that parameter.
+        - InvalidValuesError: If any of the input parameters contain an invalid value.
+        - UnknownError: In any other error case.
+    
+    parameters:
+      - name: type
+        summary: The setting type.
+        type: String
+      - name: value
+        summary:  The setting value for the type. For example, it can be a image or sound filepath.
+        type: String
+      - name: successCallback
+        summary: To be invoked if the setting value is successfully set.
+        type: Callback<Object>
+      - name: errorCallback
+        summary: To be invoked if the setting value cannot be set. It is optional
+        type: Callback<WebAPIError>
+
+- name: getProperty
+    summary: Gets the setting of the device
+    description: |
+        This method allows the user to retrieve a value according to a given type.
+        The ErrorCallback is launched with these error types:
+            - TypeMismatchError: If any input parameter is not compatible with the expected type for that parameter.
+            - InvalidValuesError: If any of the input parameters contain an invalid value.
+            - UnknownError: In any other error case.
+    
+    parameters:
+      - name: type
+        summary: The setting type.
+        type: String
+      - name: successCallback
+        summary: To be invoked if the setting value is successfully retrieved.
+        type: Callback<String>
+      - name: errorCallback
+        summary: To be invoked if the setting value cannot be retrieved.
+        type: Callback<WebAPIError>        
+        optional: true
+    
+properties:
+
+  - name: SYSTEM_SETTING_TYPE_HOME_SCREEN
+    summary: "HOME_SCREEN" is for homescreen background image.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_SETTING_TYPE_LOCK_SCREEN
+    summary: "LOCK_SCREEN" is for lockscreen background image.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_SETTING_TYPE_INCOMING_CALL
+    summary: "INCOMING_CALL" is for incoming call ringtone.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL
+    summary: "NOTIFICATION_EMAIL" is for email notification alert tone.
+    type: STRING
+    permission: read-only

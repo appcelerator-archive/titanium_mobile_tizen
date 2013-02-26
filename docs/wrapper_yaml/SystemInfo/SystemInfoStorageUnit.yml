@@ -1,0 +1,31 @@
+---
+name: Titanium.Tizen.SystemInfo.SystemInfoStorageUnit
+summary: This property exposes a single storage device connected to this system.
+
+extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+platforms: [tizen]
+since: "3.0.2"
+
+properties:
+            
+  - name: type
+    summary: |
+        The type of storage device. The value is one of the constants defined for this type.
+        The supported storage unit types are: "UNKNOWN", "INTERNAL", "MMC", and "USB_HOST".
+    type: String
+    permission: read-only
+
+  - name: capacity
+    summary: The amount of data that this device can hold, in bytes.
+    type: Number
+    permission: read-only
+
+  - name: availableCapacity
+    summary: The amount of available data that this device can hold, in bytes.
+    type: Number
+    permission: read-only
+
+  - name: isRemoveable
+    summary: true if this unit can be removed from the system (such as an sdcard unplugged), false otherwise.
+    type: Boolean
+    permission: read-only

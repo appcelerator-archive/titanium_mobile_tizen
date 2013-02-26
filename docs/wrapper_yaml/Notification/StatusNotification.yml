@@ -1,0 +1,82 @@
+---
+name: Titanium.Tizen.Notification.StatusNotification
+summary: The object which represents status notification.
+description: |
+    All notification must have title attribute.
+    
+    This interface offers additional attribute to represent notification 
+    displayed in notification tray
+    
+extends: Titanium.Tizen.Notification.Notification
+platforms: [tizen]
+since: "2.0"
+
+properties:
+
+- name: statusType
+   summary: The status notification type.
+   type: String
+   permission: read-only
+   default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
+ 
+- name: iconPath
+   summary: The path to the icon to display in the notification.
+   type: String   
+  
+- name: soundPath 
+   summary: The path of sound file to play when the notification is shown.
+   type: String
+   
+- name: vibration 
+   summary: Holds whether to use vibration when the notification is shown.
+   type: Boolean   
+
+- name: appControl 
+   summary: Holds the application control to launch when the notification is selected from the notification tray.
+   type: Titanium.Tizen.ApplicationControl 
+   
+- name: appId  
+   summary: Holds the application id to launch when the notification is selected from the notification tray.
+   type: String
+   
+- name: progressValue 
+   summary: The current progress value of notification.
+   description: |
+        If progressValue is set, the progressbar will be displayed in notification. 
+        If not, the progressbar will not be shown. This attribute is only available for StatusNotifcation "PROGRESS" type.
+        
+        Application should keep the progress value for its job because the saved value 
+        in the notification status tray would be different from exact progress value.
+        progressValue":"  percent (1 to 100)
+   type: Number      
+
+examples:
+  - title: Simple status notification with type "PROGRESS"
+    example: | 
+        try {
+              var appControl = new tizen.ApplicationControl(
+              "http://tizen.org/appcontrol/operation/create_content",
+              null,
+              "image/jpg",
+              null);
+              
+              var notificationDict = {
+                          content : "This is a progress notificaiton.",
+                          iconPath : "images/image2.jpg",
+                          soundPath : "music/Over the horizon.mp3", 
+                          vibration : true, 
+                          appControl : appControl,
+                          progressValue : 20 
+                  };
+              // constructs the progress notification.
+              var notification = new tizen.StatusNotification("PROGRESS", 
+                                 "Progress notification", notificationDict); 
+              // posts the notification
+              tizen.notification.post(notification);
+              // updates the progress value of the notification.
+              notification.progressValue = 59;
+              tizen.notification.update(notification);  
+        } catch (err) {
+            console.log (err.name + ": " + err.message);
+        }
+ 

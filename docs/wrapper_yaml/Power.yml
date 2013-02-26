@@ -1,0 +1,145 @@
+---
+name: Titanium.Tizen.Power
+summary: This Module provides  support for requesting power management related resource states.
+description: |
+    The `Power` module is a thin wrapper on the Tizen `Power` class.	
+    
+    See also:
+  
+    *   [Tizen Power API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fpower.html)
+    
+    *   [Tizen  Power Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fpower.htm)
+    
+
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+         // Check whether the screen is on or off.
+        var isScreenOn = tizen.power.isScreenOn();
+        
+        // Set the screen brightness value for the application.
+        tizen.power.setScreenBrightness(1);
+        
+        function onScreenStateChanged(previousState, changedState) {
+            console.log("Screen state changed from " + previousState + " to " + changedState);
+        }
+        
+        // Set the screen state change listener.
+        tizen.power.setScreenStateChangeListener(onScreenStateChanged);
+ 	  
+methods:
+  - name: request
+    summary: Requests the minimum-state for a power resource.
+    parameters:
+      - name: resource
+        summary: |
+            The power resource for which the request is made.
+            The value is one of the constants defined for this type. 
+            The supported request types are: POWER_RESOURCE_SCREEN = "SCREEN", POWER_RESOURCE_CPU = "CPU"
+        type: String
+      - name: state
+        summary: |
+            The minimal power state in which the power resource is desired to be. 
+            The value is one of the constants defined for this type. 
+            The supported request types are: 
+            POWER_SCREEN_STATESCREEN_OFF = "SCREEN_OFF", POWER_SCREEN_STATESCREEN_SCREEN_DIM = "SCREEN_DIM",
+            POWER_SCREEN_STATESCREEN_SCREEN_NORMAL = "SCREEN_NORMAL", POWER_SCREEN_STATESCREEN_SCREEN_BRIGHT = "SCREEN_BRIGHT", 
+            POWER_CPU_STATE_CPU_AWAKE = "CPU_AWAKE"
+        type: String
+
+  - name: release
+    summary: Releases the power state request for the given resource.
+    parameters:
+      - name: resource
+        summary: |
+            The power resource for which the request is made.
+            The value is one of the constants defined for this type. 
+            The supported request types are: POWER_RESOURCE_SCREEN = "SCREEN", POWER_RESOURCE_CPU = "CPU"
+        type: String
+
+  - name: setScreenStateChangeListener
+    summary: Sets the screen state change callback and monitors its state changes.
+    parameters:
+      - name: listener 
+        summary: |
+            The screen state change callback. There are 'previousState' and 'changedState' parameters
+            in callback. The 'previousState' and 'changedState' are one of the constants defined for this type: 
+            "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT"
+        type: Callback<String, String>
+        
+  - name: unsetScreenStateChangeListener
+    summary: Unsets the screen state change callback and stop monitoring it.
+    
+  - name: getScreenBrightness
+    summary: Gets the screen brightness level of an application, from 0 to 1.
+    returns:
+        summary: double Current screen brightness value.
+        type: Number
+    
+  - name: setScreenBrightness
+    summary: Sets the screen brightness level for an application, from 0 to 1.
+    parameters:
+      - name: brightness 
+        type: Number
+        
+  - name: isScreenOn
+    summary: Returns true if the screen is on.
+    returns:
+        summary: true if screen is on.
+        type: Boolean
+        
+  - name: restoreScreenBrightness
+    summary: Restores the screen brightness to the system default setting value.
+    
+  - name: turnScreenOn
+    summary: Turns on the screen.
+
+  - name: turnScreenOff
+    summary: Turns off the screen.
+    
+properties:
+
+  - name: POWER_RESOURCE_SCREEN
+    summary: "SCREEN" is aligned with <Titanium.Tizen.SystemInfo> property value
+    type: STRING
+    permission: read-only
+
+  - name: POWER_RESOURCE_CPU
+    summary: "CPU" is aligned with <Titanium.Tizen.SystemInfo> property value
+    type: STRING
+    permission: read-only
+
+  - name: POWER_SCREEN_STATESCREEN_OFF
+    summary: "SCREEN_OFF" - This screen state cannot be requested but can only be used in the state change callback.
+    type: STRING
+    permission: read-only
+
+  - name: POWER_SCREEN_STATE_SCREEN_DIM
+    summary: "SCREEN_DIM" - The minimal screen state is set to DIM and device does not change to OFF state automatically.
+    type: STRING
+    permission: read-only
+    
+  - name: POWER_SCREEN_STATE_SCREEN_NORMAL
+    summary: |
+        "SCREEN_NORMAL" -  The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
+        NORMAL state refers to the default screen brightness that a user has configured for the device. 
+    type: STRING
+    permission: read-only    
+    
+  - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
+    summary: |
+        "SCREEN_BRIGHT"  - The minimal screen state is set to BRIGHT and device does not change to NORMAL state automatically.
+        BRIGHT state refers to the maximum screen brightness that the device provides. 
+        Note that the change in brightness does not affect the system brightness setting, i.e., 
+        the system brightness value is automatically restored when the resource is released or the process is completed.
+    type: STRING
+    permission: read-only    
+    
+  - name: POWER_CPU_STATE_CPU_AWAKE
+    summary: "CPU_AWAKE" - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
+    type: STRING
+    permission: read-only
