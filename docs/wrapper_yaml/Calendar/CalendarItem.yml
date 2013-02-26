@@ -20,6 +20,20 @@ methods:
       - name: format
         summary:  The format to use for exporting.
         type: String
+    examples:
+      - example: |    
+            // Defines the event search success callback.
+            function eventSearchSuccessCallback(events) {
+                // Converts the first event to iCalendar 2.0 format (default)
+                var vevent = events[0].convertToString("ICALENDAR_20");
+                Titanium.API.info('iCalendar 2.0 representation of the event is: ' + vevent);
+            }
+            // Gets the default calendar
+            var myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            // Finds all events in the first calendar that contain in the summary the string Tizen.
+            var filter = Titanium.Tizen.createAttributeFilter('summary', 'CONTAINS', 'Tizen');
+            myCalendar.find(eventSearchSuccessCallback, errorCallback, filter);    
         
   - name: clone
     summary: |
@@ -31,7 +45,19 @@ methods:
     parameters:
       - name: item
         summary: The new clone of the CalendarItem object.
-        type: Titanium.Tizen.Calendar.CalendarItem      
+        type: Titanium.Tizen.Calendar.CalendarItem
+    examples:
+      - example: |    
+            // Gets default calendar.
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
+            var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: Titanium.Tizen.createTZDate(2012, 3, 4),
+                                                        duration: Titanium.Tizen.createTimeDuration(3, "DAYS"),
+                                                        summary: "HTML5 Seminar"});
+                                     
+            calendar.add(html5seminar);
+            var tizenseminar = html5seminar.clone();
+            tizenseminar.summary = "Tizen Seminar";
+            calendar.add(tizenseminar);    
  
 properties:
 
@@ -58,6 +84,9 @@ properties:
         
         The default value is an empty string.
     type: STRING
+    examples:
+      - example: |    
+            event.description = 'Tizen Codefest';
     
   - name: summary
     summary: |
@@ -65,6 +94,9 @@ properties:
         
         The default value is an empty string.
     type: STRING
+    examples:
+      - example: |    
+            event.summary = 'Launching the Tizen reference implementation';
 
   - name: isAllDay
     summary: |
@@ -73,6 +105,9 @@ properties:
         
         The default value for this attribute is false.
     type: Boolean
+    examples:
+      - example: |    
+            event.isAllDay = true; // All-Day event
 
   - name: startDate 
     summary: |
@@ -81,6 +116,10 @@ properties:
         
         startDate must be specified in the same time zone as endDate / dueDate if provided.
     type: Titanium.Tizen.Time.TZDate
+    examples:
+      - example: |    
+            // 2010-04-30 09:00
+            event.startDate = Titanium.Tizen.createTZDate(2010, 3, 30, 9, 0);
 
   - name: duration
     summary: |
@@ -91,23 +130,36 @@ properties:
         
         This attribute is precise to the second. Milliseconds are ignored.
     type: Titanium.Tizen.Time.TimeDuration
+    examples:
+      - example: |    
+            // 1 hour meeting
+            event.duration = Titanium.Tizen.createTimeDuration(1, "HOURS");
 
   - name: location 
     summary: |
         An attribute to store the location or the intended venue for the activity defined by the calendar item. (See RFC 5545 - Section 3.8.1.7)
         
         The default value for this attribute is an empty string.
-    type: Titanium.Tizen.Time.TimeDuration
+    type: String
+    examples:
+      - example: |    
+            event.location = 'Huesca';
     
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place. (See RFC 5545 - Section 3.8.1.6).
     type: Titanium.Tizen.SimpleCoordinates
+    examples:
+      - example: |    
+            event.geolocation = Titanium.Tizen.createSimpleCoordinates(60.175, 24.934);
 
   - name: organizer
     summary: |
         An attribute to store the name of the person who organized this event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is initialized to an empty string.
     type: STRING
+    examples:
+      - example: |    
+            event.organizer = 'Mr. Jones';
 
   - name: visibility
     summary: |
@@ -123,6 +175,9 @@ properties:
         For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
         For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
     type: STRING
+    examples:
+      - example: |    
+            event.status = "TENTATIVE";
 
   - name: priority
     summary: |
@@ -134,10 +189,20 @@ properties:
             - 5 to MEDIUM,
             - 6-9 to LOW.
     type: STRING
+    examples:
+      - example: |    
+            task.priority = "HIGH";
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
     type: Titanium.Tizen.Calendar.CalendarAlarm[]
+    examples:
+      - example: |    
+            ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
+          // Gives a sound notification 30 minutes before the item's start time
+          var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
+                                               "SOUND");
+          ev.alarms = [alarm];
 
   - name: categories
     summary: |
@@ -148,11 +213,19 @@ properties:
         Examples of categories are personal, work, vacation, travel, etc.
         By default, this attribute is set to an empty array.
     type: STRING[]
+    examples:
+      - example: |    
+            event.categories = ['Personal'];
 
   - name: attendees
     summary: |
         An attribute array that lists the people attending an event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is set to an empty array.
     type: Titanium.Tizen.Calendar.CalendarAttendee[]
+    examples:
+      - example: |    
+            var attendee = Titanium.Tizen.createCalendarAttendee('mailto:bob@domain.com',
+                                           {role: "CHAIR", RSVP: true});
+            event.attendees = [attendee];
 
   

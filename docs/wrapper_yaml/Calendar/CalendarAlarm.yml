@@ -9,7 +9,7 @@ examples:
   - title: Code example
     example:    |
         // Creates a sound alarm 30 minutes before the event's start time
-        var alarm = new tizen.CalendarAlarm(new tizen.TimeDuration(30, "MINS"), "SOUND");
+        var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"), "SOUND");
  
 properties:
   - name: absoluteDate 
