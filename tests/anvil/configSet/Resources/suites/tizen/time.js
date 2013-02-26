@@ -28,8 +28,7 @@ module.exports = new function() {
 		{name: 'checkEqualsTo'},
 		{name: 'checkEarlierAndLater'},
 		{name: 'checkAddDuration'},
-		{name: 'checkToXXXString'},
-		{name: 'checkGetTZAbbreviation'}
+		{name: 'checkToXXXString'}
 	];
 
 	// Check setting and getting day of the month as a number from 1 to 31 (function getDate)
@@ -272,19 +271,6 @@ module.exports = new function() {
 		valueOf(testRun, tzDate.toTimeString().length).shouldBeGreaterThan(0);
 		valueOf(testRun, tzDate.toString()).shouldBeString();
 		valueOf(testRun, tzDate.toString().length).shouldBeGreaterThan(0);
-		finish(testRun);
-	}
-
-	// Check getTimezoneAbbreviation() method
-	this.checkGetTZAbbreviation = function(testRun) {
-		var tzDate = Ti.Tizen.Time.createTZDate({
-				year: 2012,
-				month: 11,
-				day: 21
-			}),
-			date = new Date().toString(),
-			timezoneAbbrev = date.substring(date.indexOf('('), date.indexOf(')'));
-		console.log(timezoneAbbrev);
 		finish(testRun);
 	}
 }
