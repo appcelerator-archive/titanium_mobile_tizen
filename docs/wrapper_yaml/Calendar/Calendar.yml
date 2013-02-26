@@ -11,7 +11,7 @@ description: |
         - Deleting existing items using remove() / removeBatch() methods.
         - Tracking calendar changes using addChangeListener() / removeChangeListener() methods.
 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 
@@ -127,13 +127,13 @@ methods:
         optional: true
 
   - name: remove
-        summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
-        description: |
-            For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) is set to null, this method will remove the event identified by uid, and all of its possible detached instances.
-        parameters:
-          - name: id
-            summary:  The identifier (ID attribute) of the item object to delete.
-            type: CalendarEventId
+    summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
+    description: |
+        For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) is set to null, this method will remove the event identified by uid, and all of its possible detached instances.
+    parameters:
+      - name: id
+        summary:  The identifier (ID attribute) of the item object to delete.
+        type: CalendarEventId
 
   - name: removeBatch
     summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
@@ -200,7 +200,7 @@ methods:
         summary: The methods to invoke on receiving calendar change notifications.
         type: CalendarChangeCallback
  
- - name: removeChangeListener
+  - name: removeChangeListener
     summary: Unsubscribes from receiving notification for a calendar item changes.
     description: |
         If the watchId argument is valid and corresponds to a subscription already in place, 

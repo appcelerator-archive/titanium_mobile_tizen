@@ -9,37 +9,37 @@ description: |
     
 extends: Titanium.Tizen.Notification.Notification
 platforms: [tizen]
-since: "2.0"
+since: "3.0.2"
 
 properties:
 
-- name: statusType
+ - name: statusType
    summary: The status notification type.
    type: String
    permission: read-only
    default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
  
-- name: iconPath
+ - name: iconPath
    summary: The path to the icon to display in the notification.
    type: String   
   
-- name: soundPath 
+ - name: soundPath 
    summary: The path of sound file to play when the notification is shown.
    type: String
    
-- name: vibration 
+ - name: vibration 
    summary: Holds whether to use vibration when the notification is shown.
    type: Boolean   
 
-- name: appControl 
+ - name: appControl 
    summary: Holds the application control to launch when the notification is selected from the notification tray.
    type: Titanium.Tizen.ApplicationControl 
    
-- name: appId  
+ - name: appId  
    summary: Holds the application id to launch when the notification is selected from the notification tray.
    type: String
    
-- name: progressValue 
+ - name: progressValue 
    summary: The current progress value of notification.
    description: |
         If progressValue is set, the progressbar will be displayed in notification. 

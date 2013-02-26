@@ -14,10 +14,10 @@ description: |
     CELLULAR_NETWORK
     SIM
             
-    The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.	
+    The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.
     
     See also:
-  
+    
     *   [Tizen System Info API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fsysteminfo.html)
     
     *   [Tizen  System Info Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fsysteminfo.htm)
@@ -45,8 +45,6 @@ examples:
         }
         
         tizen.systeminfo.getPropertyValue("BATTERY", onSuccessCallback, onErrorCallback);
- 
-	  
 methods:
   - name: getCapabilities
     summary: Retrieves the capabilities of the device.
@@ -76,7 +74,7 @@ methods:
         type: Callback<Titanium.Tizen.SystemInfo.SystemInfoProperty>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<WebAPIError>        
+        type: Callback<WebAPIError>
         optional: true
         
   - name: addPropertyValueChangeListener
@@ -101,16 +99,17 @@ methods:
         type: Callback<Titanium.Tizen.SystemInfo.SystemInfoProperty>
       - name: options
         summary:  An object containing the various options for fetching the properties requested.
-        type: Dictionary<SystemInfoOptions>        
-        optional: true  
+        type: Dictionary<SystemInfoOptions>
+        optional: true
         
   - name: removePropertyValueChangeListener
-        summary: Unsubscribes notifications for property changes set up by addPropertyValueChangeListener.
-        description: |
-            If a valid listenerId argument is passed that corresponds to a subscription already place, 
-            then the watch process MUST immediately terminate and no further callback is invoked. 
-            If the listenerId argument does not correspond to a valid subscription, 
-            the method should return without any further action.
+    summary: |
+        Unsubscribes notifications for property changes set up by addPropertyValueChangeListener.
+    description: |
+        If a valid listenerId argument is passed that corresponds to a subscription already place, 
+        then the watch process MUST immediately terminate and no further callback is invoked. 
+        If the listenerId argument does not correspond to a valid subscription, 
+        the method should return without any further action.
     parameters:
       - name: listenerId
         summary:  Identifier of the subscription returned by the addPropertyValueChangeListener() method.
@@ -119,102 +118,102 @@ methods:
 properties:
 
   - name: SYSTEM_INFO_PROPERTY_ID_BATTERY
-    summary: "BATTERY" is for homescreen background image.
+    summary: BATTERY is for homescreen background image.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_CPU
-    summary: "CPU" is the device property identifier.
+    summary: CPU is the device property identifier.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_STORAGE
-    summary: "STORAGE" is the device property identifier.
+    summary: STORAGE is the device property identifier.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_DEVICE_ORIENTATION
-    summary: "DEVICE_ORIENTATION" is the device property identifier.
+    summary: DEVICE_ORIENTATION is the device property identifier.
     type: STRING
     
     permission: read-only
   - name: SYSTEM_INFO_PROPERTY_BUILD
-    summary: "BUILD" is the device property identifier.
+    summary: BUILD is the device property identifier.
     type: STRING
     
     permission: read-only    
   - name: SYSTEM_INFO_PROPERTY_NETWORK
-    summary: "NETWORK" is the device property identifier.
+    summary: NETWORK is the device property identifier.
     type: STRING
     
     permission: read-only    
   - name: SYSTEM_INFO_PROPERTY_WIFI_NETWORK
-    summary: "WIFI_NETWORK" is the device property identifier.
+    summary: WIFI_NETWORK is the device property identifier.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_PROPERTY_CELLULAR_NETWORK
-    summary: "CELLULAR_NETWORK" is the device property identifier.
+    summary: CELLULAR_NETWORK is the device property identifier.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_PROPERTY_SIM
-    summary: "SIM" is the device property identifier.
+    summary: SIM is the device property identifier.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_NONE
-    summary: "NONE" is Data Network Type.
+    summary: NONE is Data Network Type.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_2G
-    summary: "2G" is Data Network Type.
+    summary: 2G is Data Network Type.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_2_5G
-    summary: "2.5G" is Data Network Type.
+    summary: 2.5G is Data Network Type.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_3G
-    summary: "3G" is Data Network Type.
+    summary: 3G is Data Network Type.
     type: STRING
     permission: read-only
     
   - name: SYSTEM_INFO_NETWORK_TYPE_4G
-    summary: "4G" is Data Network Type.
+    summary: 4G is Data Network Type.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_WIFI
-    summary: "WIFI" is Data Network Type.
+    summary: WIFI is Data Network Type.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_ETHERNET
-    summary: "ETHERNET" is Data Network Type.
+    summary: ETHERNET is Data Network Type.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY
-    summary: "PORTRAIT_PRIMARY" is for homescreen background image.
+    summary: PORTRAIT_PRIMARY is for homescreen background image.
     type: STRING
     permission: read-only    
 
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY
-    summary: "PORTRAIT_SECONDARY" is for homescreen background image.
+    summary: PORTRAIT_SECONDARY is for homescreen background image.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY
-    summary: "LANDSCAPE_PRIMARY" is for homescreen background image.
+    summary: LANDSCAPE_PRIMARY is for homescreen background image.
     type: STRING
     permission: read-only    
     
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY
-    summary: "LANDSCAPE_SECONDARY" is for homescreen background image.
+    summary: LANDSCAPE_SECONDARY is for homescreen background image.
     type: STRING
     permission: read-only    
     

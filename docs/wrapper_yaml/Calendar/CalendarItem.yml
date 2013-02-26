@@ -4,7 +4,7 @@ summary:  |
     This is a parent interface that is used to create Calendar events and tasks. 
     These attributes are shared by both events and tasks.
 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 

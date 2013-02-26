@@ -1,10 +1,10 @@
 ---
-name: Titanium.Tizen.Calendar.Calendar
+name: Titanium.Tizen.Calendar.CalendarAttendee
 summary:  |
     This interface implements the CalendarAttendee object that contains information about an event attendee.
     
     By default, each of the attributes of this interface are undefined.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 
