@@ -102,7 +102,7 @@ module.exports = new function() {
 		}).shouldNotThrowException();
 		setTimeout(
 			function(){
-				valueOf(testRun, isSuccess).shouldBeTrue();	
+				valueOf(testRun, isSuccess).shouldBeTrue();
 				valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
 				valueOf(testRun, runingAppArray[0].id).shouldBeString();
 				valueOf(testRun, runingAppArray[0].appId).shouldBeString();

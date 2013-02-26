@@ -4,7 +4,15 @@ define(['Ti/_/declare', 'Ti/Tizen/AbstractFilter'], function(declare, AbstractFi
 			if(args.toString() === '[object AttributeFilter]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.AttributeFilter(args.attributeName, args.matchFlag, args.matchValue);
+				if (args.hasOwnProperty('attributeName')) {
+					this._obj = new tizen.AttributeFilter(
+						args.attributeName,
+						args.matchFlag ? args.matchFlag : null,
+						args.matchValue ? args.matchValue : null
+					);
+				} else {
+					Ti.API.error('AttributeFilter\'s constructor with such parameters not found.');
+				}
 			}
 		},
 

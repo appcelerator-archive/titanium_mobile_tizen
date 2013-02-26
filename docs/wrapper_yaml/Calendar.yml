@@ -1,0 +1,375 @@
+---
+name: Titanium.Tizen.Calendar
+summary:  interfaces and methods for users to manage their schedule. 
+description: |
+    Separate calendars can be implemented for group related events or tasks. For example, a user may have a work, personal, and family calendar. A calendar entry is called an event and is composed of a series of attributes, such as purpose, starting time, and duration. A calendar is a collection of events.
+    Internet Calendaring and Scheduling Core Object Specification (iCalendar), defines a format for exchanging event items. Mapping to specified event/task attributes in this API is as per this specification. 
+    To know more about this specification, see [RFC 5545](http://tools.ietf.org/html/rfc5545).
+    
+    This API provides functionality to read, create, delete, and update items in specific calendars. Calendars can be obtained using the getCalendars() method, which returns an array of Calendar objects.
+            
+    The `Calendar` module is a thin wrapper on the Tizen `Calendar` class.	
+    
+    See also:
+  
+    *   [Tizen Calendar API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fcalendar.html)
+    
+    *   [Tizen  System Info Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcalendar.htm)
+    
+
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+        var calendar = tizen.calendar.getDefaultCalendar("EVENT"),
+            ev = new tizen.CalendarEvent({
+               description:"HTML5 Introduction", 
+               summary:"HTML5 Webinar", 
+               startDate: new tizen.TZDate(2011, 3, 30, 10, 0), 
+               duration: new tizen.TimeDuration(1, "HOURS"),
+               location:"Huesca"
+            });
+        calendar.addBatch([ev]);
+        
+        var myCalendar;
+        
+        // Defines the error callback for all the asynchronous calls
+        function errorCallback(response) {
+            console.log( 'The following error occurred: ' +  response.name);
+        }
+        
+        function eventFoundCallback(events) {
+            // The event has been successfully found
+            // Changes the summary
+            events[0].summary = 'HTML6 Webinar'; 
+            myCalendar.update(events[0]);
+            console.log('First event was updated!');
+        }
+        
+        // Gets a list of available calendars
+        myCalendar = tizen.calendar.getDefaultCalendar("EVENT");
+        var ev = new tizen.CalendarEvent({description:'HTML5 Introduction', 
+                                        summary:'HTML5 Webinar ', 
+                                        startDate: new tizen.TZDate(2011, 3, 30, 10, 0), 
+                                        duration: new tizen.TimeDuration(1, "HOURS"),
+                                        location:'Huesca'});
+                      
+        myCalendar.add(ev);
+        
+        // The event has been added
+        // Checks if the added event can be retrieved from the calendar
+        // If the calendar was empty, only the item added through add() should be returned
+        var filter = new tizen.AttributeFilter('summary', 'CONTAINS', 'HTML5');
+        myCalendar.find(eventFoundCallback, errorCallback, filter);
+        
+ 
+methods:
+  - name: getCalendars
+    summary: Gets an array of Calendar objects.
+    description: |
+        If the operation completes successfully, the successCallback() must be invoked with all the calendars found and available. 
+        The first calendar in the list is always the default calendar.
+        
+        If no Calendar object is available, the successCallback() is invoked with an empty array.
+        
+        The errorCallback is launched with these error types:
+            InvalidValuesError - if any of the input parameters contain an invalid value.
+            UnknownError - if any other error occurs.
+    parameters:
+      - name: type
+        summary:  |
+            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+        type: String
+      - name: successCallback
+        summary: Function called when the properties have been successfully retrieved.
+        type: Callback<Titanium.Tizen.Calendar.Calendar[]>
+      - name: errorCallback
+        summary: Function called when an error occurred while retrieving the properties.
+        type: Callback<Titanium.Tizen.WebAPIError>        
+        optional: true
+
+  - name: getDefaultCalendar
+    summary: Gets the default calendar, which is used for new items.
+    returns:
+        summary: The default Calendar object.
+        type: Titanium.Tizen.Calendar.Calendar       
+    parameters:
+      - name: type
+        summary:  |
+            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+        type: String      
+          
+  - name: getCalendar
+    summary: Gets the calendar with the specified identifier and type.
+    returns:
+        summary: The matching Calendar object.
+        type: Titanium.Tizen.Calendar.Calendar       
+    parameters:
+      - name: type
+        summary:  |
+            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+        type: String
+      - name: id
+        summary:  The calendar identifier.
+        type: String
+                    
+properties:
+
+  - name: CALENDAR_TYPE_EVENT 
+    summary: "EVENT" indicates the type of a calendar if a calendar contains events (VEVENT objects)
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_TYPE_TASK
+    summary: "TASK" indicates the type of a calendar if a calendar contains tasks (VTODO objects)
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_TEXT_FORMAT_ICALENDAR_20
+    summary: "ICALENDAR_20" is type of textual format of a Calendar if the textual format is iCalendar v2.0.
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_TEXT_FORMAT_VCALENDAR_10
+    summary: "VCALENDAR_10" is type of textual format of a Calendar if the textual format is vCalendar v1.0
+    type: STRING
+    permission: read-only
+    
+  - name: ALARM_METHOD_SOUND
+    summary: "SOUND" indicates the type of an alarm if sound is played to alert the user.
+    type: STRING
+    permission: read-only    
+    
+  - name: ALARM_METHOD_DISPLAY
+    summary: "DISPLAY" indicates the type of an alarm if display on screen without any sound is used to alert the user
+    type: STRING
+    permission: read-only    
+    
+  - name: RECURRENTCE_RULE_FREQUENCY_DAILY
+    summary: "DAILY" indicates the type of frequency for the recurrence of an event if the event occurs daily.
+    type: STRING
+    permission: read-only    
+    
+  - name: RECURRENTCE_RULE_FREQUENCY_WEEKLY
+    summary: "WEEKLY" indicates the type of frequency for the recurrence of an event if the event occurs weekly.
+    type: STRING
+    permission: read-only    
+    
+  - name: RECURRENTCE_RULE_FREQUENCY_MONTHLY
+    summary: "MONTHLY" indicates the type of frequency for the recurrence of an event if the event occurs monthly.
+    type: STRING
+    permission: read-only    
+    
+  - name: RECURRENTCE_RULE_FREQUENCY_YEARLY
+    summary: "YEARLY" indicates the type of frequency for the recurrence of an event if the event occurs yearly.
+    type: STRING
+    permission: read-only
+
+  - name: BY_DAY_VALUE_MO
+    summary: "MO"  indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only
+
+  - name: BY_DAY_VALUE_TU
+    summary: "TU" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only
+
+  - name: BY_DAY_VALUE_WE
+    summary: "WE" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only
+    
+  - name: BY_DAY_VALUE_TH
+    summary: "TH" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only    
+    
+  - name: BY_DAY_VALUE_FR
+    summary: "FR" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only    
+    
+  - name: BY_DAY_VALUE_SA
+    summary: "SA" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only
+
+  - name: BY_DAY_VALUE_SU
+    summary: "SU" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: STRING
+    permission: read-only    
+
+  - name: EVENT_AVAILABILITY_BUSY
+    summary: "BUSY" indicates the availability of time for an event.
+    type: STRING
+    permission: read-only    
+    
+  - name: EVENT_AVAILABILITY_FREE
+    summary: "FREE" indicates the availability of time for an event if the specified time slot is not vacant
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_TYPE_INDIVIDUAL
+    summary: "INDIVIDUAL" - Individual
+    type: STRING
+    permission: read-only
+
+  - name: ATTENDEE_TYPE_GROUP
+    summary: "GROUP" - Group of individuals
+    type: STRING
+    permission: read-only    
+    
+  - name: ATTENDEE_TYPE_RESOURCE 
+    summary: "RESOURCE " - Physical resource
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_TYPE_ROOM
+    summary: "ROOM" - Room resource
+    type: STRING
+    permission: read-only    
+    
+  - name: ATTENDEE_TYPE_UNKNOWN
+    summary: "UNKNOWN" - Unknown
+    permission: read-only    
+
+ - name: ATTENDEE_STATUS_PENDING
+    summary: "PENDING" - if the participant has not yet responded to the event
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_ACCEPTED
+    summary: "ACCEPTED" - if the participant has accepted the event
+    type: STRING
+    permission: read-only    
+    
+  - name: ATTENDEE_STATUS_DECLINED
+    summary: "DECLINED" - if the participant has declined the event
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_TENTATIVE
+    summary: "TENTATIVE" - if the participant has tentatively accepted the event
+    type: STRING
+    permission: read-only
+
+  - name: ATTENDEE_STATUS_DELEGATED
+    summary: "DELEGATED" - if the participant has delegated attendance to another participant
+    type: STRING
+    permission: read-only    
+    
+  - name: ATTENDEE_STATUS_COMPLETED
+    summary: "COMPLETED" - if the participant's event has been completed
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_IN_PROCESS
+    summary: "IN_PROCESS" - if the participant's event is currently in process
+    type: STRING
+    permission: read-only    
+
+ - name: ATTENDEE_ROLE_REQ_PARTICIPANT
+    summary: "REQ_PARTICIPANT" - if the participation of an attendee is mandatory
+    type: STRING
+    permission: read-only
+
+  - name: ATTENDEE_ROLE_OPT_PARTICIPANT
+    summary: "OPT_PARTICIPANT" - if the participation of an attendee is optional
+    type: STRING
+    permission: read-only    
+    
+  - name: ATTENDEE_ROLE_NON_PARTICIPANT
+    summary: "NON_PARTICIPANT" - if the attendee is not a participant but is copied for information purposes
+    type: STRING
+    permission: read-only    
+
+  - name: ATTENDEE_ROLE_CHAIR
+    summary: "CHAIR" - if the attendee is the chairperson of the event.
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_PRIOTITY_HIGH
+    summary: "HIGH" - if item priority is high
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_PRIOTITY_MEDIUM
+    summary: "MEDIUM" - if item priority is medium
+    type: STRING
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_PRIOTITY_LOW
+    summary: "LOW" - if item priority is low
+    type: STRING
+    permission: read-only
+    
+  - name: CALENDAR_ITEM_VISIBILITY_PUBLIC
+    summary: "PUBLIC" - if item visibility is public
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_VISIBILITY_PRIVATE
+    summary: "PRIVATE" - if item visiblity is private
+    type: STRING
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL
+    summary: "CONFIDENTIAL" - if item visibility is confidential
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_TENTATIVE
+    summary: "TENTATIVE" - if the event is tentative.
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_CONFIRMED
+    summary: "CONFIRMED" - if the event is confirmed.
+    type: STRING
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_STATUS_CANCELLED
+    summary: "CANCELLED" - if the event/task is cancelled.
+    type: STRING
+    permission: read-only
+    
+  - name: CALENDAR_ITEM_STATUS_NEEDS_ACTION
+    summary: "NEEDS_ACTION" - if the task needs action.
+    type: STRING
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_IN_PROCESS
+    summary: "IN_PROCESS" - if the task has been completed.
+    type: STRING
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_STATUS_COMPLETED
+    summary: "COMPLETED" - if the task has been cancelled.
+    type: STRING
+    permission: read-only  
+# Pseudo-type    
+---
+name: SystemInfoOptions
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: timeout
+    type: Number
+    summary: The number of milliseconds beyond which the operation must be interrupted.
+    
+  - name: highThreshold
+    type: Number
+    summary: |
+        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
+        if the property is a number and its value is greater than or equal to this number.
+    
+  - name: lowThreshold
+    type: Number
+    summary: |
+        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
+        if the property is a number and its value is lower than or equal to this number. If both highThreshold and lowThreshold parameters are specified, 
+        the successCallback is triggered if and only if the property value is either lower than the value of lowThreshold or higher than the value of highThreshold.
+        

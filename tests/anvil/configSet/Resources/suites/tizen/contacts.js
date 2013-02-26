@@ -58,7 +58,7 @@ module.exports = new function() {
 		{name: "getPeopleWithName"},
 		{name: "getPersonById"},
 		{name: "removePerson"},
-		{name: "saveContact"}		
+		{name: "saveContact"}
 	]
 
 	this.getDefaultAddressBook = function(testRun) {

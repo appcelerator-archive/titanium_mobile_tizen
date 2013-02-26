@@ -31,7 +31,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
 				get: function() {
 					return this._obj.daysOfTheWeek;
 				}
-			},
+			}
 		},
 
 		getNextScheduledDate: function() {
