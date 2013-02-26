@@ -213,10 +213,22 @@ module.exports = new function() {
 		function folderArrayCB(folders) {
 			Ti.API.info(folders.length + ' folder(s) found.');
 
+			var i = 0,
+				len = folders.length;
+
 			valueOf(testRun, folders).shouldNotBeNull();
 			valueOf(testRun, folders).shouldBeObject();
-			valueOf(testRun, folders.length).shouldBeGreaterThan(0);
+			valueOf(testRun, len).shouldBeGreaterThan(0);
 
+			for (; i < len; i++) {
+				valueOf(testRun, folders[i]).shouldBe('[object TiTizenMessagingMessageFolder]');
+				valueOf(testRun, folders[i].contentType).shouldBeString();
+				valueOf(testRun, folders[i].path).shouldBeString();
+				valueOf(testRun, folders[i].id).shouldBeNumber();
+				valueOf(testRun, folders[i].name).shouldBeString();
+				valueOf(testRun, folders[i].type).shouldBeString();
+			}
+			
 			setTimeout(function() {
 				callBack && callBack(folders);
 			}, 500);
@@ -474,8 +486,7 @@ module.exports = new function() {
 
 				for (var i = 0, len = folders.length; i < len; i++) {
 					Ti.API.info('Folder ' + folders[i].name + ' found. Check properties.');
-
-					valueOf(testRun, folders[i]).shouldBe('[object TiTizenMessagingMessageFolder]');
+					
 					valueOf(testRun, folders[i].contentType).shouldBeString();
 					valueOf(testRun, folders[i].path).shouldBeString();
 					valueOf(testRun, folders[i].id).shouldBeNumber();
@@ -575,6 +586,7 @@ module.exports = new function() {
 
 							valueOf(testRun, messages.length).shouldBeGreaterThan(0);
 							valueOf(testRun, watchId).shouldNotBeNull();
+
 							messageStorage.removeChangeListener(watchId);
 
 							Ti.API.info('Update event listener removed.')
@@ -598,12 +610,12 @@ module.exports = new function() {
 						Ti.API.info('Service synced.');
 
 						function messagesFoundCB(messages) {
-							Ti.API.info(messages.length + ' message(s) found.');
-							finish(testRun);
+							Ti.API.info(messages.length + ' message(s) found.');							
 
 							function attachmentLoaded(attachment) {
 								Ti.API.info('Attachment loaded.');
 
+								valueOf(testRun, attachment).shouldBe('[object TiTizenMessagingMessageAttachment]');
 								valueOf(testRun, attachment.id).shouldBeObject();
 								valueOf(testRun, attachment.id).shouldNotBeNull();
 								valueOf(testRun, attachment.filePath).shouldBeObject();
@@ -613,7 +625,8 @@ module.exports = new function() {
 							}
 
 							for (var i = 0, len = messages.length; i < len; i++) {				    		
-								valueOf(testRun, messages[i]).shouldBeObject();
+								valueOf(testRun, messages[i]).shouldBe('[object TiTizenMessagingMessage]');								
+								valueOf(testRun, messages[i].attachments[0]).shouldBe('[object TiTizenMessagingMessageAttachment]');
 								valueOf(testRun, !!messages[i].attachments[0].loaded).shouldBeBoolean();
 
 								if (!messages[i].attachments[0].loaded) {
@@ -806,6 +819,12 @@ module.exports = new function() {
 					Ti.API.info(conversations.length + ' conversation(s) has been removed.'); 
 				}
 
+				valueOf(testRun, messageStorage.removeConversations).shouldBeFunction();
+
+				for (var i = 0, len = conversations.length; i < len; i++) {
+					valueOf(testRun, conversations[i]).shouldBe('[object TiTizenMessagingMessageConversation]');
+				}
+
 				if (conversations.length > 0) {
 					valueOf(testRun, function() { messageStorage.removeConversations(conversations, removeConversationsSuccess, errorCallback); }).shouldNotThrowException();
 				}
@@ -823,6 +842,8 @@ module.exports = new function() {
 						Ti.API.info(conversations.length + ' conversation(s) found.');
 
 						valueOf(testRun, conversations.length).shouldBeEqual(1);
+						valueOf(testRun, conversations[0]).shouldBe('[object TiTizenMessagingMessageConversation]');
+
 						finish(testRun);
 					}
 
@@ -870,6 +891,8 @@ module.exports = new function() {
 							Ti.API.info('Message ' + messageLoaded.id + ' body loaded.');
 
 							valueOf(testRun, messageLoaded.id).shouldBeEqual(message.id);
+							valueOf(testRun, messageLoaded).shouldBe('[object TiTizenMessagingMessage]');
+							valueOf(testRun, messageLoaded.body).shouldBe('[object TiTizenMessagingMessageBody]');
 							valueOf(testRun, messageLoaded.body['plainBody']).shouldBeEqual(message.body['plainBody']);
 							valueOf(testRun, messageLoaded.body['messageId']).shouldBeEqual(message.body['messageId']);
 							valueOf(testRun, messageLoaded.body['htmlBody']).shouldBeEqual(message.body['htmlBody']);

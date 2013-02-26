@@ -93,7 +93,33 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 		},
 
 		addMessagesChangeListener: function(messagesChangeCallback /*MessagesChangeCallback*/, filter /*AbstractFilter*/) {
-			this._obj.addMessagesChangeListener(messagesChangeCallback, filter ? filter._obj : filter);
+			function getWrappedItems(items) {
+				var i = 0,
+					itemsCount = items.length,
+					wrappedItems = [];
+
+				for (; i < itemsCount; i++) {
+					wrappedItems.push(new Message(items[i]));
+				}
+
+				return wrappedItems;
+			}
+
+			var wrappedMessagesChangeCallback = {
+				messagesupdated: function(items) {
+					messagesChangeCallback.messagesupdated.call(this, getWrappedItems(items));
+				},
+
+				messagesadded: function(items) {
+					messagesChangeCallback.messagesadded.call(this, getWrappedItems(items));
+				},
+
+				messagesremoved: function(items) {
+					messagesChangeCallback.messagesremoved.call(this, getWrappedItems(items));
+				}
+			};
+
+			return this._obj.addMessagesChangeListener(wrappedMessagesChangeCallback, filter ? filter._obj : filter);
 		},
 
 		addConversationsChangeListener: function(conversationsChangeCallback /*MessageConversationsChangeCallback*/, filter /*AbstractFilter*/) {
