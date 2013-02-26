@@ -1,0 +1,371 @@
+---
+name: Titanium.Tizen.Time.TZDate
+summary: The TZDate object represents information regarding a given date / time in a predefined timezone.
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Simple example
+    example:    |
+        TZDate now = tizen.time.getCurrentDateTime();
+        TZDate in_one_week = now.addDuration(new tizen.TimeDuration(7, "DAYS"));
+   
+methods:
+
+  - name: getDate
+    summary: Returns the day of the month (from 1-31).
+    returns:
+        type: Number
+    
+  - name: setDate
+    summary: Sets the day of the month (from 1-31).
+    returns:
+        summary: 
+        type: 
+    parameters:
+      - name: date
+        summary: Date to set.
+        type: Number
+
+  - name: getDay
+    summary: Returns the day of the week (from 0-6)
+    returns:
+        type: Number
+    
+  - name: getFullYear
+    summary: Returns the year (four digits).
+    returns:
+        type: Number
+    
+  - name: setFullYear
+    summary: Sets the year (four digits).
+    parameters:
+      - name: year
+        summary: Year to set.
+        type: Number
+
+  - name: getHours
+    summary: Returns the hour (0-23).
+    returns:
+        type: Number
+        
+  - name: setHours
+    summary: Sets the hour (0-23).
+    parameters:
+      - name: hours
+        summary: Hours to set
+        type: Number
+
+  - name: getMilliseconds
+    summary: Returns the milliseconds (from 0-999).
+    returns:
+        type: Number
+    parameters:
+      - name: 
+        summary: |
+        type: 
+
+  - name: setMilliseconds
+    summary: Sets the milliseconds (from 0-999).
+    parameters:
+      - name: ms
+        summary:  Milliseconds to set.
+        type: Number
+
+  - name: getMinutes
+    summary: Returns the minutes (from 0-59).
+    returns:
+        type: Number
+    
+  - name: setMinutes
+    summary: Sets the minutes (from 0-59).
+    parameters:
+      - name: minutes
+        summary: Minutes to set.
+        type: Number
+
+  - name: getMonth
+    summary: Returns the month (from 0-11).
+    returns:
+        type: Number
+    
+  - name: setMonth
+    summary: Sets the month (from 0-11).
+    parameters:
+      - name: month
+        summary: Month to set.
+        type: Number
+
+  - name: getSeconds
+    summary: Returns the seconds (from 0-59).
+    returns:
+        type: Number
+    
+  - name: setSeconds
+    summary: Sets the seconds (from 0-59).
+    parameters:
+      - name: seconds
+        summary: Seconds to set.
+        type: Number
+
+  - name: getUTCDate
+    summary: Returns the day of the month, according to universal time (from 1-31).
+    returns:
+        type: Number
+    
+  - name: setUTCDate
+    summary: Sets the day of the month, according to universal time (from 1-31).
+    parameters:
+      - name: date
+        summary:  Date to set.
+        type: Number
+
+  - name: getUTCDay
+    summary: Returns the day of the week, according to universal time (from 0-6).
+    returns:
+        type: Number
+    
+  - name: getUTCFullYear
+    summary: Returns the year, according to universal time (four digits).
+    returns:
+        type: Number
+    
+  - name: setUTCFullYear
+    summary: Sets the year, according to universal time (four digits).
+    parameters:
+      - name: year
+        summary:  Year to set.
+        type: Number
+
+  - name: getUTCHours
+    summary: Returns the hour, according to universal time (0-23).
+    returns:
+        type: Number
+    
+  - name: setUTCHours
+    summary: Sets the hour, according to universal time (0-23).
+    parameters:
+      - name: hours
+        summary: Hours to set.
+        type: Number
+
+  - name: getUTCMilliseconds
+    summary: Returns the milliseconds, according to universal time (from 0-999).
+    returns:
+        type: Number
+    
+  - name: setUTCMilliseconds
+    summary: Sets the milliseconds, according to universal time (from 0-999).
+    parameters:
+      - name: ms
+        summary:  Milliseconds to set.
+        type: Number
+
+  - name: getUTCMinutes
+    summary: Returns the minutes, according to universal time (from 0-59).
+    returns:
+        type: Number
+    
+  - name: setUTCMinutes
+    summary: Sets the minutes, according to universal time (from 0-59).
+    parameters:
+      - name: minutes
+        summary:  Minutes to set.
+        type: Number
+
+  - name: getUTCMonth
+    summary: Returns the month, according to universal time (from 0-11).
+    returns:
+        type: Number
+    
+  - name: setUTCMonth
+    summary: Sets the month, according to universal time (from 0-11).
+    parameters:
+      - name: month
+        summary:  Month to set.
+        type: Number
+
+  - name: getUTCSeconds
+    summary: Returns the seconds, according to universal time (from 0-59).
+    returns:
+        type: Number
+    
+  - name: setUTCSeconds
+    summary: Sets the seconds, according to universal time (from 0-59).
+    parameters:
+      - name: seconds
+        summary:  Seconds to set.
+        type: Number
+
+  - name: getTimezone
+    summary: Returns timezone identifier.
+    description: |
+        Zero or more slashes separate different components, with the most general descriptor first and the most specific one last. 
+        For example, 'Europe/Berlin', 'America/Argentina/Buenos_Aires'.
+        
+        This attribute uniquely identifies the timezone.
+    returns:
+        type: String
+    
+  - name: toTimezone
+    summary: Returns a copy of the TZDate converted to a given time zone.
+    returns:
+        summary:  New TZDate in given Timezone.
+        type: Titanium.Tizen.Time.TZDate
+    parameters:
+      - name: tzid
+        summary:  Timezone identifier to set.
+        type: String
+
+  - name: toLocalTimezone
+    summary: Returns a copy of the TZDate converted to the local time zone.
+    returns:
+        summary:  New TZDate in local Timezone.
+        type: Titanium.Tizen.Time.TZDate
+    
+  - name: toUTC
+    summary: Returns a copy of the TZDate converted to Coordinated Universal Time (UTC).
+    returns:
+        summary: Date/Time in UTC.
+        type: Titanium.Tizen.Time.TZDate
+    
+  - name: difference
+    summary: Calculates the difference with another TZDate object.
+    description: |
+        Calculates the difference in time between this and other. 
+        This comparison method takes timezones into consideration for the comparison.
+        The TimeDuration that is returned is effectively this - other. 
+        The return value is a duration in milliseconds both TZDate objects have a time component, 
+        in days, otherwise. The result value will be:
+        
+        - Negative, if other is in the future
+        - 0 if the two date / times are equal
+        - Positive, if other is in the past
+        
+    returns:
+        summary: |
+            Duration in milliseconds between the two date / time objects (or in days for comparison between dates with no time component).
+        type: Titanium.Tizen.Time.TimeDuration
+    parameters:
+      - name: other
+        summary:  Other Date/Time to compare to.
+        type: Titanium.Tizen.Time.TZDate
+
+  - name: equalsTo
+    summary: Checks if the TZDate is equal to another.
+    description: |
+        This method takes the timezones into consideration and will return true 
+        if the two TZDate objects represent the same instant in different timezones.
+        
+    returns:
+        summary: True if the 2 date/times are the same.
+        type: Boolean
+    parameters:
+      - name: other
+        summary:  Other Date/Time to compare to.
+        type: Titanium.Tizen.Time.TZDate
+
+  - name: earlierThan
+    summary: Checks if the TZDate is earlier than another.
+    description: |
+        This method takes the timezones into consideration.
+        
+    returns:
+        summary:  True, if the Date/Time is earlier than the one passed in argument.
+        type:  Boolean
+    parameters:
+      - name: other
+        summary:  Other Date/Time to compare to.
+        type: Titanium.Tizen.Time.TZDate
+
+  - name: laterThan
+    summary: Checks if the TZDate is later than another.
+    description: This method takes the timezones into consideration.
+        
+    returns:
+        summary:  True, if the Date/Time is later than the one passed in argument.
+        type: Boolean
+    parameters:
+      - name: other
+        summary:  Other Date/Time to compare to.
+        type: Titanium.Tizen.Time.TZDate
+
+  - name: addDuration
+    summary: Returns a new date by adding a duration to the current TZDate object.
+    description: |
+        If the length of duration is negative, the new date / time will be earlier than it used to.
+        Note that calling this method does not alter the current object.
+        
+    returns:
+        type: Titanium.Tizen.Time.TZDate
+    parameters:
+      - name: duration
+        summary:  TimeDuration to add.
+        type: Titanium.Tizen.Time.TimeDuration
+
+  - name: toLocaleTimeString
+    summary: Returns the date portion of a TZDate object as a string, using locale conventions.
+    returns:
+        summary:  Date portion of the TZDate object as a string, using locale conventions.
+        type: String
+    
+  - name: toLocaleString
+    summary: Converts a TZDate object to a string, using locale conventions.
+    description: |
+        
+    returns:
+        summary: String representation of the TZDate object, using locale conventions.
+        type: String
+
+  - name: toDateString
+    summary: Returns the date portion of a TZDate object as a string.
+    returns:
+        summary: Date portion of the TZDate object as a string.
+        type: String
+    
+  - name: toTimeString
+    summary: Returns the time portion of a TZDate object as a string.
+    returns:
+        summary: Time portion of the TZDate object as a string.
+        type: String
+    
+  - name: toString
+    summary: Converts a TZDate object to a string.
+    returns:
+        summary: String representation of the TZDate object.
+        type: String
+    
+  - name: getTimezoneAbbreviation
+    summary: Determines the time zone abbreviation to be used at a particular date in the time zone.
+    description: |
+        For example, in Toronto this is currently "EST" during the winter months and "EDT" during the summer months when daylight savings time is in effect.
+        
+    returns:
+        summary:  Abbreviation of the time zone (such as "EST").
+        type: String
+   
+  - name: secondsFromUTC
+    summary: Gets the number of seconds from Coordinated Universal Time (UTC) offset for the timezone.
+    description: |
+        Returns the offset (in seconds) from UTC of the timezone, accounting for daylight savings if in effect in the timezone.
+    returns:
+        summary: Offset from UTC in seconds.
+        type: Number
+    
+  - name: isDST
+    summary: Indicates if daylight savings are in effect for this TZDate.
+    returns:
+        type: Boolean
+    
+  - name: getPreviousDSTTransition
+    summary: Returns the date of the previous daylight saving time transition for the timezone.
+    returns:
+        summary: Date of the next daylight saving transition (before the instant identified by the TZDate).
+        type: Titanium.Tizen.Time.TZDate
+  
+  - name: getNextDSTTransition
+    summary: Returns the date of the next daylight saving time transition for the timezone.
+    returns:
+        summary: Date of the next daylight saving transition (after the instant identified by the TZDate).
+        type: Titanium.Tizen.Time.TZDate

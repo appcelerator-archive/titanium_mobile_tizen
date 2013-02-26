@@ -1,0 +1,14 @@
+---
+name: Titanium.Tizen.SystemInfo.SystemInfoBuild
+summary: This property reflects the information of the current device.
+    
+extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+platforms: [tizen]
+since: "3.0.2"
+
+properties:
+
+  - name: model
+    summary: Represents the model name of the current device.
+    type: String
+    permission: read-only

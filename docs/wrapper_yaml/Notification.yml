@@ -1,0 +1,130 @@
+---
+name: Titanium.Tizen.Notification
+summary: Module for managing notifications created based on application events.
+description: |
+    This module provides a way to notify user events that occur in applications to users.
+    which are represented by the <Titanium.Tizen.Notification> object.
+    
+    The `Notification` module is a thin wrapper on the Tizen `NotificationManager`
+    class.	
+    
+  See also:
+  
+    *   [Tizen Notification API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fnotification.html)
+    
+    *   [Tizen  Notification Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fnotification.html)
+      
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Simple Notification Example
+    example:    |
+        The following example demonstrates how to create notifications allows you to design 
+        interactive applications that provide the user information about their events    
+        
+        try {
+            // Application control
+            var appControl = new tizen.ApplicationControl("http://tizen.org/appcontrol/operation/create_content", 
+                                                            null, "image/jpg", null, null);
+                                                            
+            var notificationDict = 	{
+            // Notification content
+            content: "This is a simple notification.",
+            // Path to the notification icon
+            iconPath: "images/image1.jpg",
+            // Path to the sound file to be played when the notification is displayed
+            soundPath: "music/Over the horizon.mp3",
+            // Device vibrates when the notification is displayed
+            vibration: true,
+            // Application control to be launched when the user selects the notification
+            appControl: appControl
+            };
+        
+            var notification = new tizen.StatusNotification("SIMPLE", "Simple notification", notificationDict);
+            
+            tizen.notification.post(notification);  
+            
+        } catch (err) {
+            console.log (err.name + ": " + err.message);
+        }
+		
+methods:
+  - name: post
+    summary: Post the notification to display.
+    parameters:
+      - name: notification
+        summary: A notification to post.
+        type: Titanium.Tizen.Notification
+		
+  - name: update
+    summary: Updates a previously posted notification.
+    parameters:
+      - name: notification
+        summary: A notification to update.
+        type: Titanium.Tizen.Notification
+		
+  - name: remove
+    summary: Removes a previously posted notification.
+    parameters:
+      - name: id
+        summary: A previously posted notification ID.
+        type: String
+		
+  - name: removeAll
+    summary: Removes all previously posted notifications by the current application.
+  
+  - name: get
+    summary: Gets a previously posted notification by the current application.
+    returns:
+        type: Titanium.Tizen.Notification
+    parameters:
+      - name: id
+        summary: A previously posted notification ID.
+        type: String
+		
+- name: getAll
+    summary: Gets all previously posted notifications by the current application.
+    returns:
+        type: Titanium.Tizen.Notification.Notification[]
+    
+properties:
+
+  - name: NOTIFICATION_TYPE_STATUS
+    summary: A notification type.
+        
+    description: |
+        "STATUS" - The posted status notification is displayed in the notification tray. 
+        The status notification consists of icon, title, content and time. 
+        The status notification can have the application control to launch the specific application when selected by the user.
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_SIMPLE
+    summary: A status notification type.
+        
+    description: |
+        "STATUS" - The posted status notification is displayed in the notification tray. 
+        The status notification consists of icon, title, content and time. 
+        The status notification can have the application control to launch the specific application when selected by the user.
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_ONGOING
+    summary: A status notification type.
+        
+    description: |
+        "ONGOING" - If the application needs to keep the user informed about the notification, consider using ongoing status notification. 
+        Please note that the ongoing status notification should be removed by the application that posted the notification.
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_PROGRESS
+    summary: A status notification type.
+        
+    description: |
+        "PROGRESS" - The progress status notification can display the information for the progress of a job. 
+        Please note that the progress status notification should be removed by the application that posted the notification.
+    type: String
+    permission: read-only

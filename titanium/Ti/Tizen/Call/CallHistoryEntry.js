@@ -1,5 +1,11 @@
-define(['Ti/_/declare'], function(declare){
+define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemoteParty) {
+
 	return declare('Ti.Tizen.Call.CallHistoryEntry', null, {
+
+		constructor: function(args) {
+			this._obj = args;
+		},
+
 		constants: {
 			uid: {
 				get: function() {
@@ -23,12 +29,21 @@ define(['Ti/_/declare'], function(declare){
 			},
 			remoteParties: {
 				get: function() {
-					return this._obj.remoteParties;
+					var remoteParties = this._obj.remoteParties,
+						i = 0,
+						remotePartiesCount = remoteParties.length,
+						result = [];
+
+					for (; i < remotePartiesCount; i++) {
+						result.push(new RemoteParty(remoteParties[i]));
+					}
+
+					return result;
 				}
 			},
 			forwardedFrom: {
 				get: function() {
-					return this._obj.forwardedFrom;
+					return new RemoteParty(this._obj.forwardedFrom);
 				}
 			},
 			startTime: {
@@ -75,11 +90,8 @@ define(['Ti/_/declare'], function(declare){
 					this._obj.currency = value;
 				}
 			},
-		},
-		
-		constructor: function(args) {
-			this._obj = args;
 		}
 
 	});
+
 });

@@ -1,0 +1,84 @@
+---
+name: Titanium.Tizen.Time.TimeDuration
+summary: The TimeDuration object that contains the length and its associated time unit.
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Simple code example
+    example:    |
+        var d1 = new tizen.TimeDuration(1, "HOURS"); // 1 hour
+        var d2 = new tizen.TimeDuration(120, "MINS"); // 120 minutes
+        var ret = d1.lessThan(d2); // Returns true
+        
+        var now = tizen.time.getCurrentDateTime();
+        var tomorrow = now.addDuration(new tizen.TimeDuration(1, "DAYS")); // Becomes tomorrow, same time.
+   
+methods:
+
+  - name: difference
+    summary: Calculates the difference between two TimeDuration objects.
+    description: |
+        Calculates the difference in time between this and other. 
+        The TimeDuration that is returned is effectively first - other (that is: positive if the first parameter is larger).
+        The returned TimeDuration is the biggest possible unit without losing the precision.
+    returns:
+        summary: New TimeDuration object corresponding to the result of this - other.
+        type: Titanium.Tizen.Time.TimeDuration
+    parameters:    
+      - name: other
+        summary:  Other <Titanium.Tizen.Time.TimeDuration> object to compare to.
+        type: Titanium.Tizen.Time.TimeDuration
+
+  - name: equalsTo
+    summary: Checks if the TimeDuration is equal to another.
+    description: |
+        This method takes the units into consideration and will return true if the two TimeDuration objects represent the same duration in different units.
+    returns:
+        summary: 
+        type: Number
+    parameters:
+      - name: other
+        summary:  TimeDuration object to compare to.
+        type: Titanium.Tizen.Time.TimeDuration
+
+  - name: lessThan
+    summary: Checks if the TimeDuration is lower than another.
+    description: This method takes the units into consideration when doing the comparison.
+        
+    returns:
+        summary: True if the TimeDuration is less than other.
+        type: Boolean
+    parameters:
+      - name: other
+        summary: Other TimeDuration object to compare to.
+        type: Titanium.Tizen.Time.TimeDuration
+
+  - name: greaterThan
+    summary: Checks if the TimeDuration is greater than another.
+    description: This method takes the units into consideration when doing the comparison.
+        
+    returns:
+        summary: True if the TimeDuration is greater than other.
+        type: Boolean
+    parameters:
+      - name: other
+        summary:  Other TimeDuration object to compare to.
+        type: Titanium.Tizen.Time.TimeDuration
+
+properties:
+
+  - name: length
+    summary: |
+        Duration length.
+        The unit of the duration length (milliseconds, seconds, minutes, hours, or days) is determined by the duration unit attribute.
+    type: Number
+    
+  - name: unit
+    summary: |
+        Duration unit (milliseconds, seconds, minutes, hours, or days).
+        The default value is "MSECS" (milliseconds unit).
+    type: String
+    default: Titanium.Tizen.Time.TIME_DURATION_UNIT_MSECS
+

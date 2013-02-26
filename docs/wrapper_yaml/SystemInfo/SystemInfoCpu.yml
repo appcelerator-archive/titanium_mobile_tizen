@@ -1,0 +1,17 @@
+---
+name: Titanium.Tizen.SystemInfo.SystemInfoCpu
+summary: This property reflects the state of the CPUs available to this system.
+    
+extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+platforms: [tizen]
+since: "3.0.2"
+
+properties:
+        
+  - name: load
+    summary: |
+        This attribute indicates the current CPU load, as a number between 0.0 and 1.0, 
+        representing the minimum and maximum values allowed on this system. 
+        Any threshold parameter used in a watch function to monitor this property applies to this attribute.
+    type: Number
+    permission: read-only

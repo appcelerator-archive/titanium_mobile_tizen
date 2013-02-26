@@ -1,4 +1,5 @@
 define(['Ti/_/lang'], function(lang) {
+
 	return lang.setObject('Ti.Tizen.Call', {
 
 		constants: {
@@ -11,7 +12,8 @@ define(['Ti/_/lang'], function(lang) {
 
 		isCallInProgress: function() {
 			return tizen.call.isCallInProgress();
-		},
+		}
 
 	});
+
 });

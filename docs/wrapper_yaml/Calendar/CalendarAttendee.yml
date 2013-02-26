@@ -1,0 +1,99 @@
+---
+name: Titanium.Tizen.Calendar.Calendar
+summary:  |
+    This interface implements the CalendarAttendee object that contains information about an event attendee.
+    
+    By default, each of the attributes of this interface are undefined.
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+        var attendee = new tizen.CalendarAttendee('mailto:bob@domain.com',
+                                           {role: "CHAIR", RSVP: true});
+        event.attendees = [attendee];
+ 
+properties:
+
+  - name: uri 
+    summary: |
+        An attribute to store the URI for the attendee.
+        
+        This is often an email in the form 'mailto:name@domain.com'.
+    type: STRING
+
+  - name: name
+    summary: An attribute to store the name of an attendee.
+    type: STRING
+
+  - name: role 
+    summary: |
+        An attribute to denote the role of the attendee. (See RFC 5545, Section 3.2.16.)
+        
+        The value is one of the constants defined for this type:
+            - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
+            - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
+            - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+            
+        The default value is 'REQ_PARTICIPANT'.
+    type: STRING
+
+  - name: status
+    summary: |
+        An attribute to store the participant's attendance status. (See RFC 5545, Section 3.2.12.)
+        
+        The value is one of the constants defined for this type:
+            - ATTENDEE_STATUS_PENDING = 'PENDING'
+            - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
+            - ATTENDEE_STATUS_DECLINED = 'DECLINED'
+            - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
+            - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
+            - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
+            - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+            
+        The default value is PENDING.
+    type: STRING
+
+  - name: RSVP 
+    summary: |
+        An attribute to store the attendee's participation status reply (RSVP). (See RFC 5545, Section 3.2.17.)
+        
+        By default, this attribute is set to FALSE.
+    type: Boolean
+
+  - name: type
+    summary: |
+        An attribute to indicate the type of a participant. (See RFC 5545, Section 3.2.3.)
+        
+        The value is one of the constants defined for this type: 
+            - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
+            - ATTENDEE_TYPE_GROUP = 'GROUP'
+            - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
+            - ATTENDEE_TYPE_ROOM = 'ROOM'
+            - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+            
+        The default value is INDIVIDUAL.
+    type: STRING
+
+  - name: group 
+    summary: |
+        An attribute to store the participant's group or list membership. (See RFC 5545, Section 3.2.11.)
+    type: STRING
+
+  - name: delegatorURI 
+    summary: |
+        An attribute to store the URI of the person who has delegated their participation to this attendee. (See RFC 5545, Section 3.2.4.)
+    type: STRING
+
+  - name: delegateURI 
+    summary: |
+        An attribute to stores the URI of the attendee to whom the person has delegated his participation. (See RFC 5545, Section 3.2.5.)
+    type: STRING
+
+  - name: contactRef 
+    summary: |
+        An attribute to store the participant's reference in the Contact API.
+        If the contact is not resolved, this attribute will be set to null. 
+    type: Titanium.Tizen.Contacts.ContactsRef

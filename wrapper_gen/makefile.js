@@ -71,7 +71,7 @@ function ParseFiles(){
                     this.createStub(name, true); // if second parameter = true then we'll save json obects to array
 												 // get all tizen's primitive types and save inheritance tree for interfaces
                 } catch(err) {
-                    console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
+                    console.log('Something wrong with ' +idlFiles[i] + '-->' + err + (err.name=='SyntaxError'?' (line=' + err.line + ', column=' + err.column + ')':''));
                 } 
             }
 
@@ -88,7 +88,7 @@ function ParseFiles(){
                 try {
                     this.createStub(name);
                 } catch(err) {
-                    console.log('Something wrong with ' +idlFiles[i] + '-->' + err);
+                    console.log('Something wrong with ' +idlFiles[i] + '-->' + err + (err.name=='SyntaxError'?' (line=' + err.line + ', column=' + err.column + ')':''));
                 } 
             }
 

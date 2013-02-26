@@ -1,0 +1,30 @@
+---
+name: Titanium.Tizen.Notification.Notification
+summary: The interface which represents notification.
+extends: Titanium.Module
+platforms: [tizen]
+since: "2.0"
+
+properties:
+
+- name: id
+   summary: A notification id.
+   type: String   
+
+ - name: type
+   summary: A notification type.
+   type: String
+   default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
+   
+- name: postedTime
+   summary: Determines whether the client should attempt to keep a persistent connection.
+   type: Date
+   
+- name: title
+   summary: Determines whether the client should attempt to keep a persistent connection.
+   type: String   
+
+- name: content
+   summary: Determines whether the client should attempt to keep a persistent connection.
+   type: String
+   

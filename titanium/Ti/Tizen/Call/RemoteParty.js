@@ -1,5 +1,11 @@
-define(['Ti/_/declare'], function(declare){
+define(['Ti/_/declare', 'Ti/Tizen/Contact/ContactRef'], function(declare, ContactRef) {
+
 	return declare('Ti.Tizen.Call.RemoteParty', null, {
+
+	constructor: function(args) {
+			this._obj = args;
+		},
+
 		constants: {
 			remoteParty: {
 				get: function() {
@@ -13,10 +19,11 @@ define(['Ti/_/declare'], function(declare){
 			},
 			contactRef: {
 				get: function() {
-					return this._obj.contactRef;
+					return new ContactRef(this._obj.contactRef);
 				}
 			},
-		},
+		}
 
 	});
+
 });
