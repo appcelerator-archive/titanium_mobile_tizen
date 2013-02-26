@@ -18,7 +18,13 @@ define(['Ti/_/declare'], function(declare) {
 			i = 0;
 
 		for (; i < len; i++) {
-			result.push(Ti.Tizen.MediaContent._createMediaItem(objects[i]));
+			if(objects[i].type == 'AUDIO'){
+				result.push(Ti.Tizen.MediaContent._createMediaAudio(objects[i]));
+			} else if(objects[i].type == 'VIDEO'){
+				result.push(Ti.Tizen.MediaContent._createMediaVideo(objects[i]));
+			} else if(objects[i].type == 'IMAGE'){
+				result.push(Ti.Tizen.MediaContent._createMediaImage(objects[i]));
+			}
 		}
 
 		onsuccess.call(null, result);
@@ -37,7 +43,11 @@ define(['Ti/_/declare'], function(declare) {
 		},
 
 		updateItemsBatch: function(items /*MediaItem*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.updateItemsBatch(items._obj, successCallback, errorCallback);
+			var res = [];
+			for(var i= 0, len = items.length; i<len; i++) {
+				res.push(items[i]._obj);
+			}
+			return this._obj.updateItemsBatch(res, successCallback, errorCallback);
 		},
 
 		getFolders: function(successCallback /*MediaFolderArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {

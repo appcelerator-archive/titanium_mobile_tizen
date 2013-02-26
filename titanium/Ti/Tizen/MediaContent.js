@@ -1,4 +1,4 @@
-define(['Ti/_/lang', 'Ti/Tizen/MediaContent/MediaSource', 'Ti/Tizen/MediaContent/MediaFolder', 'Ti/Tizen/MediaContent/MediaItem'], function(lang, MediaSource, MediaFolder, MediaItem) {
+define(['Ti/_/lang', 'Ti/Tizen/MediaContent/MediaSource', 'Ti/Tizen/MediaContent/MediaFolder', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaContent/MediaAudio', 'Ti/Tizen/MediaContent/MediaVideo', 'Ti/Tizen/MediaContent/MediaImage'], function(lang, MediaSource, MediaFolder, MediaItem, MediaAudio, MediaVideo, MediaImage) {
 	return lang.setObject('Ti.Tizen.MediaContent', {
 
 		constants: {
@@ -41,9 +41,16 @@ define(['Ti/_/lang', 'Ti/Tizen/MediaContent/MediaSource', 'Ti/Tizen/MediaContent
 			return new MediaFolder(args);
 		},
 
-		_createMediaItem: function(args){
-			return new MediaItem(args);
-		}
+		_createMediaAudio: function(args){
+			return new MediaAudio(args);
+		},
 
+		_createMediaVideo: function(args){
+			return new MediaVideo(args);
+		},
+
+		_createMediaImage: function(args){
+			return new MediaImage(args);
+		}
 	});
 });
