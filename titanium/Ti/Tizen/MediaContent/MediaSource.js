@@ -1,4 +1,4 @@
-define(['Ti/_/declare'], function(declare) {
+define(['Ti/_/declare', 'Ti/Tizen/WebAPIError'], function(declare, WebAPIError) {
 
 	function onMediaFolderArraySuccessCallback(objects, onsuccess){
 		var result = [],
@@ -47,15 +47,15 @@ define(['Ti/_/declare'], function(declare) {
 			for(var i= 0, len = items.length; i<len; i++) {
 				res.push(items[i]._obj);
 			}
-			return this._obj.updateItemsBatch(res, successCallback, errorCallback);
+			return this._obj.updateItemsBatch(res, successCallback, errorCallback && function(e) {errorCallback.call(null, new WebAPIError(e))});
 		},
 
 		getFolders: function(successCallback /*MediaFolderArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.getFolders(function(folders){onMediaFolderArraySuccessCallback(folders, successCallback)}, errorCallback);
+			return this._obj.getFolders(successCallback && function(folders){onMediaFolderArraySuccessCallback(folders, successCallback)}, errorCallback && function(e) {errorCallback.call(null, new WebAPIError(e))});
 		},
 
 		findItems: function(successCallback /*MediaItemArraySuccessCallback*/, errorCallback /*ErrorCallback*/, folderId /*MediaFolderId*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, count /*unsigned long*/, offset /*unsigned long*/) {
-			return this._obj.findItems(function(folders){onMediaItemArraySuccessCallback(folders, successCallback)}, errorCallback, folderId, filter ? filter._obj : filter, sortMode ? sortMode._obj : sortMode, count, offset);
+			return this._obj.findItems(successCallback && function(folders){onMediaItemArraySuccessCallback(folders, successCallback)}, errorCallback && function(e) {errorCallback.call(null, new WebAPIError(e))}, folderId, filter ? filter._obj : filter, sortMode ? sortMode._obj : sortMode, count, offset);
 		}
 	});
 });
