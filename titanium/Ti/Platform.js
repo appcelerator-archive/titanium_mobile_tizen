@@ -23,29 +23,17 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 	};
 	
 
-	//in Tizen 2.0 wifi related api cannot be accesable via tizen.systeminfo.addPropertyValueChangeListener('WifiNetwork'
-	// and tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback
-	// probly may be implemented by usint "WIFI_NETWORK" instead of 'WifiNetwork'
-
 	// Do we need to unsubsctibe? Do we need ot call it anywhere?
-	//function deInitPlatformData(){
-	//	if (wifiNetworkPropertyValueChangeListenerId != null) 
-	//		tizen.systeminfo.removePropertyValueChangeListener(wifiNetworkPropertyValueChangeListenerId);
-	//};
+	function deInitPlatformData(){
+		if (wifiNetworkPropertyValueChangeListenerId != null) 
+			tizen.systeminfo.removePropertyValueChangeListener(wifiNetworkPropertyValueChangeListenerId);
+	};
 
 	// initialize values that should be initialized via fucntions with callbacks
-	function initPlatformData(){
-		// // subscribing to WiFi property changes
-		// wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WifiNetwork', onSuccessWifiNetworkCallback);
-		// // but anyway we need to get current value
-		// tizen.systeminfo.getPropertyValue('WifiNetwork', onSuccessWifiNetworkCallback, onErrorCallback);
-
-		// we are not expexting that device specific data like device model or version can be changed during 
-		//application is running so we are not monitoring it
-		// uncomment next line after Tizen fixed https://bugs.tizen.org/jira/browse/TDIST-175, 
-		// this bug cause 30 sec freeze on start
-		//tizen.systeminfo.getPropertyValue("Device", onSuccessSystemInfoDeviceCallback, onErrorCallback);
-		//Default values
+	function initPlatformData() {		
+		var deviceCapabilities;
+		
+		//Default values for Device and Model
 		Platform.constants.__values__.version = '2.0';
 		Platform.constants.__values__.model = 'Tizen Device';
 
@@ -56,44 +44,38 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		} catch (e) {
 			Platform.constants.__values__.id = "ID001"; //The unique ID for an installed application. 
 		}
+
+		//detect is WIFI exist, if yes we can find ip address
+		deviceCapabilities = tizen.systeminfo.getCapabilities();
+		if(deviceCapabilities.wifi) {
+			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
+			// subscribing to WiFi property changes
+			 wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
+		}		
 	};
 
-	// function onErrorCallback(error) {
-	// 	//console.log("An error occurred " + error.message);
-	// };
-	
-	// // Callback to update device model\version
-	// function onSuccessSystemInfoDeviceCallback(systemInfoDevice){
-	// 	try{                                                                                                      
-	// 		Platform.constants.__values__.model = systemInfoDevice.model;
-	// 		//console.log("Platform.model is set to " + systemInfoDevice.model);
-	// 		Platform.constants.__values__.version = systemInfoDevice.version;
-	// 		//console.log("Platform.version is set to " + systemInfoDevice.version);
-	// 	}
-	// 	catch (e) {
-	// 		//console.log("Error on getting device info. Error: " + e.message);
-	// 		Platform.constants.__values__.model = undefined;
-	// 		Platform.constants.__values__.version = undefined;
-	// 	}
-	// }
-	
-	// // Callback to update WiFi's IP address
-	// function onSuccessWifiNetworkCallback(wifiNetwork){
-	// 	try{
-	// 		//console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
-	// 		if (wifiNetwork.status == "ON"){
-	// 			Platform.constants.__values__.address = wifiNetwork.ipAddress;	
-	// 		}
-	// 		else{
-	// 			Platform.constants.__values__.address = undefined;
-	// 		}
-	// 		//console.log("Platform.address is set to " + Platform.address);
-	// 	}
-	// 	catch (e) {
-	// 		//console.log("Error on getting WifiNetwork info. Error: " + e.message);
-	// 		Platform.constants.__values__.address = undefined;
-	// 	}
-	// }
+	function onErrorCallback(error) {
+		console.log('An error occurred ' + error.message);
+	};
+
+	// Callback to update WiFi's IP address
+	function onSuccessWifiNetworkCallback(wifiNetwork) {
+		//receive SystemInfoWifiNetwork 
+		try{
+			//console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
+			if (wifiNetwork.status == 'ON') {
+				Platform.constants.__values__.address = wifiNetwork.ipAddress;	
+			}
+			else{
+				Platform.constants.__values__.address = undefined;
+			}
+			console.log("Platform.address is set to " + Platform.address);
+		}
+		catch (e) {
+			//console.log("Error on getting WifiNetwork info. Error: " + e.message);
+			Platform.constants.__values__.address = undefined;
+		}
+	}
 
 	on(window, "beforeunload", saveMid);
 	on(window, "unload", saveMid);
