@@ -1,9 +1,7 @@
 define(['Ti/_/declare'], function(declare) {
 	return declare('Ti.Tizen.MediaContent.MediaLyrics', null, {
 		constructor: function(args) {
-			if(args.toString() === '[object MediaLyrics]') {
-				this._obj = args;
-			}
+			this._obj = args;
 		},
 
 		constants: {

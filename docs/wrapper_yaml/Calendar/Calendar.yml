@@ -1,0 +1,279 @@
+---
+name: Titanium.Tizen.Calendar.Calendar
+summary:  |
+    This interface that has methods to manage events or tasks in a calendar. 
+    A Calendar object contains a set of events or tasks, depending on the calendar type.
+description: |
+    This interface offers the following methods to manage events in a calendar:
+        - Finding items using a key-value filter.
+        - Adding items to a specific calendar using add() / addBatch() methods.
+        - Updating existing items using update() / updateBatch() methods.
+        - Deleting existing items using remove() / removeBatch() methods.
+        - Tracking calendar changes using addChangeListener() / removeChangeListener() methods.
+
+extends: Titanium.Module
+platforms: [tizen]
+since: "3.0.2"
+
+examples: 
+  - title: Code example
+    example:    |
+        // Defines the error callback.
+        function errorCallback(response) {
+            console.log( 'The following error occurred: ' +  response.name);
+        }
+        function addEventsSuccess(events) {
+            console.log("Successfully added " + events.length + " events!");
+        }
+        
+        // Gets the default calendar
+        var calendar = tizen.calendar.getDefaultCalendar("EVENT");
+        var ev = new tizen.CalendarEvent({description:'HTML5 Introduction', 
+                                       summary:'HTML5 Webinar ', 
+                                       startDate: new tizen.TZDate(2011, 3, 30, 10, 0), 
+                                       duration: new tizen.TimeDuration(1, "HOURS"),
+                                       location:'Huesca'});
+                     
+        calendar.addBatch([ev], addEventsSuccess, errorCallback);
+ 
+methods:
+  - name: get
+    summary: Gets the calendar item with the specified identifier.
+    returns:
+        summary: The matching CalendarItem object
+        type: Titanium.Tizen.Calendar.CalendarItem       
+    parameters:
+      - name: id
+        summary:  The Calendar item identifier.
+        type: CalendarEventId
+        
+  - name: add
+    summary: Adds an item to the calendar synchronously.
+    description: |
+        If the item is successfully inserted in the calendar, 
+        the CalendarItem will have its identifier (id attribute) set when the method returns.
+        To update an existing item, call the update() method instead. 
+        If you wish to add a copy of an existing CalendarItem object, 
+        call CalendarItem.clone() method first and pass the clone to the add() method.
+    parameters:
+      - name: item
+        summary:  The calendar item to be added.
+        type: Titanium.Tizen.Calendar.CalendarItem      
+          
+  - name: addBatch
+    summary: Adds an array of items to the calendar asynchronously.
+    description: |
+        If all the items are successfully added to the calendar, the success callback will be invoked, passing the list of CalendarItem objects that were added,
+        with their identifier set (id attribute). 
+        
+        The errorCallback() is launched with these error types:
+            - InvalidValuesError - if any of the input parameters contain an invalid value, the item has any invalid value or the calendar has some restrictions that cause the attempted insertion of the calendar items to fail (for example, limitations in the size of text attributes)
+            - UnknownError - if any other error occurs.
+            
+        If you wish to update an existing item, call the update() method instead. 
+        If you wish to add a copy of an existing CalendarItem object, 
+        call CalendarItem.clone() method first and pass the clone to the add() method.
+    parameters:
+      - name: items
+        summary:  The list of calendar items to add.
+        type: Titanium.Tizen.Calendar.CalendarItem[]
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.
+        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+        optional: true
+      - name: errorCallback
+        summary:  The method to invoke when the request fails.
+        type: Callback<WebAPIError>        
+        optional: true
+
+  - name: update
+    summary: Updates an existing item in the calendar synchronously with the one specified in the argument.
+    description: |
+        In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
+        as well. If you don't want that, the updateAllInstances flag should be set to false.
+    parameters:
+      - name: item
+        summary: The Item object to update.
+        type: Titanium.Tizen.Calendar.CalendarItem      
+      - name: updateAllInstances
+        summary:  |
+            The flag indicating whether all the event instances should be updated as well or not (default value is true). 
+            This parameter only applies to calendar events, and doesn't apply to tasks.
+        type: Boolean
+        optional: true
+        
+  - name: updateBatch
+    summary: Updates an array of existing items in the calendar asynchronously with the specified values in the argument.
+    description: |
+        In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
+        as well. If you don't want that, the updateAllInstances flag should be set to false.
+    parameters:
+      - name: items
+        summary: The list of calendar item objects to update.
+        type: Titanium.Tizen.Calendar.CalendarItem[]
+      - name: successCallback
+        summary: The method to invoke when the updateEvents() request succeeds.
+        type: Callback<Object>
+        optional: true
+      - name: errorCallback
+        summary:  The method to invoke when the updateEvents() request fails.
+        type: Callback<WebAPIError>        
+        optional: true
+      - name: updateAllInstances
+        summary:  |
+            The flag indicating whether all the event instances should be updated as well or not (default value is true). 
+            This parameter only applies to calendar events, and doesn't apply to tasks.
+        type: Boolean
+        optional: true
+
+  - name: remove
+        summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
+        description: |
+            For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) is set to null, this method will remove the event identified by uid, and all of its possible detached instances.
+        parameters:
+          - name: id
+            summary:  The identifier (ID attribute) of the item object to delete.
+            type: CalendarEventId
+
+  - name: removeBatch
+    summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
+    description: |
+        The errorCallback is launched with these error types:
+                - NotFoundError - if an identifier in the ids parameter does not correspond to the ID attribute of an item in the calendar.
+                - InvalidValuesError - if any of the input parameters contain an invalid value.
+                - UnknownError - if any other error occurs.
+                
+        For (recurring) events: In the case of calendar events, if the recurrence id, rid, is set to null, 
+        this method will remove the event identified by uid, as well as all its possible detached instances.
+    parameters:
+      - name: ids
+        summary: The identifiers (id attribute) of the items to delete
+        type: CalendarEventId[]
+      - name: successCallback
+        summary: The method to invoke when the removeBatch() request succeeds.
+        type: Callback<Object>
+        optional: true
+      - name: errorCallback
+        summary:  The method to invoke when the removeBatch() request fails.
+        type: Callback<WebAPIError>        
+        optional: true            
+        
+  - name: find
+    summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
+    description: |
+        If the filter is passed and contains valid values, only those values in the calendar that match the filter criteria as specified in the AbstractFilter interface will be returned in the successCallback(). If no filter is passed, or the filter contains any invalid value which is null or undefined, then the implementation must return the full list of items in the successCallback(). If no items are available in the calendar (it is empty) or no item matches the filter criteria, the successCallback() will be invoked with an empty array.
+        
+        The errorCallback is launched with these error types:
+            - InvalidValuesError - if any of the input parameters contain an invalid value.
+            - UnknownError - if any other error occurs.
+        
+        Filter specific remarks:
+            - For event filtering based on start/end dates, items that recur during the given time interval will be found, even if the parent item itself is outside the interval.
+            - For event filtering based on the identifier, the identifier type should be CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both the parent event and all its detached instances.
+    parameters:
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.
+        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+      - name: errorCallback
+        summary: The method to call when an error occurs
+        type: Callback<WebAPIError>        
+        optional: true   
+      - name: filter 
+        summary: The supplied data used to filter the results of the find() method. 
+        type: Titanium.Tizen.AbstractFilter
+        optional: true  
+      - name: sortMode
+        summary:  The sort order in which the items return. 
+        type: Titanium.Tizen.SortMode
+        optional: true    
+
+  - name: addChangeListener
+    summary: Adds a listener to receive notifications about calendar changes.
+    description: |
+        When executed, the implementation must immediately return a subscription identifier that identifies the watch operation. 
+        After returning the identifier, the watcher methods are invoked asynchronously.
+    returns:
+        summary: The identifier used to clear the watch subscription.
+        type: Number
+    parameters:
+      - name: successCallback
+        summary: The methods to invoke on receiving calendar change notifications.
+        type: CalendarChangeCallback
+ 
+ - name: removeChangeListener
+    summary: Unsubscribes from receiving notification for a calendar item changes.
+    description: |
+        If the watchId argument is valid and corresponds to a subscription already in place, 
+        the watch process must immediately stop and no further callbacks must be invoked. 
+        If the watchId argument is not valid or does not correspond to a valid subscription, 
+        the method should return without any further action.
+    parameters:
+      - name: watchId 
+        summary:  Subscription Identifier.
+        type: CalendarChangeCallback
+ 
+properties:
+
+  - name: id 
+    summary: An attribute to uniquely identify a calendar.
+    type: STRING
+    permission: read-only
+
+  - name: name
+    summary: An attribute to assign a readable (descriptive) name for a calendar, such as work, personal, etc.
+    type: STRING
+    permission: read-only
+# Pseudo-type 
+---
+name: CalendarEventId 
+summary: This interface contains a UID and an optional recurrence ID attribute to identify calendar events.
+description: |
+    The recurrence identifier (rid attribute) is used to identify a particular instance of a recurring event. 
+    All instances of the same recurring event have the same UID but different recurrence IDs.
+properties:
+  - name: uid
+    type: String
+    summary: |
+        An attribute to persistently, and uniquely identify a calendar event.
+        This value is assigned by the platform when the event is added to the calendar, 
+        it is locally unique and persistent for the life time of the event and it cannot be modified by the developers.
+        
+        See RFC 5545 (section 3.8.4.7) for more details about this parameter and algorithms to guarantee assignment of unique values. This value is assigned by the platform when the add() method is successfully invoked.
+    
+  - name: rid
+    type: String
+    summary: |
+        An attribute to store the recurrence ID of a CalendarEvent instance.
+        This attribute is used in conjunction with the uid property to identify 
+        a specific instance of a recurring event.
+        
+        The parent of a recurrence instance has its rid set to null.
+        By default, this attribute is set to null. 
+        (See RFC 5545 (section 3.8.4.4) for more details about this parameter.)
+# Pseudo-type        
+---
+name: CalendarItemId 
+summary: A calendar item identifier, which can either be a <CalendarEventId> or a CalendarTaskId = String
+# Pseudo-type
+---
+name: CalendarChangeCallback
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: onitemsadded
+    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    summary: |
+        Called when items are added to the calendar.
+        CalendarItem[] -  The list of items that were added.
+    
+  - name: onitemsupdated
+    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    summary: |
+        Called when items are updated in the calendar.
+        CalendarItem[] - The list of items that were updated.
+    
+  - name: onitemsremoved
+    type: Callback<String[]>
+    summary: |
+        Called when item are removed from the calendar.
+        String[] - The list of identifiers for the items that were removed.
+        

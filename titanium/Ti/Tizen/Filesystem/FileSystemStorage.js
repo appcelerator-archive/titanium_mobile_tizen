@@ -18,8 +18,8 @@ define(['Ti/_/declare'], function(declare){
 				get: function() {
 					return this._obj.state;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

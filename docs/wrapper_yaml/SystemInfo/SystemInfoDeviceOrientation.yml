@@ -1,0 +1,18 @@
+---
+name: Titanium.Tizen.SystemInfo.SystemInfoDeviceOrientation
+summary: This property reflects the information of the device orientation in this system.
+    
+extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+platforms: [tizen]
+since: "3.0.2"
+
+properties:
+
+  - name: status
+    summary: |
+        This property reflects the information of the device orientation in this system.
+        The value is one of the constants defined for this type.
+        The supported device orientation types are: "PORTRAIT_PRIMARY", "PORTRAIT_SECONDARY", "LANDSCAPE_PRIMARY", "LANDSCAPE_SECONDARY"
+
+    type: String
+    permission: read-only

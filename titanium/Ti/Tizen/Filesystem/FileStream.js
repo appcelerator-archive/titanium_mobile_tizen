@@ -16,7 +16,7 @@ define(['Ti/_/declare'], function(declare){
 				get: function() {
 					return this._obj.bytesAvailable;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -27,7 +27,7 @@ define(['Ti/_/declare'], function(declare){
 				set: function(value) {
 					this._obj.position = value;
 				}
-			},
+			}
 		},
 
 		close: function() {

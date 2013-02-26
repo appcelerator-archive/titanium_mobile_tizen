@@ -1,0 +1,149 @@
+---
+name: Titanium.Tizen.CallHistory
+summary: The top level CallHistory module.  
+description: |
+    This API provides interfaces and methods for retrieving information from the call history.
+
+    For more information on the Callhistory features, see [https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm]
+extends: Titanium.Module
+since: "3.0.2"
+
+platforms: [tizen]
+methods:
+  - name: find
+    summary: Finds and returns call history items.
+    parameters:
+      - name: successCallback
+        summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
+        type: Callback<CallHistoryEntry>
+      - name: errorCallback
+        summary: The method to call when an error occurs.
+        optional: true
+        type: Callback<WebAPIError>
+      - name: filter
+        summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
+        description: |
+            AbstractFilter is a common interface used by different types of object filters. 
+            Never use this base interface directly, instead use AbstractFilter subtypes, such as AttributeFilter, AttributeRangeFilter, and CompositeFilter. 
+        optional: true
+        type: Titanium.Tizen.AbstractFilter
+      - name: sortMode
+        summary: The sorting order preference of the result set.
+        optional: true
+        type: Titanium.Tizen.SortMode
+      - name: limit
+        summary: The maximum limits the query result is set to as specified by the parameter (It is the same meaning as SQL LIMIT). If 0, there is no limit set.
+        optional: true
+        type: Number
+      - name: offset
+        summary: The offset in the result set, from where the results are listed (It is the same semantics as SQL OFFSET). The number of results listed is maximum the specified limit parameter. Defaults to 0, meaning no offset.
+        optional: true
+        type: Number
+  - name: remove
+    summary: Removes a call history entry synchronously by deleting it. 
+    parameters:
+      - name: entry
+        summary: Call history entry to be deleted. 
+        type: CallHistoryEntry
+  - name: removeBatch
+    summary: Removes a list of call history entries asynchronously by deleting them. 
+    parameters: 
+      - name: entries
+        summary: A list of call history entries to delete. 
+        type: Array<CallHistoryEntry>
+      - name: successCallback
+        summary: A generic success handler.
+        optional: true
+        type: Callback<Object>
+      - name: errorCallback
+        summary:  An error handler.
+        optional: true
+        type: Callback<WebAPIError>
+  - name: removeAll
+    summary: Removes the complete call history by deleting it. 
+    parameters: 
+      - name: successCallback
+        summary: A generic success handler.
+        optional: true
+        type: Callback<Object>
+      - name: errorCallback
+        summary:  An error handler.
+        optional: true
+        type: Callback<WebAPIError>
+  - name: addChangeListener
+    summary: Adds a listener to register for callback to observe call history changes. 
+    parameters: 
+      - name: observer
+        summary: A callback for handling the list of new or changed or CallHistoryEntry objects in the call history. 
+        type: Callback<CallHistoryChangeCallback>
+    returns:
+        type: Number
+    summary: Removes a listener to unregisters a previously registered listener. 
+    parameters: 
+      - name: handle
+        summary: The previously obtained listener handle. 
+        type: Number
+
+# Pseudo-type
+---
+name: CallHistoryEntry
+summary: This interface represents the subset of properties of calls, which become a call record in the call history after the call ends.
+platforms: [tizen]
+properties:
+  - name: uid
+    summary: An attribute to store The unique identifier of a call record. 
+    type: String
+  - name: type
+    summary: An attribute to store the service type of the call saved to call history.  
+    description: | 
+        The following values are the supported:
+            TEL - for all protocols with phone number addressing (PSTN, GSM, CDMA, LTE, etc.)
+            XMPP - for generic XMPP calls
+            SIP - for generic SIP calls
+    type: String
+  - name: features
+    summary: An array of attributes to store the features associated with the call service are saved to call history.
+    description:  | 
+        The following values are the supported:
+            CALL - for all call types
+            VOICECALL - for voice-only calls
+            VIDEOCALL - for audio and video channel support in the call
+            EMERGENCYCALL - to denote an emergency call
+    type: Array<String>
+  - name: remoteParties
+    summary: An array of attributes to store the remote parties participating in the call. 
+    type: Array<String>
+  - name: startTime
+    summary: An attribute to store the start time of the call. The exact meaning is defined by the back-end. The intention of this attribute is to give the moment when media channels come up. 
+    type: Date
+  - name: duration
+    summary: An attribute to store the duration of the call in seconds. The exact meaning is defined by the back-end. The intention of this attribute is to count the duration from media channels up to the moment when media channels tear down, on the same call service. If the call gets migrated to another service, another call history entry is used. 
+    type: Number
+  - name: direction
+    summary: An attribute to store to indicate whether the call was dialed, received, missed, blocked or rejected.
+    description: |
+        The following values are the supported:
+            DIALED - for dialed calls
+            RECEIVED - for received calls
+            MISSEDNEW - for missed calls not seen yet
+            MISSED - for missed calls
+            BLOCKED - for blocked calls
+            REJECTED - for rejected calls
+    type: String
+
+name: CallHistoryChangeCallback
+summary: This is a callback interface of a CallHistory operations. For example code, see CallHistory interface.
+platforms: [tizen]
+methods:
+  - name: onadded
+    summary: Called when a new call history item is added. 
+    parameters: 
+      - name: newItems
+        summary: An array of CallHistoryEntry objects, representing the new items added to call history.
+        type: Array<CallHistoryEntry>
+  - name: onchanged
+    summary: Called when the call history items have been changed. 
+    parameters: 
+      - name: changedItems
+        summary: An array of CallHistoryEntry objects, representing the changed items in call history.
+        type: Array<CallHistoryEntry>

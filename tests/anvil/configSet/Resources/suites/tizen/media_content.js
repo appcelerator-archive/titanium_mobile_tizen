@@ -132,6 +132,9 @@ module.exports = new function() {
 	//Tests
 	this.mediaSourceAPI = function(testRun) {
 		var source = Ti.Tizen.MediaContent.getLocalMediaSource();
+
+		valueOf(testRun, source instanceof Ti.Tizen.MediaContent.MediaSource).shouldBeTrue();
+
 		valueOf(testRun, Ti.Tizen.MediaContent).shouldNotBeNull();
 		valueOf(testRun, Ti.Tizen.MediaContent.getLocalMediaSource).shouldBeFunction();
 
@@ -250,12 +253,15 @@ module.exports = new function() {
 			}
 
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
+
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					errorCB({message:'Array items is empty'});
 					return;
 				}
-
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaItem).shouldBeTrue();
 				//debug print 
 				for (var i = 0, len = items.length; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
@@ -301,6 +307,9 @@ module.exports = new function() {
 			}
 
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
+
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					errorCB({message:'Array items is empty'});
@@ -321,7 +330,7 @@ module.exports = new function() {
 			// Create filter and find
 			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
 				filter = Ti.Tizen.createAttributeFilter({
-					attributeName: 'type',
+					attributeName: 'title',
 					matchFlag: 'EXACTLY',
 					matchValue: 'img1_for_anvil.png'
 				});
@@ -372,6 +381,9 @@ module.exports = new function() {
 			}
 			
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
+
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					errorCB({message:'Array items is empty'});
@@ -438,6 +450,9 @@ module.exports = new function() {
 			}
 
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
+
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					errorCB({message:'Array items is empty'});
@@ -507,6 +522,9 @@ module.exports = new function() {
 			}
 
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
+
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					finishError(testRun,'Array items is empty');
@@ -574,6 +592,8 @@ module.exports = new function() {
 					errorCB({message:'Array items is empty'});
 					return;
 				}
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaVideo).shouldBeTrue();
 				
 				//debug print 
 				for (var i = 0, len = items.length; i < len; i++) {
@@ -617,6 +637,9 @@ module.exports = new function() {
 			}
 
 			function successCB(items) {
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
+
 				// Check that array is not empty
 				if (!items || items.length == 0) {
 					finishError(testRun,'Array items is empty');

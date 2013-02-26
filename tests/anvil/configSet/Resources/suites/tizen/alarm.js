@@ -34,6 +34,8 @@ module.exports = new function() {
 		alarm = Ti.Tizen.Alarm.createAlarmRelative({
 			delay: 10
 		});
+		
+		valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmRelative).shouldBeTrue();
 
 		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
 		
@@ -41,10 +43,15 @@ module.exports = new function() {
 		alarm = Ti.Tizen.Alarm.createAlarmAbsolute({ 
 			date: date
 		});
+		
+		valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
 
 		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
 		
 		tizenArr = Ti.Tizen.Alarm.getAll();
+		
+		valueOf(testRun, (tizenArr[0] instanceof Ti.Tizen.Alarm.AlarmAbsolute || tizenArr[0] instanceof Ti.Tizen.Alarm.AlarmRelative)).shouldBeTrue();
+		
 		valueOf(testRun, tizenArr.length).shouldBe(2);
 
 		finish(testRun);
@@ -89,6 +96,8 @@ module.exports = new function() {
 
 		valueOf(testRun, function() {
 			var alarmTmp = Ti.Tizen.Alarm.get(absolute_id);
+			valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
+			
 			alarmTmp = Ti.Tizen.Alarm.get(relative_id);
 		}).shouldThrowException();
 
