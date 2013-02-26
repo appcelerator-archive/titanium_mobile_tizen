@@ -1,7 +1,7 @@
-define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem'], function(declare, MediaItem) {
+define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaContent/MediaLyrics'], function(declare, MediaItem, MediaLyrics) {
 	return declare('Ti.Tizen.MediaContent.MediaAudio', MediaItem, {
 		constructor: function(args) {
-			if(args.toString() === '[object MediaAudio]') {
+			if(args.toString() === '[object Audio]') {
 				this._obj = args;
 			}
 		},
@@ -9,7 +9,7 @@ define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem'], function(declare, Me
 		constants: {
 			lyrics: {
 				get: function() {
-					return this._obj.lyrics;
+					return new MediaLyrics(this._obj.lyrics);
 				}
 			},
 			copyright: {
