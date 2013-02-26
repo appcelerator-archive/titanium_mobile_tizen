@@ -99,7 +99,7 @@ methods:
     parameters:
       - name: type
         summary:  |
-            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+            The type of calendar. "EVENT" or "TASK"
         type: String      
           
   - name: getCalendar
@@ -110,7 +110,7 @@ methods:
     parameters:
       - name: type
         summary:  |
-            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+            The type of calendar. "EVENT" or "TASK"
         type: String
       - name: id
         summary:  The calendar identifier.
@@ -119,257 +119,235 @@ methods:
 properties:
 
   - name: CALENDAR_TYPE_EVENT 
-    summary: "EVENT" indicates the type of a calendar if a calendar contains events (VEVENT objects)
+    summary: EVENT indicates the type of a calendar if a calendar contains events (VEVENT objects)
     type: STRING
     permission: read-only
 
   - name: CALENDAR_TYPE_TASK
-    summary: "TASK" indicates the type of a calendar if a calendar contains tasks (VTODO objects)
+    summary: TASK indicates the type of a calendar if a calendar contains tasks (VTODO objects)
     type: STRING
     permission: read-only
 
   - name: CALENDAR_TEXT_FORMAT_ICALENDAR_20
-    summary: "ICALENDAR_20" is type of textual format of a Calendar if the textual format is iCalendar v2.0.
+    summary: ICALENDAR_20 is type of textual format of a Calendar if the textual format is iCalendar v2.0.
     type: STRING
     permission: read-only
 
   - name: CALENDAR_TEXT_FORMAT_VCALENDAR_10
-    summary: "VCALENDAR_10" is type of textual format of a Calendar if the textual format is vCalendar v1.0
+    summary: VCALENDAR_10 is type of textual format of a Calendar if the textual format is vCalendar v1.0
     type: STRING
     permission: read-only
     
   - name: ALARM_METHOD_SOUND
-    summary: "SOUND" indicates the type of an alarm if sound is played to alert the user.
+    summary: SOUND indicates the type of an alarm if sound is played to alert the user.
     type: STRING
     permission: read-only    
     
   - name: ALARM_METHOD_DISPLAY
-    summary: "DISPLAY" indicates the type of an alarm if display on screen without any sound is used to alert the user
+    summary: DISPLAY indicates the type of an alarm if display on screen without any sound is used to alert the user
     type: STRING
     permission: read-only    
     
   - name: RECURRENTCE_RULE_FREQUENCY_DAILY
-    summary: "DAILY" indicates the type of frequency for the recurrence of an event if the event occurs daily.
+    summary: DAILY indicates the type of frequency for the recurrence of an event if the event occurs daily.
     type: STRING
     permission: read-only    
     
   - name: RECURRENTCE_RULE_FREQUENCY_WEEKLY
-    summary: "WEEKLY" indicates the type of frequency for the recurrence of an event if the event occurs weekly.
+    summary: WEEKLY indicates the type of frequency for the recurrence of an event if the event occurs weekly.
     type: STRING
     permission: read-only    
     
   - name: RECURRENTCE_RULE_FREQUENCY_MONTHLY
-    summary: "MONTHLY" indicates the type of frequency for the recurrence of an event if the event occurs monthly.
+    summary: MONTHLY indicates the type of frequency for the recurrence of an event if the event occurs monthly.
     type: STRING
     permission: read-only    
     
   - name: RECURRENTCE_RULE_FREQUENCY_YEARLY
-    summary: "YEARLY" indicates the type of frequency for the recurrence of an event if the event occurs yearly.
+    summary: YEARLY indicates the type of frequency for the recurrence of an event if the event occurs yearly.
     type: STRING
     permission: read-only
 
   - name: BY_DAY_VALUE_MO
-    summary: "MO"  indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: MO  indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only
 
   - name: BY_DAY_VALUE_TU
-    summary: "TU" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: TU indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only
 
   - name: BY_DAY_VALUE_WE
-    summary: "WE" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: WE indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only
     
   - name: BY_DAY_VALUE_TH
-    summary: "TH" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: TH indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only    
     
   - name: BY_DAY_VALUE_FR
-    summary: "FR" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: FR indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only    
     
   - name: BY_DAY_VALUE_SA
-    summary: "SA" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: SA indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only
 
   - name: BY_DAY_VALUE_SU
-    summary: "SU" indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    summary: SU indicates the values for CalendarRecurrenceRule.daysOfWeek.
     type: STRING
     permission: read-only    
 
   - name: EVENT_AVAILABILITY_BUSY
-    summary: "BUSY" indicates the availability of time for an event.
+    summary: BUSY indicates the availability of time for an event.
     type: STRING
     permission: read-only    
     
   - name: EVENT_AVAILABILITY_FREE
-    summary: "FREE" indicates the availability of time for an event if the specified time slot is not vacant
+    summary: FREE indicates the availability of time for an event if the specified time slot is not vacant
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_TYPE_INDIVIDUAL
-    summary: "INDIVIDUAL" - Individual
+    summary: INDIVIDUAL - Individual
     type: STRING
     permission: read-only
 
   - name: ATTENDEE_TYPE_GROUP
-    summary: "GROUP" - Group of individuals
+    summary: GROUP - Group of individuals
     type: STRING
     permission: read-only    
     
   - name: ATTENDEE_TYPE_RESOURCE 
-    summary: "RESOURCE " - Physical resource
+    summary: RESOURCE  - Physical resource
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_TYPE_ROOM
-    summary: "ROOM" - Room resource
+    summary: ROOM - Room resource
     type: STRING
     permission: read-only    
     
   - name: ATTENDEE_TYPE_UNKNOWN
-    summary: "UNKNOWN" - Unknown
+    summary: UNKNOWN - Unknown
     permission: read-only    
 
- - name: ATTENDEE_STATUS_PENDING
-    summary: "PENDING" - if the participant has not yet responded to the event
+  - name: ATTENDEE_STATUS_PENDING
+    summary: PENDING - if the participant has not yet responded to the event
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_STATUS_ACCEPTED
-    summary: "ACCEPTED" - if the participant has accepted the event
+    summary: ACCEPTED - if the participant has accepted the event
     type: STRING
     permission: read-only    
     
   - name: ATTENDEE_STATUS_DECLINED
-    summary: "DECLINED" - if the participant has declined the event
+    summary: DECLINED - if the participant has declined the event
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_STATUS_TENTATIVE
-    summary: "TENTATIVE" - if the participant has tentatively accepted the event
+    summary: TENTATIVE - if the participant has tentatively accepted the event
     type: STRING
     permission: read-only
 
   - name: ATTENDEE_STATUS_DELEGATED
-    summary: "DELEGATED" - if the participant has delegated attendance to another participant
+    summary: DELEGATED - if the participant has delegated attendance to another participant
     type: STRING
     permission: read-only    
     
   - name: ATTENDEE_STATUS_COMPLETED
-    summary: "COMPLETED" - if the participant's event has been completed
+    summary: COMPLETED - if the participant's event has been completed
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_STATUS_IN_PROCESS
-    summary: "IN_PROCESS" - if the participant's event is currently in process
+    summary: IN_PROCESS - if the participant's event is currently in process
     type: STRING
     permission: read-only    
 
- - name: ATTENDEE_ROLE_REQ_PARTICIPANT
-    summary: "REQ_PARTICIPANT" - if the participation of an attendee is mandatory
+  - name: ATTENDEE_ROLE_REQ_PARTICIPANT
+    summary: REQ_PARTICIPANT - if the participation of an attendee is mandatory
     type: STRING
     permission: read-only
 
   - name: ATTENDEE_ROLE_OPT_PARTICIPANT
-    summary: "OPT_PARTICIPANT" - if the participation of an attendee is optional
+    summary: OPT_PARTICIPANT - if the participation of an attendee is optional
     type: STRING
     permission: read-only    
     
   - name: ATTENDEE_ROLE_NON_PARTICIPANT
-    summary: "NON_PARTICIPANT" - if the attendee is not a participant but is copied for information purposes
+    summary: NON_PARTICIPANT - if the attendee is not a participant but is copied for information purposes
     type: STRING
     permission: read-only    
 
   - name: ATTENDEE_ROLE_CHAIR
-    summary: "CHAIR" - if the attendee is the chairperson of the event.
+    summary: CHAIR - if the attendee is the chairperson of the event.
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_PRIOTITY_HIGH
-    summary: "HIGH" - if item priority is high
+    summary: HIGH - if item priority is high
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_PRIOTITY_MEDIUM
-    summary: "MEDIUM" - if item priority is medium
+    summary: MEDIUM - if item priority is medium
     type: STRING
     permission: read-only    
     
   - name: CALENDAR_ITEM_PRIOTITY_LOW
-    summary: "LOW" - if item priority is low
+    summary: LOW - if item priority is low
     type: STRING
     permission: read-only
     
   - name: CALENDAR_ITEM_VISIBILITY_PUBLIC
-    summary: "PUBLIC" - if item visibility is public
+    summary: PUBLIC - if item visibility is public
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_VISIBILITY_PRIVATE
-    summary: "PRIVATE" - if item visiblity is private
+    summary: PRIVATE - if item visiblity is private
     type: STRING
     permission: read-only    
     
   - name: CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL
-    summary: "CONFIDENTIAL" - if item visibility is confidential
+    summary: CONFIDENTIAL - if item visibility is confidential
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_TENTATIVE
-    summary: "TENTATIVE" - if the event is tentative.
+    summary: TENTATIVE - if the event is tentative.
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_CONFIRMED
-    summary: "CONFIRMED" - if the event is confirmed.
+    summary: CONFIRMED - if the event is confirmed.
     type: STRING
     permission: read-only    
     
   - name: CALENDAR_ITEM_STATUS_CANCELLED
-    summary: "CANCELLED" - if the event/task is cancelled.
+    summary: CANCELLED - if the event/task is cancelled.
     type: STRING
     permission: read-only
     
   - name: CALENDAR_ITEM_STATUS_NEEDS_ACTION
-    summary: "NEEDS_ACTION" - if the task needs action.
+    summary: NEEDS_ACTION - if the task needs action.
     type: STRING
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_IN_PROCESS
-    summary: "IN_PROCESS" - if the task has been completed.
+    summary: IN_PROCESS - if the task has been completed.
     type: STRING
     permission: read-only    
     
   - name: CALENDAR_ITEM_STATUS_COMPLETED
-    summary: "COMPLETED" - if the task has been cancelled.
+    summary: COMPLETED - if the task has been cancelled.
     type: STRING
-    permission: read-only  
-# Pseudo-type    
----
-name: SystemInfoOptions
-summary: An object containing the various options for fetching the properties requested.
-properties:
-  - name: timeout
-    type: Number
-    summary: The number of milliseconds beyond which the operation must be interrupted.
-    
-  - name: highThreshold
-    type: Number
-    summary: |
-        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
-        if the property is a number and its value is greater than or equal to this number.
-    
-  - name: lowThreshold
-    type: Number
-    summary: |
-        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
-        if the property is a number and its value is lower than or equal to this number. If both highThreshold and lowThreshold parameters are specified, 
-        the successCallback is triggered if and only if the property value is either lower than the value of lowThreshold or higher than the value of highThreshold.
-        
+    permission: read-only

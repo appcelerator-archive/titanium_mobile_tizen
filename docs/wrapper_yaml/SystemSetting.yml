@@ -9,12 +9,10 @@ description: |
         INCOMING_CALL
         NOTIFICATION_EMAIL
         
-    The `SystemSetting` module is a thin wrapper on the Tizen `SystemSetting` class.	
-
+    The `SystemSetting` module is a thin wrapper on the Tizen `SystemSetting` class.
 extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
-
 examples: 
   - title: Code example
     example:    |
@@ -28,7 +26,6 @@ examples:
             console.log("Fail to setProperty" + error.message);
         }
         tizen.systemsetting.setProperty("HOME_SCREEN", "images/image1.jpg", successCallback, errorCallback);
-	  
 methods:
   - name: setProperty
     summary: Sets the setting of the device
@@ -52,8 +49,8 @@ methods:
       - name: errorCallback
         summary: To be invoked if the setting value cannot be set. It is optional
         type: Callback<WebAPIError>
-
-- name: getProperty
+        
+  - name: getProperty
     summary: Gets the setting of the device
     description: |
         This method allows the user to retrieve a value according to a given type.
@@ -77,21 +74,21 @@ methods:
 properties:
 
   - name: SYSTEM_SETTING_TYPE_HOME_SCREEN
-    summary: "HOME_SCREEN" is for homescreen background image.
+    summary: HOME_SCREEN is for homescreen background image.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_LOCK_SCREEN
-    summary: "LOCK_SCREEN" is for lockscreen background image.
+    summary: LOCK_SCREEN is for lockscreen background image.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_INCOMING_CALL
-    summary: "INCOMING_CALL" is for incoming call ringtone.
+    summary: INCOMING_CALL is for incoming call ringtone.
     type: STRING
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL
-    summary: "NOTIFICATION_EMAIL" is for email notification alert tone.
+    summary: NOTIFICATION_EMAIL is for email notification alert tone.
     type: STRING
     permission: read-only

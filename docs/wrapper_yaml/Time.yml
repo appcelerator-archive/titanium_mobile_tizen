@@ -15,13 +15,13 @@ description: |
     the offset of the local time to UTC or to any other time zone at any point in the past or future is lost.
     This API can be used to get TZDate objects with full timezone support, convert them between timezones, retrieve available timezones.
     
-  See also:
-  
+    See also:
+    
     *   [Tizen Time API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fcalendar.html)
     
     *   [Tizen Time Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Ftime.htm)
     
-     The `Time` module is a thin wrapper on the Tizen `TimeUtil` class.	
+    The `Time` module is a thin wrapper on the Tizen `TimeUtil` class.	
 
 extends: Titanium.Module
 platforms: [tizen]
@@ -36,13 +36,12 @@ examples:
         if (is_leap) {
             console.log("This year is a leap year.");    
         }
-	  
+
 methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
     returns:
         type: Titanium.Tizen.Time.TZDate
-    	
   - name: getLocalTimezone
     summary: Returns identifier of the local system timezone.
     returns:
@@ -57,7 +56,7 @@ methods:
         For example, 'Europe/Berlin', 'America/Argentina/Buenos_Aires'.
     returns:
         type: String[]
-		
+        
   - name: getDateFormat
     summary: Returns the date format according to the system's locale settings.
     description: |
@@ -114,26 +113,26 @@ methods:
 properties:
 
   - name: TIME_DURATION_UNIT_MSECS
-    summary: "MSECS" - Indicates a duration in milliseconds
-    type: STRING
+    summary: MSECS - Indicates a duration in milliseconds
+    type: String
     permission: read-only
 
   - name: TIME_DURATION_UNIT_SECS
-    summary: "SECS" - Indicates a duration in seconds
-    type: STRING
+    summary: SECS - Indicates a duration in seconds
+    type: String
     permission: read-only
 
   - name: TIME_DURATION_UNIT_MINS
-    summary: "MINS" - Indicates a duration in minutes
-    type: STRING
+    summary: MINS - Indicates a duration in minutes
+    type: String
     permission: read-only
 
   - name: TIME_DURATION_UNIT_HOURS
-    summary: "HOURS" - Indicates a duration in hours
-    type: STRING
+    summary: HOURS - Indicates a duration in hours
+    type: String
     permission: read-only
 
   - name: TIME_DURATION_UNIT_DAYS
-    summary: "DAYS" - Indicates a duration in days
-    type: STRING
+    summary: DAYS - Indicates a duration in days
+    type: String
     permission: read-only

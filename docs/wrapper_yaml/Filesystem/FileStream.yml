@@ -1,0 +1,114 @@
+---
+name: Titanium.Filesystem.FileStream
+summary: FileStream API.
+description: |
+    A FileStream represents a handle to a File opened for read and/or write operations. 
+    Read and write operations are performed relative to a position attribute, which is a pointer that represents the current position in the file.
+    
+    A series of read/write methods are available that permit both binary and text to be processed.
+    
+    Once a file stream is closed, any operation attempted on this stream will result in a standard JavaScript error.
+    
+    The read/write operations in this interface do not throw any security exceptions as the access rights are expected to be granted through the initial resolve() method or through the openStream() method of the File interface. Therefore, all actions performed on a successfully resolved File and FileStream are expected to succeed. This avoids successive asynchronous calls and may potentially increase application for a user.
+extends: Titanium.Proxy
+since: "3.0.2"
+platforms: [tizen]
+creatable: false
+
+methods:
+  - name: close
+    summary: Closes this FileStream.
+    description: |
+        Flushes any pending buffered writes and closes the File. 
+        Always succeeds. Note that pending writes might not succeed.
+   
+  - name: read
+    summary: Reads the specified number of characters from this FileStream.
+    description: |
+        Reads the specified number of characters after the position file pointer and returns them as a string. 
+        The resulting string length might be shorter than charCount if eof is true.
+    returns:
+        summary: The result of read characters as a string.
+        type: String    
+    parameters:
+      - name: filter 
+        summary: Used to restrict the listed files.
+        type: Number
+  
+  - name: readBytes
+    summary: Reads the specified number of bytes from this FileStream.
+    description: |
+        Reads the specified number of characters after the position file pointer and returns them as a string. 
+        The resulting string length might be shorter than charCount if eof is true.
+    returns:
+        summary: The result of read bytes as a byte (or number) array.
+        type: Number[]    
+    parameters:
+      - name: byteCount 
+        summary: Number of bytes being read.
+        type: Number        
+ 
+  - name: readBase64
+    summary: Reads the specified number of bytes from this FileStream, encoding the result in base64.
+    description: |
+        Reads the specified number of characters after the position file pointer and returns them as a string. 
+        The resulting string length might be shorter than charCount if eof is true.
+    returns:
+        summary: The result of read bytes as base64 encoding string.
+        type: String
+    parameters:
+      - name: byteCount 
+        summary: Number of bytes being read.
+        type: Number        
+        
+  - name: write
+    summary: Writes the specified DOMString to this FileStream.
+    parameters:
+      - name: stringData  
+        summary: The actual string to be written.
+        type: String
+       
+  - name: writeBytes
+    summary: Writes the specified bytes to this FileStream.
+    parameters:
+      - name: byteData  
+        summary: The byte data array being written.
+        type: Number[]
+       
+  - name: writeBase64
+    summary: Converts the specified base64 DOMString to bytes and writes the result to this FileStream.
+    parameters:
+      - name: base64Data  
+        summary:  The base64 data being written.
+        type: String
+  
+properties:
+
+  - name: eof
+    summary: |
+        Indicates whether or not the current file pointer is at the end of the file.
+        
+        If [true], this attribute indicates that the file pointer is at the end of the file.
+        
+        If [false], this attribute indicates that the file pointer is not at the end of the file and may be anywhere within the file.
+    type: Boolean
+    permission: read-only
+
+  - name: position
+    summary: |
+        Gets/sets stream position for reads/writes.
+        
+        The stream position is an offset of bytes from the start of the file stream. 
+        When invoking an operation that reads or writes from the stream, the operation will take place from the byte defined by this position attribute. If the read or write operation is successful, the position of the stream is advanced by the number of bytes read or written. 
+        If the read/write operation is not successful, the position of the stream is unchanged.
+    type: Number
+    
+  - name: bytesAvailable
+    summary: |
+        Returns the number of bytes that are available for reading from the stream.
+        The number of bytes available for reading is the maximum amount of bytes that can be read in the next read operation.
+        It corresponds to the number of bytes available after the file pointer denoted by the position attribute.
+        
+        -1 if eof is true.
+    type: Number
+    permission: read-only

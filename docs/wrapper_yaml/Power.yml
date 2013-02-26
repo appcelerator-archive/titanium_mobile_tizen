@@ -18,19 +18,19 @@ since: "3.0.2"
 examples: 
   - title: Code example
     example:    |
-         // Check whether the screen is on or off.
+        // Check whether the screen is on or off.
         var isScreenOn = tizen.power.isScreenOn();
         
         // Set the screen brightness value for the application.
         tizen.power.setScreenBrightness(1);
         
         function onScreenStateChanged(previousState, changedState) {
-            console.log("Screen state changed from " + previousState + " to " + changedState);
+            console.log(Screen state changed from  + previousState +  to  + changedState);
         }
         
         // Set the screen state change listener.
         tizen.power.setScreenStateChangeListener(onScreenStateChanged);
- 	  
+
 methods:
   - name: request
     summary: Requests the minimum-state for a power resource.
@@ -39,16 +39,13 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: POWER_RESOURCE_SCREEN = "SCREEN", POWER_RESOURCE_CPU = "CPU"
+            The supported request types are: "SCREEN", "CPU
         type: String
       - name: state
         summary: |
             The minimal power state in which the power resource is desired to be. 
             The value is one of the constants defined for this type. 
-            The supported request types are: 
-            POWER_SCREEN_STATESCREEN_OFF = "SCREEN_OFF", POWER_SCREEN_STATESCREEN_SCREEN_DIM = "SCREEN_DIM",
-            POWER_SCREEN_STATESCREEN_SCREEN_NORMAL = "SCREEN_NORMAL", POWER_SCREEN_STATESCREEN_SCREEN_BRIGHT = "SCREEN_BRIGHT", 
-            POWER_CPU_STATE_CPU_AWAKE = "CPU_AWAKE"
+            The supported request types are: "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT", "CPU_AWAKE"
         type: String
 
   - name: release
@@ -58,7 +55,7 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: POWER_RESOURCE_SCREEN = "SCREEN", POWER_RESOURCE_CPU = "CPU"
+            The supported request types are: "SCREEN", "CPU"
         type: String
 
   - name: setScreenStateChangeListener
@@ -104,35 +101,35 @@ methods:
 properties:
 
   - name: POWER_RESOURCE_SCREEN
-    summary: "SCREEN" is aligned with <Titanium.Tizen.SystemInfo> property value
+    summary: SCREEN is aligned with <Titanium.Tizen.SystemInfo> property value
     type: STRING
     permission: read-only
 
   - name: POWER_RESOURCE_CPU
-    summary: "CPU" is aligned with <Titanium.Tizen.SystemInfo> property value
+    summary: CPU is aligned with <Titanium.Tizen.SystemInfo> property value
     type: STRING
     permission: read-only
 
-  - name: POWER_SCREEN_STATESCREEN_OFF
-    summary: "SCREEN_OFF" - This screen state cannot be requested but can only be used in the state change callback.
+  - name: POWER_SCREEN_STATE_SCREEN_OFF
+    summary: SCREEN_OFF - This screen state cannot be requested but can only be used in the state change callback.
     type: STRING
     permission: read-only
 
   - name: POWER_SCREEN_STATE_SCREEN_DIM
-    summary: "SCREEN_DIM" - The minimal screen state is set to DIM and device does not change to OFF state automatically.
+    summary: SCREEN_DIM - The minimal screen state is set to DIM and device does not change to OFF state automatically.
     type: STRING
     permission: read-only
     
   - name: POWER_SCREEN_STATE_SCREEN_NORMAL
     summary: |
-        "SCREEN_NORMAL" -  The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
+        SCREEN_NORMAL -  The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
         NORMAL state refers to the default screen brightness that a user has configured for the device. 
     type: STRING
     permission: read-only    
     
   - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
     summary: |
-        "SCREEN_BRIGHT"  - The minimal screen state is set to BRIGHT and device does not change to NORMAL state automatically.
+        SCREEN_BRIGHT  - The minimal screen state is set to BRIGHT and device does not change to NORMAL state automatically.
         BRIGHT state refers to the maximum screen brightness that the device provides. 
         Note that the change in brightness does not affect the system brightness setting, i.e., 
         the system brightness value is automatically restored when the resource is released or the process is completed.
@@ -140,6 +137,6 @@ properties:
     permission: read-only    
     
   - name: POWER_CPU_STATE_CPU_AWAKE
-    summary: "CPU_AWAKE" - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
+    summary: CPU_AWAKE - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
     type: STRING
     permission: read-only

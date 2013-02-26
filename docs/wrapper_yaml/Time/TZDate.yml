@@ -1,7 +1,7 @@
 ---
 name: Titanium.Tizen.Time.TZDate
 summary: The TZDate object represents information regarding a given date / time in a predefined timezone.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 

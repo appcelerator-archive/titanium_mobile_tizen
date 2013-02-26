@@ -23,10 +23,10 @@ module.exports = new function() {
 
 	this.checkPower  = function(testRun) {
 		Ti.API.debug('Checking power object availability.');
-		valueOf(testRun, tizen).shouldBeObject();
-		valueOf(testRun, tizen.power).shouldBeObject();
-		valueOf(testRun, tizen.power.request).shouldBeFunction();
-		valueOf(testRun, tizen.power.release).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.Power).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.Power.request).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Power.release).shouldBeFunction();
 		finish(testRun);
 	}
 
@@ -34,16 +34,16 @@ module.exports = new function() {
 		var stateRequest = null;
 		function onSuccess(){
 			Ti.API.debug('PowerStateListener is set.');
-			waitTimeout=setTimeout(function(){
+			waitTimeout = setTimeout(function() {
 				Ti.API.debug('Test completed by timeout!');
 				valueOf(testRun, true).shouldBeTrue();
 				try{
-					tizen.power.release('DISPLAY');
+					Ti.Tizen.Power.release('DISPLAY');
 				}catch (e){
 					reportError(testRun, JSON.stringify(e));
 				}
 				finish(testRun);
-			},2000);
+			}, 2000);
 		}
 
 		function onError(){
@@ -57,7 +57,10 @@ module.exports = new function() {
 			Ti.API.debug('State changed. Resource: ' + resource + ', actualState: ' + actualStateual + ', requestedState: ' + requestedState);
 		}
 
-		stateRequest = new tizen.PowerStateRequest('DISPLAY', 'DISPLAY_NORMAL');
-		tizen.power.request(stateRequest, onSuccess, onError, onChanged);
+		stateRequest = Ti.Tizen.Power.createPowerStateRequest({
+			resource: 'DISPLAY',
+			state: 'DISPLAY_NORMAL'
+		});
+		Ti.Tizen.Power.request(stateRequest, onSuccess, onError, onChanged);
 	}
 }
