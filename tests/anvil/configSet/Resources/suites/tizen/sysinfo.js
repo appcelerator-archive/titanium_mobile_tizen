@@ -19,48 +19,48 @@ module.exports = new function() {
 	}
 
 	//Tests for Tizen Device API: SystemInfo Device API
-	this.name = "sysinfo";
+	this.name = 'sysinfo';
 	this.tests = [
-		{name: "checkSystemInfo"},
-		{name: "allPropertiesSupported"},
-		{name: "getPowerProperty"},
-		{name: "getCpuProperty"},
-		{name: "getStorageProperty"},
-		{name: "getDisplayProperty"},
-		{name: "getDeviceProperty"},
-		{name: "getNetworkProperty"},
-		{name: "getWifiNetworkProperty"},
-		{name: "getCellularNetworkProperty"},
-		{name: "getEthernetNetworkProperty"},
-		{name: "getSimProperty"},
-		{name: "getDeviceOrientationProperty"},
-		{name: "testListenersPower"},
-		{name: "testListenersCpu"},
-		{name: "testListenersStorage"},
-		{name: "testListenersDisplay"},
-		{name: "testListenersDevice"},
-		{name: "testListenersDeviceOrientation"},
-		{name: "testListenersSIM"},
-		{name: "testListenersEthernetNetwork"},
-		{name: "testListenersCellularNetwork"},
-		{name: "testListenersWifiNetwork"},
-		{name: "testListenersNetwork"}
+		{name: 'checkSystemInfo'},
+		{name: 'allPropertiesSupported'},
+		{name: 'getPowerProperty'},
+		{name: 'getCpuProperty'},
+		{name: 'getStorageProperty'},
+		{name: 'getDisplayProperty'},
+		{name: 'getDeviceProperty'},
+		{name: 'getNetworkProperty'},
+		{name: 'getWifiNetworkProperty'},
+		{name: 'getCellularNetworkProperty'},
+		{name: 'getEthernetNetworkProperty'},
+		{name: 'getSimProperty'},
+		{name: 'getDeviceOrientationProperty'},
+		{name: 'testListenersPower'},
+		{name: 'testListenersCpu'},
+		{name: 'testListenersStorage'},
+		{name: 'testListenersDisplay'},
+		{name: 'testListenersDevice'},
+		{name: 'testListenersDeviceOrientation'},
+		{name: 'testListenersSIM'},
+		{name: 'testListenersEthernetNetwork'},
+		{name: 'testListenersCellularNetwork'},
+		{name: 'testListenersWifiNetwork'},
+		{name: 'testListenersNetwork'}
 	];
 
 	this.checkSystemInfo  = function(testRun) {
 
 		Ti.API.debug('Checking SystemInfo object availability.');
-		valueOf(testRun, tizen).shouldBeObject();
-		valueOf(testRun, tizen.systeminfo).shouldBeObject();
+		valueOf(testRun, Ti.Tizen).shouldBeObject();
+		valueOf(testRun, Ti.Tizen.SystemInfo).shouldBeObject();
 		finish(testRun);
 	}
 
 	this.allPropertiesSupported = function(testRun) {
 		// Test for Tizen Device API: do all documented properties are supported?
-		// according to "Tizen Web App Programming" => "Programming Guide" => "Device" => "SystemInfo"
+		// according to 'Tizen Web App Programming' => 'Programming Guide' => 'Device' => 'SystemInfo'
 		// Basic Supported Properties are: Power, Cpu, Storage, Display, Device, WifiNetwork, CellularNetwork.
-		// And "Network", "EthernetNetwork", "SIM", "DeviceOrientation" are NOT "Basic Supported Properties" and depends on device
-		var i,
+		// And 'Network', 'EthernetNetwork', 'SIM', 'DeviceOrientation' are NOT 'Basic Supported Properties' and depends on device
+		var i = 0,
 			current,
 			isSupported,
 			listOfAllProperties = [
@@ -75,21 +75,22 @@ module.exports = new function() {
 				'EthernetNetwork',
 				'SIM',
 				'DeviceOrientation'
-			];
+			],
+			len = listOfAllProperties.length;
 
-		for (i = 0; i < listOfAllProperties.length; i++) {
+		for (; i < len; i++) {
 			current  = listOfAllProperties[i];
 			try{
-				isSupported = tizen.systeminfo.isSupported(current);
+				isSupported = Ti.Tizen.SystemInfo.isSupported(current);
 				valueOf(testRun, isSupported).shouldBeTrue(); // test passed only if all properties are supported!
 
 				if (isSupported) {
-					Ti.API.debug('"'+current+ '" property is supported.');
+					Ti.API.debug('"' + current + '" property is supported.');
 				} else {
-					Ti.API.debug('"'+current+ '" property is not supported.');
+					Ti.API.debug('"' + current + '" property is not supported.');
 				}
 			}catch (e) {
-				Ti.API.debug('"'+current+ '" property cause exception: ' + e.message);
+				Ti.API.debug('"' + current + '" property cause exception: ' + e.message);
 				reportError(testRun, JSON.stringify(e));
 			}
 		}
@@ -99,7 +100,9 @@ module.exports = new function() {
 	this.getPowerProperty = function(testRun) {
 		//Test for Tizen Device API: SystemInfoPower
 		function onSuccessCallback(power) {
-			Ti.API.debug('The power object:' + JSON.stringify(power));
+			Ti.API.info('The power object:' + JSON.stringify(power));
+
+			valueOf(testRun, power).shouldBe('[object TiTizenSystemInfoSystemInfoPower]');
 			valueOf(testRun, power.level).shouldBeNumber();
 			valueOf(testRun, power.isCharging).shouldBeBoolean();
 			finish(testRun);
@@ -110,38 +113,53 @@ module.exports = new function() {
 			valueOf(testRun, false).shouldBeTrue();
 			finish(testRun);
 		}
-		tizen.systeminfo.getPropertyValue('Power', onSuccessCallback, onErrorCallback);
+
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Power', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getCpuProperty = function(testRun) {
 		//Test for Tizen Device API: SystemInfoCpu
 		function onSuccessCallback(cpuData) {
 			Ti.API.debug('The power CPU load level is ' + cpuData.load);
+			
+			valueOf(testRun, cpuData).shouldBe('[object TiTizenSystemInfoSystemInfoCpu]');
 			valueOf(testRun, cpuData.load).shouldBeNumber(); // double!
 			finish(testRun);
 		}
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Cpu property:' + error.message);
+			
 			valueOf(testRun, false).shouldBeTrue();
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('Cpu', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Cpu', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getStorageProperty = function(testRun) {
 		//Test for Tizen Device API: SystemInfoStorage and SystemInfoStorageUnit
 		function onSuccessCallback(systemInfoStorage) {
 			Ti.API.debug('Storage info: ' + JSON.stringify(systemInfoStorage));
-			valueOf(testRun, systemInfoStorage).shouldBeArray();			
-			if (systemInfoStorage){
-				for (var i = 0; i < systemInfoStorage.length; i++) {
-					//var current  = systemInfoStorage.units[i];
-					var current  = systemInfoStorage[i];
-					valueOf(testRun, current).shouldBeObject(); // SystemInfoStorageUnit
+
+			valueOf(testRun, systemInfoStorage).shouldBe('[object TiTizenSystemInfoSystemInfoStorage]');
+
+			if (systemInfoStorage.units) {
+				var i = 0, 
+					len = systemInfoStorage.units.length,
+					current;
+
+				for (; i < len; i++) {
+					current  = systemInfoStorage.units[i];
+
+					Ti.API.debug('Storage info: ' + JSON.stringify(current));
+
+					valueOf(testRun, current).shouldBe('[object TiTizenSystemInfoSystemInfoStorageUnit]');
 				}
 			}
+
 			finish(testRun);
 		}
 
@@ -151,14 +169,17 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue("Storage", onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Storage', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getDisplayProperty = function(testRun) {
 		// Test for Tizen Device API: SystemInfoDisplay
 		function onSuccessCallback(systemInfoDisplay) {
 			Ti.API.debug('Display info: ' + JSON.stringify(systemInfoDisplay));
-			valueOf(testRun, systemInfoDisplay).shouldBeObject();
+			
+			valueOf(testRun, systemInfoDisplay).shouldBe('[object TiTizenSystemInfoSystemInfoDisplay]');
+			
 			if (systemInfoDisplay){
 				valueOf(testRun, systemInfoDisplay.resolutionWidth).shouldBeNumber();
 				valueOf(testRun, systemInfoDisplay.resolutionHeight).shouldBeNumber();
@@ -173,18 +194,22 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Display property:' + error.message);
+			
 			valueOf(testRun, false).shouldBeTrue();
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('Display', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Display', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getDeviceProperty = function(testRun) {
 		// Test for Tizen Device API: SystemInfoDevice
 		function onSuccessCallback(systemInfoDevice) {
 			Ti.API.debug('Device info: ' + JSON.stringify(systemInfoDevice));
-			valueOf(testRun, systemInfoDevice).shouldBeObject();
+			
+			valueOf(testRun, systemInfoDevice).shouldBe('[object TiTizenSystemInfoSystemInfoDevice]');
+			
 			if (systemInfoDevice){
 				valueOf(testRun, systemInfoDevice.imei).shouldBeString();
 				valueOf(testRun, systemInfoDevice.model).shouldBeString();
@@ -200,14 +225,15 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('Device', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Device', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getNetworkProperty = function(testRun) {
 		// Test for Tizen Device API: SystemInfoNetwork
 		function onSuccessCallback(systemInfoNetwork) {
 			Ti.API.debug('Network info: ' + JSON.stringify(systemInfoNetwork));
-			valueOf(testRun, systemInfoNetwork).shouldBeObject();
+			valueOf(testRun, systemInfoNetwork).shouldBe('[object TiTizenSystemInfoSystemInfoNetwork]');
 			if (systemInfoNetwork){
 				valueOf(testRun, systemInfoNetwork.networkType).shouldBeNumber();
 			}
@@ -220,14 +246,17 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('Network', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('Network', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getWifiNetworkProperty = function(testRun) {
 		// Test for Tizen Device API: SystemInfoWifiNetwork
 		function onSuccessCallback(systemInfoWifiNetwork) {
-			Ti.API.debug("Wifi network info: " + JSON.stringify(systemInfoWifiNetwork));
-			valueOf(testRun, systemInfoWifiNetwork).shouldBeObject();
+			Ti.API.debug('Wifi network info: ' + JSON.stringify(systemInfoWifiNetwork));
+			
+			valueOf(testRun, systemInfoWifiNetwork).shouldBe('[object TiTizenSystemInfoSystemInfoWifiNetwork]');
+			
 			if (systemInfoWifiNetwork){
 				valueOf(testRun, systemInfoWifiNetwork.status).shouldBeString();
 				valueOf(testRun, systemInfoWifiNetwork.ssid).shouldBeString();
@@ -244,14 +273,17 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue("WifiNetwork", onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('WifiNetwork', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getCellularNetworkProperty = function(testRun) {
 	// Test for Tizen Device API: SystemInfoCellularNetwork
 		function onSuccessCallback(systemInfoCellularNetwork) {
 			Ti.API.debug('Cellular network info: ' + JSON.stringify(systemInfoCellularNetwork));
-			valueOf(testRun, systemInfoCellularNetwork).shouldBeObject();
+			
+			valueOf(testRun, systemInfoCellularNetwork).shouldBe('[object TiTizenSystemInfoSystemInfoCellularNetwork]');
+			
 			if (systemInfoCellularNetwork){
 				valueOf(testRun, systemInfoCellularNetwork.status).shouldBeString();
 				valueOf(testRun, systemInfoCellularNetwork.apn).shouldBeString();
@@ -267,19 +299,22 @@ module.exports = new function() {
 		}
 
 		function onErrorCallback(error) {
-			Ti.API.info("An error occurred on 'CellularNetwork' property:" + error.message);
+			Ti.API.info('An error occurred on "CellularNetwork" property:' + error.message);
 			valueOf(testRun, false).shouldBeTrue();
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue("CellularNetwork", onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('CellularNetwork', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getEthernetNetworkProperty = function(testRun) {
 	// Test for Tizen Device API: SystemInfoEthernetNetwork
 		function onSuccessCallback(systemInfoEthernetNetwork) {
 			Ti.API.debug('Ethernet network info: ' + JSON.stringify(systemInfoEthernetNetwork));
-			valueOf(testRun, systemInfoEthernetNetwork).shouldBeObject();
+			
+			valueOf(testRun, systemInfoEthernetNetwork).shouldBe('[object TiTizenSystemInfoSystemInfoEthernetNetwork]');
+			
 			if (systemInfoEthernetNetwork){
 				valueOf(testRun, systemInfoEthernetNetwork.status).shouldBeString();
 				valueOf(testRun, systemInfoEthernetNetwork.ipAddress).shouldBeString();
@@ -299,14 +334,17 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue("EthernetNetwork", onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('EthernetNetwork', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getSimProperty = function(testRun) {
 	// Test for Tizen Device API: SystemInfoSIM
 		function onSuccessCallback(systemInfoSIM) {
 			Ti.API.debug('SIM info: ' + JSON.stringify(systemInfoSIM));
-			valueOf(testRun, systemInfoSIM).shouldBeObject();
+			
+			valueOf(testRun, systemInfoSIM).shouldBe('[object TiTizenSystemInfoSystemInfoSIM]');
+			
 			if (systemInfoSIM){
 				valueOf(testRun, systemInfoSIM.operatorName).shouldBeString();
 				valueOf(testRun, systemInfoSIM.msisdn).shouldBeString();
@@ -326,14 +364,17 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('SIM', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('SIM', onSuccessCallback, onErrorCallback);
 	}
 
 	this.getDeviceOrientationProperty = function(testRun) {
 	// Test for Tizen Device API: SystemInfoDeviceOrientation
 		function onSuccessCallback(SystemInfoDeviceOrientation) {
 			Ti.API.debug('Device orientation info: ' + JSON.stringify(SystemInfoDeviceOrientation));
-			valueOf(testRun, SystemInfoDeviceOrientation).shouldBeObject();
+			
+			valueOf(testRun, SystemInfoDeviceOrientation).shouldBe('[object TiTizenSystemInfoSystemInfoDeviceOrientation]');
+			
 			if (SystemInfoDeviceOrientation){
 				valueOf(testRun, SystemInfoDeviceOrientation.status).shouldBeNumber();
 			}
@@ -342,56 +383,57 @@ module.exports = new function() {
 		}
 
 		function onErrorCallback(error) {
-			Ti.API.info("An error occurred on 'DeviceOrientation' property:" + error.message);
+			Ti.API.info('An error occurred on "DeviceOrientation" property:' + error.message);
 			valueOf(testRun, false).shouldBeTrue();
 			finish(testRun);
 		}
 
-		tizen.systeminfo.getPropertyValue('DeviceOrientation', onSuccessCallback, onErrorCallback);
+		valueOf(testRun, Ti.Tizen.SystemInfo.getPropertyValue).shouldBeFunction();
+		Ti.Tizen.SystemInfo.getPropertyValue('DeviceOrientation', onSuccessCallback, onErrorCallback);
 	}
 
 	this.testListenersPower = function(testRun) {
-		checkCallbackMethod({propertyName: 'Power', testRun: testRun, optionsParameter: {lowThreshold : 0.2, highThreshold: 0.8}});
+		checkCallbackMethod( {propertyName: 'Power', testRun: testRun, optionsParameter: { lowThreshold : 0.2, highThreshold: 0.8 } });
 	}
 
 	this.testListenersCpu = function(testRun) {
-		checkCallbackMethod({propertyName:'Cpu', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'Cpu', testRun: testRun, optionsParameter:{}} );
 	}
 
 	this.testListenersStorage = function(testRun) {
-		checkCallbackMethod({propertyName:'Storage', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'Storage', testRun: testRun, optionsParameter:{}} );
 	}
 
 	this.testListenersDisplay = function(testRun) {
-		checkCallbackMethod({propertyName:'Display', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'Display', testRun: testRun, optionsParameter:{}} );
 	}
 
 	this.testListenersDevice = function(testRun) {
-		checkCallbackMethod({propertyName:'Device',testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'Device',testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersNetwork = function(testRun) {
-		checkCallbackMethod({propertyName:'Network', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'Network', testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersWifiNetwork = function(testRun) {
-		checkCallbackMethod({propertyName:'WifiNetwork', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'WifiNetwork', testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersCellularNetwork = function(testRun) {
-		checkCallbackMethod({propertyName:'CellularNetwork', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'CellularNetwork', testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersEthernetNetwork = function(testRun) {
-		checkCallbackMethod({propertyName:'EthernetNetwork', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'EthernetNetwork', testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersSIM = function(testRun) {
-		checkCallbackMethod({propertyName:'SIM', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'SIM', testRun: testRun, optionsParameter:{} });
 	}
 
 	this.testListenersDeviceOrientation = function(testRun) {
-		checkCallbackMethod({propertyName:'DeviceOrientation', testRun: testRun, optionsParameter:{}});
+		checkCallbackMethod( {propertyName:'DeviceOrientation', testRun: testRun, optionsParameter:{} });
 	};
 
 	// helper that allows to test addPropertyValueChangeListener, removePropertyValueChangeListener, SystemInfoOptions
@@ -403,12 +445,13 @@ module.exports = new function() {
 			waitTimeout;
 
 		// removes current listener. Must be completed to accept valid test.
-		function removeListener(){
+		function removeListener() {
 			valueOf(testRun, id).shouldNotBeNull();
 			Ti.API.debug('removing listener with ID: ' + id);
-			if (id != null){
+			if (id != null) {
 				try{
-					tizen.systeminfo.removePropertyValueChangeListener(id);
+					valueOf(testRun, Ti.Tizen.SystemInfo.removePropertyValueChangeListener).shouldBeFunction();
+					Ti.Tizen.SystemInfo.removePropertyValueChangeListener(id);
 				} catch(e) {
 					reportError(testRun, JSON.stringify(e));
 				}
@@ -417,7 +460,7 @@ module.exports = new function() {
 
 		// If can accept test as on success callback as without it
 		function onSuccessCallback(dataObject) {
-			Ti.API.debug('Test completed by success callback with parameter: ' + JSON.stringify(dataObject|""));
+			Ti.API.debug('Test completed by success callback with parameter: ' + JSON.stringify(dataObject|''));
 			clearFakeTimeout();  // cancel fake timer call
 
 			valueOf(testRun, dataObject).shouldNotBeNull();
@@ -433,8 +476,8 @@ module.exports = new function() {
 		}
 
 		//clears timeout if it was set before.
-		function clearFakeTimeout(){
-			if (waitTimeout){
+		function clearFakeTimeout() {
+			if (waitTimeout) {
 				// cancel fake call if any
 				clearTimeout(waitTimeout); 
 			}
@@ -442,21 +485,23 @@ module.exports = new function() {
 
 		// we don't need to wait for real callbacks from device,
 		// as generally we are testing that we can subscribe and unsubscribe
-		waitTimeout=setTimeout(function(){
+		waitTimeout=setTimeout(function() {
 			Ti.API.debug('Test completed by timeout!');
 			removeListener();
 			finish(testRun);
-		},2000);
+		}, 2000);
 
-		try{
+		try {
 			// According to documentation:
-			// "Tizen Web App Programming" => "Programming Guide" => "Device" => "Obtain Details on Basic Supported Properties"
+			// 'Tizen Web App Programming' => 'Programming Guide' => 'Device' => 'Obtain Details on Basic Supported Properties'
 			// devices MAY not support all properties. Some properties vary from device to device
-			id = tizen.systeminfo.addPropertyValueChangeListener(data.propertyName, onSuccessCallback, onErrorCallback, data.optionsParameter);
+			valueOf(testRun, Ti.Tizen.SystemInfo.addPropertyValueChangeListener).shouldBeFunction();
+			
+			id = Ti.Tizen.SystemInfo.addPropertyValueChangeListener(data.propertyName, onSuccessCallback, onErrorCallback, data.optionsParameter);
 			valueOf(testRun, id).shouldBeGreaterThanEqual(0);
-			if (id < 0){
+			if (id < 0) {
 				clearFakeTimeout();
-				Ti.API.warn("Property " + data.propertyName+' did not accepted listener. This may depends on device.');
+				Ti.API.warn('Property ' + data.propertyName + ' did not accepted listener. This may depends on device.');
 				finish(testRun);
 			}
 		} catch(e) {

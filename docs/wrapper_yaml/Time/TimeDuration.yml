@@ -1,7 +1,7 @@
 ---
 name: Titanium.Tizen.Time.TimeDuration
 summary: The TimeDuration object that contains the length and its associated time unit.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 
