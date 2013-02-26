@@ -58,9 +58,11 @@ module.exports = new function() {
 				Ti.API.debug('onprogress event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
 				if (!wasPaused) {
 					wasPaused = true;
+					valueOf(testRun, Ti.Tizen.Download.pause).shouldBeFunction();
 					Ti.Tizen.Download.pause(downloadId);
 				}
 				if (wasResumed){
+					valueOf(testRun, Ti.Tizen.Download.abort).shouldBeFunction();
 					Ti.Tizen.Download.abort(downloadId);
 				}
 			},
@@ -68,6 +70,7 @@ module.exports = new function() {
 				Ti.API.debug('onpaused event. id=' + id);
 				clearFakeTimeout();
 				waitTimeout = setTimeout(function() {
+					valueOf(testRun, Ti.Tizen.Download.resume).shouldBeFunction();
 					Ti.Tizen.Download.resume(downloadId);
 					wasResumed = true;
 				}, 500);
@@ -96,12 +99,14 @@ module.exports = new function() {
 			destination: 'wgt-private-tmp', 
 			fileName: 'tmp' + (new Date().getTime())
 		});
+		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
 		downloadId = Ti.Tizen.Download.start(urlDownload, listener);
-		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0); //
+		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
 
 	this.failedDownloadTest = function(testRun) {
 		var localTestRun = testRun,
+			downloadId,
 			listener = {
 			onprogress: function(id, receivedSize, totalSize) {
 				reportError(localTestRun, 'onprogress may not be called in this test!');
@@ -126,13 +131,15 @@ module.exports = new function() {
 				url: 'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin', 
 				destination: 'wgt-private-tmp',
 				fileName: 'tmp' + (new Date().getTime())
-			}),
-			downloadId = Ti.Tizen.Download.start(urlDownload, listener);
+			});
+		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
+		downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
 
 	this.successDownloadTest = function(testRun) {
 		var localTestRun = testRun,
+			downloadId,
 			listener = {
 				onprogress: function(id, receivedSize, totalSize) {
 					Ti.API.debug('onprogress event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
@@ -164,7 +171,8 @@ module.exports = new function() {
 				url: 'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows', 
 				destination: 'wgt-private-tmp', 
 				fileName: 'tmp' + (new Date().getTime())
-			}),
+			});
+			valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
 			downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 			
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
