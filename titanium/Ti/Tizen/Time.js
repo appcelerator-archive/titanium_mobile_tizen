@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Time/TimeDuration'], function(lang, TimeDuration) {
-	return lang.setObject('Ti.Tizen.Time', {
+define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_/Evented'], function(lang, TZDate, TimeDuration, Evented) {
+	return lang.setObject('Ti.Tizen.Time', Evented, {
 
 		constants: {
 			TIME_DURATION_UNIT_MSECS: 'MSECS',
@@ -10,7 +10,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TimeDuration'], function(lang, TimeDuration)
 		},
 
 		getCurrentDateTime: function() {
-			return new (require('Ti/Tizen/Time/TZDate'))(tizen.time.getCurrentDateTime());
+			return new TZDate(tizen.time.getCurrentDateTime());
 		},
 
 		setCurrentDateTime: function(dt /*TZDate*/) {
@@ -38,7 +38,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TimeDuration'], function(lang, TimeDuration)
 		},
 
 		createTZDate: function(args) {
-			return new (require('Ti/Tizen/Time/TZDate'))(args);
+			return new TZDate(args);
 		},
 
 		createTimeDuration: function(args) {

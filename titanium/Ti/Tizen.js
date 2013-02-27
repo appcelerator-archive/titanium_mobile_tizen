@@ -1,5 +1,5 @@
-define(['Ti/_/lang'], function(lang) {
-	return lang.setObject('Ti.Tizen', {
+define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
+	return lang.setObject('Ti.Tizen', Evented, {
 
 		constants: {
 			FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',

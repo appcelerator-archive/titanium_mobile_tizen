@@ -1,6 +1,6 @@
-define(['Ti/_/lang'], function(lang) {
+define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
-	return lang.setObject('Ti.Tizen.Call', {
+	return lang.setObject('Ti.Tizen.Call', Evented, {
 
 		constants: {
 			history: {

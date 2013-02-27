@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Power.PowerStateRequest', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Ti.Tizen.Power.PowerStateRequest', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object PowerStateRequest]') {
 				this._obj = args;

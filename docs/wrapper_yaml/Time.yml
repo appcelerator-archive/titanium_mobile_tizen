@@ -26,17 +26,6 @@ description: |
 extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
-
-examples: 
-  - title: Simple Time Example
-    example:    |
-        var current_dt = tizen.time.getCurrentDateTime(),
-            is_leap = tizen.time.isLeapYear(current_dt.getFullYear());
-            
-        if (is_leap) {
-            console.log("This year is a leap year.");    
-        }
-
 methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
@@ -104,8 +93,8 @@ methods:
         Examples of string formats include: "h:m:s ap", "h:m:s".
     returns:
         summary: Time format according to the system's locale settings.
-        type: String        
-  
+        type: String
+        
   - name: isLeapYear
     summary: Returns true if the given year is a leap year.
     returns:
@@ -118,11 +107,11 @@ methods:
         example: |
             var current_dt = Ti.Tizen.Time.getCurrentDateTime(),
                 is_leap = Ti.Tizen.Time.isLeapYear(current_dt.getFullYear());
-
+                
             if (is_leap) {
                 console.log("This year is a leap year.");
             }
-
+    
   - name: createTZDate
     summary: Returns the Ti.Tizen.Time.TZDate.
     returns:
@@ -131,7 +120,7 @@ methods:
       - name: Options
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
-
+    
   - name: createTimeDuration
     summary: Returns the Ti.Tizen.Time.TimeDuration.
     returns:
@@ -168,7 +157,7 @@ properties:
     type: String
     permission: read-only
 
-# Pseudo-type
+# Pseudo-types
 ---
 name: TZDateUnit1
 summary: An object containing the various options for fetching the properties requested.
@@ -183,6 +172,7 @@ properties:
     summary: Predefined timezone.
     optional: true
 
+---
 name: TZDateUnit2
 summary: An object containing the various options for fetching the properties requested.
 properties:
@@ -222,7 +212,7 @@ properties:
     type: String
     summary: Predefined timezone.
     optional: true
-
+---
 name: TimeDurationUnit
 summary: An object containing the various options for fetching the properties requested.
 properties:
@@ -232,5 +222,6 @@ properties:
 
   - name: unit
     type: String
-    summary: Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+    summary: |
+        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
 

@@ -1,4 +1,4 @@
-define(['Ti/_/declare'], function(declare){
-	return declare('Ti.Tizen.AbstractFilter', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
+	return declare('Ti.Tizen.AbstractFilter', Evented, {
 	});
 });

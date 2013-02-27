@@ -1,4 +1,4 @@
-define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystemStorage', 'Ti/Tizen/WebAPIError'], function(lang, File, FileSystemStorage, WebAPIError) {
+define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystemStorage', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(lang, File, FileSystemStorage, WebAPIError, Evented) {
 	
 	function onFileSuccessCallback(object, onsuccess) { 
 		onsuccess.call(self, new File(object));
@@ -20,7 +20,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 		onsuccess.call(self, new FileSystemStorage(object));
 	};
 	
-	return lang.setObject('Ti.Tizen.Filesystem', {
+	return lang.setObject('Ti.Tizen.Filesystem', Evented, {
 
 		constants: {
 			FILE_MODE_R: 'r',

@@ -123,14 +123,14 @@ methods:
         type: Number
     examples:
       - example: |
-        var id = null;
-        function onSuccessCallback(battery) {
-           Titanium.API.info("New value for Battery level is " + battery.level);
-           if (id != null) // After receiving the first notification, we clear it
-               Titanium.Tizen.SystemInfo.removePropertyValueChangeListener(id);
-        }
-        
-        id = Titanium.Tizen.SystemInfo.addPropertyValueChangeListener("BATTERY", onSuccessCallback);
+            var id = null;
+            function onSuccessCallback(battery) {
+               Titanium.API.info("New value for Battery level is " + battery.level);
+               if (id != null) // After receiving the first notification, we clear it
+                   Titanium.Tizen.SystemInfo.removePropertyValueChangeListener(id);
+            }
+            
+            id = Titanium.Tizen.SystemInfo.addPropertyValueChangeListener("BATTERY", onSuccessCallback);
             
 properties:
 
