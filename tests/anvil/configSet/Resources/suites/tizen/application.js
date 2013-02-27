@@ -17,7 +17,7 @@ module.exports = new function() {
 		{name: 'apps_contexts', timeout: 5000},
 		{name: 'apps_contexts_harness', timeout: 5000},
 		{name: 'apps_contexts_no_params', timeout: 5000},
-		{name: 'calc_launch', timeout: 5000},
+		{name: 'calc_launch', timeout: 8000},
 		{name: 'launch_not_exist', timeout: 5000},
 		{name: 'kill_not_exist', timeout: 5000}
 		//There are tests but they could launch stand alone.
