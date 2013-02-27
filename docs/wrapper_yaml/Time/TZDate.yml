@@ -14,9 +14,6 @@ methods:
     
   - name: setDate
     summary: Sets the day of the month (from 1-31).
-    returns:
-      - summary: 
-        type: 
     parameters:
       - name: date
         summary: Date to set.
