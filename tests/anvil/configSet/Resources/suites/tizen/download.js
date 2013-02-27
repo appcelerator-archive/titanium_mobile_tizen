@@ -88,6 +88,7 @@ module.exports = new function() {
 				finish(localTestRun);
 			},
 			onfailed: function(id, error) {
+				valueOf(localTestRun, error).shouldBe('[object TiTizenWebAPIError]');
 				Ti.API.debug('onfailed event. id=' + id +', error=' + JSON.stringify(error));
 				clearFakeTimeout();
 				reportError(localTestRun, JSON.stringify(error));
@@ -122,7 +123,8 @@ module.exports = new function() {
 			},
 			onfailed: function(id, error) {
 				Ti.API.debug('onfailed event. id=' + id + ', error=' + JSON.stringify(error));
-				valueOf(localTestRun, error).shouldNotBeNull(); //
+				valueOf(localTestRun, error).shouldBe('[object TiTizenWebAPIError]');
+				valueOf(localTestRun, error).shouldNotBeNull();
 				finish(localTestRun);
 			}
 		};
@@ -163,6 +165,7 @@ module.exports = new function() {
 				},
 				onfailed: function(id, error) {
 					Ti.API.debug('onfailed event. id=' + id + ', error=' + JSON.stringify(error));
+					valueOf(localTestRun, error).shouldBe('[object TiTizenWebAPIError]');
 					reportError(localTestRun, JSON.stringify(error));
 				}
 			},
