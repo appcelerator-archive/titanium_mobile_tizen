@@ -42,10 +42,18 @@ methods:
     summary: Returns the current date / time.
     returns:
         type: Titanium.Tizen.Time.TZDate
+    examples:
+        example: |
+            var current_dt = Ti.Tizen.Time.getCurrentDateTime();
+            Ti.API.info("current date / time is " + current_dt.toLocaleString());
+
   - name: getLocalTimezone
     summary: Returns identifier of the local system timezone.
     returns:
         type: String
+    examples:
+        example: |
+            Ti.API.info("The local time zone is " + Ti.Tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
     summary: Returns synchronously the identifiers of the timezones supported by the device.
@@ -56,6 +64,10 @@ methods:
         For example, 'Europe/Berlin', 'America/Argentina/Buenos_Aires'.
     returns:
         type: String[]
+    examples:
+        example: |
+            var tzids = Ti.Tizen.Time.getAvailableTimezones();
+            Ti.API.info("The device supports " + tzids.length + " time zones.");
         
   - name: getDateFormat
     summary: Returns the date format according to the system's locale settings.
@@ -102,13 +114,32 @@ methods:
       - name: year
         summary: Year to check.
         type: Number 
-    example:  |
-        var current_dt = tizen.time.getCurrentDateTime(),
-            is_leap = tizen.time.isLeapYear(current_dt.getFullYear());
-            
-        if (is_leap) {
-            console.log("This year is a leap year.");
-        }    
+    examples:
+        example: |
+            var current_dt = Ti.Tizen.Time.getCurrentDateTime(),
+                is_leap = Ti.Tizen.Time.isLeapYear(current_dt.getFullYear());
+
+            if (is_leap) {
+                console.log("This year is a leap year.");
+            }
+
+  - name: createTZDate
+    summary: Returns the Ti.Tizen.Time.TZDate.
+    returns:
+        type: Ti.Tizen.Time.TZDate
+    parameters:
+      - name: Options
+        summary: The TZDate object represents information regarding a given date.
+        type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
+
+  - name: createTimeDuration
+    summary: Returns the Ti.Tizen.Time.TimeDuration.
+    returns:
+        type: Ti.Tizen.Time.TimeDuration
+    parameters:
+      - name: TimeDurationUnit
+        summary: The TimeDuration object that contains the length and its associated time unit.
+        type: Dictionary<TimeDurationUnit>
     
 properties:
 
@@ -136,3 +167,70 @@ properties:
     summary: DAYS - Indicates a duration in days
     type: String
     permission: read-only
+
+# Pseudo-type
+---
+name: TZDateUnit1
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: datetime
+    type: Date
+    summary: Time format according to the system's locale settings.
+    optional: true
+
+  - name: timezone
+    type: String
+    summary: Predefined timezone.
+    optional: true
+
+name: TZDateUnit2
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: year
+    type: Number
+    summary: Year to check.
+
+  - name: month
+    type: Number
+    summary: Month to check.
+
+  - name: day
+    type: Number
+    summary: Day to check.
+
+  - name: hours
+    type: Number
+    summary: Hours to check.
+    optional: true
+
+  - name: minutes
+    type: Number
+    summary: Minutes to check.
+    optional: true
+
+  - name: seconds
+    type: Number
+    summary: Seconds to check.
+    optional: true
+
+  - name: milliseconds
+    type: Number
+    summary: Milliseconds to check.
+    optional: true
+
+  - name: timezone
+    type: String
+    summary: Predefined timezone.
+    optional: true
+
+name: TimeDurationUnit
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: length
+    type: Number
+    summary: Count of items.
+
+  - name: unit
+    type: String
+    summary: Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+

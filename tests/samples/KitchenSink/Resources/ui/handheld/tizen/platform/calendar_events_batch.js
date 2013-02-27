@@ -1,16 +1,16 @@
 function events_batch(args) {
-	const ADD_BATCH = 1,
-		  UPDATE_BATCH = 2,
-		  DELETE_BATCH = 3;
-		  
+	var  ADD_BATCH = 1,
+		 UPDATE_BATCH = 2,
+		 DELETE_BATCH = 3;
+
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = tizen.calendar.getDefaultCalendar("EVENT"),
+		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
 		data = [
-			{title: 'Add three events', test: ADD_BATCH},
-			{title: 'Update last three events', test: UPDATE_BATCH},
-			{title: 'Delete last three events', test: DELETE_BATCH}
+			{ title: 'Add three events', test: ADD_BATCH },
+			{ title: 'Update last three events', test: UPDATE_BATCH },
+			{ title: 'Delete last three events', test: DELETE_BATCH }
 		],
 		tableview = Ti.UI.createTableView({
 			rowHeight: 40,
@@ -30,10 +30,10 @@ function events_batch(args) {
 			top: 10,
 			borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED
 		});
-	
+
 	self.add(summaryLabel);
 	self.add(summaryInput);
-	
+
 	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {
 			switch (e.rowData.test) {
@@ -45,73 +45,79 @@ function events_batch(args) {
 					break;
 				case DELETE_BATCH:
 					deleteBatch();
-					break;
 			}
 		}
 	});
-	
+
 	tableview.data = data;
-	
+
 	self.add(tableview);
-		
+
 	function addBatch() {
 		var value = summaryInput.value.trim(),
-			eventsArr = [];
+			eventsArr = [],
+			startDate = Ti.Tizen.Time.getCurrentDateTime(),
+			duration = Ti.Tizen.Time.createTimeDuration({
+				length: 1, 
+				unit: 'HOURS'
+			});
+
 		if (!value) {
 			alert('Please enter summary');
 			return ;
 		}
-		
-		eventsArr[0] = new tizen.CalendarEvent({
+
+		eventsArr[0] = Ti.Tizen.Calendar.createCalendarEvent({
 			summary : value,
-			startDate : tizen.time.getCurrentDateTime(),
-			duration : new tizen.TimeDuration(1, "HOURS"),
-		});	
+			startDate : startDate,
+			duration : duration
+		});
+
 		eventsArr[1] = eventsArr[0].clone();
 		eventsArr[1].summary += ' copy 1';
 		eventsArr[2] = eventsArr[0].clone();
 		eventsArr[2].summary += ' copy 2';
-		
-		calendar.addBatch(eventsArr, function(){
-			summaryInput.value = "";
+
+		calendar.addBatch(eventsArr, function() {
+			summaryInput.value = '';
 			alert('Events were added successfully');
-		}, onError);	
-		
+		}, onError);
+
 	}
-	
+
 	function updateBatch() {
 		var value = summaryInput.value.trim();
 		if (!value) {
 			alert('Please enter summary');
 			return ;
-		}		
-		calendar.find(function(events){
+		}
+		calendar.find(function(events) {
 			var eventsArr = [],
 				i = events.length - 1,
 				j = 0;
-				
+
 			if (i < 2) {
 				alert('You should have at least three events. Now you have ' + events.length + ' events');
 				return ;
 			}
-							
+
 			for (; i >= 0, j < 3; i--, j++) {
 				events[i].summary = value;
 				eventsArr.push(events[i]);
 			}
-			calendar.updateBatch(eventsArr, function(){
-				summaryInput.value = "";
+			calendar.updateBatch(eventsArr, function() {
+				summaryInput.value = '';
 				alert('Events were updated successfully');
 			}, onError)
 		}, onError)	
 	}
-	
+
 	function deleteBatch() {
-		calendar.find(function(events){
+		calendar.find(function(events) {
 			var eventsArr = [],
 				i = events.length - 1,
 				j = 0;
-			
+
 			if (i < 2) {
 				alert('You should have at least three events. Now you have ' + events.length + ' events');
 				return ;
@@ -121,20 +127,19 @@ function events_batch(args) {
 				eventsArr.push(events[i].id);
 			}
 			try {
-				alert(eventsArr.length);
-				calendar.removeBatch(eventsArr, function(){
+				calendar.removeBatch(eventsArr, function() {
 					alert('Events were removed successfully');
 				}, onError);
 			} catch (err) {
 				alert('Exception: ' + err.message);
 			}
-		}, onError)			
+		}, onError)
 	}
-	
+
 	function onError(err) {
 		alert('Error: ' + err.message);
 	}
-	
-	return self;	
+
+	return self;
 }
 module.exports = events_batch;

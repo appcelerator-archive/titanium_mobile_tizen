@@ -59,7 +59,7 @@ properties:
     permission: read-only
 
   - name: isTrusted
-    summary:The value is necessary to check if the local Bluetooth adapter recognizes the Bluetooth device as a trusted device. 
+    summary: The value is necessary to check if the local Bluetooth adapter recognizes the Bluetooth device as a trusted device. 
     type: Boolean
     permission: read-only
 

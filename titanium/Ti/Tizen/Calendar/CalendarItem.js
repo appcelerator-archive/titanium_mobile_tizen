@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId'], function(declare, CalendarEventId) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/Time/TZDate'], function(declare, CalendarEventId, TimeDuration, TZDate) {
 	return declare('Ti.Tizen.Calendar.CalendarItem', null, {
 		constructor: function(args) {
 			this._obj = args;
@@ -44,18 +44,28 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId'], function(declare, 
 			},
 			startDate: {
 				get: function() {
-					return this._obj.startDate;
+					return new TZDate(this._obj.startDate);
 				},
 				set: function(value) {
-					this._obj.startDate = value;
+					if (value instanceof TZDate) {
+						this._obj.startDate = value._obj;					
+					} else {
+						this._obj.startDate = value;
+					}
 				}
 			},
 			duration: {
 				get: function() {
-					return this._obj.duration;
+					return new TimeDuration(this._obj.duration);
 				},
 				set: function(value) {
-					this._obj.duration = value;
+					if (value == '[object TimeDuration]') {
+						this._obj.duration = value;
+					} else if (value == '[object TiTizenTimeTimeDuration]') {
+						this._obj.duration = value._obj;
+					} else {
+						Ti.API.error('Error when set duration.');
+					}	
 				}
 			},
 			location: {
@@ -137,7 +147,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId'], function(declare, 
 		},
 
 		clone: function() {
-			return this._obj.clone();
+			return new (require('Ti/Tizen/Calendar/CalendarEvent'))(this._obj.clone());
 		}
 	});
 });

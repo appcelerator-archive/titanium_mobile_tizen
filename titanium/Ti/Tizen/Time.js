@@ -10,7 +10,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_
 		},
 
 		getCurrentDateTime: function() {
-			return this._wrap(tizen.time.getCurrentDateTime());
+			return new (require('Ti/Tizen/Time/TZDate'))(tizen.time.getCurrentDateTime());
 		},
 
 		setCurrentDateTime: function(dt /*TZDate*/) {
@@ -38,7 +38,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_
 		},
 
 		createTZDate: function(args) {
-			return new TZDate(args);
+			return new (require('Ti/Tizen/Time/TZDate'))(args);
 		},
 
 		createTimeDuration: function(args) {
