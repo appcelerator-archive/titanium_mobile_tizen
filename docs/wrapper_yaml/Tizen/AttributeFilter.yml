@@ -1,0 +1,48 @@
+---
+name: Titanium.Tizen.AttributeFilter
+summary: AttributeFilter represents a filter based on an object attribute. 
+description: |
+    It represents the query statement for the specified value of the matchValue by the rule of matchFlag.
+    If no matchValue is defined, the filter will match all objects that have the attribute defined (same as the "EXISTS" filter works), 
+    otherwise, it will only match objects which have an attribute that matches the given value.
+platforms: [tizen]
+extends: Titanium.Tizen.AbstractFilter
+
+properties:
+  - name: attributeName
+    summary: The name of the object attribute used for filtering. 
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. For attributes of complex type, 
+        use fully-qualified names (such as 'organizations.role' to filter on a contact's role in an organization).
+        For attributes of an array type, the filter will match if any value in the array matches.
+    type: String
+
+  - name: matchFlag
+    summary: The match flag used for attribute-based filtering. 
+    description: "By default, this attribute is set to FILTER_MUCH_FLAG_EXACTLY." 
+    type: String
+    default: Titanium.Tizen.FILTER_MUCH_FLAG_EXACTLY
+
+  - name: matchValue
+    summary: The value used for matching. 
+    description: |
+        The filter will match if the attribute value matches the given matchValue.
+        This value is not used if the matchFlag is set to "FILTER_MUCH_FLAG_EXISTS". By default, this attribute is set to null.
+    type: Object
+    default: null
+
+examples:
+  - title: This example shows how to get contacts form address book with using filter
+    example: |
+        // Define success callback
+        function successCallback(contacts) {
+            console.log(contacts.length + " contacts found.");
+        }
+        // Define error callback
+        function errorCallback(error) {
+            console.log("An error occurred: " + error.message);
+        }
+        // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
+        var filter = Titanium.Tizen.AttributeFilter({"name.firstName", Titanium.Tizen.FILTER_MUCH_FLAG_CONTAINS, "Chris"});
+        // Send request on contact address book.
+        Titanium.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
