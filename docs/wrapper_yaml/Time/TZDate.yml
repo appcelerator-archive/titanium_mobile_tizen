@@ -303,6 +303,10 @@ methods:
       - name: duration
         summary:  TimeDuration to add.
         type: Titanium.Tizen.Time.TimeDuration
+    examples:
+        example: |
+            now = Ti.Tizen.Time.getCurrentDateTime(); //TZDate
+            in_one_week = now.addDuration(Ti.Tizen.Time.createTimeDuration({length: 7, unit: "DAYS"})); //TZDate
 
   - name: toLocaleTimeString
     summary: Returns the date portion of a TZDate object as a string, using locale conventions.
@@ -352,6 +356,12 @@ methods:
     returns:
         summary: Offset from UTC in seconds.
         type: Number
+    examples:
+        example: |
+            var offset = Ti.Tizen.Time.getCurrentDateTime().secondsFromUTC();
+            var myDate = new Date();
+            var exp_offset = myDate.getTimezoneOffset()*60;
+            //offset is equals to exp_offset.
     
   - name: isDST
     summary: Indicates if daylight savings are in effect for this TZDate.
