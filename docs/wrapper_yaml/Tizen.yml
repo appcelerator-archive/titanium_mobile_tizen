@@ -11,11 +11,22 @@ methods:
     returns: 
         type: Titanium.Tizen.AbstractFilter
     parameters: 
-
-      - name: parameterers
+      - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
-        type: Dictionary
-        optional: true 
+        type: Dictionary<AttributeFilterUnit>
+
+    examples:
+        -example: |
+            function successCallback(contacts) {
+                console.log(contacts.length + " contacts found.");
+            }
+            function errorCallback(error) {
+                console.log("An error occurred: " + error.message);
+            }
+            var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                         matchFlag: "CONTAINS",
+                                                         matchValue: "Chris"});
+            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
   - name: createAttributeRangeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.AttributeRangeFilter>.
@@ -23,10 +34,30 @@ methods:
         type: Titanium.Tizen.AbstractFilter
     parameters: 
 
-      - name: parameterers
+      - name: Options
         summary: Dictionary with initial arguments for AttributeRangeFilter.
-        type: Dictionary
-        optional: true
+        type: Dictionary<AttributeRangeFilterUnit>
+
+    examples:
+        -example: |
+            function successCallback(events) {
+                console.log(events.length + " events today.");
+            }
+            function errorCallback(error) {
+                console.log("An error occurred: " + error.message);
+            }
+            // Create an attribute range filter based on event start date: "All events occurring today".
+            var now_dt = Ti.Tizen.Time.getCurrentDateTime();
+            var today_begin = Ti.Tizen.Time.createTZDate({year: now_dt.getFullYear(),
+                                                          month: now_dt.getMonth(),
+                                                          day: now_dt.getDate()});
+            var today_end = today_begin.addDuration(Ti.Tizen.createTimeDuration({length: 1, 
+                                                                                 unit: "DAYS"}));
+            var filter = Ti.Tizen.createAttributeRangeFilter({attributeName: "startDate",
+                                                              initialValue: today_begin,
+                                                              endValue: today_end});
+            // Send a search request to default event calendar.
+            Ti.Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
 
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.CompositeFilter>.
@@ -34,80 +65,192 @@ methods:
         type: Titanium.Tizen.AbstractFilter
     parameters: 
 
-      - name: parameterers
+      - name: Options
         summary: Dictionary with initial arguments for CompositeFilter.
-        type: Dictionary
-        optional: true
+        type: Dictionary<CompositeFilterUnit>
 
+    examples:
+        -example: |
+            function successCallback(contacts) {
+                console.log(contacts.length + " contacts found.");
+            }
+            function errorCallback(error) {
+                console.log("An error occurred: " + error.message);
+            }
+            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
+            var firstNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                                  matchFlag: "CONTAINS",
+                                                                  matchValue: "Chris"});
+            // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
+            var lastNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.lastName",
+                                                                 matchFlag: "EXACTLY",
+                                                                 matchValue: "Smith"});
+            // Create a filter based on the intersection of these two filter:
+            // "First name should contain 'Chris' AND last name should be 'Smith'".
+            var filter = Ti.Tizen.createCompositeFilter({type: "INTERSECTION",
+                                                         filters: [firstNameFilter, lastNameFilter]});
+            // Send request on contact address book.
+            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
   - name: createSortMode
     summary: Creates and returns an instance of <Titanium.Tizen.SortMode>.
     returns: 
         type: Titanium.Tizen.SortMode
     parameters: 
 
-      - name: parameterers
+      - name: Options
         summary: Dictionary with initial arguments for SortMode.
-        type: Dictionary
-        optional: true
+        type: Dictionary<SortModeUnit>
 
+    examples:
+        -example: |
+            function successCallback(contacts) {
+                console.log(contacts.length + " contacts found.");
+            }
+            function errorCallback(error) {
+                console.log("An error occurred: " + error.message);
+            }
+            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
+            var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                         matchFlag: "CONTAINS",
+                                                         matchValue: "Chris"});
+            // Sort by first name, ascending
+            var sortMode = Ti.Tizen.createSortMode({attributeName: "name.firstName",
+                                                    order: "ASC"});
+            // Send request on contact address book.
+            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
   - name: createSimpleCoordinates
     summary: Creates and returns an instance of <Titanium.Tizen.SimpleCoordinates>.
     returns: 
         type: Titanium.Tizen.SimpleCoordinates
     parameters: 
 
-      - name: parameterers
+      - name: Options
         summary: Dictionary with initial arguments for SimpleCoordinates.
-        type: Dictionary
-        optional: true
+        type: Dictionary<SimpleCoordinatesUnit>
 
-properties: 
+properties:
   - name: FILTER_MUCH_FLAG_EXACTLY
     summary: '"EXACTLY" Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.'
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_FULLSTRING
-    summary: "FULLSTRING" - String-based matching. Matches the whole string (case insensitive).
+    summary: '"FULLSTRING" - String-based matching. Matches the whole string (case insensitive).'
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_CONTAINS
-    summary: "CONTAINS" - Indicates the attribute value should contain the given string (strings only - case insensitive).
+    summary: '"CONTAINS" - Indicates the attribute value should contain the given string (strings only - case insensitive).'
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_STARTSWITH
-    summary: "STARTSWITH" - Indicates the attribute value should start with the given string (strings only - case insensitive). 
+    summary: '"STARTSWITH" - Indicates the attribute value should start with the given string (strings only - case insensitive).'
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_ENDSWITH
-    summary:"ENDSWITH" - Indicates the attribute value should end with the given string (strings only - case insensitive). 
+    summary: '"ENDSWITH" - Indicates the attribute value should end with the given string (strings only - case insensitive).'
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_EXISTS
-    summary:"EXISTS" - Indicates the filter should match if the attribute exists.
+    summary: '"EXISTS" - Indicates the filter should match if the attribute exists.'
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_ASC
-    summary: "ASC" - Indicates the sorting order is ascending 
+    summary: '"ASC" - Indicates the sorting order is ascending'
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_DESC
-    summary:"DESC" - Indicates the sorting order is descending 
+    summary: '"DESC" - Indicates the sorting order is descending'
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_UNION
-    summary:"UNION" - A union of filters ("OR" operator) 
+    summary: '"UNION" - A union of filters ("OR" operator)'
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_INTERSECTION
-    summary: "INTERSECTION" - lAn intersection of filters ("AND" operator) 
+    summary: '"INTERSECTION" - An intersection of filters ("AND" operator)'
     type: String
     permission: read-only
+    
+# Pseudo-type
+---
+name: AbstractFilter
+summary: Common interface used by different types of object filters.
+platforms: [tizen]
+
+name: AttributeFilterUnit
+summary: Represents a filter based on an object attribute.
+platforms: [tizen]
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for filtering.
+             This is the name of the object attribute exactly as it is defined in the object's interface. For attributes of complex type, use fully-qualified names (such as 'organizations.role' to filter on a contact's role in an organization).
+             For attributes of an array type, the filter will match if any value in the array matches.
+  - name: matchFlag
+    type: String
+    summary: Used for attribute-based filtering: "EXACTLY", "FULLSTRING", "CONTAINS", "STARTSWITH", "ENDSWITH", "EXISTS".
+  - name: matchValue
+    type: any
+    summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
+    optional: true
+
+name: AttributeRangeFilterUnit
+summary: Represents a filter based on an object attribute which has values that are within a particular range.
+platforms: [tizen]
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for filtering.
+             This is the name of the object attribute exactly as it is defined in the object's interface. For attributes of complex type, use fully-qualified names (such as 'organizations.role' to filter on a contact's role in an organization).
+             For attributes of an array type, the filter will match if any value in the array matches.
+  - name: initialValue
+    type: any
+    summary: Objects with an attribute that is greater than or equal to initialValue will match. By default, this attribute is set to null.
+    optional: true
+  - name: endValue
+    type: any
+    summary: Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
+    optional: true
+ 
+name: CompositeFilterUnit
+summary: Represents a set of filters.
+platforms: [tizen]
+properties:
+  - name: type
+    type: String
+    summary: The composite filter type: "UNION", "INTERSECTION".
+  - name: filters
+    type: AbstractFilter
+    summary: The list of filters in the composite filter.
+    optional: true
+    
+name: SortModeUnit
+summary: Common interface used for sorting of queried data.
+platforms: [tizen]
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for sorting.
+  - name: order
+    type: String
+    summary: The type of the sorting: "ASC", "DESC".
+    optional: true
+
+name: SimpleCoordinatesUnit
+summary:  Represents a point (latitude and longitude) in map coordinate system.
+platforms: [tizen]
+properties:
+  - name: latitude
+    type: Number
+    summary: Latitude are of the WGS84 datum.
+  - name: longitude
+    type: Number
+    summary: Longitude are of the WGS84 datum.

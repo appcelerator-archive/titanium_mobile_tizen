@@ -2,13 +2,13 @@
 name: Titanium.Tizen.Filesystem
 summary: This Module provides  provides access to a device's filesystem.
 description: |
-    The filesystem is represented as an abstract collection of disjointed filesystem virtual root locations, 
-    each corresponding to a specific location in the device filesystem. The filesystem API exposes the hierarchies 
+    The filesystem is represented as an abstract collection of disjointed filesystem virtual root locations,
+    each corresponding to a specific location in the device filesystem. The filesystem API exposes the hierarchies
     below these root locations as a single virtual filesystem, but provides no access to other parts of the device filesystem.
-    
-    Each virtual root has a string name. Each file or directory within the virtual filesystem is addressed using a fully-qualified path of the form: 
+
+    Each virtual root has a string name. Each file or directory within the virtual filesystem is addressed using a fully-qualified path of the form:
     <root name>/<path> where <rootname> is the name of the virtual root and <path> is the path to the file or directory relative to that root.
-    
+
     The following virtual roots MUST be supported:
         - images: the images location
         - videos: the videos location
@@ -19,12 +19,12 @@ description: |
         - wgt-private: the widget private storage
         - wgt-private-tmp: the widget private volatile storage area
     To access specific locations from those specified above, a file handle must be retrieved using the filesystem.resolve call.
-    
-    A file handle represents either a file or a directory. For a file, the isFile attribute is true. 
-    For a directory, the isDirectory attribute is true. A file can be opened for read and write operations, using a FileStream handle. 
-    A list of files and sub-directories can be obtained from a directory and a resolve method exists to resolve files or sub-directories 
+
+    A file handle represents either a file or a directory. For a file, the isFile attribute is true.
+    For a directory, the isDirectory attribute is true. A file can be opened for read and write operations, using a FileStream handle.
+    A list of files and sub-directories can be obtained from a directory and a resolve method exists to resolve files or sub-directories
     more conveniently than processing directory listings.
-    
+
     The implementation MUST support the use of the following characters in file names:
         - Letters (azAZ)
         - Numbers (0-9)
@@ -32,67 +32,67 @@ description: |
         - Underscores ("_")
         - Hyphens ("-")
         - Periods (".")
-    
+
     The implementation MAY support additional characters in file names, depending on platform support.
-    The implementation MAY forbid the use of additional characters in file names, depending on the platform. 
+    The implementation MAY forbid the use of additional characters in file names, depending on the platform.
     The use of the path separator "/" in file names MUST NOT be allowed. The "/" character is used as the (path) component separator.
-    
-    Some other file name and path characteristics are platform-dependent, for example, maximum path length, file name length, 
-    case sensitivity, additional character support, etc. Therefore, it is recommended that you avoid any dependency on aspects 
+
+    Some other file name and path characteristics are platform-dependent, for example, maximum path length, file name length,
+    case sensitivity, additional character support, etc. Therefore, it is recommended that you avoid any dependency on aspects
     that cannot be supported across many platforms.
-        
+
     When a path is used to interact with the underlying filesystem, the encoding used for the file path SHOULD be the platform default.
-            
-    The `Filesystem` module is a thin wrapper on the Tizen `FileSystemManager` class.	
-    
+
+    The `Filesystem` module is a thin wrapper on the Tizen `FileSystemManager` class.
+
     See also:
-  
+
     *   [Tizen Filesystem API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Ffilesystem.html)
-    
+
     *   [Tizen  Filesystem Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fio_guide%2Ffilesystem.htm)
-    
+
 
 extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
 
-examples: 
+examples:
   - title: Code example
     example:    |
         var documentsDir;
-        function onsuccess(files) {
-            for(var i = 0; i < files.length; i++) {
-                console.log("File Name is " + files[i].name); // displays file name
-            }
-            
-            var testFile = documentsDir.createFile("test.txt");
-            
-            if (testFile != null) {
+         function onsuccess(files) {
+           for(var i = 0; i < files.length; i++) {
+             Ti.API.info("File Name is " + files[i].name); // displays file name
+           }
+
+           var testFile = documentsDir.createFile("test.txt");
+
+           if (testFile != null) {
              testFile.openStream(
                "w",
                function(fs){
                  fs.write("HelloWorld");
                  fs.close();
                }, function(e){
-                 console.log("Error " + e.message);
+                 Ti.API.info("Error " + e.message);
                }, "UTF-8"
              );
-            }
-        }
-            
-        function onerror(error) {
-            console.log("The error " + error.message + " occurred when listing the files in the selected folder");
-        }
-            
-        tizen.filesystem.resolve(
-            'documents', 
-            function(dir){
-                documentsDir = dir;
-                dir.listFiles(onsuccess,onerror);
-            }, function(e){
-                console.log("Error" + e.message);
-            }, "rw"
-        );
+           }
+         }
+
+         function onerror(error) {
+           Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+         }
+
+         Ti.Tizen.Filesystem.resolve(
+           'documents',
+           function(dir){
+             documentsDir = dir;
+             dir.listFiles(onsuccess,onerror);
+           }, function(e){
+             Ti.API.info("Error" + e.message);
+           }, "rw"
+         );
 methods:
   - name: resolve
     summary: Resolves a location to a file handle.
@@ -107,19 +107,19 @@ methods:
             - wgt-package: Describes the read-only folder in which the content of the widget file was extracted to.
             - wgt-private: Describes a private folder in which a widget can store information. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT access the information stored there.
             - wgt-private-tmp: Describes a temporary, private folder in which a widget can store data that is available during one widget execution cycle. Content of this folder MAY be removed from this directory when the widget is closed or the Web Runtime is restarted. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT have access to it.
-        
-        The mode parameter specifies whether the resulting File object has read-only access ("r" access), 
-        read and write access ("rw" access), append access ("a" access), or write access ("w" access) to the root location containing directory tree. 
-        Permission for the requested access is obtained from the security framework. 
-        Once the resulting File object has access, access is inherited by any other File objects derived 
+
+        The mode parameter specifies whether the resulting File object has read-only access ("r" access),
+        read and write access ("rw" access), append access ("a" access), or write access ("w" access) to the root location containing directory tree.
+        Permission for the requested access is obtained from the security framework.
+        Once the resulting File object has access, access is inherited by any other File objects derived
         from this instance without any further reference to the security framework, as noted in descriptions of certain methods of File.
-            
+
         The ErrorCallback is launched with these error types:
             - InvalidValuesError: If any of the input parameters contain an invalid value. For example, the mode is not valid (that is not "r", "rw", "a", or "w").
             - NotFoundError: The location input argument does not correspond to a valid location.
             - UnknownError: In any other error case.
     parameters:
-      - name: location 
+      - name: location
         summary: Location to resolve. Must be a virtual path, prefixed by a valid root.
         type: String
       - name: onsuccess
@@ -127,43 +127,60 @@ methods:
         type: Callback<Titanium.Tizen.Filesystem.File>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<WebAPIError>        
+        type: Callback<WebAPIError>
         optional: true
       - name: mode
         summary: |
-            Optional string of value "r" to obtain read-only access, 
-            "rw" to obtain read and write access, "a" to obtain append access, 
-            or "w" to obtain write access to all files and directories that can be reached from the File object passed to onsuccess. 
+            Optional string of value "r" to obtain read-only access,
+            "rw" to obtain read and write access, "a" to obtain append access,
+            or "w" to obtain write access to all files and directories that can be reached from the File object passed to onsuccess.
             Defaults to "rw" if absent or null.
         type: String
         optional: true
-   
+    examples:
+        -example: |
+           Ti.Tizen.Filesystem.resolve(
+              'images',
+              function(dir) {
+                 Ti.API.info("Mount point Name is " +  dir.path);
+              }, function(e) {
+                 Ti.API.info("Error: " + e.message);
+              }, "r"
+           );
   - name: getStorage
     summary: Gets information about a storage based on its label.Gets information about a storage based on its label.
     description: |
         Get storage information based on its label (example: "MyThumbDrive", "InternalFlash"). The onsuccess will receive as input argument the data structure containing additional information about the drive.
-        
+
         The ErrorCallback is launched with these error types:
             - NotFoundError: No drive was found with the given label.
             - InvalidValuesError: If any of the input parameters contain an invalid value.
             - UnknownError: In any other error case.
     parameters:
-      - name: label 
+      - name: label
         summary: Storage label.
         type: String
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
         type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
       - name: onerror
-        summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        summary: Called if an error occurred.
+        type: Callback<WebAPIError>
         optional: true
-        
+    examples:
+        example: |
+            function onStorage(storage) {
+               // Do something
+            }
+            function onStorageError(e) {
+               Ti.API.info("Storage not found!" + e.message);
+            }
+            Ti.Tizen.Filesystem.getStorage("MMC", onStorage, onStorageError);
   - name: listStorages
     summary: Lists the available storages on the device.
     description: |
         Get the list of available internal and external storage devices. The onsuccess will receive as input argument a list of the data structure containing additional information about each drive found.
-        
+
         The ErrorCallback is launched with these error types:
             - InvalidValuesError: If any of the input parameters contain an invalid value.
             - UnknownError: In any other error case.
@@ -172,20 +189,30 @@ methods:
         summary: Called when the list of storage is available, passing the storage list to the callback.
         type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
       - name: onerror
-        summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        summary: Called if an error occurred.
+        type: Callback<WebAPIError>
         optional: true
-        
+    examples:
+        example: |
+            function alertForCorruptedRemovableDrives(storages) {
+                 for (var i = 0; i < storages.length; i++) {
+                     if (storages[i].type != "EXTERNAL")
+                         continue;
+                     if (storages[i].state == "UNMOUNTABLE")
+                         Ti.API.info("External drive " + storages[i].label + " is corrupted.");
+                 }
+             }
+             Ti.Tizen.Filesystem.listStorages(alertForCorruptedRemovableDrives);
   - name: addStorageStateChangeListener
     summary: Subscribes to notifications when a storage state changes.
     description: |
         The most common usage for this method would be to watch notifications of additions and removals of external storages.
-        
-        When executed, the implementation MUST immediately return a subscription identifier that identifies the watch operation. 
-        After returning the identifier, the watch operation is started asynchronously. The onsuccess MUST be invoked every time a storage state changes. 
+
+        When executed, the implementation MUST immediately return a subscription identifier that identifies the watch operation.
+        After returning the identifier, the watch operation is started asynchronously. The onsuccess MUST be invoked every time a storage state changes.
         If the attempt fails, the onerror (if present) MUST be invoked with the relevant error type.
-        
-        The watch operation MUST continue until the removeStorageStateChangeListener() method is called with the corresponding subscription 
+
+        The watch operation MUST continue until the removeStorageStateChangeListener() method is called with the corresponding subscription
     returns:
         summary: The identifier used to clear the watch subscription.
         type: Number
@@ -195,19 +222,37 @@ methods:
         type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
       - name: onerror
         summary: To be invoked in case of error during the watch process.
-        type: Callback<WebAPIError>        
+        type: Callback<WebAPIError>
         optional: true
-        
+    examples:
+        example: |
+            var watchID;
+            function onStorageStateChanged(storage) {
+                if (storage.state == "MOUNTED")
+                    Ti.API.info("Storage " + storage.label + " was added!");
+                }
+
+            watchID = Ti.Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
   - name: removeStorageStateChangeListener
     summary: Unsubscribes a storage watch operation.
     description: |
-        If the watchId argument is valid and corresponds to a subscription already in place, 
+        If the watchId argument is valid and corresponds to a subscription already in place,
         the watch process MUST immediately stop and no further callbacks MUST be invoked.
     parameters:
       - name: watchId
         summary:  Subscription Identifier.
         type: Number
-            
+    examples:
+        example: |
+            var watchID;
+             function onStorageStateChanged(storage) {
+                 if (storage.state == "MOUNTED")
+                     Ti.API.info("Storage " + storage.label + " was added!");
+                 Ti.Tizen.filesystem.removeStorageStateChangeListener(watchID);
+             }
+
+             watchID = Ti.Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
+
 properties:
 
   - name: FILE_MODE_R
@@ -229,32 +274,32 @@ properties:
     summary: Value "a" is for appending.
     type: STRING
     permission: read-only
-    
+
   - name: FILE_SYSTEM_STORAGE_TYPE_INTERNAL
     summary: INTERNAL - Internal storage is storage that cannot be removed, such as a flash memory.
     type: STRING
-    permission: read-only    
-    
+    permission: read-only
+
   - name: FILE_SYSTEM_STORAGE_TYPE_EXTERNAL
     summary: EXTERNAL - External storage is removable storage, such as a USB drive or memory cards.
     type: STRING
-    permission: read-only    
-    
+    permission: read-only
+
   - name: FILE_SYSTEM_STORAGE_STATE_MOUNTED
     summary: MOUNTED - The device is mounted and can be browsed.
     type: STRING
-    permission: read-only    
-    
+    permission: read-only
+
   - name: FILE_SYSTEM_STORAGE_STATE_REMOVED
     summary: REMOVED - The device was removed. This states only applies to external drives.
     type: STRING
-    permission: read-only    
-    
+    permission: read-only
+
   - name: FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE
     summary: UNMOUNTABLE - The device cannot be mounted due to an error.
     type: STRING
-    permission: read-only    
-    
+    permission: read-only
+
   - name: maxPathLength
     summary: Contains the platform-dependent maximum path length.
     type: Number

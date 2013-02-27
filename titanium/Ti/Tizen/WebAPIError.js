@@ -1,5 +1,9 @@
 define(['Ti/_/declare'], function(declare){
 	return declare('Ti.Tizen.WebAPIError', null, {
+		constructor: function(args) {
+			this._obj = args;
+		},
+		
 		constants: {
 			INDEX_SIZE_ERR: 1, //unsigned short
 			DOMSTRING_SIZE_ERR: 2, //unsigned short
