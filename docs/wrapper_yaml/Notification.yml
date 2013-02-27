@@ -232,7 +232,7 @@ platforms: [tizen]
 properties:
   - name: StatusNotificationType
     type: String
-    summary: Notification property value: "SIMPLE", "ONGOING", "PROGRESS".
+    summary: Notification property value "SIMPLE", "ONGOING", "PROGRESS"
 
   - name: title
     type: String
