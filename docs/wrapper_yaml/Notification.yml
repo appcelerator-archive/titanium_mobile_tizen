@@ -171,6 +171,7 @@ properties:
     type: Number
     summary: Notification progress.
 
+---
 name: StatusNotificationUnit
 summary: An object containing the various options for fetching the properties requested.
 platforms: [tizen]
