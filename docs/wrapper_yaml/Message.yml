@@ -9,7 +9,7 @@ platforms: [tizen]
 methods:
   - name: createMessage
     summary: Returns the Titanium.Tizen.Message.Message.
-    returns: 
+    returns:
       - type: Titanium.Tizen.Message.Message
     parameters: 
 
@@ -17,20 +17,29 @@ methods:
         summary: Provides specifying message attributes upon message creation.
         type: MessageInit
 
-properties:
+  - name: createMessageAttachment
+    summary: Returns the Titanium.Tizen.Message.MessageAttachment.
+    returns:
+      - type: Titanium.Tizen.Message.MessageAttachment
+    parameters:
 
+      - name: initDict
+        summary: Provides specifying attachment attributes upon messageAttachment creation.
+        type: MessageAttachmentInit
+
+properties:
   - name: MESSAGE_SERVICE_TAG_SMS
-    summary: "messaging.sms", for SMS services
+    summary: messaging.sms, for SMS services
     type: String
     permission: read-only
 
   - name: MESSAGE_SERVICE_TAG_MMS
-    summary: "messaging.mms", for MMS services 
+    summary: messaging.mms, for MMS services
     type: String
     permission: read-only
 
   - name: MESSAGE_SERVICE_TAG_EMAIL
-    summary: "messaging.email", for email services 
+    summary: messaging.email, for email services
     type: String
     permission: read-only
 
@@ -44,9 +53,10 @@ properties:
         The type of message. The supported types are: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, and Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL. 
     type: String
 
-  - name: messageInitDict 
+  - name: Dictionary
     summary: Provides specifying message attributes upon message creation. 
-    type: MessageInit
+    type: messageInitDict
+    optional: true
 
 ---
 name: MessageInitDict
