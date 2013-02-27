@@ -110,7 +110,8 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Power property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -131,7 +132,7 @@ module.exports = new function() {
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Cpu property:' + error.message);
 			
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -165,7 +166,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Storage property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -195,7 +196,7 @@ module.exports = new function() {
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Display property:' + error.message);
 			
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -221,7 +222,8 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Device property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -242,7 +244,8 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on Network property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -269,7 +272,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on WifiNetwork property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -300,7 +303,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on "CellularNetwork" property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -330,7 +333,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on EthernetNetwork property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -360,7 +363,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on SIM property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -384,7 +387,7 @@ module.exports = new function() {
 
 		function onErrorCallback(error) {
 			Ti.API.info('An error occurred on "DeviceOrientation" property:' + error.message);
-			valueOf(testRun, false).shouldBeTrue();
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			finish(testRun);
 		}
 
@@ -461,6 +464,7 @@ module.exports = new function() {
 		// If can accept test as on success callback as without it
 		function onSuccessCallback(dataObject) {
 			Ti.API.debug('Test completed by success callback with parameter: ' + JSON.stringify(dataObject|''));
+			valueOf(testRun, dataObject).shouldBe('[object TiTizenSystemInfoSystemInfoProperty]');
 			clearFakeTimeout();  // cancel fake timer call
 
 			valueOf(testRun, dataObject).shouldNotBeNull();
@@ -471,6 +475,7 @@ module.exports = new function() {
 		// If called with not null - test failed!
 		function onErrorCallback(error) {
 			Ti.API.info('Test completed by error callback - ' + JSON.stringify(error));
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
 			clearFakeTimeout(); // cancel fake timer call
 			reportError(testRun, JSON.stringify(error));
 		}

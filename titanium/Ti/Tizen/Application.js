@@ -4,13 +4,13 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 	return lang.setObject('Ti.Tizen.Application', {
 
 		launch: function(id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, argument /*DOMString*/) {
-			tizen.application.launch(id, successCallback, function(e) {
+			tizen.application.launch(id, successCallback, errorCallback && function(e) {
 				errorCallback.call(null, new WebAPIError(e));
 			}, argument);
 		},
 
 		kill: function(contextId /*ApplicationContextId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			tizen.application.kill(contextId, successCallback, function(e) {
+			tizen.application.kill(contextId, successCallback, errorCallback && function(e) {
 				errorCallback.call(null, new WebAPIError(e));
 			});
 		},
@@ -24,24 +24,17 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 		},
 
 		launchService: function(service /*ApplicationService*/, id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, replyCallback /*ApplicationServiceDataArrayReplyCallback*/) {
-			console.log('Callback');
-			tizen.application.launchService(service._obj, id, successCallback, function(e) {
+			tizen.application.launchService(service._obj, id, successCallback, errorCallback && function(e) {
 				errorCallback.call(null,  new WebAPIError(e));
-			}, {
+			}, replyCallback && {
 				onsuccess: replyCallback.onsuccess && function(objects) {
-					console.log(11111111);
-					try {
 					var i = 0,
 						objectsCount = objects.length,
 						result = [];
 					for(; i < objectsCount; i++) {
 						result.push(new ApplicationServiceData(objects[i]));
 					}
-					console.log(result);
 					replyCallback.onsuccess.call(null, result);
-					} catch(e) {
-						console.log('Exception' + e);
-					}
 				},
 				onfail: replyCallback.onfail && function(e) {
 					replyCallback.onfail.call(null);
@@ -62,7 +55,7 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 						result.push(new ApplicationContext(objects[i]));
 					}
 					successCallback.call(null, result);
-				}, function(e) {
+				}, errorCallback && function(e) {
 					errorCallback.call(null, new WebAPIError(e));
 			});
 		},
@@ -80,7 +73,7 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 					result.push(new ApplicationInformation(objects[i]));
 				}
 				successCallback.call(null, result);
-			}, function(e) {
+			}, errorCallback && function(e) {
 				errorCallback.call(null, new WebAPIError(e));
 			});
 		},
@@ -100,7 +93,9 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 				onuninstalled: function(id) {
 					eventCallback.onuninstalled.call(null, id);
 				}
-			}, errorCallback);
+			}, errorCallback && function(e) {
+				errorCallback.call(null,  new WebAPIError(e));
+			});
 		},
 
 		removeAppInfoEventListener: function(listenerID /*long*/) {

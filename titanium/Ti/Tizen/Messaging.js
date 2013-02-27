@@ -1,4 +1,4 @@
-define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService'], function(lang, MessageService) {
+define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/MessageAttachment'], function(lang, MessageService, Message, MessageAttachment) {
 	return lang.setObject('Ti.Tizen.Messaging', {
 		constants: {
 			MESSAGE_SERVICE_TAG_MESSAGINGSMS: 'messaging.sms',
@@ -19,15 +19,19 @@ define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService'], function(lang, Messag
 				successCallback.call(this, result);
 			}
 
-			return tizen.messaging.getMessageServices(messageServiceType, servicesListSuccessCallBack, errorCallback, serviceId);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			tizen.messaging.getMessageServices(messageServiceType, servicesListSuccessCallBack, errorCallback && wrappedErrorCallback, serviceId);
 		},
 
 		createMessage: function(args) {
-			return new (require('Ti/Tizen/Messaging/Message'))(args);
+			return new Message(args);
 		},
 
 		createMessageAttachment: function(args) {
-			return new (require('Ti/Tizen/Messaging/MessageAttachment'))(args);
+			return new MessageAttachment(args);
 		},
 	});
 });

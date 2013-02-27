@@ -6,10 +6,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId'], function(declare, 
 
 		constants: {
 			id: {
-				get: function() {
-// console.log("this._obj: " + this._obj);
-// console.log("this._obj.id: " + this._obj.id);
-					
+				get: function() {				
 					return (this._obj == '[object CalendarEvent]') ? (new Ti.Tizen.Calendar.CalendarEventId(this._obj.id)) : this._obj.id;
 				}
 			},
