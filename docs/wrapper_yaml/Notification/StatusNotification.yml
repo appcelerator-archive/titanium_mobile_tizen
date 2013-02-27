@@ -38,6 +38,31 @@ properties:
  - name: appId  
    summary: Holds the application id to launch when the notification is selected from the notification tray.
    type: String
+   examples:
+     - example: |
+          try {
+                // gets a current application inforamtion with tizen.application.getAppInfo
+                var myappInfo = Ti.Tizen.Application.getAppInfo();
+
+                var notificationDict = {
+                            content : "This is a simple notificaiton.",
+                            iconPath : "images/image1.jpg",
+                            soundPath : "music/Over the horizon.mp3",
+                            vibration : true,
+                            appId : myappInfo.id
+                          };
+
+                var notification = Ti.Tizen.Notification.createStatusNotification({
+                                      statusType: "SIMPLE",
+                                      title: "Simple notification",
+                                      notificationInitDict: notificationDict
+                                   });
+
+                Ti.Tizen.Notification.post(notification);
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
+
    
  - name: progressValue 
    summary: The current progress value of notification.
@@ -48,35 +73,40 @@ properties:
         Application should keep the progress value for its job because the saved value 
         in the notification status tray would be different from exact progress value.
         progressValue":"  percent (1 to 100)
-   type: Number      
+   type: Number
+   examples:
+     - example: |
+          try {
+                var appControl = Ti.Tizen.Application.createApplicationControl({
+                                     operation: "http://tizen.org/appcontrol/operation/create_content",
+                                     uri: null,
+                                     mime: "image/jpg",
+                                     category: null
+                                 });
 
-examples:
-  - title: Simple status notification with type "PROGRESS"
-    example: | 
-        try {
-              var appControl = new tizen.ApplicationControl(
-              "http://tizen.org/appcontrol/operation/create_content",
-              null,
-              "image/jpg",
-              null);
-              
-              var notificationDict = {
-                          content : "This is a progress notificaiton.",
-                          iconPath : "images/image2.jpg",
-                          soundPath : "music/Over the horizon.mp3", 
-                          vibration : true, 
-                          appControl : appControl,
-                          progressValue : 20 
-                  };
-              // constructs the progress notification.
-              var notification = new tizen.StatusNotification("PROGRESS", 
-                                 "Progress notification", notificationDict); 
-              // posts the notification
-              tizen.notification.post(notification);
-              // updates the progress value of the notification.
-              notification.progressValue = 59;
-              tizen.notification.update(notification);  
-        } catch (err) {
-            console.log (err.name + ": " + err.message);
-        }
- 
+                var notificationDict = {
+                            content : "This is a progress notificaiton.",
+                            iconPath : "images/image2.jpg",
+                            soundPath : "music/Over the horizon.mp3",
+                            vibration : true,
+                            appControl : appControl,
+                            progressValue : 20
+                      };
+                // constructs the progress notification.
+                var notification = Ti.Tizen.Notification.createStatusNotification({
+                                      statusType: "PROGRESS",
+                                      title: "Progress notification",
+                                      notificationInitDict: notificationDict
+                                   });
+                // posts the notification
+                Ti.Tizen.Notification.post(notification);
+
+                // updates the progress value of the notification.
+                notification.progressValue = 59;
+                Ti.Tizen.Notification.update(notification);
+
+
+           } catch (err) {
+               Ti.API.info (err.name + ": " + err.message);
+           }
+

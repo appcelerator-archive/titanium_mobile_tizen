@@ -18,37 +18,6 @@ extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
 
-examples: 
-  - title: Simple Notification Example
-    example:    |
-        The following example demonstrates how to create notifications allows you to design 
-        interactive applications that provide the user information about their events    
-        
-        try {
-            // Application control
-            var appControl = new tizen.ApplicationControl("http://tizen.org/appcontrol/operation/create_content", 
-                                                            null, "image/jpg", null, null);
-                                                            
-            var notificationDict = 	{
-            // Notification content
-            content: "This is a simple notification.",
-            // Path to the notification icon
-            iconPath: "images/image1.jpg",
-            // Path to the sound file to be played when the notification is displayed
-            soundPath: "music/Over the horizon.mp3",
-            // Device vibrates when the notification is displayed
-            vibration: true,
-            // Application control to be launched when the user selects the notification
-            appControl: appControl
-            };
-        
-            var notification = new tizen.StatusNotification("SIMPLE", "Simple notification", notificationDict);
-            
-            tizen.notification.post(notification);  
-            
-        } catch (err) {
-            console.log (err.name + ": " + err.message);
-        }
 methods:
   - name: post
     summary: Post the notification to display.
@@ -56,13 +25,50 @@ methods:
       - name: notification
         summary: A notification to post.
         type: Titanium.Tizen.Notification
-        
+    examples:
+      - example: |
+          try {
+                var appControl = Ti.Tizen.Application.createApplicationControl({
+                                     operation: "http://tizen.org/appcontrol/operation/create_content",
+                                     uri: null,
+                                     mime: "image/jpg",
+                                     category: null
+                                 });
+
+                var notificationDict = {
+                            content : "This is a simple notificaiton.",
+                            iconPath : "images/image1.jpg",
+                            soundPath : "music/Over the horizon.mp3",
+                            vibration : true,
+                            appControl : appControl
+                        };
+
+                var notification = Ti.Tizen.Notification.createStatusNotification({
+                                        statusType: "SIMPLE",
+                                        title: "Simple notification",
+                                        notificationInitDict: notificationDict
+                                   });
+
+                Ti.Tizen.Notification.post(notification);
+           } catch (err) {
+                Ti.API.info(err.name + ": " + err.message);
+           }
+
   - name: update
     summary: Updates a previously posted notification.
     parameters:
       - name: notification
         summary: A notification to update.
         type: Titanium.Tizen.Notification
+    examples:
+      - example: |
+          try {
+                // use a varible for the previoulsy posted notification.
+                notification.content = "My notification";
+                Ti.Tizen.Notification.update(notification);
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
         
   - name: remove
     summary: Removes a previously posted notification.
@@ -70,9 +76,24 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
+    examples:
+      - example: |
+          try {
+                // use a varible for the previoulsy posted notification.
+                Ti.Tizen.Notification.remove(notification.id);;
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
         
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
+    examples:
+      - example: |
+          try {
+                Ti.Tizen.Notification.removeAll();
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
     
   - name: get
     summary: Gets a previously posted notification by the current application.
@@ -82,11 +103,44 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
+    examples:
+      - example: |
+          try {
+                // use a varible for the previoulsy posted notification.
+                // keeps notification id to use later.
+                var myId = notification.id;
+
+                var myNotification = Ti.Tizen.Notification.get(myId);
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
     
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
     returns:
         type: Titanium.Tizen.Notification.Notification[]
+    examples:
+      - example: |
+          try {
+               var notifications = Ti.Tizen.Notification.getAll();
+               var index = 0;
+               
+               for ( index = 0; notifications.length > index; index++ )
+               {
+                   Ti.API.info(notifications[index].id);
+                   Ti.API.info(notifications[index].title);
+                   Ti.API.info(notifications[index].statusType);
+                   Ti.API.info(notifications[index].type);
+                   Ti.API.info(notifications[index].content);
+                   Ti.API.info(notifications[index].postedTime);
+                   Ti.API.info(notifications[index].iconPath);
+                   Ti.API.info(notifications[index].soundPath);
+                   Ti.API.info(notifications[index].vibration);
+                   Ti.API.info(notifications[index].appControl);
+               } 
+           } catch (err) {
+               Ti.API.info (err.name + ": " + err.message);
+           }
 
   - name: createStatusNotification
     summary: The interface which represents status notification.
