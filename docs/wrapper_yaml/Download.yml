@@ -1,5 +1,5 @@
 ---
-name: Titanium.Download
+name: Titanium.Tizen.Download
 summary: |
     The Download module provides methods to asynchronously download the contents of a URL to a storage.
 extends: Titanium.Module
@@ -20,12 +20,14 @@ methods:
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
         optional: true
+
   - name: cancel
     summary: Cancels an ongoing download operation that is specified by the downloadId parameter.
     parameters:
       - name: downloadId
         summary: The ID of the ongoing download operation to stop.
         type: Number
+
   - name: pause
     summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
         The paused download operation can be resumed later by the resume() method.
@@ -33,12 +35,14 @@ methods:
       - name: downloadId
         summary: The ID of the ongoing download operation to pause.
         type: Number
+
   - name: resume  
     summary: Resumes a paused download operation that is specified by the downloadId parameter.
     parameters:
       - name: downloadId  
         summary: The ID of the paused download operation to be resume.
         type: Number
+
   - name: getState
     summary: Gets the download state of an operation synchronously with the specified ID.
     description: |
@@ -49,6 +53,7 @@ methods:
       - name: downloadId
         summary: The ID to get the current state of download operation.
         type: Number  
+
   - name: getDownloadRequest
     summary: Gets the DownloadRequest object from a given id.
     description: |
@@ -59,6 +64,7 @@ methods:
       - name: downloadId
         summary: The ID to get the download request information.
         type: Number
+
   - name: getMIMEType
     summary: Gets the MIME type of the downloaded file.
     description: |
@@ -69,6 +75,7 @@ methods:
       - name: downloadId
         summary: The ID to get the MIME type information.
         type: Number
+
   - name: setListener
     summary: Sets the download callback to the download operation of given id.
         It's possible to change or register the listener of download operation using the saved id.
@@ -79,22 +86,15 @@ methods:
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
----
-name: DownloadRequest
-summary: Defines the download request object.
-parameters:
-  - name: url
-    summary: Store the URL of the object to download.
-    type: String
-  - name: destination
-    summary: Sore the folder path of the destination folder to which a requested file object will be downloaded.
-        If the destination is not specified,  the file will be downloaded to the default storage "Downloads".
-    type: String
-    optional: true
-  - name: fileName
-    summary: An attribute to store the file name for the specified URL. If the file name is not given, the original file name from URL is used.
-    type: String
-    optional: true
+
+  - name: createDownloadRequest
+    summary: Creates <Titanium.Tizen.Download.DownloadRequest> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Titanium.Tizen.Download.DownloadRequest>.
+        type: createDownloadRequestParameters
+    returns:
+        type: Titanium.Tizen.Download.DownloadRequest
 ---
 name: DownloadCallback
 summary: Defines notification callbacks for the download state change or progress.
@@ -143,3 +143,22 @@ methods:
       - name: error
         summary: The reason for the download failure.
         type: Callback<WebAPIError>
+---
+name: createDownloadRequestParameters
+summary: Parameters for the <Titanium.Tizen.Download.createDownloadRequest>.
+properties:
+  - name: url
+    summary: The URL of the object to download.
+    type: String
+
+  - name: destination
+    summary: Destination folder to which a requested file object will be downloaded.
+        If the destination is not specified, the file will be downloaded to the default storage "Downloads".
+    type: String
+    optional: true
+
+  - name: fileName
+    summary: An attribute to store the file name for the specified URL. If the file name is not given, 
+        the original file name from URL is used.
+    type: String
+    optional: true
