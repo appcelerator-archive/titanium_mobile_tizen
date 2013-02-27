@@ -25,7 +25,7 @@ methods:
     parameters:
       - name: downloadId
         summary: The ID of the ongoing download operation to stop.
-        type: Number	  
+        type: Number
   - name: pause
     summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
         The paused download operation can be resumed later by the resume() method.
@@ -59,31 +59,31 @@ methods:
       - name: downloadId
         summary: The ID to get the download request information.
         type: Number
-  - name: getMIMEType	
+  - name: getMIMEType
     summary: Gets the MIME type of the downloaded file.
     description: |
         Returns a valid MIME type of the downloaded file when the download operation has been started and successfully retrieved the file header.
     returns:
-        type: String	
-    parameters: 	
+        type: String
+    parameters:
       - name: downloadId
         summary: The ID to get the MIME type information.
-        type: Number 	
+        type: Number
   - name: setListener
     summary: Sets the download callback to the download operation of given id.
         It's possible to change or register the listener of download operation using the saved id.
-    parameters: 
-      - name: downloadId 
+    parameters:
+      - name: downloadId
         summary: The ID to set the download callback.
         type: Number
-      - name: downloadCallback 		
-        summary: The method to invoke when the download state changes or an error occurs.	
+      - name: downloadCallback
+        summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
 ---
 name: DownloadRequest
 summary: Defines the download request object.
-parameters:		
-  - name: url		
+parameters:
+  - name: url
     summary: Store the URL of the object to download.
     type: String
   - name: destination
