@@ -4,7 +4,7 @@ summary: This property reflects the general state of the system's battery
     
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 properties:
         

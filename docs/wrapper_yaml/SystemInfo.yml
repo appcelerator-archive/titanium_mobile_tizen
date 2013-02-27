@@ -139,42 +139,47 @@ properties:
     type: STRING
     permission: read-only
 
-  - name: SYSTEM_INFO_PROPERTY_CPU
+  - name: SYSTEM_INFO_PROPERTY_ID_CPU
     summary: CPU is the device property identifier.
     type: STRING
     permission: read-only
 
-  - name: SYSTEM_INFO_PROPERTY_STORAGE
+  - name: SYSTEM_INFO_PROPERTY_ID_STORAGE
     summary: STORAGE is the device property identifier.
     type: STRING
     permission: read-only
 
-  - name: SYSTEM_INFO_PROPERTY_DEVICE_ORIENTATION
+  - name: SYSTEM_INFO_PROPERTY_ID_DISPLAY
+    summary: DISPLAY is the device property identifier.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION
     summary: DEVICE_ORIENTATION is the device property identifier.
     type: STRING
     
     permission: read-only
-  - name: SYSTEM_INFO_PROPERTY_BUILD
+  - name: SYSTEM_INFO_PROPERTY_ID_BUILD
     summary: BUILD is the device property identifier.
     type: STRING
     
     permission: read-only    
-  - name: SYSTEM_INFO_PROPERTY_NETWORK
+  - name: SYSTEM_INFO_PROPERTY_ID_NETWORK
     summary: NETWORK is the device property identifier.
     type: STRING
     
     permission: read-only    
-  - name: SYSTEM_INFO_PROPERTY_WIFI_NETWORK
+  - name: SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK
     summary: WIFI_NETWORK is the device property identifier.
     type: STRING
     permission: read-only    
     
-  - name: SYSTEM_INFO_PROPERTY_CELLULAR_NETWORK
+  - name: SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK
     summary: CELLULAR_NETWORK is the device property identifier.
     type: STRING
     permission: read-only    
     
-  - name: SYSTEM_INFO_PROPERTY_SIM
+  - name: SYSTEM_INFO_PROPERTY_ID_SIM
     summary: SIM is the device property identifier.
     type: STRING
     permission: read-only    
@@ -211,6 +216,11 @@ properties:
     
   - name: SYSTEM_INFO_NETWORK_TYPE_ETHERNET
     summary: ETHERNET is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_UNKNOWN
+    summary: UNKNOWN is Data Network Type.
     type: STRING
     permission: read-only
 
@@ -255,4 +265,3 @@ properties:
         This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
         if the property is a number and its value is lower than or equal to this number. If both highThreshold and lowThreshold parameters are specified, 
         the successCallback is triggered if and only if the property value is either lower than the value of lowThreshold or higher than the value of highThreshold.
-        
