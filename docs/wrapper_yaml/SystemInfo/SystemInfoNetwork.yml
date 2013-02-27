@@ -3,7 +3,7 @@ name: Titanium.Tizen.SystemInfo.SystemInfoNetwork
 summary: This property reflects the information of the data network in this system.
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 properties:
   - name: networkType
