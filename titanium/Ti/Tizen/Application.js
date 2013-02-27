@@ -1,7 +1,8 @@
-define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen/Application/ApplicationContext', 'Ti/Tizen/Application/ApplicationServiceData'], 
-	function(lang, WebAPIError, ApplicationInformation, ApplicationContext, ApplicationServiceData) {
+define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen/Application/ApplicationContext', 
+		'Ti/Tizen/Application/ApplicationServiceData', 'Ti/Tizen/Application/ApplicationService', 'Ti/_/Evented'], 
+	function(lang, WebAPIError, ApplicationInformation, ApplicationContext, ApplicationServiceData, ApplicationService, Evented) {
 
-	return lang.setObject('Ti.Tizen.Application', {
+	return lang.setObject('Ti.Tizen.Application', Evented, {
 
 		launch: function(id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, argument /*DOMString*/) {
 			tizen.application.launch(id, successCallback, errorCallback && function(e) {
@@ -109,7 +110,7 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 		},
 
 		createApplicationService: function(args) {
-			return new (require('Ti/Tizen/Application/ApplicationService'))(args);
+			return new ApplicationService(args);
 		},
 	});
 });

@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare){
-	return declare('Ti.Tizen.Filesystem.FileStream', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
+	return declare('Ti.Tizen.Filesystem.FileStream', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object FileStream]') {
 				this._obj = args;

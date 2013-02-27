@@ -1,5 +1,6 @@
-define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/MessageAttachment'], function(lang, MessageService, Message, MessageAttachment) {
-	return lang.setObject('Ti.Tizen.Messaging', {
+define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/MessageAttachment', 'Ti/_/Evented'], 
+		function(lang, MessageService, Message, MessageAttachment, Evented) {
+	return lang.setObject('Ti.Tizen.Messaging', Evented, {
 		constants: {
 			MESSAGE_SERVICE_TAG_MESSAGINGSMS: 'messaging.sms',
 			MESSAGE_SERVICE_TAG_MESSAGINGMMS: 'messaging.mms',

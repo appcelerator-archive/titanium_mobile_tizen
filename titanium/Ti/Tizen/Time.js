@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration'], function(lang, TZDate, TimeDuration) {
-	return lang.setObject('Ti.Tizen.Time', {
+define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_/Evented'], function(lang, TZDate, TimeDuration, Evented) {
+	return lang.setObject('Ti.Tizen.Time', Evented, {
 
 		constants: {
 			TIME_DURATION_UNIT_MSECS: 'MSECS',

@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageBody'], function(declare, MessageBody) {
-	return declare('Ti.Tizen.Messaging.Message', null, {
+define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageBody', 'Ti/_/Evented'], function(declare, MessageBody, Evented) {
+	return declare('Ti.Tizen.Messaging.Message', Evented, {
 		constructor: function(args) {
 			if (args.toString && args.toString() === '[object Message]') {
 				this._obj = args;

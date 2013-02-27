@@ -1,6 +1,6 @@
-define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError'], function(lang, CallHistoryEntry, WebAPIError){
+define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented){
 
-	return lang.setObject('Ti.Tizen.Call.CallHistory', {
+	return lang.setObject('Ti.Tizen.Call.CallHistory', Evented, {
 
 		find: function(successCallback /*CallHistoryEntryArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
 			tizen.call.history.find(function(histories) {

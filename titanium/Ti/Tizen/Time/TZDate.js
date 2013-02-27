@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Time', 'Ti/Tizen/Time/TimeDuration'], function(declare, Time, TimeDuration) {
-	return declare('Ti.Tizen.Time.TZDate', null, {
+define(['Ti/_/declare', 'Ti/Tizen/Time', 'Ti/Tizen/Time/TimeDuration', 'Ti/_/Evented'], function(declare, Time, TimeDuration, Evented) {
+	return declare('Ti.Tizen.Time.TZDate', Evented, {
 		constructor: function(args) {
 			if(args instanceof tizen.TZDate) {
 				this._obj = args;
