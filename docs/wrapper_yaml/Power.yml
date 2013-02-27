@@ -15,22 +15,6 @@ extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
 
-examples: 
-  - title: Code example
-    example:    |
-        // Check whether the screen is on or off.
-        var isScreenOn = tizen.power.isScreenOn();
-        
-        // Set the screen brightness value for the application.
-        tizen.power.setScreenBrightness(1);
-        
-        function onScreenStateChanged(previousState, changedState) {
-            console.log(Screen state changed from  + previousState +  to  + changedState);
-        }
-        
-        // Set the screen state change listener.
-        tizen.power.setScreenStateChangeListener(onScreenStateChanged);
-
 methods:
   - name: request
     summary: Requests the minimum-state for a power resource.
