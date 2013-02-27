@@ -26,6 +26,12 @@ function ParseFiles(){
         var self = this;
         var code = parser.toSource();
         
+        try {
+                fs.mkdirSync(this.options.jsParcerFolder, 0755);
+        } catch(err) {
+                console.log('Folder '+this.options.jsParcerFolder+' not created. Reason:' + err.code);
+        } 
+
         //create js parser
         fs.writeFile(this.options.jsParcerFolder + 'WebIDLParser.js', 'exports.Parser = ' + code, 
         
