@@ -1,0 +1,12 @@
+---
+name: Titanium.Tizen.Alarm.Alarm
+summary: This interface is an abstract interface for alarm types. 
+    
+extends: Titanium.Module
+platforms: [tizen]
+
+properties:
+  - name: id
+    summary: The alarm identifier. 
+    type: String
+    permission: read-only

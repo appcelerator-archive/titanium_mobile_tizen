@@ -21,7 +21,10 @@ methods:
     description: |
         Flushes any pending buffered writes and closes the File. 
         Always succeeds. Note that pending writes might not succeed.
-   
+    examples:
+        example: |
+            stream.close(); // closes this stream, no subsequent access to stream allowed
+
   - name: read
     summary: Reads the specified number of characters from this FileStream.
     description: |
@@ -31,10 +34,14 @@ methods:
         summary: The result of read characters as a string.
         type: String    
     parameters:
-      - name: filter 
+      - name: filter
         summary: Used to restrict the listed files.
         type: Number
-  
+    examples:
+        example: |
+            var text = stream.read(file.fileSize);
+            stream.close();
+
   - name: readBytes
     summary: Reads the specified number of bytes from this FileStream.
     description: |
@@ -46,8 +53,15 @@ methods:
     parameters:
       - name: byteCount 
         summary: Number of bytes being read.
-        type: Number        
- 
+        type: Number
+    examples:
+        example: |
+            // reads up to 256 bytes from the stream
+             var raw = stream.readBytes(256);
+             for(var i = 0; i < raw.length; i++) {
+               // raw[i] contains the i-th byte of the current data chunk
+             }
+
   - name: readBase64
     summary: Reads the specified number of bytes from this FileStream, encoding the result in base64.
     description: |
@@ -59,7 +73,11 @@ methods:
     parameters:
       - name: byteCount 
         summary: Number of bytes being read.
-        type: Number        
+        type: Number
+    examples:
+        example: |
+            // reads up to 256 bytes from the stream
+            var base64 = stream.readBase64(256);
         
   - name: write
     summary: Writes the specified DOMString to this FileStream.
@@ -67,6 +85,10 @@ methods:
       - name: stringData  
         summary: The actual string to be written.
         type: String
+    examples:
+        example: |
+            var text = "Hello world";
+            stream.write(text);
        
   - name: writeBytes
     summary: Writes the specified bytes to this FileStream.
@@ -74,6 +96,10 @@ methods:
       - name: byteData  
         summary: The byte data array being written.
         type: Number[]
+    examples:
+        example: |
+            var bytes = in.readBytes(256);
+            out.writeBytes(bytes); // writes the bytes read from in to out
        
   - name: writeBase64
     summary: Converts the specified base64 DOMString to bytes and writes the result to this FileStream.
@@ -81,6 +107,10 @@ methods:
       - name: base64Data  
         summary:  The base64 data being written.
         type: String
+    examples:
+        example: |
+            var base64 = in.readBase64(256);
+            out.writeBase64(base64); // writes the base64 data read from in to out
   
 properties:
 
@@ -93,6 +123,11 @@ properties:
         If [false], this attribute indicates that the file pointer is not at the end of the file and may be anywhere within the file.
     type: Boolean
     permission: read-only
+    examples:
+        example: |
+            if(stream.eof) {
+               // file has been read completely
+             }
 
   - name: position
     summary: |
@@ -102,7 +137,13 @@ properties:
         When invoking an operation that reads or writes from the stream, the operation will take place from the byte defined by this position attribute. If the read or write operation is successful, the position of the stream is advanced by the number of bytes read or written. 
         If the read/write operation is not successful, the position of the stream is unchanged.
     type: Number
-    
+    examples:
+        example: |
+            Ti.API.info(stream.position); // displays current stream position
+            // alters current stream position to the begin of the file,
+            // like seek() in C
+            stream.position = 0;
+
   - name: bytesAvailable
     summary: |
         Returns the number of bytes that are available for reading from the stream.
@@ -112,3 +153,6 @@ properties:
         -1 if eof is true.
     type: Number
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(stream.bytesAvailable); // displays the available bytes to be read

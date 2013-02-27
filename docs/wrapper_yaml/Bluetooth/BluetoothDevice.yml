@@ -1,0 +1,75 @@
+---
+name: Titanium.Tizen.Bluetooth.BluetoothDevice
+summary: The interface which represents a remote Bluetooth device.   
+description: |
+    This interface holds information about a remote device available on a local Bluetooth device, such as device name, address, bonding status, etc.
+    A BluetoothDevice object can be retrieved using one of the following APIs:
+        BluetoothAdapter.getDevice()
+        BluetoothAdapter.getKnownDevices()
+        BluetoothAdapter.discoverDevices()
+        BluetoothAdapter.createBonding()
+
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: connectToServiceByUUID
+    summary: Creates a socket connection to the specified service UUID.
+    description: |
+        This method attempts to open a connection to the service identified by uuid on this remote device. This performs an SDP(Service Discovery Protocol) lookup on the local device for the given uuid and determines which channel to use.
+        If opening a connection is successful, then a BluetoothSocket object with open state is sent using successCallback, through which data can be exchanged by both devices.
+        The ErrorCallback is launched with these error types:
+            NotFoundError: If there is no service with the given uuid
+            InvalidValuesError: If any of the input parameters contain an invalid value.
+            UnknownError: In any other error case
+
+    parameters: 
+      - name: uuid
+        summary: 128 bit unique identifier, which represents the service record on the device.
+        type: String
+
+      - name: successCallback
+        summary: Method to be invoked when the asynchronous call completes successfully. 
+        type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket> 
+
+      - name: errorCallback
+        summary: Method to be invoked in case of failure to open a socket.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+properties:
+  - name: name
+    summary: The readable name of the device.
+    type: String
+    permission: read-only
+
+  - name: address
+    summary: The hardware address of the device. 
+    type: String
+    permission: read-only
+
+  - name: deviceClass
+    summary: The device class, which represents the type of the device and the services it provides.  
+    type: Titanium.Tizen.Bluetooth.BluetoothClass
+    permission: read-only
+
+  - name: isBonded
+    summary: The bond state of the device with the local device.  
+    type: Boolean
+    permission: read-only
+
+  - name: isTrusted
+    summary:The value is necessary to check if the local Bluetooth adapter recognizes the Bluetooth device as a trusted device. 
+    type: Boolean
+    permission: read-only
+
+  - name: isConnected
+    summary: The connection state of the Bluetooth device with the local Bluetooth adapter.     
+    type: Boolean
+    permission: read-only
+
+  - name:  uuids
+    summary: The list of 128 bit service UUIDs available on this device. 
+    type: String[]
+    permission: read-only
+

@@ -1,0 +1,67 @@
+---
+name: Titanium.Tizen.Bluetooth.BluetoothSocket
+summary: The interface to represent the Bluetooth socket.   
+description: The socket object is created by BluetoothDevice.connectToServiceByUUID() or BluetoothAdapter.registerRFCOMMServiceByUUID().
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: writeData
+    summary: Writes data onto the socket. 
+    description: Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
+    returns: 
+      - type: Number
+        summary: The number of bytes actually sent. 
+    parameters: 
+      - name: data
+        summary: Data to send. 
+        type: Number[]
+
+  - name: readData
+    summary: Reads data from the socket. 
+    description: This should be called only in the BluetoothSocket.onmessage handler, that is, when data is ready on the socket. 
+    returns: 
+      - type: Number[]
+        summary: Sequence of bytes successfully read. 
+
+  - name: close
+    summary: Closes the socket.  
+    description: Calling this method closes the socket. BluetoothSocket.state changes to "CLOSED", and BluetoothSocket.onclose is invoked on success. 
+
+properties:
+  - name: uuid
+    summary: Service UUID to which this socket is connected. 
+    type: String
+    permission: read-only
+
+  - name: state
+    summary: The current socket state.  The value is one of the constants defined for this type. The supported state types are: "CLOSED", and "OPEN".
+    type: String
+    permission: read-only
+
+  - name: peer
+    summary: The peer device to which this socket is connected. 
+    type: Titanium.Tizen.Bluetooth.BluetoothDevice
+    permission: read-only
+
+  - name: onmessage
+    summary: The success callback to be invoked when an incoming message is received from the peer.     
+    type: Callback<Object>
+
+  - name: onclose
+    summary: The success callback to be invoked when the socket is closed.      
+    type: Callback<Object>
+
+  - name: onerror
+    summary: The error callback to be invoked when an error occurs. 
+    type: Callback<Object>
+
+  - name: BLUETOOTH_SOCKET_STATE_CLOSED
+    summary: "CLOSED" - The Bluetooth socket state. 
+    type: String
+    permission: read-only
+    
+  - name: BLUETOOTH_SOCKET_OPEN
+    summary: "OPEN" - The Bluetooth socket state.
+    type: String
+    permission: read-only

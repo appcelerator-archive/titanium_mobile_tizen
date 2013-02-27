@@ -1,0 +1,89 @@
+---
+name: Titanium.Tizen.Message
+summary: This specification defines interfaces to manage Message. 
+description: There is a object that allows access to the messaging API. 
+    
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: createMessage
+    summary: Returns the Titanium.Tizen.Message.Message.
+    returns: 
+      - type: Titanium.Tizen.Message.Message
+    parameters: 
+
+      - name: initDict
+        summary: Provides specifying message attributes upon message creation.
+        type: MessageInit
+
+properties:
+
+  - name: MESSAGE_SERVICE_TAG_SMS
+    summary: "messaging.sms", for SMS services
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_MMS
+    summary: "messaging.mms", for MMS services 
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_EMAIL
+    summary: "messaging.email", for email services 
+    type: String
+    permission: read-only
+
+# Pseudo-type    
+---
+name: MessageInit
+summary: An object containing the various options for inititalized Titanium.Tizen.Message.Message object. It passing into constructor Titanium.Tizen.Message.createMessage()
+properties:
+  - name: type
+    summary: |
+        The type of message. The supported types are: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, and Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL. 
+    type: String
+
+  - name: messageInitDict 
+    summary: Provides specifying message attributes upon message creation. 
+    type: MessageInit
+
+---
+name: MessageInitDict
+summary: Provides specifying message attributes upon message creation. 
+properties: 
+  - name: subject
+    summary: The subject of a message. 
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+- name: to
+    summary: The destination addresses (or phone numbers) of a message. 
+    type: String[]
+
+- name: cc
+    summary: The carbon copy addresses of a message. 
+    description: This property is used only with Email messages. 
+    type: String[]
+
+- name: bcc
+    summary: The blind carbon copy addresses of a message. 
+    type: String[]
+
+- name: plainBody
+    summary: The plain text representation of the message body.
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+- name: htmlBody
+    summary: The HTML representation of the message body. 
+    description: This property is used only with Email messages. 
+    type: String
+
+- name: isHighPriority
+    summary: The priority of a message. 
+    description: |
+        This property is true, if the message has a high priority and false, if the message has a normal or low priority.
+        This property is used only with Email messages.
+    type: Boolean
+

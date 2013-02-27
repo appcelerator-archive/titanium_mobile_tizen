@@ -1,0 +1,250 @@
+---
+name: Titanium.Tizen.Bluetooth.BluetoothAdapter
+summary: The Bluetooth adapter interface that provides access to control the device's Bluetooth adapter.  
+description: |
+    This interface offers methods to control local Bluetooth behavior, such as:
+
+    Turn on/off Bluetooth radio
+    Scan for remote devices
+    Access known devices
+    Register a service in the device service database
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: setName
+    summary: Sets the local Bluetooth adapter name.
+    description: |
+        Sends a request to Bluetooth hardware to change the name of the local Bluetooth adapter to name.
+        The ErrorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contain an invalid value.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+    parameters: 
+      - name: name
+        summary: Name to set.
+        type: String
+
+      - name: successCallback
+        summary: Method invoked when the asynchronous call completes successfully
+        type: Callback<Object> 
+        optional: true
+
+      - name: errorCallback
+        summary: Method invoked when an error occurs.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: setPowered
+    summary: Turns Bluetooth adapter on or off. 
+    description: |
+        Sends a request to Bluetooth hardware to change the state to a given state. For most Bluetooth actions, the Bluetooth adapter must be powered on.
+        The ErrorCallback is launched with these error names:
+            ServiceNotAvailableError: If a Bluetooth device is busy.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: state
+        summary: State to set: true to power on Bluetooth, false to power it off. 
+        type: Boolean
+
+      - name: successCallback
+        summary: Method to be invoked on successful Bluetooth activation/deactivation.
+        type: Callback<Object> 
+        optional: true
+
+      - name: errorCallback
+        summary: Method to be called in case Bluetooth activation/deactivation failed.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: discoverDevices
+    summary: Searches for nearby Bluetooth devices.  
+    description: |
+        That is, devices within proximity to the local device.
+        This method initiates the device discovery process. When the discovery process has started successfully, BluetoothDiscoverDevicesSuccessCallback.onstarted() is invoked. If any device is found in the process, then the device information is sent with BluetoothDiscoverDevicesSuccessCallback.ondevicefound(). At the end of the discovery process, BluetoothDiscoverDevicesSuccessCallback.onfinished() is invoked. If a device goes out of proximity then BluetoothDiscoverDevicesSuccessCallback.ondevicedisappeared() is invoked with the address of the device. Note that if no device is found, BluetoothDiscoverDevicesSuccessCallback.ondevicefound() will never be called.
+        The discovery process can be cancelled anytime, by calling stopDiscovery() on the BluetoothAdapter.
+        The ErrorCallback is launched with these error types:
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: successCallback
+        summary: |
+        Pass a dictionary with the following supported keys: `onstarted` the method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device, 
+        `ondevicefound` a function that accepts parameter of type Titanium.Tizen.Bluetooth.BluetoothDevice, and to be invoked when a new device is discovered in the process of inquiry/discovery, 
+        `ondevicedisappeared` a function that accepts BluetoothAddress, and to be invoked when a device is lost from proximity. After that, this device is no longer visible.
+        and `onfinished` , a function that accepts a array of Titanium.Tizen.Bluetooth.BluetoothDevice, and to be invoked when the device discovery process has finished. 
+        type: Object
+        optional: ture
+
+      - name: errorCallback
+        summary: Method to be invoked when an error occurs.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+- name: stopDiscovery
+    summary: Stops the device discovery process session, if active.   
+    description: |
+        Device discovery is a heavyweight procedure, hence we recommend stopping discovery as soon as required device is found. This method cancels an active discovery session.
+        The ErrorCallback is launched with these error types:
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: successCallback
+        summary: Method to be invoked when the asynchronous call completes successfully. 
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary: Method to be invoked when an error occurs. 
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+- name: getKnownDevices
+    summary: Gets all the devices that have information stored in the local Bluetooth adapter.    
+    description: |
+        A known device is one of the following:
+            a bonded device
+            a device found in last inquiry process
+        On success, it returns the list of currently known devices through BluetoothDeviceArraySuccessCallback.
+        The ErrorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contain an invalid value.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: successCallback
+        summary:Method invoked at retrieval of a list of Bluetooth devices that were bonded to the local Bluetooth adapter.  
+        type: Callback<Object>
+
+      - name: errorCallback
+        summary: Method invoked in case of failure to get bonded devices. 
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: getDevice
+    summary: Gets the BluetoothDevice object for a given device hardware address. 
+    description: |
+        This method returns device information stored in the local Bluetooth adapter for the specified device address through BluetoothDeviceSuccessCallback.onsuccess(). A valid hardware address must be passed, such as "35:F4:59:D1:7A:03".
+        The ErrorCallback is launched with these error types:
+            NotFoundError: If there is no device with the given address.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: address
+        summary: Address of a remote Bluetooth device to get.  
+        type: String
+
+      - name: successCallback
+        summary: Method to be invoked when the asynchronous call completes successfully. 
+        type: Callback<Titanium.Tizen.Bluetooth.BluetoothDevice> 
+        optional: true
+
+      - name: errorCallback
+        summary:  Method to be invoked when an error occurs.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: createBonding
+    summary: Initiates the bonding process with a remote device.  
+    description: |
+        To communicate with any remote Bluetooth device, it must be bonded (that is, the device should be authenticated). Only bonded devices can connect to services and exchange data with each other. This method initiates the bonding process with peer device, using the given MAC address.
+        If the bonding process is successful, the device information is sent through successCallback.
+        The ErrorCallback is launched with these error types:
+            NotFoundError: If there is no device with the given address.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: address
+        summary: The MAC address of remote Bluetooth address to bond with.   
+        type: String
+
+      - name: successCallback
+        summary: Method to be invoked when the asynchronous call completes successfully.  
+        type: Callback<Titanium.Tizen.Bluetooth.BluetoothDevice> 
+        optional: true
+
+      - name: errorCallback
+        summary:  Method to be invoked when an error occurs
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: destroyBonding
+    summary: Destroys bonding with a remote device.   
+    description: |
+        This method initiates the process to remove the given address from the bonded devices list.
+        The ErrorCallback is launched with these error types:
+            NotFoundError: If there is no device with the given address.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: address
+        summary: Address of the bonded device.   
+        type: String
+
+      - name: successCallback
+        summary: Method to be invoked when the asynchronous call completes successfully.  
+        type: Callback<Object> 
+        optional: true
+
+      - name: errorCallback
+        summary:  Method to be invoked when an error occurs
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: registerRFCOMMServiceByUUID
+    summary: Registers a service for other devices to consume.    
+    description: |
+        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
+        Clients should do service discovery on this device with a specified uuid to determine the right channel.
+        If any client(remote device) connects to this service, then BluetoothServiceHandler.onconnect() is invoked with BluetoothSocket object.
+        BluetoothServiceHandler.unregister() can be used to unregister the service record from the device service database and stop listening for client connections.
+        The ErrorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contain an invalid value.
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: uuid
+        summary: UUID of the service, to which clients can connect.   
+        type: String
+
+      - name: name
+        summary: Name of the service.    
+        type: String
+
+      - name: successCallback
+        summary: Method to be called on successful service registration.   
+        type: Callback<Titanium.Tizen.Bluetooth.BluetoothServiceHandler> 
+        optional: true
+
+      - name: errorCallback
+        summary: Method to be invoked when an error occurs
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+properties:
+  - name: name
+    summary: The readable name of the Bluetooth adapter.
+    type: String
+    permission: read-only
+
+  - name: address
+    summary: The unique hardware address of the Bluetooth adapter, also known as the MAC address. 
+    type: String
+    permission: read-only
+
+  - name: powered
+    summary: Holds the current state of Bluetooth adapter.   
+    type: Boolean
+    permission: read-only
+
+  - name: visible
+    summary: Holds the current visibility of the device.    
+    type: Boolean
+    permission: read-only

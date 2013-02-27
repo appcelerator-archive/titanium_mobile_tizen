@@ -4,29 +4,27 @@ summary:  An interface that implements the calendarEvent object.
 extends: Titanium.Tizen.Calendar.CalendarItem
 platforms: [tizen]
 since: "3.0.2"
-
-examples: 
-  - title: Code example
-    example:    |
-        // Gets the default calendar
-        var calendar = tizen.calendar.getDefaultCalendar("EVENT");
-        try {
-            var ev = new tizen.CalendarEvent("BEGIN:VCALENDAR\r\n" +
-                          "BEGIN:VEVENT\r\n" +
-                          "DTSTAMP:19970901T1300Z\r\n" +
-                          "DTSTART:19970903T163000Z\r\n" +
-                          "DTEND:19970903T190000Z\r\n" +
-                          "SUMMARY:Annual Employee Review\r\n" +
-                          "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
-                          "END:VEVENT\r\n" +
-                          "END:VCALENDAR", "ICALENDAR_20");
+examples:
+      - example: |    
+            // Gets the default calendar
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            try {
+                var ev = Titanium.Tizen.Calendar.createCalendarEvent("BEGIN:VCALENDAR\r\n" +
+                            "BEGIN:VEVENT\r\n" +
+                            "DTSTAMP:19970901T1300Z\r\n" +
+                            "DTSTART:19970903T163000Z\r\n" +
+                            "DTEND:19970903T190000Z\r\n" +
+                            "SUMMARY:Annual Employee Review\r\n" +
+                            "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
+                            "END:VEVENT\r\n" +
+                            "END:VCALENDAR", "ICALENDAR_20");
                            
-            calendar.add(ev);
-            console.log('Event added with UID ' + ev.id.uid);
-        } catch (err) {
-            console.log("Failed to add VEVENT to the calendar, error: " + err.name);
-        }
-
+                calendar.add(ev);
+                Titanium.API.info('Event added with UID ' + ev.id.uid);
+            } catch (err) {
+                Titanium.API.info("Failed to add VEVENT to the calendar, error: " + err.name);
+            }
 methods:
   - name: expandRecurrence
     summary: |
@@ -55,7 +53,29 @@ methods:
       - name: errorCallback
         summary:  The method to invoke when the request fails.
         type: Callback<WebAPIError>        
-        optional: true        
+        optional: true
+    examples:
+      - example: |    
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the event expanding success callback.
+            function eventExpandingSuccessCallback(events) {
+                Titanium.API.info(events.length + ' event instances were returned.');
+            }
+            
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
+            var event = calendar.get(evId);
+            
+            if (event.recurrenceRule != null) {
+                // This is a recurring event. Expand all the instances during August 2011.
+                event.expandRecurrence(Titanium.Tizen.createTZDate(2011, 7, 1),
+                                    Titanium.Tizen.createTZDate(2011, 7, 31),
+                                    eventExpandingSuccessCallback,
+                                    errorCallback);
+            }
   
 properties:
   - name: isDetached 
@@ -73,6 +93,10 @@ properties:
         This attribute is precise to the second. Milliseconds are ignored.
         
         The default value for this attribute is null.
+    examples:
+      - example: |    
+            // 2010-04-30 09:00
+            event.endDate = Titanium.Tizen.createTZDate(2010, 3, 30, 9, 0);    
         
   - name: availability
     type: String
@@ -93,4 +117,9 @@ properties:
         The detached instances (specific instances that have been modified as saved to the calendar) of a recurring event will not have any recurrence rule. 
         No recurrence rule can be set on detached instances either. If one tries to set a recurrence rule on a detached event, 
         a NotSupportedError should be thrown. Detached instances can be distinguished by checking their isDetached attribute. (See RFC 5545, Section 3.3.10.)
+    examples:
+      - example: |    
+            // Repeats daily for 7 days
+            var rule = Titanium.Tizen.createCalendarRecurrenceRule("DAILY", {occurrenceCount: 7});
+            event.recurrenceRule = rule;
         

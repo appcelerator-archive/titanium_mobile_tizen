@@ -1,0 +1,113 @@
+---
+name: Titanium.Tizen
+summary: The mine module of Titanium.Tizen Web Device API
+description: "This is the Tizen root interface."
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: createAttributeFilter
+    summary: Creates and returns an instance of <Titanium.Tizen.AttributeFilter>.
+    returns: 
+        type: Titanium.Tizen.AbstractFilter
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for AttributeFilter.
+        type: Dictionary
+        optional: true 
+
+  - name: createAttributeRangeFilter
+    summary: Creates and returns an instance of <Titanium.Tizen.AttributeRangeFilter>.
+    returns: 
+        type: Titanium.Tizen.AbstractFilter
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for AttributeRangeFilter.
+        type: Dictionary
+        optional: true
+
+  - name: createCompositeFilter
+    summary: Creates and returns an instance of <Titanium.Tizen.CompositeFilter>.
+    returns: 
+        type: Titanium.Tizen.AbstractFilter
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for CompositeFilter.
+        type: Dictionary
+        optional: true
+
+  - name: createSortMode
+    summary: Creates and returns an instance of <Titanium.Tizen.SortMode>.
+    returns: 
+        type: Titanium.Tizen.SortMode
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for SortMode.
+        type: Dictionary
+        optional: true
+
+  - name: createSimpleCoordinates
+    summary: Creates and returns an instance of <Titanium.Tizen.SimpleCoordinates>.
+    returns: 
+        type: Titanium.Tizen.SimpleCoordinates
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for SimpleCoordinates.
+        type: Dictionary
+        optional: true
+
+properties: 
+  - name: FILTER_MUCH_FLAG_EXACTLY
+    summary: '"EXACTLY" Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.'
+    type: String
+    permission: read-only
+
+  - name: FILTER_MUCH_FLAG_FULLSTRING
+    summary: "FULLSTRING" - String-based matching. Matches the whole string (case insensitive).
+    type: String
+    permission: read-only
+
+  - name: FILTER_MUCH_FLAG_CONTAINS
+    summary: "CONTAINS" - Indicates the attribute value should contain the given string (strings only - case insensitive).
+    type: String
+    permission: read-only
+
+  - name: FILTER_MUCH_FLAG_STARTSWITH
+    summary: "STARTSWITH" - Indicates the attribute value should start with the given string (strings only - case insensitive). 
+    type: String
+    permission: read-only
+
+  - name: FILTER_MUCH_FLAG_ENDSWITH
+    summary:"ENDSWITH" - Indicates the attribute value should end with the given string (strings only - case insensitive). 
+    type: String
+    permission: read-only
+
+  - name: FILTER_MUCH_FLAG_EXISTS
+    summary:"EXISTS" - Indicates the filter should match if the attribute exists.
+    type: String
+    permission: read-only
+
+  - name: SORT_ORDER_MODE_ASC
+    summary: "ASC" - Indicates the sorting order is ascending 
+    type: String
+    permission: read-only
+
+  - name: SORT_ORDER_MODE_DESC
+    summary:"DESC" - Indicates the sorting order is descending 
+    type: String
+    permission: read-only
+
+  - name: COMPOSITE_FILTER_TYPE_UNION
+    summary:"UNION" - A union of filters ("OR" operator) 
+    type: String
+    permission: read-only
+
+  - name: COMPOSITE_FILTER_TYPE_INTERSECTION
+    summary: "INTERSECTION" - lAn intersection of filters ("AND" operator) 
+    type: String
+    permission: read-only
