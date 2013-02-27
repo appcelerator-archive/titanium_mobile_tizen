@@ -272,10 +272,12 @@ properties:
     summary: The encoded text.
     type: String
   - name: languageCode
-    summary: The language code string value, followed by IANA[RFC 3066] (ex: en-US, ko-KR).
+    summary: |
+        The language code string value, followed by IANA [RFC 3066] (ex. en-US, ko-KR).
     type: String
   - name: encoding
-    summary: The encoding type. Possible values are: <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF8> or <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF16>
+    summary:  |
+        The encoding type. Possible values are: <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF8> or <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF16>
     type: String
     optional: true
 
