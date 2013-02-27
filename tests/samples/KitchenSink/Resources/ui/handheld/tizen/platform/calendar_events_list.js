@@ -2,36 +2,36 @@ function events_list(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = tizen.calendar.getDefaultCalendar("EVENT"),
+		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
 		tableview = Ti.UI.createTableView();
-		
+
 	tableview.addEventListener('click', function(e) {
 		var wnd = new (require('ui/handheld/tizen/platform/calendar_edit_event'))({
 			title: args.title,
 			containingTab: args.containingTab,
 			id: e.rowData.eventId
 		});
-		args.containingTab.open(wnd, {animated: true});
+		args.containingTab.open(wnd, { animated: true });
 	});
-	
+
 	calendar.find(function (events) {
 		tableview.data = fillEventsTable(events);
 	}, onError);
-	
+
 	self.add(tableview);
-	
-	
-	//Update events table after editing single event
+
+	// Update events table after editing single event
 	Ti.App.addEventListener('UpdateEventsTable',  function(e) {
 		calendar.find(function (events) {
 			tableview.data = fillEventsTable(events);
-		}, onError);		
+		}, onError);
 	});
-	
-	function fillEventsTable(events){
+
+	function fillEventsTable(events) {
 		var data = [],
 			eventsCount = events.length,
 			i = 0;
+
 		for (; i < eventsCount; i++) {
 			var row = Ti.UI.createTableViewRow({
 					height: 40,
@@ -43,17 +43,17 @@ function events_list(args) {
 					left: 5,
 					width: 160,
 					height: 30,
-					text: events[i].summary					
+					text: events[i].summary	
 				}),
 				delButton = Ti.UI.createButton({
 					top: 5,
 					left: 220,
 					height: 30,
 					width: 60,
-					title: 'Delete'					
+					title: 'Delete'	
 				});
-				
-			(function(index){
+
+			(function(index) {
 				delButton.addEventListener('click', function(e) {
 					var rowsCount = data.length,
 						i = 0,
@@ -70,21 +70,21 @@ function events_list(args) {
 					calendar.remove(events[index].id);
 					tableview.data = data;
 					alert('Event was removed successfully');
-				});				
+				});	
 			})(i);
-				
+
 			row.add(label);
 			row.add(delButton);
-				
+
 			data.push(row);
 		}
-		return data;		
+		return data;
 	}
-	
+
 	function onError(err) {
 		alert('Error: ' + err.message);
-	}	
+	}
 
-	return self;	
+	return self;
 }
 module.exports = events_list;
