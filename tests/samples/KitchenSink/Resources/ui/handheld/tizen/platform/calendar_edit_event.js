@@ -2,7 +2,7 @@ function edit_event(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = tizen.calendar.getDefaultCalendar("EVENT"),
+		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
 		calendarEvent = calendar.get(args.id),
 		startDate = calendarEvent.startDate,
 		labelLeftPos = 10,
@@ -10,19 +10,21 @@ function edit_event(args) {
 		height = 30,
 		top = 10,
 		inputLeftPos = '45%',
-		inputWidth = '50%';
-		
-	// Add controls for summary
-	var summaryLabel = Ti.UI.createLabel({
-		left: labelLeftPos,
-		top: top,
-		height: height,
-		width: labelWidth,
-		textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-		text: 'Summary:'
-	});	
+		inputWidth = '50%',
+		// Add controls for summary
+		summaryLabel = Ti.UI.createLabel({
+			left: labelLeftPos,
+			top: top,
+			height: height,
+			width: labelWidth,
+			textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+			text: 'Summary:'
+		});	
 	self.add(summaryLabel);
-	
+
+Ti.API.info('startDate: ' + startDate);
+Ti.API.info('startDate instanceof Ti.Tizen.Time.TZDate: ' + startDate instanceof Ti.Tizen.Time.TZDate);
+
 	var summaryInput = Ti.UI.createTextField({
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		top: top,
@@ -32,9 +34,9 @@ function edit_event(args) {
 		value: calendarEvent.summary
 	});
 	self.add(summaryInput);
-	
+
 	top += height + 10;
-	
+
 	// Add controls for description
 	var descriptionLabel = Ti.UI.createLabel({
 		left: labelLeftPos,
@@ -45,7 +47,7 @@ function edit_event(args) {
 		text: 'Description:'
 	}); 
 	self.add(descriptionLabel);
-	
+
 	var descriptionInput = Ti.UI.createTextField({
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		top: top,
@@ -55,9 +57,9 @@ function edit_event(args) {
 		value: calendarEvent.description
 	});
 	self.add(descriptionInput);
-	
+
 	top += height + 10;
-	
+
 	// Add controls for location
 	var locationLabel = Ti.UI.createLabel({
 		left: labelLeftPos,
@@ -68,7 +70,7 @@ function edit_event(args) {
 		text: 'Location:'
 	}); 
 	self.add(locationLabel);
-	
+
 	var locationInput = Ti.UI.createTextField({
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		top: top,
@@ -78,9 +80,9 @@ function edit_event(args) {
 		value: calendarEvent.location
 	});
 	self.add(locationInput);
-	
+
 	top += height + 10;
-	
+
 	var timeLabel = Ti.UI.createLabel({
 		left: labelLeftPos,
 		top: top,
@@ -88,54 +90,63 @@ function edit_event(args) {
 		width: Ti.UI.FILL,
 		textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
 		text: 'Time:'
-	});	
-	self.add(timeLabel);			
-	
-	top += height + 20;	
-	
+	});
+	self.add(timeLabel);
+
+	top += height + 20;
+
 	var timePicker = Ti.UI.createPicker({
 		type: Ti.UI.PICKER_TYPE_DATE_AND_TIME,
 		value: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0),
 		width: '100%'
 	});
 	self.add(timePicker);
-	
-	top += height + 20;	
-	
+
+	top += height + 20;
+
 	var updateButton = Ti.UI.createButton({
 		title: 'Update event',
 		top: top
-	});	
+	});
 	self.add(updateButton);	
-	
+
 	updateButton.addEventListener('click',  function(e) {
 		var summary = summaryInput.value.trim(),
 			description = descriptionInput.value.trim(),
 			location = locationInput.value.trim(),
-			d = getCalendarStartDate();
-			
+			d = getCalendarStartDate(),
+			tzDate = Ti.Tizen.Time.createTZDate({
+				year: d.yy,
+				month: d.mm,
+				day: d.dd,
+				hours: d.h,
+				minutes: d.m
+			}),
+			duration = Ti.Tizen.Time.createTimeDuration({
+				length: 1, 
+				unit: 'HOURS'
+			});
+
 		try {
 			calendarEvent.summary = summary;
 			calendarEvent.description = description;
-			calendarEvent.startDate = new tizen.TZDate(d.yy, d.mm, d.dd, d.h, d.m);
-			calendarEvent.duration = new tizen.TimeDuration(1, 'HOURS');
+			calendarEvent.startDate = tzDate;
+			calendarEvent.duration = duration;
 			calendarEvent.location = location;
-			
 			calendar.update(calendarEvent);
-			
-			//Apdate table in previous window
+
+			// Update table in previous window
 			Ti.App.fireEvent('UpdateEventsTable');
-			
 		} catch (err) {
-			alert('Error: ' + err.message);
+			alert('Error: type: ' +  err.type + "; message: " + err.message);
 			return ;
 		}
 		alert('Event was updated successfully.');
-	});	
-	
-	function getCalendarStartDate(){
+	});
+
+	function getCalendarStartDate() {
 		var times = timePicker.value;
-		
+
 		return {
 			yy: times.getUTCFullYear(),
 			mm: times.getMonth(),
@@ -143,8 +154,8 @@ function edit_event(args) {
 			h: times.getHours(),
 			m: times.getUTCMinutes()
 		};
-	}	
+	}
 
-	return self;		
+	return self;
 }
 module.exports = edit_event;
