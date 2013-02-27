@@ -47,6 +47,9 @@ methods:
             The value is one of the constants defined for this type. 
             The supported request types are: "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT", "CPU_AWAKE"
         type: String
+    examples:
+      - example: |
+            Ti.Tizen.Power.request("SCREEN", "SCREEN_NORMAL");
 
   - name: release
     summary: Releases the power state request for the given resource.
@@ -57,6 +60,10 @@ methods:
             The value is one of the constants defined for this type. 
             The supported request types are: "SCREEN", "CPU"
         type: String
+    examples:
+      - example: |
+            // Release SCREEN resource.
+            Ti.Tizen.Power.release("SCREEN");
 
   - name: setScreenStateChangeListener
     summary: Sets the screen state change callback and monitors its state changes.
@@ -67,36 +74,72 @@ methods:
             in callback. The 'previousState' and 'changedState' are one of the constants defined for this type: 
             "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT"
         type: Callback<String, String>
+    examples:
+      - example: |
+            function onScreenStateChanged(previousState, changedState) {
+               Ti.API.info("Screen state changed from " + previousState + " to " + changedState);
+            }
+
+            // Set the screen state change listener.
+            Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
         
   - name: unsetScreenStateChangeListener
     summary: Unsets the screen state change callback and stop monitoring it.
-    
+    examples:
+      - example: |
+            // Unet the screen state change listener.
+            Ti.Tizen.Power.unsetScreenStateChangeListener();
+
   - name: getScreenBrightness
     summary: Gets the screen brightness level of an application, from 0 to 1.
     returns:
         summary: double Current screen brightness value.
         type: Number
+    examples:
+      - example: |
+            // Get the current screen brightness value.
+            var screenBrightness = Ti.Tizen.Power.getScreenBrightness();
     
   - name: setScreenBrightness
     summary: Sets the screen brightness level for an application, from 0 to 1.
     parameters:
       - name: brightness 
         type: Number
-        
+    examples:
+      - example: |
+            // Set the screen brightness value for the application.
+            Ti.Tizen.Power.setScreenBrightness(1);
+
   - name: isScreenOn
     summary: Returns true if the screen is on.
     returns:
         summary: true if screen is on.
         type: Boolean
-        
+    examples:
+      - example: |
+            // Check whether the screen is on or off.
+            var isScreenOn = Ti.Tizen.Power.isScreenOn();
+
   - name: restoreScreenBrightness
     summary: Restores the screen brightness to the system default setting value.
-    
+    examples:
+      - example: |
+            // Restore the screen brightness value to the system default setting value.
+            Ti.Tizen.Power.restoreScreenBrightness();
+
   - name: turnScreenOn
     summary: Turns on the screen.
+    examples:
+      - example: |
+            // Turn on the screen.
+            Ti.Tizen.Power.turnScreenOn();
 
   - name: turnScreenOff
     summary: Turns off the screen.
+    examples:
+      - example: |
+            // Turn off the screen.
+            Ti.Tizen.Power.turnScreenOff();
     
 properties:
 
