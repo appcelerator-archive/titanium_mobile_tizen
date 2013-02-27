@@ -98,7 +98,7 @@ parameters:
 ---
 name: DownloadCallback
 summary: Defines notification callbacks for the download state change or progress.
-methods:	
+methods:
   - name: onprogress
     summary: Called when a download is successful and it called multiple times as the download progresses.
         The interval between onprogress() callback is platform-dependent. When the download is started, the receivedSize can be 0.
@@ -117,29 +117,29 @@ methods:
     parameters:
       - name: downloadId
         summary: The ID of the corresponding download operation.
-        type: Number		
+        type: Number
   - name: oncanceled
     summary: Called when download is canceled by the cancel() method.
     parameters:
       - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-  - name: oncompleted		
+  - name: oncompleted
     summary: Called when the download operation is completed with the final full path.
         If the same file name already exists in the destination, it is changed according to the platform policy and delivered in this callback.
     parameters:
-      - name: downloadId		
+      - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-      - name: fullPath		
+      - name: fullPath
         summary: The final full path for the downloaded file.
         type: String
   - name: onfailed
     summary: Called when the download operation fails.
-    parameters:	
-      - name: downloadId	
+    parameters:
+      - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-      - name: error	
+      - name: error
         summary: The reason for the download failure.
         type: Callback<WebAPIError>

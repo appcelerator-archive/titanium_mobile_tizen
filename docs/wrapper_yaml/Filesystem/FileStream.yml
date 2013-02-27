@@ -22,7 +22,7 @@ methods:
         Flushes any pending buffered writes and closes the File. 
         Always succeeds. Note that pending writes might not succeed.
     examples:
-        example: |
+      - example: |
             stream.close(); // closes this stream, no subsequent access to stream allowed
 
   - name: read
@@ -38,7 +38,7 @@ methods:
         summary: Used to restrict the listed files.
         type: Number
     examples:
-        example: |
+      - example: |
             var text = stream.read(file.fileSize);
             stream.close();
 
@@ -55,7 +55,7 @@ methods:
         summary: Number of bytes being read.
         type: Number
     examples:
-        example: |
+      - example: |
             // reads up to 256 bytes from the stream
              var raw = stream.readBytes(256);
              for(var i = 0; i < raw.length; i++) {
@@ -75,7 +75,7 @@ methods:
         summary: Number of bytes being read.
         type: Number
     examples:
-        example: |
+      - example: |
             // reads up to 256 bytes from the stream
             var base64 = stream.readBase64(256);
         
@@ -86,7 +86,7 @@ methods:
         summary: The actual string to be written.
         type: String
     examples:
-        example: |
+      - example: |
             var text = "Hello world";
             stream.write(text);
        
@@ -97,7 +97,7 @@ methods:
         summary: The byte data array being written.
         type: Number[]
     examples:
-        example: |
+      - example: |
             var bytes = in.readBytes(256);
             out.writeBytes(bytes); // writes the bytes read from in to out
        
@@ -108,7 +108,7 @@ methods:
         summary:  The base64 data being written.
         type: String
     examples:
-        example: |
+      - example: |
             var base64 = in.readBase64(256);
             out.writeBase64(base64); // writes the base64 data read from in to out
   
@@ -124,7 +124,7 @@ properties:
     type: Boolean
     permission: read-only
     examples:
-        example: |
+      - example: |
             if(stream.eof) {
                // file has been read completely
              }
@@ -138,7 +138,7 @@ properties:
         If the read/write operation is not successful, the position of the stream is unchanged.
     type: Number
     examples:
-        example: |
+      - example: |
             Ti.API.info(stream.position); // displays current stream position
             // alters current stream position to the begin of the file,
             // like seek() in C
@@ -154,5 +154,5 @@ properties:
     type: Number
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(stream.bytesAvailable); // displays the available bytes to be read
