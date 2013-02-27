@@ -196,7 +196,8 @@ properties:
              For attributes of an array type, the filter will match if any value in the array matches.
   - name: matchFlag
     type: String
-    summary: Used for attribute-based filtering: "EXACTLY", "FULLSTRING", "CONTAINS", "STARTSWITH", "ENDSWITH", "EXISTS".
+    summary: |
+        Used for attribute-based filtering: "EXACTLY", "FULLSTRING", "CONTAINS", "STARTSWITH", "ENDSWITH", "EXISTS".
   - name: matchValue
     type: any
     summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
@@ -226,7 +227,8 @@ platforms: [tizen]
 properties:
   - name: type
     type: String
-    summary: The composite filter type: "UNION", "INTERSECTION".
+    summary: | 
+        The composite filter type: "UNION", "INTERSECTION".
   - name: filters
     type: AbstractFilter
     summary: The list of filters in the composite filter.
@@ -241,7 +243,8 @@ properties:
     summary: The name of the object attribute used for sorting.
   - name: order
     type: String
-    summary: The type of the sorting: "ASC", "DESC".
+    summary: |
+        The type of the sorting: "ASC", "DESC".
     optional: true
 
 name: SimpleCoordinatesUnit

@@ -35,456 +35,547 @@ properties:
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_MISC
-    summary: 0x00 
+    summary: |
+        0x00 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER
-    summary: 0x01 
+    summary: |
+        0x01 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_PHONE
-    summary: 0x02 
+    summary: |
+        0x02 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_NETWORK
-    summary: 0x03 
+    summary: |
+        0x03 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_AUDIO_VIDEO
-    summary: 0x04 
+    summary: |
+        0x04 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_PERIPHERAL
-    summary: 0x05 
+    summary: |
+        0x05 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_IMAGING
-    summary: 0x06 
+    summary: |
+        0x06 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_WEARABLE
-    summary: 0x07 
+    summary: |
+        0x07 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_TOY
-    summary: 0x08
+    summary: |
+        0x08
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_HEALTH
-    summary: 0x09
+    summary: |
+        0x09
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MAJOR_UNCATEGORIZED
-    summary: 0x1F 
+    summary: |
+        0x1F 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED
-    summary: 0x00 
+    summary: |
+        0x00 
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_SERVER
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_LAPTOP
-    summary: 0x03
+    summary: |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_HANDHELD_PC_OR_PDA
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_PALM_PC_OR_PDA
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_WEARABLE
-    summary: 0x06
+    summary: |
+        0x06
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_UNCATEGORIZED
-    summary: 0x00
+    summary: |
+        0x00
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CELLULAR
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CORDLESS
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_SMARTPHONE
-    summary: 0x03
+    summary: |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_MODEM_OR_GATEWAY
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_ISDN
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_UNRECOGNIZED
-    summary: 0x00
+    summary: |
+        0x00
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_WEARABLE_HEADSET
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HANDSFREE
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_MICROPHONE
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_LOUDSPEAKER
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HEADPHONES
-    summary: 0x06
+    summary: |
+        0x06
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_PORTABLE_AUDIO
-    summary: 0x07
+    summary: |
+        0x07
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAR_AUDIO
-    summary: 0x08
+    summary: |
+        0x08
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_SETTOP_BOX
-    summary: 0x09
+    summary: |
+        0x09
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HIFI
-    summary: 0x0a
+    summary: |
+        0x0a
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VCR
-    summary: 0x0b
+    summary: |
+        0x0b
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CAMERA
-    summary: 0x0c
+    summary: |
+        0x0c
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAMCORDER
-    summary: 0x0d
+    summary: |
+        0x0d
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_MONITOR
-    summary: 0x0e
+    summary: |
+        0x0e
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_DISPLAY_AND_LOUDSPEAKER
-    summary: 0x0f
+    summary: |
+        0x0f
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CONFERENCING
-    summary: 0x10
+    summary: |
+        0x10
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_GAMING_TOY
-    summary: 0x12
+    summary: |
+        0x12
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_UNCATEGORIZED
-    summary: 0
+    summary: |
+        0
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD
-    summary: 0x10
+    summary: |
+        0x10
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_POINTING_DEVICE
-    summary: 0x20
+    summary: |
+        0x20
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD_AND_POINTING_DEVICE
-    summary: 0x30
+    summary: |
+        0x30
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_JOYSTICK
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_GAMEPAD
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_REMOTE_CONTROL
-    summary:  0x03
+    summary:  |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_SENSING_DEVICE 
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DEGITIZER_TABLET
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_CARD_READER
-    summary: 0x06
+    summary: |
+        0x06
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DIGITAL_PEN
-    summary: 0x07
+    summary: |
+        0x07
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_SCANNER
-    summary: 0x08
+    summary: |
+        0x08
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_INPUT_DEVICE
-    summary: 0x09
+    summary: |
+        0x09
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_UNCATEGORIZED
-    summary: 0x00
+    summary: |
+        0x00
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_DISPLAY
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_CAMERA
-    summary: 0x08
+    summary: |
+        0x08
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_SCANNER
-    summary: 0x10
+    summary: |
+        0x10
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_PRINTER
-    summary: 0x20
+    summary: |
+        0x20
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_WRITST_WATCH
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_PAGER
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_JACKET
-    summary: 0x03
+    summary: |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_HELMET
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_GLASSES
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_ROBOT
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_VEHICLE
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_DOLL
-    summary: 0x03
+    summary: |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_CONTROLLER
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_GAME
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_UNDEFINED
-    summary: 0x00
+    summary: |
+        0x00
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BLOOD_PRESSURE_MONITOR
-    summary: 0x01
+    summary: |
+        0x01
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_THERMOMETER
-    summary: 0x02
+    summary: |
+        0x02
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_WEIGHING_SCALE
-    summary: 0x03
+    summary: |
+        0x03
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_GLUCOSE_METER
-    summary: 0x04
+    summary: |
+        0x04
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_OXIMETER
-    summary: 0x05
+    summary: |
+        0x05
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_RATE_MONITOR
-    summary: 0x06
+    summary: |
+        0x06
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_DATA_DISPLAY
-    summary: 0x07
+    summary: |
+        0x07
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_STEP_COUNTER
-    summary: 0x08
+    summary: |
+        0x08
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BODY_COMPOSITION_ANALYZER
-    summary: 0x09
+    summary: |
+        0x09
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_MEDICATION_MONITOR
-    summary: 0x0b
+    summary: |
+        0x0b
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_KNEE_PROSTHESIS
-    summary: 0x0c
+    summary: |
+        0x0c
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_ANKLE_PROSTHESIS
-    summary: 0x0d
+    summary: |
+        0x0d
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY
-    summary: 0x0001
+    summary: |
+        0x0001
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING
-    summary: 0x0008
+    summary: |
+        0x0008
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_NETWORKING
-    summary: 0x0010
+    summary: |
+        0x0010
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_RENDERING
-    summary: 0x0020
+    summary: |
+        0x0020
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_CAPTURING
-    summary: 0x0040
+    summary: |
+        0x0040
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_OBJECT_TRANSFER
-    summary: 0x0080
+    summary: |
+        0x0080
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_AUDIO
-    summary: 0x0100
+    summary: |
+        0x0100
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_TELEPHONY
-    summary: 0x0200
+    summary: |
+        0x0200
     type: Number
     permission: read-only
 
   - name: BLUETOOTH_CLASS_DEVICE_SERVICE_INFORMATION
-    summary: 0x0400
+    summary: |
+        0x0400
     type: Number
     permission: read-only

@@ -317,7 +317,9 @@ methods:
 ---
 name: MessageFoldersChangeCallback
 summary: watchFoldersChanges callback. 
-description: This callback interface specifies a callback as a set of functions that will be invoked when message folders from MessageStorage change. Each function takes a list of folders as the input argument. 
+description: |
+    This callback interface specifies a callback as a set of functions that will be invoked when message folders from MessageStorage change. Each function takes a list of folders as the input argument. 
+methods:
   - name: foldersadded
     summary: Method invoked when folders are added to MessageStorage. 
     parameters:
