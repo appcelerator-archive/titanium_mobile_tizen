@@ -168,7 +168,7 @@ methods:
         type: Callback<WebAPIError>
         optional: true
     examples:
-        example: |
+       -example: |
             function onStorage(storage) {
                // Do something
             }
@@ -193,7 +193,7 @@ methods:
         type: Callback<WebAPIError>
         optional: true
     examples:
-        example: |
+       -example: |
             function alertForCorruptedRemovableDrives(storages) {
                  for (var i = 0; i < storages.length; i++) {
                      if (storages[i].type != "EXTERNAL")
@@ -225,7 +225,7 @@ methods:
         type: Callback<WebAPIError>
         optional: true
     examples:
-        example: |
+       -example: |
             var watchID;
             function onStorageStateChanged(storage) {
                 if (storage.state == "MOUNTED")
@@ -243,7 +243,7 @@ methods:
         summary:  Subscription Identifier.
         type: Number
     examples:
-        example: |
+       -example: |
             var watchID;
              function onStorageStateChanged(storage) {
                  if (storage.state == "MOUNTED")
