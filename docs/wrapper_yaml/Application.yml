@@ -9,7 +9,11 @@ methods:
     summary: Gets the Application object defining the current application.
     returns: 
       - type: Titanium.Application.Application
-        summary: Application The data structure that defines current application. 
+        summary: Application The data structure that defines current application.
+    examples:
+        example: |
+            var app = Ti.Tizen.Application.getCurrentApplication();
+            console.log("Current application's app id is " + app.appInfo.id);
 
   - name: launch
     summary: Launches an application with the given application ID. 
@@ -32,8 +36,13 @@ methods:
       - name: errorCallback
         summary: The method executes when an error occurs. Accepts error object as parameter.
         type: Callback<Titanium.Tizen.WebAPIError>
-        optional: ture
-
+        optional: true
+    examples:
+        example: |
+            function onsuccess() {
+                console.log("The application has launched successfully");
+            }
+            Ti.Tizen.Application.launch("org.tizen.calculator", onsuccess);
 
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
@@ -73,10 +82,35 @@ methods:
             and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
             and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
         type: Object
-        optional: true 
+        optional: true
+    examples:
+        example: |
+            var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
+                                                                uri: null,
+                                                                mime: "image/jpeg",
+                                                                category: null});
+            var appControlReplyCallback = {
+                // callee sent a reply
+                onsuccess: function(data) {
+                    for(var i=0; i < data.length; i++) {
+                        console.log("#"+i+" key:"+data[i].key);
+                        for(var j=0; j < data[i].value.length; j++) {
+                            console.log("   value#"+j+":"+data[i].value[j]);
+                        }
+                    }
+                },
+                // Something went wrong
+                onfailure: function() {
+                    console.log('The launch application control failed');
+                }
+            }
+            Ti.Tizen.Application.launchAppControl(appControl, null,
+                                                  function() {console.log("launch application control succeed");},
+                                                  function(e) {console.log("launch application control failed. reason: " + e.message);},
+                                                  appControlReplyCallback );
 
   - name: findAppControl
-  	summary: Finds application information can be launched with the given application control.  
+    summary: Finds application information can be launched with the given application control.
     description: |
         An application can get a list of other applications can be launched with the application control.
         The ErrorCallback() is launched with these error types:
@@ -97,9 +131,39 @@ methods:
         summary: The method to call when an error occurs. Accepts error object as parameter.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
-
+    examples:
+        example: |
+            var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
+                                                                uri: null,
+                                                                mime: "image/jpeg",
+                                                                category: null});
+            function successCB(appInfos, appControl) {
+                // em>appControl/em> is same object with the value passed as first parameter to em>findAppControl()/em>
+                var appControlReplyCallback = {
+                    // callee sent a reply
+                    onsuccess: function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            console.log("#"+i+" key:"+data[i].key);
+                            for(var j=0; j < data[i].value.length; j++) {
+                                console.log("   value#"+j+":"+data[i].value[j]);
+                            }
+                        }
+                    },
+                    // Something went wrong
+                    onfailure: function() {
+                        console.log('The launch application control failed');
+                    }
+                }
+                var appId = appInfos[0].id; // select first app's id
+                Ti.Tizen.Application.launchAppControl(appControl, appId,
+                                                      function() {console.log("launch application control succeed"); },
+                                                      function(e) {console.log("launch application control failed. reason: " + e.message); },
+                                                      appControlReplyCallback );
+            }
+            Ti.Tizen.Application.findAppControl(appControl, successCB); 
+ 
   - name: getAppsContext
-  	summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
     description: |
         The errorCallback() is launched with this error type:
             UnknownError - If an unknownn error occurs.
@@ -113,7 +177,14 @@ methods:
         summary: The method to call when an error occurs. Accepts error object as parameter.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
-
+    examples:
+        example: |
+            function onRunningAppsContext(contexts) {
+                for (var i = 0; i < contexts.length; i++)
+                addToTaskManager(contexts[i]);
+            }
+            Ti.Tizen.Application.getAppsContext(onRunningAppsContext);
+ 
   - name: getAppContext
     summary: |
         Gets the application context for the specified application context ID. 
@@ -134,17 +205,24 @@ methods:
         The errorCallback() is launched with this error type:
         UnknownError - If an unknown error occurs.
 
-    parameters: 
+    parameters:
 
       - name: successCallback
-        summary: The method to call when the invocation ends successfully.  
+        summary: The method to call when the invocation ends successfully.
         type: Callback<Titanium.Tizen.Application.ApplicationInformation[]>
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
-
+    examples:
+        example: |       
+            function onListInstalledApps(applications) {
+                for (var i = 0; i < applications.length; i++)
+                    addToApplicationGrid(applications[i]);
+                }
+            Ti.Tizen.Application.getAppsInfo(onListInstalledApps);
+ 
   - name: getAppInfo
     summary: Gets application information for a specified application ID.  
     description: |
@@ -158,8 +236,12 @@ methods:
       - name: id
         summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
         type: String
-        optional: ture
-
+        optional: true
+    examples:
+        example: |
+            var appContext = Ti.Tizen.Application.getAppContext(null);
+            console.log("Application context retrieved for app " + appContext.id);
+ 
   - name: addAppInfoEventListener
     summary: Adds a listener for receiving any notification for changes in the list of the installed applications on a device. 
     description: |
@@ -179,11 +261,97 @@ methods:
             called when the application is installed, `onupdated` a function that accepts parameter of type Titanium.Tizen.Application.ApplicationInformation, and will be 
             called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
         type: Object
-
+    examples:
+        example: |
+            var appEventCallback = {
+                oninstalled: function(application) {
+                    console.log('The application ' + application.name + ' is installed');
+                },
+                onupdated: function(application) {
+                    console.log('The application ' + application.name + ' is updated');
+                },
+                onuninstalled: function(appid) {
+                    console.log('The application ' + appid + ' is uninstalled');
+                }
+            };
+            var watchId = Ti.Tizen.Application.addAppInfoEventListener(appEventCallback);
+    
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
     parameters: 
 
       - name: watchId
-        summary: An ID that identifies the listener.   
+        summary: An ID that identifies the listener.
         type: Number
+    examples:
+        example: |
+            Ti.Tizen.Application.removeAppInfoEventListener(watchId);
+ 
+  - name: createApplicationControlData
+    summary: Creates and returns an instance of <Ti.Tizen.Application.ApplicationControlData>.
+    returns: 
+        type: Ti.Tizen.Application
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for ApplicationControlDataUnit.
+        type: Dictionary<ApplicationControlDataUnit>
+
+    examples:
+        -example: |
+            var appControlData = Ti.Tizen.createApplicationControlData({key: "image", value: [imagedata1]});
+
+  - name: createApplicationControl
+    summary: Creates and returns an instance of <Ti.Tizen.Application.ApplicationControl>.
+    returns: 
+        type: Ti.Tizen.Application
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for ApplicationControlUnit.
+        type: Dictionary<ApplicationControlUnit>
+
+    examples:
+        -example: |
+            var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/share",
+                                                                uri: "share.html",
+                                                                mime: "image/*",
+                                                                category: null,
+                                                                data: [Ti.Tizen.createApplicationControlData(key: "images", value: [imagedata1, imagedata2])]});
+# Pseudo-type
+---
+name: ApplicationControlDataUnit
+summary: Defines a key/value pair used to pass data between applications through the ApplicationControl interface.
+platforms: [tizen]
+properties:
+  - name: key
+    type: String
+    summary: An attribute to store the name of a key.
+  - name: value
+    type: String
+    summary: An attribute to store the value associated with a key.
+    
+name: ApplicationControlUnit
+summary: Consists of an operation, URI, MIME type, and data. It describes an action to be performed by other applications and is passed to launch other applications.
+         If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application.
+platforms: [tizen]
+properties:
+  - name: operation
+    type: String
+    summary: An attribute to store the string that defines the action to be performed by an application control.
+  - name: uri 
+    type: String
+    summary: An attribute to store the URI needed by application control.
+    optional: true
+  - name: mime  
+    type: String
+    summary: An attribute to store the MIME type of a content.
+    optional: true
+  - name: category   
+    type: String
+    summary: An attribute to store the category of the application to be launched.
+    optional: true
+  - name: data  
+    type: Ti.Tizen.Application.ApplicationControlData
+    summary: An array of attributes to store the data needed for an application control.
+    optional: true
