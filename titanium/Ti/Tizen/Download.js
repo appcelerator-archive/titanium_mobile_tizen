@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Download/URLDownload'], function(lang, WebAPIError, URLDownload) {
-	return lang.setObject('Ti.Tizen.Download', {
+define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Download/URLDownload', 'Ti/_/Evented'], function(lang, WebAPIError, URLDownload, Evented) {
+	return lang.setObject('Ti.Tizen.Download', Evented, {
 
 		constants: {
 			DOWNLOAD_STATE_QUEUED: 'QUEUED',

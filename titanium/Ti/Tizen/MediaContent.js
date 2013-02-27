@@ -1,5 +1,7 @@
-define(['Ti/_/lang', 'Ti/Tizen/MediaContent/MediaSource', 'Ti/Tizen/MediaContent/MediaFolder', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaContent/MediaAudio', 'Ti/Tizen/MediaContent/MediaVideo', 'Ti/Tizen/MediaContent/MediaImage'], function(lang, MediaSource, MediaFolder, MediaItem, MediaAudio, MediaVideo, MediaImage) {
-	return lang.setObject('Ti.Tizen.MediaContent', {
+define(['Ti/_/lang', 'Ti/Tizen/MediaContent/MediaSource', 'Ti/Tizen/MediaContent/MediaFolder', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaContent/MediaAudio', 
+		'Ti/Tizen/MediaContent/MediaVideo', 'Ti/Tizen/MediaContent/MediaImage', 'Ti/_/Evented'], 
+		function(lang, MediaSource, MediaFolder, MediaItem, MediaAudio, MediaVideo, MediaImage, Evented) {
+	return lang.setObject('Ti.Tizen.MediaContent', Evented, {
 
 		constants: {
 			MEDIA_FOLDER_STORAGE_TYPE_INTERNAL: 'INTERNAL',

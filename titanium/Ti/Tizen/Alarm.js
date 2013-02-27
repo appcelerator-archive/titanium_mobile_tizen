@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Alarm/AlarmRelative', 'Ti/Tizen/Alarm/AlarmAbsolute'], function(lang, AlarmRelative, AlarmAbsolute) {
-	return lang.setObject('Ti.Tizen.Alarm', {
+define(['Ti/_/lang', 'Ti/Tizen/Alarm/AlarmRelative', 'Ti/Tizen/Alarm/AlarmAbsolute', 'Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
+	return lang.setObject('Ti.Tizen.Alarm', Evented, {
 
 		constants: {
 			PERIOD_MINUTE: 60, //unsigned long long

@@ -81,7 +81,7 @@ methods:
             Pass a dictionary with the following supported keys: `onsuccess` a function that accepts as parameter array of Titanium.Tizen.Application.ApplicationControlData, 
             and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
             and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
-        type: Object
+        type: ApplicationControlDataArrayReplyCallback
         optional: true
     examples:
         example: |
@@ -110,7 +110,7 @@ methods:
                                                   appControlReplyCallback );
 
   - name: findAppControl
-    summary: Finds application information can be launched with the given application control.
+    summary: Finds application information can be launched with the given application control.  
     description: |
         An application can get a list of other applications can be launched with the application control.
         The ErrorCallback() is launched with these error types:
@@ -275,7 +275,6 @@ methods:
                 }
             };
             var watchId = Ti.Tizen.Application.addAppInfoEventListener(appEventCallback);
-    
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
     parameters: 
@@ -355,3 +354,46 @@ properties:
     type: Ti.Tizen.Application.ApplicationControlData
     summary: An array of attributes to store the data needed for an application control.
     optional: true
+---
+name: ApplicationControlDataArrayReplyCallback
+summary: This call back interface specifies success callbacks that are invoked as a reply from the requseted application control within the application control requestor. 
+description: |
+    This callback interface specifies two methods:
+        onsuccess() - Invoked by the callee application calls RequestedApplicationControl.replyResult().
+        onfailure() - Invoked if the callee application calls RequestedApplicationControl.replyFailure().
+methods:
+  - name: onsuccess
+    summary: Called when the callee application calls RequestedApplicationControl.replyResult().  
+    parameters:
+      - name: data 
+        summary: An array of ApplicationControlData objects 
+        type: Titanium.Tizen.Application.ApplicationControlData[]
+        optional: true
+
+  - name: onfailure 
+    summary: Called when the callee application calls RequestedApplicationControl.replyFailure(). 
+---
+name: ApplicationInformationEventCallback
+summary: The callback interface to specify for subscribing for notification of changes in the list of installed applications on a device. 
+description: This callback interface specifies methods that will be invoked when an application is installed, updated, or uninstalled.  
+methods: 
+  - name: oninstalled
+    summary: Called when an application is installed. 
+    parameters:
+      - name: info 
+        summary: The application information of the installed application. 
+        type: Titanium.Tizen.Application.ApplicationInformation[]
+
+  - name: onupdated 
+    summary: Called when an application is updated. 
+    parameters:
+      - name: info 
+        summary: The application information of the updated application. 
+        type: Titanium.Tizen.Message.MessageConversation[]
+
+  - name: onuninstalled
+    summary: Called when an application is uninstalled. 
+    parameters:
+      - name: id
+        summary: The ID of the uninstalled application.  
+        type: String

@@ -1,10 +1,11 @@
-define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemInfo/SystemInfoPower', 'Ti/Tizen/SystemInfo/SystemInfoCpu', 'Ti/Tizen/SystemInfo/SystemInfoStorage', 'Ti/Tizen/SystemInfo/SystemInfoDisplay',
-		'Ti/Tizen/SystemInfo/SystemInfoDevice', 'Ti/Tizen/SystemInfo/SystemInfoNetwork', 'Ti/Tizen/SystemInfo/SystemInfoWifiNetwork', 'Ti/Tizen/SystemInfo/SystemInfoCellularNetwork', 'Ti/Tizen/SystemInfo/SystemInfoEthernetNetwork',
-		'Ti/Tizen/SystemInfo/SystemInfoSIM', 'Ti/Tizen/SystemInfo/SystemInfoDeviceOrientation', 'Ti/Tizen/WebAPIError'],
+define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemInfo/SystemInfoPower', 'Ti/Tizen/SystemInfo/SystemInfoCpu', 'Ti/Tizen/SystemInfo/SystemInfoStorage', 
+		'Ti/Tizen/SystemInfo/SystemInfoDisplay', 'Ti/Tizen/SystemInfo/SystemInfoDevice', 'Ti/Tizen/SystemInfo/SystemInfoNetwork', 'Ti/Tizen/SystemInfo/SystemInfoWifiNetwork', 
+		'Ti/Tizen/SystemInfo/SystemInfoCellularNetwork', 'Ti/Tizen/SystemInfo/SystemInfoEthernetNetwork', 'Ti/Tizen/SystemInfo/SystemInfoSIM', 
+		'Ti/Tizen/SystemInfo/SystemInfoDeviceOrientation', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'],
 		function(lang, SystemInfoProperty, SystemInfoPower, SystemInfoCpu, SystemInfoStorage, SystemInfoDisplay, SystemInfoDevice, SystemInfoNetwork,
-					SystemInfoWifiNetwork, SystemInfoCellularNetwork, SystemInfoEthernetNetwork, SystemInfoSIM, SystemInfoDeviceOrientation, WebAPIError) {
+					SystemInfoWifiNetwork, SystemInfoCellularNetwork, SystemInfoEthernetNetwork, SystemInfoSIM, SystemInfoDeviceOrientation, WebAPIError, Evented) {
 	
-	return lang.setObject('Ti.Tizen.SystemInfo', {
+	return lang.setObject('Ti.Tizen.SystemInfo', Evented, {
 
 		constants: {
 			SYSTEM_INFO_NETWORK_TYPE_NONE: 'NONE',

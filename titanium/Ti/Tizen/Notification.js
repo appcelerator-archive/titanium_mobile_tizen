@@ -1,5 +1,5 @@
-define(['Ti/_/lang'], function(lang) {
-	return lang.setObject('Ti.Tizen.Notification', {
+define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
+	return lang.setObject('Ti.Tizen.Notification', Evented, {
 
 		constants: {
 			NOTIFICATION_TYPE_STATUS: 'STATUS',
@@ -49,7 +49,7 @@ define(['Ti/_/lang'], function(lang) {
 		},
 
 		createStatusNotification: function(args) {
-			return new (require('Ti/Tizen/Notification/StatusNotification'))(args);
+			return new StatusNotification(args);
 		},
 	});
 });

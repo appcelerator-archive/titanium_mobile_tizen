@@ -21,14 +21,14 @@ methods:
         type: String
 
       - name: appControl
-        summary:The data structure describing application control details.
+        summary: The data structure describing application control details.
         type: Titanium.Tizen.Application.ApplicationControl
         optional: true
 
   - name: remove
     summary: Removes an alarm from the storage. 
     parameters:
- 
+
       - name: id
         summary: The ID of the alarm to remove 
         type: String
@@ -38,10 +38,10 @@ methods:
     description: "Because each application has its own alarm storage, this method will only remove alarms added by the calling application."
 
   - name: get
-  	summary: Returns an alarm as per the specified identifier.
-  	returns: 
-  	  - type: Titanium.Tizen.Alarm.Alarm
-  	    summary: Alarm An alarm object with the specified ID. 
+    summary: Returns an alarm as per the specified identifier.
+    returns: 
+      - type: Titanium.Tizen.Alarm.Alarm
+        summary: Alarm An alarm object with the specified ID. 
     parameters: 
 
       - name: id
@@ -49,7 +49,7 @@ methods:
         type: String
 
   - name: getAll
-  	summary: Returns all alarms.
+    summary: Returns all alarms.
     description: |
         This method returns all alarms in an application storage. 
         Alarms that have already been triggered are removed automatically from the storage. 

@@ -18,8 +18,8 @@ methods:
         For example, an application might be launched to display an image on a page by other application's request. 
         In all of these cases, the application is responsible for checking the contents of the application control and responding appropriately when it is launched. 
   - returns: 
-        type: Titanium.Tizen.Application.RequestedApplicationControl
-      - summary: The details of an requested application control
+      - type: Titanium.Tizen.Application.RequestedApplicationControl
+        summary: The details of an requested application control
 
 properties:
   - name: appInfo
