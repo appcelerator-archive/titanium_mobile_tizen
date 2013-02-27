@@ -1,0 +1,189 @@
+---
+name: Titanium.Tizen.Application
+summary: This module provides methods to manage application.
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+  - name: getCurrentApplication
+    summary: Gets the Application object defining the current application.
+    returns: 
+      - type: Titanium.Application.Application
+        summary: Application The data structure that defines current application. 
+
+  - name: launch
+    summary: Launches an application with the given application ID. 
+    description: |
+        The ErrorCallback() is launched with these error types:
+        NotFoundError - If the application is not found with given ID.
+        InvalidValuesError - If any of the input parameters contain an invalid value.
+        UnknownError - If any other error occurs.
+    parameters:
+ 
+      - name: id
+        summary: A unique string representing application ID.
+        type: String
+
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary: The method executes when an error occurs. Accepts error object as parameter.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: ture
+
+
+  - name: launchAppControl
+    summary: Launches an application with the specified application control. 
+    description: |
+        An application can launch other applications with the application control, and get back the results from the launched applications.
+        The application control consists of an operation, URI, and MIME type, and describes the request to be performed by the newly launched application. The application control is passed to the launchAppControl() method to launch an application. The system tries to find the proper application to perform the requested application control, then launches the selected application.
+        The application control request is passed to the newly launched application and it can be accessed by getRequestedAppControl() method. The passed application control contains the reason the application was launched and information about what the application is doing. The launched application can send a result to the caller application with the replyResult() method of RequestedApplicationControl interface.
+        The ErrorCallback() is launched with these error types:
+            NotFoundError - If system cannot find the application that matches the specified application control.
+            InvalidValuesError - If any of the input parameters contain an invalid value.
+            UnknownError: If any other error occurs.
+
+    parameters:
+
+      - name: appControl
+        summary: The data structure describing application control details.
+        type: Titanium.Application.ApplicationControl
+ 
+      - name: id
+        summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
+        type: String
+
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary: The method executes when an error occurs. Accepts error object as parameter.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true    
+
+      - name: replyCallback
+        summary: |
+            The method to invoke when the application gets back results from the launched application. 
+            Pass a dictionary with the following supported keys: `onsuccess` a function that accepts as parameter array of Titanium.Tizen.Application.ApplicationControlData, 
+            and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
+            and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
+        type: Object
+        optional: true 
+
+  - name: findAppControl
+  	summary: Finds application information can be launched with the given application control.  
+    description: |
+        An application can get a list of other applications can be launched with the application control.
+        The ErrorCallback() is launched with these error types:
+            NotFoundError - If system cannot find the application that corresponds to the specified application control.
+            InvalidValuesError - If any of the input parameters contain an invalid value.
+            UnknownError - If any other error occurs.
+    parameters: 
+
+      - name: appControl
+        summary: A data structure describing application control details.
+        type: Titanium.Tizen.Application.ApplicationControl
+
+      - name: successCallback
+        summary: The method to call that returns a list of application information. 
+        type: Callback<Titanium.Tizen.Application.ApplicationInformation[], Titanium.Tizen.Application.ApplicationControl>
+
+      - name: errorCallback
+        summary: The method to call when an error occurs. Accepts error object as parameter.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: getAppsContext
+  	summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    description: |
+        The errorCallback() is launched with this error type:
+            UnknownError - If an unknownn error occurs.
+    parameters:
+
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.  
+        type: Callback<Titanium.Tizen.Application.ApplicationContext[]>
+
+      - name: errorCallback
+        summary: The method to call when an error occurs. Accepts error object as parameter.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: getAppContext
+    summary: |
+        Gets the application context for the specified application context ID. 
+        If the ID is set to null or is not set at all, the method returns the application context of the current application. 
+        The list of running applications and their application IDs is obtained with getAppsContext().
+    returns: 
+      - type: Titanium.Tizen.Application.ApplicationContext
+        summary: A data structure that lists running application details.
+    parameters: 
+
+      - name: contextId
+        summary: "A string representing an application context ID. If the ID is not provided, the application context of the calling application will be returned."
+        type: String
+
+  - name: getAppsInfo
+    summary: Gets the list of installed application's information on a device. The information contained on each application corresponds to the application state at the moment when the list was generated. 
+    description: |
+        The errorCallback() is launched with this error type:
+        UnknownError - If an unknown error occurs.
+
+    parameters: 
+
+      - name: successCallback
+        summary: The method to call when the invocation ends successfully.  
+        type: Callback<Titanium.Tizen.Application.ApplicationInformation[]>
+
+      - name: errorCallback
+        summary: The method to call when an error occurs. Accepts error object as parameter.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: getAppInfo
+    summary: Gets application information for a specified application ID.  
+    description: |
+        If the ID is set to null or not set at all, it returns application information for the current application. 
+        The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+    returns:
+      - type: Titanium.Tizen.Application.ApplicationInformation
+        summary: The application metadata
+    parameters: 
+
+      - name: id
+        summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
+        type: String
+        optional: ture
+
+  - name: addAppInfoEventListener
+    summary: Adds a listener for receiving any notification for changes in the list of the installed applications on a device. 
+    description: |
+        It install a callback that is triggered every time a change occurs on the list of installed applications on a device. This change may be occured by a new installation, uninstallation, or update of an application.
+        When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
+        The ApplicationInformationEventCallback must be invoked every time a new application is installed, removed, or updated.
+        The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
+
+    returns:
+      - type: Number
+        summary: ID of the listener that can be used to remove the listener later. 
+    parameters: 
+
+      - name: eventCallback
+        summary: |
+            Pass a dictionary with the following supported keys: `oninstalled` a function that accepts parameter of type Titanium.Tizen.Application.ApplicationInformation,  
+            called when the application is installed, `onupdated` a function that accepts parameter of type Titanium.Tizen.Application.ApplicationInformation, and will be 
+            called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
+        type: Object
+
+  - name: removeAppInfoEventListener
+    summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
+    parameters: 
+
+      - name: watchId
+        summary: An ID that identifies the listener.   
+        type: Number

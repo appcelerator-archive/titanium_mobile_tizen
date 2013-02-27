@@ -1,0 +1,205 @@
+---
+name: Titanium.Tizen.Message.MessageService
+summary: Message creating, sending, and fetching capabilities. 
+description: |
+    This interface allows a web application to manipulate and send messages.
+    The interface allows you to fetch messages for all folders belonging to one account, with synchronizable flag set, using the sync() method, or for a given folder using the syncFolder() method.
+    The interface allows you to fetch the message body for a given message using loadMessageBody() method.
+
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: sendMessage
+    summary: Attempts to send the specified message. 
+    description: |
+        For messaging technologies in which the message is sent individually to every recipient, (such as SMS) individual notification MUST be supported as follows:
+        For every individual recipient in the destination list, if the message cannot be sent to that recipient, the onerror method of the errorCallback argument MUST be invoked with the corresponding error type as input parameter. These error types may be passed, depending on the the error conditions:
+            NetworkError: If the network connection is not accessible.
+            InvalidValuesError: If any of the input parameters contains an invalid value.
+            UnknownError: In any other error case.
+        The error message contains the name of the recipient who failed to receive the sent message.
+        When the operation is fully completed (that is, the implementation has the result of the send operation for all recipients), the onsuccess(DOMString[] recipients) method of the successCallback will be invoked with an array of recipients who received the sent message, as input parameter.
+    parameters: 
+      - name: message
+        summary: The message to be sent. 
+        type: Titanium.Tizen.Message.Message
+
+      - name: successCallback
+        summary: To be invoked if the message is successfully sent
+        type: Callback<Strings[]> 
+        optional: true
+
+      - name: errorCallback
+        summary: To be invoked if the sending request fails.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: loadMessageBody
+    summary: Attempts to load the body for the specified message. 
+    description: |
+        It is the back end's responsibility to detect which mime parts of the message are related to the message body and should be loaded. If the message body is already loaded, the onsuccess method of the successCallback will be invoked immediately.
+        The errorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contains an invalid value.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: message
+        summary: Message with the body to be loaded. 
+        type: Titanium.Tizen.Message.Message
+
+      - name: successCallback
+        summary: Function to be invoked if the message body is successfully loaded. 
+        type: Callback<Titanium.Tizen.Message.Message> 
+
+      - name: errorCallback
+        summary:  Function to be invoked if the loading request fails
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+  - name: loadMessageAttachment
+    summary: Attempts to load the specified message attachment. 
+    description: |
+        This method is used only for EMAIL services. If the message attachment is already loaded, the onsuccess method of the successCallback will be invoked immediately.
+        The errorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contains an invalid value.
+            UnknownError: In any other error case.
+
+    parameters: 
+      - name: attachment
+        summary: Message attachment to be loaded. 
+        type: Titanium.Tizen.Message.MessageAttachment
+
+      - name: successCallback
+        summary: Function to be invoked if the message attachment is successfully loaded. 
+        type: Callback<Titanium.Tizen.Message.MessageAttachment> 
+
+      - name: errorCallback
+        summary: Function to be invoked if the loading request fails. 
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+- name: sync
+    summary: Synchronizes the service content with an external mail server. 
+    description: |
+        This method is used only for EMAIL services. This method performs the same actions as syncFolder for every folder with Synchronizable flag set within the current Messaging service.
+        The errorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contains an invalid value.
+            AbortError: If the operation is stopped.
+            UnknownError: In any other error case.
+    returns: 
+      - type: Number
+        summary: Identifier which can be used to stop this service operation. 
+
+    parameters: 
+      - name: successCallback
+        summary:  To be invoked if all the actions are completed successfully
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary: To be invoked if the request fails. 
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+      - name: limit
+        summary: The maximum amount of messages retrieved within each folder. 
+        type: Number
+        optional: true
+
+- name: syncFolder
+    summary: Synchronizes the folder content with an external mail server. 
+    description: |
+        This method is used only for EMAIL services. This method is performed the following actions:
+            export local changes within a given folder from device to server (If exportUpdates flag set).
+            retrieve the list of available messages from within the given folder.
+        Messages are retrieved from a given folder, even if synchronizable flag for this folder is not set. The backend is to decide which data is retrieved for every message. It can be:
+            message header details
+            whole message body
+        The limit of latest messages for the given folder MUST be retrieved and put into MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
+        The errorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contains an invalid value.
+            AbortError: If the operation is stopped.
+            UnknownError: In any other error case.
+    returns: 
+      - type: Number
+        summary: Identifier which can be used to stop this service operation. 
+
+    parameters: 
+      - name: folder
+        summary: Folder to be synchronized. 
+        type: Titanium.Tizen.Message.MessageFolder
+
+      - name: successCallback
+        summary: Function to be invoked if all actions are completed successfully. 
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary: Function to be invoked if the request fails.
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+      - name: limit
+        summary: The maximum amount of messages retrieved within a given folder. 
+        type: Number
+        optional: true
+
+  - name: 
+    summary: Stops sync() and syncFoler() operation. 
+    description: |
+        If the operationId argument is valid and corresponds to a service operation already in place, the operation MUST be stopped and its error callback MUST be invoked with error type AbortError.
+        If the operationId argument is not valid or does not correspond to a valid service operation, the method will return without any further action.
+    parameters: 
+      - name: opId
+        summary: Service operation identifier. 
+        type: Number
+
+properties:
+  - name: type
+    summary: | 
+        The tag supported by this messaging service. Can be one of this constants: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, 
+        Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL
+    type: String
+    permission: read-only
+
+  - name: messageStorage
+    summary: | 
+        The interface for accessing MessageStorage for this Messaging service.
+        If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
+    type: Titanium.Tizen.Message.MessageStorage
+    permission: read-only
+
+examples: 
+  - title: This example demonstrates working with messageServices
+    example: |
+         // Define the success callback.
+         function messageSent(recipients) {
+           console.log("The SMS has been sent");
+         }
+
+         // Define the error callback.
+         function messageFailed(error) {
+           console.log("The SMS could not be sent " + error.message);
+         }
+
+         // Define service error callback.
+         function serviceErrorCB(error) {
+          console.log("Cannot get messaging service " + error.message);
+         }
+
+         // Define the success callback.
+         function serviceListCB(services) {
+           if (services.length > 0) {
+             // SMS sending example
+             var msg = new tizen.Message("messaging.sms", {plainBody:"I will arrive in 10 minutes.",
+                                          to:["+34666666666"]});
+             // Send request
+             services[0].sendMessage(msg, messageSent, messageFailed);
+           }
+         }
+
+         tizen.messaging.getMessageServices("messaging.sms",
+                                            serviceListCB,
+                                            serviceErrorCB);
+         

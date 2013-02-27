@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarItem) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarEvent, CalendarItem) {
 	return declare('Ti.Tizen.Calendar.Calendar', null, {
 		constructor: function(args) {
 			this._obj = args;
@@ -23,7 +23,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 		},
 
 		get: function(id /*CalendarItemId*/) {
-			return this._obj.get(id._obj);
+			return new CalendarEvent(this._obj.get(id._obj));
 		},
 
 		add: function(item /*CalendarItem*/) {
@@ -50,7 +50,11 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				successCallback.call(this, wrappedItems);
 			}
 
-			this._obj.addBatch(unwrappedItems, calendarItemsSuccessCallback, errorCallback);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.addBatch(unwrappedItems, calendarItemsSuccessCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		update: function(item /*CalendarItem*/, updateAllInstances /*boolean*/) {
@@ -66,7 +70,11 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				unwrapedItems.push(items[i]._obj);
 			}
 
-			this._obj.updateBatch(unwrapedItems, successCallback, errorCallback, updateAllInstances);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.updateBatch(unwrapedItems, successCallback, errorCallback && wrappedErrorCallback, updateAllInstances);
 		},
 
 		remove: function(id /*CalendarItemId*/) {
@@ -76,6 +84,9 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				obj = id;
 			} else if (id.toString() == '[object TiTizenCalendarCalendarEventId]') {
 				obj = id._obj;
+			} else {
+				Ti.API.error('Unexpected type of CalendarItemId.');
+				return;
 			}
 
 			this._obj.remove(obj);
@@ -90,7 +101,11 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				unwrapedIds.push(ids[i]._obj);
 			}
 
-			this._obj.removeBatch(unwrapedIds, successCallback, errorCallback);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.removeBatch(unwrapedIds, successCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		find: function(successCallback /*CalendarItemArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/) {
@@ -106,12 +121,11 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				successCallback.call(this, calendarItems);
 			}
 
-			this._obj.find(
-				calendarItemsListSuccesscallback,
-				errorCallback,
-				filter ? filter._obj : null,
-				sortMode ? sortMode._obj : null
-			);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.find(calendarItemsListSuccesscallback, errorCallback && wrappedErrorCallback, filter ? filter._obj : null, sortMode ? sortMode._obj : null);
 		},
 
 		addChangeListener: function(successCallback /*CalendarChangeCallback*/, errorCallback /*ErrorCallback*/) {
@@ -128,20 +142,24 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 			}
 
 			var wrappedCallback = {
-				onitemsadded: function(items) {
+				onitemsadded: successCallback.onitemsadded && function(items) {
 					successCallback.onitemsadded.call(this, getWrappedItems(items));
 				},
 
-				onitemsupdated: function(items) {
+				onitemsupdated: successCallback.onitemsupdated && function(items) {
 					successCallback.onitemsupdated.call(this, getWrappedItems(items));
 				},
 
-				onitemsremoved: function(items) {
+				onitemsremoved: successCallback.onitemsremoved &&function(items) {
 					successCallback.onitemsremoved.call(this, getWrappedItems(items));
 				}
 			};
 
-			return this._obj.addChangeListener(wrappedCallback, errorCallback);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			return this._obj.addChangeListener(wrappedCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		removeChangeListener: function(watchId /*long*/) {
