@@ -16,7 +16,7 @@ methods:
         type: Dictionary<AttributeFilterUnit>
 
     examples:
-        -example: |
+      - example: |
             function successCallback(contacts) {
                 console.log(contacts.length + " contacts found.");
             }
@@ -39,7 +39,7 @@ methods:
         type: Dictionary<AttributeRangeFilterUnit>
 
     examples:
-        -example: |
+      - example: |
             function successCallback(events) {
                 console.log(events.length + " events today.");
             }
@@ -70,7 +70,7 @@ methods:
         type: Dictionary<CompositeFilterUnit>
 
     examples:
-        -example: |
+      - example: |
             function successCallback(contacts) {
                 console.log(contacts.length + " contacts found.");
             }
@@ -102,7 +102,7 @@ methods:
         type: Dictionary<SortModeUnit>
 
     examples:
-        -example: |
+      - example: |
             function successCallback(contacts) {
                 console.log(contacts.length + " contacts found.");
             }
