@@ -14,27 +14,6 @@ description: |
 extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
-
-examples: 
-  - title: Code example
-    example:    |
-        // Defines the error callback.
-        function errorCallback(response) {
-            console.log( 'The following error occurred: ' +  response.name);
-        }
-        function addEventsSuccess(events) {
-            console.log("Successfully added " + events.length + " events!");
-        }
-        
-        // Gets the default calendar
-        var calendar = tizen.calendar.getDefaultCalendar("EVENT");
-        var ev = new tizen.CalendarEvent({description:'HTML5 Introduction', 
-                                       summary:'HTML5 Webinar ', 
-                                       startDate: new tizen.TZDate(2011, 3, 30, 10, 0), 
-                                       duration: new tizen.TimeDuration(1, "HOURS"),
-                                       location:'Huesca'});
-                     
-        calendar.addBatch([ev], addEventsSuccess, errorCallback);
  
 methods:
   - name: get
@@ -46,6 +25,16 @@ methods:
       - name: id
         summary:  The Calendar item identifier.
         type: CalendarEventId
+    examples:
+      - example: |    
+            var myCalendar; // Calendar supposed to be initialized
+            var itemId; // Calendar item identifier
+            try {
+                var item = myCalendar.get(itemId);
+                Titanium.API.info("Successfully retrieved item with id: " + itemId);
+            } catch(err) {
+                Titanium.API.info("Error: " + err.name);
+            }    
         
   - name: add
     summary: Adds an item to the calendar synchronously.
@@ -58,7 +47,17 @@ methods:
     parameters:
       - name: item
         summary:  The calendar item to be added.
-        type: Titanium.Tizen.Calendar.CalendarItem      
+        type: Titanium.Tizen.Calendar.CalendarItem
+    examples:
+      - example: |    
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+                                            summary:'HTML5 Webinar ', 
+                                            startDate: Titanium.Tizen.createTZDate(2011, 3, 30, 10, 0), 
+                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            location:'Huesca'});
+            calendar.add(ev);
+            Titanium.API.info('Event added with uid ' + ev.id.uid);        
           
   - name: addBatch
     summary: Adds an array of items to the calendar asynchronously.
@@ -85,6 +84,25 @@ methods:
         summary:  The method to invoke when the request fails.
         type: Callback<WebAPIError>        
         optional: true
+    examples:
+      - example: |    
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            function addEventsSuccess(events) {
+                Titanium.API.info("Successfully added " + events.length + " events!");
+            }
+            
+            // Gets the default calendar
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+                                            summary:'HTML5 Webinar ', 
+                                            startDate: Titanium.Tizen.createTZDate(2011, 3, 30, 10, 0), 
+                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            location:'Huesca'});
+            calendar.addBatch([ev], addEventsSuccess, errorCallback);    
 
   - name: update
     summary: Updates an existing item in the calendar synchronously with the one specified in the argument.
@@ -101,6 +119,28 @@ methods:
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
+    examples:
+      - example: |    
+            var myCalendar;
+            
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the event success callback.
+            function eventSearchSuccessCallback(events) {
+                events[0].description = 'New Description';
+                // Updates the first existing event.
+                myCalendar.update(events[0]);
+                Titanium.API.info("The first item description was updated!");
+            }
+            
+            // Gets the default calendar
+            myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            // Finds all events in a Calendar
+            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
         
   - name: updateBatch
     summary: Updates an array of existing items in the calendar asynchronously with the specified values in the argument.
@@ -125,6 +165,32 @@ methods:
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
+    examples:
+      - example: |    
+            var myCalendar;
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the success callback
+            function updateEventsSuccess() {
+                Titanium.API.info("Successfully updated !" );
+            }
+            
+            // Defines the event success callback.
+            function eventSearchSuccessCallback(events) {
+                events[0].description = 'New Description 1';
+                events[1].description = 'New Description 2';
+                // Update the first two existing events.
+                myCalendar.updateBatch(events.slice(0,2), updateEventsSuccess, errorCallback);
+            }
+            
+            // Gets the default calendar
+            myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            // Finds all events in Calendar
+            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
 
   - name: remove
     summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
@@ -134,6 +200,24 @@ methods:
       - name: id
         summary:  The identifier (ID attribute) of the item object to delete.
         type: CalendarEventId
+    examples:
+      - example: |    
+            var myCalendar;
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the event success callback.
+            function eventSearchSuccessCallback(events) {
+                // Deletes the first existing event.
+                myCalendar.remove(events[0].id);
+                Titanium.API.info('The first event was removed');
+            }
+            // Gets default calendar
+            myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            // Finds all events in Calendar
+            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
 
   - name: removeBatch
     summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
@@ -156,7 +240,34 @@ methods:
       - name: errorCallback
         summary:  The method to invoke when the removeBatch() request fails.
         type: Callback<WebAPIError>        
-        optional: true            
+        optional: true
+    examples:
+      - example: |    
+            var myCalendar;
+            
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the removeBatch callback
+            function removeBatchCallback() {
+                Titanium.API.info("Requested events were successfully removed.");
+            }
+            
+            // Defines the event search success callback.
+            function eventSearchSuccessCallback(events) {
+                // Deletes the first two existing events.
+                myCalendar.removeBatch([events[0].id, events[1].id], 
+                                       removeBatchCallback, 
+                                       errorCallback);
+            }
+            
+            // Gets default calendar
+            myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            // Retrieves all events in Calendar
+            myCalendar.find(eventSearchSuccessCallback, errorCallback);        
         
   - name: find
     summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
@@ -185,7 +296,29 @@ methods:
       - name: sortMode
         summary:  The sort order in which the items return. 
         type: Titanium.Tizen.SortMode
-        optional: true    
+        optional: true
+    examples:
+      - example: |    
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' +  response.name);
+            }
+            
+            // Defines the event search success callback.
+            function eventSearchSuccessCallback(events) {
+                Titanium.API.info(events.length + ' results found.');
+            }
+            
+            // Gets default calendar
+            calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            
+            // Finds all events the calendar that contain in the summary the string Tizen.
+            var filter = Titanium.Tizen.createAttributeFilter('summary', 'CONTAINS', 'Tizen');
+            
+            // The events returned by the find() query will be sorted by ascending summary
+            var sortingMode = Titanium.Tizen.createSortMode('summary', 'ASC');
+            
+            calendar.find(eventSearchSuccessCallback, errorCallback, filter, sortingMode);        
 
   - name: addChangeListener
     summary: Adds a listener to receive notifications about calendar changes.
@@ -199,7 +332,25 @@ methods:
       - name: successCallback
         summary: The methods to invoke on receiving calendar change notifications.
         type: CalendarChangeCallback
- 
+    examples:
+      - example: |    
+            var watcherId = 0; // watcher identifier
+            var calendar; // This example assumes calendar is initialized
+            
+            var watcher = {
+                onitemsadded: function(items) {
+                Titanium.API.info(items.length + ' items were added');
+                },
+                onitemsupdated: function(items) {
+                Titanium.API.info(items.length + ' items were updated');
+                },
+                onitemsremoved: function(ids) {
+                Titanium.API.info(ids.length + ' items were removed');
+                }
+            };
+            // Registers to be notified when the calendar changes
+            watcherId = calendar.addChangeListener(watcher);
+             
   - name: removeChangeListener
     summary: Unsubscribes from receiving notification for a calendar item changes.
     description: |
@@ -211,6 +362,29 @@ methods:
       - name: watchId 
         summary:  Subscription Identifier.
         type: CalendarChangeCallback
+    examples:
+      - example: |    
+            var watcherId = 0; // watcher identifier
+            var calendar; // This example assumes calendar is initialized
+        
+            // Receives calendar changes
+            var watcher = {
+                onitemsadded: function(items) {
+                Titanium.API.info(items.length + ' items were added');
+                },
+                onitemsupdated: function(items) {
+                  Titanium.API.info(evitemsents.length + ' items were updated');
+                },
+                onitemsremoved: function(ids) {
+                  Titanium.API.info(ids.length + ' items were removed');
+                }
+            };
+            
+            // Registers to be notified when the calendar changes
+            watcherId = calendar.addChangeListener(watcher);
+            
+            // Cancels the watch operation
+            calendar.removeChangeListener(watcherId);
  
 properties:
 
@@ -223,6 +397,11 @@ properties:
     summary: An attribute to assign a readable (descriptive) name for a calendar, such as work, personal, etc.
     type: STRING
     permission: read-only
+    examples:
+      - example: |    
+            // Gets the default calendar and show its name
+            calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            Titanium.API.info('The calendar name is ' + calendar.name);
 # Pseudo-type 
 ---
 name: CalendarEventId 

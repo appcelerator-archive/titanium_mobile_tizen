@@ -1,0 +1,44 @@
+---
+name: Titanium.Tizen.Bluetooth.BluetoothServiceHandler
+summary: The Bluetooth service interface. 
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: unregister
+    summary: Unregisters a service record from service database. 
+    description: |
+        This method unregisters a service record from the Bluetooth services record database and stops listening for new connections to this service.
+        The ErrorCallback is launched with these error types:
+            UnknownError: In any error case
+
+    parameters: 
+      - name: successCallback
+        summary:  Method to be invoked when the record is removed successfully from the service records database.
+        type: Callback<Object>
+        optional: true
+
+      - name: errorCallback
+        summary:   Method to be invoked in case of failure (to unregister).
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+
+properties:
+  - name: uuid
+    summary: UUID of the service. 
+    type: String
+    permission: read-only
+
+  - name: name
+    summary: The name of the service. 
+    type: String
+    permission: read-only
+
+  - name: isConnected
+    summary: The value is necessary to check if any other Bluetooth devices use this service. 
+    type: Boolean
+    permission: read-only
+
+  - name: onconnect
+    summary: The success callback to be invoked when a remote device connected to this service.   
+    type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket>

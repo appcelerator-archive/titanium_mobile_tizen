@@ -9,7 +9,7 @@ examples:
   - title: Code example
     example: |
         // Repeats daily for 7 days
-        var rule = new tizen.CalendarRecurrenceRule("DAILY", {occurrenceCount:7});
+        var rule = Titanium.Tizen.createCalendarRecurrenceRule("DAILY", {occurrenceCount:7});
         event.recurrenceRule = rule;
          
 properties:

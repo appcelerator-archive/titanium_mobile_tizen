@@ -1,0 +1,15 @@
+---
+name: Titanium.Tizen.SimpleCoordinate
+summary: SimpleCoordinates represents a point (latitude and longitude) in map coordinate system.   
+description: Latitude and longitude are of the WGS84 datum. 
+platforms: [tizen]
+extends: Titanium.Module
+
+properties:
+  - name: latitude
+    summary: Latitude. 
+    type: Number
+
+  - name: longitude
+    summary: Longitude. 
+    type: Number
