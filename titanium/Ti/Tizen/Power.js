@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/WebAPIError'], function(lang, WebAPIError) {
-	return lang.setObject('Ti.Tizen.Power', {
+define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Power/PowerStateRequest', 'Ti/_/Evented'], function(lang, WebAPIError, PowerRequest, Evented) {
+	return lang.setObject('Ti.Tizen.Power', Evented, {
 
 		constants: {
 			POWER_RESOURCE_DISPLAY: 'DISPLAY',
@@ -20,7 +20,7 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError'], function(lang, WebAPIError) {
 		},
 
 		createPowerStateRequest: function(args) {
-			return new (require('Ti/Tizen/Power/PowerStateRequest'))(args);
+			return new PowerRequest(args);
 		},
 	});
 });

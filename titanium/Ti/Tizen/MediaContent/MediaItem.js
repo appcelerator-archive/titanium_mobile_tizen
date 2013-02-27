@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.MediaContent.MediaItem', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Ti.Tizen.MediaContent.MediaItem', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},

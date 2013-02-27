@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/WebAPIError'], function(declare, WebAPIError) {
+define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
 
 	function onMediaFolderArraySuccessCallback(objects, onsuccess){
 		var result = [],
@@ -30,7 +30,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError'], function(declare, WebAPIError) 
 		onsuccess.call(null, result);
 	}
 
-	return declare('Ti.Tizen.MediaContent.MediaSource', null, {
+	return declare('Ti.Tizen.MediaContent.MediaSource', Evented, {
 
 		constructor: function(args) {
 			if(args.toString() === '[object MediaSource]') {

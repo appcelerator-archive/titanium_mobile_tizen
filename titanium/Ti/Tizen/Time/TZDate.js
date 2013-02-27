@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Time', 'Ti/Tizen/Time/TimeDuration'], function(declare, Time, TimeDuration) {
-	return declare('Ti.Tizen.Time.TZDate', null, {
+define(['Ti/_/declare', 'Ti/Tizen/Time/TimeDuration', 'Ti/_/Evented'], function(declare, TimeDuration, Evented) {
+	return declare('Ti.Tizen.Time.TZDate', Evented, {
 		constructor: function(args) {
 			if(args instanceof tizen.TZDate) {
 				this._obj = args;
@@ -151,15 +151,15 @@ define(['Ti/_/declare', 'Ti/Tizen/Time', 'Ti/Tizen/Time/TimeDuration'], function
 		},
 
 		toTimezone: function(tzid /*DOMString*/) {
-			return Time.createTZDate(this._obj.toTimezone(tzid));
+			return Ti.Tizen.Time.createTZDate(this._obj.toTimezone(tzid));
 		},
 
 		toLocalTimezone: function() {
-			return Time.createTZDate(this._obj.toLocalTimezone());
+			return Ti.Tizen.Time.createTZDate(this._obj.toLocalTimezone());
 		},
 
 		toUTC: function() {
-			return Time.createTZDate(this._obj.toUTC());
+			return Ti.Tizen.Time.createTZDate(this._obj.toUTC());
 		},
 
 		difference: function(other /*TZDate*/) {

@@ -1,9 +1,8 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.MediaContent.MediaFolder', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Ti.Tizen.MediaContent.MediaFolder', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object Folder]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

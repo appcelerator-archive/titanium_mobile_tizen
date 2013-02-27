@@ -66,6 +66,8 @@ module.exports = new function() {
 			item;
 
 		valueOf(testRun, startDate).shouldBeObject();
+		valueOf(testRun, startDate instanceof Ti.Tizen.Time.TZDate).shouldBeTrue();
+		valueOf(testRun, duration instanceof Ti.Tizen.Time.TimeDuration).shouldBeTrue();
 		valueOf(testRun, duration).shouldBe('[object TiTizenTimeTimeDuration]');
 
 		if (calendarType == 'EVENT') {
@@ -78,6 +80,8 @@ module.exports = new function() {
 			valueOf(testRun, item).shouldBe('[object TiTizenCalendarCalendarTask]');
 		}
 
+		valueOf(testRun, item.duration).shouldBe('[object TiTizenTimeTimeDuration]');
+		valueOf(testRun, item.startDate instanceof Ti.Tizen.Time.TZDate).shouldBeTrue();
 		valueOf(testRun, calendar).shouldBe('[object TiTizenCalendarCalendar]');
 		valueOf(testRun, calendar.add).shouldBeFunction();
 		valueOf(testRun, calendar.find).shouldBeFunction();
