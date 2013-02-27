@@ -25,7 +25,7 @@ methods:
 
       - name: initDict
         summary: Provides specifying attachment attributes upon messageAttachment creation.
-        type: MessageAttachmentInit
+        type: MessageAttachmentUnit
 
 properties:
   - name: MESSAGE_SERVICE_TAG_SMS
@@ -50,15 +50,14 @@ summary: An object containing the various options for inititalized Titanium.Tize
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, and Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL. 
+        The type of message. The supported types are: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, and Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL.
     type: String
 
-  - name: Dictionary
-    summary: Provides specifying message attributes upon message creation. 
+  - name: options
+    summary: Provides specifying message attributes upon message creation.
     type: messageInitDict
     optional: true
 
----
 name: MessageInitDict
 summary: Provides specifying message attributes upon message creation. 
 properties: 
@@ -96,4 +95,16 @@ properties:
         This property is true, if the message has a high priority and false, if the message has a normal or low priority.
         This property is used only with Email messages.
     type: Boolean
+
+name: MessageAttachmentUnit
+summary: An object containing the path of file and mime type(optional)
+properties:
+  - name: filePath
+    summary: Path to file
+    type: String
+
+  - name: mimeType
+    summary: Provides specifying mimeType of file.
+    type: String
+    optional: true
 
