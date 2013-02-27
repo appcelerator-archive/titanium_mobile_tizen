@@ -182,12 +182,12 @@ methods:
         Get the list of available internal and external storage devices. The onsuccess will receive as input argument a list of the data structure containing additional information about each drive found.
 
         The ErrorCallback is launched with these error types:
-            - InvalidValuesError: If any of the input parameters contain an invalid value.
-            - UnknownError: In any other error case.
+            * InvalidValuesError: If any of the input parameters contain an invalid value.
+            * UnknownError: In any other error case.
     parameters:
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
-        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
+        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage[]>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<WebAPIError>
