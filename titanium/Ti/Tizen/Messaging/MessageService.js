@@ -1,4 +1,6 @@
-define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageStorage'], function(declare, MessageStorage) {
+define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStorage', 'Ti/Tizen/Messaging/MessageBody', 'Ti/Tizen/Messaging/MessageAttachment'], 
+	function(declare, WebAPIError, MessageStorage, MessageBody, MessageAttachment) {
+
 	return declare('Ti.Tizen.Messaging.MessageService', null, {
 		constructor: function(args) {
 			this._obj = args;
@@ -25,27 +27,55 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageStorage'], function(declare, 
 		},
 
 		sendMessage: function(message /*Message*/, successCallback /*MessageRecipientsCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.sendMessage(message._obj, successCallback, errorCallback);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.sendMessage(message._obj, successCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		loadMessageBody: function(message /*Message*/, successCallback /*MessageBodySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.loadMessageBody(message._obj, successCallback, errorCallback);
+			function messageBodyLoadedSuccessCallback(message) {
+				successCallback.call(this, new Ti.Tizen.Messaging.MessageBody(message));
+			}
+
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.loadMessageBody(message._obj, successCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		loadMessageAttachment: function(attachment /*MessageAttachment*/, successCallback /*MessageAttachmentSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.loadMessageAttachment(attachment._obj, successCallback, errorCallback);
+			function attachmentLoadedSuccessCallback(attachment) {
+				successCallback.call(this, new Ti.Tizen.Messaging.MessageAttachment(attachment));
+			}
+
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			this._obj.loadMessageAttachment(attachment._obj, successCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		sync: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, limit /*unsigned long*/) {
-			return this._obj.sync(successCallback, errorCallback, limit);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			return this._obj.sync(successCallback, errorCallback && wrappedErrorCallback, limit);
 		},
 
 		syncFolder: function(folder /*MessageFolder*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, limit /*unsigned long*/) {
-			return this._obj.syncFolder(folder._obj, successCallback, errorCallback, limit);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+			
+			return this._obj.syncFolder(folder._obj, successCallback, errorCallback && wrappedErrorCallback, limit);
 		},
 
 		stopSync: function(opId /*long*/) {
-			return this._obj.stopSync(opId);
+			this._obj.stopSync(opId);
 		},
 	});
 });
