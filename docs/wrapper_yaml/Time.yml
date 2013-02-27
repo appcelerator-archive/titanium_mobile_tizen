@@ -130,7 +130,7 @@ methods:
     parameters:
       - name: Options
         summary: The TZDate object represents information regarding a given date.
-        type: [TZDateUnit1, TZDateUnit2]
+        type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
 
   - name: createTimeDuration
     summary: Returns the Ti.Tizen.Time.TimeDuration.
@@ -139,7 +139,7 @@ methods:
     parameters:
       - name: TimeDurationUnit
         summary: The TimeDuration object that contains the length and its associated time unit.
-        type: TimeDurationUnit
+        type: Dictionary<TimeDurationUnit>
     
 properties:
 
@@ -232,5 +232,5 @@ properties:
 
   - name: unit
     type: String
-    summary: Time property: "TIME_DURATION_UNIT_MSECS" or "TIME_DURATION_UNIT_SECS" or "TIME_DURATION_UNIT_MINS"....
+    summary: Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
 
