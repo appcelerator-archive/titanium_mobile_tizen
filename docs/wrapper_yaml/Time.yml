@@ -32,7 +32,7 @@ methods:
     returns:
         type: Titanium.Tizen.Time.TZDate
     examples:
-        example: |
+      - example: |
             var current_dt = Ti.Tizen.Time.getCurrentDateTime();
             Ti.API.info("current date / time is " + current_dt.toLocaleString());
 
@@ -41,7 +41,7 @@ methods:
     returns:
         type: String
     examples:
-        example: |
+      - example: |
             Ti.API.info("The local time zone is " + Ti.Tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
@@ -54,7 +54,7 @@ methods:
     returns:
         type: String[]
     examples:
-        example: |
+      - example: |
             var tzids = Ti.Tizen.Time.getAvailableTimezones();
             Ti.API.info("The device supports " + tzids.length + " time zones.");
         
@@ -104,7 +104,7 @@ methods:
         summary: Year to check.
         type: Number 
     examples:
-        example: |
+      - example: |
             var current_dt = Ti.Tizen.Time.getCurrentDateTime(),
                 is_leap = Ti.Tizen.Time.isLeapYear(current_dt.getFullYear());
                 
