@@ -45,7 +45,7 @@ methods:
 
     parameters: 
       - name: state
-        summary: State to set: true to power on Bluetooth, false to power it off. 
+        summary: "State to set: true to power on Bluetooth, false to power it off." 
         type: Boolean
 
       - name: successCallback
@@ -70,12 +70,8 @@ methods:
 
     parameters: 
       - name: successCallback
-        summary: |
-        Pass a dictionary with the following supported keys: `onstarted` the method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device, 
-        `ondevicefound` a function that accepts parameter of type Titanium.Tizen.Bluetooth.BluetoothDevice, and to be invoked when a new device is discovered in the process of inquiry/discovery, 
-        `ondevicedisappeared` a function that accepts BluetoothAddress, and to be invoked when a device is lost from proximity. After that, this device is no longer visible.
-        and `onfinished` , a function that accepts a array of Titanium.Tizen.Bluetooth.BluetoothDevice, and to be invoked when the device discovery process has finished. 
-        type: Object
+        summary: Method to be invoked when the asynchronous call completes successfully. 
+        type: BluetoothDiscoverDevicesSuccessCallback
         optional: ture
 
       - name: errorCallback
@@ -83,7 +79,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
 
-- name: stopDiscovery
+  - name: stopDiscovery
     summary: Stops the device discovery process session, if active.   
     description: |
         Device discovery is a heavyweight procedure, hence we recommend stopping discovery as soon as required device is found. This method cancels an active discovery session.
@@ -102,7 +98,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
 
-- name: getKnownDevices
+  - name: getKnownDevices
     summary: Gets all the devices that have information stored in the local Bluetooth adapter.    
     description: |
         A known device is one of the following:
@@ -116,7 +112,7 @@ methods:
 
     parameters: 
       - name: successCallback
-        summary:Method invoked at retrieval of a list of Bluetooth devices that were bonded to the local Bluetooth adapter.  
+        summary: Method invoked at retrieval of a list of Bluetooth devices that were bonded to the local Bluetooth adapter.  
         type: Callback<Object>
 
       - name: errorCallback
@@ -248,3 +244,32 @@ properties:
     summary: Holds the current visibility of the device.    
     type: Boolean
     permission: read-only
+
+# Pseudo-type    
+---
+name: BluetoothDiscoverDevicesSuccessCallback
+summary: The success callback for BluetoothAdapter.discoverDevices().
+methods: 
+  - name: onstarted
+    summary: The method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device. 
+    
+  - name: ondevicefound 
+    summary: The method to be invoked when a new device is discovered in the process of inquiry/discovery. 
+    parameters:
+      - name: device 
+        summary: Found device. 
+        type: Titanium.Tizen.Bluetooth.BluetoothDevice
+
+  - name: ondevicedisappeared
+    summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible. 
+    parameters:
+      - name: address 
+        summary: Address of the device that is no longer in range or visible. 
+        type: String
+
+  - name: onfinished
+    summary: The method to be invoked when the device discovery process has finished. 
+    parameters:
+      - name: foundDevices 
+        summary: Array of devices found in this discovery session. 
+        type: Titanium.Tizen.Bluetooth.BluetoothDevice[]

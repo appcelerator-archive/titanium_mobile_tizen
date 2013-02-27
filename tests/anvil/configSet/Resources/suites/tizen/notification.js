@@ -7,7 +7,8 @@
 
 module.exports = new function() {
 	var finish,
-	valueOf;
+		valueOf;
+
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
@@ -21,180 +22,223 @@ module.exports = new function() {
 		{name: 'notificationGet'},
 		{name: 'notificationUpdate'},
 		{name: 'notificationRemove'}
-	]
+	];
 
 	this.notificationPost = function(testRun) {
-		tizen.notification.removeAll(); //clear notification tray
-		//create app service for notification
-		var notification_arr,
-			appService = new tizen.ApplicationService(
-				'http://tizen.org/appcontrol/operation/create_content',
-				null,
-				'image/jpg',
-				null),		
-			notificationDict = { //create dictionary with parameters for status notification
-				content : 'This is a simple notificaiton.',
-				iconPath : 'images/image1.jpg', 
-				vibration : true, 
-				service : appService},
-			notification = new tizen.StatusNotification('SIMPLE', 'Simple notification', notificationDict);
+		// Clear notification tray
+		Ti.Tizen.Notification.removeAll();
 
-		//post created notification to tray               
-		valueOf(testRun, function(){
-			tizen.notification.post(notification);
+		// Create app service for notification
+		var notificationArr,
+			appService = Ti.Tizen.Application.createApplicationService({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpg',
+				category: null
+			}),
+			// Create dictionary with parameters for status notification
+			notificationDict = {
+				content: 'This is a simple notificaiton.',
+				iconPath: 'images/image1.jpg', 
+				vibration: true, 
+				service: appService
+			},
+			notification = Ti.Tizen.Notification.createStatusNotification({
+				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+				title: 'Simple notification',
+				notificationInitDict: notificationDict
+			});
+
+		// Post created notification to tray               
+		valueOf(testRun, function() {
+			Ti.Tizen.Notification.post(notification);
 		}).shouldNotThrowException();
 
-		notification_arr = tizen.notification.getAll();
-		//get notification from tray and check is it instance of status notification
-		valueOf(testRun, notification_arr[0] instanceof tizen.StatusNotification).shouldBeTrue();
-		tizen.notification.removeAll();
+		notificationArr = Ti.Tizen.Notification.getAll();
+		// Get notification from tray and check is it instance of status notification
+		valueOf(testRun, notificationArr[0] instanceof Ti.Tizen.Notification.StatusNotification).shouldBeTrue();
+		Ti.Tizen.Notification.removeAll();
 
 		finish(testRun);
 	}
 	
+	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationGet = function(testRun) {
-		//clear notification tray
-		tizen.notification.removeAll();
-		//create notification and add it to tray
+		// Clear notification tray
+		Ti.Tizen.Notification.removeAll();
+
+		// Create notification and add it to tray
 		var notId,
-			appService = new tizen.ApplicationService(
-				 'http://tizen.org/appcontrol/operation/create_content',
-				 null,
-				 'image/jpg',
-				 null),
+			appService = Ti.Tizen.Application.createApplicationService({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpg',
+				category: null
+			}),
 			notificationDict = {
-							content : 'This is a simple notificaiton.',
-							iconPath : 'images/image1.jpg',
-							soundPath : undefined, 
-							vibration : true, 
-							service : appService},
-			notification = new tizen.StatusNotification('SIMPLE', 'Simple notification', notificationDict);
+				content: 'This is a simple notificaiton.',
+				iconPath: 'images/image1.jpg',
+				soundPath: undefined, 
+				vibration: true, 
+				service: appService
+			},
+			notification = Ti.Tizen.Notification.createStatusNotification({
+				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+				title: 'Simple notification',
+				notificationInitDict: notificationDict
+			});
+			
 
-		valueOf(testRun, function(){
-			tizen.notification.post(notification);
+		valueOf(testRun, function() {
+			Ti.Tizen.Notification.post(notification);
 		}).shouldNotThrowException();
 
-		//memorize notification id for use later
+		// Memorize notification id for use later
 		notId = notification.content;
-		//try to get notification by id
-		valueOf(testRun, function(){      
-				var notification_from = tizen.notification.get(notId);
-		}).shouldNotThrowException();
 
-		//compare property of gotten notification with coresponding property of posted notification
-		valueOf(testRun, notification_from.content).shouldBe(notificationDict.content);
-		valueOf(testRun, notification_from.statusType).shouldBe(notification.statusType);
-		valueOf(testRun, notification_from.title).shouldBe(notificationDict.title);
-		tizen.notification.removeAll();
+		// Try to get notification by id
+		valueOf(testRun, function() {      
+			var notificationFrom = Ti.Tizen.Notification.get(notId);
+		}).shouldNotThrowException();
+		// Compare property of gotten notification with coresponding property of posted notification
+		valueOf(testRun, notificationFrom.content).shouldBe(notificationDict.content);
+		valueOf(testRun, notificationFrom.statusType).shouldBe(notification.statusType);
+		valueOf(testRun, notificationFrom.title).shouldBe(notificationDict.title);
+
+		Ti.Tizen.Notification.removeAll();
 
 		finish(testRun);
 	}
 
+	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationUpdate = function(testRun) {
-		//clear notification tray
-		tizen.notification.removeAll();
+		// Clear notification tray
+		Ti.Tizen.Notification.removeAll();
 
-		//create notification and add it to tray
+		// Create notification and add it to tray
 		var notId,
-			appService = new tizen.ApplicationService(
-					'http://tizen.org/appcontrol/operation/create_content',
-					null,
-					'image/jpg',
-					null),
+			appService = Ti.Tizen.Application.createApplicationService({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpg',
+				category: null
+			}),
 			notificationDict = {
-					content : 'This is a simple notificaiton.',
-					iconPath : 'images/image1.jpg', 
-					vibration : true, 
-					service : appService},
-			notification = new tizen.StatusNotification('SIMPLE', 'Simple notification', notificationDict);
-									 
-		valueOf(testRun, function(){
-			tizen.notification.post(notification);
+					content: 'This is a simple notificaiton.',
+					iconPath: 'images/image1.jpg', 
+					vibration: true, 
+					service: appService},
+			notification = Ti.Tizen.Notification.createStatusNotification({
+				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+				title: 'Simple notification',
+				notificationInitDict: notificationDict
+			});
+
+		valueOf(testRun, function() {
+			Ti.Tizen.Notification.post(notification);
 		}).shouldNotThrowException();
 
-		//memorize notification id for use later
+		// Memorize notification id for use later
 		notId = notification.id;
-		//change notification content and try to update this notification
+
+		// Change notification content and try to update this notification
 		notification.content = 'New Content';
-		valueOf(testRun, function(){      
-				tizen.notification.update(notification);
+
+		valueOf(testRun, function() {      
+			Ti.Tizen.Notification.update(notification);
 		}).shouldNotThrowException();
-		//get notification by id and compare it content attribute
-		valueOf(testRun, function(){      
-			var	notification_from = tizen.notification.get(notId);
+
+		// Get notification by id and compare it content attribute
+		valueOf(testRun, function() {      
+			var	notificationFrom = Ti.Tizen.Notification.get(notId);
 		}).shouldNotThrowException();
-		valueOf(testRun, notification_from.content).shouldBe(notification.content);
-		tizen.notification.removeAll();
+		valueOf(testRun, notificationFrom.content).shouldBe(notification.content);
+
+		Ti.Tizen.Notification.removeAll();
 
 		finish(testRun);
 	}
 	
+	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationRemove = function(testRun) {
-		//clear notification tray
-		tizen.notification.removeAll();
+		// Clear notification tray
+		Ti.Tizen.Notification.removeAll();
 
-		//create first notification and add it to tray
+		// Create first notification and add it to tray
 		var notId,
 			notId1,
-			appService = new tizen.ApplicationService(
-				'http://tizen.org/appcontrol/operation/create_content',
-				null,
-				'image/jpg',
-				null),
+			appService = Ti.Tizen.Application.createApplicationService({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpg',
+				category: null
+			}),
 			notificationDict = {
-				content : 'This is a simple notificaiton 1.',
-				iconPath : 'images/image1.jpg', 
-				vibration : true, 
-				service : appService},
-			notification = new tizen.StatusNotification('SIMPLE', 'Simple notification 1', notificationDict),
-			appService1 = new tizen.ApplicationService(
-				 'http://tizen.org/appcontrol/operation/create_content',
-				 null,
-				 'image/jpg',
-				 null),
+				content: 'This is a simple notificaiton 1.',
+				iconPath: 'images/image1.jpg', 
+				vibration: true, 
+				service: appService
+			},
+			notification = Ti.Tizen.Notification.createStatusNotification({
+				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+				title: 'Simple notification 1',
+				notificationInitDict: notificationDict
+			}),
+			appService1 = Ti.Tizen.Application.createApplicationService({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpg',
+				category: null
+			}),
 			notificationDict1 = {
-				content : 'This is a simple notificaiton 2.',
-				iconPath : 'images/image1.jpg',
-				vibration : true, 
-				service : appService1},
-			notification1 = new tizen.StatusNotification('SIMPLE', 
-							'Simple notification 2', notificationDict1);
+				content: 'This is a simple notificaiton 2.',
+				iconPath: 'images/image1.jpg',
+				vibration: true, 
+				service: appService1
+			},
+			notification1 = Ti.Tizen.Notification.createStatusNotification({
+				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+				title: 'Simple notification 2',
+				notificationInitDict: notificationDict
+			});
 
 
-		valueOf(testRun, function(){
-			tizen.notification.post(notification);
+		valueOf(testRun, function() {
+			Ti.Tizen.Notification.post(notification);
 		}).shouldNotThrowException();
-		//memorize id for use later
+
+		// Memorize id for use later
 		notId = notification.id;
 
-		valueOf(testRun, function(){      
-				tizen.notification.post(notification1);
+		valueOf(testRun, function() {      
+			Ti.Tizen.Notification.post(notification1);
 		}).shouldNotThrowException();
-		//memorize second id 
+
+		// Memorize second id 
 		notId1 = notification1.id;
 
-		//try to remove notification by id
-		valueOf(testRun, function(){      
-				tizen.notification.remove(notId);
+		// Try to remove notification by id
+		valueOf(testRun, function() {      
+			Ti.Tizen.Notification.remove(notId);
 		}).shouldNotThrowException();
 
-		//try to get removed notification: it should cause exception
-		valueOf(testRun, function(){      
-			var	notification_from = tizen.notification.get(notId);
+		// Try to get removed notification: it should cause exception
+		valueOf(testRun, function() {      
+			var	notificationFrom = Ti.Tizen.Notification.get(notId);
 		}).shouldThrowException();
 
-		//try to remove all notification in tray
-		valueOf(testRun, function(){      
-				tizen.notification.removeAll();
+		// Try to remove all notification in tray
+		valueOf(testRun, function() {      
+			Ti.Tizen.Notification.removeAll();
 		}).shouldThrowException();
 
 		//try to get second notification and it should be removed
-		valueOf(testRun, function(){      
-			var notification_from1 = tizen.notification.get(notId1);
+		valueOf(testRun, function() {      
+			var notificationFrom1 = Ti.Tizen.Notification.get(notId1);
 		}).shouldThrowException();
 
-		tizen.notification.removeAll();
-		
+		Ti.Tizen.Notification.removeAll();
+
 		finish(testRun);
 	}
 }

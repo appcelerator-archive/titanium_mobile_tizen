@@ -87,6 +87,15 @@ methods:
     summary: Gets all previously posted notifications by the current application.
     returns:
         type: Titanium.Tizen.Notification.Notification[]
+
+  - name: createStatusNotification
+    summary: The interface which represents status notification.
+    returns:
+        type: Ti.Tizen.SystemSettings.StatusNotification
+    parameters:
+      - name: Options
+        summary: The dictionary represents information regarding a notification what need to create.
+        type: Dictionary<StatusNotificationUnit>
     
 properties:
 
@@ -127,3 +136,53 @@ properties:
         Please note that the progress status notification should be removed by the application that posted the notification.
     type: String
     permission: read-only
+
+# Pseudo-type
+---
+name: StatusNotificationInit
+summary: An object containing the various options for fetching the properties requested.
+platforms: [tizen]
+properties:
+  - name: content
+    type: String
+    summary: .
+
+  - name: iconPath
+    type: String
+    summary: .
+
+  - name: soundPath
+    type: String
+    summary: .
+
+  - name: vibration
+    type: Boolean
+    summary: .
+
+  - name: appControl
+    type: Ti.Tizen.Aplication.ApplicationControl
+    summary: This interface consists of an operation, URI, MIME type, and data.
+
+  - name: appId
+    type: String
+    summary: The unique ID for an installed application.
+
+  - name: progressValue
+    type: Number
+    summary: Notification progress.
+
+name: StatusNotificationUnit
+summary: An object containing the various options for fetching the properties requested.
+platforms: [tizen]
+properties:
+  - name: StatusNotificationType
+    type: String
+    summary: Notification property value: "SIMPLE", "ONGOING", "PROGRESS".
+
+  - name: title
+    type: String
+    summary: Name of notification.
+
+  - name: notificationInitDict
+    type: StatusNotificationInit
+    summary: Dictionary.

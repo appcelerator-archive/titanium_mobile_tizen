@@ -27,20 +27,3 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
 
-examples: 
-  - title: This example demonstrates working with messaging
-    example: |
-         // Define the success callback.
-         function serviceListCB(services) {
-             if (services.length > 0) {
-                 var msg = new tizen.Message("messaging.sms");
-             }
-         }
-
-         // Define error callback.
-         function errorCallback(error) {
-          console.log("Cannot get messaging service " + error.message);
-         }
-
-         tizen.messaging.getMessageServices("messaging.sms", serviceListCB,
-                                             errorCallback);
