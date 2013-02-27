@@ -67,30 +67,30 @@ properties:
     description: This property is used only with Email and MMS messages. 
     type: String
 
-- name: to
+  - name: to
     summary: The destination addresses (or phone numbers) of a message. 
     type: String[]
 
-- name: cc
+  - name: cc
     summary: The carbon copy addresses of a message. 
     description: This property is used only with Email messages. 
     type: String[]
 
-- name: bcc
+  - name: bcc
     summary: The blind carbon copy addresses of a message. 
     type: String[]
 
-- name: plainBody
+  - name: plainBody
     summary: The plain text representation of the message body.
     description: This property is used only with Email and MMS messages. 
     type: String
 
-- name: htmlBody
+  - name: htmlBody
     summary: The HTML representation of the message body. 
     description: This property is used only with Email messages. 
     type: String
 
-- name: isHighPriority
+  - name: isHighPriority
     summary: The priority of a message. 
     description: |
         This property is true, if the message has a high priority and false, if the message has a normal or low priority.

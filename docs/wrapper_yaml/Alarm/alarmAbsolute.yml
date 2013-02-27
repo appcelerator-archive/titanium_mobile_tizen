@@ -20,7 +20,7 @@ properties:
     summary: An attribute to store the absolute date/time when the alarm is initially triggered.
     description: This attribute is precise to the second; milliseconds will be ignored. 
     type: Date
-    premission: read-only
+    permission: read-only
 
   - name: period
     summary: An attribute to store the duration in seconds between each trigger of the alarm. 
@@ -28,7 +28,7 @@ properties:
         By default, this attribute is set to null, indicating that this alarm does not repeat. The period and daysOfTheWeek attributes are mutually exclusive. 
     type: Number
     default: null
-    premission: read-only
+    permission: read-only
 
   - name: daysOfTheWeek
     summary: An attribute to store the days of the week associated with the recurrence rule.
@@ -37,5 +37,5 @@ properties:
         If this array is non-empty, the period attribute will be set to tizen.alarm.PERIOD_WEEK, since the alarm will recur weekly. 
         The period and daysOfTheWeek attributes are mutually exclusive. 
     type: "String[]"
-    premission: read-only
+    permission: read-only
     
