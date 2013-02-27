@@ -79,7 +79,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
 
-- name: sync
+  - name: sync
     summary: Synchronizes the service content with an external mail server. 
     description: |
         This method is used only for EMAIL services. This method performs the same actions as syncFolder for every folder with Synchronizable flag set within the current Messaging service.
@@ -107,7 +107,7 @@ methods:
         type: Number
         optional: true
 
-- name: syncFolder
+  - name: syncFolder
     summary: Synchronizes the folder content with an external mail server. 
     description: |
         This method is used only for EMAIL services. This method is performed the following actions:
@@ -145,7 +145,7 @@ methods:
         type: Number
         optional: true
 
-  - name: 
+  - name: stopSync
     summary: Stops sync() and syncFoler() operation. 
     description: |
         If the operationId argument is valid and corresponds to a service operation already in place, the operation MUST be stopped and its error callback MUST be invoked with error type AbortError.
@@ -169,37 +169,3 @@ properties:
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
     type: Titanium.Tizen.Message.MessageStorage
     permission: read-only
-
-examples: 
-  - title: This example demonstrates working with messageServices
-    example: |
-         // Define the success callback.
-         function messageSent(recipients) {
-           console.log("The SMS has been sent");
-         }
-
-         // Define the error callback.
-         function messageFailed(error) {
-           console.log("The SMS could not be sent " + error.message);
-         }
-
-         // Define service error callback.
-         function serviceErrorCB(error) {
-          console.log("Cannot get messaging service " + error.message);
-         }
-
-         // Define the success callback.
-         function serviceListCB(services) {
-           if (services.length > 0) {
-             // SMS sending example
-             var msg = new tizen.Message("messaging.sms", {plainBody:"I will arrive in 10 minutes.",
-                                          to:["+34666666666"]});
-             // Send request
-             services[0].sendMessage(msg, messageSent, messageFailed);
-           }
-         }
-
-         tizen.messaging.getMessageServices("messaging.sms",
-                                            serviceListCB,
-                                            serviceErrorCB);
-         

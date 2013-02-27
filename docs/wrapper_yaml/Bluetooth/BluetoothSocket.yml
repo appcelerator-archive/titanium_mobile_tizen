@@ -35,7 +35,8 @@ properties:
     permission: read-only
 
   - name: state
-    summary: The current socket state.  The value is one of the constants defined for this type. The supported state types are: "CLOSED", and "OPEN".
+    summary: |
+        The current socket state.  The value is one of the constants defined for this type. The supported state types are: "CLOSED", and "OPEN".
     type: String
     permission: read-only
 
@@ -57,11 +58,13 @@ properties:
     type: Callback<Object>
 
   - name: BLUETOOTH_SOCKET_STATE_CLOSED
-    summary: "CLOSED" - The Bluetooth socket state. 
+    summary: |
+        "CLOSED" - The Bluetooth socket state. 
     type: String
     permission: read-only
     
   - name: BLUETOOTH_SOCKET_OPEN
-    summary: "OPEN" - The Bluetooth socket state.
+    summary: |
+        "OPEN" - The Bluetooth socket state.
     type: String
     permission: read-only

@@ -76,7 +76,7 @@ methods:
         optional: true 
 
   - name: findAppControl
-  	summary: Finds application information can be launched with the given application control.  
+    summary: Finds application information can be launched with the given application control.  
     description: |
         An application can get a list of other applications can be launched with the application control.
         The ErrorCallback() is launched with these error types:
@@ -99,7 +99,7 @@ methods:
         optional: true
 
   - name: getAppsContext
-  	summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
     description: |
         The errorCallback() is launched with this error type:
             UnknownError - If an unknownn error occurs.
@@ -178,7 +178,7 @@ methods:
             Pass a dictionary with the following supported keys: `oninstalled` a function that accepts parameter of type Titanium.Tizen.Application.ApplicationInformation,  
             called when the application is installed, `onupdated` a function that accepts parameter of type Titanium.Tizen.Application.ApplicationInformation, and will be 
             called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
-        type: Object
+        type: ApplicationControlDataArrayReplyCallback
 
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
