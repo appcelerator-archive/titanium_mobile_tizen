@@ -10,7 +10,8 @@ examples:
     example:    |
         var now = Ti.Tizen.Time.getCurrentDateTime();
         var tomorrow = now.addDuration(Ti.Tizen.Time.createTimeDuration({length: 1, unit: "DAYS"})); // Becomes tomorrow, same time.
-   
+
+
 methods:
 
   - name: difference
