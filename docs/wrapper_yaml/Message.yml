@@ -58,6 +58,7 @@ properties:
     type: messageInitDict
     optional: true
 
+---
 name: MessageInitDict
 summary: Provides specifying message attributes upon message creation. 
 properties: 
@@ -96,6 +97,7 @@ properties:
         This property is used only with Email messages.
     type: Boolean
 
+---
 name: MessageAttachmentUnit
 summary: An object containing the path of file and mime type(optional)
 properties:
