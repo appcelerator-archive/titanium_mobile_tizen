@@ -1,0 +1,14 @@
+name: Titanium.Tizen.NFC.NDEFRecordURI
+summary: |
+  The NDEFRecord that has URI type payload.
+extends: Titanium.Tizen.NFC.NDEFRecord
+platforms: [tizen]
+
+properties:
+
+  - name: uri
+    type: String
+    summary: |
+        The URI string that will be stored in the payload.
+    permission: read-only
+

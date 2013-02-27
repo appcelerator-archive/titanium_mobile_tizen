@@ -1,0 +1,30 @@
+name: Titanium.Tizen.Content.AudioContentLyrics
+summary: |
+  The interface that provides lyrics for music.
+extends: Titanium.Module
+platforms: [tizen]
+
+properties:
+
+  - name: type
+    type: String
+    summary: |
+        The type of lyrics: whether they are synchronized with the music or not. Valid values:
+        <Titanium.Tizen.Content.AUDIO_CONTENT_LYRICS_TYPE_SYNCHRONIZED>
+        <Titanium.Tizen.Content.AUDIO_CONTENT_LYRICS_TYPE_UNSYNCHRONIZED>
+    permission: read-only
+
+  - name: timestamps 
+    type: Array<Number>
+    summary: |
+        The array of timestamps in milliseconds for lyrics.
+        If the lyrics are not synchronized (if there is no time information for the lyrics) the array is undefined.
+    permission: read-only
+
+  - name: texts  
+    type: Array<String>
+    summary: |
+        The array of lyric snippets.
+        If the lyrics are not synchronized, the array has only one member with full lyrics.
+    permission: read-only
+
