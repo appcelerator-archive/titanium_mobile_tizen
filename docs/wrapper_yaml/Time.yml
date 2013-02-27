@@ -232,5 +232,6 @@ properties:
 
   - name: unit
     type: String
-    summary: Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+    summary: |
+        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
 
