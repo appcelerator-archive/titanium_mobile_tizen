@@ -1,0 +1,99 @@
+---
+name: Titanium.Tizen.Alarm
+summary: This interface provides methods to manage alarms.
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+  - name: add
+    summary: Adds an alarm to the storage.
+    description: |
+        For more information about the arguments, see
+        (https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fapplication.html)
+    parameters: 
+
+      - name: alarm
+        summary: An alarm to add.
+        type: Titanium.Tizen.Alarm.Alarm
+
+      - name: applicationId
+        summary: The ID of the application to execute when the alarm is triggered. 
+        type: String
+
+      - name: appControl
+        summary:The data structure describing application control details.
+        type: Titanium.Tizen.Application.ApplicationControl
+        optional: true
+
+  - name: remove
+    summary: Removes an alarm from the storage. 
+    parameters:
+ 
+      - name: id
+        summary: The ID of the alarm to remove 
+        type: String
+
+  - name: removeAll
+    summary: Removes all alarms added by an application.
+    description: "Because each application has its own alarm storage, this method will only remove alarms added by the calling application."
+
+  - name: get
+  	summary: Returns an alarm as per the specified identifier.
+  	returns: 
+  	  - type: Titanium.Tizen.Alarm.Alarm
+  	    summary: Alarm An alarm object with the specified ID. 
+    parameters: 
+
+      - name: id
+        summary: The ID of the alarm to retrieve.
+        type: String
+
+  - name: getAll
+  	summary: Returns all alarms.
+    description: |
+        This method returns all alarms in an application storage. 
+        Alarms that have already been triggered are removed automatically from the storage. 
+    returns: 
+      - type: "Titanium.Tizen.Alarm.Alarm[]"
+        summary: All Alarm objects.
+
+  - name: createAlarmRelative
+    summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmRelative>.
+    returns: 
+        type: Titanium.Tizen.Alarm
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for AlarmRelative.
+        type: Dictionary
+
+  - name: createAlarmAbsolute
+    summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmAbsolute>.
+    returns: 
+        type: Titanium.Tizen.Alarm
+    parameters: 
+
+      - name: parameterers
+        summary: Dictionary with initial arguments for AlarmAbsolute.
+        type: Dictionary
+
+properties:
+  - name: PERIOD_MINUTE
+    summary: 60 - The period of a minute. It defines the number of seconds per minute. 
+    type: Number
+    permission: read-only
+    
+  - name: PERIOD_HOUR
+    summary: 3600 - The period of an hour. It defines the number of seconds per hour.
+    type: Number
+    permission: read-only
+
+  - name: PERIOD_DAY
+    summary: 86400 - The period of a day. It defines the number of seconds per day.
+    type: Number
+    permission: read-only
+
+  - name: PERIOD_WEEK
+    summary: 604800 - The period of a week. It define the number of seconds in a week. 
+    type: Number
+    permission: read-only

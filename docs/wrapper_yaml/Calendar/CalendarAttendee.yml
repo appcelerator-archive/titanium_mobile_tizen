@@ -11,7 +11,7 @@ since: "3.0.2"
 examples: 
   - title: Code example
     example:    |
-        var attendee = new tizen.CalendarAttendee('mailto:bob@domain.com',
+        var attendee = Titanium.Tizen.createCalendarAttendee('mailto:bob@domain.com',
                                            {role: "CHAIR", RSVP: true});
         event.attendees = [attendee];
  

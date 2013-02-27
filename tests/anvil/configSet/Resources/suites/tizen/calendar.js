@@ -130,6 +130,8 @@ module.exports = new function() {
 			function(e) {
 				Ti.API.error("In errorCB function. Type: " + e.type);
 
+				valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 				finishError(testRun, e);
 			},
 			filter
@@ -138,6 +140,8 @@ module.exports = new function() {
 
 	this.getEventCalendars = function(testRun) {
 		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun,e);
 		}
 
@@ -162,6 +166,8 @@ module.exports = new function() {
 	
 	this.getTaskCalendars = function(testRun) {
 		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun, e);
 		}
 
@@ -252,6 +258,8 @@ module.exports = new function() {
 			});
 
 		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun, e);
 		}
 		
@@ -395,6 +403,8 @@ module.exports = new function() {
 		valueOf(testRun, ev2).shouldBe('[object TiTizenCalendarCalendarEvent]');
 
 		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun, e);
 		}
 
@@ -447,6 +457,8 @@ module.exports = new function() {
 			isUpdated;		
 
 		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun, e);
 		}
 		
@@ -533,7 +545,9 @@ module.exports = new function() {
 	};
 	
 	this.changeCallbacks = function(testRun) {
-		function errorCB(e) {	
+		function errorCB(e) {
+			valueOf(testRun, e).shouldBe('[object TiTizenWebAPIError]');
+
 			finishError(testRun, e.message);
 		}
 		
@@ -586,12 +600,12 @@ module.exports = new function() {
 					});
 				},
 				onitemsupdated: function(items) {
-					checkEvent('UPDATED', items, function(event) {
+					 checkEvent('UPDATED', items, function(event) {
 						Ti.API.info('Item updated.');
 
 						event.summary = 'REMOVED';
 						calendar.remove(event.id);
-					});
+					 });
 				},
 				onitemsremoved: function(ids) {
 					if (ids.indexOf(eventUID)) {

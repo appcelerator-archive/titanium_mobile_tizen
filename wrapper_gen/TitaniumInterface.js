@@ -299,7 +299,7 @@ exports.TitaniumInterface = (function(){
 
 
 				function genString(name, value){
-					return generateFormat(name).replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '') +'_'+ value.toUpperCase().replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '') + ': \'' + value+'\'';
+					return generateFormat(name).replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '_') +'_'+ value.toUpperCase().replace(/-/g, '_').replace(/[^a-zA-Z0-9_]+/g, '_') + ': \'' + value+'\'';
 				}
 
 				function generateFormat(stringV){

@@ -83,6 +83,8 @@ module.exports = new function() {
 		}
 
 		function errorCallback(error) {
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+
 			finishWithError(testRun, error.message);
 		}
 
@@ -96,6 +98,8 @@ module.exports = new function() {
 		Ti.API.info('Start to find messages.');
 		
 		function errorCallback(error) {
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+
 			finishWithError(testRun, error.message);
 		}
 
@@ -147,6 +151,8 @@ module.exports = new function() {
 		}
 
 		function errorCallback(error) {
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+
 			finishWithError(testRun, error.message);
 		}			
 		
@@ -181,6 +187,8 @@ module.exports = new function() {
 		}
 
 		function errorCallback(error) {
+			valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+
 			finishWithError(testRun, error.message);
 		}
 
@@ -748,6 +756,7 @@ module.exports = new function() {
 						finish(testRun);
 					}
 
+					valueOf(testRun, messageStorage).shouldBe('[object TiTizenMessagingMessageStorage]');
 					valueOf(testRun, function() { messageStorage.findMessages(filter, updatedMessageFound, errorCallback); }).shouldNotThrowException();
 				}
 

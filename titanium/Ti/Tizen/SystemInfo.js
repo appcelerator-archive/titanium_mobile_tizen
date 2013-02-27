@@ -1,8 +1,8 @@
 define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemInfo/SystemInfoPower', 'Ti/Tizen/SystemInfo/SystemInfoCpu', 'Ti/Tizen/SystemInfo/SystemInfoStorage', 'Ti/Tizen/SystemInfo/SystemInfoDisplay',
 		'Ti/Tizen/SystemInfo/SystemInfoDevice', 'Ti/Tizen/SystemInfo/SystemInfoNetwork', 'Ti/Tizen/SystemInfo/SystemInfoWifiNetwork', 'Ti/Tizen/SystemInfo/SystemInfoCellularNetwork', 'Ti/Tizen/SystemInfo/SystemInfoEthernetNetwork',
-		'Ti/Tizen/SystemInfo/SystemInfoSIM', 'Ti/Tizen/SystemInfo/SystemInfoDeviceOrientation'],
+		'Ti/Tizen/SystemInfo/SystemInfoSIM', 'Ti/Tizen/SystemInfo/SystemInfoDeviceOrientation', 'Ti/Tizen/WebAPIError'],
 		function(lang, SystemInfoProperty, SystemInfoPower, SystemInfoCpu, SystemInfoStorage, SystemInfoDisplay, SystemInfoDevice, SystemInfoNetwork,
-					SystemInfoWifiNetwork, SystemInfoCellularNetwork, SystemInfoEthernetNetwork, SystemInfoSIM, SystemInfoDeviceOrientation) {
+					SystemInfoWifiNetwork, SystemInfoCellularNetwork, SystemInfoEthernetNetwork, SystemInfoSIM, SystemInfoDeviceOrientation, WebAPIError) {
 	
 	return lang.setObject('Ti.Tizen.SystemInfo', {
 
@@ -26,11 +26,11 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemI
 		},
 
 		getPropertyValue: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			tizen.systeminfo.getPropertyValue(property, function(object){getPropertySuccessCallBack(object, successCallback)}, errorCallback);
+			tizen.systeminfo.getPropertyValue(property, function(object){getPropertySuccessCallBack(object, successCallback)}, function(error) {errorCallback.call(null, new WebAPIError(error));});
 		},
 
 		addPropertyValueChangeListener: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, errorCallback /*ErrorCallback*/, options /*SystemInfoOptions*/) {			
-			return tizen.systeminfo.addPropertyValueChangeListener(property, function(object){onSystemInfoPropertySuccessCallback(object, successCallback)}, errorCallback, options);
+			return tizen.systeminfo.addPropertyValueChangeListener(property, function(object){onSystemInfoPropertySuccessCallback(object, successCallback)}, function(error) {errorCallback.call(null, new WebAPIError(error));}, options);
 		},
 
 		removePropertyValueChangeListener: function(listenerID /*long*/) {

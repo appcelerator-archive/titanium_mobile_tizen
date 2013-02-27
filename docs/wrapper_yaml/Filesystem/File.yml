@@ -20,6 +20,24 @@ since: "3.0.2"
 platforms: [tizen]
 creatable: true
 
+examples:
+  - title: Code example
+    example:    |
+        function onsuccess(files) {
+           for(var i = 0; i < files.length; i++) {
+             // alerts each name of dir's contents
+             Ti.API.info(files[i].name);
+           }
+         }
+
+         function onerror(error) {
+           Ti.API.info("The error " + error.message + "
+                       occurred when listing the files in the selected folder");
+         }
+
+         // list directory contents
+         dir.listFiles(onsuccess, onerror);
+
 methods:
   - name: toURI
     summary: Returns a URI for the file.
@@ -37,7 +55,12 @@ methods:
     returns:
         summary: The URI that identifies the file or null if an error occurs.
         type: String
-   
+    examples:
+        example: |
+           /*'file://music/ramones/RockawayBeach.mp3' or 'file:///opt/media/music/ramones/RockawayBeach.mp3' if the file is
+           music/ramones/RockawayBeach.mp3*/
+           Ti.API.info(file.toURI());
+
   - name: listFiles
     summary: Returns the list of all files in this directory.
     description: |
@@ -61,6 +84,24 @@ methods:
         summary: Used to restrict the listed files.
         type: FileFilter
         optional: true
+    examples:
+        example: |
+           function onsuccess(files) {
+               Ti.API.info("There are " + files.length  + " in the selected folder");
+           }
+
+           function onerror(error) {
+               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+           }
+
+           Ti.Tizen.Filesystem.resolve(
+              "documents",
+              function(dir){
+                dir.listFiles(onsuccess, onerror);
+              }, function(e){
+                Ti.API.info("Error " + e.message);
+              }, "r"
+           );
         
   - name: openStream
     summary: Opens the file in the given mode supporting the given encoding.
@@ -88,6 +129,41 @@ methods:
             If no encoding is passed by the developer, then the default platform encoding MUST be used.
         type: String
         optional: true
+    examples:
+        example: |
+            var documentsDir;
+            function onsuccess(files) {
+                for(var i = 0; i < files.length; i++) {
+                   Ti.API.info("File Name is " + files[i].name); // displays file name
+                }
+
+                var testFile = documentsDir.createFile("test.txt");
+                if (testFile != null) {
+                   testFile.openStream(
+                      "w",
+                      function(fs){
+                         fs.write("HelloWorld");
+                         fs.close();
+                      }, function(e){
+                         Ti.API.info("Error " + e.message);
+                      }, "UTF-8"
+                   );
+                }
+            }
+
+            function onerror(error) {
+                Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+            }
+
+            Ti.Tizen.Filesystem.resolve(
+                'documents',
+                function(dir){
+                   documentsDir = dir;
+                   dir.listFiles(onsuccess,onerror);
+                }, function(e) {
+                   Ti.API.info("Error" + e.message);
+                }, "rw"
+            );
 
   - name: readAsText
     summary: Reads the content of a file as a String.
@@ -111,6 +187,36 @@ methods:
             If no encoding is passed by the developer, then the default platform encoding MUST be used.
         type: String
         optional: true
+    examples:
+        example: |
+            function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 Ti.API.info("File Name is " + files[i].name); // displays file name
+                 if (files[i].isDirectory == false)
+                   files[i].readAsText(
+                       function(str){
+                         Ti.API.info("The file content " + str);
+                       }, function(e){
+                         Ti.API.info("Error " + e.message);
+                       }, "UTF-8"
+                   );
+               }
+             }
+
+             function onerror(error) {
+               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
+
+             var documentsDir;
+             Ti.Tizen.Filesystem.resolve(
+                 'documents',
+                 function(dir){
+                   documentsDir = dir;
+                   dir.listFiles(onsuccess,onerror);
+                 }, function(e) {
+                   Ti.API.info("Error" + e.message);
+                 }, "rw"
+             );
 
   - name: copyTo
     summary: |
@@ -132,16 +238,43 @@ methods:
       - name: destinationFilePath
         summary: The new full virtual file path or directory path.
         type: String
-      - name: overwrite  
+      - name: overwrite
         summary: true enforces overwriting an existing file.
         type: Boolean
       - name: onsuccess
         summary: Called when the file has been copied.
         type: Callback<Object>
       - name: onerror
-        summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        summary: Called if an error occurred.
+        type: Callback<WebAPIError>
         optional: true
+    examples:
+        example: |
+            var documentsDir;
+             function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 if (files[i].isDirectory == false)
+                   documentsDir.copyTo(files[i].fullPath,
+                                       "images/backup/"+files[i].name,
+                                       false,
+                                       function(){Ti.API.info("file copied");});
+               }
+             }
+
+             function onerror(error) {
+               Ti.API.info("The error " + error.message +
+                           " occurred when listing the files in the selected folder");
+             }
+
+             Ti.Tizen.Filesystem.resolve(
+                 'documents',
+                 function(dir){
+                   documentsDir = dir;
+                   dir.listFiles(onsuccess, onerror);
+                 }, function(e) {
+                   Ti.API.info("Error" + e.message);
+                 }, "rw"
+             );
 
   - name: moveTo
     summary: Moves a file or a directory from a specified location to another.
@@ -173,6 +306,33 @@ methods:
         summary: Called if an error occurred. 
         type: Callback<WebAPIError>        
         optional: true
+    examples:
+        example: |
+            var documentsDir;
+             function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 if (files[i].isDirectory == false)
+                   documentsDir.moveTo(files[i].fullPath,
+                                       "images/newFolder/"+files[i].name,
+                                       false,
+                                       function(){Ti.API.info("file moved");});
+               }
+             }
+
+             function onerror(error) {
+               Ti.API.info("The error " + error.message +
+                           " occurred during listing the files in the selected folder");
+             }
+
+             Ti.Tizen.Filesystem.resolve(
+                 'documents',
+                 function(dir){
+                   documentsDir = dir;
+                   dir.listFiles(onsuccess, onerror);
+                 }, function(e) {
+                   Ti.API.info("Error" + e.message);
+                 }, "rw"
+             );
 
   - name: createDirectory
     summary: Creates a new directory.
@@ -188,7 +348,11 @@ methods:
     parameters:
       - name: dirPath   
         summary: The relative directory path, it should only contain characters supported by the underlying filesystem.
-        type: String        
+        type: String
+    examples:
+        example: |
+            var newDir = dir.createDirectory("newDir");
+            var anotherNewDir = dir.createDirectory("newDir1/subNewDir1");
 
   - name: createFile
     summary: Creates a new empty file in a specified location.
@@ -207,7 +371,10 @@ methods:
     parameters:
       - name: filePath   
         summary: The new file path, it should only contain characters supported by the underlying filesystem.
-        type: String        
+        type: String
+    examples:
+        example: |
+            var newFile = dir.createFile("newFilePath");
 
   - name: resolve
     summary: Resolves an existing file or directory relative to the current directory this operation is performed on, and returns a file handle for it.
@@ -221,7 +388,17 @@ methods:
     parameters:
       - name: filePath   
         summary: The relative file/directory path to resolve.
-        type: String        
+        type: String
+    examples:
+        example: |
+            var file;
+             // Resolves helloWorld.doc file that is located in the
+             // documents root location
+             Ti.Tizen.Filesystem.resolve(
+               'documents',
+               function(dir){ file = dir.resolve("helloWorld.doc");},
+               function(e){ Ti.API.info("Error" + e.message);},
+               "rw");
 
   - name: deleteDirectory
     summary: Deletes a specified directory and directory tree if specified.
@@ -249,6 +426,44 @@ methods:
         summary: Called if an error occurred. 
         type: Callback<WebAPIError>        
         optional: true
+    examples:
+        example: |
+            var documentsDir;
+             function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 if (files[i].isDirectory)
+                   documentsDir.deleteDirectory(
+                       files[i].fullPath,
+                       false,
+                       function(){
+                         Ti.API.info("Directory Deleted");
+                       }, function(e) {
+                         Ti.API.info("Error" + e.message);
+                       });
+                 else
+                   documentsDir.deleteFile(
+                       files[i].fullPath,
+                       function(){
+                         Ti.API.info("File Deleted");
+                       }, function(e) {
+                         Ti.API.info("Error" + e.message);
+                       });
+               }
+             }
+
+             function onerror(error) {
+               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
+
+             Ti.Tizen.Filesystem.resolve(
+                 'documents',
+                 function(dir){
+                   documentsDir = dir;
+                   dir.listFiles(onsuccess,onerror);
+                 }, function(e) {
+                   Ti.API.info("Error" + e.message);
+                 }, "rw"
+             );
 
   - name: deleteFile
     summary: Deletes a specified file.
@@ -273,11 +488,72 @@ methods:
       - name: onerror
         summary: Called if an error occurred. 
         type: Callback<WebAPIError>        
-        optional: true    
+        optional: true
+    examples:
+        example: |
+            function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 if (files[i].isDirectory)
+                   documentsDir.deleteDirectory(
+                       files[i].fullPath,
+                       false,
+                       function(){
+                         Ti.API.info("File Deleted");
+                       }, function(e) {
+                         Ti.API.info("Error" + e.message);
+                       });
+                 else
+                   documentsDir.deleteFile(
+                       files[i].fullPath,
+                       function(){
+                         Ti.API.info("Directory Deleted");
+                       }, function(e) {
+                         Ti.API.info("Error" + e.message);
+                       });
+               }
+             }
+
+             function onerror(error) {
+               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
+
+             var documentsDir;
+             Ti.Tizen.Filesystem.resolve(
+               'documents',
+               function(dir){
+                 documentsDir = dir;
+                 dir.listFiles(onsuccess,onerror);
+               }, function(e){
+                 Ti.API.info("Error" + e.message);
+               }, "rw"
+             );
  
 properties:
 
   - name: parent
+    summary: |
+        The parent directory handle.
+        null if there is no parent directory.
+        If there is no parent directory, this represents a root location.
+    type: Titanium.Filesystem.File
+    permission: read-only
+    examples:
+        example: |
+            // list directory contents
+             dir.listFiles(onsuccess, onerror);
+
+             function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 // prints the file parent, should contain the
+                 // same value for all the files in the loop
+                 Ti.API.info("All the files should have the same parent " + files[i].parent);
+               }
+             }
+
+             function onerror(error){
+               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
+  - name: readOnly
     summary: |
         The file/directory access state in the filesystem.
         true if object has read-only access at its location.
@@ -285,9 +561,25 @@ properties:
         This attribute represents the actual state of a file or directory in the filesystem. 
         Its value is not affected by the mode used in FileSystem.resolve 
         that was used to create the File object from which this File object was obtained.
-    type: Titanium.Filesystem.File
+    type: Boolean
     permission: read-only
+    examples:
+        example: |
+            // list directory contents
+             dir.listFiles(onsuccess, onerror);
 
+             function onsuccess(files) {
+               for(var i = 0; i < files.length; i++) {
+                 if(files[i].readOnly)
+                   console.log("Cannot write to file " + files[i].name);
+                 else
+                   console.log("Can write to file " + files[i].name);
+               }
+             }
+
+             function onerror(error) {
+               console.log("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
   - name: isFile
     summary: |
         The file type.
@@ -321,6 +613,9 @@ properties:
         It is unspecified and platform-dependent if the modified timestamp changes when a file is moved.
     type: Date
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.modified); // displays the modification timestamp
 
   - name: path
     summary: |
@@ -336,6 +631,9 @@ properties:
         For the special case of the root, if the root is music, then the path is music.
     type: String
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.path); // should be 'music/' if the file is music/foo.mp3
 
   - name: name
     summary: |
@@ -349,6 +647,9 @@ properties:
         For the special case of the root itself, the name is an empty string.
     type: String
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.name); // should be foo.mp3 if the file path is music/foo.mp3
 
   - name: fullPath
     summary: |
@@ -364,6 +665,9 @@ properties:
         The fullPath is always equal to path + name.
     type: String
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.fullPath); // should be music/track1.mp3 if the file is music/track1.mp3
 
   - name: fileSize
     summary: |
@@ -372,6 +676,9 @@ properties:
         To retrieve the number of files and directories contained in the directory, use the length attribute, instead.
     type: Number
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.fileSize); // displays the file size
 
   - name: length
     summary: |
@@ -380,6 +687,9 @@ properties:
         To retrieve the size of a file, use the fileSize attribute instead.
     type: Number
     permission: read-only
+    examples:
+        example: |
+            Ti.API.info(file.length); // '3' if the directory contains two files and one sub-directory
 
 # Pseudo-type
 ---

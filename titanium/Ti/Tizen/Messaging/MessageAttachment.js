@@ -5,12 +5,9 @@ define(['Ti/_/declare'], function(declare) {
 				this._obj = args;
 			} else {	
 				if (args.hasOwnProperty('filePath')) {
-					this._obj = new tizen.MessageAttachment(
-						args.filePath,
-						args.hasOwnProperty('mimeType') ? mimeType : null
-					);
+					this._obj = new tizen.MessageAttachment(args.filePath, args.mimeType);
 				} else {
-					Ti.API.error('MessageAttachment\'s with such arguments not found.');
+					Ti.API.error('MessageAttachment\'s constructor with such arguments not found.');
 				}
 			}
 		},
