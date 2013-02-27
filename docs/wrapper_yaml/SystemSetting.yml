@@ -13,19 +13,7 @@ description: |
 extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
-examples: 
-  - title: Code example
-    example:    |
-        // Define the success callback
-        function successCallback() {
-            console.log("Success to setProperty");
-        }
-        
-        // Define the error callback.
-        function errorCallback(error) {
-            console.log("Fail to setProperty" + error.message);
-        }
-        tizen.systemsetting.setProperty("HOME_SCREEN", "images/image1.jpg", successCallback, errorCallback);
+
 methods:
   - name: setProperty
     summary: Sets the setting of the device
@@ -49,6 +37,19 @@ methods:
       - name: errorCallback
         summary: To be invoked if the setting value cannot be set. It is optional
         type: Callback<WebAPIError>
+    examples:
+      - example: |
+          // Define the success callback
+           function successCallback() {
+             Ti.API.info("Success to setProperty");
+           }
+
+           // Define the error callback.
+           function errorCallback(error) {
+             Ti.API.info("Fail to setProperty" + error.message);
+           }
+
+           Ti.Tizen.SystemSetting.setProperty("HOME_SCREEN", "images/image1.jpg", successCallback, errorCallback);
         
   - name: getProperty
     summary: Gets the setting of the device
@@ -70,6 +71,19 @@ methods:
         summary: To be invoked if the setting value cannot be retrieved.
         type: Callback<WebAPIError>        
         optional: true
+    examples:
+      - example: |
+           // Define the success callback
+           function getPropertySuccessCallback(value) {
+             Ti.API.info("Success to getProperty : " + value);
+           }
+
+           // Define the error callback.
+           function errorCallback(error) {
+             Ti.API.info("Fail to getProperty" + error.message);
+           }
+
+           Ti.Tizen.SystemSetting.getProperty("HOME_SCREEN", getPropertySuccessCallback, errorCallback);
     
 properties:
 
