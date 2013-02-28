@@ -91,6 +91,7 @@ methods:
                                                          filters: [firstNameFilter, lastNameFilter]});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
+            
   - name: createSortMode
     summary: Creates and returns an instance of <Titanium.Tizen.SortMode>.
     returns: 
@@ -118,6 +119,7 @@ methods:
                                                     order: "ASC"});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
+            
   - name: createSimpleCoordinates
     summary: Creates and returns an instance of <Titanium.Tizen.SimpleCoordinates>.
     returns: 
@@ -185,6 +187,7 @@ name: AbstractFilter
 summary: Common interface used by different types of object filters.
 platforms: [tizen]
 
+---
 name: AttributeFilterUnit
 summary: Represents a filter based on an object attribute.
 platforms: [tizen]
@@ -203,6 +206,7 @@ properties:
     summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
     optional: true
 
+---
 name: AttributeRangeFilterUnit
 summary: Represents a filter based on an object attribute which has values that are within a particular range.
 platforms: [tizen]
@@ -221,6 +225,7 @@ properties:
     summary: Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
     optional: true
  
+---
 name: CompositeFilterUnit
 summary: Represents a set of filters.
 platforms: [tizen]
@@ -234,6 +239,7 @@ properties:
     summary: The list of filters in the composite filter.
     optional: true
     
+---
 name: SortModeUnit
 summary: Common interface used for sorting of queried data.
 platforms: [tizen]
@@ -247,6 +253,7 @@ properties:
         The type of the sorting: "ASC", "DESC".
     optional: true
 
+---
 name: SimpleCoordinatesUnit
 summary:  Represents a point (latitude and longitude) in map coordinate system.
 platforms: [tizen]

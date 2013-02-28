@@ -76,10 +76,10 @@ methods:
     parameters:
       - name: items
         summary:  The list of calendar items to add.
-        type: Titanium.Tizen.Calendar.CalendarItem[]
+        type: Array<Titanium.Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
         optional: true
       - name: errorCallback
         summary:  The method to invoke when the request fails.
@@ -151,7 +151,7 @@ methods:
     parameters:
       - name: items
         summary: The list of calendar item objects to update.
-        type: Titanium.Tizen.Calendar.CalendarItem[]
+        type: Array<Titanium.Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to invoke when the updateEvents() request succeeds.
         type: Callback<Object>
@@ -232,7 +232,7 @@ methods:
     parameters:
       - name: ids
         summary: The identifiers (id attribute) of the items to delete
-        type: CalendarEventId[]
+        type: Array<CalendarEventId>
       - name: successCallback
         summary: The method to invoke when the removeBatch() request succeeds.
         type: Callback<Object>
@@ -278,7 +278,7 @@ methods:
     parameters:
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
       - name: errorCallback
         summary: The method to call when an error occurs
         type: Callback<WebAPIError>        
@@ -433,20 +433,20 @@ name: CalendarChangeCallback
 summary: An object containing the various options for fetching the properties requested.
 properties:
   - name: onitemsadded
-    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are added to the calendar.
-        CalendarItem[] -  The list of items that were added.
+        Array<CalendarItem> -  The list of items that were added.
     
   - name: onitemsupdated
-    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are updated in the calendar.
-        CalendarItem[] - The list of items that were updated.
+        Array<CalendarItem> - The list of items that were updated.
     
   - name: onitemsremoved
-    type: Callback<String[]>
+    type: Callback<Array<String>>
     summary: |
         Called when item are removed from the calendar.
-        String[] - The list of identifiers for the items that were removed.
+        Array<String> - The list of identifiers for the items that were removed.
         

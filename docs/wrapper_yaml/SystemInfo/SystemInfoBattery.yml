@@ -1,6 +1,6 @@
 ---
 name: Titanium.Tizen.SystemInfo.SystemInfoBattery
-summary: This property reflects the general state of the system's battery
+summary: This property reflects the general state of the system's battery.
     
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]

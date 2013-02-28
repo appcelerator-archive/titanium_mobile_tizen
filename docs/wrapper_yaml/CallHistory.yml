@@ -15,7 +15,7 @@ methods:
     parameters:
       - name: successCallback
         summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
-        type: Callback<Titanium.Tizen.CallHistory.CallHistoryEntry>
+        type: Callback<CallHistoryEntry>
       - name: errorCallback
         summary: The method to call when an error occurs.
         optional: true
@@ -44,13 +44,13 @@ methods:
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
-        type: Titanium.Tizen.CallHistory.CallHistoryEntry
+        type: CallHistoryEntry
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     parameters: 
       - name: entries
         summary: A list of call history entries to delete. 
-        type: Array<Titanium.Tizen.CallHistory.CallHistoryEntry>
+        type: Array<CallHistoryEntry>
       - name: successCallback
         summary: A generic success handler.
         optional: true
@@ -86,7 +86,7 @@ methods:
 
 # Pseudo-type
 ---
-name: Titanium.Tizen.CallHistory.CallHistoryEntry
+name: CallHistoryEntry
 summary: This interface represents the subset of properties of calls, which become a call record in the call history after the call ends.
 platforms: [tizen]
 properties:
