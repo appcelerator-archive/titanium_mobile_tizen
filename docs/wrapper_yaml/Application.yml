@@ -303,7 +303,7 @@ methods:
   - name: createApplicationControl
     summary: Creates and returns an instance of <Ti.Tizen.Application.ApplicationControl>.
     returns: 
-        type: Ti.Tizen.Application
+        type: Ti.Tizen.ApplicationControl
     parameters: 
 
       - name: Options
@@ -320,20 +320,19 @@ methods:
 # Pseudo-type
 ---
 name: ApplicationControlDataUnit
-summary: Defines a key/value pair used to pass data between applications through the ApplicationControl interface.
+summary: Contains information required to initialize a <Titanium.Application.ApplicationControlData>.
 platforms: [tizen]
 properties:
   - name: key
     type: String
     summary: An attribute to store the name of a key.
   - name: value
-    type: String
+    type: String[]
     summary: An attribute to store the value associated with a key.
     
 ---
 name: ApplicationControlUnit
-summary: Consists of an operation, URI, MIME type, and data. It describes an action to be performed by other applications and is passed to launch other applications.
-         If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application.
+summary: Contains information required to initialize an <Titanium.Application.ApplicationControl>.
 platforms: [tizen]
 properties:
   - name: operation
@@ -341,19 +340,19 @@ properties:
     summary: An attribute to store the string that defines the action to be performed by an application control.
   - name: uri 
     type: String
-    summary: An attribute to store the URI needed by application control.
+    summary: (optional) An attribute to store the URI needed by application control.
     optional: true
   - name: mime  
     type: String
-    summary: An attribute to store the MIME type of a content.
+    summary: (optional) An attribute to store the MIME type of a content.
     optional: true
   - name: category   
     type: String
-    summary: An attribute to store the category of the application to be launched.
+    summary: (optional) An attribute to store the category of the application to be launched.
     optional: true
   - name: data  
     type: Ti.Tizen.Application.ApplicationControlData
-    summary: An array of attributes to store the data needed for an application control.
+    summary: (optional) An array of attributes to store the data needed for an application control.
     optional: true
 ---
 name: ApplicationControlDataArrayReplyCallback
