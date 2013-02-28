@@ -1,5 +1,5 @@
 ---
-name: Titanium.Filesystem.FileStream
+name: Titanium.Tizen.Filesystem.FileStream
 summary: FileStream API.
 description: |
     A FileStream represents a handle to a File opened for read and/or write operations. 
@@ -11,9 +11,8 @@ description: |
     
     The read/write operations in this interface do not throw any security exceptions as the access rights are expected to be granted through the initial resolve() method or through the openStream() method of the File interface. Therefore, all actions performed on a successfully resolved File and FileStream are expected to succeed. This avoids successive asynchronous calls and may potentially increase application for a user.
 extends: Titanium.Proxy
-since: "3.0.2"
 platforms: [tizen]
-creatable: false
+createable: false
 
 methods:
   - name: close
