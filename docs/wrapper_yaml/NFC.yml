@@ -181,7 +181,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Titanium.Tizen.NFC.NDEFMessage>.
-        type: createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData
+        type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
         optional: true
     returns:
         type: Titanium.Tizen.NFC.NDEFMessage
@@ -191,7 +191,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecord>.
-        type: createNDEFRecordParameters, createNDEFRecordParametersrawData
+        type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
     returns:
         type: Titanium.Tizen.NFC.NDEFRecord
 
