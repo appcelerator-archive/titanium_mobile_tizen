@@ -39,10 +39,27 @@ methods:
         summary: The success callback to be invoked when an NFC tag is detected or lost.
         type: NFCTagDetectCallback
 
-    parameters:
       - name: tagFilter 
-        summary: Filter to be used when specific NFC tag is detected.
-        type: Array<Titanium.Tizen.NFC.NFCTag>
+        summary: | 
+            Filter to be used when specific NFC tag is detected.
+            Valid values are:
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_GENERIC_TARGET>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_A>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_4A>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_3A>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_MIFARE_MINI>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_MIFARE_1K>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_MIFARE_4K>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_MIFARE_ULTRA>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_MIFARE_DESFIRE>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_B>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_4B>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO14443_BPRIME>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_FELICA>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_JEWEL>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_ISO15693>
+                <Titanium.Tizen.NFC.N_F_C_TAG_TYPE_UNKNOWN_TARGET>
+        type: Array<Stirng>
 
   - name: setPeerListener
     summary: Registers a callback function to be invoked when NFC peer-to-peer target is detected.
