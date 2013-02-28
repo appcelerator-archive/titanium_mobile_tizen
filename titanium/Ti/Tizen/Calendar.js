@@ -56,8 +56,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTa
 
 		getCalendars: function(type /*CalendarType*/, successCallback /*CalendarArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			function calendarsListSuccessCallBack(calendars) {
-				Ti.API.info("calendars.length: " + calendars.length);
-
 				var i = 0,
 					len = calendars.length,
 					calendarsArr = [];
@@ -106,7 +104,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTa
 	});
 
 	function onCalendarEventArraySuccessCallback(object, onsuccess) { 
-		Ti.API.info('succ');
 		onsuccess.call(null, new CalendarEvent(object));
 	};
 

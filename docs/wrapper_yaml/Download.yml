@@ -1,9 +1,8 @@
 ---
-name: Titanium.Download
+name: Titanium.Tizen.Download
 summary: |
     The Download module provides methods to asynchronously download the contents of a URL to a storage.
 extends: Titanium.Module
-since: "2.0"
 
 methods:
   - name: start
@@ -15,17 +14,19 @@ methods:
     parameters:
       - name: downloadRequest
         summary: The URL and destination information of the object to download.
-        type: DownloadRequest
+        type: Titanium.Tizen.Download.DownloadRequest
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
         optional: true
+
   - name: cancel
     summary: Cancels an ongoing download operation that is specified by the downloadId parameter.
     parameters:
       - name: downloadId
         summary: The ID of the ongoing download operation to stop.
         type: Number
+
   - name: pause
     summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
         The paused download operation can be resumed later by the resume() method.
@@ -33,12 +34,14 @@ methods:
       - name: downloadId
         summary: The ID of the ongoing download operation to pause.
         type: Number
+
   - name: resume  
     summary: Resumes a paused download operation that is specified by the downloadId parameter.
     parameters:
       - name: downloadId  
         summary: The ID of the paused download operation to be resume.
         type: Number
+
   - name: getState
     summary: Gets the download state of an operation synchronously with the specified ID.
     description: |
@@ -49,16 +52,18 @@ methods:
       - name: downloadId
         summary: The ID to get the current state of download operation.
         type: Number  
+
   - name: getDownloadRequest
     summary: Gets the DownloadRequest object from a given id.
     description: |
         Returns the download request information of the given id.
     returns:
-        type: DownloadRequest
+        type: Titanium.Tizen.Download.DownloadRequest
     parameters:
       - name: downloadId
         summary: The ID to get the download request information.
         type: Number
+
   - name: getMIMEType
     summary: Gets the MIME type of the downloaded file.
     description: |
@@ -69,6 +74,7 @@ methods:
       - name: downloadId
         summary: The ID to get the MIME type information.
         type: Number
+
   - name: setListener
     summary: Sets the download callback to the download operation of given id.
         It's possible to change or register the listener of download operation using the saved id.
@@ -79,26 +85,51 @@ methods:
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
----
-name: DownloadRequest
-summary: Defines the download request object.
-parameters:
-  - name: url
-    summary: Store the URL of the object to download.
-    type: String
-  - name: destination
-    summary: Sore the folder path of the destination folder to which a requested file object will be downloaded.
-        If the destination is not specified,  the file will be downloaded to the default storage "Downloads".
-    type: String
-    optional: true
-  - name: fileName
-    summary: An attribute to store the file name for the specified URL. If the file name is not given, the original file name from URL is used.
-    type: String
-    optional: true
+
+  - name: createDownloadRequest
+    summary: Creates <Titanium.Tizen.Download.DownloadRequest> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Titanium.Tizen.Download.DownloadRequest>.
+        type: Dictionary<createDownloadRequestParameters>
+    returns:
+        type: Titanium.Tizen.Download.DownloadRequest
+        
+properties:
+
+  - name: DOWNLOAD_STATE_QUEUED
+    summary: Indicates that the download operation is listed in a queue.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_DOWNLOADING
+    summary:  Indicates that the download operation is in progress.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_PAUSED
+    summary: Indicates that the download operation is in a paused state by user request.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_CANCELED
+    summary: Indicates that the download operation is canceled by user request.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_COMPLETED
+    summary: Indicates that the download operation is in a completed state.
+    type: STRING  
+    
+  - name: DOWNLOAD_STATE_FAILED
+    summary: Indicates that the download operation has failed due to some reasons.
+    type: STRING
+    permission: read-only
+
 ---
 name: DownloadCallback
 summary: Defines notification callbacks for the download state change or progress.
-methods:	
+methods:
   - name: onprogress
     summary: Called when a download is successful and it called multiple times as the download progresses.
         The interval between onprogress() callback is platform-dependent. When the download is started, the receivedSize can be 0.
@@ -117,29 +148,48 @@ methods:
     parameters:
       - name: downloadId
         summary: The ID of the corresponding download operation.
-        type: Number		
+        type: Number
   - name: oncanceled
     summary: Called when download is canceled by the cancel() method.
     parameters:
       - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-  - name: oncompleted		
+  - name: oncompleted
     summary: Called when the download operation is completed with the final full path.
         If the same file name already exists in the destination, it is changed according to the platform policy and delivered in this callback.
     parameters:
-      - name: downloadId		
+      - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-      - name: fullPath		
+      - name: fullPath
         summary: The final full path for the downloaded file.
         type: String
   - name: onfailed
     summary: Called when the download operation fails.
-    parameters:	
-      - name: downloadId	
+    parameters:
+      - name: downloadId
         summary: The ID of the corresponding download operation.
         type: Number
-      - name: error	
+      - name: error
         summary: The reason for the download failure.
-        type: Callback<WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
+---
+name: createDownloadRequestParameters
+summary: Parameters for the <Titanium.Tizen.Download.createDownloadRequest>.
+properties:
+  - name: url
+    summary: The URL of the object to download.
+    type: String
+
+  - name: destination
+    summary: Destination folder to which a requested file object will be downloaded.
+        If the destination is not specified, the file will be downloaded to the default storage "Downloads".
+    type: String
+    optional: true
+
+  - name: fileName
+    summary: An attribute to store the file name for the specified URL. If the file name is not given, 
+        the original file name from URL is used.
+    type: String
+    optional: true

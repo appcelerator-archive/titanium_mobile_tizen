@@ -18,7 +18,7 @@ description: |
 extends: Titanium.Proxy
 since: "3.0.2"
 platforms: [tizen]
-creatable: true
+createable: true
 
 examples:
   - title: Code example
@@ -56,7 +56,7 @@ methods:
         summary: The URI that identifies the file or null if an error occurs.
         type: String
     examples:
-        example: |
+      - example: |
            /*'file://music/ramones/RockawayBeach.mp3' or 'file:///opt/media/music/ramones/RockawayBeach.mp3' if the file is
            music/ramones/RockawayBeach.mp3*/
            Ti.API.info(file.toURI());
@@ -85,7 +85,7 @@ methods:
         type: FileFilter
         optional: true
     examples:
-        example: |
+      - example: |
            function onsuccess(files) {
                Ti.API.info("There are " + files.length  + " in the selected folder");
            }
@@ -130,7 +130,7 @@ methods:
         type: String
         optional: true
     examples:
-        example: |
+      - example: |
             var documentsDir;
             function onsuccess(files) {
                 for(var i = 0; i < files.length; i++) {
@@ -188,7 +188,7 @@ methods:
         type: String
         optional: true
     examples:
-        example: |
+      - example: |
             function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  Ti.API.info("File Name is " + files[i].name); // displays file name
@@ -249,7 +249,7 @@ methods:
         type: Callback<WebAPIError>
         optional: true
     examples:
-        example: |
+      - example: |
             var documentsDir;
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
@@ -307,7 +307,7 @@ methods:
         type: Callback<WebAPIError>        
         optional: true
     examples:
-        example: |
+      - example: |
             var documentsDir;
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
@@ -350,7 +350,7 @@ methods:
         summary: The relative directory path, it should only contain characters supported by the underlying filesystem.
         type: String
     examples:
-        example: |
+      - example: |
             var newDir = dir.createDirectory("newDir");
             var anotherNewDir = dir.createDirectory("newDir1/subNewDir1");
 
@@ -373,7 +373,7 @@ methods:
         summary: The new file path, it should only contain characters supported by the underlying filesystem.
         type: String
     examples:
-        example: |
+      - example: |
             var newFile = dir.createFile("newFilePath");
 
   - name: resolve
@@ -390,7 +390,7 @@ methods:
         summary: The relative file/directory path to resolve.
         type: String
     examples:
-        example: |
+      - example: |
             var file;
              // Resolves helloWorld.doc file that is located in the
              // documents root location
@@ -427,7 +427,7 @@ methods:
         type: Callback<WebAPIError>        
         optional: true
     examples:
-        example: |
+      - example: |
             var documentsDir;
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
@@ -490,7 +490,7 @@ methods:
         type: Callback<WebAPIError>        
         optional: true
     examples:
-        example: |
+      - example: |
             function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  if (files[i].isDirectory)
@@ -538,7 +538,7 @@ properties:
     type: Titanium.Filesystem.File
     permission: read-only
     examples:
-        example: |
+      - example: |
             // list directory contents
              dir.listFiles(onsuccess, onerror);
 
@@ -564,7 +564,7 @@ properties:
     type: Boolean
     permission: read-only
     examples:
-        example: |
+      - example: |
             // list directory contents
              dir.listFiles(onsuccess, onerror);
 
@@ -614,7 +614,7 @@ properties:
     type: Date
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.modified); // displays the modification timestamp
 
   - name: path
@@ -632,7 +632,7 @@ properties:
     type: String
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.path); // should be 'music/' if the file is music/foo.mp3
 
   - name: name
@@ -648,7 +648,7 @@ properties:
     type: String
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.name); // should be foo.mp3 if the file path is music/foo.mp3
 
   - name: fullPath
@@ -666,7 +666,7 @@ properties:
     type: String
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.fullPath); // should be music/track1.mp3 if the file is music/track1.mp3
 
   - name: fileSize
@@ -677,7 +677,7 @@ properties:
     type: Number
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.fileSize); // displays the file size
 
   - name: length
@@ -688,7 +688,7 @@ properties:
     type: Number
     permission: read-only
     examples:
-        example: |
+      - example: |
             Ti.API.info(file.length); // '3' if the directory contains two files and one sub-directory
 
 # Pseudo-type

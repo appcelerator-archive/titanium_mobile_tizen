@@ -436,7 +436,7 @@ summary: A calendar item identifier, which can either be a <CalendarEventId> or 
 # Pseudo-type
 ---
 name: CalendarChangeCallback
-summary: An object containing the various options for fetching the properties requested.
+summary: This interface specifies a set of methods that will be invoked every time a calendar change occurs (calendar item addition/update/removal).
 properties:
   - name: onitemsadded
     type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>

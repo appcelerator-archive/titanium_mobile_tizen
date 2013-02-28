@@ -197,12 +197,12 @@ properties:
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
     type: Titanium.Tizen.Calendar.CalendarAlarm[]
     examples:
-      - example: |    
+      - example: |
             ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
-          // Gives a sound notification 30 minutes before the item's start time
-          var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
-                                               "SOUND");
-          ev.alarms = [alarm];
+            // Gives a sound notification 30 minutes before the item's start time
+            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
+                                                   "SOUND");
+            ev.alarms = [alarm];
 
   - name: categories
     summary: |

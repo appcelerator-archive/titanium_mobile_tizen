@@ -152,7 +152,47 @@ methods:
             } catch(err) {
                 Titanium.API.info("Error: " + err.name);
             }
-            
+
+  - name: createCalendarTask
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarTask 
+    returns:
+        type: Titanium.Tizen.Calendar.CalendarTask       
+    parameters:
+      - name: taskParameters
+        type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
+  
+  - name: createCalendarEvent
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarEvent
+    returns:
+        type: Titanium.Tizen.Calendar.CalendarEvent       
+    parameters:
+      - name: eventParameters
+        type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
+                
+  - name: createCalendarAttendee
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
+    returns:
+        type: Titanium.Tizen.Calendar.CalendarAttendee
+    parameters:
+      - name: attendeeParameters
+        type: Dictionary<CalendarAttendeeInit>
+                
+  - name: createCalendarRecurrenceRule
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarRecurrenceRule
+    returns:
+        type: Titanium.Tizen.Calendar.CalendarRecurrenceRule
+    parameters:
+      - name: recurrenceRuleParameters
+        type: Dictionary<CalendarRecurrenceRuleInit>
+                
+  - name: createCalendarAlarm
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAlarm
+    returns:
+        type: Titanium.Tizen.Calendar.CalendarAlarm
+    parameters:
+      - name: alarmParameters
+        type: [Dictionary<CalendarAlarmInitWithDate>, CalendarAlarmInitWithDuration>]
+        
 properties:
 
   - name: CALENDAR_TYPE_EVENT 
@@ -388,3 +428,341 @@ properties:
     summary: COMPLETED - if the task has been cancelled.
     type: STRING
     permission: read-only
+    
+
+# Pseudo-types used in creators
+---
+name: CalendarItemInit
+summary: |
+    A dictionary that is used for creating calendar items.
+    
+    These attributes are shared by both calendar events and tasks.
+    
+    See CalendarItem interface for more information about the members.
+platforms: [tizen]
+properties:
+    
+  - name: description 
+    summary: An attribute to store the textual descriptions of an item.
+    type: STRING
+    
+  - name: summary
+    summary: An attribute to store a short summary or subject for an item.
+    type: STRING
+    
+  - name: isAllDay
+    summary: An attribute that behaves like a flag to indicate whether an event is an all-day event or not.
+    type: Boolean
+    
+  - name: startDate 
+    summary: An attribute to store the start date/time for an item.e / dueDate if provided.
+    type: Titanium.Tizen.Time.TZDate
+    
+  - name: duration
+    summary: An attribute to denote the duration of the calendar component.
+    type: Titanium.Tizen.Time.TimeDuration
+    
+  - name: location 
+    summary: An attribute to store the location or the intended venue for the activity defined by the calendar item.
+    type: String
+
+  - name: geolocation
+    summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place.
+    type: Titanium.Tizen.SimpleCoordinates
+
+  - name: organizer
+    summary: An attribute to store the name of the person who organized this event.
+    type: STRING
+    
+  - name: visibility
+    summary: |
+        An attribute to mark the visibility (secrecy) level of the item.
+        The value is one of the constants defined for this parameter : 
+            CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
+            CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
+    type: STRING
+
+  - name: status
+    summary: |
+        An attribute to store the overall confirmation status for a calendar component.
+        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
+        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
+    type: STRING
+    
+  - name: priority
+    summary: |
+        An attribute to indicate the priority level of an item and may be used to relatively prioritize multiple items during a given period of time. (See RFC 5545 - Section 3.8.1.9).
+        The default value for this attribute is LOW priority.
+        If the native item database supports another priority schema (such as a range from 1 to 9), the implementation must convert those values to the supported values. 
+        For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
+            - 1-4 to HIGH,
+            - 5 to MEDIUM,
+            - 6-9 to LOW.
+    type: STRING
+    
+  - name: alarms
+    summary: An attribute array to lists the alarms (or reminders) associated to an item.
+    type: Titanium.Tizen.Calendar.CalendarAlarm[]
+    examples:
+      - example: |
+            ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
+            // Gives a sound notification 30 minutes before the item's start time
+            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
+                                                            "SOUND");
+            ev.alarms = [alarm];
+
+  - name: categories
+    summary: |
+        An attribute to indicate the item categories or subtypes of a calendar component. 
+        The categories are useful in searching for a calendar component of a particular type and category. 
+        (See RFC 5545 - Section 3.8.1.2).  
+        
+        Examples of categories are personal, work, vacation, travel, etc.
+        By default, this attribute is set to an empty array.
+    type: STRING[]
+    
+  - name: attendees
+    summary: An attribute array that lists the people attending an event.
+    type: Titanium.Tizen.Calendar.CalendarAttendee[]
+
+---
+name: CalendarTaskInit
+summary: |
+    A dictionary that is used for creating calendar tasks.
+    
+    All the attributes are optional and are undefined by default.
+    
+    It also provides an interface for specifying task attributes upon task creation
+    
+    See CalendarTask interface for more information about the members.
+extends: CalendarItemInit
+platforms: [tizen]
+properties:
+  - name: dueDate 
+    type: Titanium.Tizen.Time.TZDate
+    summary: An attribute to store the due date and time for completing a task.
+    optional: true
+    
+  - name: completedDate
+    type: Titanium.Tizen.Time.TZDate
+    summary: An attribute to record the date and time when an task is completed.
+    optional: true
+        
+  - name: progress
+    type: Number
+    summary: An attribute to denote the percent of completion of a task.
+    optional: true
+
+---
+name: CalendarEventInit
+summary: |
+    A dictionary that is used for creating calendar events.
+    
+    Provides an interface for specifying event attributes upon event creation
+    
+    All the attributes are optional and are undefined by default.
+    
+    See CalendarEvent interface for more information about the members.
+    
+extends: CalendarItemInit
+platforms: [tizen]
+properties:
+   
+  - name: endDate 
+    type: Titanium.Tizen.Date.TZDate
+    summary: An attribute to store the end date/time of an event.
+        
+  - name: availability
+    type: String
+    summary: |
+        An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
+        The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
+                
+  - name: recurrenceRule 
+    type: Titanium.Tizen.Date.TZDate
+    summary: An attribute to denote the recurrence rule for the event.
+
+---
+name: RepresentationInit
+summary: A dictionary that is used for creating both calendar tasks and events.
+platforms: [tizen]
+properties:
+        
+  - name: stringRepresentation
+    type: String
+    summary: Data in string format 'iCalendar 1.0' or 'iCalendar 2.0'
+  - name: format
+    type: String
+    summary: |
+        Indicates the type of textual format of a Calendar.
+        
+        The value is one of the constants defined for this parameter :
+            CALENDAR_TEXT_FORMAT_ICALENDAR_20 = "ICALENDAR_20",
+            CALENDAR_TEXT_FORMAT_VCALENDAR_10 = "VCALENDAR_10".
+            
+---
+name: CalendarAttendeeInit
+summary: |
+    The properties of a CalendarAttendee, to pass to its creator.
+    
+    See CalendarAttendee interface for more information about the members.
+platforms: [tizen]
+properties:
+
+  - name: uri 
+    summary: An attribute to store the URI for the attendee.
+    type: STRING
+
+  - name: name
+    summary: An attribute to store the name of an attendee.
+    type: STRING
+
+  - name: role 
+    summary: |
+        An attribute to denote the role of the attendee.
+        
+        The value is one of the constants defined for this type:
+            - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
+            - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
+            - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+        
+    type: STRING
+
+  - name: status
+    summary: |
+        An attribute to store the participant's attendance status.
+        
+        The value is one of the constants defined for this type:
+            - ATTENDEE_STATUS_PENDING = 'PENDING'
+            - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
+            - ATTENDEE_STATUS_DECLINED = 'DECLINED'
+            - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
+            - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
+            - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
+            - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+            
+    type: STRING
+
+  - name: RSVP 
+    summary: An attribute to store the attendee's participation status reply (RSVP).
+    type: Boolean
+
+  - name: type
+    summary: |
+        An attribute to indicate the type of a participant.
+        
+        The value is one of the constants defined for this type: 
+            - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
+            - ATTENDEE_TYPE_GROUP = 'GROUP'
+            - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
+            - ATTENDEE_TYPE_ROOM = 'ROOM'
+            - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+    type: STRING
+
+  - name: group 
+    summary: An attribute to store the participant's group or list membership.
+    type: STRING
+    optional: true
+
+  - name: delegatorURI 
+    summary: An attribute to store the URI of the person who has delegated their participation to this attendee.
+    type: STRING
+
+  - name: delegateURI 
+    summary: An attribute to stores the URI of the attendee to whom the person has delegated his participation.
+    type: STRING
+
+  - name: contactRef 
+    summary: |
+        An attribute to store the participant's reference in the Contact API.
+        If the contact is not resolved, this attribute will be set to null. 
+    type: Titanium.Tizen.Contacts.ContactsRef
+---
+name: CalendarRecurrenceRuleInit
+summary: |
+    The properties of a CalendarRecurrenceRule to pass to its creator.
+    
+    For more information about the members, see CalendarRecurrenceRule interface.
+platforms: [tizen]
+properties:
+ 
+  - name: interval
+    type: Number
+    summary: An attribute to specify how often the recurrence rule repeats over the unit of time indicated by its frequency.
+        
+  - name: untilDate
+    type: Titanium.Tizen.Time.TZDate
+    summary: An attribute to indicate the end date of a recurrence duration of an event using either an end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
+        
+  - name: occurrenceCount
+    type: Number
+    summary: An attribute to indicate the number of occurrences of a recurring event.
+        
+  - name: daysOfTheWeek
+    type: String[]
+    summary: |
+        An attribute to store the days of the week associated with the recurrence rule.
+        This property value is valid only for recurrence rules with a frequency type of WEEKLY, MONTHLY, and YEARLY.
+        This property corresponds to BYDAY in RFC 5545.
+                
+  - name: setPositions
+    type: Number[]
+    summary: |
+        An attribute to store a list of ordinal numbers that filters which recurrences to include in the recurrence rule's frequency.
+        For example, a yearly recurrence rule that has a daysOfTheWeek value that specifies Monday through Friday, and a setPositions array containing 2 and -1, occurs only on the second weekday and last weekday of every year.
+        Values can be from 1 to 366 or -366 to -1. Negative values indicate counting backwards from the end of the recurrence rule's frequency (week, month, or year).
+        This attribute must only be used in conjunction with another BYxxx rule part (such as daysOfTheWeek).
+        This property corresponds to BYSETPOS in RFC 5545.
+        
+        By default, this attribute is set to an empty array
+        
+  - name: exceptions
+    type: Titanium.Tizen.Time.TZDate[]
+    summary: An attribute to list date/time exceptions for the recurring event.
+---
+name: CalendarAlarmInitWithDate
+summary: 
+platforms: [tizen]
+properties:
+
+  - name: absoluteDate 
+    type: Titanium.Tizen.Time.TZDate
+    summary: An attribute to record the absolute date and time when an alarm should be triggered.
+             
+  - name: method 
+    type: String
+    summary: |
+        An attribute to denote the notification method used by an alarm.
+        
+        The value is one of the constants defined for this type:
+            - ALARM_METHOD_SOUND = 'SOUND'
+            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+    
+  - name: description
+    type: String
+    summary: An attribute to store the description of an alarm.
+    optional: true
+
+---
+name: CalendarAlarmInitWithDuration
+summary: 
+platforms: [tizen]
+properties:
+   
+  - name: before 
+    type: Titanium.Tizen.Time.TimeDuration
+    summary: An attribute to store the duration before an event starts on which the alarm should be triggered.
+        
+  - name: method 
+    type: String
+    summary: |
+        An attribute to denote the notification method used by an alarm.
+        
+        The value is one of the constants defined for this type:
+            - ALARM_METHOD_SOUND = 'SOUND'
+            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+    
+  - name: description
+    type: String
+    summary: An attribute to store the description of an alarm.
+    optional: true

@@ -64,8 +64,8 @@ methods:
     parameters: 
 
       - name: parameterers
-        summary: Dictionary with initial arguments for AlarmRelative.
-        type: Dictionary
+        summary: Initial arguments for AlarmRelative.
+        type: createAlarmRelativeParameterers
 
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmAbsolute>.
@@ -74,8 +74,8 @@ methods:
     parameters: 
 
       - name: parameterers
-        summary: Dictionary with initial arguments for AlarmAbsolute.
-        type: Dictionary
+        summary: Initial arguments for AlarmAbsolute.
+        type: createAlarmAbsoluteParameterers, createAlarmAbsoluteParameterersPeriod
 
 properties:
   - name: PERIOD_MINUTE
@@ -97,3 +97,55 @@ properties:
     summary: 604800 - The period of a week. It define the number of seconds in a week. 
     type: Number
     permission: read-only
+
+---
+name: createAlarmRelativeParameterers
+summary: Parameters for the createAlarmRelative.
+properties:
+  - name: delay
+    summary: |
+        An attribute to stores the difference in time (in seconds) between 
+        when an alarm is added and it is triggered.
+    type: Number
+
+  - name: period
+    summary: |
+        The duration (in seconds) between each trigger of an alarm. 
+        By default, this attribute is set to null, indicating that this alarm does not repeat.
+    type: Number
+    optional: true
+
+---
+name: createAlarmAbsoluteParameterers
+summary: Parameters for the createAlarmAbsolute.
+properties:
+  - name: date
+    type: Date
+    summary: |
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+  - name: daysOfTheWeek
+    summary: |
+        The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+        Valid days of the week constants:
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_MO>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_TU>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_WE>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_TH>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_FR>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_SA>
+        <Titanium.Tizen.Calendar.BY_DAY_VALUE_SU>
+    type: Array<String>
+    optional: true
+
+---
+name: createAlarmAbsoluteParameterersPeriod
+summary: Parameters for the createAlarmAbsolute.
+properties:
+  - name: date
+    type: Date
+    summary: |
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+  - name: period
+    summary: Duration in seconds between each trigger of the alarm.
+    type: Number
+    optional: true

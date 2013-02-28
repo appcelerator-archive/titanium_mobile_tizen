@@ -11,7 +11,7 @@ methods:
       - type: Titanium.Application.Application
         summary: Application The data structure that defines current application.
     examples:
-        example: |
+      - example: |
             var app = Ti.Tizen.Application.getCurrentApplication();
             console.log("Current application's app id is " + app.appInfo.id);
 
@@ -38,7 +38,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
     examples:
-        example: |
+      - example: |
             function onsuccess() {
                 console.log("The application has launched successfully");
             }
@@ -81,10 +81,10 @@ methods:
             Pass a dictionary with the following supported keys: `onsuccess` a function that accepts as parameter array of Titanium.Tizen.Application.ApplicationControlData, 
             and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
             and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
-        type: Object
+        type: ApplicationControlDataArrayReplyCallback
         optional: true
     examples:
-        example: |
+      - example: |
             var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
                                                                 uri: null,
                                                                 mime: "image/jpeg",
@@ -132,7 +132,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
     examples:
-        example: |
+      - example: |
             var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
                                                                 uri: null,
                                                                 mime: "image/jpeg",
@@ -178,7 +178,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
     examples:
-        example: |
+      - example: |
             function onRunningAppsContext(contexts) {
                 for (var i = 0; i < contexts.length; i++)
                 addToTaskManager(contexts[i]);
@@ -216,7 +216,7 @@ methods:
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
     examples:
-        example: |       
+      - example: |       
             function onListInstalledApps(applications) {
                 for (var i = 0; i < applications.length; i++)
                     addToApplicationGrid(applications[i]);
@@ -238,7 +238,7 @@ methods:
         type: String
         optional: true
     examples:
-        example: |
+      - example: |
             var appContext = Ti.Tizen.Application.getAppContext(null);
             console.log("Application context retrieved for app " + appContext.id);
  
@@ -262,7 +262,7 @@ methods:
             called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
         type: Object
     examples:
-        example: |
+      - example: |
             var appEventCallback = {
                 oninstalled: function(application) {
                     console.log('The application ' + application.name + ' is installed');
@@ -283,7 +283,7 @@ methods:
         summary: An ID that identifies the listener.
         type: Number
     examples:
-        example: |
+      - example: |
             Ti.Tizen.Application.removeAppInfoEventListener(watchId);
  
   - name: createApplicationControlData
@@ -297,7 +297,7 @@ methods:
         type: Dictionary<ApplicationControlDataUnit>
 
     examples:
-        -example: |
+      - example: |
             var appControlData = Ti.Tizen.createApplicationControlData({key: "image", value: [imagedata1]});
 
   - name: createApplicationControl
@@ -311,7 +311,7 @@ methods:
         type: Dictionary<ApplicationControlUnit>
 
     examples:
-        -example: |
+      - example: |
             var appControl = Ti.Tizen.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/share",
                                                                 uri: "share.html",
                                                                 mime: "image/*",
@@ -354,3 +354,46 @@ properties:
     type: Ti.Tizen.Application.ApplicationControlData
     summary: An array of attributes to store the data needed for an application control.
     optional: true
+---
+name: ApplicationControlDataArrayReplyCallback
+summary: This call back interface specifies success callbacks that are invoked as a reply from the requseted application control within the application control requestor. 
+description: |
+    This callback interface specifies two methods:
+        onsuccess() - Invoked by the callee application calls RequestedApplicationControl.replyResult().
+        onfailure() - Invoked if the callee application calls RequestedApplicationControl.replyFailure().
+methods:
+  - name: onsuccess
+    summary: Called when the callee application calls RequestedApplicationControl.replyResult().  
+    parameters:
+      - name: data 
+        summary: An array of ApplicationControlData objects 
+        type: Titanium.Tizen.Application.ApplicationControlData[]
+        optional: true
+
+  - name: onfailure 
+    summary: Called when the callee application calls RequestedApplicationControl.replyFailure(). 
+---
+name: ApplicationInformationEventCallback
+summary: The callback interface to specify for subscribing for notification of changes in the list of installed applications on a device. 
+description: This callback interface specifies methods that will be invoked when an application is installed, updated, or uninstalled.  
+methods: 
+  - name: oninstalled
+    summary: Called when an application is installed. 
+    parameters:
+      - name: info 
+        summary: The application information of the installed application. 
+        type: Titanium.Tizen.Application.ApplicationInformation[]
+
+  - name: onupdated 
+    summary: Called when an application is updated. 
+    parameters:
+      - name: info 
+        summary: The application information of the updated application. 
+        type: Titanium.Tizen.Message.MessageConversation[]
+
+  - name: onuninstalled
+    summary: Called when an application is uninstalled. 
+    parameters:
+      - name: id
+        summary: The ID of the uninstalled application.  
+        type: String

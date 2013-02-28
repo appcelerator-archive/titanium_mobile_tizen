@@ -5,12 +5,6 @@ extends: Titanium.Proxy
 platforms: [tizen]
 since: "3.0.2"
 
-examples: 
-  - title: Simple example
-    example:    |
-        TZDate now = tizen.time.getCurrentDateTime();
-        TZDate in_one_week = now.addDuration(new tizen.TimeDuration(7, "DAYS"));
-   
 methods:
 
   - name: getDate
@@ -20,9 +14,6 @@ methods:
     
   - name: setDate
     summary: Sets the day of the month (from 1-31).
-    returns:
-        summary: 
-        type: 
     parameters:
       - name: date
         summary: Date to set.
@@ -211,7 +202,7 @@ methods:
   - name: toTimezone
     summary: Returns a copy of the TZDate converted to a given time zone.
     returns:
-        summary:  New TZDate in given Timezone.
+      - summary:  New TZDate in given Timezone.
         type: Titanium.Tizen.Time.TZDate
     parameters:
       - name: tzid
@@ -221,13 +212,13 @@ methods:
   - name: toLocalTimezone
     summary: Returns a copy of the TZDate converted to the local time zone.
     returns:
-        summary:  New TZDate in local Timezone.
+      - summary:  New TZDate in local Timezone.
         type: Titanium.Tizen.Time.TZDate
     
   - name: toUTC
     summary: Returns a copy of the TZDate converted to Coordinated Universal Time (UTC).
     returns:
-        summary: Date/Time in UTC.
+      - summary: Date/Time in UTC.
         type: Titanium.Tizen.Time.TZDate
     
   - name: difference
@@ -242,10 +233,8 @@ methods:
         - Negative, if other is in the future
         - 0 if the two date / times are equal
         - Positive, if other is in the past
-        
     returns:
-        summary: |
-            Duration in milliseconds between the two date / time objects (or in days for comparison between dates with no time component).
+      - summary: Duration in milliseconds between the two date or time objects (or in days for comparison between dates with no time component).
         type: Titanium.Tizen.Time.TimeDuration
     parameters:
       - name: other
@@ -257,9 +246,8 @@ methods:
     description: |
         This method takes the timezones into consideration and will return true 
         if the two TZDate objects represent the same instant in different timezones.
-        
     returns:
-        summary: True if the 2 date/times are the same.
+      - summary: True if the 2 date/times are the same.
         type: Boolean
     parameters:
       - name: other
@@ -270,9 +258,8 @@ methods:
     summary: Checks if the TZDate is earlier than another.
     description: |
         This method takes the timezones into consideration.
-        
     returns:
-        summary:  True, if the Date/Time is earlier than the one passed in argument.
+      - summary:  True, if the Date/Time is earlier than the one passed in argument.
         type:  Boolean
     parameters:
       - name: other
@@ -282,9 +269,8 @@ methods:
   - name: laterThan
     summary: Checks if the TZDate is later than another.
     description: This method takes the timezones into consideration.
-        
     returns:
-        summary:  True, if the Date/Time is later than the one passed in argument.
+      - summary:  True, if the Date/Time is later than the one passed in argument.
         type: Boolean
     parameters:
       - name: other
@@ -304,14 +290,14 @@ methods:
         summary:  TimeDuration to add.
         type: Titanium.Tizen.Time.TimeDuration
     examples:
-        example: |
+      - example: |
             now = Ti.Tizen.Time.getCurrentDateTime(); //TZDate
             in_one_week = now.addDuration(Ti.Tizen.Time.createTimeDuration({length: 7, unit: "DAYS"})); //TZDate
 
   - name: toLocaleTimeString
     summary: Returns the date portion of a TZDate object as a string, using locale conventions.
     returns:
-        summary:  Date portion of the TZDate object as a string, using locale conventions.
+      - summary:  Date portion of the TZDate object as a string, using locale conventions.
         type: String
     
   - name: toLocaleString
@@ -319,34 +305,33 @@ methods:
     description: |
         
     returns:
-        summary: String representation of the TZDate object, using locale conventions.
+      - summary: String representation of the TZDate object, using locale conventions.
         type: String
 
   - name: toDateString
     summary: Returns the date portion of a TZDate object as a string.
     returns:
-        summary: Date portion of the TZDate object as a string.
+      - summary: Date portion of the TZDate object as a string.
         type: String
     
   - name: toTimeString
     summary: Returns the time portion of a TZDate object as a string.
     returns:
-        summary: Time portion of the TZDate object as a string.
+      - summary: Time portion of the TZDate object as a string.
         type: String
     
   - name: toString
     summary: Converts a TZDate object to a string.
     returns:
-        summary: String representation of the TZDate object.
+      - summary: String representation of the TZDate object.
         type: String
     
   - name: getTimezoneAbbreviation
     summary: Determines the time zone abbreviation to be used at a particular date in the time zone.
     description: |
         For example, in Toronto this is currently "EST" during the winter months and "EDT" during the summer months when daylight savings time is in effect.
-        
     returns:
-        summary:  Abbreviation of the time zone (such as "EST").
+      - summary:  Abbreviation of the time zone (such as "EST").
         type: String
    
   - name: secondsFromUTC
@@ -354,15 +339,13 @@ methods:
     description: |
         Returns the offset (in seconds) from UTC of the timezone, accounting for daylight savings if in effect in the timezone.
     returns:
-        summary: Offset from UTC in seconds.
+      - summary: Offset from UTC in seconds.
         type: Number
     examples:
-        example: |
+      - example: |
             var offset = Ti.Tizen.Time.getCurrentDateTime().secondsFromUTC();
             var myDate = new Date();
-            var exp_offset = myDate.getTimezoneOffset()*60;
-            //offset is equals to exp_offset.
-    
+            var exp_offset = myDate.getTimezoneOffset()*60;//offset is equals to exp_offset.
   - name: isDST
     summary: Indicates if daylight savings are in effect for this TZDate.
     returns:
@@ -371,11 +354,11 @@ methods:
   - name: getPreviousDSTTransition
     summary: Returns the date of the previous daylight saving time transition for the timezone.
     returns:
-        summary: Date of the next daylight saving transition (before the instant identified by the TZDate).
+      - summary: Date of the next daylight saving transition (before the instant identified by the TZDate).
         type: Titanium.Tizen.Time.TZDate
   
   - name: getNextDSTTransition
     summary: Returns the date of the next daylight saving time transition for the timezone.
     returns:
-        summary: Date of the next daylight saving transition (after the instant identified by the TZDate).
+      - summary: Date of the next daylight saving transition (after the instant identified by the TZDate).
         type: Titanium.Tizen.Time.TZDate
