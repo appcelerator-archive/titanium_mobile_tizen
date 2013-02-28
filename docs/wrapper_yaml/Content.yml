@@ -109,6 +109,15 @@ methods:
       - name: content 
         summary: The content to update.
         type: Ti.Tizen.Content.Content
+    examples:
+      - example: |
+            // The following example changes a description.
+            // Assume the content is a Content object as a result of find method.
+            // Check the description is editable, and then set a description.
+            if (content.editableAttributes.indexOf("description") >= 0) {
+                content.description = "Sample content";
+            }
+            Ti.Tizen.Content.update(content);
   
   - name: updateBatch
     summary: Changes attributes of some contents asynchronously.
@@ -128,6 +137,24 @@ methods:
         summary: Function called when an error has occurred. 
         optional: true
         type: Callback<Titanium.Tizen.WebAPIError>
+    examples:
+      - example: |
+            // The following example increases rating of an content by 1
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function successCB() {
+                Ti.API.info('Attributes set successfully');
+            }
+
+            // Assume the content is a Content object as a result of find method.
+            // Check the rating is editable, and then increase by 1.
+            if (content.editableAttributes.indexOf("rating") >= 0) {
+                content.rating++;
+            }
+            Ti.Tizen.Content.updateBatch([content], successCB, errorCB);
   
   - name: getDirectories
     summary: Gets a list of content directory.
@@ -143,6 +170,22 @@ methods:
         summary: Function called when an error has occurred. 
         optional: true
         type: Callback<Titanium.Tizen.WebAPIError>
+    examples:
+      - example: |
+            // The following example retrieves content directories in the storage.
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function printDirectory(directory, index, directories) {
+                Ti.API.info('directoryURI: ' + directory.directoryURI + ' Title: ' + directory.title);
+            }
+            function getDirectoriesCB(directories) {
+                directories.forEach(printDirectory);
+            }
+
+            Ti.Tizen.Content.getDirectories(getDirectoriesCB, errorCB);
 
   - name: find
     summary: Find contents. That is, satisfy conditions set in a filter.
@@ -184,3 +227,31 @@ methods:
         summary: Offset of the result set.
         optional: true
         type: Number
+    examples:
+      - example: |
+            // The following example retrieves all songs from the album "The Joshua Tree", by artist "U2", ordered by the track number.
+            var count = 100;
+            var offset = 0;
+            var sortMode = Ti.Tizen.createSortMode({attributeName: "trackNumber",  order: "ASC"});
+            var artistFilter = Ti.Tizen.createAttributeFilter({attributeName: "artists", matchFlag: "EXACTLY", matchValue: "U2"});
+            var albumFilter = Ti.Tizen.createAttributeFilter({attributeName: "album", matchFlag: "EXACTLY", matchValue: "The Joshua Tree"});
+            var filter = Ti.Tizen.createCompositeFilter({ type: "INTERSECTION", filters: [albumFilter, artistFilter]});
+            Ti.Tizen.Content.find(findCB, errorCB, null, filter, sortMode, count, offset);
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function printContent(content, index, contents) {
+                Ti.API.info('Track: ' + content.trackNumber + ' Title: ' + content.title + 'Duration: ' + content.duration + 'URL: ' + content.contentURI + 'MIME: ' + content.mimeType);
+            }
+
+            function findCB(contents) {
+                Ti.API.info('The Joshua Tree by U2:');
+                contents.forEach(printContent);
+                // Increase the offset as much as the count and then find content again.
+                if (contents.length == count) {
+                    offset += count;
+                    Ti.Tizen.Content.find(findCB, errorCB, null, filter, sortMode, count, offset);
+                }
+            }
