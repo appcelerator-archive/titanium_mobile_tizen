@@ -7,7 +7,7 @@ description: |
     The intersection - used to filter objects that match all filters it includes.
 
 platforms: [tizen]
-extends: Titanium.Module
+extends: Titanium.Tizen.AbstractFilter
 
 properties:
   - name: type

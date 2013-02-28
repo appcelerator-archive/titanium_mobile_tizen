@@ -1,7 +1,7 @@
 name: Titanium.Tizen.Content.Content
 summary: |
   The content interface that provides access to properties of content.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 createable: false
 
