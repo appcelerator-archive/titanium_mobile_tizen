@@ -15,13 +15,13 @@ methods:
     parameters: 
       - name: data
         summary: Data to send. 
-        type: Number[]
+        type: Array<Number>
 
   - name: readData
     summary: Reads data from the socket. 
     description: This should be called only in the BluetoothSocket.onmessage handler, that is, when data is ready on the socket. 
     returns: 
-      - type: Number[]
+      - type: Array<Number>
         summary: Sequence of bytes successfully read. 
 
   - name: close
