@@ -188,7 +188,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
-        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage[]>
+        type: Callback<Array<Titanium.Tizen.Filesystem.FileSystemStorage>>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<WebAPIError>

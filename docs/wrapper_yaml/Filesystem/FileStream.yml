@@ -48,7 +48,7 @@ methods:
         The resulting string length might be shorter than charCount if eof is true.
     returns:
         summary: The result of read bytes as a byte (or number) array.
-        type: Number[]    
+        type: Array<Number>
     parameters:
       - name: byteCount 
         summary: Number of bytes being read.
@@ -94,7 +94,7 @@ methods:
     parameters:
       - name: byteData  
         summary: The byte data array being written.
-        type: Number[]
+        type: Array<Number>
     examples:
       - example: |
             var bytes = in.readBytes(256);

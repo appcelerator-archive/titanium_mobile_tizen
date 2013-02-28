@@ -74,7 +74,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list operation has been successfully completed
-        type: Callback<Titanium.Tizen.Filesystem.File[]>
+        type: Callback<Array<Titanium.Tizen.Filesystem.File>>
       - name: onerror
         summary: Called if an error occurred
         type: Callback<WebAPIError>        
