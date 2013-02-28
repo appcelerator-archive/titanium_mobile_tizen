@@ -160,7 +160,7 @@ properties:
 # Pseudo-types
 ---
 name: TZDateUnit1
-summary: An object containing the various options for fetching the properties requested.
+summary: Contains information required to initialize a TZDateTime.
 properties:
   - name: datetime
     type: Date
@@ -174,7 +174,7 @@ properties:
 
 ---
 name: TZDateUnit2
-summary: An object containing the various options for fetching the properties requested.
+summary: Contains information required to initialize a TZDateTime.
 properties:
   - name: year
     type: Number
@@ -214,7 +214,7 @@ properties:
     optional: true
 ---
 name: TimeDurationUnit
-summary: An object containing the various options for fetching the properties requested.
+summary: Contains information required to initialize a TimeDuration.
 properties:
   - name: length
     type: Number

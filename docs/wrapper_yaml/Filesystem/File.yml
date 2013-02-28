@@ -18,7 +18,7 @@ description: |
 extends: Titanium.Proxy
 since: "3.0.2"
 platforms: [tizen]
-creatable: true
+createable: true
 
 examples:
   - title: Code example
