@@ -73,7 +73,7 @@ methods:
     parameters:
       - name: parameterers
         summary: Initial arguments for AlarmAbsolute.
-        type: createAlarmAbsoluteParameterers, createAlarmAbsoluteParameterersPeriod
+        type: [createAlarmAbsoluteParameterers, createAlarmAbsoluteParameterersPeriod]
 
 properties:
   - name: PERIOD_MINUTE

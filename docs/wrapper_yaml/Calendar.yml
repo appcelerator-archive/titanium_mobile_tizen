@@ -39,7 +39,7 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Titanium.Tizen.Calendar.Calendar[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.Calendar>>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
         type: Callback<Titanium.Tizen.WebAPIError>        
@@ -501,7 +501,7 @@ properties:
     
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Titanium.Tizen.Calendar.CalendarAlarm[]
+    type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
@@ -518,11 +518,11 @@ properties:
         
         Examples of categories are personal, work, vacation, travel, etc.
         By default, this attribute is set to an empty array.
-    type: STRING[]
+    type: Array<String>
     
   - name: attendees
     summary: An attribute array that lists the people attending an event.
-    type: Titanium.Tizen.Calendar.CalendarAttendee[]
+    type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
 
 ---
 name: CalendarTaskInit
@@ -698,14 +698,14 @@ properties:
     summary: An attribute to indicate the number of occurrences of a recurring event.
         
   - name: daysOfTheWeek
-    type: String[]
+    type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
         This property value is valid only for recurrence rules with a frequency type of WEEKLY, MONTHLY, and YEARLY.
         This property corresponds to BYDAY in RFC 5545.
                 
   - name: setPositions
-    type: Number[]
+    type: Array<Number>
     summary: |
         An attribute to store a list of ordinal numbers that filters which recurrences to include in the recurrence rule's frequency.
         For example, a yearly recurrence rule that has a daysOfTheWeek value that specifies Monday through Friday, and a setPositions array containing 2 and -1, occurs only on the second weekday and last weekday of every year.
@@ -716,7 +716,7 @@ properties:
         By default, this attribute is set to an empty array
         
   - name: exceptions
-    type: Titanium.Tizen.Time.TZDate[]
+    type: Array<Titanium.Tizen.Time.TZDate>
     summary: An attribute to list date/time exceptions for the recurring event.
 ---
 name: CalendarAlarmInitWithDate

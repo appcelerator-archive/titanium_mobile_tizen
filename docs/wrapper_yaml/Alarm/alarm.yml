@@ -2,7 +2,7 @@
 name: Titanium.Tizen.Alarm.Alarm
 summary: This interface is an abstract interface for alarm types. 
     
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 createable: false
 

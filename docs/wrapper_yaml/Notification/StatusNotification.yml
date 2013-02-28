@@ -1,6 +1,6 @@
 ---
 name: Titanium.Tizen.Notification.StatusNotification
-summary: The object which represents status notification.
+summary: The interface which represents status notification.
 description: |
     All notification must have the title attribute.
     
