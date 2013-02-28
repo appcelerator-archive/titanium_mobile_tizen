@@ -1,0 +1,7 @@
+---
+name: Titanium.Tizen.SystemInfo.SystemInfoProperty
+summary: Common abstract interface used by different types of system information objects.
+extends: Titanium.Proxy
+platforms: [tizen]
+since: "3.0.2"
+createable: false
