@@ -29,20 +29,20 @@ properties:
   - name: major
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
-        The supported major types are: Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC, Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER, and ohter.
+        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and ohter.
     type: Number
     permission: read-only
 
   - name: minor
     summary: |
       The minor device class. The value is one of the constants defined for this type. 
-      The supported major types are: Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED, Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP, and ohter.
+      The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and ohter.
     type: String
     permission: read-only
 
   - name:  services
     summary: |
-        The services provided by this device.
-        Refer to the BluetoothClassDeviceService interface for the list of possible values.
-    type: Number[]
+        The services provided by this device.The value is one of the constants defined for this type. 
+        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
+    type: Array<Number>
     permission: read-only
