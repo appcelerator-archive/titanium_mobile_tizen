@@ -3,6 +3,7 @@ summary: |
   The interface that provides lyrics for music.
 extends: Titanium.Module
 platforms: [tizen]
+createable: false
 
 properties:
 
