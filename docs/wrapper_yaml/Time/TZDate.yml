@@ -3,7 +3,6 @@ name: Titanium.Tizen.Time.TZDate
 summary: The TZDate object represents information regarding a given date / time in a predefined timezone.
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
 
 methods:
 
@@ -291,8 +290,8 @@ methods:
         type: Titanium.Tizen.Time.TimeDuration
     examples:
       - example: |
-            now = Ti.Tizen.Time.getCurrentDateTime(); //TZDate
-            in_one_week = now.addDuration(Ti.Tizen.Time.createTimeDuration({length: 7, unit: "DAYS"})); //TZDate
+            now = Titanium.Tizen.Time.getCurrentDateTime(); //TZDate
+            in_one_week = now.addDuration(Titanium.Tizen.Time.createTimeDuration({length: 7, unit: "DAYS"})); //TZDate
 
   - name: toLocaleTimeString
     summary: Returns the date portion of a TZDate object as a string, using locale conventions.
@@ -343,7 +342,7 @@ methods:
         type: Number
     examples:
       - example: |
-            var offset = Ti.Tizen.Time.getCurrentDateTime().secondsFromUTC();
+            var offset = Titanium.Tizen.Time.getCurrentDateTime().secondsFromUTC();
             var myDate = new Date();
             var exp_offset = myDate.getTimezoneOffset()*60;//offset is equals to exp_offset.
   - name: isDST
