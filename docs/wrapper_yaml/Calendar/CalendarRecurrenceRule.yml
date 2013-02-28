@@ -3,7 +3,6 @@ name: Titanium.Tizen.Calendar.CalendarRecurrenceRule
 summary:  This interface implements the CalendarRecurrenceRule object, which contains information about the recurrence of an event. (See RFC 5545, Section 3.3.10.)
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
 
 examples: 
   - title: Code example

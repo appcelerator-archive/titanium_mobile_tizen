@@ -6,7 +6,6 @@ summary:  |
     By default, each of the attributes of this interface are undefined.
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
 
 examples: 
   - title: Code example
