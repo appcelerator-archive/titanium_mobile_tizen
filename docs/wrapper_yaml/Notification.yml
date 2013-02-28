@@ -232,7 +232,8 @@ platforms: [tizen]
 properties:
   - name: statusType
     type: String
-    summary: Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
+    summary: |
+        Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
 
   - name: title
     type: String
