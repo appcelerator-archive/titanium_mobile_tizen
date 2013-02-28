@@ -17,7 +17,6 @@ description: |
 extends: Titanium.Module
 platforms: [tizen]
 since: "3.0.2"
-createable: false
 
 methods:
   - name: post
@@ -144,7 +143,7 @@ methods:
           }
 
   - name: createStatusNotification
-    summary: Creates and returns an instance of <Ti.Tizen.SystemSettings.StatusNotification>.
+    summary: Creates and returns an instance of <Titanium.Tizen.SystemSettings.StatusNotification>.
     returns:
         type: Ti.Tizen.SystemSettings.StatusNotification
     parameters:
@@ -234,6 +233,7 @@ properties:
     type: String
     summary: |
         Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
+    permission: read-only
 
   - name: title
     type: String

@@ -25,7 +25,6 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
         
 methods:
   - name: getCapabilities
@@ -63,7 +62,7 @@ methods:
         type: Callback<Titanium.Tizen.SystemInfo.SystemInfoProperty>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
