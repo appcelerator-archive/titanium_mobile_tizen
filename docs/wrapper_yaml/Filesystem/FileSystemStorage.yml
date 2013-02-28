@@ -7,7 +7,7 @@ description: |
 extends: Titanium.Proxy
 since: "3.0.2"
 platforms: [tizen]
-creatable: false
+createable: false
 properties:
 
   - name: label
