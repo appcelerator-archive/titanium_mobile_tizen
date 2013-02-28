@@ -3,6 +3,7 @@ summary: |
   The interface that extends a basic content object with audio-specific attributes.
 extends: Titanium.Tizen.Content.Content
 platforms: [tizen]
+createable: false
 
 properties:
 

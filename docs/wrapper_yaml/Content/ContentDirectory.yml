@@ -3,6 +3,7 @@ summary: |
   The content directory interface that provides access to properties of a content directory.
 extends: Titanium.Module
 platforms: [tizen]
+createable: false
 
 properties:
 

@@ -1,11 +1,10 @@
 ---
-name: Titanium.Filesystem.FileSystemStorage
+name: Titanium.Tizen.Filesystem.FileSystemStorage
 summary: The FileSystemStorage interface.
 description: |
     This interface gives additional information about a storage, such as if the device is mounted, if it's a removable drive or not, or the device's name. 
     To retrieve the mount point, the resolve() method should be used using the label as argument.
 extends: Titanium.Proxy
-since: "3.0.2"
 platforms: [tizen]
 createable: false
 properties:
@@ -22,14 +21,15 @@ properties:
     summary: |
         The storage type.
                 
-        Defines whether the storage is "INTERNAL" or "EXTERNAL".
+        Defines whether the storage is Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_INTERNAL or Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL.
     type: String
     permission: read-only
 
   - name: state
     summary: |
         The storage state.
-        The value is one of the constants defined for this parameter : "MOUNTED", "REMOVED", "UNMOUNTABLE"
+        The value is one of the constants defined for this parameter : Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED, Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_REMOVED,
+        Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE
         
         Defines whether the storage is mounted or not.
     type: String

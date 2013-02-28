@@ -6,7 +6,7 @@ summary:  |
 
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 methods:
   - name: convertToString

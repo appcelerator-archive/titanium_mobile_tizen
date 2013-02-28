@@ -3,6 +3,7 @@ summary: |
   The content interface that provides access to properties of content.
 extends: Titanium.Module
 platforms: [tizen]
+createable: false
 
 properties:
 
