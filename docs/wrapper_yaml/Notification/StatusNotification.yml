@@ -2,10 +2,10 @@
 name: Titanium.Tizen.Notification.StatusNotification
 summary: The object which represents status notification.
 description: |
-    All notification must have title attribute.
+    All notification must have the title attribute.
     
-    This interface offers additional attribute to represent notification 
-    displayed in notification tray
+    This interface offers additional attributes to represent notification 
+    displayed in the notification tray.
     
 extends: Titanium.Tizen.Notification.Notification
 platforms: [tizen]
