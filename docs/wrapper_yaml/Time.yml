@@ -117,7 +117,7 @@ methods:
     returns:
         type: Titanium.Tizen.Time.TZDate
     parameters:
-      - name: Options
+      - name: tzDateParameters
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
     
@@ -126,9 +126,9 @@ methods:
     returns:
         type: Titanium.Tizen.Time.TimeDuration
     parameters:
-      - name: options
+      - name: timeDurationParameters
         summary: The TimeDuration object that contains the length and its associated time unit.
-        type: Dictionary<createTimeDurationUnit>
+        type: Dictionary<InitTimeDuration>
     
 properties:
 
@@ -158,7 +158,20 @@ properties:
     permission: read-only
 
 # Pseudo-types
+
 ---
+name: InitTimeDuration
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: length
+    type: Number
+    summary: Count of items.
+  - name: unit
+    type: String
+    summary: |
+        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+---
+
 name: TZDateUnit1
 summary: An object containing the various options for fetching the properties requested.
 properties:
@@ -212,15 +225,3 @@ properties:
     type: String
     summary: Predefined timezone.
     optional: true
-
----
-name: createTimeDurationUnit
-summary: An object containing the various options for fetching the properties requested.
-properties:
-  - name: length
-    type: Number
-    summary: Count of items.
-  - name: unit
-    type: String
-    summary: |
-        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
