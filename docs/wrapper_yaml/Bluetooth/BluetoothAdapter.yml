@@ -272,4 +272,4 @@ methods:
     parameters:
       - name: foundDevices 
         summary: Array of devices found in this discovery session. 
-        type: Titanium.Tizen.Bluetooth.BluetoothDevice[]
+        type: Array<Titanium.Tizen.Bluetooth.BluetoothDevice>
