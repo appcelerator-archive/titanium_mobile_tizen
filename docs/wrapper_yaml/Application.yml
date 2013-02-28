@@ -330,6 +330,7 @@ properties:
     type: String
     summary: An attribute to store the value associated with a key.
     
+---
 name: ApplicationControlUnit
 summary: Consists of an operation, URI, MIME type, and data. It describes an action to be performed by other applications and is passed to launch other applications.
          If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application.
