@@ -6,7 +6,6 @@ description: |
 
     For more information on the Callhistory features, see [Tizen Web App Programming: Call History](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm)
 extends: Titanium.Module
-since: "3.0.2"
 
 platforms: [tizen]
 methods:

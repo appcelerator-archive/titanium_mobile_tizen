@@ -9,7 +9,6 @@ description: |
     
 extends: Titanium.Tizen.Notification.Notification
 platforms: [tizen]
-since: "3.0.2"
 
 properties:
 

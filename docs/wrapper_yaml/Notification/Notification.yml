@@ -3,7 +3,6 @@ name: Titanium.Tizen.Notification.Notification
 summary: The interface which represents notification.
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
 createable: false
 
 properties:
