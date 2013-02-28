@@ -1,15 +1,16 @@
 ---
-name: Titanium.Tizen.Message.MessageService
+name: Titanium.Tizen.Messaging.MessageService
 summary: Message creating, sending, and fetching capabilities. 
 description: |
     This interface allows a web application to manipulate and send messages.
     The interface allows you to fetch messages for all folders belonging to one account, with synchronizable flag set, using the sync() method, or for a given folder using the syncFolder() method.
     The interface allows you to fetch the message body for a given message using loadMessageBody() method.
 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
-methods:
+createable: false
 
+methods:
   - name: sendMessage
     summary: Attempts to send the specified message. 
     description: |
@@ -23,17 +24,39 @@ methods:
     parameters: 
       - name: message
         summary: The message to be sent. 
-        type: Titanium.Tizen.Message.Message
+        type: Titanium.Tizen.Messaging.Message
 
       - name: successCallback
         summary: To be invoked if the message is successfully sent
-        type: Callback<Strings[]> 
+        type: Callback<Array<Strings>>
         optional: true
 
       - name: errorCallback
         summary: To be invoked if the sending request fails.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples: 
+      - example: |
+            // Define the success callback
+            function messageSent(recipients) {
+                for (var i=0; i<recipients.length; i++) {
+                    console.log("The SMS has been sent to " + recipients[i]);
+                }
+            }
+            // Define the error callback.
+            function messageFailed(error) {
+                console.log("The SMS could not be sent " + error.message);
+            }
+            // Define the success callback.
+            function serviceListCB(services) {
+                if (services.length > 0) {
+                    // SMS sending example
+                    var msg = new tizen.Message(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, {plainBody: "I will arrive in 10 minutes.", to: ["+34666666666", "+34888888888"]});
+                    // Send request
+                    services[0].sendMessage(msg, messageSent, messageFailed);
+                }
+            }
+            Titanium.Tizen.Messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: loadMessageBody
     summary: Attempts to load the body for the specified message. 
@@ -42,20 +65,39 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: message
         summary: Message with the body to be loaded. 
-        type: Titanium.Tizen.Message.Message
+        type: Titanium.Tizen.Messaging.Message
 
       - name: successCallback
         summary: Function to be invoked if the message body is successfully loaded. 
-        type: Callback<Titanium.Tizen.Message.Message> 
+        type: Callback<Titanium.Tizen.Messaging.Message> 
 
       - name: errorCallback
         summary:  Function to be invoked if the loading request fails
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples: 
+      - example: |
+            var service; // Assume messaging service is initialized
+            // Define the success body loaded callback.
+            function successCallback(message) {
+                console.log ("body for message: " + message.subject + "from: " + message.from + "loaded.");
+            }
+            // Define error callback.
+            function errorCallback(error) {
+                console.log("Cannot load message body" + error.message);
+            }
+            function messageQueryCallback(messages) {
+                for (var i = 0; i < messages.length; i++) {
+                    var message = messages[i];
+                    if (!message.body.loaded) {
+                        service.loadMessageBody(message, successCallback, errorCallback);
+                    }
+                }
+            }
+            service.messageStorage.findMessages(Titanium.Tizen.createAttributeFilter("type", "EXACTLY", Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL), messageQueryCallback);
 
   - name: loadMessageAttachment
     summary: Attempts to load the specified message attachment. 
@@ -64,20 +106,39 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: attachment
         summary: Message attachment to be loaded. 
-        type: Titanium.Tizen.Message.MessageAttachment
+        type: Titanium.Tizen.Messaging.MessageAttachment
 
       - name: successCallback
         summary: Function to be invoked if the message attachment is successfully loaded. 
-        type: Callback<Titanium.Tizen.Message.MessageAttachment> 
+        type: Callback<Titanium.Tizen.Messaging.MessageAttachment> 
 
       - name: errorCallback
         summary: Function to be invoked if the loading request fails. 
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            // Define success body loaded callback
+            function successCallback(attachment) {
+                console.log("attachment" + attachment.id + "is loaded to:" + attachment.filePath);
+            }
+            // Define error callback
+            function errorCallback(error) {
+                console.log("Cannot load message attachment" + error.message);
+            }
+            function messagesFoundCB(messages) {
+                for (var i = 0; i < messages.length; i++) {
+                    var message = messages[i];
+                    if (!message.attachments[0].loaded) {
+                        service.loadMessageAttachment(message.attachments[0], successCallback, errorCallback);
+                    }
+                }
+            }
+            service.messageStorage.findMessages(Titanium.Tizen.createAttributeFilter("hasAttachment", "EXACTLY", true), messagesFoundCB);
 
   - name: sync
     summary: Synchronizes the service content with an external mail server. 
@@ -90,7 +151,6 @@ methods:
     returns: 
       - type: Number
         summary: Identifier which can be used to stop this service operation. 
-
     parameters: 
       - name: successCallback
         summary:  To be invoked if all the actions are completed successfully
@@ -106,6 +166,18 @@ methods:
         summary: The maximum amount of messages retrieved within each folder. 
         type: Number
         optional: true
+    examples:
+      - example: |
+            // Define the success callback.
+            function serviceSynced() {
+                console.log("New messages are fetched!");
+            }
+            // Define the success callback.
+            function servicesListSuccessCB(services) {
+                services[0].sync(serviceSynced, null, 30);
+                // Subscribe to MessageStorage notification
+            }
+            Titanium.Tizen.Messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, servicesListSuccessCB);
 
   - name: syncFolder
     summary: Synchronizes the folder content with an external mail server. 
@@ -124,11 +196,10 @@ methods:
     returns: 
       - type: Number
         summary: Identifier which can be used to stop this service operation. 
-
     parameters: 
       - name: folder
         summary: Folder to be synchronized. 
-        type: Titanium.Tizen.Message.MessageFolder
+        type: Titanium.Tizen.Messaging.MessageFolder
 
       - name: successCallback
         summary: Function to be invoked if all actions are completed successfully. 
@@ -144,6 +215,29 @@ methods:
         summary: The maximum amount of messages retrieved within a given folder. 
         type: Number
         optional: true
+    examples:
+      - example: |
+            var emailService; // Assume email service is initialized
+            // Define the error callback.
+            function errorCallback(err) {
+                console.log(err.name + " error: " + err.message);
+            }
+            function serviceCallback(services) {
+                 emailService = services[0];
+            } 
+            // Define the success callback.
+            function folderSynced() {
+                console.log("New messages are fetched!");
+            }
+            function folderQueryCallback(folders) {
+                console.log(folders.length + " folders(s) found!");
+                for (var i = 0; i < folders.length; i++) {
+                    emailService.syncFolder(folders[i], folderSynced, null, 30);
+                }
+            }
+            tizen.messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceCallback, errorCallback);
+            var filter = Titanium.Tizen.createAttributeFilter("serviceId", "EXACTLY", emailService.id);
+            emailService.messageStorage.findFolders(filter, folderQueryCallback);
 
   - name: stopSync
     summary: Stops sync() and syncFoler() operation. 
@@ -158,8 +252,8 @@ methods:
 properties:
   - name: type
     summary: | 
-        The tag supported by this messaging service. Can be one of this constants: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, 
-        Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL
+        The tag supported by this messaging service. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -167,5 +261,5 @@ properties:
     summary: | 
         The interface for accessing MessageStorage for this Messaging service.
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
-    type: Titanium.Tizen.Message.MessageStorage
+    type: Titanium.Tizen.Messaging.MessageStorage
     permission: read-only

@@ -1,14 +1,14 @@
 ---
-name: Titanium.Tizen.Message.MessageStorage
+name: Titanium.Tizen.Messaging.MessageStorage
 summary: MessageStorage management capabilities. 
 description: |
     This interface allows a web application to query, update, and delete messages, and subscribe to MessageStorage changes. In addition to simple message queries, the MessageStorage interface provides functionality to find conversations and folders.
     The conversation object represents a group of messages combined by the set of message fields. Email conversations are grouped by subject, while chat messages are grouped by sender and recipient fields.
-
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
-methods:
+createable: false
 
+methods:
   - name: addDraftMessage
     summary: Adds a draft message to MessageStorage. 
     description: |
@@ -19,7 +19,7 @@ methods:
     parameters: 
       - name: message
         summary:  Draft message that should be added to the storage. 
-        type: Titanium.Tizen.Message.Message
+        type: Titanium.Tizen.Messaging.Message
 
       - name: successCallback
         summary: Function called when draft messages successfully added.
@@ -30,6 +30,24 @@ methods:
         summary: To be invoked if the sending request fails.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            // Define success callback
+            function successCallback() {
+                console.log("Draft message added");
+            }
+            // Define error callback
+            function errorCallback(error) {
+                console.log("Cannot add draft message " + error.message);
+            }
+            // Define service query success callback.
+            function serviceListCB(services) {
+                if (services.length > 0) {
+                    var msg = new tizen.Message(MESSAGE_SERVICE_TAG_MESSAGING_SMS, {plainBody: "Tizen draft SMS message."});
+                    services[0].messageStorage.addDraftMessage(msg, successCallback, errorCallback);
+                }
+            }
+            Titanium.Tizen.Messaging.getMessageServices(MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: findMessages
     summary: Queries messages from MessageStorage. 
@@ -37,7 +55,6 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -45,7 +62,7 @@ methods:
 
       - name: successCallback
         summary: Function called when the invocation ends successfully. 
-        type: Callback<Titanium.Tizen.Message.Message[]> 
+        type: Callback<Array<Titanium.Tizen.Messaging.Message>>
 
       - name: errorCallback
         summary: Function called when an error occurs.
@@ -66,6 +83,22 @@ methods:
         summary:  Define offset of the query.
         type: Number
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            function messageArrayCB(messages) {
+                console.log(messages.length + " message(s) fetched!");
+                for (var i = 0; i < messages.length; i++) {
+                  console.log(i + ". message from " + messages[i].from);
+                }
+            }
+            // Define error callback
+            function errorCallback(error) {
+                console.log("Cannot query messages" + error.message);
+            }
+            var filter = Titanium.Tizen.createAttributeFilter("from", "CONTAINS", "2593");
+            messageStorage.findMessages(filter, messageArrayCB, errorCallback);
 
   - name: removeMessages
     summary: Deletes messages from MessageStorage. 
@@ -76,7 +109,7 @@ methods:
     parameters: 
       - name: messages
         summary: Array of messages to be deleted. 
-        type: Titanium.Tizen.Message.Message[]
+        type: Array<Titanium.Tizen.Messaging.Message>
 
       - name: successCallback
         summary: Function called when messages are successfully deleted.
@@ -87,6 +120,24 @@ methods:
         summary: Function called when an error occurs.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+
+    examples:
+      - example: |
+            // Define success callback
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            function successCallback() {
+                console.log("Messages were deleted");
+            }
+            // Define error callback
+            function errorCallback(error) {
+                console.log("Cannot delete messages " + error.message);
+            }
+            function messageArrayCB(messages) {
+                messageStorage.removeMessages(messages, successCallback, errorCallback);
+            }
+            var filter = Titanium.Tizen.createAttributeFilter("from", "CONTAINS", "2593");
+            messageStorage.findMessages(filter, messageArrayCB);
 
   - name: updateMessages
     summary: Updates messages in MessageStorage. 
@@ -99,7 +150,7 @@ methods:
     parameters: 
       - name: messages
         summary: Array that should be updated. 
-        type: Titanium.Tizen.Message.Message[]
+        type: Array<Titanium.Tizen.Messaging.Message>
 
       - name: successCallback
         summary: Function called when messages are successfully updated. 
@@ -110,6 +161,24 @@ methods:
         summary: Function called when an error occurs.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            // Define success callback
+            function successCallback() {
+                console.log("Messages were updated");
+            }
+            // Define error callback
+            function errorCallback(error) {
+                console.log("Cannot update messages " + error.message);
+            }
+            function messageArrayCB(messages) {
+                messages[0].isRead = true;
+                messageStorage.updateMessages(messages, successCallback, errorCallback);
+            }
+            var filter = Titanium.Tizen.createAttributeFilter('isRead', 'EXACTLY', 'false');
+            messageStorage.findMessages(filter, messageArrayCB);
 
   - name: findConversations
     summary: Queries conversations from MessageStorage. 
@@ -117,7 +186,6 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -125,7 +193,7 @@ methods:
 
       - name: successCallback
         summary:  Function called when the invocation ends successfully. 
-        type: Callback<Titanium.Tizen.Message.MessageConversation[]>
+        type: Callback<Array<Titanium.Tizen.Messaging.MessageConversation>>
 
       - name: errorCallback
         summary: Function called when an error occurs.
@@ -146,6 +214,22 @@ methods:
         summary: Define offset of the query.
         type: Number
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            function conversationsArrayCB(conversations) {
+                console.log(conversations.length + " conversation(s) found!");
+                for (var i = 0; i < conversations.length; i++) {
+                    console.log(i + " . conversation preview " + conversations[i].preview);
+                }
+            }
+            // Define error callback.
+            function errorCallback(error) {
+                console.log("Cannot query conversations" + error.message);
+            }
+            var filter = new Titanium.Tizen.createAttributeFilter('from', 'CONTAINS', '2593');
+            messageStorage.findConversations(filter, conversationsArrayCB, errorCallback)
 
   - name: removeConversations
     summary: Deletes conversations from MessageStorage. 
@@ -153,11 +237,10 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: conversations
         summary: Array of conversations to be deleted.
-        type: Titanium.Tiaen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
       - name: successCallback
         summary: Function called when conversations are successfully deleted.
@@ -168,6 +251,28 @@ methods:
         summary: Function called when an error occurs
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            // Define success callback.
+            function successCallback() {
+                console.log("Conversations deleted");
+            }
+            // Define error callback.
+            function errorCallback(error) {
+                console.log("Cannot delete conversations " + error.message);
+            }
+            function conversationsArrayCB(conversations) {
+                messageStorage.removeConversations(conversations, successCallback, errorCallback);
+                console.log("Deleted " + conversations.length + " conversation(s)");
+            }
+            // Define error callback.
+            function queryErrorCB(error) {
+                console.log("Cannot query conversations" + error.message);
+            }
+            var filter = Titanium.Tizen.createAttributeFilter('from', 'CONTAINS', '2593');
+            messageStorage.findConversations(filter, conversationsArrayCB, queryErrorCB);
 
   - name: findFolders
     summary: Queries folders from MessageStorage. 
@@ -175,7 +280,6 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
@@ -183,12 +287,24 @@ methods:
 
       - name: successCallback
         summary: Function called when the invocation ends successfully. 
-        type: Callback<Titanium.Tizen.Message.MessageFolder[]> 
+        type: Callback<Array<Titanium.Tizen.Messaging.MessageFolder>>
 
       - name: errorCallback
         summary: Function called when an error occurs. 
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            function folderArrayCB(folders) {
+              console.log(folders.length + " folders(s) found!");
+              for (var i = 0; i < folders.length; i++) {
+                console.log(i + ", folder: " + folders[i].name);
+              }
+            }
+            var filter = Titanium.Tizen.createAttributeFilter("serviceId", "EXACTLY", service.id);
+            messageStorage.findFolders(filter, folderArrayCB);
 
   - name: addMessagesChangeListener
     summary: Subscribes to get notification when MessageStorage changes. 
@@ -199,7 +315,6 @@ methods:
     returns: 
       - type: Number
         summary: subscription identifier. 
-
     parameters: 
       - name: messagesChangeCallback
         summary: Criteria to be used when filtering. 
@@ -209,6 +324,22 @@ methods:
         summary: Criteria to be used when filtering.
         type: Titanium.Tizen.AbstractFilter
         optional: true
+    examples:
+      - example: |
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            var messageChangeCallback = {
+                messagesupdated: function(messages) {
+                    console.log(messages.length + " message(s) updated");
+                },
+                messagesadded: function(messages) {
+                    console.log(messages.length + " message(s) added");
+                },
+                messagesremoved: function(messages) {
+                    console.log(messages.length + " message(s) removed");
+                }
+            };
+            messageStorage.addMessagesChangeListener(messageChangeCallback);
 
   - name: addConversationsChangeListener
     summary: Subscribes to get notification when MessageConversation changes. 
@@ -247,6 +378,26 @@ methods:
         summary: Criteria to be used when filtering.
         type: Titanium.Tizen.AbstractFilter
         optional: true
+    examples:
+      - example: |
+            var watchId;
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            var folderChangeCB = {
+                foldersupdated: function(folders) {
+                    console.log(folders.length + " folders(s) updated. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                },
+                foldersadded: function(folders) {
+                    console.log(folders.length + " folders(s) added. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                },
+                foldersremoved: function(folders) {
+                    console.log(folders.length + " folders(s) removed. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                }
+            };
+            watchId = messageStorage.addFoldersChangeListener(folderChangeCB);
 
   - name: removeChangeListener
     summary: This method allows a message notification subscription to be cancelled. 
@@ -255,11 +406,30 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         If the subscriptionId argument is valid and corresponds to a subscription already in place, the subscription process MUST stop immediately and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId argument does not correspond to a valid subscription, the method will return without any further action.
-
     parameters: 
       - name: watchId
         summary:  Identifier of the subscription returned by addMessagesChangeListener, addConversationsChangeListener or addFoldersChangeListener methods. 
         type: Number
+    examples:
+      - example: |
+            var watchId;
+            var service; // Assume messaging service is initialized
+            var messageStorage = service.messageStorage; 
+            var folderChangeCB = {
+                foldersupdated: function(folders) {
+                    console.log(folders.length + " folders(s) updated. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                },
+                foldersadded: function(folders) {
+                    console.log(folders.length + " folders(s) added. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                },
+                foldersremoved: function(folders) {
+                    console.log(folders.length + " folders(s) removed. Cancel watching.");
+                    messageStorage.removeChangeListener(watchId);
+                }
+            };
+            watchId = messageStorage.addFoldersChangeListener(folderChangeCB);
 
 # Pseudo-type    
 ---
@@ -272,21 +442,21 @@ methods:
     parameters:
       - name: addedMessages 
         summary: Array of added messages.
-        type: Titanium.Tizen.Message.Message[]
+        type: Array<Titanium.Tizen.Messaging.Message>
 
   - name: messagesupdated 
     summary: Method invoked when messages are updated in MessageStorage. 
     parameters:
       - name: updatedMessages 
         summary: Array of updated messages. 
-        type: Titanium.Tizen.Message.Message[]
+        type: Array<Titanium.Tizen.Messaging.Message>
 
   - name: removedMessages
     summary: Method invoked when messages are removed from MessageStorage. 
     parameters:
       - name: removedMessages 
         summary: Array of updated messages. 
-        type: Titanium.Tizen.Message.Message[]
+        type: Array<Titanium.Tizen.Messaging.Message>
 
 ---
 name: MessageConversationsChangeCallback
@@ -298,21 +468,21 @@ methods:
     parameters:
       - name: addedConversations 
         summary: Array of added conversations. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
   - name: conversationsupdated 
     summary: Method invoked when conversations are updated in MessageStorage. 
     parameters:
       - name: updatedConversations 
         summary: Array of updated messages. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
   - name: conversationsremoved
     summary: Method invoked when conversations are removed from MessageStorage. 
     parameters:
       - name: removedConversations 
         summary: Array of updated messages. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
 ---
 name: MessageFoldersChangeCallback
@@ -325,18 +495,18 @@ methods:
     parameters:
       - name: addedFolders 
         summary: Array of added folders. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
   - name: foldersupdated
     summary: Method invoked when folders are updated in MessageStorage. 
     parameters:
       - name: updatedFolders 
         summary: Array of updated folders. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
 
   - name: removedFolders
     summary: Method invoked when folders are removed from MessageStorage. 
     parameters:
       - name: removedConversations 
         summary: Array of removed folders. 
-        type: Titanium.Tizen.Message.MessageConversation[]
+        type: Array<Titanium.Tizen.Messaging.MessageConversation>
