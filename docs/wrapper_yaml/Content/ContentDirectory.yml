@@ -1,7 +1,7 @@
 name: Titanium.Tizen.Content.ContentDirectory
 summary: |
   The content directory interface that provides access to properties of a content directory.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 createable: false
 

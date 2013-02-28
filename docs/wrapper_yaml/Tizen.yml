@@ -9,7 +9,7 @@ methods:
   - name: createAttributeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.AttributeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.AttributeFilter
     parameters: 
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
@@ -31,7 +31,7 @@ methods:
   - name: createAttributeRangeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.AttributeRangeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.AttributeRangeFilter
     parameters: 
 
       - name: Options
@@ -62,7 +62,7 @@ methods:
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.CompositeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.CompositeFilter
     parameters: 
 
       - name: Options
@@ -235,7 +235,7 @@ properties:
     summary: | 
         The composite filter type: "UNION", "INTERSECTION".
   - name: filters
-    type: AbstractFilter
+    type: AbstractFilter[]
     summary: The list of filters in the composite filter.
     optional: true
     
@@ -260,7 +260,7 @@ platforms: [tizen]
 properties:
   - name: latitude
     type: Number
-    summary: Latitude are of the WGS84 datum.
+    summary: Latitude, of the WGS84 datum.
   - name: longitude
     type: Number
-    summary: Longitude are of the WGS84 datum.
+    summary: Longitude, of the WGS84 datum.
