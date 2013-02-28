@@ -35,7 +35,7 @@ methods:
 
   - name: removeAll
     summary: Removes all alarms added by an application.
-    description: "Because each application has its own alarm storage, this method will only remove alarms added by the calling application."
+    description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
 
   - name: get
     summary: Returns an alarm as per the specified identifier.
@@ -54,15 +54,14 @@ methods:
         This method returns all alarms in an application storage. 
         Alarms that have already been triggered are removed automatically from the storage. 
     returns: 
-      - type: "Titanium.Tizen.Alarm.Alarm[]"
+      - type: Array<Titanium.Tizen.Alarm.Alarm>
         summary: All Alarm objects.
 
   - name: createAlarmRelative
     summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmRelative>.
     returns: 
-        type: Titanium.Tizen.Alarm
-    parameters: 
-
+        type: Titanium.Tizen.Alarm.AlarmAlarmRelative
+    parameters:
       - name: parameterers
         summary: Initial arguments for AlarmRelative.
         type: createAlarmRelativeParameterers
@@ -70,9 +69,8 @@ methods:
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmAbsolute>.
     returns: 
-        type: Titanium.Tizen.Alarm
-    parameters: 
-
+        type: Titanium.Tizen.Alarm.AlarmAlarmAbsolute
+    parameters:
       - name: parameterers
         summary: Initial arguments for AlarmAbsolute.
         type: createAlarmAbsoluteParameterers, createAlarmAbsoluteParameterersPeriod

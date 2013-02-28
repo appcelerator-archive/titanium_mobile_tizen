@@ -19,7 +19,6 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
  
 methods:
   - name: getCalendars
@@ -191,7 +190,7 @@ methods:
         type: Titanium.Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
-        type: [Dictionary<CalendarAlarmInitWithDate>, CalendarAlarmInitWithDuration>]
+        type: [Dictionary<CalendarAlarmInitWithDate>, Dictionary<CalendarAlarmInitWithDuration>]
         
 properties:
 

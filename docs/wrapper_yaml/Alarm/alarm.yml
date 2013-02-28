@@ -4,6 +4,7 @@ summary: This interface is an abstract interface for alarm types.
     
 extends: Titanium.Module
 platforms: [tizen]
+createable: false
 
 properties:
   - name: id
