@@ -24,7 +24,7 @@ methods:
                 console.log("An error occurred: " + error.message);
             }
             var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: "CONTAINS",
+                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                          matchValue: "Chris"});
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
@@ -79,15 +79,15 @@ methods:
             }
             // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
             var firstNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                                  matchFlag: "CONTAINS",
+                                                                  matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                                   matchValue: "Chris"});
             // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
             var lastNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.lastName",
-                                                                 matchFlag: "EXACTLY",
+                                                                 matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_EXACTLY,
                                                                  matchValue: "Smith"});
             // Create a filter based on the intersection of these two filter:
             // "First name should contain 'Chris' AND last name should be 'Smith'".
-            var filter = Ti.Tizen.createCompositeFilter({type: "INTERSECTION",
+            var filter = Ti.Tizen.createCompositeFilter({type: Ti.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                          filters: [firstNameFilter, lastNameFilter]});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
@@ -112,11 +112,11 @@ methods:
             }
             // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
             var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: "CONTAINS",
+                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                          matchValue: "Chris"});
             // Sort by first name, ascending
             var sortMode = Ti.Tizen.createSortMode({attributeName: "name.firstName",
-                                                    order: "ASC"});
+                                                    order: Ti.Tizen.SORT_ORDER_MODE_ASC});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
             
@@ -132,52 +132,52 @@ methods:
 
 properties:
   - name: FILTER_MUCH_FLAG_EXACTLY
-    summary: '"EXACTLY" Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.'
+    summary: Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_FULLSTRING
-    summary: '"FULLSTRING" - String-based matching. Matches the whole string (case insensitive).'
+    summary: String-based matching. Matches the whole string (case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_CONTAINS
-    summary: '"CONTAINS" - Indicates the attribute value should contain the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should contain the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_STARTSWITH
-    summary: '"STARTSWITH" - Indicates the attribute value should start with the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should start with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_ENDSWITH
-    summary: '"ENDSWITH" - Indicates the attribute value should end with the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should end with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_EXISTS
-    summary: '"EXISTS" - Indicates the filter should match if the attribute exists.'
+    summary: Indicates the filter should match if the attribute exists.
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_ASC
-    summary: '"ASC" - Indicates the sorting order is ascending'
+    summary: Indicates the sorting order is ascending
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_DESC
-    summary: '"DESC" - Indicates the sorting order is descending'
+    summary: Indicates the sorting order is descending
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_UNION
-    summary: '"UNION" - A union of filters ("OR" operator)'
+    summary: A union of filters ("OR" operator)
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_INTERSECTION
-    summary: '"INTERSECTION" - An intersection of filters ("AND" operator)'
+    summary: An intersection of filters ("AND" operator)
     type: String
     permission: read-only
     
@@ -200,7 +200,7 @@ properties:
   - name: matchFlag
     type: String
     summary: |
-        Used for attribute-based filtering: "EXACTLY", "FULLSTRING", "CONTAINS", "STARTSWITH", "ENDSWITH", "EXISTS".
+        Used for attribute-based filtering: FILTER_MUCH_FLAG_EXACTLY, FILTER_MUCH_FLAG_FULLSTRING, FILTER_MUCH_FLAG_CONTAINS, FILTER_MUCH_FLAG_STARTSWITH, FILTER_MUCH_FLAG_ENDSWITH, FILTER_MUCH_FLAG_EXISTS.
   - name: matchValue
     type: any
     summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
@@ -233,7 +233,7 @@ properties:
   - name: type
     type: String
     summary: | 
-        The composite filter type: "UNION", "INTERSECTION".
+        The composite filter type: COMPOSITE_FILTER_TYPE_UNION, COMPOSITE_FILTER_TYPE_INTERSECTION.
   - name: filters
     type: AbstractFilter[]
     summary: The list of filters in the composite filter.
@@ -250,7 +250,7 @@ properties:
   - name: order
     type: String
     summary: |
-        The type of the sorting: "ASC", "DESC".
+        The type of the sorting: SORT_ORDER_MODE_ASC, SORT_ORDER_MODE_DESC.
     optional: true
 
 ---
