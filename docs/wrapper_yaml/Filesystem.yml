@@ -54,13 +54,12 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
 
 examples:
   - title: Code example
-    example:    |
+    example: |
         var documentsDir;
-         function onsuccess(files) {
+        function onsuccess(files) {
            for(var i = 0; i < files.length; i++) {
              Ti.API.info("File Name is " + files[i].name); // displays file name
            }
@@ -69,7 +68,7 @@ examples:
 
            if (testFile != null) {
              testFile.openStream(
-               "w",
+               Ti.Tizen.Filesystem.FILE_MODE_W,
                function(fs){
                  fs.write("HelloWorld");
                  fs.close();
@@ -78,21 +77,21 @@ examples:
                }, "UTF-8"
              );
            }
-         }
+        }
 
-         function onerror(error) {
+        function onerror(error) {
            Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
-         }
+        }
 
-         Ti.Tizen.Filesystem.resolve(
+        Ti.Tizen.Filesystem.resolve(
            'documents',
            function(dir){
              documentsDir = dir;
              dir.listFiles(onsuccess,onerror);
            }, function(e){
              Ti.API.info("Error" + e.message);
-           }, "rw"
-         );
+           }, Ti.Tizen.Filesystem.FILE_MODE_RW
+        );
 methods:
   - name: resolve
     summary: Resolves a location to a file handle.
@@ -108,14 +107,14 @@ methods:
             - wgt-private: Describes a private folder in which a widget can store information. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT access the information stored there.
             - wgt-private-tmp: Describes a temporary, private folder in which a widget can store data that is available during one widget execution cycle. Content of this folder MAY be removed from this directory when the widget is closed or the Web Runtime is restarted. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT have access to it.
 
-        The mode parameter specifies whether the resulting File object has read-only access ("r" access),
-        read and write access ("rw" access), append access ("a" access), or write access ("w" access) to the root location containing directory tree.
+        The mode parameter specifies whether the resulting File object has read-only access (Ti.Tizen.Filesystem.FILE_MODE_R access),
+        read and write access (Ti.Tizen.Filesystem.FILE_MODE_RW access), append access (Ti.Tizen.Filesystem.FILE_MODE_A access), or write access (Ti.Tizen.Filesystem.FILE_MODE_W access) to the root location containing directory tree.
         Permission for the requested access is obtained from the security framework.
         Once the resulting File object has access, access is inherited by any other File objects derived
         from this instance without any further reference to the security framework, as noted in descriptions of certain methods of File.
 
         The ErrorCallback is launched with these error types:
-            - InvalidValuesError: If any of the input parameters contain an invalid value. For example, the mode is not valid (that is not "r", "rw", "a", or "w").
+            - InvalidValuesError: If any of the input parameters contain an invalid value. For example, the mode is not valid (that is not Ti.Tizen.Filesystem.FILE_MODE_R, Ti.Tizen.Filesystem.FILE_MODE_RW, Ti.Tizen.Filesystem.FILE_MODE_A, or Ti.Tizen.Filesystem.FILE_MODE_W).
             - NotFoundError: The location input argument does not correspond to a valid location.
             - UnknownError: In any other error case.
     parameters:
@@ -131,31 +130,33 @@ methods:
         optional: true
       - name: mode
         summary: |
-            Optional string of value "r" to obtain read-only access,
-            "rw" to obtain read and write access, "a" to obtain append access,
-            or "w" to obtain write access to all files and directories that can be reached from the File object passed to onsuccess.
-            Defaults to "rw" if absent or null.
+            Optional string of value Ti.Tizen.Filesystem.FILE_MODE_R to obtain read-only access,
+            Ti.Tizen.Filesystem.FILE_MODE_RW to obtain read and write access, Ti.Tizen.Filesystem.FILE_MODE_A to obtain append access,
+            or Ti.Tizen.Filesystem.FILE_MODE_W to obtain write access to all files and directories that can be reached from the File object passed to onsuccess.
+            Defaults to Ti.Tizen.Filesystem.FILE_MODE_RW if absent or null.
         type: String
         optional: true
     examples:
        - example: |
-           Ti.Tizen.Filesystem.resolve(
-              'images',
-              function(dir) {
-                 Ti.API.info("Mount point Name is " +  dir.path);
-              }, function(e) {
-                 Ti.API.info("Error: " + e.message);
-              }, "r"
-           );
+             Ti.Tizen.Filesystem.resolve(
+                'images',
+                function(dir) {
+                   Ti.API.info("Mount point Name is " +  dir.path);
+                }, function(e) {
+                   Ti.API.info("Error: " + e.message);
+                }, Ti.Tizen.Filesystem.FILE_MODE_R
+             );
   - name: getStorage
     summary: Gets information about a storage based on its label.Gets information about a storage based on its label.
     description: |
         Get storage information based on its label (example: "MyThumbDrive", "InternalFlash"). The onsuccess will receive as input argument the data structure containing additional information about the drive.
 
         The ErrorCallback is launched with these error types:
-            - NotFoundError: No drive was found with the given label.
-            - InvalidValuesError: If any of the input parameters contain an invalid value.
-            - UnknownError: In any other error case.
+
+            * NotFoundError: No drive was found with the given label.
+            * InvalidValuesError: If any of the input parameters contain an invalid value.
+            * UnknownError: In any other error case.
+
     parameters:
       - name: label
         summary: Storage label.
@@ -187,7 +188,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
-        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage[]>
+        type: Callback<Array<Titanium.Tizen.Filesystem.FileSystemStorage>>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<WebAPIError>
@@ -256,47 +257,47 @@ methods:
 properties:
 
   - name: FILE_MODE_R
-    summary: Value "r" to obtain read-only access
+    summary: Value to obtain read-only access
     type: STRING
     permission: read-only
 
   - name: FILE_MODE_RW
-    summary: Value "rw" to obtain read and write access
+    summary: Value to obtain read and write access
     type: STRING
     permission: read-only
 
   - name: FILE_MODE_W
-    summary: Value "w" to obtain write access
+    summary: Value to obtain write access
     type: STRING
     permission: read-only
 
   - name: FILE_MODE_A
-    summary: Value "a" is for appending.
+    summary: Value is for appending.
     type: STRING
     permission: read-only
 
   - name: FILE_SYSTEM_STORAGE_TYPE_INTERNAL
-    summary: INTERNAL - Internal storage is storage that cannot be removed, such as a flash memory.
+    summary: Internal storage is storage that cannot be removed, such as a flash memory.
     type: STRING
     permission: read-only
 
   - name: FILE_SYSTEM_STORAGE_TYPE_EXTERNAL
-    summary: EXTERNAL - External storage is removable storage, such as a USB drive or memory cards.
+    summary: External storage is removable storage, such as a USB drive or memory cards.
     type: STRING
     permission: read-only
 
   - name: FILE_SYSTEM_STORAGE_STATE_MOUNTED
-    summary: MOUNTED - The device is mounted and can be browsed.
+    summary: The device is mounted and can be browsed.
     type: STRING
     permission: read-only
 
   - name: FILE_SYSTEM_STORAGE_STATE_REMOVED
-    summary: REMOVED - The device was removed. This states only applies to external drives.
+    summary: The device was removed. This states only applies to external drives.
     type: STRING
     permission: read-only
 
   - name: FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE
-    summary: UNMOUNTABLE - The device cannot be mounted due to an error.
+    summary: The device cannot be mounted due to an error.
     type: STRING
     permission: read-only
 

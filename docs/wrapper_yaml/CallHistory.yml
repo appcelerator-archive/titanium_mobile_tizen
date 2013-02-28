@@ -4,7 +4,7 @@ summary: The top level CallHistory module.
 description: |
     This API provides interfaces and methods for retrieving information from the call history.
 
-    For more information on the Callhistory features, see [https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm]
+    For more information on the Callhistory features, see [Tizen Web App Programming: Call History](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm)
 extends: Titanium.Module
 since: "3.0.2"
 
@@ -19,7 +19,7 @@ methods:
       - name: errorCallback
         summary: The method to call when an error occurs.
         optional: true
-        type: Callback<WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
       - name: filter
         summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
         description: |
@@ -58,7 +58,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     parameters: 
@@ -69,7 +69,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
     parameters: 
@@ -130,7 +130,7 @@ properties:
             BLOCKED - for blocked calls
             REJECTED - for rejected calls
     type: String
-
+---
 name: CallHistoryChangeCallback
 summary: This is a callback interface of a CallHistory operations. For example code, see CallHistory interface.
 platforms: [tizen]

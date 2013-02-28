@@ -3,13 +3,15 @@ name: Titanium.Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
 extends: Titanium.Tizen.Calendar.CalendarItem
 platforms: [tizen]
-since: "3.0.2"
+
 examples:
       - example: |    
             // Gets the default calendar
+
             var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
             
             try {
+
                 var ev = Titanium.Tizen.Calendar.createCalendarEvent("BEGIN:VCALENDAR\r\n" +
                             "BEGIN:VEVENT\r\n" +
                             "DTSTAMP:19970901T1300Z\r\n" +
@@ -23,6 +25,7 @@ examples:
                 calendar.add(ev);
                 Titanium.API.info('Event added with UID ' + ev.id.uid);
             } catch (err) {
+
                 Titanium.API.info("Failed to add VEVENT to the calendar, error: " + err.name);
             }
 methods:
