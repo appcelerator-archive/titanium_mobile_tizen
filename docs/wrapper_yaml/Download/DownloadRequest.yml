@@ -1,12 +1,10 @@
+---
 name: Titanium.Tizen.Download.DownloadRequest
-summary: |
-   Download request object.
-extends: Titanium.Module
+summary: Defines the download request object.
+extends: Titanium.Proxy
 platforms: [tizen]
 
-name: DownloadRequest
-summary: Defines the download request object.
-parameters:
+properties:
   - name: url
     summary: Store the URL of the object to download.
     type: String
