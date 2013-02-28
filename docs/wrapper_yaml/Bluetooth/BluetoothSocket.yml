@@ -57,14 +57,3 @@ properties:
     summary: The error callback to be invoked when an error occurs. 
     type: Callback<Object>
 
-  - name: BLUETOOTH_SOCKET_STATE_CLOSED
-    summary: |
-        "CLOSED" - The Bluetooth socket state. 
-    type: String
-    permission: read-only
-    
-  - name: BLUETOOTH_SOCKET_OPEN
-    summary: |
-        "OPEN" - The Bluetooth socket state.
-    type: String
-    permission: read-only

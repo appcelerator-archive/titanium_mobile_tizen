@@ -1,6 +1,6 @@
 ---
 name: Titanium.Tizen.SystemInfo.SystemInfoStorage
-summary: This property exposes the data storage devices connected to this system
+summary: This property exposes the data storage devices connected to this system.
 
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
@@ -10,5 +10,5 @@ properties:
             
   - name: units
     summary: The array of storage units connected to this device.
-    type: Titanium.Tizen.SystemInfo.SystemInfoStorageUnit[] 
+    type: Array<Titanium.Tizen.SystemInfo.SystemInfoStorageUnit>
     permission: read-only

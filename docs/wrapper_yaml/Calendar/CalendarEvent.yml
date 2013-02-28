@@ -51,7 +51,7 @@ methods:
         
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Titanium.Tizen.Calendar.CalendarEvent[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.CalendarEvent>>
         
       - name: errorCallback
         summary:  The method to invoke when the request fails.
