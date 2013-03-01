@@ -112,7 +112,10 @@ module.exports = new function() {
 				buildHarness(serverCallback, commandFinishedCallback);
 			},
 			serverCallback = function() {
-				startServer(runCallback, commandFinishedCallback);
+				startServer(installCallback, commandFinishedCallback);
+			},
+			installCallback = function() {
+				installHarness(runCallback, commandFinishedCallback);
 			},
 			runCallback = function() {
 				runHarness(null, commandFinishedCallback);
@@ -239,23 +242,36 @@ module.exports = new function() {
 		server.listen(driverGlobal.config.httpPort);
 	};
 	
-	var runHarness = function(successCallback, errorCallback) {
-		process.chdir(path.resolve(driverGlobal.harnessDir, "tizen/harness/build/tizen"));
-		driverUtils.runCommand("web-run -w tizenapp.wgt -i http://www.test.com",
 
-		driverUtils.logStdout, function(error) {
+	var installHarness = function(successCallback, errorCallback) {
+		process.chdir(path.resolve(driverGlobal.harnessDir, "tizen/harness/build/tizen"));
+		driverUtils.runCommand("web-install -w tizenapp.wgt", driverUtils.logStdout, function(error) {
 			if (error !== null) {
-				driverUtils.log("error encountered when running harness: " + error);
+				driverUtils.log("error encountered when installing harness: " + error.message);
 				errorCallback && errorCallback();
 			} else {
-				driverUtils.log('installed, running...');
+				driverUtils.log('installing...');
+				successCallback && successCallback();
+			}
+		});
+	};
+
+	var runHarness = function(successCallback, errorCallback) {
+		process.chdir(path.resolve(driverGlobal.harnessDir, "tizen/harness/build/tizen"));
+
+		driverUtils.runCommand("web-run -i zhrTuDSwYV", driverUtils.logStdout, function(error) {
+			if (error !== null) {
+				driverUtils.log("error encountered when running harness: " + error.message);
+				errorCallback && errorCallback();
+			} else {
+				driverUtils.log('running...');
 				successCallback && successCallback();
 			}
 		});
 	};
 	
 	var uninstallHarness = function(successCallback, errorCallback) {
-		driverUtils.runCommand("web-uninstall -i http://www.test.com", driverUtils.logStdout, function(error) {
+		driverUtils.runCommand("web-uninstall -i zhrTuDSwYV", driverUtils.logStdout, function(error) {
 			if (error !== null) {
 				driverUtils.log("Error encountered when uninstalling harness: " + error);
 				errorCallback && errorCallback();
@@ -263,7 +279,7 @@ module.exports = new function() {
 				driverUtils.log("Harness uninstalled");
 				successCallback && successCallback();
 			}
-		});
+		});	
 	};
 
 	// Handles restarting the test pass (usually when an error is encountered)
