@@ -39,7 +39,39 @@ var ti = require('titanium-sdk'),
 		'.gif': 'image/gif',
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
-	};
+	},
+	devId,
+	defaultPrivilegesList = '<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/download"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/power"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/setting"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>'+
+			'<access origin="*" subdomains="true"/>';
 
 // silence uglify's default warn mechanism
 UglifyJS.AST_Node.warn_function = function () {};
@@ -260,7 +292,15 @@ function build(logger, config, cli, finished) {
 			theme: 'default'
 		}
 	});
-	
+	//get device id
+	if(this.debugDevice){
+		devId = this.debugDevice;
+	}else if(this.runDevice){
+		devId = this.runDevice;
+	} else if(this.targetDevice){
+		devId = this.targetDevice;
+	}
+	logger.info(__('Target device Id:  "%s" ', devId));
 	//adding defauld tizen values into tiapp and create/fill tizen specific settings
 	this.tiapp.tizen = {
 		appid : randomString(10)
@@ -325,7 +365,7 @@ function build(logger, config, cli, finished) {
 					}.bind(this), function(next){
 						this.signTizenApp(logger, function(){
 							next(null, 'ok');
-						});
+						});						
 					}.bind(this), function(next){
 						if(process.platform === 'win32'){
 							this.wgtPackaging7z(logger, function(){
@@ -340,7 +380,7 @@ function build(logger, config, cli, finished) {
 							//find Tizen SDK location. Needs it to use Tizen CLI
 							this.detectTizenSDK(logger, next);
 					}.bind(this),function(next){
-						if(this.debugDevice || this.runDevice || this.targetDevice){
+						if(devId){
 							this.uninstallWidgetForce(logger, function(){
 									next(null, 'ok');
 								});
@@ -348,16 +388,16 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						}
 					}.bind(this), function(next){
-						if(this.runDevice && this.runDevice != 'none'){
-							this.runOnDevice(logger, function(){
+						if(devId && devId != 'none'){
+							this.installOnDevice(logger, function(){
 									next(null, 'ok');
 								});
-						}else{							
+						}else{
 							next(null, 'ok');
 						}
 					}.bind(this),function(next){
-						if(this.targetDevice && this.targetDevice != 'none'){
-							this.installOnDevice(logger, function(){
+						if(this.runDevice && this.runDevice != 'none'){
+							this.runOnDevice(logger, function(){
 									next(null, 'ok');
 								});
 						}else{							
@@ -666,7 +706,7 @@ build.prototype = {
 			moduleCounter = 0;
 		
 		// uncomment next line to bypass module caching (which is ill advised):
-		// this.modulesToCache = [];
+		this.modulesToCache = [];
 		
 		this.modulesToCache.forEach(function (moduleName) {
 			var isCommonJS = false;
@@ -999,14 +1039,12 @@ build.prototype = {
 
 	addTizenToTiAppXml: function (tizenAppId){		
 		this.logger.info('Processing tiapp.xml for tizen node');
-		var XMLSerializer = xmldom.XMLSerializer;
-
-		var xmlpath = path.join(this.projectDir, 'tiapp.xml');
-		var doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml');
-		var parsedTiXml = doc.documentElement;
-		//check for Tizen section
-		var tizenTagFound = false;
-		var node = parsedTiXml.firstChild;
+		var XMLSerializer = xmldom.XMLSerializer,
+			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
+			doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml'),
+			parsedTiXml = doc.documentElement;
+			tizenTagFound = false, //check for Tizen section
+			node = parsedTiXml.firstChild;
 
 		while (node) {
 			if (node.nodeType == 1 && node.tagName == 'tizen'){
@@ -1025,19 +1063,19 @@ build.prototype = {
 			this.logger.info('<tizen> node available.');
 			return;
 		}
-		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');
+
+		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');		
 		
-		//no tizen section in xml, add it
-		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'"><feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/></tizen>';
-		var tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml');
-		parsedTiXml.appendChild(tizenSec);
-		var result = new XMLSerializer().serializeToString(doc);
+		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'">' + defaultPrivilegesList + '</tizen>',
+			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
+			result;
+		parsedTiXml.appendChild(tizenSec),
+		result = new XMLSerializer().serializeToString(doc);
 		fs.writeFileSync(xmlpath, result, 'utf8');
 	},
 
 	createConfigXml: function () {
-		this.logger.info(__('createConfigXml'));
-		var allTizenFeatures = '<feature name="http://tizen.org/api/alarm" required="true"/><feature name="http://tizen.org/api/alarm.read" required="true"/><feature name="http://tizen.org/api/alarm.write" required="true"/><feature name="http://tizen.org/api/application" required="true"/><feature name="http://tizen.org/api/application.kill" required="true"/><feature name="http://tizen.org/api/application.launch" required="true"/><feature name="http://tizen.org/api/application.read" required="true"/><feature name="http://tizen.org/api/bluetooth" required="true"/><feature name="http://tizen.org/api/bluetooth.admin" required="true"/><feature name="http://tizen.org/api/bluetooth.gap" required="true"/><feature name="http://tizen.org/api/bluetooth.spp" required="true"/><feature name="http://tizen.org/api/calendar" required="true"/><feature name="http://tizen.org/api/calendar.read" required="true"/><feature name="http://tizen.org/api/calendar.write" required="true"/><feature name="http://tizen.org/api/call" required="true"/><feature name="http://tizen.org/api/call.history" required="true"/><feature name="http://tizen.org/api/call.history.read" required="true"/><feature name="http://tizen.org/api/call.history.write" required="true"/><feature name="http://tizen.org/api/call.state" required="true"/><feature name="http://tizen.org/api/contact" required="true"/><feature name="http://tizen.org/api/contact.read" required="true"/><feature name="http://tizen.org/api/contact.write" required="true"/><feature name="http://tizen.org/api/download" required="true"/><feature name="http://tizen.org/api/filesystem" required="true"/><feature name="http://tizen.org/api/filesystem.read" required="true"/><feature name="http://tizen.org/api/filesystem.write" required="true"/><feature name="http://tizen.org/api/geocoder" required="true"/><feature name="http://tizen.org/api/lbs" required="true"/><feature name="http://tizen.org/api/mediacontent" required="true"/><feature name="http://tizen.org/api/mediacontent.read" required="true"/><feature name="http://tizen.org/api/mediacontent.write" required="true"/><feature name="http://tizen.org/api/messaging" required="true"/><feature name="http://tizen.org/api/messaging.read" required="true"/><feature name="http://tizen.org/api/messaging.send" required="true"/><feature name="http://tizen.org/api/messaging.write" required="true"/><feature name="http://tizen.org/api/nfc" required="true"/><feature name="http://tizen.org/api/nfc.admin" required="true"/><feature name="http://tizen.org/api/nfc.p2p" required="true"/><feature name="http://tizen.org/api/nfc.tag" required="true"/><feature name="http://tizen.org/api/notification" required="true"/><feature name="http://tizen.org/api/power" required="true"/><feature name="http://tizen.org/api/systeminfo" required="true"/><feature name="http://tizen.org/api/time" required="true"/><feature name="http://tizen.org/api/time.read" required="true"/><feature name="http://tizen.org/api/time.write" required="true"/><feature name="http://tizen.org/api/tizen" required="true"/><access origin="*"/>';
+		this.logger.info(__('createConfigXml'));		
 
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
 		if(!this.tiapp.url || 0 === this.tiapp.url){
@@ -1047,7 +1085,7 @@ build.prototype = {
 		}
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%FEATURES_LIST%%', allTizenFeatures);
+		templt = templt.replace('%%FEATURES_LIST%%', defaultPrivilegesList);
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
@@ -1195,14 +1233,6 @@ build.prototype = {
 		);			
 	},
 	uninstallWidgetForce: function(logger, callback){		
-		var devId;
-		if(this.debugDevice){
-			devId = this.debugDevice;
-		}else if(this.runDevice){
-			devId = this.runDevice;
-		} else if(this.targetDevice){
-			devId = this.targetDevice;
-		}
 		if(devId){
 			var runner = require("child_process");
 			var pathToCmd;
@@ -1212,7 +1242,7 @@ build.prototype = {
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall');
 			}
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url + ' --device=' + devId;;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + devId;;
 			logger.info('Forsing widget uninstall cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1222,7 +1252,7 @@ build.prototype = {
 						logger.info('wgt uninstall failed');
 						logger.info(stderr);
 					}else{
-						logger.info('UnInstalled wgt failed');
+						logger.info('UnInstalled wgt: success');
 					}
 					callback();
 			});
@@ -1230,21 +1260,17 @@ build.prototype = {
 			callback();
 		}
 	},
-	// implementations of  installOnDevice/runOnDevice/debugOnDevice are very close
-	// but do not move code for all into "common" functions. These functions seems to be subject of change in next TizenSDK versions.
-	// I belive that at least parameter --id will be changed since it can be ease received from config.xml also web-install really needs only path to wgt
-	// but current tizen implementation does not work without --id parameter
 	installOnDevice : function(logger, callback){
-		if(this.targetDevice && this.targetDevice != 'none'){
-			var runner = require("child_process");
-			var pathToCmd;
+		if(devId && devId != 'none'){
+			var runner = require("child_process"),
+				pathToCmd,
+				pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
 			if(process.platform === 'win32'){
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
 			}else{
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install');
-			}
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.targetDevice;
+			}			
+			var cmd = pathToCmd + ' -t 10 ' + ' --widget="' + pathToWgt + '"' + ' --device=' + devId;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1254,7 +1280,7 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Installed on device: ' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1272,7 +1298,7 @@ build.prototype = {
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run');
 			}
 			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.runDevice;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1282,7 +1308,7 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Run on device:' + pathToWgt);
 					}
 					callback();
 			});	
@@ -1292,15 +1318,15 @@ build.prototype = {
 	},
 	debugOnDevice : function(logger, callback){
 		if(this.debugDevice && this.debugDevice != 'none'){
-			var runner = require("child_process");			
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');			
+			var runner = require("child_process");
+			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
 			var pathToCmd;
 			if(process.platform === 'win32'){
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug.bat');
 			} else{
 				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug');
 			}
-			var cmd = pathToCmd + ' --id=' + this.tiapp.url +' --widget="' + pathToWgt + '"'+ ' --device=' + this.debugDevice;
+			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.debugDevice;
 			logger.info('install cmd: ' + cmd);
 			runner.exec(
 				cmd,
@@ -1310,13 +1336,13 @@ build.prototype = {
 						logger.info('wgt installation failed');
 						logger.info(stderr);
 					}else{
-						logger.info('Installed wgt: ' + pathToWgt);
+						logger.info('Debug initiated for: ' + pathToWgt);
 					}
 					callback();
-			});	
+			});
 		}else{
 			callback();
-		}		
+		}
 	},	
 	detectTizenSDK: function(logger, next){
 		var self = this;
@@ -1375,7 +1401,7 @@ build.prototype = {
 		}
 	},
 
-	find7za: function(logger){	
+	find7za: function(logger){
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if(fs.existsSync(zippath)){
 			return zippath;
@@ -1466,7 +1492,6 @@ function renderTemplate(template, props) {
 
 function randomString(length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
-
     if (! length) {
         length = Math.floor(Math.random() * chars.length);
     }

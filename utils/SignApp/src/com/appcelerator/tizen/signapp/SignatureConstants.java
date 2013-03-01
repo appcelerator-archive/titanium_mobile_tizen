@@ -1,7 +1,6 @@
 package com.appcelerator.tizen.signapp;
 
-public abstract interface SignatureConstants
-{
+public abstract interface SignatureConstants{
     public static final String distributorTarget = "#DistributorASignature";
     public static final String authorTarget = "#AuthorSignature";
     public static final String roleProperty = "dsp:Role";

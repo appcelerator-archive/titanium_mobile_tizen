@@ -65,7 +65,6 @@ public class SignatureUtility {
 	}
 
 	public static boolean checkForWgtPackage(String fileName) {
-		
 		return (fileName != null && fileName.toUpperCase().endsWith(WIDGET_FILE_EXTENSION));
 	}
 

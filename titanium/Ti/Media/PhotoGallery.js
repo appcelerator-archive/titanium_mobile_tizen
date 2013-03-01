@@ -1,6 +1,6 @@
 define(["Ti/_/declare", "Ti/Blob"],
-    function(declare, Blob) {
-		var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/pick', null,'IMAGE/*'),
+	function(declare, Blob) {
+		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -18,7 +18,7 @@ define(["Ti/_/declare", "Ti/Blob"],
 				removablePrefix: '/opt/storage/sdcard/', 
 				removable: 'removable1',
 				tizenRoots: ['images', 'videos', 'downloads', 'documents', 'removable1'],
-				_removePrefix: function(path){
+				_removePrefix: function(path) {
 					var nP;
 					if(path.indexOf(this.prefix) == 0){
 						nP = path.replace(this.prefix, '');		
@@ -42,8 +42,8 @@ define(["Ti/_/declare", "Ti/Blob"],
 						console.log('Can not connect to directory - ' + d);
 					}
 				},
-				getFile: function(path){
-					if(this.getRoot(path)){
+				getFile: function(path) {
+					if(this.getRoot(path)) {
 						var noP = this._removePrefix(path);
 						return noP.substring(noP.indexOf('/'));
 					}
@@ -60,8 +60,8 @@ define(["Ti/_/declare", "Ti/Blob"],
 					return i; 			
 				}
 			};
-        return {
-			open: function(args){
+		return {
+			open: function(args) {
 				var path,
 					file,
 					serviceReplyCB = {
@@ -71,12 +71,12 @@ define(["Ti/_/declare", "Ti/Blob"],
 						onfail: args.error ? args.error : function(){Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
 					};
 					
-				function readFromStream(fileStream){
+				function readFromStream(fileStream) {
 					var contents = fileStream.readBase64(fileStream.bytesAvailable),
 						blob = new Blob({
 							data: contents,
 							length: contents.length,
-							mimeType: imgMimeType[virtualRoot.fileExt(path)] || "text/plain",
+							mimeType: imgMimeType[virtualRoot.fileExt(path)] || 'text/plain',
 							file: file || null,
 							nativePath: path || null
 						}),					
@@ -100,23 +100,22 @@ define(["Ti/_/declare", "Ti/Blob"],
 						readFromStream,
 						// error callback
 						function(e) {
-							Titanium.API.error("Error with open stream" + e.message)
+							Titanium.API.error('Error with open stream' + e.message)
 							}
 						);	
 				};
-				function pickToItemCB(reply) {   // reply -> ApplicationServiceData[0]
+				function pickToItemCB(reply) {   // reply -> ApplicationControlData[0]
 					path = reply[0].value.toString();
 					//Check if this file is image - return blob
 					if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
 						//Resolve to directory
 						tizen.filesystem.resolve(
 							virtualRoot.getRoot(path), 
-							//'removable1',
 							resolveFileCB, 
 							function(e) {
-								Titanium.API.error("Error" + e.message);
+								Titanium.API.error('Error' + e.message);
 							}, 
-							"rw");
+							'rw');
 					//Check if this file is video - return path(string)		
 					} else if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == VIDEO) {
 						var event = {
@@ -130,18 +129,11 @@ define(["Ti/_/declare", "Ti/Blob"],
 					}	
 				};
 				//START
-                //Launch PhotoGallery for tizen
-                tizen.application.launchService(
-                    service,
-                    'org.tizen.gallery',
-                    function() {
-                        console.log("Launch service succeeded");
-                    }, 
-                    function(e) {
-                        console.log("Launch service failed. Reason : " + e.name);
-                    },  
-                    serviceReplyCB
-                    );
+				tizen.application.launchAppControl(service, 
+					'org.tizen.gallery',
+					function(){console.log('launch appControl succeeded');}, 
+					function(e){console.log('launch appControl failed. Reason: ' + e.name);}, 
+					serviceReplyCB);
 			}
-        };
-    });
+		};
+	});
