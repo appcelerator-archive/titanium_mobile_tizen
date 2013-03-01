@@ -24,73 +24,35 @@ module.exports = new function() {
 
 	this.name = 'filters';
 	this.tests = [
-		{name: 'attributeFliterExactly'},
 		{name: 'attributeFilterFullstring'},
-		{name: 'attributeFliterContains'},
-		{name: 'attributeFilterStartsWith'},
-		{name: 'attributeFilterEndsWith'},
-		{name: 'attributeFilterExists'},
+	//	{name: 'attributeFliterContains'},
+	//	{name: 'attributeFilterStartsWith'},
+	//	{name: 'attributeFilterEndsWith'},
+	//	{name: 'attributeFilterExists'},
 		{name: 'attributeFilterWrongValue'},
 		{name: 'compositeFilterUnionTest'},
 		{name: 'compositeFilterIntersectionTest'},
 		{name: 'rangeFilterTest'}
 	]
 
-	this.attributeFliterExactly = function(testRun) {
-		var contact1 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'John'
-				})
-			}), 
-			contact2 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Mark'
-				})
-			});
-
-		addressbook.find(function(contacts) {
-			var ids = [];
-			for (var i = 0; i < contacts.length; i++) {
-				ids.push(contacts[i].id);
-			}
-
-			addressbook.removeBatch(ids, function(){
-				var filter = new tizen.AttributeFilter('name.firstName', 'EXACTLY', 'John');
-				addressbook.add(contact1);
-				addressbook.add(contact2);
-				addressbook.find(function(contacts){
-					valueOf(testRun, contacts.length).shouldBe(1);
-					finish(testRun);
-					}, reportErrorMessage, filter);
-			}, reportErrorMessage);
-		}, reportErrorMessage);
-	}
-
 	this.attributeFilterFullstring = function(testRun) {
-		var contact1 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'John'
-				})
-			}),
-			contact2 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Mark'
-				})
+		Ti.Contacts.Tizen.getAllPeople(function(persons) {
+			var i = 0,
+				personsCount = persons.length,
+				person1, person2, filter;
+			for (; i < personsCount; i++) {
+				Ti.Contacts.removePerson(persons[i]);
+			}
+			person1 = Ti.Contacts.createPerson({
+				firstName: 'John'
 			});
-
-		addressbook.find(function(contacts) {
-			var ids = [];
-			for (var i = 0; i < contacts.length; i++) {
-				ids.push(contacts[i].id);
-			}		
-			addressbook.removeBatch(ids, function(){
-				var filter = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', 'John');
-				addressbook.add(contact1);
-				addressbook.add(contact2);
-				addressbook.find(function(contacts){
-					valueOf(testRun, contacts.length).shouldBe(1);
-					finish(testRun);
-				}, reportErrorMessage, filter);
+			person2 = Ti.Contacts.createPerson({
+				firstName: 'Mark'
+			});
+			Ti.Contacts.Tizen.getPeopleWithName('John', function(persons) {
+				valueOf(testRun, persons.length).shouldBe(1);
+				valueOf(testRun, persons[0].toString()).shouldBe('[object TiContactsPerson]');
+				finish(testRun);
 			}, reportErrorMessage);
 		}, reportErrorMessage);
 	}
@@ -213,112 +175,78 @@ module.exports = new function() {
 	}
 
 	this.attributeFilterWrongValue = function(testRun) {
-		var contact1 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'John'
-				})
-			}), contact2 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Mark'
-				})
+		Ti.Contacts.Tizen.getAllPeople(function(persons) {
+			var i = 0,
+				personsCount = persons.length,
+				person1, person2, filter;
+			for (; i < personsCount; i++) {
+				Ti.Contacts.removePerson(persons[i]);
+			}
+			person1 = Ti.Contacts.createPerson({
+				firstName: 'John'
 			});
-		addressbook.find(function(contacts) {
-			var ids = [];
-			for (var i = 0; i < contacts.length; i++) {
-				ids.push(contacts[i].id);
-			}		
-			addressbook.removeBatch(ids, function(){
-				addressbook.add(contact1);
-				addressbook.add(contact2);
-				var filter = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', 'QJohn');
-				addressbook.find(function(contacts){
-					valueOf(testRun, contacts.length).shouldBe(0);
-					finish(testRun);
-				}, reportErrorMessage, filter);
+			Ti.Contacts.Tizen.getPeopleWithName('John111', function(persons) {
+				valueOf(testRun, persons.length).shouldBe(0);
+				finish(testRun);
 			}, reportErrorMessage);
 		}, reportErrorMessage);
 	}
 
 	this.compositeFilterUnionTest = function(testRun) {
-		var contact1 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'John',
-					lastName: 'Smith',
-					middleName: 'Middle'
-				})
-			}), contact2 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Mark'
-				})
+		Ti.Contacts.Tizen.getAllPeople(function(persons) {
+			var i = 0,
+				personsCount = persons.length,
+				person1, person2, filter;
+			for (; i < personsCount; i++) {
+				Ti.Contacts.removePerson(persons[i]);
+			}
+			person1 = Ti.Contacts.createPerson({
+				firstName: 'John'
 			});
-		addressbook.find(function(contacts) {
-			var ids = [];
-			for (var i = 0; i < contacts.length; i++) {
-				ids.push(contacts[i].id);
-			}		
-			addressbook.removeBatch(ids, function(){
-				addressbook.add(contact1);
-				addressbook.add(contact2);
-				var filter1 = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', 'John'),
-					filter2 = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', 'Mille'),
-					filter3 = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', 'Smith'),
-					filter = new tizen.CompositeFilter('UNION', [filter1, filter2, filter3]);
-				addressbook.find(function(contacts){
-					valueOf(testRun, contacts.length).shouldBe(1);
-					finish(testRun);
-				}, reportErrorMessage, filter);
+			person2 = Ti.Contacts.createPerson({
+				lastName: 'John'
+			});
+			Ti.Contacts.Tizen.getPeopleWithName('John', function(persons) {
+				valueOf(testRun, persons.length).shouldBe(2);
+				valueOf(testRun, persons[0].toString()).shouldBe('[object TiContactsPerson]');
+				finish(testRun);
 			}, reportErrorMessage);
 		}, reportErrorMessage);
 	}
 
 	this.compositeFilterIntersectionTest = function(testRun) {
-		var contact1 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'John',
-					lastName: 'Smith',
-					middleName: 'Middle'
-				})
-			}), contact2 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Middle',
-					lastName: 'John',
-					middleName: 'Smith'
-				})
-			}), contact3 = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName: 'Smith',
-					lastName: 'Middle',
-					middleName: 'John'
-				})
-			}), names = ['John', 'Middle', 'Smith'];
-		addressbook.find(function(contacts) {
-			var ids = [];
-			for (var i = 0; i < contacts.length; i++) {
-				ids.push(contacts[i].id);
-			}		
-			addressbook.removeBatch(ids, function(){
-				var compositeFilters = [];
-				addressbook.add(contact1);
-				addressbook.add(contact2);
-				addressbook.add(contact3);
-				for (i = 0; i < names.length; i++) {
-					firstNameFilter = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', names[i]);
-					middleNameFilter = new tizen.AttributeFilter('name.middleName', 'FULLSTRING', names[i]);
-					lastNameFilter = new tizen.AttributeFilter('name.lastName', 'FULLSTRING', names[i]);
-					compositeFilters.push(new tizen.CompositeFilter('UNION', [firstNameFilter, middleNameFilter, lastNameFilter]));
-				}
-				var resultFilter = new tizen.CompositeFilter('INTERSECTION',  compositeFilters);
-				addressbook.find(function(contacts){
-					valueOf(testRun, contacts.length).shouldBe(3);
-					finish(testRun);
-				}, reportErrorMessage, resultFilter);
+		Ti.Contacts.Tizen.getAllPeople(function (persons) {
+			var i = 0,
+				personsCount = persons.length,
+				person1, person2, filter;
+			for (; i < personsCount; i++) {
+				Ti.Contacts.removePerson(persons[i]);
+			}
+			person1 = Ti.Contacts.createPerson({
+				firstName: 'John',
+				lastName: 'Smith'
+			});
+			person2 = Ti.Contacts.createPerson({
+				firstName: 'Smith',
+				lastName: 'John'
+			});
+			Ti.Contacts.Tizen.getPeopleWithName('John Smith', function(persons) {
+				valueOf(testRun, persons.length).shouldBe(2);
+				valueOf(testRun, persons[0].toString()).shouldBe('[object TiContactsPerson]');
+				valueOf(testRun, persons[1].toString()).shouldBe('[object TiContactsPerson]');
+				finish(testRun);
 			}, reportErrorMessage);
 		}, reportErrorMessage);
 	}
 
+// Please make a call before running this test
 	this.rangeFilterTest = function(testRun) {
-		var filter = new tizen.AttributeRangeFilter('startTime', new Date(2012, 0, 1), new Date());
-		tizen.call.history.find(function(results) {
+		var filter = Ti.Tizen.createAttributeRangeFilter({
+				attributeName: 'startTime', 
+				initialValue: new Date(2012, 0, 1),
+				endValue: new Date()
+			});
+		Ti.Tizen.Call.CallHistory.find(function(results) {
 			Ti.API.info(results.length);
 			valueOf(testRun, results.length).shouldBeGreaterThan(0);
 			finish(testRun);
