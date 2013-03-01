@@ -29,41 +29,20 @@ properties:
   - name: major
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
-        The supported major types are: Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC, Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER, and ohter.
+        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
     type: Number
     permission: read-only
 
-  - name: state
+  - name: minor
     summary: |
-      The current socket state.  The value is one of the constants defined for this type. The supported state types are: "CLOSED", and "OPEN".
+      The minor device class. The value is one of the constants defined for this type. 
+      The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
     type: String
     permission: read-only
 
-  - name: peer
-    summary: The peer device to which this socket is connected. 
-    type: Titanium.Tizen.Bluetooth.BluetoothDevice
-    permission: read-only
-
-  - name: onmessage
-    summary: The success callback to be invoked when an incoming message is received from the peer.     
-    type: Callback<Object>
-
-  - name: onclose
-    summary: The success callback to be invoked when the socket is closed.      
-    type: Callback<Object>
-
-  - name: onerror
-    summary: The error callback to be invoked when an error occurs. 
-    type: Callback<Object>
-
-  - name: BLUETOOTH_SOCKET_STATE_CLOSED
+  - name:  services
     summary: |
-        "CLOSED" - The Bluetooth socket state. 
-    type: String
-    permission: read-only
-    
-  - name: BLUETOOTH_SOCKET_OPEN
-    summary: |
-        "OPEN" - The Bluetooth socket state.
-    type: String
+        The services provided by this device.The value is one of the constants defined for this type. 
+        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
+    type: Array<Number>
     permission: read-only

@@ -3,27 +3,30 @@ name: Titanium.Tizen.Notification.Notification
 summary: The interface which represents notification.
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 properties:
- - name: id
-   summary: A notification id.
-   type: String   
-
- - name: type
-   summary: A notification type.
-   type: String
-   default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
-   
- - name: postedTime
-   summary: Determines whether the client should attempt to keep a persistent connection.
-   type: Date
-   
- - name: title
-   summary: Determines whether the client should attempt to keep a persistent connection.
-   type: String   
-
- - name: content
-   summary: Determines whether the client should attempt to keep a persistent connection.
-   type: String
-   
+  - name: id
+    summary: A notification id.
+    type: String
+    permission: read-only
+    
+  - name: type
+    summary: A notification type.
+    type: String
+    default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
+    permission: read-only
+    
+  - name: postedTime
+    summary: The time that the notification is posted.
+    type: Date
+    permission: read-only
+    
+  - name: title
+    summary: The title to display in the notification.
+    type: String
+ 
+  - name: content
+    summary: The content to display in the notification.
+    type: String
+    

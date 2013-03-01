@@ -1,0 +1,144 @@
+---
+name: Titanium.Tizen.Messaging
+summary: This specification defines interfaces to manage Message, retrieve messaging services.
+description: There is a object that allows access to the messaging API. Fetches all existing messaging services by type or a messaging service of a given type for concrete account. 
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: getMessageServices
+    summary: Retrieves the messaging service of a given type for a given account, or all existing services supporting the given type, if serviceId is not given. 
+    description: |
+        The errorCallback is launched with these error types:
+            InvalidValuesError: If any of the input parameters contain an invalid value, the encoding is not valid or onsuccess is null. Please note that to allow developers to ignore errors, errorCallback accepts null as a valid value.
+            UnknownError: In any other error case.
+    parameters: 
+      - name: messageServiceType
+        summary: |
+            Type of the services to be retrieved. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        type: String
+
+      - name: successCallback
+        summary: Invoked if the services are successfully retrieved. 
+        type: Callback<Titanium.Tizen.Messaging.MessageService>
+
+      - name: errorCallback
+        summary: Function called when an error occurs
+        type: Callback<Titanium.Tizen.WebAPIError>
+        optional: true
+    examples:
+      - example: |
+            // Define the error callback.
+            function errorCallback(error) {
+                console.log("Cannot get messaging service " + error.message);
+            }
+            // Define the success callback.
+            function serviceListCB(services) {
+                console.log("Found " + services.html + "email services");
+            }
+            tizen.messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
+
+  - name: createMessage
+    summary: Returns the <Titanium.Tizen.Messaging.Message> object.
+    returns:
+      - type: Titanium.Tizen.Messaging.Message
+    parameters: 
+
+      - name: initDict
+        summary: Provides specifying message attributes upon message creation.
+        type: MessageInit
+
+  - name: createMessageAttachment
+    summary: Returns the <Titanium.Tizen.Messaging.MessageAttachment> object.
+    returns:
+      - type: Titanium.Tizen.Messaging.MessageAttachment
+    parameters:
+
+      - name: initDict
+        summary: Provides specifying attachment attributes upon messageAttachment creation.
+        type: MessageAttachmentUnit
+
+properties:
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_SMS
+    summary: messaging.sms constant for SMS services
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_MMS
+    summary: messaging.mms constant for MMS services
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_EMAIL
+    summary: messaging.email constant for email services
+    type: String
+    permission: read-only
+
+# Pseudo-type    
+---
+name: MessageInit
+summary: An object containing the various options for inititalized <Titanium.Tizen.Messaging.Message> object. It passing into constructor <Titanium.Tizen.Message.createMessage>.
+properties:
+  - name: type
+    summary: |
+        The type of message. The supported types are: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
+
+  - name: options
+    summary: Provides specifying message attributes upon message creation.
+    type: messageInitDict
+    optional: true
+
+---
+name: MessageInitDict
+summary: Provides specifying message attributes upon message creation. 
+properties: 
+  - name: subject
+    summary: The subject of a message. 
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+  - name: to
+    summary: The destination addresses (or phone numbers) of a message. 
+    type: Array<String>
+
+  - name: cc
+    summary: The carbon copy addresses of a message. 
+    description: This property is used only with Email messages. 
+    type: Array<String>
+
+  - name: bcc
+    summary: The blind carbon copy addresses of a message. 
+    type: Array<String>
+
+  - name: plainBody
+    summary: The plain text representation of the message body.
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+  - name: htmlBody
+    summary: The HTML representation of the message body. 
+    description: This property is used only with Email messages. 
+    type: String
+
+  - name: isHighPriority
+    summary: The priority of a message. 
+    description: |
+        This property is true, if the message has a high priority and false, if the message has a normal or low priority.
+        This property is used only with Email messages.
+    type: Boolean
+
+---
+name: MessageAttachmentUnit
+summary: An object containing the path of file and mime type(optional)
+properties:
+  - name: filePath
+    summary: Path to file.
+    type: String
+
+  - name: mimeType
+    summary: Provides specifying mimeType of file.
+    type: String
+    optional: true
+

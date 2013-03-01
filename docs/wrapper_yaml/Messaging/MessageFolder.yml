@@ -1,13 +1,15 @@
 ---
-name: Titanium.Tizen.Message.MessageFolder
+name: Titanium.Tizen.Messaging.MessageFolder
 summary: Defines the email folder.
 description: |
     This interface allows a web application to get the set of properties that are linked to an email folder.
     The concept of folders is present in several email protocols, such as IMAP, Mail For Exchange.
     If the Messaging service does not represent email or an email protocol supporting the concept of folders on a server, this service have one folder which is the standard INBOX folder.
 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
+createable: false
+
 properties:
   - name: id
     summary: |
@@ -27,7 +29,7 @@ properties:
   - name: contentType  
     summary: |
         The type of the messages contained within this folder.
-        Can be one of this constants: Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_SMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_MMS, Titanium.Tizen.Message.MESSAGE_SERVICE_TAG_EMAIL
+        Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -48,11 +50,7 @@ properties:
   - name: type
     summary: |
         The standard type of the folder.
-        It can be one of the following values:
-            INBOX
-            OUTBOX
-            DRAFTS
-            SENTBOX
+        It can be one of the following values: INBOX, OUTBOX, DRAFTS, SENTBOX.
         If this folder is not a standard folder, an empty value must be returned.
         This property is unique for each type within one Messaging service.
     type: String
@@ -61,6 +59,6 @@ properties:
   - name: synchronizable 
     summary:  |
         This attribute shows whether this folder should be synchronized.
-        This attribute affects the behavior of the MessageService.sync() method.
+        This attribute affects the behavior of the Titinium.Tizen.Messaging.MessageService.sync() method.
     type: Boolean
     permission: read-only

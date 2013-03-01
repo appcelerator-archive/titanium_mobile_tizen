@@ -3,7 +3,6 @@ name: Titanium.Tizen.Calendar.CalendarTask
 summary:  An interface that implements the CalendarTask object.
 extends: Titanium.Tizen.Calendar.CalendarItem
 platforms: [tizen]
-since: "3.0.2"
 
 examples: 
   - title: Code example

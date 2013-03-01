@@ -5,15 +5,16 @@ summary:  |
     A Calendar object contains a set of events or tasks, depending on the calendar type.
 description: |
     This interface offers the following methods to manage events in a calendar:
-        - Finding items using a key-value filter.
-        - Adding items to a specific calendar using add() / addBatch() methods.
-        - Updating existing items using update() / updateBatch() methods.
-        - Deleting existing items using remove() / removeBatch() methods.
-        - Tracking calendar changes using addChangeListener() / removeChangeListener() methods.
+
+    *   Finding items using a key-value filter.
+    *   Adding items to a specific calendar using add() / addBatch() methods.
+    *   Updating existing items using update() / updateBatch() methods.
+    *   Deleting existing items using remove() / removeBatch() methods.
+    *   Tracking calendar changes using addChangeListener() / removeChangeListener() methods.
 
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
+createable: false
  
 methods:
   - name: get
@@ -75,10 +76,10 @@ methods:
     parameters:
       - name: items
         summary:  The list of calendar items to add.
-        type: Titanium.Tizen.Calendar.CalendarItem[]
+        type: Array<Titanium.Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
         optional: true
       - name: errorCallback
         summary:  The method to invoke when the request fails.
@@ -150,7 +151,7 @@ methods:
     parameters:
       - name: items
         summary: The list of calendar item objects to update.
-        type: Titanium.Tizen.Calendar.CalendarItem[]
+        type: Array<Titanium.Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to invoke when the updateEvents() request succeeds.
         type: Callback<Object>
@@ -207,7 +208,6 @@ methods:
             function errorCallback(response) {
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
             }
-            
             // Defines the event success callback.
             function eventSearchSuccessCallback(events) {
                 // Deletes the first existing event.
@@ -232,7 +232,7 @@ methods:
     parameters:
       - name: ids
         summary: The identifiers (id attribute) of the items to delete
-        type: CalendarEventId[]
+        type: Array<CalendarEventId>
       - name: successCallback
         summary: The method to invoke when the removeBatch() request succeeds.
         type: Callback<Object>
@@ -244,17 +244,14 @@ methods:
     examples:
       - example: |    
             var myCalendar;
-            
             // Defines the error callback.
             function errorCallback(response) {
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
             }
-            
             // Defines the removeBatch callback
             function removeBatchCallback() {
                 Titanium.API.info("Requested events were successfully removed.");
             }
-            
             // Defines the event search success callback.
             function eventSearchSuccessCallback(events) {
                 // Deletes the first two existing events.
@@ -262,13 +259,10 @@ methods:
                                        removeBatchCallback, 
                                        errorCallback);
             }
-            
             // Gets default calendar
             myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
-            
             // Retrieves all events in Calendar
             myCalendar.find(eventSearchSuccessCallback, errorCallback);        
-        
   - name: find
     summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
     description: |
@@ -284,7 +278,7 @@ methods:
     parameters:
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
       - name: errorCallback
         summary: The method to call when an error occurs
         type: Callback<WebAPIError>        
@@ -439,20 +433,20 @@ name: CalendarChangeCallback
 summary: An object containing the various options for fetching the properties requested.
 properties:
   - name: onitemsadded
-    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are added to the calendar.
-        CalendarItem[] -  The list of items that were added.
+        Array<CalendarItem> -  The list of items that were added.
     
   - name: onitemsupdated
-    type: Callback<Titanium.Tizen.Calendar.CalendarItem[]>
+    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are updated in the calendar.
-        CalendarItem[] - The list of items that were updated.
+        Array<CalendarItem> - The list of items that were updated.
     
   - name: onitemsremoved
-    type: Callback<String[]>
+    type: Callback<Array<String>>
     summary: |
         Called when item are removed from the calendar.
-        String[] - The list of identifiers for the items that were removed.
+        Array<String> - The list of identifiers for the items that were removed.
         

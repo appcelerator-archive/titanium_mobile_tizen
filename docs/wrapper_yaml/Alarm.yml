@@ -10,7 +10,7 @@ methods:
     description: |
         For more information about the arguments, see
         (https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fapplication.html)
-    parameters: 
+    parameters:
 
       - name: alarm
         summary: An alarm to add.
@@ -24,6 +24,13 @@ methods:
         summary: The data structure describing application control details.
         type: Titanium.Tizen.Application.ApplicationControl
         optional: true
+    examples:
+      - example: |
+            // Triggers an alarm on a given date/time
+            var alarm = Ti.Tizen.Alarm.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
+            var appControl = Ti.Tizen.Alarm.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
+            Ti.Tizen.Alarm.add({alarm: alarm, applicationId: "org.tizen.browser", appControl: appControl});
+            Ti.API.info("Alarm added with id: " + alarm.id);
 
   - name: remove
     summary: Removes an alarm from the storage. 
@@ -32,21 +39,37 @@ methods:
       - name: id
         summary: The ID of the alarm to remove 
         type: String
+    examples:
+      - example: |
+            var alarms = Ti.Tizen.Alarm.getAll();
+            // Removes the first alarm
+            if (alarms.length > 0) {
+                try {
+                    Ti.Tizen.Alarm.remove(alarms[0].id);
+                    Ti.API.info("Successfully removed the first alarm.");
+                } catch(error) {
+                    Ti.API.info("Failed to remove the first alarm.");
+                }
+            }
 
   - name: removeAll
     summary: Removes all alarms added by an application.
-    description: "Because each application has its own alarm storage, this method will only remove alarms added by the calling application."
+    description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
 
   - name: get
     summary: Returns an alarm as per the specified identifier.
     returns: 
       - type: Titanium.Tizen.Alarm.Alarm
         summary: Alarm An alarm object with the specified ID. 
-    parameters: 
+    parameters:
 
       - name: id
         summary: The ID of the alarm to retrieve.
         type: String
+    examples:
+      - example: |
+            var alarm = Ti.Tizen.Alarm.get(myAlarmID);
+            Ti.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
 
   - name: getAll
     summary: Returns all alarms.
@@ -54,28 +77,30 @@ methods:
         This method returns all alarms in an application storage. 
         Alarms that have already been triggered are removed automatically from the storage. 
     returns: 
-      - type: "Titanium.Tizen.Alarm.Alarm[]"
+      - type: Array<Titanium.Tizen.Alarm.Alarm>
         summary: All Alarm objects.
+    examples:
+      - example: |
+            var alarms = Ti.Tizen.Alarm.getAll();
+            Ti.API.info(alarms.length + " alarms present in the storage.");
 
   - name: createAlarmRelative
     summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmRelative>.
     returns: 
-        type: Titanium.Tizen.Alarm
-    parameters: 
-
-      - name: parameterers
+        type: Titanium.Tizen.Alarm.AlarmAlarmRelative
+    parameters:
+      - name: parameters
         summary: Initial arguments for AlarmRelative.
-        type: createAlarmRelativeParameterers
+        type: alarmRelativeParameters
 
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmAbsolute>.
     returns: 
-        type: Titanium.Tizen.Alarm
-    parameters: 
-
-      - name: parameterers
+        type: Titanium.Tizen.Alarm.AlarmAlarmAbsolute
+    parameters:
+      - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
-        type: createAlarmAbsoluteParameterers, createAlarmAbsoluteParameterersPeriod
+        type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
 
 properties:
   - name: PERIOD_MINUTE
@@ -99,7 +124,7 @@ properties:
     permission: read-only
 
 ---
-name: createAlarmRelativeParameterers
+name: alarmRelativeParameters
 summary: Parameters for the createAlarmRelative.
 properties:
   - name: delay
@@ -110,13 +135,13 @@ properties:
 
   - name: period
     summary: |
-        The duration (in seconds) between each trigger of an alarm. 
+        (optional) The duration (in seconds) between each trigger of an alarm. 
         By default, this attribute is set to null, indicating that this alarm does not repeat.
     type: Number
     optional: true
 
 ---
-name: createAlarmAbsoluteParameterers
+name: alarmAbsoluteParameters
 summary: Parameters for the createAlarmAbsolute.
 properties:
   - name: date
@@ -125,7 +150,7 @@ properties:
         The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
   - name: daysOfTheWeek
     summary: |
-        The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+        (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
         Valid days of the week constants:
         <Titanium.Tizen.Calendar.BY_DAY_VALUE_MO>
         <Titanium.Tizen.Calendar.BY_DAY_VALUE_TU>
@@ -138,13 +163,13 @@ properties:
     optional: true
 
 ---
-name: createAlarmAbsoluteParameterersPeriod
+name: alarmAbsoluteParametersPeriod
 summary: Parameters for the createAlarmAbsolute.
 properties:
   - name: date
     type: Date
     summary: |
-        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        (Optional) The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
   - name: period
     summary: Duration in seconds between each trigger of the alarm.
     type: Number

@@ -3,7 +3,7 @@ name: Titanium.Tizen.SortMode
 summary: SortMode is a common interface used for sorting of queried data.  
 description: Note that the sorting result of list type attributes is not determined. 
 platforms: [tizen]
-extends: Titanium.Module
+extends: Titanium.Proxy
 
 properties:
   - name: attributeName

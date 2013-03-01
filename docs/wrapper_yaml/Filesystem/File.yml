@@ -1,5 +1,5 @@
 ---
-name: Titanium.Filesystem.File
+name: Titanium.Tizen.Filesystem.File
 summary: The file interface.
 description: |
     This interface represents the file abstraction in use. 
@@ -16,9 +16,8 @@ description: |
     
     A file handle representing a directory can be used for listing all files and directories rooted as the file handle location.
 extends: Titanium.Proxy
-since: "3.0.2"
 platforms: [tizen]
-creatable: true
+createable: false
 
 examples:
   - title: Code example
@@ -57,9 +56,9 @@ methods:
         type: String
     examples:
       - example: |
-           /*'file://music/ramones/RockawayBeach.mp3' or 'file:///opt/media/music/ramones/RockawayBeach.mp3' if the file is
-           music/ramones/RockawayBeach.mp3*/
-           Ti.API.info(file.toURI());
+             /*'file://music/ramones/RockawayBeach.mp3' or 'file:///opt/media/music/ramones/RockawayBeach.mp3' if the file is
+             music/ramones/RockawayBeach.mp3*/
+             Ti.API.info(file.toURI());
 
   - name: listFiles
     summary: Returns the list of all files in this directory.
@@ -75,7 +74,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list operation has been successfully completed
-        type: Callback<Titanium.Tizen.Filesystem.FileS[]>
+        type: Callback<Array<Titanium.Tizen.Filesystem.File>>
       - name: onerror
         summary: Called if an error occurred
         type: Callback<WebAPIError>        
@@ -86,27 +85,27 @@ methods:
         optional: true
     examples:
       - example: |
-           function onsuccess(files) {
-               Ti.API.info("There are " + files.length  + " in the selected folder");
-           }
+             function onsuccess(files) {
+                 Ti.API.info("There are " + files.length  + " in the selected folder");
+             }
 
-           function onerror(error) {
-               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
-           }
+             function onerror(error) {
+                 Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+             }
 
-           Ti.Tizen.Filesystem.resolve(
-              "documents",
-              function(dir){
-                dir.listFiles(onsuccess, onerror);
-              }, function(e){
-                Ti.API.info("Error " + e.message);
-              }, "r"
-           );
+             Ti.Tizen.Filesystem.resolve(
+                "documents",
+                function(dir){
+                  dir.listFiles(onsuccess, onerror);
+                }, function(e){
+                  Ti.API.info("Error " + e.message);
+                }, Ti.Tizen.Filesystem.FILE_MODE_R
+             );
         
   - name: openStream
     summary: Opens the file in the given mode supporting the given encoding.
     description: |
-        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append ("a") mode, in which case the filepointer points to the end of the file.
+        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append (Ti.Tizen.Filesystem.FILE_MODE_A) mode, in which case the filepointer points to the end of the file.
         The ErrorCallback is launched with these error types:
             - InvalidValuesError: If any of the input parameters contains an invalid value.
             - IOError: The operation is launched on a directory (not a file), the file is not valid or it does not exist.
@@ -114,7 +113,7 @@ methods:
     parameters:
       - name: mode  
         summary: |
-            The mode for opening a file: "r" for reading "a" for appending "w" for [over]writing "rw" for reading and writing
+            The mode for opening a file: Ti.Tizen.Filesystem.FILE_MODE_R for reading Ti.Tizen.Filesystem.FILE_MODE_A for appending Ti.Tizen.Filesystem.FILE_MODE_W for [over]writing Ti.Tizen.Filesystem.FILE_MODE_RW for reading and writing
         type: String
       - name: onsuccess
         summary: Called when the file has been opened.
@@ -132,15 +131,15 @@ methods:
     examples:
       - example: |
             var documentsDir;
+
             function onsuccess(files) {
                 for(var i = 0; i < files.length; i++) {
                    Ti.API.info("File Name is " + files[i].name); // displays file name
                 }
-
                 var testFile = documentsDir.createFile("test.txt");
                 if (testFile != null) {
                    testFile.openStream(
-                      "w",
+                      Ti.Tizen.Filesystem.FILE_MODE_W,
                       function(fs){
                          fs.write("HelloWorld");
                          fs.close();
@@ -162,7 +161,7 @@ methods:
                    dir.listFiles(onsuccess,onerror);
                 }, function(e) {
                    Ti.API.info("Error" + e.message);
-                }, "rw"
+                }, Ti.Tizen.Filesystem.FILE_MODE_RW
             );
 
   - name: readAsText
@@ -215,7 +214,7 @@ methods:
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
                    Ti.API.info("Error" + e.message);
-                 }, "rw"
+                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: copyTo
@@ -273,7 +272,7 @@ methods:
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
                    Ti.API.info("Error" + e.message);
-                 }, "rw"
+                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: moveTo
@@ -331,7 +330,7 @@ methods:
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
                    Ti.API.info("Error" + e.message);
-                 }, "rw"
+                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: createDirectory
@@ -343,7 +342,7 @@ methods:
         If the directory is successfully created, it will be returned.
         In case the directory cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
-        summary: The file handle of the new directory. The new File object will have "rw" access rights, as it inherits this from the File object on which the createDirectory() method is called.
+        summary: The file handle of the new directory. The new File object will have Ti.Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createDirectory() method is called.
         type: Titanium.Filesystem.File
     parameters:
       - name: dirPath   
@@ -366,7 +365,7 @@ methods:
         
         In case the file cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
-        summary: The file handle of the new empty file. The new File object will have "rw" access rights, as it inherits this from the File object on which the createFile() method is called.
+        summary: The file handle of the new empty file. The new File object will have Ti.Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createFile() method is called.
         type: Titanium.Filesystem.File
     parameters:
       - name: filePath   
@@ -392,13 +391,13 @@ methods:
     examples:
       - example: |
             var file;
-             // Resolves helloWorld.doc file that is located in the
-             // documents root location
-             Ti.Tizen.Filesystem.resolve(
+            // Resolves helloWorld.doc file that is located in the
+            // documents root location
+            Ti.Tizen.Filesystem.resolve(
                'documents',
                function(dir){ file = dir.resolve("helloWorld.doc");},
                function(e){ Ti.API.info("Error" + e.message);},
-               "rw");
+               Ti.Tizen.Filesystem.FILE_MODE_RW);
 
   - name: deleteDirectory
     summary: Deletes a specified directory and directory tree if specified.
@@ -462,7 +461,7 @@ methods:
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
                    Ti.API.info("Error" + e.message);
-                 }, "rw"
+                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: deleteFile
@@ -511,22 +510,22 @@ methods:
                          Ti.API.info("Error" + e.message);
                        });
                }
-             }
+            }
 
-             function onerror(error) {
+            function onerror(error) {
                Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
-             }
+            }
 
-             var documentsDir;
-             Ti.Tizen.Filesystem.resolve(
+            var documentsDir;
+            Ti.Tizen.Filesystem.resolve(
                'documents',
                function(dir){
                  documentsDir = dir;
                  dir.listFiles(onsuccess,onerror);
                }, function(e){
                  Ti.API.info("Error" + e.message);
-               }, "rw"
-             );
+               }, Ti.Tizen.Filesystem.FILE_MODE_RW
+            );
  
 properties:
 

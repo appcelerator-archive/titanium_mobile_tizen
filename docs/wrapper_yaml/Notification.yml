@@ -16,39 +16,7 @@ description: |
     
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
 
-examples: 
-  - title: Simple Notification Example
-    example:    |
-        The following example demonstrates how to create notifications allows you to design 
-        interactive applications that provide the user information about their events    
-        
-        try {
-            // Application control
-            var appControl = new tizen.ApplicationControl("http://tizen.org/appcontrol/operation/create_content", 
-                                                            null, "image/jpg", null, null);
-                                                            
-            var notificationDict = 	{
-            // Notification content
-            content: "This is a simple notification.",
-            // Path to the notification icon
-            iconPath: "images/image1.jpg",
-            // Path to the sound file to be played when the notification is displayed
-            soundPath: "music/Over the horizon.mp3",
-            // Device vibrates when the notification is displayed
-            vibration: true,
-            // Application control to be launched when the user selects the notification
-            appControl: appControl
-            };
-        
-            var notification = new tizen.StatusNotification("SIMPLE", "Simple notification", notificationDict);
-            
-            tizen.notification.post(notification);  
-            
-        } catch (err) {
-            console.log (err.name + ": " + err.message);
-        }
 methods:
   - name: post
     summary: Post the notification to display.
@@ -56,13 +24,50 @@ methods:
       - name: notification
         summary: A notification to post.
         type: Titanium.Tizen.Notification
-        
+    examples:
+      - example: |
+          try {
+                var appControl = Ti.Tizen.Application.createApplicationControl({
+                                     operation: "http://tizen.org/appcontrol/operation/create_content",
+                                     uri: null,
+                                     mime: "image/jpg",
+                                     category: null
+                                 });
+
+                var notificationDict = {
+                            content : "This is a simple notificaiton.",
+                            iconPath : "images/image1.jpg",
+                            soundPath : "music/Over the horizon.mp3",
+                            vibration : true,
+                            appControl : appControl
+                        };
+
+                var notification = Ti.Tizen.Notification.createStatusNotification({
+                                        statusType: "SIMPLE",
+                                        title: "Simple notification",
+                                        notificationInitDict: notificationDict
+                                   });
+
+                Ti.Tizen.Notification.post(notification);
+           } catch (err) {
+                Ti.API.info(err.name + ": " + err.message);
+           }
+
   - name: update
     summary: Updates a previously posted notification.
     parameters:
       - name: notification
         summary: A notification to update.
         type: Titanium.Tizen.Notification
+    examples:
+      - example: |
+          try {
+                // use a varible for the previoulsy posted notification.
+                notification.content = "My notification";
+                Ti.Tizen.Notification.update(notification);
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
         
   - name: remove
     summary: Removes a previously posted notification.
@@ -70,9 +75,24 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
+    examples:
+      - example: |
+          try {
+                // use a varible for the previoulsy posted notification.
+                Ti.Tizen.Notification.remove(notification.id);;
+           } catch (err) {
+                Ti.API.info (err.name + ": " + err.message);
+           }
         
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
+    examples:
+      - example: |
+          try {
+              Ti.Tizen.Notification.removeAll();
+          } catch (err) {
+              Ti.API.info (err.name + ": " + err.message);
+          }
     
   - name: get
     summary: Gets a previously posted notification by the current application.
@@ -82,19 +102,52 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
+    examples:
+      - example: |
+          try {
+              // use a varible for the previoulsy posted notification.
+              // keeps notification id to use later.
+              var myId = notification.id;
+                
+              var myNotification = Ti.Tizen.Notification.get(myId);
+          } catch (err) {
+              Ti.API.info (err.name + ": " + err.message);
+          }
     
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
     returns:
         type: Titanium.Tizen.Notification.Notification[]
+    examples:
+      - example: |
+          try {
+              var notifications = Ti.Tizen.Notification.getAll();
+              var index = 0;
+               
+              for ( index = 0; notifications.length > index; index++ )
+              {
+                  Ti.API.info(notifications[index].id);
+                  Ti.API.info(notifications[index].title);
+                  Ti.API.info(notifications[index].statusType);
+                  Ti.API.info(notifications[index].type);
+                  Ti.API.info(notifications[index].content);
+                  Ti.API.info(notifications[index].postedTime);
+                  Ti.API.info(notifications[index].iconPath);
+                  Ti.API.info(notifications[index].soundPath);
+                  Ti.API.info(notifications[index].vibration);
+                  Ti.API.info(notifications[index].appControl);
+              } 
+          } catch (err) {
+              Ti.API.info (err.name + ": " + err.message);
+          }
 
   - name: createStatusNotification
-    summary: The interface which represents status notification.
+    summary: Creates and returns an instance of <Titanium.Tizen.SystemSettings.StatusNotification>.
     returns:
         type: Ti.Tizen.SystemSettings.StatusNotification
     parameters:
       - name: Options
-        summary: The dictionary represents information regarding a notification what need to create.
+        summary: The dictionary representing information about the new notification.
         type: Dictionary<StatusNotificationUnit>
     
 properties:
@@ -110,75 +163,76 @@ properties:
     permission: read-only
 
   - name: STATUS_NOTIFICATION_TYPE_SIMPLE
-    summary: A status notification type.
+    summary: A simple status notification.
         
     description: |
-        STATUS - The posted status notification is displayed in the notification tray. 
-        The status notification consists of icon, title, content and time. 
-        The status notification can have the application control to launch the specific application when selected by the user.
+        The simple status notification is basic status notification type and removed automatically when selected by the user. 
+        All simple status notifications can be removed by user interaction. 
     type: String
     permission: read-only
 
   - name: STATUS_NOTIFICATION_TYPE_ONGOING
-    summary: A status notification type.
+    summary: A status notification about an ongoing event.
         
     description: |
-        ONGOING - If the application needs to keep the user informed about the notification, consider using ongoing status notification. 
-        Please note that the ongoing status notification should be removed by the application that posted the notification.
+        If the application needs to keep the user informed about the notification, consider using ongoing status notification. 
+        Please note that the ongoing status notification should be removed by the application that posted the notification. 
     type: String
     permission: read-only
 
   - name: STATUS_NOTIFICATION_TYPE_PROGRESS
-    summary: A status notification type.
+    summary: A status notification with progress.
         
     description: |
-        PROGRESS - The progress status notification can display the information for the progress of a job. 
-        Please note that the progress status notification should be removed by the application that posted the notification.
+        The progress status notification can display the information for the progress of a job. 
+        Please note that the progress status notification should be removed by the application that posted the notification. 
     type: String
     permission: read-only
 
 # Pseudo-type
 ---
 name: StatusNotificationInit
-summary: An object containing the various options for fetching the properties requested.
+summary: Contains additional information required to initialize a StatusNotification.
 platforms: [tizen]
 properties:
   - name: content
     type: String
-    summary: .
+    summary: The content of the status notification.
 
   - name: iconPath
     type: String
-    summary: .
+    summary: The path to the icon to display in the notification.
 
   - name: soundPath
     type: String
-    summary: .
+    summary: The path of sound file to play when the notification is shown.
 
   - name: vibration
     type: Boolean
-    summary: .
+    summary: Holds whether to use vibration when the notification is shown.
 
   - name: appControl
     type: Ti.Tizen.Aplication.ApplicationControl
-    summary: This interface consists of an operation, URI, MIME type, and data.
+    summary: Holds the application control to launch when the notification is selected from the notification tray.
 
   - name: appId
     type: String
-    summary: The unique ID for an installed application.
+    summary: Holds the application id to launch when the notification is selected from the notification tray.
 
   - name: progressValue
     type: Number
-    summary: Notification progress.
+    summary: The initial progress value of the notification.
 
 ---
 name: StatusNotificationUnit
-summary: An object containing the various options for fetching the properties requested.
+summary: Contains information required to initialize a StatusNotification.
 platforms: [tizen]
 properties:
-  - name: StatusNotificationType
+  - name: statusType
     type: String
-    summary: Notification property value: "SIMPLE", "ONGOING", "PROGRESS".
+    summary: |
+        Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
+    permission: read-only
 
   - name: title
     type: String

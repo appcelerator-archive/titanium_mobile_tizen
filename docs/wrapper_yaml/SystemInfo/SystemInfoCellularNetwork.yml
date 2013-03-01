@@ -4,7 +4,7 @@ summary: This property reflects the information of the Cellular network in this 
     
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 properties:
 

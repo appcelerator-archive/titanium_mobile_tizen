@@ -3,7 +3,6 @@ name: Titanium.Tizen.Calendar.CalendarRecurrenceRule
 summary:  This interface implements the CalendarRecurrenceRule object, which contains information about the recurrence of an event. (See RFC 5545, Section 3.3.10.)
 extends: Titanium.Proxy
 platforms: [tizen]
-since: "3.0.2"
 
 examples: 
   - title: Code example
@@ -59,7 +58,7 @@ properties:
         This property corresponds to COUNT in RFC 5545.
         
   - name: daysOfTheWeek
-    type: String[]
+    type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
         This property value is valid only for recurrence rules with a frequency type of WEEKLY, MONTHLY, and YEARLY.
@@ -68,7 +67,7 @@ properties:
         By default, this attribute is set to an empty array.
         
   - name: setPositions
-    type: Number[]
+    type: Array<Number>
     summary: |
         An attribute to store a list of ordinal numbers that filters which recurrences to include in the recurrence rule's frequency.
         For example, a yearly recurrence rule that has a daysOfTheWeek value that specifies Monday through Friday, and a setPositions array containing 2 and -1, occurs only on the second weekday and last weekday of every year.
@@ -79,7 +78,7 @@ properties:
         By default, this attribute is set to an empty array
         
   - name: exceptions
-    type: Titanium.Tizen.Time.TZDate[]
+    type: Array<Titanium.Tizen.Time.TZDate>
     summary: |
         An attribute to list date/time exceptions for the recurring event. (See RFC 5545, Section 3.8.5.1.)
         This attribute is precise to the second. Milliseconds are ignored.

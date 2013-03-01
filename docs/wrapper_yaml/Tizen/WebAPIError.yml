@@ -2,7 +2,7 @@
 name: Titanium.Tizen.WebAPIError
 summary: Generic error interface. 
 description: This interface will be used by the APIs in order to return them in the error callback of asynchronous methods. 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 
 properties: 

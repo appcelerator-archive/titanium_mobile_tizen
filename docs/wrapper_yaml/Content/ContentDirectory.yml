@@ -1,0 +1,39 @@
+name: Titanium.Tizen.Content.ContentDirectory
+summary: |
+  The content directory interface that provides access to properties of a content directory.
+extends: Titanium.Proxy
+platforms: [tizen]
+createable: false
+
+properties:
+
+  - name: id
+    type: String
+    summary: |
+        The opaque content directory ID.
+    permission: read-only
+
+  - name: directoryURI
+    type: String
+    summary: |
+        The optional directory path on the device.
+    permission: read-only
+
+  - name: title
+    type: String
+    summary: |
+        The directory name.
+    permission: read-only
+
+  - name: storageType
+    type: String
+    summary: |
+        The type of a device storage. Can be <Titanium.Tizen.Content.CONTENT_DIRECTORY_STORAGE_TYPE_INTERNAL> or <Titanium.Tizen.Content.CONTENT_DIRECTORY_STORAGE_TYPE_EXTERNAL>.
+    permission: read-only
+
+  - name: modifiedDate
+    type: Date
+    summary: |
+        The directory modification date.
+    permission: read-only
+

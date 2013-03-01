@@ -9,7 +9,7 @@ methods:
   - name: createAttributeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.AttributeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.AttributeFilter
     parameters: 
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
@@ -24,14 +24,14 @@ methods:
                 console.log("An error occurred: " + error.message);
             }
             var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: "CONTAINS",
+                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                          matchValue: "Chris"});
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
   - name: createAttributeRangeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.AttributeRangeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.AttributeRangeFilter
     parameters: 
 
       - name: Options
@@ -62,7 +62,7 @@ methods:
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Titanium.Tizen.CompositeFilter>.
     returns: 
-        type: Titanium.Tizen.AbstractFilter
+        type: Titanium.Tizen.CompositeFilter
     parameters: 
 
       - name: Options
@@ -79,18 +79,19 @@ methods:
             }
             // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
             var firstNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                                  matchFlag: "CONTAINS",
+                                                                  matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                                   matchValue: "Chris"});
             // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
             var lastNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.lastName",
-                                                                 matchFlag: "EXACTLY",
+                                                                 matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_EXACTLY,
                                                                  matchValue: "Smith"});
             // Create a filter based on the intersection of these two filter:
             // "First name should contain 'Chris' AND last name should be 'Smith'".
-            var filter = Ti.Tizen.createCompositeFilter({type: "INTERSECTION",
+            var filter = Ti.Tizen.createCompositeFilter({type: Ti.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                          filters: [firstNameFilter, lastNameFilter]});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
+            
   - name: createSortMode
     summary: Creates and returns an instance of <Titanium.Tizen.SortMode>.
     returns: 
@@ -111,13 +112,14 @@ methods:
             }
             // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
             var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: "CONTAINS",
+                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                          matchValue: "Chris"});
             // Sort by first name, ascending
             var sortMode = Ti.Tizen.createSortMode({attributeName: "name.firstName",
-                                                    order: "ASC"});
+                                                    order: Ti.Tizen.SORT_ORDER_MODE_ASC});
             // Send request on contact address book.
             Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
+            
   - name: createSimpleCoordinates
     summary: Creates and returns an instance of <Titanium.Tizen.SimpleCoordinates>.
     returns: 
@@ -130,52 +132,52 @@ methods:
 
 properties:
   - name: FILTER_MUCH_FLAG_EXACTLY
-    summary: '"EXACTLY" Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.'
+    summary: Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_FULLSTRING
-    summary: '"FULLSTRING" - String-based matching. Matches the whole string (case insensitive).'
+    summary: String-based matching. Matches the whole string (case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_CONTAINS
-    summary: '"CONTAINS" - Indicates the attribute value should contain the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should contain the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_STARTSWITH
-    summary: '"STARTSWITH" - Indicates the attribute value should start with the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should start with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_ENDSWITH
-    summary: '"ENDSWITH" - Indicates the attribute value should end with the given string (strings only - case insensitive).'
+    summary: Indicates the attribute value should end with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
   - name: FILTER_MUCH_FLAG_EXISTS
-    summary: '"EXISTS" - Indicates the filter should match if the attribute exists.'
+    summary: Indicates the filter should match if the attribute exists.
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_ASC
-    summary: '"ASC" - Indicates the sorting order is ascending'
+    summary: Indicates the sorting order is ascending
     type: String
     permission: read-only
 
   - name: SORT_ORDER_MODE_DESC
-    summary: '"DESC" - Indicates the sorting order is descending'
+    summary: Indicates the sorting order is descending
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_UNION
-    summary: '"UNION" - A union of filters ("OR" operator)'
+    summary: A union of filters ("OR" operator)
     type: String
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_INTERSECTION
-    summary: '"INTERSECTION" - An intersection of filters ("AND" operator)'
+    summary: An intersection of filters ("AND" operator)
     type: String
     permission: read-only
     
@@ -185,6 +187,7 @@ name: AbstractFilter
 summary: Common interface used by different types of object filters.
 platforms: [tizen]
 
+---
 name: AttributeFilterUnit
 summary: Represents a filter based on an object attribute.
 platforms: [tizen]
@@ -196,12 +199,14 @@ properties:
              For attributes of an array type, the filter will match if any value in the array matches.
   - name: matchFlag
     type: String
-    summary: Used for attribute-based filtering: "EXACTLY", "FULLSTRING", "CONTAINS", "STARTSWITH", "ENDSWITH", "EXISTS".
+    summary: |
+        Used for attribute-based filtering: FILTER_MUCH_FLAG_EXACTLY, FILTER_MUCH_FLAG_FULLSTRING, FILTER_MUCH_FLAG_CONTAINS, FILTER_MUCH_FLAG_STARTSWITH, FILTER_MUCH_FLAG_ENDSWITH, FILTER_MUCH_FLAG_EXISTS.
   - name: matchValue
     type: any
     summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
     optional: true
 
+---
 name: AttributeRangeFilterUnit
 summary: Represents a filter based on an object attribute which has values that are within a particular range.
 platforms: [tizen]
@@ -220,18 +225,21 @@ properties:
     summary: Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
     optional: true
  
+---
 name: CompositeFilterUnit
 summary: Represents a set of filters.
 platforms: [tizen]
 properties:
   - name: type
     type: String
-    summary: The composite filter type: "UNION", "INTERSECTION".
+    summary: | 
+        The composite filter type: COMPOSITE_FILTER_TYPE_UNION, COMPOSITE_FILTER_TYPE_INTERSECTION.
   - name: filters
-    type: AbstractFilter
+    type: AbstractFilter[]
     summary: The list of filters in the composite filter.
     optional: true
     
+---
 name: SortModeUnit
 summary: Common interface used for sorting of queried data.
 platforms: [tizen]
@@ -241,16 +249,18 @@ properties:
     summary: The name of the object attribute used for sorting.
   - name: order
     type: String
-    summary: The type of the sorting: "ASC", "DESC".
+    summary: |
+        The type of the sorting: SORT_ORDER_MODE_ASC, SORT_ORDER_MODE_DESC.
     optional: true
 
+---
 name: SimpleCoordinatesUnit
 summary:  Represents a point (latitude and longitude) in map coordinate system.
 platforms: [tizen]
 properties:
   - name: latitude
     type: Number
-    summary: Latitude are of the WGS84 datum.
+    summary: Latitude, of the WGS84 datum.
   - name: longitude
     type: Number
-    summary: Longitude are of the WGS84 datum.
+    summary: Longitude, of the WGS84 datum.

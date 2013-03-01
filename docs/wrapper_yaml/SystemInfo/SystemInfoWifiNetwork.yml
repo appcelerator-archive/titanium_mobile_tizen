@@ -4,7 +4,7 @@ summary: This property reflects the information of the Wi-Fi network in this sys
     
 extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
-since: "3.0.2"
+createable: false
 
 properties:
 

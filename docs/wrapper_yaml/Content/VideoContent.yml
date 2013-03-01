@@ -1,0 +1,43 @@
+name: Titanium.Tizen.Content.VideoContent
+summary: |
+  The interface that extends a basic content object with video-specific attributes.
+extends: Titanium.Tizen.Content.Content
+platforms: [tizen]
+createable: false
+
+properties:
+  - name: geolocation
+    type: Ti.Tizen.SimpleCoordinates
+    summary: |
+        The geographical location where the video was made.
+
+  - name: album 
+    type: String
+    summary: |
+        The album name to which the video belongs.
+    permission: read-only
+
+  - name: artists
+    type: Array<String>
+    summary: |
+        The list of artists that created the video.
+    permission: read-only
+
+  - name: duration
+    type: Number
+    summary: |
+        The video duration in milliseconds.
+    permission: read-only
+
+  - name: width
+    type: Number
+    summary: |
+        The width of the video in pixels.
+    permission: read-only
+
+  - name: height
+    type: Number
+    summary: |
+        The height of the video in pixels.
+    permission: read-only
+

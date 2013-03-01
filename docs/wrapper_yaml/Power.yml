@@ -13,23 +13,6 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
-
-examples: 
-  - title: Code example
-    example:    |
-        // Check whether the screen is on or off.
-        var isScreenOn = tizen.power.isScreenOn();
-        
-        // Set the screen brightness value for the application.
-        tizen.power.setScreenBrightness(1);
-        
-        function onScreenStateChanged(previousState, changedState) {
-            console.log(Screen state changed from  + previousState +  to  + changedState);
-        }
-        
-        // Set the screen state change listener.
-        tizen.power.setScreenStateChangeListener(onScreenStateChanged);
 
 methods:
   - name: request
@@ -84,7 +67,7 @@ methods:
             Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
         
   - name: unsetScreenStateChangeListener
-    summary: Unsets the screen state change callback and stop monitoring it.
+    summary: Unsets the screen state change callback and stops monitoring it.
     examples:
       - example: |
             // Unet the screen state change listener.
@@ -104,6 +87,7 @@ methods:
     summary: Sets the screen brightness level for an application, from 0 to 1.
     parameters:
       - name: brightness 
+        summary: The screen brightness value to set.
         type: Number
     examples:
       - example: |
@@ -144,12 +128,12 @@ methods:
 properties:
 
   - name: POWER_RESOURCE_SCREEN
-    summary: SCREEN is aligned with <Titanium.Tizen.SystemInfo> property value
+    summary: SCREEN is aligned with <Titanium.Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 
   - name: POWER_RESOURCE_CPU
-    summary: CPU is aligned with <Titanium.Tizen.SystemInfo> property value
+    summary: CPU is aligned with <Titanium.Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 

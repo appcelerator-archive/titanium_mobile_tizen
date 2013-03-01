@@ -1,0 +1,257 @@
+name: Titanium.Tizen.Content
+summary: |
+  Provides functionality to discover contents (such as images, videos, or music) that are available on the device. 
+  It is possible to search for specific contents using filters. Also supports setting attributes of specific contents.
+extends: Titanium.Module
+platforms: [tizen]
+
+properties:
+
+  - name: CONTENT_DIRECTORY_STORAGE_TYPE_INTERNAL
+    type: String
+    summary: |
+        Defines content directory that is stored on internal storage.
+    permission: read-only
+
+  - name: CONTENT_DIRECTORY_STORAGE_TYPE_EXTERNAL
+    type: String
+    summary: |
+        Defines content directory that is stored on external storage (such as a removable memory card).
+    permission: read-only
+
+  - name: CONTENT_TYPE_IMAGE
+    type: String
+    summary: |
+        Defines an image type of content.
+    permission: read-only
+
+  - name: CONTENT_TYPE_VIDEO
+    type: String
+    summary: |
+        Defines a video type of content.
+    permission: read-only
+
+  - name: CONTENT_TYPE_AUDIO
+    type: String
+    summary: |
+        Defines an audio type of content.
+    permission: read-only
+
+  - name: AUDIO_CONTENT_LYRICS_TYPE_SYNCHRONIZED
+    type: String
+    summary: |
+        Defines time-synchronized lyric supplied with the audio file.
+    permission: read-only
+
+  - name: AUDIO_CONTENT_LYRICS_TYPE_UNSYNCHRONIZED
+    type: String
+    summary: |
+        Defines not time-synchronized lyric supplied with the audio file.
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_NORMAL
+    type: String
+    summary: |
+        Defines normal orientation of an image. 
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_FLIP_HORIZONTAL
+    type: String
+    summary: |
+        Defines orientation of an image as flipped horizontally. 
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_ROTATE_180
+    type: String
+    summary: |
+        Defines orientation of an image as 180 degrees rotated.
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_FLIP_VERTICAL
+    type: String
+    summary: |
+        Defines orientation of an image as flipped vertically. 
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_TRANSPOSE
+    type: String
+    summary: |
+        Defines orientation of an image as transposed.
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_ROTATE_90
+    type: String
+    summary: |
+        Defines orientation of an image as 90 degrees rotated.
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_TRANSVERSE 
+    type: String
+    summary: |
+        Defines an image with transverse orientation.
+    permission: read-only
+
+  - name: IMAGE_CONTENT_ORIENTATION_ROTATE_270
+    type: String
+    summary: |
+        Defines orientation of an image as 270 degrees rotated.
+    permission: read-only
+
+
+
+methods:
+  - name: update
+    summary: Changes attributes of a content synchronously.
+    description: |
+        When an application has changed some attributes in a content, this method allows writing it back. 
+        The editableAttributes in content interface indicates which attributes can be changed.
+    parameters:
+      - name: content 
+        summary: The content to update.
+        type: Ti.Tizen.Content.Content
+    examples:
+      - example: |
+            // The following example changes a description.
+            // Assume the content is a Content object as a result of find method.
+            // Check the description is editable, and then set a description.
+            if (content.editableAttributes.indexOf("description") >= 0) {
+                content.description = "Sample content";
+            }
+            Ti.Tizen.Content.update(content);
+  
+  - name: updateBatch
+    summary: Changes attributes of some contents asynchronously.
+    description: |
+        When an application has changed any attributes in array of content, this method allows writing them back.
+        The editableAttributes in content interface indicates which attributes can be changed.
+    parameters:
+      - name: content 
+        summary: The content to update.
+        type: Array<Ti.Tizen.Content.Content>
+
+      - name: successCallback 
+        summary: Function called when attributes have been changed.
+        type: Callback
+        
+      - name: errorCallback 
+        summary: Function called when an error has occurred. 
+        optional: true
+        type: Callback<Titanium.Tizen.WebAPIError>
+    examples:
+      - example: |
+            // The following example increases rating of an content by 1
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function successCB() {
+                Ti.API.info('Attributes set successfully');
+            }
+
+            // Assume the content is a Content object as a result of find method.
+            // Check the rating is editable, and then increase by 1.
+            if (content.editableAttributes.indexOf("rating") >= 0) {
+                content.rating++;
+            }
+            Ti.Tizen.Content.updateBatch([content], successCB, errorCB);
+  
+  - name: getDirectories
+    summary: Gets a list of content directory.
+    description: |
+        This method returns (via callback) a list of content directory objects. 
+        To obtain a list of contents in a specific directory, use find() method with the directory ID. 
+    parameters:
+      - name: successCallback 
+        summary: Function called when content directories have been retrieved successfully.
+        type: Callback<Array<Ti.Tizen.Content.ContentDirectory>>
+        
+      - name: errorCallback 
+        summary: Function called when an error has occurred. 
+        optional: true
+        type: Callback<Titanium.Tizen.WebAPIError>
+    examples:
+      - example: |
+            // The following example retrieves content directories in the storage.
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function printDirectory(directory, index, directories) {
+                Ti.API.info('directoryURI: ' + directory.directoryURI + ' Title: ' + directory.title);
+            }
+            function getDirectoriesCB(directories) {
+                directories.forEach(printDirectory);
+            }
+
+            Ti.Tizen.Content.getDirectories(getDirectoriesCB, errorCB);
+
+  - name: find
+    summary: Find contents. That is, satisfy conditions set in a filter.
+    description: |
+        This method allows searching based on a supplied filter. 
+        The filter allows precise searching such as "return all songs by artist U2, ordered by name".
+
+    parameters:
+      - name: successCallback 
+        summary: Function called when content have been retrieved. It's possible to call find() again from that function to retrieve more contents.
+        type: Callback<Array<Titanium.Tizen.Content.Content>>
+        
+      - name: errorCallback 
+        summary: Function called when an error has occurred. 
+        optional: true
+        type: Callback<Titanium.Tizen.WebAPIError>
+
+      - name: directoryId
+        summary: directory ID that is use to select content to retrieve in a specified directory.
+        optional: true
+        type: String
+
+      - name: filter
+        summary: Filter that is used to select content to retrieve.
+        optional: true
+        type: Titanium.Tizen.AbstractFilter 
+
+      - name: sortMode
+        summary: Used to determine the sort order in which the content are returned.
+        optional: true
+        type: Titanium.Tizen.SortMode
+
+      - name: count
+        summary: Maximum amount of content to return.
+        optional: true
+        type: Number
+
+      - name: offset
+        summary: Offset of the result set.
+        optional: true
+        type: Number
+    examples:
+      - example: |
+            // The following example retrieves all songs from the album "The Joshua Tree", by artist "U2", ordered by the track number.
+            var count = 100;
+            var offset = 0;
+            var sortMode = Ti.Tizen.createSortMode({attributeName: "trackNumber",  order: "ASC"});
+            var artistFilter = Ti.Tizen.createAttributeFilter({attributeName: "artists", matchFlag: "EXACTLY", matchValue: "U2"});
+            var albumFilter = Ti.Tizen.createAttributeFilter({attributeName: "album", matchFlag: "EXACTLY", matchValue: "The Joshua Tree"});
+            var filter = Ti.Tizen.createCompositeFilter({ type: "INTERSECTION", filters: [albumFilter, artistFilter]});
+            Ti.Tizen.Content.find(findCB, errorCB, null, filter, sortMode, count, offset);
+
+            function errorCB(err) {
+                Ti.API.info( 'The following error occurred: ' +  err.name);
+            }
+
+            function printContent(content, index, contents) {
+                Ti.API.info('Track: ' + content.trackNumber + ' Title: ' + content.title + 'Duration: ' + content.duration + 'URL: ' + content.contentURI + 'MIME: ' + content.mimeType);
+            }
+
+            function findCB(contents) {
+                Ti.API.info('The Joshua Tree by U2:');
+                contents.forEach(printContent);
+                // Increase the offset as much as the count and then find content again.
+                if (contents.length == count) {
+                    offset += count;
+                    Ti.Tizen.Content.find(findCB, errorCB, null, filter, sortMode, count, offset);
+                }
+            }

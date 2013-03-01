@@ -11,7 +11,7 @@ define(['Ti/_/declare'], function(declare) {
 				} else if () {
 					this._obj = new tizen.NDEFMessage();
 				} else {
-					Ti.API.error('Constructor with given parameters doesn\'t exists');
+					Ti.API.error('Constructor NDEFMessage with given parameters doesn\'t exists');
 				}
 			}
 		},

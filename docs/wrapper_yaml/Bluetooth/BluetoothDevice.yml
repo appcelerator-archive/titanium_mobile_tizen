@@ -70,6 +70,6 @@ properties:
 
   - name:  uuids
     summary: The list of 128 bit service UUIDs available on this device. 
-    type: String[]
+    type: Array<String>
     permission: read-only
 
