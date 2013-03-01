@@ -85,10 +85,6 @@ function(next) {
 		next(null, 'ok');
 	});
 }, function(next) {
-	console.log('[DEBUG] fixing manifest.json');
-	fixManifest();
-	next(null, 'ok');
-}, function(next) {
 	executeDependenciesAnalyzer(function() {
 		next(null, 'ok');
 	});
@@ -108,12 +104,9 @@ function(next) {
 		console.log(err);
 	}
 	console.log('Finished.');
-
 });
 
 //validating input parameters
-
-
 function validateArgs(params) {
 	var workOk = true;
 	if(!fs.existsSync(params[0])) {
@@ -180,20 +173,6 @@ function copymobilWebToTizen(finish) {
 
 		finish();
 	});
-}
-
-function applyPatches() {
-	//make temp dir
-	//generate patche
-	//apply patch
-}
-
-function fixManifest() {
-	var manifestPath = path.join(sdkRoot, "manifest.json");
-	var manifestStr = fs.readFileSync(manifestPath, 'utf8').toString();
-	var manifestObject = JSON.parse(manifestStr);
-	manifestObject.platforms.push("tizen");
-	fs.writeFileSync(manifestPath, JSON.stringify(manifestObject), 'utf8');
 }
 
 function executeDependenciesAnalyzer(finished) {
