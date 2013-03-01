@@ -1,4 +1,4 @@
-define(['Ti/_/lang'], function(lang) {
+define(['Ti/_/lang', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], function(lang, BluetoothAdapter) {
 	return lang.setObject('Ti.Tizen.Bluetooth', {
 
 		constants: {
@@ -8,7 +8,7 @@ define(['Ti/_/lang'], function(lang) {
 			BLUETOOTH_SOCKET_TYPE_RFCOMM: 'RFCOMM',
 			BLUETOOTH_SOCKET_TYPE_L2CAP: 'L2CAP',
 			BLUETOOTH_SOCKET_STATE_CLOSED: 'CLOSED',
-			BLUETOOTH_SOCKET_STATE_OPEN: 'OPEN',
+			BLUETOOTH_SOCKET_STATE_OPEN: 'OPEN'
 		},
 
 		constants: {
@@ -38,7 +38,13 @@ define(['Ti/_/lang'], function(lang) {
 				return this.createBluetoothAdapter(object);
 			}
 		},
+		createBluetoothAdapter: function(object) { 
+			return new BluetoothAdapter(object);
+		}
+
+
 	});
+
 	function onBluetoothDeviceSuccessCallback(object, onsuccess) { 
 		onsuccess.call(null, new BluetoothDevice(object));
 	};

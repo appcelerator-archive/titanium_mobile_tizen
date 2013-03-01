@@ -135,7 +135,7 @@ properties:
 
   - name: period
     summary: |
-        The duration (in seconds) between each trigger of an alarm. 
+        (optional) The duration (in seconds) between each trigger of an alarm. 
         By default, this attribute is set to null, indicating that this alarm does not repeat.
     type: Number
     optional: true
@@ -150,7 +150,7 @@ properties:
         The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
   - name: daysOfTheWeek
     summary: |
-        The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+        (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
         Valid days of the week constants:
         <Titanium.Tizen.Calendar.BY_DAY_VALUE_MO>
         <Titanium.Tizen.Calendar.BY_DAY_VALUE_TU>
@@ -169,7 +169,7 @@ properties:
   - name: date
     type: Date
     summary: |
-        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        (Optional) The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
   - name: period
     summary: Duration in seconds between each trigger of the alarm.
     type: Number

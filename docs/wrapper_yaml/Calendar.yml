@@ -539,17 +539,17 @@ platforms: [tizen]
 properties:
   - name: dueDate 
     type: Titanium.Tizen.Time.TZDate
-    summary: An attribute to store the due date and time for completing a task.
+    summary: (optional) An attribute to store the due date and time for completing a task.
     optional: true
     
   - name: completedDate
     type: Titanium.Tizen.Time.TZDate
-    summary: An attribute to record the date and time when an task is completed.
+    summary: (optional) An attribute to record the date and time when an task is completed.
     optional: true
         
   - name: progress
     type: Number
-    summary: An attribute to denote the percent of completion of a task.
+    summary: (optional) An attribute to denote the percent of completion of a task.
     optional: true
 
 ---
@@ -659,7 +659,7 @@ properties:
     type: STRING
 
   - name: group 
-    summary: An attribute to store the participant's group or list membership.
+    summary: (optional) An attribute to store the participant's group or list membership.
     type: STRING
     optional: true
 
@@ -739,7 +739,7 @@ properties:
     
   - name: description
     type: String
-    summary: An attribute to store the description of an alarm.
+    summary: (optional) An attribute to store the description of an alarm.
     optional: true
 
 ---
@@ -763,5 +763,5 @@ properties:
     
   - name: description
     type: String
-    summary: An attribute to store the description of an alarm.
+    summary: (optional) An attribute to store the description of an alarm.
     optional: true

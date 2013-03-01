@@ -18,17 +18,17 @@ function tizenNFC(title) {
 	// Converts NFC record type to human readable presentation.
 	function NfcRecordTypeToString(tnfType){
 		switch (tnfType) {
-			case tizen.nfc.NFC_RECORD_TNF_EMPTY:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_EMPTY:
 				return 'EMPTY';
-			case tizen.nfc.NFC_RECORD_TNF_WELL_KNOWN:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_WELL_KNOWN:
 				return 'WELL KNOWN';
-			case tizen.nfc.NFC_RECORD_TNF_MIME_MEDIA:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_MIME_MEDIA:
 				return 'MIME MEDIA';
-			case tizen.nfc.NFC_RECORD_TNF_URI:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_URI:
 				return 'URI';
-			case tizen.nfc.NFC_RECORD_TNF_EXTERNAL_RTD:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_EXTERNAL_RTD:
 				return 'EXTERNAL RTD';
-			case tizen.nfc.NFC_RECORD_TNF_UNKNOWN:
+			case Ti.Tizen.NFC.NFC_RECORD_TNF_UNKNOWN:
 				return 'UNKNOWN';
 			default:
 				return 'incorrect value';
@@ -47,13 +47,13 @@ function tizenNFC(title) {
 			result += propertyToLine('id', byteArrayToString(record.id));
 			result += propertyToLine('Payload', byteArrayToString(record.payload));
 
-			if (record instanceof tizen.NDEFRecordText) {
+			if (record instanceof Ti.Tizen.NFC.NDEFRecordText) {
 				result += propertyToLine('text', record.text);
 				result += propertyToLine('langCode', record.languageCode);
 				result += propertyToLine('encodeType', (record.encoding == 'UTF8' ? 'UTF-8' : 'UTF-16'));
-			} else if (record instanceof tizen.NDEFRecordURI) {
+			} else if (record instanceof Ti.Tizen.NFC.NDEFRecordURI) {
 				result += propertyToLine('URI', record.uri);
-			} else if (record instanceof tizen.NDEFRecordMedia) {
+			} else if (record instanceof Ti.Tizen.NFC.NDEFRecordMedia) {
 				result += propertyToLine('mimeType', record.mimeType);
 			}
 			result += propertyToLine('Raw byte data', byteArrayToString(record.toByte()));
@@ -176,7 +176,7 @@ function tizenNFC(title) {
 				nfcDetectionLabel.text = "Failed to power on NFC: " + e.message;
 			}
 			try {
-				nfcAdapter = tizen.nfc.getDefaultAdapter();
+				nfcAdapter = Ti.Tizen.NFC.getDefaultAdapter();
 				nfcAdapter.setPowered(true, setTagDetect, onPowerOnFails);
 			} catch (e) {
 				onPowerOnFails(e);
