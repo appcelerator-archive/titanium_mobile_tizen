@@ -13,7 +13,6 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
 
 methods:
   - name: request

@@ -1,7 +1,7 @@
 name: Titanium.Tizen.Content.AudioContentLyrics
 summary: |
   The interface that provides lyrics for music.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 createable: false
 

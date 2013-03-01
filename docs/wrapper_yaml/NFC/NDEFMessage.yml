@@ -13,7 +13,7 @@ properties:
     permission: read-only
 
   - name: records
-    type: Array<NDEFRecord>
+    type: Array<Titanium.Tizen.NFC.NDEFRecord>
     summary: |
         The array of NDEFRecord objects in the NDEFMessage.
 

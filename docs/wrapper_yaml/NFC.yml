@@ -60,112 +60,112 @@ properties:
         Indicates that the payload is an intermediate or final chunk of a chunked NDEF record.
     permission: read-only
 
-  - name: N_D_E_F_RECORD_TEXT_ENCODING_UTF8
+  - name: NDEF_RECORD_TEXT_ENCODING_UTF8
     type: String
     summary: |
         Indicates NDEFRecordText UTF8 encoding
     permission: read-only
 
-  - name: N_D_E_F_RECORD_TEXT_ENCODING_UTF16
+  - name: NDEF_RECORD_TEXT_ENCODING_UTF16
     type: String
     summary: |
         Indicates NDEFRecordText UTF16 encoding
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_GENERIC_TARGET
+  - name: NFC_TAG_TYPE_GENERIC_TARGET
     type: String
     summary: |
-        NFC tag type 'GENERIC_TARGET'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_A
+  - name: NFC_TAG_TYPE_ISO14443_A
     type: String
     summary: |
-        NFC tag type 'ISO14443_A'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_4A
+  - name: NFC_TAG_TYPE_ISO14443_4A
     type: String
     summary: |
-        NFC tag type 'ISO14443_4A'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_3A
+  - name: NFC_TAG_TYPE_ISO14443_3A
     type: String
     summary: |
-        NFC tag type 'ISO14443_3A'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_MIFARE_MINI
+  - name: NFC_TAG_TYPE_MIFARE_MINI
     type: String
     summary: |
-        NFC tag type 'MIFARE_MINI'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_MIFARE_1K
+  - name: NFC_TAG_TYPE_MIFARE_1K
     type: String
     summary: |
-        NFC tag type 'MIFARE_1K'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_MIFARE_4K
+  - name: NFC_TAG_TYPE_MIFARE_4K
     type: String
     summary: |
-        NFC tag type 'MIFARE_4K'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_MIFARE_ULTRA
+  - name: NFC_TAG_TYPE_MIFARE_ULTRA
     type: String
     summary: |
-        NFC tag type 'MIFARE_ULTRA'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_MIFARE_DESFIRE
+  - name: NFC_TAG_TYPE_MIFARE_DESFIRE
     type: String
     summary: |
-        NFC tag type 'MIFARE_DESFIRE'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_B
+  - name: NFC_TAG_TYPE_ISO14443_B
     type: String
     summary: |
-        NFC tag type 'ISO14443_B'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_4B
+  - name: NFC_TAG_TYPE_ISO14443_4B
     type: String
     summary: |
-        NFC tag type 'ISO14443_4B'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO14443_BPRIME
+  - name: NFC_TAG_TYPE_ISO14443_BPRIME
     type: String
     summary: |
-        NFC tag type 'ISO14443_BPRIME'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_FELICA
+  - name: NFC_TAG_TYPE_FELICA
     type: String
     summary: |
-        NFC tag type 'FELICA'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_JEWEL
+  - name: NFC_TAG_TYPE_JEWEL
     type: String
     summary: |
-        NFC tag type 'JEWEL'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_ISO15693
+  - name: NFC_TAG_TYPE_ISO15693
     type: String
     summary: |
-        NFC tag type 'ISO15693'
+        NFC tag type.
     permission: read-only
 
-  - name: N_F_C_TAG_TYPE_UNKNOWN_TARGET
+  - name: NFC_TAG_TYPE_UNKNOWN_TARGET
     type: String
     summary: |
-        NFC tag type 'UNKNOWN_TARGET'
+        NFC tag type.
     permission: read-only
 
 methods:
@@ -181,7 +181,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Titanium.Tizen.NFC.NDEFMessage>.
-        type: createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData
+        type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
         optional: true
     returns:
         type: Titanium.Tizen.NFC.NDEFMessage
@@ -191,7 +191,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecord>.
-        type: createNDEFRecordParameters, createNDEFRecordParametersrawData
+        type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
     returns:
         type: Titanium.Tizen.NFC.NDEFRecord
 
@@ -277,7 +277,7 @@ properties:
     type: String
   - name: encoding
     summary:  |
-        The encoding type. Possible values are: <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF8> or <Titanium.Tizen.NFC.N_D_E_F_RECORD_TEXT_ENCODING_UTF16>
+        The encoding type. Possible values are: <Titanium.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Titanium.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
     type: String
     optional: true
 

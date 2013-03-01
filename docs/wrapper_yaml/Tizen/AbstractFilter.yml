@@ -2,5 +2,6 @@
 name: Titanium.Tizen.AbstractFilter
 summary: AbstractFilter is a common interface used by different types of object filters. 
 description: "Never use this base interface directly, instead use AbstractFilter subtypes, such as AttributeFilter, AttributeRangeFilter, and CompositeFilter."     
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
+createable: false

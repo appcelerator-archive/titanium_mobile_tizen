@@ -25,7 +25,7 @@ description: |
 
 extends: Titanium.Module
 platforms: [tizen]
-since: "3.0.2"
+
 methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
@@ -33,8 +33,8 @@ methods:
         type: Titanium.Tizen.Time.TZDate
     examples:
       - example: |
-            var current_dt = Ti.Tizen.Time.getCurrentDateTime();
-            Ti.API.info("current date / time is " + current_dt.toLocaleString());
+            var current_dt = Titanium.Tizen.Time.getCurrentDateTime();
+            Titanium.API.info("current date / time is " + current_dt.toLocaleString());
 
   - name: getLocalTimezone
     summary: Returns identifier of the local system timezone.
@@ -42,7 +42,7 @@ methods:
         type: String
     examples:
       - example: |
-            Ti.API.info("The local time zone is " + Ti.Tizen.Time.getLocalTimezone());
+            Titanium.API.info("The local time zone is " + Titanium.Tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
     summary: Returns synchronously the identifiers of the timezones supported by the device.
@@ -55,8 +55,8 @@ methods:
         type: String[]
     examples:
       - example: |
-            var tzids = Ti.Tizen.Time.getAvailableTimezones();
-            Ti.API.info("The device supports " + tzids.length + " time zones.");
+            var tzids = Titanium.Tizen.Time.getAvailableTimezones();
+            Titanium.API.info("The device supports " + tzids.length + " time zones.");
         
   - name: getDateFormat
     summary: Returns the date format according to the system's locale settings.
@@ -105,30 +105,30 @@ methods:
         type: Number 
     examples:
       - example: |
-            var current_dt = Ti.Tizen.Time.getCurrentDateTime(),
-                is_leap = Ti.Tizen.Time.isLeapYear(current_dt.getFullYear());
+            var current_dt = Titanium.Tizen.Time.getCurrentDateTime(),
+                is_leap = Titanium.Tizen.Time.isLeapYear(current_dt.getFullYear());
                 
             if (is_leap) {
                 console.log("This year is a leap year.");
             }
     
   - name: createTZDate
-    summary: Returns the Ti.Tizen.Time.TZDate.
+    summary: Returns the <Titanium.Tizen.Time.TZDate>.
     returns:
-        type: Ti.Tizen.Time.TZDate
+        type: Titanium.Tizen.Time.TZDate
     parameters:
-      - name: Options
+      - name: tzDateParameters
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
     
   - name: createTimeDuration
-    summary: Returns the Ti.Tizen.Time.TimeDuration.
+    summary: Returns the <Titanium.Tizen.Time.TimeDuration>.
     returns:
-        type: Ti.Tizen.Time.TimeDuration
+        type: Titanium.Tizen.Time.TimeDuration
     parameters:
-      - name: TimeDurationUnit
+      - name: timeDurationParameters
         summary: The TimeDuration object that contains the length and its associated time unit.
-        type: Dictionary<TimeDurationUnit>
+        type: Dictionary<InitTimeDuration>
     
 properties:
 
@@ -158,9 +158,22 @@ properties:
     permission: read-only
 
 # Pseudo-types
+
 ---
+name: InitTimeDuration
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: length
+    type: Number
+    summary: Count of items.
+  - name: unit
+    type: String
+    summary: |
+        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+---
+
 name: TZDateUnit1
-summary: Contains information required to initialize a TZDateTime.
+summary: An object containing the various options for fetching the properties requested.
 properties:
   - name: datetime
     type: Date
@@ -174,7 +187,7 @@ properties:
 
 ---
 name: TZDateUnit2
-summary: Contains information required to initialize a TZDateTime.
+summary: An object containing the various options for fetching the properties requested.
 properties:
   - name: year
     type: Number
@@ -212,16 +225,3 @@ properties:
     type: String
     summary: Predefined timezone.
     optional: true
----
-name: TimeDurationUnit
-summary: Contains information required to initialize a TimeDuration.
-properties:
-  - name: length
-    type: Number
-    summary: Count of items.
-
-  - name: unit
-    type: String
-    summary: |
-        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
-
