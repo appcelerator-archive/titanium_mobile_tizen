@@ -15,8 +15,8 @@ define(['Ti/_/declare'], function(declare) {
 			},
 		},
 
-		setReceiveNDEFListener: function(successCallback /*NDEFMessageReadCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.setReceiveNDEFListener(successCallback, errorCallback);
+		setReceiveNDEFListener: function(successCallback /*NDEFMessageReadCallback*/) {
+			return this._obj.setReceiveNDEFListener(successCallback);
 		},
 
 		unsetReceiveNDEFListener: function() {

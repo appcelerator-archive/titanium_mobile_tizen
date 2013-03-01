@@ -9,7 +9,7 @@ define(['Ti/_/declare'], function(declare) {
 				} else if ('tnf' in args && 'type' in args && 'payload' in args && 'id' in args) {
 					this._obj = new tizen.NDEFRecord(args.tnf, args.type, args.payload, args.id);
 				} else {
-					Ti.API.error('Constructor with given parameters doesn\'t exists');
+					Ti.API.error('Constructor NDEFRecord with given parameters doesn\'t exists');
 				}
 			}
 		},

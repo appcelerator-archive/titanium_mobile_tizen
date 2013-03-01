@@ -56,8 +56,6 @@ function tizenNFC(title) {
 			} else if (record instanceof Ti.Tizen.NFC.NDEFRecordMedia) {
 				result += propertyToLine('mimeType', record.mimeType);
 			}
-			result += propertyToLine('Raw byte data', byteArrayToString(record.toByte()));
-
 		} catch (e) {
 			result = 'NFC message parse error. \n' + e.name + " : " + e.message;
 		}
@@ -142,12 +140,8 @@ function tizenNFC(title) {
 			}
 		};
 
-		function onError(e) {
-			Ti.API.warn('Tag Listen Error: ' + e.message);
-		}
-
 		try {
-			nfcAdapter.setTagListener(onSuccess, onError);
+			nfcAdapter.setTagListener(onSuccess);
 		} catch (e) {
 			Ti.API.warn(e.name + " : " + e.message);
 		}
