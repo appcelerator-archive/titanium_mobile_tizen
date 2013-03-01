@@ -45,10 +45,6 @@ define(['Ti/_/declare'], function(declare) {
 
 		transceive: function(data /*byte*/, dataCallback /*ByteArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.transceive(data._obj, dataCallback, errorCallback);
-		},
-
-		formatNDEF: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, key /*byte*/) {
-			return this._obj.formatNDEF(successCallback, errorCallback, key ? key._obj : key);
 		}
 	});
 });
