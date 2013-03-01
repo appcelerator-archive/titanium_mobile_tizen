@@ -307,7 +307,7 @@ exports.TitaniumInterface = (function(){
 					var arr = str.split('');
 
 					for(var i = 0, len = arr.length; i<len; i++) {
-						if(arr[i] == arr[i].toUpperCase()) {
+						if(arr[i] == arr[i].toUpperCase() && arr[i+1] != arr[i+1].toUpperCase()) {
 							(i !== 0) && (arr[i] = '_' + arr[i]);
 						}
 					}
