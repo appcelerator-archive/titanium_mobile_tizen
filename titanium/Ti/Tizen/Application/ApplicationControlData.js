@@ -1,10 +1,10 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Ti.Tizen.Application.ApplicationServiceData', Evented, {
+define(['Ti/_/declare'], function(declare) {
+	return declare('Ti.Tizen.Application.ApplicationControlData', null, {
 		constructor: function(args) {
-			if (args.toString() === '[object ApplicationServiceData]') {
+			if(args.toString() === '[object ApplicationControlData]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.ApplicationServiceData(args.key, args.value);
+				this._obj = new tizen.ApplicationControlData(args.key, args.value);
 			}
 		},
 
