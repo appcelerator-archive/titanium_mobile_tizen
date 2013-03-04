@@ -22,7 +22,8 @@ var suites = [
 	{name: "tizen/application"},
 	{name: "tizen/filesystem"},
 	{name: "tizen/filters"},
-	{name: "tizen/time"}
+	{name: "tizen/time"},
+    {name: "tizen/systemsetting"}
 ];
 
 

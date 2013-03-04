@@ -1,15 +1,15 @@
 module Download {
 
-    enum DownloadState { "QUEUED", "DOWNLOADING", "PAUSED", "ABORTED", "COMPLETED", "FAILED" };
+    enum DownloadState { "QUEUED", "DOWNLOADING", "PAUSED", "CANCELED", "COMPLETED", "FAILED" };
 
-    [NoInterfaceObject] interface DownloadObject {
+    [NoInterfaceObject] interface DownloadManagerObject {
         readonly attribute DownloadManager download;
     };
 
-    Tizen implements DownloadObject;
+    Tizen implements DownloadManagerObject;
 
     [Constructor(DOMString url, optional DOMString? destination, optional DOMString? fileName)]
-    interface URLDownload {
+    interface DownloadRequest {
         attribute DOMString url;
 
         attribute DOMString? destination;
@@ -18,16 +18,22 @@ module Download {
     };
 
    [NoInterfaceObject] interface DownloadManager {
-       long start(URLDownload downloadObject,
+       long start(DownloadRequest downloadRequest,
                     optional DownloadCallback? downloadCallback);
 
-       void abort(long downloadId);
+       void cancel(long downloadId);
 
        void pause(long downloadId);
 
        void resume(long downloadId);
 
        DownloadState getState(long downloadId);
+
+       DownloadRequest getDownloadRequest(long downloadId);
+
+       DOMString getMIMEType(long downloadId);
+
+       void setListener(long downloadId, DownloadCallback downloadCallback);
    };
 
    [Callback, NoInterfaceObject] interface DownloadCallback {
@@ -35,10 +41,11 @@ module Download {
 
        void onpaused(long downloadId);
 
-       void onaborted(long downloadId);
+       void oncanceled(long downloadId);
 
-       void oncompleted(long downloadId, DOMString fileName);
+       void oncompleted(long downloadId, DOMString fullPath);
 
        void onfailed(long downloadId, WebAPIError error);
    };
 };
+

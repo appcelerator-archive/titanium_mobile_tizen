@@ -1,169 +1,152 @@
 module Application {
 
-    typedef DOMString ApplicationId;
+  typedef DOMString ApplicationId;
 
+  typedef DOMString ApplicationContextId;
 
-    typedef DOMString ApplicationContextId;
+  [NoInterfaceObject] interface ApplicationManagerObject {
+    readonly attribute ApplicationManager application;
+  };
+  Tizen implements ApplicationManagerObject;
 
+  [NoInterfaceObject] interface ApplicationManager {
 
-    [NoInterfaceObject] interface ApplicationObject {
-        readonly attribute Application application;
-    };
-    Tizen implements ApplicationObject;
+    Application getCurrentApplication();
 
+    void launch(ApplicationId id,
+                optional SuccessCallback? successCallback,
+                optional ErrorCallback? errorCallback);
 
-    [NoInterfaceObject] interface Application {
+    void launchAppControl(ApplicationControl appControl,
+                          ApplicationId? id,
+                          optional SuccessCallback? successCallback,
+                          optional ErrorCallback? errorCallback,
+                          optional ApplicationControlDataArrayReplyCallback? replyCallback);
 
-        void launch(ApplicationId id,
-                    optional SuccessCallback? successCallback,
-                    optional ErrorCallback? errorCallback,
-                    optional DOMString[]? argument);
+    void findAppControl(ApplicationControl appControl,
+                        FindAppControlSuccessCallback successCallback,
+                        optional ErrorCallback? errorCallback);
 
+    void getAppsContext(ApplicationContextArraySuccessCallback successCallback,
+                        optional ErrorCallback? errorCallback);
 
+    ApplicationContext getAppContext(optional ApplicationContextId? contextId);
 
-        void kill(ApplicationContextId contextId,
-                  optional SuccessCallback? successCallback,
-                  optional ErrorCallback? errorCallback);
+    void getAppsInfo(ApplicationInformationArraySuccessCallback successCallback,
+                     optional ErrorCallback? errorCallback);
 
+    ApplicationInformation getAppInfo(optional ApplicationId? id);
 
+    long addAppInfoEventListener(ApplicationInformationEventCallback eventCallback);
 
-        void exit();
+    void removeAppInfoEventListener(long watchId);
 
+  };
 
+  [NoInterfaceObject] interface Application {
 
-        void hide();
+    readonly attribute ApplicationInformation appInfo;
 
+    readonly attribute ApplicationContextId contextId;
 
-        void launchService(ApplicationService service,
-                           ApplicationId? id,
-                           optional SuccessCallback? successCallback,
-                           optional ErrorCallback? errorCallback,
-                           optional ApplicationServiceDataArrayReplyCallback? replyCallback);
+    void exit();
 
+    void hide();
 
+    RequestedApplicationControl getRequestedAppControl();
+  };
 
-        ApplicationService getAppService();
 
+  [NoInterfaceObject] interface ApplicationInformation {
 
+    readonly attribute ApplicationId id;
 
-        void getAppsContext(ApplicationContextArraySuccessCallback successCallback,
-                            optional ErrorCallback? errorCallback);
+    readonly attribute DOMString name;
 
+    readonly attribute DOMString iconPath;
 
+    readonly attribute DOMString version;
 
-        ApplicationContext getAppContext(optional ApplicationContextId? id);
+    readonly attribute boolean show;
 
+    readonly attribute DOMString[] categories;
 
+    readonly attribute Date installDate;
 
-        void getAppsInfo(ApplicationInformationArraySuccessCallback successCallback,
-                         optional ErrorCallback? errorCallback);
+    readonly attribute long size;
 
+  };
 
+  [NoInterfaceObject] interface ApplicationContext {
 
-        ApplicationInformation getAppInfo(optional ApplicationId? id);
+    readonly attribute ApplicationContextId id;
 
+    readonly attribute ApplicationId appId;
 
+  };
 
-        long addAppInfoEventListener(ApplicationInformationEventCallback eventCallback,
-                                     optional ErrorCallback? errorCallback);
+  [Constructor(DOMString key, DOMString[] value)]
+  interface ApplicationControlData {
 
+    attribute DOMString key;
 
+    attribute DOMString[] value;
 
-        void removeAppInfoEventListener(long listenerID);
+  };
 
-    };
+  [Constructor(DOMString operation, optional DOMString? uri,
+               optional DOMString? mime, optional DOMString? category,
+               optional ApplicationControlData[]? data)]
+  interface ApplicationControl {
 
+    attribute DOMString operation;
 
-    [NoInterfaceObject] interface ApplicationInformation {
+    attribute DOMString? uri;
 
-        readonly attribute ApplicationId id;
+    attribute DOMString? mime;
 
-        readonly attribute DOMString name;
+    attribute DOMString? category;
 
-        readonly attribute DOMString iconPath;
+    attribute ApplicationControlData[] data;
 
-        readonly attribute DOMString version;
+  };
 
-        readonly attribute boolean show;
+  [NoInterfaceObject] interface RequestedApplicationControl {
 
-        readonly attribute Date installDate;
+    readonly attribute ApplicationControl appControl;
 
-        readonly attribute long size;
-    };
+    void replyResult(optional ApplicationControlData[]? data);
 
+    void replyFailure();
 
-    [NoInterfaceObject] interface ApplicationContext {
+  };
 
-        readonly attribute ApplicationContextId id;
 
-        readonly attribute ApplicationId appId;
-    };
 
-    [Constructor(DOMString key, DOMString[] value)]
+  [Callback=FunctionOnly, NoInterfaceObject] interface ApplicationInformationArraySuccessCallback {
+    void onsuccess(ApplicationInformation[] informationArray);
+  };
 
-    interface ApplicationServiceData {
+  [Callback=FunctionOnly, NoInterfaceObject] interface FindAppControlSuccessCallback {
+    void onsuccess(ApplicationInformation[] informationArray, ApplicationControl appControl);
+  };
 
-        attribute DOMString key;
+  [Callback=FunctionOnly, NoInterfaceObject] interface ApplicationContextArraySuccessCallback {
+    void onsuccess(ApplicationContext[] contexts);
+  };
 
+  [Callback, NoInterfaceObject] interface ApplicationControlDataArrayReplyCallback {
+    void onsuccess(optional ApplicationControlData[]? data);
 
-        attribute DOMString[] value;
-    };
+    void onfailure();
+  };
 
-    [Constructor(DOMString operation),
-     Constructor(DOMString operation, optional DOMString? uri, 
-                 optional DOMString? mime, optional ApplicationServiceData[]? data)]
+  [Callback, NoInterfaceObject] interface ApplicationInformationEventCallback {
+    void oninstalled(ApplicationInformation info);
 
-    interface ApplicationService {
+    void onupdated(ApplicationInformation info);
 
-        attribute DOMString operation;
-
-
-        attribute DOMString? uri;
-
-
-        attribute DOMString? mime;
-
-
-        attribute ApplicationServiceData[] data;
-
-
-        void replyResult(optional ApplicationServiceData[]? data);
-
-
-        void replyFailure();
-    };
-
-
-    [Callback=FunctionOnly, NoInterfaceObject] interface ApplicationInformationArraySuccessCallback {
-
-        void onsuccess(ApplicationInformation[] informationArray);
-    };
-
-
-    [Callback=FunctionOnly, NoInterfaceObject] interface ApplicationContextArraySuccessCallback {
-
-        void onsuccess(ApplicationContext[] contexts);
-    };
-
-
-    [Callback, NoInterfaceObject] interface ApplicationServiceDataArrayReplyCallback {
-
-        void onsuccess(optional ApplicationServiceData[]? data);
-
-
-        void onfail();
-    };
-
-
-    [Callback, NoInterfaceObject] interface ApplicationInformationEventCallback {
-
-        void oninstalled(ApplicationInformation info);
-
-
-        void onupdated(ApplicationInformation info);
-
-
-        void onuninstalled(ApplicationId id);
-    };
+    void onuninstalled(ApplicationId id);
+  };
 
 };

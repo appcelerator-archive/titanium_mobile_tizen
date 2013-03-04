@@ -58,7 +58,7 @@ module Filesystem {
 
     readonly attribute DOMString fullPath;
 
-    readonly attribute long fileSize;
+    readonly attribute unsigned long long fileSize;
 
     readonly attribute long length;
 

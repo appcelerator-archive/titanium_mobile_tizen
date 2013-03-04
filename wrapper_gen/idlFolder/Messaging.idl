@@ -20,8 +20,6 @@ module Messaging {
 
     readonly attribute MessageId? id;
 
-    readonly attribute AccountServiceId? serviceId;
-
     readonly attribute MessageConvId? conversationId;
 
     readonly attribute MessageFolderId? folderId;
@@ -87,13 +85,13 @@ module Messaging {
 
   [Constructor(DOMString filePath, optional DOMString mimeType)]
   interface MessageAttachment {
-
+    
     readonly attribute MessageAttachmentId? id;
-
+    
     readonly attribute MessageId? messageId;
-
+    
     readonly attribute DOMString? mimeType;
-
+    
     readonly attribute DOMString? filePath;
   };
 
@@ -101,8 +99,7 @@ module Messaging {
 
     void getMessageServices(MessageServiceTag messageServiceType,
                             MessageServiceArraySuccessCallback successCallback,
-                            optional ErrorCallback? errorCallback,
-                            optional AccountServiceId? serviceId);
+                            optional ErrorCallback? errorCallback);
   };
 
   [Callback=FunctionOnly, NoInterfaceObject] interface MessageServiceArraySuccessCallback {
@@ -114,12 +111,8 @@ module Messaging {
 
   [NoInterfaceObject] interface MessageService {
 
-    readonly attribute AccountServiceId id;
-
     readonly attribute MessageServiceTag type;
 
-    readonly attribute DOMString name;
-                    
     void sendMessage(Message message,
                      optional MessageRecipientsCallback successCallback,
                      optional ErrorCallback? errorCallback);
@@ -287,8 +280,6 @@ module Messaging {
     readonly attribute MessageFolderId id;
 
     readonly attribute MessageFolderId parentId;
-
-    readonly attribute AccountServiceId serviceId;
 
     readonly attribute MessageServiceTag contentType;
 

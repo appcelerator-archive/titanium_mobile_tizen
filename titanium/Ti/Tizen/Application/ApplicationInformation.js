@@ -1,6 +1,11 @@
 define(['Ti/_/declare'], function(declare) {
 	return declare('Ti.Tizen.Application.ApplicationInformation', null, {
 		constructor: function(args) {
+			// if(args.toString() === '[object ApplicationInformation]') {
+			// 	this._obj = args;
+			// } else {
+			// }
+
 			this._obj = args;
 		},
 
@@ -28,6 +33,11 @@ define(['Ti/_/declare'], function(declare) {
 			show: {
 				get: function() {
 					return this._obj.show;
+				}
+			},
+			categories: {
+				get: function() {
+					return this._obj.categories;
 				}
 			},
 			installDate: {
