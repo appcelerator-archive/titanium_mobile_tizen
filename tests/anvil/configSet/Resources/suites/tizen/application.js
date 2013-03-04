@@ -224,7 +224,7 @@ module.exports = new function() {
 			valueOf(testRun, isError).shouldBeTrue();
 
 			finish(testRun);
-		}, 1000);
+		}, 2000);
 	}
 
 	// Hides harnes app - MAY HAVE PROBLEM FOR OTHER TESTS
