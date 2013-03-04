@@ -5,10 +5,7 @@ function tizen_power() {
 			top: 10
 		});
 
-
-
 	buttonTurnOffScreen.addEventListener('click', function(){
-		//tizen.power.turnScreenOff();
 		Ti.Tizen.Power.turnScreenOff();
 	});
 
