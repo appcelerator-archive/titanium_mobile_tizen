@@ -1,16 +1,14 @@
-module Call {
-    [NoInterfaceObject] interface CallApiObject {
-        readonly attribute CallManager call;
+module Callhistory {
+    [NoInterfaceObject] interface CallHistoryObject {
+        readonly attribute CallHistory callhistory;
     };
     
-    Tizen implements CallApiObject;
+    Tizen implements CallHistoryObject;
 
     [NoInterfaceObject] interface RemoteParty {
         readonly attribute DOMString? remoteParty;
 
-        readonly attribute DOMString? displayName;
-
-        readonly attribute ContactRef? contactRef;
+        readonly attribute PersonId? personId;
 
     };
 
@@ -18,29 +16,17 @@ module Call {
     
         readonly attribute DOMString uid;
 
-        readonly attribute AccountServiceId? serviceId;
+        readonly attribute DOMString type;
 
-        readonly attribute DOMString callType;
-
-        readonly attribute DOMString[]? tags;
+        readonly attribute DOMString[]? features;
 
         readonly attribute RemoteParty[] remoteParties;
-
-        readonly attribute RemoteParty? forwardedFrom;
 
         readonly attribute Date startTime;
 
         readonly attribute unsigned long duration;
 
-        readonly attribute DOMString? endReason;
-
         attribute DOMString direction;
-
-        readonly attribute DOMString[]? recording;
-
-        readonly attribute unsigned long cost;
-
-        attribute DOMString? currency;
     };
 
     [NoInterfaceObject] interface CallHistory {
@@ -61,13 +47,9 @@ module Call {
         void removeAll(optional SuccessCallback? successCallback,
                        optional ErrorCallback? errorCallback);
 
-        void deleteRecording(CallHistoryEntry historyEntry,
-                             optional SuccessCallback? successCallback,
-                             optional ErrorCallback? errorCallback);
+        long addChangeListener(CallHistoryChangeCallback observer);
 
-        long addListener(CallHistoryChangeCallback observer);
-
-        void removeListener(long handle);
+        void removeChangeListener(long handle);
     };
 
     [Callback, NoInterfaceObject] interface CallHistoryEntryArraySuccessCallback {
@@ -79,12 +61,5 @@ module Call {
         void onadded(CallHistoryEntry[] newItems);
 
         void onchanged(CallHistoryEntry[] changedItems);
-    };
-
-    [NoInterfaceObject] interface CallManager {
-        readonly attribute CallHistory history;
-
-        boolean isCallInProgress();
-
     };
 };

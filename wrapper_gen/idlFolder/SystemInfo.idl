@@ -1,0 +1,198 @@
+module SystemInfo {
+
+  enum SystemInfoPropertyId { "BATTERY" , "CPU", "STORAGE", "DISPLAY", "DEVICE_ORIENTATION", "BUILD", "NETWORK", "WIFI_NETWORK", "CELLULAR_NETWORK", "SIM" };
+
+  enum SystemInfoNetworkType { "NONE", "2G", "2.5G", "3G", "4G", "WIFI", "ETHERNET", "UNKNOWN" };
+  
+  enum SystemInfoDeviceOrientationStatus { "PORTRAIT_PRIMARY", "PORTRAIT_SECONDARY", "LANDSCAPE_PRIMARY", "LANDSCAPE_SECONDARY" };
+
+  [NoInterfaceObject] interface SystemInfoObject {
+    readonly attribute SystemInfo systeminfo;
+  };
+  Tizen implements SystemInfoObject;
+
+  [NoInterfaceObject] interface SystemInfo {
+
+    SystemInfoDeviceCapability getCapabilities();
+
+    void getPropertyValue(SystemInfoPropertyId property,
+                          SystemInfoPropertySuccessCallback successCallback,
+                          optional ErrorCallback? errorCallback);
+
+    unsigned long addPropertyValueChangeListener(SystemInfoPropertyId property,
+                                        SystemInfoPropertySuccessCallback successCallback,
+                                        optional SystemInfoOptions? options);
+
+    void removePropertyValueChangeListener(unsigned long listenerId);
+  };
+
+  [NoInterfaceObject] interface SystemInfoDeviceCapability {
+    readonly attribute boolean bluetooth;
+
+    readonly attribute boolean nfc;
+
+    readonly attribute unsigned short multiTouchCount;
+
+    readonly attribute boolean inputKeyboard;
+
+    readonly attribute boolean wifi;
+
+    readonly attribute boolean wifiDirect;
+
+    readonly attribute boolean openglesVersion1_1;
+
+    readonly attribute boolean openglesVersion2_0;
+
+    readonly attribute boolean fmRadio;
+
+    readonly attribute DOMString platformVersion;
+
+    readonly attribute DOMString platformName;
+
+    readonly attribute boolean cameraFront;
+
+    readonly attribute boolean cameraFrontFlash;
+
+    readonly attribute boolean cameraBack;
+
+    readonly attribute boolean cameraBackFlash;
+
+    readonly attribute boolean location;
+
+    readonly attribute boolean locationGps;
+
+    readonly attribute boolean locationWps;
+
+    readonly attribute boolean microphone;
+
+    readonly attribute boolean usbHost;
+
+    readonly attribute boolean usbAccessory;
+
+    readonly attribute boolean screenOutputRca;
+
+    readonly attribute boolean screenOutputHdmi;
+
+    readonly attribute DOMString platformCoreCpuArch;
+
+    readonly attribute DOMString platformCoreFpuArch;
+
+    readonly attribute boolean sipVoip;
+
+    readonly attribute DOMString duid;
+
+    readonly attribute boolean speechRecognition;
+
+    readonly attribute boolean accelerometer;
+
+    readonly attribute boolean barometer;
+    
+    readonly attribute boolean gyroscope;
+
+    readonly attribute boolean magnetometer;
+
+    readonly attribute boolean proximity;
+  };  
+  
+  dictionary SystemInfoOptions {
+    unsigned long timeout;
+
+    double highThreshold;
+
+    double lowThreshold;
+  };
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface SystemInfoPropertySuccessCallback {
+    void onsuccess(SystemInfoProperty prop);
+  };
+
+  [NoInterfaceObject] interface SystemInfoProperty {
+  };
+
+  [NoInterfaceObject] interface SystemInfoBattery : SystemInfoProperty {
+    readonly attribute double level;
+
+    readonly attribute boolean isCharging;
+  };
+
+  [NoInterfaceObject] interface SystemInfoCpu : SystemInfoProperty {
+    readonly attribute double load;
+  };
+
+  [NoInterfaceObject] interface SystemInfoStorage : SystemInfoProperty {
+    readonly attribute SystemInfoStorageUnit[] units;
+  };
+
+  [NoInterfaceObject] interface SystemInfoStorageUnit : SystemInfoProperty {
+    readonly attribute DOMString type;
+
+    readonly attribute unsigned long long capacity;
+
+    readonly attribute unsigned long long availableCapacity;
+
+    readonly attribute boolean isRemoveable;
+  };
+
+  [NoInterfaceObject] interface SystemInfoDisplay : SystemInfoProperty {
+    readonly attribute unsigned long resolutionWidth;
+
+    readonly attribute unsigned long resolutionHeight;
+
+    readonly attribute unsigned long dotsPerInchWidth;
+
+    readonly attribute unsigned long dotsPerInchHeight;
+
+    readonly attribute double physicalWidth;
+
+    readonly attribute double physicalHeight;
+
+    readonly attribute double brightness;
+  };
+
+  [NoInterfaceObject] interface SystemInfoDeviceOrientation : SystemInfoProperty {
+
+    readonly attribute SystemInfoDeviceOrientationStatus status;
+  };
+  
+  [NoInterfaceObject] interface SystemInfoBuild : SystemInfoProperty {
+
+    readonly attribute DOMString model;
+  };
+
+  [NoInterfaceObject] interface SystemInfoNetwork : SystemInfoProperty {    
+
+    readonly attribute SystemInfoNetworkType networkType;    
+  };    
+
+   [NoInterfaceObject] interface SystemInfoWifiNetwork : SystemInfoProperty {    
+
+    readonly attribute DOMString status;    
+    readonly attribute DOMString ssid;    
+    readonly attribute DOMString ipAddress;    
+     readonly attribute DOMString ipv6Address;    
+    readonly attribute double signalStrength;    
+  };    
+
+  [NoInterfaceObject] interface SystemInfoCellularNetwork : SystemInfoProperty {    
+
+    readonly attribute DOMString status;    
+    readonly attribute DOMString apn;    
+    readonly attribute DOMString ipAddress;    
+    readonly attribute DOMString ipv6Address;    
+    readonly attribute unsigned short mcc;    
+    readonly attribute unsigned short mnc;    
+    readonly attribute unsigned short cellId;    
+    readonly attribute unsigned short lac;    
+    readonly attribute boolean isRoaming;    
+  };    
+
+  [NoInterfaceObject] interface SystemInfoSIM : SystemInfoProperty {    
+    readonly attribute DOMString operatorName;    
+    readonly attribute DOMString msisdn;    
+    readonly attribute DOMString iccid;    
+    readonly attribute unsigned short mcc;    
+    readonly attribute unsigned short mnc;    
+    readonly attribute DOMString msin;    
+    readonly attribute DOMString spn;    
+  };    
+};

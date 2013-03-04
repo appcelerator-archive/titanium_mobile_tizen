@@ -68,10 +68,11 @@ module Notification {
 
         boolean vibration;
 
-        ApplicationService service;
+        ApplicationControl appControl;
+
+        ApplicationId appId;
 
         unsigned short progressValue;
-
     };
     
    [Constructor(StatusNotificationType statusType, DOMString title, optional StatusNotificationInit? notificationInitDict)]
@@ -82,9 +83,9 @@ module Notification {
 
         readonly attribute StatusNotificationType statusType;
     
-    
+
         attribute DOMString? iconPath;
-   
+
     
         attribute DOMString? soundPath;
   
@@ -92,7 +93,12 @@ module Notification {
         attribute boolean? vibration;
 
     
-        attribute ApplicationService? service;
+        attribute ApplicationControl? appControl;
+
+
+    
+       attribute ApplicationId? appId;
+
     
 
         attribute unsigned short? progressValue;

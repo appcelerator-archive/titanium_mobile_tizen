@@ -48,8 +48,6 @@ module Calendar {
   [NoInterfaceObject] interface Calendar {
     
     readonly attribute CalendarId id;
-    
-    readonly attribute AccountServiceId? accountServiceId;
 
     readonly attribute DOMString name;
                               
@@ -80,8 +78,7 @@ module Calendar {
               optional AbstractFilter? filter,
               optional SortMode? sortMode);
                                 
-    long addChangeListener(CalendarChangeCallback successCallback, 
-                           optional ErrorCallback? errorCallback);
+    long addChangeListener(CalendarChangeCallback successCallback);
                       
     void removeChangeListener(long watchId);
   };
