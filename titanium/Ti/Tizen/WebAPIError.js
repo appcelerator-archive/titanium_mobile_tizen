@@ -1,38 +1,37 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	return declare('Ti.Tizen.WebAPIError', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
-
+        
 		constants: {
-			INDEX_SIZE_ERR: 1, //unsigned short
-			DOMSTRING_SIZE_ERR: 2, //unsigned short
-			HIERARCHY_REQUEST_ERR: 3, //unsigned short
-			WRONG_DOCUMENT_ERR: 4, //unsigned short
-			INVALID_CHARACTER_ERR: 5, //unsigned short
-			NO_DATA_ALLOWED_ERR: 6, //unsigned short
-			NO_MODIFICATION_ALLOWED_ERR: 7, //unsigned short
-			NOT_FOUND_ERR: 8, //unsigned short
-			NOT_SUPPORTED_ERR: 9, //unsigned short
-			INUSE_ATTRIBUTE_ERR: 10, //unsigned short
-			INVALID_STATE_ERR: 11, //unsigned short
-			SYNTAX_ERR: 12, //unsigned short
-			INVALID_MODIFICATION_ERR: 13, //unsigned short
-			NAMESPACE_ERR: 14, //unsigned short
-			INVALID_ACCESS_ERR: 15, //unsigned short
-			VALIDATION_ERR: 16, //unsigned short
-			TYPE_MISMATCH_ERR: 17, //unsigned short
-			SECURITY_ERR: 18, //unsigned short
-			NETWORK_ERR: 19, //unsigned short
-			ABORT_ERR: 20, //unsigned short
-			URL_MISMATCH_ERR: 21, //unsigned short
-			QUOTA_EXCEEDED_ERR: 22, //unsigned short
-			TIMEOUT_ERR: 23, //unsigned short
-			INVALID_NODE_TYPE_ERR: 24, //unsigned short
-			DATA_CLONE_ERR: 25 //unsigned short
-		},
-
-		constants: {
+            /*
+            INDEX_SIZE_ERR: 1,
+			DOMSTRING_SIZE_ERR: 2,
+			HIERARCHY_REQUEST_ERR: 3,
+			WRONG_DOCUMENT_ERR: 4,
+			INVALID_CHARACTER_ERR: 5,
+			NO_DATA_ALLOWED_ERR: 6,
+			NO_MODIFICATION_ALLOWED_ERR: 7,
+			NOT_FOUND_ERR: 8,
+			NOT_SUPPORTED_ERR: 9,
+			INUSE_ATTRIBUTE_ERR: 10,
+			INVALID_STATE_ERR: 11,
+			SYNTAX_ERR: 12,
+			INVALID_MODIFICATION_ERR: 13,
+			NAMESPACE_ERR: 14,
+			INVALID_ACCESS_ERR: 15,
+			VALIDATION_ERR: 16,
+			TYPE_MISMATCH_ERR: 17,
+			SECURITY_ERR: 18,
+			NETWORK_ERR: 19,
+			ABORT_ERR: 20,
+			URL_MISMATCH_ERR: 21,
+			QUOTA_EXCEEDED_ERR: 22,
+			TIMEOUT_ERR: 23,
+			INVALID_NODE_TYPE_ERR: 24,
+			DATA_CLONE_ERR: 25,
+            */
 			code: {
 				get: function() {
 					return this._obj.code;
