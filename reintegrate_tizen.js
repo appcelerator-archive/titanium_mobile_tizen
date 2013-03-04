@@ -180,26 +180,15 @@ function copymobilWebToTizen(finish) {
 }
 
 function executeDependenciesAnalyzer(finished) {
-	console.log('[DEBUG] executeDependenciesAnalyzer ');
-	var runner = require('child_process');
-	var scriptpath = path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js');
-	var analyzerCmd = 'node "' + scriptpath + '"';
-
-	console.log('starting dependency analyzer: ' + analyzerCmd);
-	options = {
-		cwd: path.join(sdkRoot, 'tizen', 'dependencyAnalyzer')
-	};
-	runner.exec(
-	analyzerCmd, function(err, stdout, stderr) {
-		console.log(stdout);
-		if(err != null) {
-			console.log('[Error] executeDependenciesAnalyzer failed');
-			console.log(stderr);
-		} else {
-			console.log('executeDependenciesAnalyzer ok');
-		}
-		finished();
-	});
+	try{
+		console.log('[DEBUG] loading dependencyAnalyzer.js');
+		var depCheck = require(path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer'));
+		console.log('[DEBUG] loading calling depCheck');
+		depCheck(sdkRoot + '/');
+	} catch(e) {
+		console.log('[ERROR] ' + e);
+	}
+	finished();
 }
 
 function copyFileSync(srcFile, destFile) {
