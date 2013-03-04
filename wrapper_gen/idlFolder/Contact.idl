@@ -4,7 +4,11 @@ module Contact {
 
   typedef DOMString ContactId;
 
-  enum ContactTextFormat {"VCARD_21","VCARD_30"};
+  typedef DOMString PersonId;
+
+  typedef DOMString ContactGroupId;
+
+  enum ContactTextFormat {"VCARD_30"};
 
   [NoInterfaceObject] interface ContactManagerObject {
     readonly attribute ContactManager contact;
@@ -18,12 +22,35 @@ module Contact {
 
     AddressBook getDefaultAddressBook();
 
-    AddressBook getAddressBook(AddressBookId id);
-   };
+    AddressBook getAddressBook(AddressBookId addressBookId);
+
+    Person get(PersonId personId);
+
+    void update(Person person);
+
+    void updateBatch(Person[] persons,
+                     optional SuccessCallback? successCallback,
+                     optional ErrorCallback? errorCallback);
+
+    void remove(PersonId personId);
+
+    void removeBatch(PersonId[] personIds,
+                     optional SuccessCallback? successCallback,
+                     optional ErrorCallback? errorCallback);
+
+    void find(PersonArraySuccessCallback successCallback,
+              optional ErrorCallback? errorCallback,
+              optional AbstractFilter? filter,
+              optional SortMode? sortMode);
+
+    long addChangeListener(PersonsChangeCallback successCallback);
+
+    void removeChangeListener(long watchId);
+  };
 
   [NoInterfaceObject] interface AddressBook {
 
-    readonly attribute AddressBookId id;
+    readonly attribute AddressBookId? id;
 
     readonly attribute DOMString name;
     
@@ -54,14 +81,46 @@ module Contact {
               optional AbstractFilter? filter,
               optional SortMode? sortMode);
 
-    DOMString[] getCategories();
-
     long addChangeListener(AddressBookChangeCallback successCallback,
                            optional ErrorCallback? errorCallback);
 
     void removeChangeListener(long watchId);
-   };
-   
+
+    ContactGroup getGroup(ContactGroupId groupId);
+
+    void addGroup(ContactGroup group);
+
+    void updateGroup(ContactGroup group);
+
+    void removeGroup(ContactGroupId groupId);
+
+    ContactGroup[] getGroups();
+  };
+
+  [NoInterfaceObject] interface Person {
+    readonly attribute PersonId id;
+
+    readonly attribute DOMString displayName;
+
+    readonly attribute long contactCount;
+
+    readonly attribute boolean hasPhoneNumber;
+
+    readonly attribute boolean hasEmail;
+
+    attribute boolean isFavorite;
+
+    attribute DOMString? photoURI;
+
+    attribute DOMString? ringtoneURI;
+
+    attribute ContactId displayContactId;
+
+    void link(PersonId personId);
+
+    Person unlink(ContactId contactId);
+  };
+
   dictionary ContactInit {
     ContactName name;
     ContactAddress[] addresses;
@@ -70,26 +129,27 @@ module Contact {
     ContactEmailAddress[] emails;
     Date birthday;
     ContactAnniversary[] anniversaries;
-    ContactOrganization organization;
-    DOMString note;
+    ContactOrganization[] organizations;
+    DOMString[] notes;
     ContactWebSite[] urls;
-    boolean isFavorite;
     DOMString ringtoneURI;
-    DOMString[] categories;
+    ContactGroupId[] groupIds;
   };
 
   [Constructor(optional ContactInit? ContactInitDict),
-   Constructor(DOMString stringRepresentation, ContactTextFormat format)]
+   Constructor(DOMString stringRepresentation)]
   interface Contact {
     readonly attribute ContactId? id;
+
+    readonly attribute PersonId? personId;
 
     readonly attribute AddressBookId? addressBookId;
 
     readonly attribute Date? lastUpdated;
 
-    attribute ContactName? name;
+    readonly attribute boolean isFavorite;
 
-    attribute ContactAccount? account;
+    attribute ContactName? name;
 
     attribute ContactAddress[] addresses;
 
@@ -103,35 +163,31 @@ module Contact {
 
     attribute ContactAnniversary[] anniversaries;
 
-    attribute ContactOrganization? organization;
+    attribute ContactOrganization[] organizations;
 
     attribute DOMString[] notes;
 
-    attribute DOMString? note;
-
     attribute ContactWebSite[] urls;
-
-    attribute boolean isFavorite;
 
     attribute DOMString? ringtoneURI;
 
-    attribute DOMString[] categories;
-    
-     
-    DOMString convertToString(ContactTextFormat format);
-                              
+    attribute ContactGroupId[] groupIds;
+
+    DOMString convertToString(optional ContactTextFormat? format);
+
     Contact clone();
   };
-  
+
   [Constructor(AddressBookId addressBookId, ContactId contactId)]
   interface ContactRef {
     attribute AddressBookId addressBookId;
-    
+
     attribute ContactId contactId;
   };
-  
+
   dictionary ContactNameInit {
     DOMString prefix;
+    DOMString suffix;
     DOMString firstName;
     DOMString middleName;
     DOMString lastName;
@@ -144,6 +200,8 @@ module Contact {
   interface ContactName {
     attribute DOMString? prefix;
 
+    attribute DOMString? suffix;
+
     attribute DOMString? firstName;
 
     attribute DOMString? middleName;
@@ -152,15 +210,13 @@ module Contact {
 
     attribute DOMString[] nicknames;
 
-    attribute DOMString? phoneticName;
-
     attribute DOMString? phoneticFirstName;
 
     attribute DOMString? phoneticLastName;
 
     readonly attribute DOMString? displayName;
   };
-  
+
   dictionary ContactOrganizationInit {
     DOMString name;
     DOMString department;
@@ -174,8 +230,6 @@ module Contact {
     attribute DOMString? name;
 
     attribute DOMString? department;
-
-    attribute DOMString? office;
 
     attribute DOMString? title;
 
@@ -200,13 +254,6 @@ module Contact {
     attribute DOMString? label;
   };
 
-  [Constructor(AccountServiceId id, DOMString? contactURI)]
-  interface ContactAccount {
-    attribute AccountServiceId accountServiceId;
-
-    attribute DOMString contactURI;
-  };
-  
   dictionary ContactAddressInit
   {
     DOMString country;
@@ -215,6 +262,7 @@ module Contact {
     DOMString streetAddress;
     DOMString additionalInformation;
     DOMString postalCode;
+    boolean isDefault;
     DOMString[] types;
   };
 
@@ -233,23 +281,49 @@ module Contact {
 
     attribute DOMString? postalCode;
 
+    attribute boolean isDefault;
+
     attribute DOMString[] types;
   };
 
-  [Constructor(DOMString number, optional DOMString[]? types)]
+  [Constructor(DOMString number, optional DOMString[]? types, optional boolean isDefault)]
   interface ContactPhoneNumber
   {
     attribute DOMString number;
 
+    attribute boolean isDefault;
+
     attribute DOMString[] types;
   };
 
-  [Constructor(DOMString email, optional DOMString[]? types)]
+  [Constructor(DOMString email, optional DOMString[]? types, optional boolean isDefault)]
   interface ContactEmailAddress
   {
     attribute DOMString email;
 
+    attribute boolean isDefault;
+
     attribute DOMString[] types;
+  };
+
+  [Constructor(DOMString name, optional DOMString? ringtoneURI, optional DOMString? photoURI)]
+  interface ContactGroup
+  {
+    readonly attribute ContactGroupId? id;
+
+    readonly attribute AddressBookId? addressBookId;
+
+    attribute DOMString name;
+
+    attribute DOMString? ringtoneURI;
+
+    attribute DOMString? photoURI;
+
+    readonly attribute DOMString readOnly;
+  };
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface PersonArraySuccessCallback {
+    void onsuccess(Person[] persons);
   };
 
   [Callback=FunctionOnly, NoInterfaceObject] interface ContactArraySuccessCallback {
@@ -266,5 +340,13 @@ module Contact {
     void oncontactsupdated(Contact[] contacts);
 
     void oncontactsremoved(ContactId[] contactIds);
+  };
+
+  [Callback, NoInterfaceObject] interface PersonsChangeCallback {
+    void onpersonsadded(Person[] persons);
+
+    void onpersonsupdated(Person[] persons);
+
+    void onpersonsremoved(PersonId[] personIds);
   };
 };

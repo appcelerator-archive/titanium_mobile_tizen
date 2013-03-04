@@ -3,10 +3,6 @@ module Bluetooth {
     
     typedef DOMString BluetoothUUID;
     
-    enum BluetoothSecurityLevel { "LOW", "MEDIUM", "HIGH" };
-    
-    enum BluetoothSocketType { "RFCOMM", "L2CAP" };
-    
     enum BluetoothSocketState { "CLOSED", "OPEN" };
     
     [NoInterfaceObject] interface BluetoothManagerObject {
@@ -25,61 +21,53 @@ module Bluetooth {
     [NoInterfaceObject] interface BluetoothAdapter {
         readonly attribute DOMString name;
         readonly attribute BluetoothAddress address;
-        readonly attribute boolean powered;
+        readonly attribute boolean powered; 
         readonly attribute boolean visible;
 
         void setName(DOMString name,
-                     optional SuccessCallback? successCallback,
+                     optional SuccessCallback? successCallback, 
                      optional ErrorCallback? errorCallback);
-
+ 
         void setPowered(boolean state,
-                        optional SuccessCallback? successCallback,
+                        optional SuccessCallback? successCallback, 
                         optional ErrorCallback? errorCallback);
 
 
-        void setVisible(boolean mode,
-                        optional SuccessCallback? successCallback,
-                        optional ErrorCallback? errorCallback,
-                        optional unsigned short? timeout);
 
 
-
-
-        void discoverDevices(BluetoothDiscoverDevicesSuccessCallback successCallback,
+        void discoverDevices(BluetoothDiscoverDevicesSuccessCallback successCallback, 
                              optional ErrorCallback? errorCallback);
 
-        void stopDiscovery(optional SuccessCallback? successCallback,
+        void stopDiscovery(optional SuccessCallback? successCallback, 
                            optional ErrorCallback? errorCallback);
 
-        void getKnownDevices(BluetoothDeviceArraySuccessCallback successCallback,
+        void getKnownDevices(BluetoothDeviceArraySuccessCallback successCallback, 
                              optional ErrorCallback? errorCallback);
 
 
 
 
         void getDevice(BluetoothAddress address,
-                       BluetoothDeviceSuccessCallback successCallback,
+                       BluetoothDeviceSuccessCallback successCallback, 
                        optional ErrorCallback? errorCallback);
 
 
 
 
         void createBonding(BluetoothAddress address,
-                           BluetoothDeviceSuccessCallback successCallback,
+                           BluetoothDeviceSuccessCallback successCallback, 
                            optional ErrorCallback? errorCallback);
 
         void destroyBonding(BluetoothAddress address,
-                            optional SuccessCallback? successCallback,
+                            optional SuccessCallback? successCallback, 
                             optional ErrorCallback? errorCallback);
 
 
 
         void registerRFCOMMServiceByUUID(BluetoothUUID uuid,
                                          DOMString name,
-                                         BluetoothServiceSuccessCallback successCallback,
-                                         optional ErrorCallback? errorCallback,
-                                         optional BluetoothSecurityLevel? securityLevel);
-
+                                         BluetoothServiceSuccessCallback successCallback, 
+                                         optional ErrorCallback? errorCallback);
              };
     [NoInterfaceObject] interface BluetoothDevice {
         readonly attribute DOMString name;
@@ -91,13 +79,11 @@ module Bluetooth {
         readonly attribute BluetoothUUID[] uuids;
 
         void connectToServiceByUUID(BluetoothUUID uuid,
-                                    BluetoothSocketSuccessCallback successCallback,
-                                    optional ErrorCallback? errorCallback,
-                                    optional BluetoothSocketType? protocol);
+                                    BluetoothSocketSuccessCallback successCallback, 
+                                    optional ErrorCallback? errorCallback);
     };
     [NoInterfaceObject] interface BluetoothSocket {
         readonly attribute BluetoothUUID uuid;
-        readonly attribute BluetoothSocketType protocol;
         readonly attribute BluetoothSocketState state;
         readonly attribute BluetoothDevice peer;
         [TreatNonCallableAsNull] attribute SuccessCallback? onmessage;
@@ -114,12 +100,12 @@ module Bluetooth {
 
     [NoInterfaceObject] interface BluetoothClass {
         readonly attribute octet major;
-
+        
         readonly attribute octet minor;
-
+        
         readonly attribute unsigned short[] services ;
-
-        boolean hasService(octet service);
+        
+        boolean hasService(unsigned short service);
     };
 
     [NoInterfaceObject] interface BluetoothClassDeviceMajor {
@@ -221,11 +207,11 @@ module Bluetooth {
 
     [NoInterfaceObject] interface BluetoothClassDeviceService {
         const unsigned short LIMITED_DISCOVERABILITY = 0x0001;
-        const unsigned short POSITIONING = 0x0008;
-        const unsigned short NETWORKING = 0x0010;
-        const unsigned short RENDERING = 0x0020;
+        const unsigned short POSITIONING = 0x0008; 
+        const unsigned short NETWORKING = 0x0010; 
+        const unsigned short RENDERING = 0x0020; 
         const unsigned short CAPTURING = 0x0040;
-        const unsigned short OBJECT_TRANSFER = 0x0080;
+        const unsigned short OBJECT_TRANSFER = 0x0080; 
         const unsigned short AUDIO = 0x0100;
         const unsigned short TELEPHONY = 0x0200;
         const unsigned short INFORMATION = 0x0400;

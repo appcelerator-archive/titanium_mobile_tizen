@@ -1,0 +1,150 @@
+module Content {
+
+  enum ContentDirectoryStorageType { "INTERNAL", "EXTERNAL" };
+
+  enum ContentType { "IMAGE", "VIDEO", "AUDIO" };
+
+  enum AudioContentLyricsType { "SYNCHRONIZED", "UNSYNCHRONIZED" };
+
+  enum ImageContentOrientation { "NORMAL", "FLIP_HORIZONTAL", "ROTATE_180", "FLIP_VERTICAL", "TRANSPOSE", "ROTATE_90", "TRANSVERSE", "ROTATE_270" };
+
+  typedef DOMString ContentId;
+
+  typedef DOMString ContentDirectoryId;
+
+  [NoInterfaceObject] interface ContentManagerObject {
+    readonly attribute ContentManager content;
+  };
+  Tizen implements ContentManagerObject;
+
+
+  [NoInterfaceObject] interface ContentManager {
+
+    void update(Content content);
+
+    void updateBatch(Content[] contents,
+                                      SuccessCallback successCallback,
+                                      optional ErrorCallback? errorCallback);
+
+    void getDirectories(ContentDirectoryArraySuccessCallback successCallback,
+                     optional ErrorCallback? errorCallback);
+
+    void find(ContentArraySuccessCallback successCallback,
+                   optional ErrorCallback? errorCallback,
+                   optional ContentDirectoryId? directoryId,
+                   optional AbstractFilter? filter,
+                   optional SortMode? sortMode,
+                   optional unsigned long? count,
+                   optional unsigned long? offset);
+
+};
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface ContentArraySuccessCallback {
+    void onsuccess(Content[] contents);
+  };
+
+  [Callback=FunctionOnly, NoInterfaceObject] interface ContentDirectoryArraySuccessCallback {
+    void onsuccess(ContentDirectory[] directories);
+  };
+
+  [NoInterfaceObject] interface ContentDirectory {
+
+    readonly attribute ContentDirectoryId id;
+
+    readonly attribute DOMString? directoryURI;
+
+    readonly attribute DOMString title;
+
+    readonly attribute ContentDirectoryStorageType storageType;
+
+    readonly attribute Date? modifiedDate;
+
+   };
+
+  [NoInterfaceObject] interface Content {
+
+    readonly attribute DOMString[] editableAttributes;
+
+    readonly attribute ContentId id;
+
+    readonly attribute ContentType type;
+
+    readonly attribute DOMString mimeType;
+
+    attribute DOMString title;
+
+    readonly attribute DOMString contentURI;
+
+    readonly attribute DOMString[]? thumbnailURIs;
+
+    readonly attribute Date? releaseDate;
+
+    readonly attribute Date? modifiedDate;
+
+    readonly attribute unsigned long? size;
+
+    attribute DOMString? description;
+
+    attribute float? rating;
+  };
+
+  [NoInterfaceObject] interface VideoContent : Content {
+
+    attribute SimpleCoordinates? geolocation;
+
+    readonly attribute DOMString? album;
+
+    readonly attribute DOMString[]? artists;
+
+    readonly attribute unsigned long duration;
+
+    readonly attribute unsigned long width;
+
+    readonly attribute unsigned long height;
+
+  };
+
+
+  [NoInterfaceObject] interface AudioContentLyrics {
+
+    readonly attribute AudioContentLyricsType type;
+
+    readonly attribute unsigned long[] timestamps;
+
+    readonly attribute DOMString[] texts;
+  };
+
+  [NoInterfaceObject] interface AudioContent : Content {
+
+    readonly attribute DOMString? album;
+
+    readonly attribute DOMString[]? genres;
+
+    readonly attribute DOMString[]? artists;
+
+    readonly attribute DOMString[]? composers;
+
+    readonly attribute AudioContentLyrics? lyrics;
+
+    readonly attribute DOMString? copyright;
+
+    readonly attribute unsigned long? bitrate;
+
+    readonly attribute unsigned short? trackNumber;
+
+    readonly attribute unsigned long duration;
+
+  };
+
+  [NoInterfaceObject] interface ImageContent : Content {
+
+    attribute SimpleCoordinates? geolocation;
+
+    readonly attribute unsigned long width;
+
+    readonly attribute unsigned long height;
+
+    attribute ImageContentOrientation? orientation;
+
+  };
+};
