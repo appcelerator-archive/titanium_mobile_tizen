@@ -1,10 +1,7 @@
 define(['Ti/_/declare'], function(declare) {
 	return declare('Ti.Tizen.Application.RequestedApplicationControl', null, {
 		constructor: function(args) {
-			if(args.toString() === '[object RequestedApplicationControl]') {
-				this._obj = args;
-			} else {
-			}
+			this._obj = args;
 		},
 
 		constants: {
