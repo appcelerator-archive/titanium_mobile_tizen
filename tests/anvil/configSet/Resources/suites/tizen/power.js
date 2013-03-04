@@ -29,38 +29,30 @@ module.exports = new function() {
 		valueOf(testRun, Ti.Tizen.Power.release).shouldBeFunction();
 		finish(testRun);
 	}
+	
 
 	this.powerStateListener = function(testRun) {
-		var stateRequest = null;
-		function onSuccess(){
-			Ti.API.debug('PowerStateListener is set.');
-			waitTimeout = setTimeout(function() {
-				Ti.API.debug('Test completed by timeout!');
-				valueOf(testRun, true).shouldBeTrue();
-				try{
-					Ti.Tizen.Power.release('DISPLAY');
-				}catch (e){
-					reportError(testRun, JSON.stringify(e));
-				}
-				finish(testRun);
-			}, 2000);
-		}
 
-		function onError(){
-			Ti.API.info('PowerStateListener failed.');
-			valueOf(testRun, false).shouldBeTrue();
+		function onScreenStateChanged(previousState, changedState) {
+			Ti.API.info("Screen state changed from " + previousState + " to " + changedState);
+			Ti.Tizen.Power.turnScreenOn();
 			finish(testRun);
 		}
 
-		function onChanged(resource, actualState, requestedState) {
-			Ti.API.debug('Strange, but we got onChanged event inside Anvil. You ary lucky!');
-			Ti.API.debug('State changed. Resource: ' + resource + ', actualState: ' + actualStateual + ', requestedState: ' + requestedState);
-		}
+		valueOf(testRun, function() {
+			Ti.Tizen.Power.request(Ti.Tizen.Power.POWER_RESOURCE_SCREEN, Ti.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL);
+		}).shouldNotThrowException();
 
-		stateRequest = Ti.Tizen.Power.createPowerStateRequest({
-			resource: 'DISPLAY',
-			state: 'DISPLAY_NORMAL'
-		});
-		Ti.Tizen.Power.request(stateRequest, onSuccess, onError, onChanged);
+		valueOf(testRun, function() {
+			Ti.Tizen.Power.turnScreenOn();
+		}).shouldNotThrowException();
+
+		valueOf(testRun, function() {
+			Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
+		}).shouldNotThrowException();
+
+		valueOf(testRun, function() {
+			Ti.Tizen.Power.turnScreenOff();
+		}).shouldNotThrowException();
 	}
 }
