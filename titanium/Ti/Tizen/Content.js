@@ -5,7 +5,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Content/AudioContent', 'Ti/Tizen/Content/VideoCon
 				len = objects.length,
 				i = 0;
 			for (; i < len; i++) {
-				console.log(objects[i].type);
 				if(objects[i].type == 'AUDIO'){
 					result.push(Ti.Tizen.Content._createAudioContent(objects[i]));
 				} else if(objects[i].type == 'VIDEO'){
@@ -67,7 +66,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Content/AudioContent', 'Ti/Tizen/Content/VideoCon
 			},
 
 			find: function(successCallback /*ContentArraySuccessCallback*/, errorCallback /*ErrorCallback*/, directoryId /*ContentDirectoryId*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, count /*unsigned long*/, offset /*unsigned long*/) {
-				console.log('Im here');
 				return tizen.content.find(successCallback && function(objects){onContentArraySuccessCallback(objects, successCallback)}, errorCallback && function(e) {errorCallback.call(null, new WebAPIError(e))}, directoryId, filter ? filter._obj : filter, sortMode ? sortMode._obj : sortMode, count, offset);
 			},
 
