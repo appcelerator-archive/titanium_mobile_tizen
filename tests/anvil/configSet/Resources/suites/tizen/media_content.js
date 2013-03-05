@@ -61,18 +61,39 @@ module.exports = new function() {
 	},
 		
 	copyFileTo = function(testRun, destFolderName, pathFrom, fileName, nextCallback) {
+
+		// This function copies a file from the Local Storage to one of the
+		// virtual roots of Tizen.
+		// Note:
+		// - Titanium.Filesystem.FileStream can open Local Storage files, but cannot open filesystem files.
+		// - tizen.Filesystem.File cannot open Local Storage files, but can open filesystem files.
+		// This is why, in order to copy the file from Local Storage to the desired location (that
+		// MediaContent knows about), we have to use intermediate steps:
+		// - open a Titanium file and read data;
+		// - encode it in memory to base64, otherwise binary data will be mangled;
+		// - write it to a Tizen file.
+
 		var blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, pathFrom + '/' + fileName).read();
 		function errorCB(e){
 			finishError(testRun,e.message);
 		};
 		function successCB(dir) {
 			var writeToStream = function (fileStream) {
-				fileStream.writeBase64(blob._data);
+				var res = '';
+				for(var i= 0, len = blob._data.length; i<len; i++) {
+					var charcode = blob._data.charCodeAt(i) & 255;
+					res+= String.fromCharCode(charcode);
+				}
+				try {
+					fileStream.writeBase64(btoa(res));
+				} catch(e) {
+					console.log('writeBase64: '+e.message);
+				}
 				fileStream.close();
 				//pause for refreshing of media content
-				setTimeout(function(){nextCallback && nextCallback(testRun);},2000);
+				setTimeout(function(){nextCallback && nextCallback(testRun)}, 2000);
 			};
-				
+
 			try {
 				dir.createFile(fileName).openStream('rw', writeToStream,errorCB);
 			} catch(e){
@@ -85,28 +106,28 @@ module.exports = new function() {
 
 		Ti.Tizen.Filesystem.resolve(destFolderName, successCB, errorCB, 'rw');
 	},
-		
+
 	check_media_types = function(testRun, item) {
 		valueOf(testRun, item.title).shouldBeString();
-		valueOf(testRun, item.itemURI).shouldBeString();
+		valueOf(testRun, item.contentURI).shouldBeString();
 		valueOf(testRun, item.mimeType).shouldBeString();
 		valueOf(testRun, item.id).shouldBeString();
 		valueOf(testRun, item.size).shouldBeNumber();
-		valueOf(testRun, item.type).shouldBeString();	
+		valueOf(testRun, item.type).shouldBeString();
 		valueOf(testRun, item.releaseDate).shouldBeObject();
-		valueOf(testRun, item.modifiedDate).shouldBeObject();	
+		valueOf(testRun, item.modifiedDate).shouldBeObject();
 		valueOf(testRun, item.description).shouldBeString();
-		valueOf(testRun, item.rating).shouldBeNumber();	
+		valueOf(testRun, item.rating).shouldBeNumber();
 		valueOf(testRun, item.thumbnailURIs[0]).shouldBeString();
 
 		if (item.type == 'IMAGE') {
-			valueOf(testRun, item.type).shouldBe('IMAGE');	
+			valueOf(testRun, item.type).shouldBe('IMAGE');
 			valueOf(testRun, item.width).shouldBeNumber();
 			valueOf(testRun, item.height).shouldBeNumber();
 			valueOf(testRun, item.geolocation.latitude).shouldBeNumber();
 			valueOf(testRun, item.geolocation.longitude).shouldBeNumber();
 		} else if (item.type == 'VIDEO') {
-			valueOf(testRun, item.type).shouldBe('VIDEO');	
+			valueOf(testRun, item.type).shouldBe('VIDEO');
 			valueOf(testRun, item.width).shouldBeNumber();
 			valueOf(testRun, item.height).shouldBeNumber();
 			//valueOf(testRun, item.album).shouldBeString();
@@ -115,7 +136,7 @@ module.exports = new function() {
 			valueOf(testRun, item.playedTime).shouldBeNumber();
 			valueOf(testRun, item.playCount).shouldBeNumber();
 		} else if (item.type == 'AUDIO') {
-			valueOf(testRun, item.type).shouldBe('AUDIO');	
+			valueOf(testRun, item.type).shouldBe('AUDIO');
 			valueOf(testRun, item.album).shouldBeString();
 			valueOf(testRun, item.artists[0]).shouldBeString();
 			valueOf(testRun, item.composers[0]).shouldBeString();
@@ -128,26 +149,20 @@ module.exports = new function() {
 			valueOf(testRun, item.playCount).shouldBeNumber();
 		}
 	};
-	
+
 	//Tests
 	this.mediaSourceAPI = function(testRun) {
-		var source = Ti.Tizen.MediaContent.getLocalMediaSource();
+		valueOf(testRun, Ti.Tizen.Content).shouldNotBeNull();
 
-		valueOf(testRun, source instanceof Ti.Tizen.MediaContent.MediaSource).shouldBeTrue();
+		valueOf(testRun, Ti.Tizen.Content.getDirectories).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Content.update).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Content.updateBatch).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Content.find).shouldBeFunction();
 
-		valueOf(testRun, Ti.Tizen.MediaContent).shouldNotBeNull();
-		valueOf(testRun, Ti.Tizen.MediaContent.getLocalMediaSource).shouldBeFunction();
-
-		valueOf(testRun, source).shouldNotBeNull();
-		valueOf(testRun, source.getFolders).shouldBeFunction();
-		valueOf(testRun, source.updateItem).shouldBeFunction();
-		valueOf(testRun, source.updateItemsBatch).shouldBeFunction();
-		valueOf(testRun, source.findItems).shouldBeFunction();
-		
 		Ti.API.info('Finish');
 		finish(testRun);
 	};
-		
+
 	this.getFolder = function(testRun) {
 		function test() {
 			Ti.API.info('Start getFolder');
@@ -158,33 +173,32 @@ module.exports = new function() {
 			}
 
 			function errorCB(e) {
-				removeFileFrom(testRun, 'images','img1_for_anvil.png', function(){finishError(testRun,e.message);});
+				removeFileFrom(testRun, 'images','img1_for_anvil.png', function(){finishError(testRun,e.message)});
 			}
 
 			function getFolderCB(folders){
 				valueOf(testRun, folders.length).shouldBeGreaterThan(0);//at least images
 				valueOf(testRun, folders[0].id).shouldNotBeNull();
-				valueOf(testRun, folders[0].folderURI).shouldNotBeNull();
+				valueOf(testRun, folders[0].directoryURI).shouldNotBeNull();
 				valueOf(testRun, folders[0].title).shouldNotBeNull();
 				valueOf(testRun, folders[0].storageType).shouldNotBeNull();
-				
-				//debug print 
+
+				//debug print
 				for (var i in folders) {
-					Ti.API.info('folder id:'+folders[i].id+'; uri'+folders[i].folderURI + '; title:'+folders[i].title+'; storageType:'+folders[i].storageType);
+					Ti.API.info('folder id:'+folders[i].id+'; uri'+folders[i].directoryURI + '; title:'+folders[i].title+'; storageType:'+folders[i].storageType);
 				}
-				
+
 				//clear and finish
 				clear_finish();
 			}
-		
-			mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource();
-			mediaSource.getFolders(getFolderCB,errorCB);
+
+			Ti.Tizen.Content.getDirectories(getFolderCB, errorCB);
 		}
-		
+
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun,'images','suites/tizen/images', 'img1_for_anvil.png', test);
 	};
-	
+
 	this.findItemsInImages = function(testRun) {
 		function test() {
 			Ti.API.info('Start findItemsInImages');
@@ -193,7 +207,7 @@ module.exports = new function() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', function(){finishError(testRun,e.message);});
 			}
@@ -206,14 +220,14 @@ module.exports = new function() {
 						return;
 					}
 
-					//debug print 
+					//debug print
 					for (var i = 0; i < items.length; i++) {
 						Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
 					}
 					valueOf(testRun, items.length).shouldBeGreaterThan(0);
-					
+
 					check_media_types(testRun,items[0]);
-					
+
 					//clear and finish
 					clear_finish();
 				}
@@ -223,61 +237,55 @@ module.exports = new function() {
 					Ti.API.info('folder id:' + folders[i].id + '; uri'+ folders[i].folderURI + '; title:' + folders[i].title + '; storageType:' + folders[i].storageType);
 					if (folders[i].title == 'Images') {
 						isFolderExisted = true;
-						mediaSource.findItems(browseItemsInFolder, errorCB, folders[i].id);
+						Ti.Tizen.Content.find(browseItemsInFolder, errorCB, folders[i].id);
 						break;
 					}
 				}
-				
+
 				if (!isFolderExisted) {
 					errorCB( {message: 'Folder hasn`t been found'} );
 				}
 			}
-		
-			mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource();
-			mediaSource.getFolders(getFolderCB,errorCB);
+
+			Ti.Tizen.Content.getDirectories(getFolderCB,errorCB);
 		}
-		
+
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun, 'images', 'suites/tizen/images', 'img1_for_anvil.png', test);
 	};
-	
+
 	this.findImageByMediaType  = function(testRun) {
 		function test() {
 			function clear_finish() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', function() { finishError(testRun,e.message); });
 			}
 
 			function successCB(items) {
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.ImageContent).shouldBeTrue();
 
 				//Check that array is not empty
 				if (!items || items.length == 0) {
 					errorCB({message:'Array items is empty'});
 					return;
 				}
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaItem).shouldBeTrue();
-				//debug print 
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.Content).shouldBeTrue();
+				//debug print
 				for (var i = 0, len = items.length; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
 				}
-
 				valueOf(testRun, items.length).shouldBeGreaterThan(0);
 				check_media_types(testRun,items[0]);
 
 				//clear and finish
 				clear_finish();
 			}
-			
-			// Source
-			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
-				// Filter
-				mediaType = 'IMAGE',
+			var mediaType = 'IMAGE',
 				count = 1,
 				offset = 0,
 				filter = Ti.Tizen.createAttributeFilter({
@@ -285,37 +293,42 @@ module.exports = new function() {
 					matchFlag: 'EXACTLY',
 					matchValue: mediaType
 				});
-			
+
 			// Find
-			mediaSource.findItems(successCB, errorCB, null, filter, null, count, offset);
+			Ti.Tizen.Content.find(successCB, errorCB, null, filter, null, count, offset);
 		}
-		
+
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun, 'images', 'suites/tizen/images', 'img1_for_anvil.png', test);
 	};
-	
+
 	this.findImageByTitle  = function(testRun) {
 		function test() {
-			Ti.API.info('Start findImageByTitle');	
+			Ti.API.info('Start findImageByTitle');
 			function clear_finish() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', function(){finishError(testRun,e.message);});
 			}
 
 			function successCB(items) {
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
-
 				//Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					errorCB({message:'Array items is empty'});
 					return;
 				}
-				//debug print 
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.ImageContent).shouldBeTrue();
+
+				//debug print
 				for (var i = 0, len = items.length; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
 				}
@@ -326,22 +339,21 @@ module.exports = new function() {
 				//clear and finish
 				clear_finish();
 			}
-			
+
 			// Create filter and find
-			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
-				filter = Ti.Tizen.createAttributeFilter({
+			var filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'title',
 					matchFlag: 'EXACTLY',
 					matchValue: 'img1_for_anvil.png'
 				});
 
-			mediaSource.findItems(successCB,errorCB, null, filter);
+			Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 		}
-		
+
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun, 'images', 'suites/tizen/images', 'img1_for_anvil.png', test);
 	};
-	
+
 	this.findImageByTitleFailed  = function(testRun) {
 		Ti.API.info('Start findImageByTitleFailed');
 		function test() {
@@ -353,21 +365,20 @@ module.exports = new function() {
 				valueOf(testRun, items.length).shouldBeZero(0);
 				finish(testRun);
 			}
-			
+
 			// Create filter and find
-			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
-				filter = Ti.Tizen.createAttributeFilter({
+			var filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'title',
 					matchFlag: 'EXACTLY',
 					matchValue: 'img1_for_anvil.png'
 				});
 
-			mediaSource.findItems(successCB, errorCB, null, filter);
+			Ti.Tizen.Content.find(successCB, errorCB, null, filter);
 		}
-		
+
 		test();
 	};
-	
+
 	this.updateImage  = function(testRun) {
 		Ti.API.info('Start updateImage');
 		function test() {
@@ -375,24 +386,27 @@ module.exports = new function() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'images','img1_for_anvil.png', function() {finishError(testRun,e.message);});
 			}
-			
+
 			function successCB(items) {
-
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaImage).shouldBeTrue();
-
 				//Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					errorCB({message:'Array items is empty'});
 					return;
 				}
-				
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.ImageContent).shouldBeTrue();
+
 				var item = items[0], i = 0, len = items.length;
-				
-				//debug print 
+
+				//debug print
 				for (; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
 				}
@@ -402,7 +416,7 @@ module.exports = new function() {
 						try {
 							rating = item.rating;
 							item.rating++;
-							mediaSource.updateItem(item); 
+							Ti.Tizen.Content.update(item);
 							isUpdated = true;
 						} catch(e) {
 							return errorCB(e);
@@ -410,9 +424,9 @@ module.exports = new function() {
 					} else {
 						return errorCB( {message: 'Property "rating" is not editable'} );
 					}
-					
+
 					//find again
-					mediaSource.findItems(successCB,errorCB, null, filter);
+					Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 				} else {
 					//check rating
 					valueOf(testRun, item.rating).shouldBe(rating+1);
@@ -420,18 +434,16 @@ module.exports = new function() {
 					clear_finish();
 				}
 			}
-			
+
 			var isUpdated,
-				rating = 0,	
-				mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
+				rating = 0,
 				filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'title',
 					matchFlag: 'EXACTLY',
 					matchValue: 'img1_for_anvil.png'
 				});
-			mediaSource.findItems(successCB,errorCB, null, filter);
+			Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 		}
-		
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun, 'images', 'suites/tizen/images', 'img1_for_anvil.png', test);
 	};
@@ -444,46 +456,50 @@ module.exports = new function() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'music','Kalimba.mp3', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'music','Kalimba.mp3', function(){finishError(testRun,e.message);});
 			}
 
 			function successCB(items) {
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
-
 				//Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					errorCB({message:'Array items is empty'});
 					return;
 				}
-				
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.AudioContent).shouldBeTrue();
+
 				var item = items[0], i = 0, len = items.length;
-				//debug print 
+				//debug print
 				for (; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; description=' + items[i].description + '; playCount=' + items[i].playCount+ '; rating=' + items[i].rating);
 				}
-				
+
 				//update
 				if (!isUpdated) {
 					//editable attributes
 					valueOf(testRun, item.editableAttributes.length ).shouldBeGreaterThan(0);
 					//other properties
 					check_media_types(testRun,item);
-					
+
 					try {
 						item.playCount=1;
 						item.rating=1;
 						item.description = 'updated';
 						item.title = 'title changed';
-						mediaSource.updateItem(item); 
+						Ti.Tizen.Content.update(item);
 						isUpdated = true;
 					} catch(e) {
 						return errorCB(e);
 					}
 					//find again
-					mediaSource.findItems(successCB,errorCB, null, filter);
+					Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 				} else {
 					//check rating
 					valueOf(testRun, item.rating).shouldBe(1);
@@ -492,9 +508,8 @@ module.exports = new function() {
 					clear_finish();
 				}
 			}
-			
+
 			var isUpdated,
-				mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
 				mediaType = 'AUDIO',
 				filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'type',
@@ -502,9 +517,9 @@ module.exports = new function() {
 					matchValue: mediaType
 				});
 
-			mediaSource.findItems(successCB,errorCB, null, filter);
+			Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 		}
-		
+
 		//Start: copy file to opt/media/sounds and test
 		copyFileTo(testRun, 'music', 'suites/tizen/sounds', 'Kalimba.mp3', test);//we must write 'music' instead of 'sounds', Why ???
 	};
@@ -516,72 +531,75 @@ module.exports = new function() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'music','Kalimba.mp3', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'music','Kalimba.mp3', function() { finishError(testRun,e.message); });
 			}
 
 			function successCB(items) {
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
-
 				//Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					finishError(testRun,'Array items is empty');
 				}
-				
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.AudioContent).shouldBeTrue();
+
 				//debug print
-				var item = items[0], 
-					i = 0, 
+				var item = items[0],
+					i = 0,
 					len = items.length;
 
 				for (; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; playCount=' + items[i].playCount + '; rating=' + items[i].rating);
 				}
-				
+
 				//updateBatch, clear and finish
 				if (!isUpdated) {
 					item.playCount = 1;
 					item.rating = 1;
 					item.description = 'updateBatch';
 					isUpdated = true;
-					mediaSource.updateItemsBatch([item], find/*find again*/, errorCB);
+					Ti.Tizen.Content.updateBatch([item], find/*find again*/, errorCB);
 				} else {
 					//check rating
 					valueOf(testRun, item.rating).shouldBe(1);
 					valueOf(testRun, item.playCount).shouldBe(1);//it is not changed !!!
 					//clear and finish
-					clear_finish();	
+					clear_finish();
 				}
 			}
-			
+
 			function find() {
-				mediaSource.findItems(successCB,errorCB, null, filter);
+				Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 			}
-			
+
 			var isUpdated,
-				mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
 				mediaType = 'AUDIO',
 				filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'type',
 					matchFlag: 'EXACTLY',
 					matchValue: mediaType
 				});
-				
-			find();//mediaSource.findItems(successCB,errorCB, null, filter);
-		}		
+
+			find();
+		}
 		//Start: copy file to opt/media/sounds and test
 		copyFileTo(testRun, 'music', 'suites/tizen/sounds', 'Kalimba.mp3', test);//we have to write 'music' instead of 'sounds', Why ?
 	};
-	
+
 	this.findVideoByMediaType  = function(testRun) {
 		function test() {
-			Ti.API.info('Start findVideoByMediaType');			
+			Ti.API.info('Start findVideoByMediaType');
 			function clear_finish() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'videos','video_for_anvil.mp4', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'videos','video_for_anvil.mp4', function() { finishError(testRun,e.message); });
 			}
@@ -589,27 +607,30 @@ module.exports = new function() {
 			function successCB(items) {
 				//Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					errorCB({message:'Array items is empty'});
 					return;
 				}
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaVideo).shouldBeTrue();
-				
-				//debug print 
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.VideoContent).shouldBeTrue();
+
+				//debug print
 				for (var i = 0, len = items.length; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
 				}
-				
+
 				valueOf(testRun, items.length).shouldBeGreaterThan(0);
 				check_media_types(testRun,items[0]);
-				
+
 				//clear and finish
 				clear_finish();
 			}
-			
+
 			//source
-			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
-				mediaType = 'VIDEO',
+			var mediaType = 'VIDEO',
 				count = 1,
 				offset = 0,
 				filter = Ti.Tizen.createAttributeFilter({
@@ -618,7 +639,7 @@ module.exports = new function() {
 					matchValue: mediaType
 				});
 
-			mediaSource.findItems(successCB, errorCB, null, filter, null, count, offset);
+			Ti.Tizen.Content.find(successCB, errorCB, null, filter, null, count, offset);
 		}
 		//Start: copy file to opt/media/images and test
 		copyFileTo(testRun, 'videos', 'suites/tizen/videos', 'video_for_anvil.mp4', test);
@@ -626,24 +647,28 @@ module.exports = new function() {
 
 	this.findAudioByTitle  = function(testRun) {
 		function test() {
-			Ti.API.info('Start findAudioByTitle');				
+			Ti.API.info('Start findAudioByTitle');
 			function clear_finish() {
 				Ti.API.info('Finish');
 				removeFileFrom(testRun, 'music','Kalimba.mp3', finish);
 			}
-			
+
 			function errorCB(e) {
 				removeFileFrom(testRun, 'music','Kalimba.mp3', function(){finishError(testRun,e.message);});
 			}
 
 			function successCB(items) {
 
-				valueOf(testRun, items[0] instanceof Ti.Tizen.MediaContent.MediaAudio).shouldBeTrue();
-
 				// Check that array is not empty
 				if (!items || items.length == 0) {
+					// Test currently fails here, because (from the Tizen documentation):
+					// "If a content file is copied or moved, you cannot find the content items because a scan is not
+					// performed automatically in this version. In the next version, the feature will be added."
+					// (https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/guide/content_guide/mediacontent.htm)
 					finishError(testRun,'Array items is empty');
 				}
+
+				valueOf(testRun, items[0] instanceof Ti.Tizen.Content.AudioContent).shouldBeTrue();
 				
 				for (var i = 0, len = items.length; i < len; i++) {
 					Ti.API.info('Title=' + items[i].title + '; type=' + items[i].type + '; rating=' + items[i].rating);
@@ -655,14 +680,13 @@ module.exports = new function() {
 			}
 			
 			// Create filter and find by title
-			var mediaSource = Ti.Tizen.MediaContent.getLocalMediaSource(),
-				filter = Ti.Tizen.createAttributeFilter({
+			var filter = Ti.Tizen.createAttributeFilter({
 					attributeName: 'title',
 					matchFlag: 'EXACTLY',
 					matchValue: 'Kalimba'
 				});
 
-			mediaSource.findItems(successCB,errorCB, null, filter);
+			Ti.Tizen.Content.find(successCB,errorCB, null, filter);
 		}
 
 		//Start: copy file to opt/media/images and test
