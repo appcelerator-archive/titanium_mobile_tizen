@@ -4,22 +4,11 @@ define(['Ti/_/declare', 'Ti/Tizen/Time/TimeDuration', 'Ti/_/Evented'], function(
 			if(args instanceof tizen.TZDate) {
 				this._obj = args;
 			} else {
+				Ti.API.info('in constructor');
 				if (args.hasOwnProperty('year') && args.hasOwnProperty('day') && args.hasOwnProperty('month')) {
-					this._obj = new tizen.TZDate(
-						args.year,
-						args.month,
-						args.day,
-						args.hasOwnProperty('hours') ? args.hours : null,
-						args.hasOwnProperty('minutes') ? args.minutes : null,
-						args.hasOwnProperty('seconds') ? args.seconds : null,
-						args.hasOwnProperty('milliseconds') ? args.milliseconds : null,
-						args.hasOwnProperty('timezone') ? args.timezone : null
-					);
+					this._obj = new tizen.TZDate(args.year, args.month, args.day, args.hours, args.minutes, args.seconds, args.milliseconds, args.timezone);
 				} else if (args.hasOwnProperty('datetime') && args.hasOwnProperty('timezone')) {
-					this._obj = new tizen.TZDate(
-						args.datetime,
-						args.timezone
-					);
+					this._obj = new tizen.TZDate(args.datetime, args.timezone);
 				} else {
 					Ti.API.error('TZDate\'s constructor with given parameters doesn\'t exists.');
 				}

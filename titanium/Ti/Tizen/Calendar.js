@@ -67,7 +67,11 @@ define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTa
 				successCallback.call(this, calendarsArr);
 			}
 
-			tizen.calendar.getCalendars(type, calendarsListSuccessCallBack, errorCallback);
+			function wrappedErrorCallback(error) {
+				errorCallback.call(null, new WebAPIError(error));
+			}
+
+			tizen.calendar.getCalendars(type, successCallback && calendarsListSuccessCallBack, errorCallback && wrappedErrorCallback);
 		},
 
 		getDefaultCalendar: function(type /*CalendarType*/) {

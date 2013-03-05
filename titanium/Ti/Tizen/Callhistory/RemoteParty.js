@@ -1,20 +1,21 @@
 define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Application.ApplicationContext', null, {
+	return declare('Ti.Tizen.Callhistory.RemoteParty', null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
 
 		constants: {
-			id: {
+			remoteParty: {
 				get: function() {
-					return this._obj.id;
+					return this._obj.remoteParty;
 				}
 			},
-			appId: {
+			personId: {
 				get: function() {
-					return this._obj.appId;
+					return this._obj.personId;
 				}
 			},
-		}
+		},
+
 	});
 });
