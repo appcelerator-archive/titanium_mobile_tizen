@@ -56,19 +56,7 @@ function tizen_media_content_files(args) {
 			Ti.API.error(e.message);
 		}
 
-		try {
-			source = Ti.Tizen.MediaContent.getLocalMediaSource();
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
-
-		try {
-			source.findItems(onMediaItemArraySuccess, onError, null, filter);
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
+		Ti.Tizen.Content.find(onMediaItemArraySuccess, onError, null, filter);
 	}
 
 	function onMediaItemArraySuccess(items) {
