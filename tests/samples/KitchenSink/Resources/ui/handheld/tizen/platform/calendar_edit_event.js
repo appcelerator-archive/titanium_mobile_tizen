@@ -22,9 +22,6 @@ function edit_event(args) {
 		});	
 	self.add(summaryLabel);
 
-Ti.API.info('startDate: ' + startDate);
-Ti.API.info('startDate instanceof Ti.Tizen.Time.TZDate: ' + startDate instanceof Ti.Tizen.Time.TZDate);
-
 	var summaryInput = Ti.UI.createTextField({
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		top: top,
@@ -133,6 +130,7 @@ Ti.API.info('startDate instanceof Ti.Tizen.Time.TZDate: ' + startDate instanceof
 			calendarEvent.startDate = tzDate;
 			calendarEvent.duration = duration;
 			calendarEvent.location = location;
+
 			calendar.update(calendarEvent);
 
 			// Update table in previous window
