@@ -5,19 +5,14 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				this._obj = args;
 			} else {
 				if (args.hasOwnProperty('stringRepresentation') && args.hasOwnProperty('format')) {
-					this._obj = new tizen.CalendarEvent(
-						args.stringRepresentation,
-						args.format
-					);
+					this._obj = new tizen.CalendarEvent(args.stringRepresentation, args.format);
 				} else {
 					var eventInitDict = args;
 
 					args.hasOwnProperty('startDate') && (eventInitDict.startDate = args.startDate._obj);
 					args.hasOwnProperty('duration') && (eventInitDict.duration = args.duration._obj);
 
-					this._obj = new tizen.CalendarEvent(
-						args ? eventInitDict : null
-					);
+					this._obj = new tizen.CalendarEvent(eventInitDict);
 				}
 			}
 		},

@@ -4,12 +4,12 @@ define(['Ti/_/declare'], function(declare) {
 			if(args.toString() === '[object CalendarAlarm]') {
 				this._obj = args;
 			} else {
-				if ('before' in args && 'method' in args && 'description' in args) {
+				if (args.hasOwnProperty('before') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
 					this._obj = new tizen.CalendarAlarm(args.before, args.method, args.description);
-				} else if ('absoluteDate' in args && 'method' in args && 'description' in args) {
+				} else if (args.hasOwnProperty('absoluteDate') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
 					this._obj = new tizen.CalendarAlarm(args.absoluteDate, args.method, args.description);
 				} else {
-					Ti.API.error('Constructor with given parameters doesn\'t exists');
+					Ti.API.error('Constructor with such parameters does not exist in CalendarAlarm.');
 				}
 			}
 		},

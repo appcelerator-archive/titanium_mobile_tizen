@@ -25,9 +25,9 @@ function manageHistory() {
 			width: 10
 		}),
 		filter = Ti.Tizen.createAttributeFilter({
-			attributeName: 'callType',
+			attributeName: 'type',
 			matchFlag: 'EXACTLY',
-			matchValue: 'tizen.tel'
+			matchValue: 'TEL'
 		}),
 		sortMode = Ti.Tizen.createSortMode({
 			attributeName: 'startTime', 
@@ -46,7 +46,7 @@ function manageHistory() {
 					Ti.API.info('item.index: ' + item.index);
 					
 					try {
-						Ti.Tizen.Call.CallHistory.remove(results[item.index]);
+						Ti.Tizen.Callhistory.remove(results[item.index]);
 						tableView.deleteRow(item.index);
 						
 						if (tableView.sections[0].rowCount == 0) {
@@ -65,7 +65,7 @@ function manageHistory() {
 			}
 
 			function removeAll(e) {
-				Ti.Tizen.Call.CallHistory.removeAll(
+				Ti.Tizen.Callhistory.removeAll(
 					function() {
 						Ti.API.info('All history removed.');
 						
@@ -106,7 +106,20 @@ function manageHistory() {
 		}).show();
 	}
 	console.log('Before find');
-	Ti.Tizen.Call.CallHistory.find(onSuccess, onError, filter, sortMode);
+
+	function tmpCallback(histories)
+	{
+		console.log('begin')
+		var result = [],
+			historiesCount = histories.length,
+			i = 0;
+		console.log("historiesCount=" + historiesCount);
+		for (; i < historiesCount; i++) {
+			console.log(histories[i]);
+		}
+	}
+
+	Ti.Tizen.Callhistory.find(onSuccess, onError, filter._obj, sortMode._obj);
 
 	return win;
 }
