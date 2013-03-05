@@ -60,7 +60,6 @@ function tizen_media_content_files(args) {
 	}
 
 	function onMediaItemArraySuccess(items) {
-		console.log('items: '+ items);
 		var tableData = [],
 			i = 0,
 			itemsCount = items.length;

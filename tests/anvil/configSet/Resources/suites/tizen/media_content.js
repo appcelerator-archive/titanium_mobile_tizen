@@ -87,7 +87,7 @@ module.exports = new function() {
 				try {
 					fileStream.writeBase64(btoa(res));
 				} catch(e) {
-					console.log('writeBase64: '+e.message);
+					Ti.API.info('writeBase64: '+e.message);
 				}
 				fileStream.close();
 				//pause for refreshing of media content
