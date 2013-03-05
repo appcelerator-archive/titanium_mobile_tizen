@@ -271,10 +271,15 @@ module.exports = new function() {
 	};
 	
 	var uninstallHarness = function(successCallback, errorCallback) {
-		driverUtils.runCommand("web-uninstall -i zhrTuDSwYV", driverUtils.logStdout, function(error) {
+		driverUtils.runCommand("web-uninstall -i zhrTuDSwYV", driverUtils.logStdout, function(error, stdout, stderr) {
 			if (error !== null) {
 				driverUtils.log("Error encountered when uninstalling harness: " + error);
-				errorCallback && errorCallback();
+
+				if (stdout.indexOf("Uninstall failed, 'zhrTuDSwYV' widget is not installed") + 1) {
+					successCallback && successCallback();
+				} else {
+					errorCallback && errorCallback();
+				}
 			} else {
 				driverUtils.log("Harness uninstalled");
 				successCallback && successCallback();

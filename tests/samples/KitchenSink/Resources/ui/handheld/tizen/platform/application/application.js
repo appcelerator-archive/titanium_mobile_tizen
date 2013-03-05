@@ -4,7 +4,6 @@ function tizen_application(_args) {
 			data : [
 				{ title: 'Installed App Info', hasChild: true, test: 'ui/handheld/tizen/platform/application/appsinfo' }, 
 				{ title: 'Running App Info', hasChild: true, test: 'ui/handheld/tizen/platform/application/appscontext' }, 
-				{ title: 'Kill Running App', hasChild: true, test: 'ui/handheld/tizen/platform/application/apps_kill' }, 
 				{ title: 'Exit / Hide / Launch', hasChild: true, test: 'ui/handheld/tizen/platform/application/exit_hide_launch' }
 			]
 		});

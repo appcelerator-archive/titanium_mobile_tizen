@@ -30,6 +30,11 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.show;
 				}
 			},
+			categories: {
+				get: function() {
+					return this._obj.categories;
+				}
+			},
 			installDate: {
 				get: function() {
 					return this._obj.installDate;
@@ -40,7 +45,6 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.size;
 				}
 			},
-		},
-
+		}
 	});
 });

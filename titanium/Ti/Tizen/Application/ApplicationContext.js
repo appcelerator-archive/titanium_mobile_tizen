@@ -15,7 +15,6 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.appId;
 				}
 			},
-		},
-
+		}
 	});
 });
