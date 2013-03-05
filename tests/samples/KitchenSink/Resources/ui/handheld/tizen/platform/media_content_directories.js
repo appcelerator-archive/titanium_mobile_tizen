@@ -35,18 +35,11 @@ function tizen_media_content_directories(args) {
 	function getSelectedFoldersList() {
 		var source = null;
 
-		try {
-			source = Ti.Tizen.MediaContent.getLocalMediaSource();
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
-
 		function onError(e) {
 			Ti.API.error(e.message);
 		}
 
-		source.getFolders(onMediaFolderArrayFilteredSuccess, onError);
+		Ti.Tizen.Content.getDirectories(onMediaFolderArrayFilteredSuccess, onError);
 	}
 
 	function onMediaFolderArrayFilteredSuccess(folders) {
