@@ -1,7 +1,7 @@
-define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem'], function(declare, MediaItem) {
-	return declare('Ti.Tizen.MediaContent.MediaImage', MediaItem, {
+define(['Ti/_/declare', 'Ti/Tizen/Content/Content'], function(declare, Content) {
+	return declare('Ti.Tizen.Content.ImageContent', Content, {
 		constructor: function(args) {
-			if(args.toString() === '[object Image]') {
+			if(args.toString() === '[object ImageContent]') {
 				this._obj = args;
 			}
 		},
