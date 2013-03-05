@@ -1,12 +1,22 @@
-define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem'], function(declare, MediaItem) {
-	return declare('Ti.Tizen.MediaContent.MediaVideo', MediaItem, {
+define(['Ti/_/declare', 'Ti/Tizen/Content/Content'], function(declare, Content) {
+	return declare('Ti.Tizen.Content.VideoContent', Content, {
 		constructor: function(args) {
-			if(args.toString() === '[object Video]') {
+			if(args.toString() === '[object VideoContent]') {
 				this._obj = args;
 			}
 		},
 
 		constants: {
+			album: {
+				get: function() {
+					return this._obj.album;
+				}
+			},
+			artists: {
+				get: function() {
+					return this._obj.artists;
+				}
+			},
 			duration: {
 				get: function() {
 					return this._obj.duration;
@@ -31,38 +41,6 @@ define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem'], function(declare, Me
 				},
 				set: function(value) {
 					this._obj.geolocation = value;
-				}
-			},
-			album: {
-				get: function() {
-					return this._obj.album;
-				},
-				set: function(value) {
-					this._obj.album = value;
-				}
-			},
-			artists: {
-				get: function() {
-					return this._obj.artists;
-				},
-				set: function(value) {
-					this._obj.artists = value;
-				}
-			},
-			playedTime: {
-				get: function() {
-					return this._obj.playedTime;
-				},
-				set: function(value) {
-					this._obj.playedTime = value;
-				}
-			},
-			playCount: {
-				get: function() {
-					return this._obj.playCount;
-				},
-				set: function(value) {
-					this._obj.playCount = value;
 				}
 			}
 		}

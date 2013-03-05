@@ -1,15 +1,35 @@
-define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaContent/MediaLyrics'], function(declare, MediaItem, MediaLyrics) {
-	return declare('Ti.Tizen.MediaContent.MediaAudio', MediaItem, {
+define(['Ti/_/declare', 'Ti/Tizen/Content/Content', 'Ti/Tizen/Content/AudioContentLyrics'], function(declare, Content, AudioContentLyrics) {
+	return declare('Ti.Tizen.Content.AudioContent', Content, {
 		constructor: function(args) {
-			if(args.toString() === '[object Audio]') {
+			if(args.toString() === '[object AudioContent]') {
 				this._obj = args;
 			}
 		},
 
 		constants: {
+			album: {
+				get: function() {
+					return this._obj.album;
+				}
+			},
+			genres: {
+				get: function() {
+					return this._obj.genres;
+				}
+			},
+			artists: {
+				get: function() {
+					return this._obj.artists;
+				}
+			},
+			composers: {
+				get: function() {
+					return this._obj.composers;
+				}
+			},
 			lyrics: {
 				get: function() {
-					return new MediaLyrics(this._obj.lyrics);
+					return new AudioContentLyrics(this._obj.lyrics);
 				}
 			},
 			copyright: {
@@ -22,68 +42,14 @@ define(['Ti/_/declare', 'Ti/Tizen/MediaContent/MediaItem', 'Ti/Tizen/MediaConten
 					return this._obj.bitrate;
 				}
 			},
-			duration: {
-				get: function() {
-					return this._obj.duration;
-				}
-			}
-		},
-
-		properties: {
-			album: {
-				get: function() {
-					return this._obj.album;
-				},
-				set: function(value) {
-					this._obj.album = value;
-				}
-			},
-			genres: {
-				get: function() {
-					return this._obj.genres;
-				},
-				set: function(value) {
-					this._obj.genres = value;
-				}
-			},
-			artists: {
-				get: function() {
-					return this._obj.artists;
-				},
-				set: function(value) {
-					this._obj.artists = value;
-				}
-			},
-			composers: {
-				get: function() {
-					return this._obj.composers;
-				},
-				set: function(value) {
-					this._obj.composers = value;
-				}
-			},
 			trackNumber: {
 				get: function() {
 					return this._obj.trackNumber;
-				},
-				set: function(value) {
-					this._obj.trackNumber = value;
 				}
 			},
-			playedTime: {
+			duration: {
 				get: function() {
-					return this._obj.playedTime;
-				},
-				set: function(value) {
-					this._obj.playedTime = value;
-				}
-			},
-			playCount: {
-				get: function() {
-					return this._obj.playCount;
-				},
-				set: function(value) {
-					this._obj.playCount = value;
+					return this._obj.duration;
 				}
 			}
 		}
