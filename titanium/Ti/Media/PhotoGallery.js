@@ -1,6 +1,6 @@
 define(["Ti/_/declare", "Ti/Blob"],
 	function(declare, Blob) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
+		var service = new tizen.ApplicationControl("http://tizen.org/appcontrol/operation/pick", '/opt/media', "image/*"),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -129,9 +129,9 @@ define(["Ti/_/declare", "Ti/Blob"],
 						Titanium.API.error('This format of file does not supported');
 					}	
 				};
-				//START
+				//launch default gallery application
                 tizen.application.launchAppControl(service, 
-                    'ijudt7w61q.Gallery',//'org.tizen.gallery',
+                    null,
                     function(){console.log('launch appControl succeeded');}, 
                     function(e){console.log('launch appControl failed. Reason: ' + e.name);}, 
                     serviceReplyCB
