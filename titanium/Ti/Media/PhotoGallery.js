@@ -1,6 +1,6 @@
-define(["Ti/_/declare", "Ti/Blob"],
+define(['Ti/_/declare', 'Ti/Blob'],
 	function(declare, Blob) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
+		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -11,73 +11,92 @@ define(["Ti/_/declare", "Ti/Blob"],
 			},
 			PHOTO = 1,
 			VIDEO = 2,
-			UKNOWN = 3,
-			args,
+			UNKNOWN = 3,
 			virtualRoot = {
-				prefix: '/opt/media/',
-				removablePrefix: '/opt/storage/sdcard/', 
+				prefix: '/opt/usr/media/',
+				removablePrefix: '/opt/usr/storage/sdcard/', 
 				removable: 'removable1',
 				tizenRoots: ['images', 'videos', 'downloads', 'documents', 'removable1'],
+                
+                // From Tizen's photo gallery we receive the fully qualified file name
+                // (for example, /opt/usr/media/image.jpg). We will need to open the file
+                // using tizen's Filesystem and read it. However, tizen.Filesystem will
+                // not accept the fully qualified file name - it only works with 
+                // "virtual roots". There is no OS facility to "reverse resolve" from
+                // a OS path to a "virtual root".
+                //
+                // Our method to get a virtual root from a fully qualified file name is
+                // to simply remove the '/opt/usr/media/' part from the file name.
+                
 				_removePrefix: function(path) {
 					var nP;
-					if(path.indexOf(this.prefix) == 0){
+					if (path.indexOf(this.prefix) == 0) {
 						nP = path.replace(this.prefix, '');		
 					} else {
 						nP = this.removable + '/' + path.replace(this.removablePrefix, '');
 					}
 					return nP;
 				},
-				fileName: function(path) {
+				
+                fileName: function(path) {
 					return path.substring(path.lastIndexOf('/')+1);
 				},
-				fileExt: function(path) {
+				
+                fileExt: function(path) {
 					return path.substring(path.lastIndexOf('.')+1);
 				},
-				getRoot: function(path){
-					var noP = this._removePrefix(path).toLowerCase(); 
-					var d = noP.substring(0, noP.indexOf('/'));
-					if(this.tizenRoots.indexOf(d) != -1) {
+				
+                getRoot: function(path) {
+					var noP = this._removePrefix(path).toLowerCase(),
+                        d = noP.substring(0, noP.indexOf('/'));
+                        
+					if (this.tizenRoots.indexOf(d) != -1) {
 						return d;
 					} else {
-						console.log('Can not connect to directory - ' + d);
-					}
+						Titanium.API.error("Can`t resolve root directory: " + d);
+                    }
 				},
-				getFile: function(path) {
-					if(this.getRoot(path)) {
+				
+                getFile: function(path) {
+					if (this.getRoot(path)) {
 						var noP = this._removePrefix(path);
 						return noP.substring(noP.indexOf('/'));
 					}
 				},
-				fileType: function(fileExt) {
-					var i;
-					if(photoExt.indexOf(fileExt) !== -1) {
-						i = PHOTO;
-					} else if(videoExt.indexOf(fileExt) !== -1) {
-						i = VIDEO;
-					} else {
-						i = UKNOWN;
-					};
-					return i; 			
+				
+                fileType: function(fileExt) {
+					var type = UNKNOWN;
+					if (photoExt.indexOf(fileExt) !== -1) {
+						type = PHOTO;
+					} else if (videoExt.indexOf(fileExt) !== -1) {
+						type = VIDEO;
+					} 
+                    
+					return type; 			
 				}
 			};
-		return {
-			open: function(args) {
+		
+        return {
+		
+        open: function(args) {
 				var path,
 					file,
 					serviceReplyCB = {
 						// callee now sends a reply
 						onsuccess: pickToItemCB,
 						// Something went wrong 
-						onfail: args.error ? args.error : function(){Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
+						onfailure: args.error ? args.error : function() {Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
 					};
 					
 				function readFromStream(fileStream) {
 					var contents = fileStream.readBase64(fileStream.bytesAvailable),
-						blob = new Blob({
+                    	blob = new Blob({
 							data: contents,
 							length: contents.length,
 							mimeType: imgMimeType[virtualRoot.fileExt(path)] || 'text/plain',
-							file: file || null,
+							// we cannot return a Titanium.Filesystem.File here, because the file is not in the HTML5
+                            // local storage and therefore not accessible to Titanium Filesystem
+                            file: null,     
 							nativePath: path || null
 						}),					
 						event = {
@@ -91,7 +110,7 @@ define(["Ti/_/declare", "Ti/Blob"],
 				};
 								
 				function resolveFileCB(dir) {
-					//Resolve to file
+                    //Resolve to file
 					file = dir.resolve(virtualRoot.getFile(path));
 					file.openStream(
 						// open for reading
@@ -101,39 +120,46 @@ define(["Ti/_/declare", "Ti/Blob"],
 						// error callback
 						function(e) {
 							Titanium.API.error('Error with open stream' + e.message)
-							}
-						);	
+						}
+                    );	
 				};
-				function pickToItemCB(reply) {   // reply -> ApplicationControlData[0]
-					path = reply[0].value.toString();
-					//Check if this file is image - return blob
-					if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
-						//Resolve to directory
-						tizen.filesystem.resolve(
+
+				function pickToItemCB(data) {
+                    if (!data) {
+                        Titanium.API.error('Error: ApplicationControlData is empty');
+                    }
+                    
+                    path = data[0].value.toString();
+                    if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
+						// Resolve to directory
+                        tizen.filesystem.resolve(
 							virtualRoot.getRoot(path), 
 							resolveFileCB, 
 							function(e) {
 								Titanium.API.error('Error' + e.message);
 							}, 
-							'rw');
-					//Check if this file is video - return path(string)		
-					} else if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == VIDEO) {
-						var event = {
+							'rw'
+                        );
+							
+					} else if (virtualRoot.fileType(virtualRoot.fileExt(path)) == VIDEO) {
+                    	var event = {
 								cropRect: null,
-								media: path,
+								media: path,//For video files we return only 'path'
 								mediaType: Ti.Media.MEDIA_TYPE_VIDEO
-							}		
+							}
 						args.success && args.success(event);
 					} else {
-						Titanium.API.error('This format of file does not supported');
+						Titanium.API.error('This format of file is not supported');
 					}	
 				};
-				//START
-				tizen.application.launchAppControl(service, 
-					'org.tizen.gallery',
-					function(){console.log('launch appControl succeeded');}, 
-					function(e){console.log('launch appControl failed. Reason: ' + e.name);}, 
-					serviceReplyCB);
+                
+				//launch default gallery application
+                tizen.application.launchAppControl(service, 
+                    null,
+                    function() {console.log('launch appControl succeeded');}, 
+                    function(e) {console.log('launch appControl failed. Reason: ' + e.name);}, 
+                    serviceReplyCB
+                );
 			}
 		};
 	});

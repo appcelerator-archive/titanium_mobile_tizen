@@ -34,8 +34,8 @@ function tizenDownload(title) {
 		stateLabel = createLabel('Download not started yet.', 330),
 		startButton = createButton('start download', 70, function() { startDownload(); }),
 		pauseButton = createButton('pause download', 110, function() { downloadId && Ti.Tizen.Download.pause(downloadId); }),
-		resumeButton = createButton('resume download', 150, function() { downloadId && Ti.Tizen.Download.resume(downloadId); }),
-		stopButton = createButton('stop download', 190, function(){ downloadId && Ti.Tizen.Download.abort(downloadId); }),
+		resumeButton = createButton('resume download', 150, function() { downloadId && Ti.Tizen.Download.resume(downloadId) }),
+		stopButton = createButton('stop download', 190, function(){ downloadId && Ti.Tizen.Download.cancel(downloadId); }),
 		urlTextField = Titanium.UI.createTextField({
 			value: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin',
 			top: 30,
@@ -72,15 +72,15 @@ function tizenDownload(title) {
 				messageWin.showToast('Download paused. ', 3000);
 				checkState();
 			},
-			onaborted : function(id) {
-				Titanium.API.info('"onaborted" event.');
-				messageWin.showToast('Download aborted. ', 3000);
+			oncanceled : function(id) {
+				Titanium.API.info('"oncanceled" event.');
+				messageWin.showToast('Download canceled. ', 3000);
 				downloadId = void 0;
 				checkState();
 			},
-			oncompleted : function(id, fileName) {
+			oncanceled : function(id, fullPath) {
 				Titanium.API.info('"oncompleted" event.');
-				messageWin.showToast('Download completed. Saved to file: ' + fileName, 5000);
+				messageWin.showToast('Download completed. Saved to file: ' + fullPath, 5000);
 				downloadId = void 0;
 				checkState();
 			},
@@ -96,9 +96,10 @@ function tizenDownload(title) {
 			if (downloadId){
 				messageWin.showToast('Please, stop current download before start new one.', 3000);
 			}else{
-				var urlDownload = Ti.Tizen.Download.createURLDownload({
+				var urlDownload = Ti.Tizen.Download.createDownloadRequest({
 					url: urlTextField.value,
-					destination: 'wgt-private-tmp',
+					//destination: 'wgt-private-tmp',
+					destination: 'documents',
 					fileName: 'tmp' + (new Date().getTime())
 				});
 				statusLabel.text = 'Starting...';

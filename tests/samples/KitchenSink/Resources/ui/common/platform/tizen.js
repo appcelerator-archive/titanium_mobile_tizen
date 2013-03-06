@@ -6,6 +6,7 @@ function tizen(_args) {
 			{title: 'Application', hasChild: true, test: 'ui/handheld/tizen/platform/application/application'},
 			{title: 'Filesystem', hasChild: true, test: 'ui/handheld/tizen/platform/filesystem'},
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenDownload'},
+            {title: 'System setting', hasChild: true, test: 'ui/handheld/tizen/platform/systemsetting'},
 			{title: 'System info', hasChild: true, test: 'ui/handheld/tizen/platform/tizenSystemInfo'},
 			{title: 'Power', hasChild: true, test: 'ui/handheld/tizen/platform/power'},
 			{title: 'NFC demo', hasChild: true, test: 'ui/handheld/tizen/platform/tizenNFC'},
@@ -15,7 +16,7 @@ function tizen(_args) {
 			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/alarm'},
 			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/notification'},
 			{title: 'Calendar', hasChild: true, test: 'ui/handheld/tizen/platform/calendar'}
-		],
+        ],
 		tableview = Ti.UI.createTableView({
 			data: data
 		});
