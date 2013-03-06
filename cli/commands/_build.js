@@ -42,6 +42,7 @@ var ti = require('titanium-sdk'),
 	},
 	devId,
 	defaultPrivilegesList = '<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
+			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>'+
