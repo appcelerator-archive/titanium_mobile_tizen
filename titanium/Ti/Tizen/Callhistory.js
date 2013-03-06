@@ -1,13 +1,15 @@
-define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented){
-
-	return lang.setObject('Ti.Tizen.Call.CallHistory', Evented, {
+define(['Ti/_/lang', 'Ti/Tizen/Callhistory/CallHistoryEntry', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
+	return lang.setObject('Ti.Tizen.Callhistory', Evented, {
 
 		find: function(successCallback /*CallHistoryEntryArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-			tizen.call.history.find(function(histories) {
+			console.log('begin')
+			tizen.callhistory.find(function(histories) {
 				var result = [],
 					historiesCount = histories.length,
 					i = 0;
+				console.log("historiesCount=" + historiesCount);
 				for (; i < historiesCount; i++) {
+					console.log(histories[i].direction);
 					result.push(new CallHistoryEntry(histories[i]));
 				}
 				successCallback.call(null, result);
@@ -17,7 +19,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError', '
 		},
 
 		remove: function(entry /*CallHistoryEntry*/) {
-			return tizen.call.history.remove(entry._obj);
+			return tizen.callhistory.remove(entry._obj);
 		},
 
 		removeBatch: function(entries /*CallHistoryEntry*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
@@ -29,24 +31,18 @@ define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError', '
 				result.push(entries[i]._obj);
 			}
 
-			return tizen.call.history.removeBatch(result, successCallback, function(error) {
+			return tizen.callhistory.removeBatch(result, successCallback, function(error) {
 				errorCallback.call(null, new WebAPIError(error));
 			});
 		},
 
 		removeAll: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return tizen.call.history.removeAll(successCallback, function(error) {
+			return tizen.callhistory.removeAll(successCallback, function(error) {
 				errorCallback.call(null, new WebAPIError(error));
 			});
 		},
 
-		deleteRecording: function(historyEntry /*CallHistoryEntry*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return tizen.call.history.deleteRecording(historyEntry._obj, successCallback, function(error) {
-				errorCallback.call(null, new WebAPIError(error));
-			});
-		},
-
-		addListener: function(observer /*CallHistoryChangeCallback*/) {
+		addChangeListener: function(observer /*CallHistoryChangeCallback*/) {
 			var object = {
 				onadded: function(entries) {
 					if (observer.onadded) {
@@ -73,11 +69,12 @@ define(['Ti/_/lang', 'Ti/Tizen/Call/CallHistoryEntry', 'Ti/Tizen/WebAPIError', '
 					}
 				}
 			}
-			return tizen.call.history.addListener(object);
+			return tizen.callhistory.addChangeListener(object);
 		},
 
-		removeListener: function(handle /*long*/) {
-			return tizen.call.history.removeListener(handle);
-		}
+		removeChangeListener: function(handle /*long*/) {
+			return tizen.callhistory.removeChangeListener(handle);
+		},
+
 	});
 });

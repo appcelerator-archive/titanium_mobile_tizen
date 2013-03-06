@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Ti.Tizen.MediaContent.MediaItem', Evented, {
+	return declare('Ti.Tizen.Content.Content', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -25,9 +25,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.mimeType;
 				}
 			},
-			itemURI: {
+			contentURI: {
 				get: function() {
-					return this._obj.itemURI;
+					return this._obj.contentURI;
 				}
 			},
 			thumbnailURIs: {

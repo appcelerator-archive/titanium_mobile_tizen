@@ -1,7 +1,7 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Ti.Tizen.MediaContent.MediaFolder', Evented, {
+	return declare('Ti.Tizen.Content.ContentDirectory', Evented, {
 		constructor: function(args) {
-			if(args.toString() === '[object Folder]') {
+			if(args.toString() === '[object ContentDirectory]') {
 				this._obj = args;
 			}
 		},
@@ -12,9 +12,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.id;
 				}
 			},
-			folderURI: {
+			directoryURI: {
 				get: function() {
-					return this._obj.folderURI;
+					return this._obj.directoryURI;
 				}
 			},
 			title: {

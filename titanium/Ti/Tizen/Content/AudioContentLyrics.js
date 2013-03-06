@@ -1,5 +1,5 @@
 define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.MediaContent.MediaLyrics', null, {
+	return declare('Ti.Tizen.Content.AudioContentLyrics', null, {
 		constructor: function(args) {
 			this._obj = args;
 		},

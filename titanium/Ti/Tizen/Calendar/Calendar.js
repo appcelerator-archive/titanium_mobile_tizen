@@ -10,11 +10,6 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 					return this._obj.id;
 				}
 			},
-			accountServiceId: {
-				get: function() {
-					return this._obj.accountServiceId;
-				}
-			},
 			name: {
 				get: function() {
 					return this._obj.name;
@@ -54,7 +49,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 				errorCallback.call(null, new WebAPIError(error));
 			}
 
-			this._obj.addBatch(unwrappedItems, calendarItemsSuccessCallback, errorCallback && wrappedErrorCallback);
+			this._obj.addBatch(unwrappedItems, successCallback && calendarItemsSuccessCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		update: function(item /*CalendarItem*/, updateAllInstances /*boolean*/) {
@@ -86,7 +81,6 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 				obj = id._obj;
 			} else {
 				Ti.API.error('Unexpected type of CalendarItemId.');
-				return;
 			}
 
 			this._obj.remove(obj);
@@ -125,7 +119,12 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 				errorCallback.call(null, new WebAPIError(error));
 			}
 
-			this._obj.find(calendarItemsListSuccesscallback, errorCallback && wrappedErrorCallback, filter ? filter._obj : null, sortMode ? sortMode._obj : null);
+			this._obj.find(
+				successCallback && calendarItemsListSuccesscallback,
+				errorCallback && wrappedErrorCallback, 
+				(filter && (filter.toString() == '[object TiTizenAttributeFilter]')) ? filter._obj : filter,
+				(sortMode && (sortMode.toString() == '[object TiTizenSortMode]')) ? sortMode._obj : sortMode
+			);
 		},
 
 		addChangeListener: function(successCallback /*CalendarChangeCallback*/, errorCallback /*ErrorCallback*/) {
@@ -155,11 +154,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 				}
 			};
 
-			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
-			}
-
-			return this._obj.addChangeListener(wrappedCallback, errorCallback && wrappedErrorCallback);
+			return this._obj.addChangeListener(wrappedCallback);
 		},
 
 		removeChangeListener: function(watchId /*long*/) {

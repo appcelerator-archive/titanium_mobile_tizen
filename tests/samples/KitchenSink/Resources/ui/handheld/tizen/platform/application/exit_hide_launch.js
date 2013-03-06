@@ -1,9 +1,10 @@
 function tizen_exit_hide_launch(_args) {
 	var win = Ti.UI.createWindow(),
-		CALC_APP_ID = 'org.tizen.calculator', 
+		CALC_APP_ID = 'tlp6xwqzos.Calculator', 
 		butttonHeightOffset = 10, 
-		butttonHeight = 40, 
-		butttonWidth = 200;
+		butttonHeight = 40,
+		butttonWidth = 200,
+		kitchenSinkApp = Titanium.Tizen.Application.getCurrentApplication();
 
 	// Create button for Exit
 	var buttonExit = Titanium.UI.createButton({
@@ -16,7 +17,7 @@ function tizen_exit_hide_launch(_args) {
 	// Call tizen.application.exit when button has been pressed
 	buttonExit.addEventListener('click', function() {
 		try {
-			Ti.Tizen.Application.exit();
+			kitchenSinkApp.exit();
 		} catch (e) {
 			_args.showErrorDialog(e, 'Could not Exit from KitchenSink');
 		}
@@ -34,7 +35,7 @@ function tizen_exit_hide_launch(_args) {
 	// Call tizen.application.exit when button has been pressed
 	buttonHide.addEventListener('click', function() {
 		try {
-			Ti.Tizen.Application.hide();
+			kitchenSinkApp.hide();
 		} catch (e) {
 			_args.showErrorDialog(e, 'Could not Hide KitchenSink');
 		}

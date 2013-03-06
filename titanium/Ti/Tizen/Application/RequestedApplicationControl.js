@@ -1,26 +1,20 @@
-define(['Ti/_/declare'], function(declare) {
+define(['Ti/_/declare', 'Ti/Tizen/Application/ApplicationControl'], function(declare, ApplicationControl) {
 	return declare('Ti.Tizen.Application.RequestedApplicationControl', null, {
 		constructor: function(args) {
-			if(args.toString() === '[object RequestedApplicationControl]') {
-				this._obj = args;
-			} else {
-			}
+			this._obj = args;
+			this.constants.__values__.appControl = new ApplicationControl(this._obj.appControl);
 		},
 
 		constants: {
-			appControl: {
-				get: function() {
-					return this._obj.appControl;
-				}
-			},
+			appControl: {},
 		},
 
 		replyResult: function(data /*ApplicationControlData*/) {
-			return this._obj.replyResult(data ? data._obj : data);
+			this._obj.replyResult(data ? data._obj : data);
 		},
 
 		replyFailure: function() {
-			return this._obj.replyFailure();
+			this._obj.replyFailure();
 		}
 	});
 });

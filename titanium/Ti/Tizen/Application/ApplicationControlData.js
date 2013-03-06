@@ -4,7 +4,11 @@ define(['Ti/_/declare'], function(declare) {
 			if(args.toString() === '[object ApplicationControlData]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.ApplicationControlData(args.key, args.value);
+				if (args.key && args.value) {
+					this._obj = new tizen.ApplicationControlData(args.key, args.value);
+				} else {
+					Ti.API.error('Constructor with such parameters not found for ApplicationControlData.');
+				}
 			}
 		},
 
@@ -25,7 +29,6 @@ define(['Ti/_/declare'], function(declare) {
 					this._obj.value = value;
 				}
 			},
-		},
-
+		}
 	});
 });

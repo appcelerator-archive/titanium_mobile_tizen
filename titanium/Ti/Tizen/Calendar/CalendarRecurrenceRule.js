@@ -4,7 +4,11 @@ define(['Ti/_/declare'], function(declare) {
 			if(args.toString() === '[object CalendarRecurrenceRule]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.CalendarRecurrenceRule(args.frequency, args.ruleInitDict);
+				if (args.hasOwnProperty('frequency')) {
+					this._obj = new tizen.CalendarRecurrenceRule(args.frequency, args.ruleInitDict);
+				} else {
+					Ti.API.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
+				}
 			}
 		},
 

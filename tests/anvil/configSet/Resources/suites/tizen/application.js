@@ -18,9 +18,10 @@ module.exports = new function() {
 		{name: 'apps_contexts_harness'},
 		{name: 'apps_contexts_no_params'},
 		{name: 'launch_not_exist'},
-		{name: 'calc_launch'}
+		{name: 'calc_launch'},
+		{name: 'launchAppControl'},
 		// This test impact to another and can not be launched with others
-		// {name: 'harness_hide'},
+		// {name: 'harness_hide'}
 	];
 
 	function _runingAppWithId(runingAppArray, appId) {
@@ -125,21 +126,18 @@ module.exports = new function() {
 			});
 		}).shouldNotThrowException();
 
-		setTimeout(
-			function() {
-				valueOf(testRun, isSuccess).shouldBeTrue();
-				valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
+		setTimeout(function() {
+			valueOf(testRun, isSuccess).shouldBeTrue();
+			valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
 
-				for (var i = 0, len = runingAppArray.length; i < len; i++) {
-					valueOf(testRun, runingAppArray[i].id).shouldNotBeUndefined();
-					valueOf(testRun, runingAppArray[i].id).shouldBeString();
-					valueOf(testRun, runingAppArray[i].appId).shouldBeString();	
-				}
+			for (var i = 0, len = runingAppArray.length; i < len; i++) {
+				valueOf(testRun, runingAppArray[i].id).shouldNotBeUndefined();
+				valueOf(testRun, runingAppArray[i].id).shouldBeString();
+				valueOf(testRun, runingAppArray[i].appId).shouldBeString();	
+			}
 
-				finish(testRun);
-			}, 
-			2000
-		);
+			finish(testRun);
+		}, 2000);
 	}
 
 	// Test - check does getAppsContext return harness id
@@ -160,17 +158,14 @@ module.exports = new function() {
 
 		finish(testRun);
 
-		setTimeout(
-			function() {
-				isHarness = _runingAppWithId(runingAppArray, harness.id);
+		setTimeout(function() {
+			isHarness = _runingAppWithId(runingAppArray, harness.id);
 
-				valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
-				valueOf(testRun, isHarness).shouldBeTrue();
-				
-				finish(testRun);
-			}, 
-			1000
-		);
+			valueOf(testRun, runingAppArray.length).shouldBeGreaterThan(0);
+			valueOf(testRun, isHarness).shouldBeTrue();
+			
+			finish(testRun);
+		}, 1000);
 	}
 
 	// Test - Negative scenario - Does getAppsContext catch exception with no parameters
@@ -224,7 +219,7 @@ module.exports = new function() {
 			valueOf(testRun, isError).shouldBeTrue();
 
 			finish(testRun);
-		}, 1000);
+		}, 2000);
 	}
 
 	// Hides harnes app - MAY HAVE PROBLEM FOR OTHER TESTS
@@ -247,5 +242,67 @@ module.exports = new function() {
 		Ti.Tizen.Application.launch(appId);
 
 		finish(testRun);
+	};
+
+	// Test - launch image from another appControl
+	this.launchAppControl = function(testRun) {
+		var serviceLaunched,
+			isError,
+			appControl,
+			appControlReplyCallback = { 
+				// Callee sent a reply
+				onsuccess: function(data) {
+					Ti.API.info('success');
+					valueOf(testRun, data).shouldBe('[object TiTizenApplicationApplicationControlData]');
+
+					for (var i = 0; i < data.length; i++) {
+						Ti.API.info("#" + i + " key:" + data[i].key);
+						
+						for(var j = 0; j < data[i].value.length; j++) {
+							Ti.API.info("   value#" + j + ":" + data[i].value[j]);
+						}
+					}
+				},
+				// Something went wrong
+				onfailure: function() {
+				   Ti.API.info('The launch application control failed');
+				}
+			};
+
+		valueOf(testRun, function() {
+			appControl = Ti.Tizen.Application.createApplicationControl({
+				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				uri: null,
+				mime: 'image/jpeg',
+				category: null
+			});
+		}).shouldNotThrowException();
+
+		valueOf(testRun, appControl).shouldBe('[object TiTizenApplicationApplicationControl]');
+
+		valueOf(testRun, function() {
+			 Ti.Tizen.Application.launchAppControl(
+				appControl, 
+				null,
+				function() { 
+					Ti.API.info("Launch application control succeed.");
+
+					serviceLaunched = true;
+				},
+				function(e) {
+					Ti.API.info("Launch application control failed. reason: " + e.message);
+
+					isError = true;
+				},
+				appControlReplyCallback
+			);
+		}).shouldNotThrowException();
+
+		setTimeout(function() {
+			valueOf(testRun, serviceLaunched).shouldBeTrue();
+			valueOf(testRun, isError).shouldBeFalse();
+
+			finish(testRun);
+		}, 5000);
 	};
 }

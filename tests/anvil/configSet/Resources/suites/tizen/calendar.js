@@ -31,12 +31,15 @@ module.exports = new function() {
 
 	var finishError = function (testRun, errorMsg) {
 		Ti.API.info('The following error occurred: ' +  errorMsg);
+
 		reportError(testRun, 'The following error occurred: ' +  errorMsg);
 
 		finish(testRun);
 	};
 
 	var createCalendarItem = function(testRun, calendarType) {
+		Ti.API.info('Start to get default calendar.');
+
 		var calendar = Ti.Tizen.Calendar.getDefaultCalendar(calendarType),
 			today = new Date(),
 			h = today.getHours(),
@@ -68,13 +71,17 @@ module.exports = new function() {
 		valueOf(testRun, startDate).shouldBeObject();
 		valueOf(testRun, startDate instanceof Ti.Tizen.Time.TZDate).shouldBeTrue();
 		valueOf(testRun, duration instanceof Ti.Tizen.Time.TimeDuration).shouldBeTrue();
-		valueOf(testRun, duration).shouldBe('[object TiTizenTimeTimeDuration]');
+		valueOf(testRun, duration).shouldBe('[object TiTizenTimeTimeDuration]');		
 
 		if (calendarType == 'EVENT') {
+			Ti.API.info('Start to create Event.');
+
 			item = Ti.Tizen.Calendar.createCalendarEvent(itemParams);
 
 			valueOf(testRun, item).shouldBe('[object TiTizenCalendarCalendarEvent]');
 		} else {
+			Ti.API.info('Start to create Task.');
+
 			item = Ti.Tizen.Calendar.createCalendarTask(itemParams);
 
 			valueOf(testRun, item).shouldBe('[object TiTizenCalendarCalendarTask]');
@@ -99,6 +106,8 @@ module.exports = new function() {
 		});
 
 		valueOf(testRun, filter).shouldBe('[object TiTizenAttributeFilter]');		
+
+		Ti.API.info('Start to find items.');
 
 		calendar.find(
 			function(items) {
