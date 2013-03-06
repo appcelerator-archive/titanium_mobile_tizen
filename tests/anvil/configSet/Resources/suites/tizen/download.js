@@ -20,8 +20,8 @@ module.exports = new function() {
 	this.name = 'download';
 	this.tests = [
 		{name: 'checkDownload'},
-		{name: 'successDownloadTest'},
 		{name: 'successDownloadFlowTest'},
+		{name: 'successDownloadTest'},
 		{name: 'failedDownloadTest'}
 	];
 
@@ -40,7 +40,7 @@ module.exports = new function() {
 		valueOf(testRun, Ti.Tizen.Download).shouldBeObject();
 		valueOf(testRun, Ti.Tizen.Download.start).shouldBeFunction();
 		valueOf(testRun, Ti.Tizen.Download.pause).shouldBeFunction();
-		valueOf(testRun, Ti.Tizen.Download.abort).shouldBeFunction();
+		valueOf(testRun, Ti.Tizen.Download.cancel).shouldBeFunction();
 		valueOf(testRun, Ti.Tizen.Download.resume).shouldBeFunction();
 		
 		finish(testRun);
@@ -62,8 +62,8 @@ module.exports = new function() {
 					Ti.Tizen.Download.pause(downloadId);
 				}
 				if (wasResumed){
-					valueOf(testRun, Ti.Tizen.Download.abort).shouldBeFunction();
-					Ti.Tizen.Download.abort(downloadId);
+					valueOf(testRun, Ti.Tizen.Download.cancel).shouldBeFunction();
+					Ti.Tizen.Download.cancel(downloadId);
 				}
 			},
 			onpaused: function(id) {
@@ -75,7 +75,7 @@ module.exports = new function() {
 					wasResumed = true;
 				}, 500);
 			},
-			onaborted: function(id) {
+			oncanceled: function(id) {
 				Ti.API.debug('onaborted event. id=' + id);
 				clearFakeTimeout();
 				valueOf(localTestRun, id).shouldBeGreaterThanEqual(0);
@@ -95,12 +95,12 @@ module.exports = new function() {
 			}
 		};
 		// Downloading large file to test callbacks.
-		var urlDownload = Ti.Tizen.Download.createURLDownload({
-			url: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin', 
-			destination: 'wgt-private-tmp', 
+		var urlDownload = Ti.Tizen.Download.createDownloadRequest({
+			url: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin',
+			destination: 'documents',
 			fileName: 'tmp' + (new Date().getTime())
 		});
-		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
+		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');
 		downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
@@ -115,7 +115,7 @@ module.exports = new function() {
 			onpaused: function(id) {
 				reportError(localTestRun, 'onpaused may not be called in this test!');
 			},
-			onaborted: function(id) {
+			oncanceled: function(id) {
 				reportError(localTestRun, 'onaborted may not be called in this test!');
 			},
 			oncompleted: function(id, fileName) {
@@ -129,12 +129,12 @@ module.exports = new function() {
 			}
 		};
 		// Start downloading large file to be able to test callbacks.
-		var urlDownload = Ti.Tizen.Download.createURLDownload({
-				url: 'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin', 
-				destination: 'wgt-private-tmp',
+		var urlDownload = Ti.Tizen.Download.createDownloadRequest({
+				url: 'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin',
+				destination: 'documents',
 				fileName: 'tmp' + (new Date().getTime())
 			});
-		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
+		valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');
 		downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
@@ -153,7 +153,7 @@ module.exports = new function() {
 					valueOf(localTestRun, 'onpaused').shouldBe('oncompleted');
 					finish(localTestRun);
 				},
-				onaborted: function(id) {
+				oncanceled: function(id) {
 					Ti.API.debug('onaborted event. id=' +id);
 					valueOf(localTestRun, 'onaborted').shouldBe('oncompleted');
 					finish(localTestRun);
@@ -170,12 +170,12 @@ module.exports = new function() {
 				}
 			},
 			// Start downloading large file to initate callbacks.
-			urlDownload = Ti.Tizen.Download.createURLDownload({
-				url: 'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows', 
-				destination: 'wgt-private-tmp', 
+			urlDownload = Ti.Tizen.Download.createDownloadRequest({
+				url: 'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows',
+				destination: 'documents',
 				fileName: 'tmp' + (new Date().getTime())
 			});
-			valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadURLDownload]');
+			valueOf(testRun, urlDownload.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');
 			downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 			
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
