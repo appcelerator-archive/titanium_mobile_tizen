@@ -82,7 +82,7 @@ function tizen_media_content_files(args) {
 		var index = e.rowData.itemIdOwn,
 			propArray = [
 				{ title: 'Item name: ' + itemsArray[index].title },
-				{ title: 'Item URI: ' + itemsArray[index].itemURI },
+				{ title: 'Item URI: ' + itemsArray[index].contentURI },
 				{ title: 'Item type: ' + itemsArray[index].type },
 				{ title: 'Item identifier: ' + itemsArray[index].id },
 				{ title: 'Item mimeType: ' + itemsArray[index].mimeType },

@@ -1,6 +1,6 @@
 define(["Ti/_/declare", "Ti/Blob"],
 	function(declare, Blob) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
+		var service = new tizen.ApplicationControl("http://tizen.org/appcontrol/operation/pick", '/opt/media', "image/*"),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -68,12 +68,12 @@ define(["Ti/_/declare", "Ti/Blob"],
 						// callee now sends a reply
 						onsuccess: pickToItemCB,
 						// Something went wrong 
-						onfail: args.error ? args.error : function(){Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
+						onfailure: args.error ? args.error : function(){Titanium.API.error('Something wrong with launching service - Photo Gallery')} 
 					};
 					
 				function readFromStream(fileStream) {
 					var contents = fileStream.readBase64(fileStream.bytesAvailable),
-						blob = new Blob({
+                    	blob = new Blob({
 							data: contents,
 							length: contents.length,
 							mimeType: imgMimeType[virtualRoot.fileExt(path)] || 'text/plain',
@@ -106,6 +106,7 @@ define(["Ti/_/declare", "Ti/Blob"],
 				};
 				function pickToItemCB(reply) {   // reply -> ApplicationControlData[0]
 					path = reply[0].value.toString();
+                    
 					//Check if this file is image - return blob
 					if	(virtualRoot.fileType(virtualRoot.fileExt(path)) == PHOTO) {
 						//Resolve to directory
@@ -128,12 +129,13 @@ define(["Ti/_/declare", "Ti/Blob"],
 						Titanium.API.error('This format of file does not supported');
 					}	
 				};
-				//START
-				tizen.application.launchAppControl(service, 
-					'org.tizen.gallery',
-					function(){console.log('launch appControl succeeded');}, 
-					function(e){console.log('launch appControl failed. Reason: ' + e.name);}, 
-					serviceReplyCB);
+				//launch default gallery application
+                tizen.application.launchAppControl(service, 
+                    null,
+                    function(){console.log('launch appControl succeeded');}, 
+                    function(e){console.log('launch appControl failed. Reason: ' + e.name);}, 
+                    serviceReplyCB
+                );
 			}
 		};
 	});
