@@ -95,11 +95,12 @@ function edit_event(args) {
 	var timePicker = Ti.UI.createPicker({
 		type: Ti.UI.PICKER_TYPE_DATE_AND_TIME,
 		value: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0),
-		width: '100%'
+		width: '100%',
+		top: top
 	});
 	self.add(timePicker);
 
-	top += height + 20;
+	top += height + 40;
 
 	var updateButton = Ti.UI.createButton({
 		title: 'Update event',
