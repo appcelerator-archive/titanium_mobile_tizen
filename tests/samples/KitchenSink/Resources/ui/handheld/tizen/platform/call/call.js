@@ -4,8 +4,8 @@ function call(args) {
 		}),
 		tableview = Ti.UI.createTableView({
 			data: [
-				{ title: 'Call in progress', hasChild: true, test: 'ui/handheld/tizen/platform/call/call_in_progress' },
-				{ title: 'Call history', hasChild: true, test: 'ui/handheld/tizen/platform/call/history' }
+				{ title: 'Manage history', test: 'ui/handheld/tizen/platform/call/manage_history' },
+				{ title: 'Listeners', test: 'ui/handheld/tizen/platform/call/listeners' },
 			]
 		});
 
