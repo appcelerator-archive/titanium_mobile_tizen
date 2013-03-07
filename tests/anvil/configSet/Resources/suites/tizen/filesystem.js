@@ -104,7 +104,6 @@ module.exports = new function() {
 				valueOf(testRun, stream.eof).shouldBeTrue();
 				valueOf(testRun, stream.bytesAvailable).shouldBeLessThanEqual(startBytes);
 				valueOf(testRun, stream.position).shouldBeEqual(startBytes-1);
-//				console.log('stream.position: '+stream.position);
 				stream.close();
 				
 				deleteFiles(docDir, [file.fullPath, fileNew.fullPath], function() {
