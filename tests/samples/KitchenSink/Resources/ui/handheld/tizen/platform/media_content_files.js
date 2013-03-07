@@ -66,6 +66,11 @@ function tizen_media_content_files(args) {
 			
 		itemsArray = items;
 
+		(itemsCount == 0) && Titanium.UI.createAlertDialog({
+								title: 'Info',
+								message: 'Content is empty. Add some files first.'
+							}).show();
+
 		for (; i < itemsCount; i++) {
 			var item = items[i],
 				row = Ti.UI.createTableViewRow({
@@ -76,8 +81,10 @@ function tizen_media_content_files(args) {
             
 			tableData.push(row);
 		}
+
 		filesList.setData(tableData);
 	}
+
 	filesList.addEventListener('click', function(e) {
 		var index = e.rowData.itemIdOwn,
 			propArray = [
@@ -90,7 +97,7 @@ function tizen_media_content_files(args) {
 				{ title: 'Item modifiedDate: ' + itemsArray[index].modifiedDate },
 				{ title: 'Item description: ' + itemsArray[index].description },
 				{ title: 'Item rating: ' + itemsArray[index].rating }
-		];
+			];
 
 		switch (itemsArray[index].type) {
 			case 'IMAGE':
@@ -195,6 +202,7 @@ function tizen_media_content_files(args) {
 	self.add(viewFiles);
 
 	self.add(filesList);
+
 	return self;
 }
 

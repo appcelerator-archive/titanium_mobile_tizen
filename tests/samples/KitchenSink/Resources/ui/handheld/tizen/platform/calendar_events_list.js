@@ -3,7 +3,12 @@ function events_list(args) {
 			title: args.title
 		}),
 		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
-		tableview = Ti.UI.createTableView();
+		tableview = Ti.UI.createTableView(),
+		emptyList = Ti.UI.createLabel({
+			text: 'List empty.',
+			top: 10,
+			left: 5
+		});
 
 	tableview.addEventListener('click', function(e) {
 		var wnd = new (require('ui/handheld/tizen/platform/calendar_edit_event'))({
@@ -15,7 +20,10 @@ function events_list(args) {
 	});
 
 	calendar.find(function (events) {
-		tableview.data = fillEventsTable(events);
+		var list = fillEventsTable(events);
+
+		(list.length == 0) && self.add(emptyList);
+		tableview.data = list;
 	}, onError);
 
 	self.add(tableview);
@@ -69,6 +77,9 @@ function events_list(args) {
 					}
 					calendar.remove(events[index].id);
 					tableview.data = data;
+
+					(data.length == 0) && self.add(emptyList);
+
 					alert('Event was removed successfully');
 				});	
 			})(i);

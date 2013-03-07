@@ -5,13 +5,14 @@ function tizenDownload(title) {
 	// simplify similar buttons creation
 	function createButton(title, top, clickHandler) {
 		var result = Titanium.UI.createButton({
-			title: title,
-			top: top,
-			height: 39,
-			width: '100%'
-		});
+				title: title,
+				top: top,
+				height: 39,
+				width: '100%'
+			});
 
 		result.addEventListener('click', clickHandler);
+
 		return result;
 	}
 
@@ -56,35 +57,36 @@ function tizenDownload(title) {
 	win.add(urlTextField);
 
 	checkState();
+
 	return win;
 
-	function startDownload(){
+	function startDownload() {
 		// Listener object must be "local" for call "Ti.Tizen.Download.start". Don't move this declaration it out of this function.
 		var listener = {
-			onprogress : function(id, receivedSize, totalSize) {
+			onprogress: function(id, receivedSize, totalSize) {
 				Titanium.API.info('"onprogress" event. id=' + id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
 				var percentString = (totalSize > 0) ? String.formatDecimal((receivedSize * 100 / totalSize), '##.##' ) + '% ' : '';
 				statusLabel.text = 'Completed ' + percentString + '['+receivedSize + '/' + totalSize + ' bytes]';
 				checkState();
 			},
-			onpaused : function(id) {
+			onpaused: function(id) {
 				Titanium.API.info('"onpaused" event.');
 				messageWin.showToast('Download paused. ', 3000);
 				checkState();
 			},
-			oncanceled : function(id) {
+			oncanceled: function(id) {
 				Titanium.API.info('"oncanceled" event.');
 				messageWin.showToast('Download canceled. ', 3000);
 				downloadId = void 0;
 				checkState();
 			},
-			oncanceled : function(id, fullPath) {
+			oncompleted: function(id, fullPath) {
 				Titanium.API.info('"oncompleted" event.');
 				messageWin.showToast('Download completed. Saved to file: ' + fullPath, 5000);
 				downloadId = void 0;
 				checkState();
 			},
-			onfailed : function(id, error) {
+			onfailed: function(id, error) {
 				Titanium.API.info('"onfailed" event.');
 				messageWin.showToast('Download failed with error: ' + error.name, 3000);
 				downloadId = void 0;
@@ -92,22 +94,23 @@ function tizenDownload(title) {
 			}
 		};
 
-		try{
-			if (downloadId){
+		try {
+			if (downloadId) {
 				messageWin.showToast('Please, stop current download before start new one.', 3000);
-			}else{
+			} else {
 				var urlDownload = Ti.Tizen.Download.createDownloadRequest({
-					url: urlTextField.value,
-					//destination: 'wgt-private-tmp',
-					destination: 'documents',
-					fileName: 'tmp' + (new Date().getTime())
-				});
+						url: urlTextField.value,
+						//destination: 'wgt-private-tmp',
+						destination: 'documents',
+						fileName: 'tmp' + (new Date().getTime())
+					});
+
 				statusLabel.text = 'Starting...';
 				downloadId = Ti.Tizen.Download.start(urlDownload, listener);
 				Titanium.API.info('Download started. downloadId=' + downloadId);
 				Titanium.API.info('Download started. State=' + Ti.Tizen.Download.getState(downloadId));
 			}
-		}catch(e) {
+		} catch(e) {
 			messageWin.showToast('Exception on start download! /n' + e.message, 2500);
 		}
 
@@ -115,8 +118,8 @@ function tizenDownload(title) {
 	}
 
 	// checks current download state and updates buttons and messages states according to it.
-	function checkState(){
-		try{
+	function checkState() {
+		try {
 			// as downloadId has value only on some download in progress(or paused)
 			// we can get basic states from it
 			startButton.enabled = !downloadId;
@@ -129,7 +132,7 @@ function tizenDownload(title) {
 
 			pauseButton.enabled = (state === 'DOWNLOADING');
 			resumeButton.enabled = (state === 'PAUSED');
-		}catch(e) {
+		} catch(e) {
 			messageWin.showToast('Exception! ' + e.message, 2500);
 			// on error reset download and state.
 			downloadId = undefined;

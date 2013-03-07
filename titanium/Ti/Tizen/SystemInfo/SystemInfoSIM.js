@@ -1,7 +1,10 @@
 define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
 	return declare('Ti.Tizen.SystemInfo.SystemInfoSIM', SystemInfoProperty, {
 		constructor: function(args) {
-			this._obj = args;
+			if(args.toString() === '[object SystemInfoSIM]') {
+				this._obj = args;
+			} else {
+			}
 		},
 
 		constants: {
