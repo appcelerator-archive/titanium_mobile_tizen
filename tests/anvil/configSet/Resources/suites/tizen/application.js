@@ -258,7 +258,7 @@ module.exports = new function() {
 					for (var i = 0; i < data.length; i++) {
 						Ti.API.info("#" + i + " key:" + data[i].key);
 						
-						for(var j = 0; j < data[i].value.length; j++) {
+						for (var j = 0; j < data[i].value.length; j++) {
 							Ti.API.info("   value#" + j + ":" + data[i].value[j]);
 						}
 					}
@@ -277,9 +277,7 @@ module.exports = new function() {
 				category: null
 			});
 		}).shouldNotThrowException();
-
 		valueOf(testRun, appControl).shouldBe('[object TiTizenApplicationApplicationControl]');
-
 		valueOf(testRun, function() {
 			 Ti.Tizen.Application.launchAppControl(
 				appControl, 
