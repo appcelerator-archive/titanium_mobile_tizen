@@ -14,8 +14,6 @@ var suites = [
 	{name: "tizen/contacts"},
 	{name: "tizen/notification"},
 	{name: "tizen/call"},
-	{name: "tizen/bluetooth"},
-	{name: "tizen/nfc"},
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
 	{name: "tizen/download"},
