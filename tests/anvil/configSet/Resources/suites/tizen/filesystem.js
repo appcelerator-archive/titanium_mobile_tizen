@@ -104,7 +104,6 @@ module.exports = new function() {
 				valueOf(testRun, stream.eof).shouldBeTrue();
 				valueOf(testRun, stream.bytesAvailable).shouldBeLessThanEqual(startBytes);
 				valueOf(testRun, stream.position).shouldBeEqual(startBytes-1);
-				
 				stream.close();
 				
 				deleteFiles(docDir, [file.fullPath, fileNew.fullPath], function() {
@@ -136,7 +135,7 @@ module.exports = new function() {
 				try {
 					fileNew = docDir.createFile(fNnew);
 				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+					if(exc.type == 'NotFoundError') {
 						fileNew = docDir.resolve(fNnew);
 					} else {
 						errorCB(exc, testRun, 'Create file');
@@ -162,7 +161,7 @@ module.exports = new function() {
 				try {
 					file = docDir.createFile(fN);
 				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+					if(exc.type == 'NotFoundError') {
 						file = docDir.resolve(fN);
 					} else {
 						errorCB(exc, testRun, 'Create file')
@@ -186,16 +185,13 @@ module.exports = new function() {
 				var directory, file;
 				docDir = dir;
 				valueOf(testRun, docDir instanceof Ti.Tizen.Filesystem.File).shouldBeTrue();
-				
-				
 				function createDir() {
 					//create directory, if exist - delete and create new
 					try {
 						directory = docDir.resolve(dN);
 						deleteDirectories(docDir, [directory.fullPath], function() { createDir(); });
 					} catch (exc) {
-						if ( exc.type == 'IOError' && 
-							(exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						if (exc.type == 'NotFoundError') {
 							directory = docDir.createDirectory(dN);
 							file = directory.createFile(fN);
 							
@@ -205,7 +201,7 @@ module.exports = new function() {
 									try {
 										directory = docDir.resolve(dN);
 									} catch (exc) {
-										if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+										if(exc.type == 'NotFoundError') {
 											finish(testRun);
 										} else {
 											errorCB(exc, testRun, 'Create file');
@@ -266,7 +262,7 @@ module.exports = new function() {
 								directory.resolve(fN);
 								errorCB(exc, testRun, 'File did not deleted')
 							} catch (exc) {
-								if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+								if(exc.type == 'NotFoundError') {
 									try {
 										directory1.resolve(fN);
 										deleteDirectories(docDir, [directory.fullPath], function(){
@@ -330,7 +326,7 @@ module.exports = new function() {
 							createDir();
 						});
 					} catch (exc) {
-						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						if(exc.type == 'NotFoundError') {
 							var copyToCB = function(){
 								try {
 									directory.resolve(fN);
@@ -384,7 +380,7 @@ module.exports = new function() {
 						directory = docDir.resolve(dN);
 						deleteDirectories(docDir, [directory.fullPath], function() { createDir(); });
 					} catch (exc) {
-						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						if(exc.type == 'NotFoundError') {
 							var writeToStream = function(stream) {
 								stream.write(text);
 								stream.close();
@@ -392,7 +388,7 @@ module.exports = new function() {
 								valueOf(testRun, file.isDirectory).shouldBeFalse();
 								valueOf(testRun, file.readOnly).shouldBeFalse();
 								valueOf(testRun, file.fileSize).shouldBeGreaterThan(0);
-								valueOf(testRun, file.toURI()).shouldBeEqual('file:///opt/media/Documents/testDir/textFile.txt');
+								valueOf(testRun, file.toURI()).shouldBeEqual('file:///opt/usr/media/Documents/testDir/textFile.txt');
 								valueOf(testRun, file.name).shouldBeEqual(fN);
 								valueOf(testRun, file.path).shouldBeEqual('documents/testDir/');
 								valueOf(testRun, file.fullPath).shouldBeEqual('documents/testDir/textFile.txt');
@@ -448,7 +444,7 @@ module.exports = new function() {
 						deleteDirectories(docDir, [directory.fullPath], function() {createDir();});
 					} catch (exc) {
 						
-						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						if(exc.type == 'NotFoundError') {
 							//read bytes
 							var readToStream = function(stream) {
 							
@@ -465,7 +461,6 @@ module.exports = new function() {
 									finish(testRun);
 								});
 							}
-							console.log('4');
 							//write bytes
 							var writeToStream = function(stream) {
 								valueOf(testRun, stream instanceof Ti.Tizen.Filesystem.FileStream).shouldBeTrue();
@@ -520,7 +515,7 @@ module.exports = new function() {
 						createDir();
 					});
 				} catch (exc) {
-					if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+					if(exc.type == 'NotFoundError') {
 						var readToStreamBase64 = function(stream) {
 							var content = stream.readBase64(stream.bytesAvailable);
 							stream.close();
@@ -636,7 +631,7 @@ module.exports = new function() {
 							createDir();
 						});
 					} catch (exc) {
-						if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+						if(exc.type == 'NotFoundError') {
 							var writeToStream = function(stream) {
 								stream.write(text);
 								stream.close();
@@ -651,7 +646,7 @@ module.exports = new function() {
 											finish(testRun);
 										});
 									} catch (exc) {
-										if(exc.type == 'IOError' && (exc.message == 'Node already exists.' || exc.message == 'Node does not exist or access denied.')) {
+										if(exc.type == 'NotFoundError') {
 											errorCB(exc, testRun, 'File alredy exist');
 										} else {
 											errorCB(exc, testRun, 'Problem with creating the file');

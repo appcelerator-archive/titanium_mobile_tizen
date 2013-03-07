@@ -72,12 +72,12 @@ module.exports = new function() {
 			valueOf(testRun, results).shouldBeObject();
 
 			for (var i in results) {
-				valueOf(testRun, results[i].uid).shouldBeNumber();
+				valueOf(testRun, results[i].uid).shouldBeString();
 				valueOf(testRun, results[i].remoteParties).shouldBeArray();
 				valueOf(testRun, results[i].startTime).shouldBeObject();
 				valueOf(testRun, results[i].direction).shouldBeString();
 				valueOf(testRun, results[i].type).shouldBeString();
-				valueOf(testRun, results[i].toString()).shouldBe('[object TiTizenCallCallHistoryEntry]');
+				valueOf(testRun, results[i].toString()).shouldBe('[object TiTizenCallhistoryCallHistoryEntry]');
 			}
 		}
 

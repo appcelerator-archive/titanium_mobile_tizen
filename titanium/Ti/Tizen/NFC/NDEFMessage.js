@@ -8,10 +8,8 @@ define(['Ti/_/declare'], function(declare) {
 					this._obj = new tizen.NDEFMessage(args.rawData);
 				} else if ('ndefRecords' in args) {
 					this._obj = new tizen.NDEFMessage(args.ndefRecords);
-				} else if () {
-					this._obj = new tizen.NDEFMessage();
 				} else {
-					Ti.API.error('Constructor NDEFMessage with given parameters doesn\'t exists');
+					this._obj = new tizen.NDEFMessage();
 				}
 			}
 		},

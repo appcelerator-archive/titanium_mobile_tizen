@@ -1,37 +1,42 @@
-define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Download/URLDownload', 'Ti/_/Evented'], function(lang, WebAPIError, URLDownload, Evented) {
+define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Download/DownloadRequest', 'Ti/_/Evented'], function(lang, WebAPIError, DownloadRequest, Evented) {
+
+	function getDownloadCallback(downloadCallback) {
+		return {
+			onprogress: downloadCallback.onprogress && function(id, receivedSize, totalSize) {
+				downloadCallback.onprogress.call(null, id, receivedSize, totalSize);
+			},
+			onpaused: downloadCallback.onpaused && function(id) {
+				downloadCallback.onpaused.call(null, id);
+			},
+			oncanceled: downloadCallback.oncanceled && function(id) {
+				downloadCallback.oncanceled.call(null, id);
+			},
+			oncompleted: downloadCallback.oncompleted && function(id, fullPath) {
+				downloadCallback.oncompleted.call(null, id, fullPath);
+			},
+			onfailed: downloadCallback.onfailed && function(id, error) {
+				downloadCallback.onfailed.call(null, id, new WebAPIError(error));
+			}
+		}
+	}
+
 	return lang.setObject('Ti.Tizen.Download', Evented, {
 
 		constants: {
 			DOWNLOAD_STATE_QUEUED: 'QUEUED',
 			DOWNLOAD_STATE_DOWNLOADING: 'DOWNLOADING',
 			DOWNLOAD_STATE_PAUSED: 'PAUSED',
-			DOWNLOAD_STATE_ABORTED: 'ABORTED',
+			DOWNLOAD_STATE_CANCELED: 'CANCELED',
 			DOWNLOAD_STATE_COMPLETED: 'COMPLETED',
-			DOWNLOAD_STATE_FAILED: 'FAILED',
+			DOWNLOAD_STATE_FAILED: 'FAILED'
 		},
 
-		start: function(downloadObject /*URLDownload*/, downloadCallback /*DownloadCallback*/) {
-			return tizen.download.start(downloadObject._obj, downloadCallback && {
-				onprogress: downloadCallback.onprogress && function(id, receivedSize, totalSize) {
-					downloadCallback.onprogress.call(null, id, receivedSize, totalSize);
-				},
-				onpaused: downloadCallback.onpaused && function(id) {
-					downloadCallback.onpaused.call(null, id);
-				},
-				onaborted: downloadCallback.onaborted && function(id) {
-					downloadCallback.onaborted.call(null, id);
-				},
-				oncompleted: downloadCallback.oncompleted && function(id, fileName) {
-					downloadCallback.oncompleted.call(null, id, fileName);
-				},
-				onfailed: downloadCallback.onfailed && function(id, error) {
-					downloadCallback.onfailed.call(null, id, new WebAPIError(error));
-				}
-			});
+		start: function(downloadRequest /*DownloadRequest*/, downloadCallback /*DownloadCallback*/) {
+			return tizen.download.start(downloadRequest._obj, downloadCallback && getDownloadCallback(downloadCallback));
 		},
 
-		abort: function(downloadId /*long*/) {
-			return tizen.download.abort(downloadId);
+		cancel: function(downloadId /*long*/) {
+			return tizen.download.cancel(downloadId);
 		},
 
 		pause: function(downloadId /*long*/) {
@@ -46,8 +51,20 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Download/URLDownload', 'T
 			return tizen.download.getState(downloadId);
 		},
 
-		createURLDownload: function(args){
-			return new URLDownload(args);
+		getDownloadRequest: function(downloadId /*long*/) {
+			return this._wrap(tizen.download.getDownloadRequest(downloadId));
 		},
+
+		getMIMEType: function(downloadId /*long*/) {
+			return tizen.download.getMIMEType(downloadId);
+		},
+
+		setListener: function(downloadId /*long*/, downloadCallback /*DownloadCallback*/) {
+			return tizen.download.setListener(downloadId, downloadCallback && getDownloadCallback(downloadCallback));
+		},
+
+		createDownloadRequest: function(args){
+			return new DownloadRequest(args);
+		}
 	});
 });

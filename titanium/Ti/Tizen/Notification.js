@@ -9,6 +9,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 		},
 
 		post: function(notification /*Notification*/) {
+			console.log('it work here');
 			tizen.notification.post(notification._obj);
 		},
 
@@ -41,7 +42,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 
 		_wrap: function(object) {
 			var result;
-			console.log(object);
 			if (object.toString() === '[object StatusNotification]') {
 				result = this.createStatusNotification(object);
 			}
@@ -49,7 +49,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 		},
 
 		createStatusNotification: function(args) {
-			return new StatusNotification(args);
+			return new StatusNotification(args); //Need to add this module StatusNotification in define, with path Ti/Tizen/Notification/StatusNotification
 		},
 	});
 });

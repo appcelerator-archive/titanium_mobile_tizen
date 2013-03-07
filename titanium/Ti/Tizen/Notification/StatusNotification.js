@@ -7,9 +7,9 @@ define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare,
 				var notificationInitDict;
 				if (args.notificationInitDict) {
 					notificationInitDict = args.notificationInitDict;
-					notificationInitDict.service && (notificationInitDict.service = notificationInitDict.service._obj);
+					notificationInitDict.appControl && (notificationInitDict.appControl = notificationInitDict.appControl._obj);
 				}
-				this._obj = new tizen.StatusNotification(args.statusType, args.title, notificationInitDict);
+				this._obj = new tizen.StatusNotification(args.statusType, args.title, args.notificationInitDict);
 			}
 		},
 
@@ -46,12 +46,20 @@ define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare,
 					this._obj.vibration = value;
 				}
 			},
-			service: {
+			appControl: {
 				get: function() {
-					return this._obj.service;
+					return this._obj.appControl;
 				},
 				set: function(value) {
-					this._obj.service = value;
+					this._obj.appControl = value;
+				}
+			},
+			appId: {
+				get: function() {
+					return this._obj.appId;
+				},
+				set: function(value) {
+					this._obj.appId = value;
 				}
 			},
 			progressValue: {
@@ -62,7 +70,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare,
 					this._obj.progressValue = value;
 				}
 			},
-		}
+		},
 
 	});
 });
