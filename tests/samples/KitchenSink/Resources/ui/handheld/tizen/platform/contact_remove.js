@@ -3,7 +3,7 @@ function remove_contact(args) {
 			title: args.title
 		}),
 		contactsTable = Ti.UI.createTableView();
-	
+
 	Ti.Contacts.Tizen.getAllPeople(function(persons) {
 		var contactsCount = persons.length,
 			i = 0,
@@ -29,7 +29,7 @@ function remove_contact(args) {
 					});
 				row.add(contactLabel);
 				row.add(delButton);
-				
+
 				(function(index){
 					delButton.addEventListener('click', function(e) {
 						var rowsCount = data.length,
@@ -55,9 +55,9 @@ function remove_contact(args) {
 	}, function(err) {
 		alert('Error occured: ' + err);
 	});
-	
+
 	wnd.add(contactsTable);
-	
+
 	return wnd;
 }
 module.exports = remove_contact;
