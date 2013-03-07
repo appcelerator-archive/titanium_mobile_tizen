@@ -1,7 +1,10 @@
 define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
 	return declare('Ti.Tizen.SystemInfo.SystemInfoStorageUnit', SystemInfoProperty, {
 		constructor: function(args) {
-			this._obj = args;
+			if(args.toString() === '[object SystemInfoStorageUnit]') {
+				this._obj = args;
+			} else {
+			}
 		},
 
 		constants: {
