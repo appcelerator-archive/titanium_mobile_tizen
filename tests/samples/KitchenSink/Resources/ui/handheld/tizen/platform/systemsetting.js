@@ -36,27 +36,27 @@ function systemsetting(args) {
 			left: 0,
 			zIndex: 4
 		}),
-        settingType = Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN,
-        settingTypes = [];
-    
-    //settings data
-    settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN }));
+		settingType = Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN,
+		settingTypes = [];
+	
+	//settings data
+	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN }));
 	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN }));
 	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL }));
 	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL }));
-    
-    settingTypeSwitcher.add(settingTypes);
+	
+	settingTypeSwitcher.add(settingTypes);
 
 	switchPanel.add(propertyLabel);
 	switchPanel.add(settingTypeSwitcher);
 	window.add(switchPanel);
-    window.add(filesPanel);
-    
+	window.add(filesPanel);
+	
 	//load images
 	function loadFiles(type) {
 		var source,
-            isImage = type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || 
-                      type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
+			isImage = type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || 
+					  type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
 			filter = Ti.Tizen.createAttributeFilter({
 				attributeName: 'type',
 				matchFlag: 'EXACTLY',
@@ -64,68 +64,73 @@ function systemsetting(args) {
 			});
 
 		Ti.Tizen.Content.find( 
-            //Success
-            function(items) {
-                var tableData = [],
-                    i = 0,
-                    length = items.length;
-                
-                Ti.API.info('loadImages => success');    
-                for (; i < length; i++) {
-                    
-                    var item = items[i],
-                        row = Ti.UI.createTableViewRow({
-                            title: items[i].contentURI,
-                            hasChild: false,
-                            itemIdOwn: i
-                        });
-                    
-                    tableData.push(row);
-                }
-                
-                //clear listeners and rows
-                filesPanel.removeEventListener('click');
-                filesPanel.setData([]);
-                
-                //set new data and listener
-                filesPanel.setData(tableData);
-                filesPanel.addEventListener('click', function(e) {
-                    Ti.API.info('click' + e.rowData.title);
-                    //setProperty
-                    Ti.Tizen.SystemSetting.setProperty( settingType, e.rowData.title, 
-                        //successCallback
-                        function() {
-                            Titanium.UI.createAlertDialog({
-                                title: 'System setting',
-                                message: settingType + ' has been changed.'
-                            }).show();  
-                        },
-                        //errorCallback
-                        function(e) {
-                            Titanium.UI.createAlertDialog({
-                                title:'System setting',
-                                message:e.message
-                            }).show();
-                        } 
-                    );
-                });
-            },
-            //Error
-            function onError(e) {
-                Ti.API.error(e.message);
-            },
-            null,
-            filter
-        );
+			//Success
+			function(items) {			
+				var tableData = [],
+					i = 0,
+					length = items.length;
+				
+				(length == 0) && Titanium.UI.createAlertDialog({
+									title: 'Info',
+									message: 'Content is empty. Add some files first.'
+								}).show();
+
+				Ti.API.info('loadImages => success');
+
+				for (; i < length; i++) {                   
+					var item = items[i],
+						row = Ti.UI.createTableViewRow({
+							title: items[i].contentURI,
+							hasChild: false,
+							itemIdOwn: i
+						});
+					
+					tableData.push(row);
+				}
+				
+				// Clear listeners and rows
+				filesPanel.removeEventListener('click');
+				filesPanel.setData([]);
+				
+				// Set new data and listener
+				filesPanel.setData(tableData);
+				filesPanel.addEventListener('click', function(e) {
+					Ti.API.info('click' + e.rowData.title);
+					// SetProperty
+					Ti.Tizen.SystemSetting.setProperty( settingType, e.rowData.title, 
+						// SuccessCallback
+						function() {
+							Titanium.UI.createAlertDialog({
+								title: 'System setting',
+								message: settingType + ' has been changed.'
+							}).show();
+						},
+						// ErrorCallback
+						function(e) {
+							Titanium.UI.createAlertDialog({
+								title:'System setting',
+								message:e.message
+							}).show();
+						} 
+					);
+				});
+			},
+			//Error
+			function onError(e) {
+				Ti.API.error(e.message);
+			},
+			null,
+			filter
+		);
 	};
-    
-    loadFiles(settingType);
+	
+	loadFiles(settingType);
 
 	settingTypeSwitcher.addEventListener('change', function(e) {
 		Ti.API.info(e.row.value);
-        
-        settingType = e.row.value;
-        loadFiles(settingType);
+		
+		settingType = e.row.value;
+		loadFiles(settingType);
 	});
 	
 	return window;
