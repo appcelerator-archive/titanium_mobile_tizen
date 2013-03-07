@@ -27,6 +27,11 @@ function tizen_alarm() {
 
 	removeButton.addEventListener('click', function() {
 		Ti.Tizen.Notification.removeAll();
+
+		Ti.UI.createAlertDialog({
+			title: 'Info',
+			message: 'All notifications removed successfully'
+		}).show();
 	});
 
 	postButton.addEventListener('click', createNotification);
