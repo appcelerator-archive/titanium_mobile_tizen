@@ -194,7 +194,7 @@ function tizen_alarm() {
 				title: 'Alarm'
 			});
 
-		Ti.Tizen.Alarm.add(alarm, 'org.tizen.browser');
+		Ti.Tizen.Alarm.add(alarm, 'tlp6xwqzos.Calculator');
 		dialog.message = 'Alarm has been successfuly added with id ' + alarm.id;
 		dialog.show();
 		addRow(alarm);
@@ -320,13 +320,14 @@ function tizen_alarm() {
 			dialog = Ti.UI.createAlertDialog({
 				cancel: 1,
 				buttonNames: ['Ok'],
-				message: 'Alarm has been successfuly added with id ' + alarm.id,
 				title: 'Alarm'
 			});
 
 		Ti.Tizen.Alarm.add(alarm, 'org.tizen.clock');
 
+		dialog.message = 'Alarm has been successfuly added with id ' + alarm.id;
 		dialog.show();
+
 		addRow(alarm);
 	}
 
