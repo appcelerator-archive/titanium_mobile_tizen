@@ -6,15 +6,11 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_
 			TIME_DURATION_UNIT_SECS: 'SECS',
 			TIME_DURATION_UNIT_MINS: 'MINS',
 			TIME_DURATION_UNIT_HOURS: 'HOURS',
-			TIME_DURATION_UNIT_DAYS: 'DAYS',
+			TIME_DURATION_UNIT_DAYS: 'DAYS'
 		},
 
 		getCurrentDateTime: function() {
 			return new TZDate(tizen.time.getCurrentDateTime());
-		},
-
-		setCurrentDateTime: function(dt /*TZDate*/) {
-			return tizen.time.setCurrentDateTime(dt._obj);
 		},
 
 		getLocalTimezone: function() {
@@ -43,6 +39,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Time/TZDate', 'Ti/Tizen/Time/TimeDuration', 'Ti/_
 
 		createTimeDuration: function(args) {
 			return new TimeDuration(args);
-		},
+		}
 	});
 });

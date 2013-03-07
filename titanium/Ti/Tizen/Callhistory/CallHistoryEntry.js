@@ -1,7 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemoteParty) {
-
-	return declare('Ti.Tizen.Call.CallHistoryEntry', null, {
-
+define(['Ti/_/declare', 'Ti/Tizen/Callhistory/RemoteParty'], function(declare, RemoteParty) {
+	return declare('Ti.Tizen.Callhistory.CallHistoryEntry', null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -12,19 +10,14 @@ define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemotePa
 					return this._obj.uid;
 				}
 			},
-			serviceId: {
+			type: {
 				get: function() {
-					return this._obj.serviceId;
+					return this._obj.type;
 				}
 			},
-			callType: {
+			features: {
 				get: function() {
-					return this._obj.callType;
-				}
-			},
-			tags: {
-				get: function() {
-					return this._obj.tags;
+					return this._obj.features;
 				}
 			},
 			remoteParties: {
@@ -41,11 +34,6 @@ define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemotePa
 					return result;
 				}
 			},
-			forwardedFrom: {
-				get: function() {
-					return new RemoteParty(this._obj.forwardedFrom);
-				}
-			},
 			startTime: {
 				get: function() {
 					return this._obj.startTime;
@@ -54,21 +42,6 @@ define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemotePa
 			duration: {
 				get: function() {
 					return this._obj.duration;
-				}
-			},
-			endReason: {
-				get: function() {
-					return this._obj.endReason;
-				}
-			},
-			recording: {
-				get: function() {
-					return this._obj.recording;
-				}
-			},
-			cost: {
-				get: function() {
-					return this._obj.cost;
 				}
 			},
 		},
@@ -82,16 +55,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Call/RemoteParty'], function(declare, RemotePa
 					this._obj.direction = value;
 				}
 			},
-			currency: {
-				get: function() {
-					return this._obj.currency;
-				},
-				set: function(value) {
-					this._obj.currency = value;
-				}
-			},
-		}
+		},
 
 	});
-
 });

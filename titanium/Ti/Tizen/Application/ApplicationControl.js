@@ -4,7 +4,21 @@ define(['Ti/_/declare'], function(declare) {
 			if(args.toString() === '[object ApplicationControl]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data);
+				if (args.operation) {
+					if (args.data) {
+						var i = 0,
+							len = args.data.length,
+							unwrappedItems = [];
+
+						for (; i < len; i++) {
+							unwrappedItems.push(args.data[i]._obj);								
+						}
+					}
+
+					this._obj = new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data ? unwrappedItems : args.data);
+				} else {
+					Ti.API.error('Constructor with such parameters not found for ApplicationControl.');
+				}
 			}
 		},
 
@@ -49,7 +63,6 @@ define(['Ti/_/declare'], function(declare) {
 					this._obj.data = value;
 				}
 			},
-		},
-
+		}
 	});
 });

@@ -271,6 +271,7 @@ module.exports = new function() {
 	};
 	
 	var uninstallHarness = function(successCallback, errorCallback) {
+        driverUtils.log("uninstall...");
 		driverUtils.runCommand("web-uninstall -i zhrTuDSwYV", driverUtils.logStdout, function(error, stdout, stderr) {
 			if (error !== null) {
 				driverUtils.log("Error encountered when uninstalling harness: " + error);
@@ -289,12 +290,21 @@ module.exports = new function() {
 
 	// Handles restarting the test pass (usually when an error is encountered)
 	this.resumeConfig = function() {
-		var runCallback = function() {
-			runHarness(commandFinishedCallback);
-		};
-
+		var uninstallCallback = function() {
+				uninstallHarness(installHarness, commandFinishedCallback);
+			},
+            serverCallback = function() {
+				startServer(installCallback, commandFinishedCallback);
+			},
+            installCallback = function() {
+                installHarness(runCallback, commandFinishedCallback);
+            },
+            runCallback = function() {
+                runHarness(null, commandFinishedCallback);
+            };
+        
 		stopHarness();
-		startServer(runCallback, commandFinishedCallback);
+        uninstallHarness(serverCallback, commandFinishedCallback);
 	};
 
 	// Called when a config is finished running

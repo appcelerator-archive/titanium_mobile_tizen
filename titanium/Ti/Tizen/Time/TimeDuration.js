@@ -4,7 +4,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			if(args.toString() === '[object TimeDuration]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.TimeDuration(args.length, args.unit);
+				if (args.hasOwnProperty('length')) {
+					this._obj = new tizen.TimeDuration(args.length, args.unit);
+				} else {
+					Ti.API.error('Constructor with such parameters not found in TimeDuration.');
+				}
 			}
 		},
 

@@ -30,7 +30,7 @@ module.exports = new function() {
 
 		// Create app service for notification
 		var notificationArr,
-			appService = Ti.Tizen.Application.createApplicationService({
+			appControl = Ti.Tizen.Application.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -41,7 +41,7 @@ module.exports = new function() {
 				content: 'This is a simple notificaiton.',
 				iconPath: 'images/image1.jpg', 
 				vibration: true, 
-				service: appService
+				appControl: appControl
 			},
 			notification = Ti.Tizen.Notification.createStatusNotification({
 				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
@@ -69,7 +69,8 @@ module.exports = new function() {
 
 		// Create notification and add it to tray
 		var notId,
-			appService = Ti.Tizen.Application.createApplicationService({
+			notificationFrom,
+			appControl = Ti.Tizen.Application.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -80,7 +81,7 @@ module.exports = new function() {
 				iconPath: 'images/image1.jpg',
 				soundPath: undefined, 
 				vibration: true, 
-				service: appService
+				appControl: appControl
 			},
 			notification = Ti.Tizen.Notification.createStatusNotification({
 				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
@@ -94,16 +95,16 @@ module.exports = new function() {
 		}).shouldNotThrowException();
 
 		// Memorize notification id for use later
-		notId = notification.content;
-
+		notId = notification.id;
+		Ti.API.info(notId);
 		// Try to get notification by id
 		valueOf(testRun, function() {      
-			var notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = Ti.Tizen.Notification.get(notId);
 		}).shouldNotThrowException();
 		// Compare property of gotten notification with coresponding property of posted notification
 		valueOf(testRun, notificationFrom.content).shouldBe(notificationDict.content);
 		valueOf(testRun, notificationFrom.statusType).shouldBe(notification.statusType);
-		valueOf(testRun, notificationFrom.title).shouldBe(notificationDict.title);
+		valueOf(testRun, notificationFrom.title).shouldBe(notification.title);
 
 		Ti.Tizen.Notification.removeAll();
 
@@ -117,7 +118,8 @@ module.exports = new function() {
 
 		// Create notification and add it to tray
 		var notId,
-			appService = Ti.Tizen.Application.createApplicationService({
+			notificationFrom,
+			appControl = Ti.Tizen.Application.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -127,7 +129,7 @@ module.exports = new function() {
 					content: 'This is a simple notificaiton.',
 					iconPath: 'images/image1.jpg', 
 					vibration: true, 
-					service: appService},
+					appControl: appControl},
 			notification = Ti.Tizen.Notification.createStatusNotification({
 				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification',
@@ -150,7 +152,7 @@ module.exports = new function() {
 
 		// Get notification by id and compare it content attribute
 		valueOf(testRun, function() {      
-			var	notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = Ti.Tizen.Notification.get(notId);
 		}).shouldNotThrowException();
 		valueOf(testRun, notificationFrom.content).shouldBe(notification.content);
 
@@ -166,8 +168,10 @@ module.exports = new function() {
 
 		// Create first notification and add it to tray
 		var notId,
+			notificationFrom,
 			notId1,
-			appService = Ti.Tizen.Application.createApplicationService({
+			notificationFrom1,
+			appControl = Ti.Tizen.Application.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -177,14 +181,14 @@ module.exports = new function() {
 				content: 'This is a simple notificaiton 1.',
 				iconPath: 'images/image1.jpg', 
 				vibration: true, 
-				service: appService
+				appControl: appControl
 			},
 			notification = Ti.Tizen.Notification.createStatusNotification({
 				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification 1',
 				notificationInitDict: notificationDict
 			}),
-			appService1 = Ti.Tizen.Application.createApplicationService({
+			appControl1 = Ti.Tizen.Application.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -194,7 +198,7 @@ module.exports = new function() {
 				content: 'This is a simple notificaiton 2.',
 				iconPath: 'images/image1.jpg',
 				vibration: true, 
-				service: appService1
+				appControl: appControl1
 			},
 			notification1 = Ti.Tizen.Notification.createStatusNotification({
 				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
@@ -224,17 +228,17 @@ module.exports = new function() {
 
 		// Try to get removed notification: it should cause exception
 		valueOf(testRun, function() {      
-			var	notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = Ti.Tizen.Notification.get(notId);
 		}).shouldThrowException();
 
 		// Try to remove all notification in tray
 		valueOf(testRun, function() {      
 			Ti.Tizen.Notification.removeAll();
-		}).shouldThrowException();
+		}).shouldNotThrowException();
 
 		//try to get second notification and it should be removed
 		valueOf(testRun, function() {      
-			var notificationFrom1 = Ti.Tizen.Notification.get(notId1);
+			notificationFrom1 = Ti.Tizen.Notification.get(notId1);
 		}).shouldThrowException();
 
 		Ti.Tizen.Notification.removeAll();

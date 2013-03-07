@@ -1,4 +1,6 @@
-define(['Ti/_/declare', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen/Application/RequestedApplicationControl'], function(declare, ApplicationInformation, RequestedApplicationControl) {
+define(['Ti/_/declare', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen/Application/RequestedApplicationControl'], 
+		function(declare, ApplicationInformation, RequestedApplicationControl) {
+
 	return declare('Ti.Tizen.Application.Application', null, {
 		constructor: function(args) {
 			this._obj = args;
@@ -15,7 +17,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen
 		},
 
 		exit: function() {
-			return this._obj.exit();
+			this._obj.exit();
 		},
 
 		hide: function() {

@@ -24,7 +24,6 @@ var fs = require('fs'),
 	tmpFileUtil = require("file-utils").File,
 	scriptArgs = process.argv.slice(2),
 	workingDir = void 0,
-	//scriptArgs[1],
 	titaniumTizenDir = __dirname,
 	sdkRoot, resultPath, buildLinuxSdk = true;
 
@@ -34,23 +33,23 @@ async.series([
 
 function(next) {
 	//Validation
-	if(validateArgs(scriptArgs)) {
+	if (validateArgs(scriptArgs)) {
 		var archiveName = path.basename(scriptArgs[0]);
 		//build name for output zip with SDK
 		archiveName = archiveName.replace('.zip', '-tizen.zip');
 		resultPath = path.join(path.dirname(scriptArgs[0]), archiveName);
-		if(resultPath.indexOf('win32') != -1) {
+		if (resultPath.indexOf('win32') != -1) {
 			//initialize everything for linux sdk
 			buildLinuxSdk = false;
 		}
 		console.log('[DEBUG] created output file name: ' + resultPath);
-		if(process.platform === 'win32') {
+		if (process.platform === 'win32') {
 			//create temporary dir to unzip and modify sdk content. The dir is removed when the process finishes
 			var settings = {
 				directory: scriptArgs[1]
 			};
 			tmpFileUtil.createTempFolder(settings, function(error, folder) {
-				if(folder == null) {
+				if (folder == null) {
 					next("Cannot create temporary directory", 'failed');
 				}
 				console.log('[DEBUG] created temporary directory:' + folder.toString());
@@ -66,14 +65,14 @@ function(next) {
 	console.log('[DEBUG] Start unzip');
 	//Unzip callback
 	var resultCb = function(errorMsg) {
-			if(errorMsg) {
+			if (errorMsg) {
 				console.log('[DEBUG] unzip finished with error: ' + errorMsg);
 				next(null, 'ok');
 			} else {
 				next(null, 'ok');
 			}
 		};
-	if(process.platform === 'win32') {
+	if (process.platform === 'win32') {
 		unzip7za(scriptArgs[0], workingDir, resultCb);
 	} else {
 		appc.zip.unzip(scriptArgs[0], workingDir, resultCb);
@@ -89,7 +88,7 @@ function(next) {
 		next(null, 'ok');
 	});
 }, function(next) {
-	if(process.platform === 'win32') {
+	if (process.platform === 'win32') {
 		console.log('Start packaging on win32');
 		packagingSDK7z(function() {
 			next(null, 'ok');
@@ -100,7 +99,7 @@ function(next) {
 		});
 	}
 }], function(err) {
-	if(err) {
+	if (err) {
 		console.log(err);
 	}
 	console.log('Finished.');
@@ -109,12 +108,12 @@ function(next) {
 //validating input parameters
 function validateArgs(params) {
 	var workOk = true;
-	if(!fs.existsSync(params[0])) {
+	if (!fs.existsSync(params[0])) {
 		console.log('Error: param 1 should point existng zip archive. Current value: ' + params[0]);
 		workOk = false;
 	}
 	var stats = fs.statSync(params[1]);
-	if(!stats.isDirectory()) {
+	if (!stats.isDirectory()) {
 		console.log('Error: param 3 should point existing directory. Current value: ' + params[1]);
 		workOk = false;
 	}
@@ -123,9 +122,9 @@ function validateArgs(params) {
 
 function copymobilWebToTizen(finish) {
 	var basePath;
-	if(buildLinuxSdk) {
+	if (buildLinuxSdk) {
 		basePath = path.join(workingDir, 'mobilesdk', 'linux');
-		if(!fs.existsSync(basePath)) {
+		if (!fs.existsSync(basePath)) {
 			basePath = path.join(workingDir, 'mobilesdk', 'osx');
 		}
 	} else {
@@ -137,7 +136,7 @@ function copymobilWebToTizen(finish) {
 		console.log('[DEBUG] Full path to SDK folder:' + sdkRoot);
 	}, function() {
 		var pathToTizenInInSdk = path.join(sdkRoot, 'tizen');
-		if(fs.existsSync(pathToTizenInInSdk)) {
+		if (fs.existsSync(pathToTizenInInSdk)) {
 			wrench.rmdirSyncRecursive(pathToTizenInInSdk, true);
 		}
 		//visitDirs finished, sdk root detected, create initiali version of tizen directory that really is copy of mobileweb
@@ -180,40 +179,29 @@ function copymobilWebToTizen(finish) {
 }
 
 function executeDependenciesAnalyzer(finished) {
-	console.log('[DEBUG] executeDependenciesAnalyzer ');
-	var runner = require('child_process');
-	var scriptpath = path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer.js');
-	var analyzerCmd = 'node "' + scriptpath + '"';
-
-	console.log('starting dependency analyzer: ' + analyzerCmd);
-	options = {
-		cwd: path.join(sdkRoot, 'tizen', 'dependencyAnalyzer')
-	};
-	runner.exec(
-	analyzerCmd, function(err, stdout, stderr) {
-		console.log(stdout);
-		if(err != null) {
-			console.log('[Error] executeDependenciesAnalyzer failed');
-			console.log(stderr);
-		} else {
-			console.log('executeDependenciesAnalyzer ok');
-		}
-		finished();
-	});
+	try{
+		console.log('[DEBUG] loading dependencyAnalyzer.js');
+		var depCheck = require(path.join(sdkRoot, 'tizen', 'dependencyAnalyzer', 'dependencyAnalyzer'));
+		console.log('[DEBUG] loading calling depCheck');
+		depCheck(sdkRoot + '/');
+	} catch(e) {
+		console.log('[ERROR] ' + e);
+	}
+	finished();
 }
 
 function copyFileSync(srcFile, destFile) {
 	console.log('[DEBUG] copyFileSync from ' + srcFile + " to " + destFile);
-	var bytesRead, fdr, fdw, pos;
-	var BUF_LENGTH = 64 * 1024;
-	var _buff = new Buffer(BUF_LENGTH);
+	var bytesRead = 1, 
+		fdr, fdw, 
+		pos = 0,
+		BUF_LENGTH = 64 * 1024,
+		buff = new Buffer(BUF_LENGTH);
 	fdr = fs.openSync(srcFile, 'r');
 	fdw = fs.openSync(destFile, 'w');
-	bytesRead = 1;
-	pos = 0;
-	while(bytesRead > 0) {
-		bytesRead = fs.readSync(fdr, _buff, 0, BUF_LENGTH, pos);
-		fs.writeSync(fdw, _buff, 0, bytesRead);
+	while (bytesRead > 0) {
+		bytesRead = fs.readSync(fdr, buff, 0, BUF_LENGTH, pos);
+		fs.writeSync(fdw, buff, 0, bytesRead);
 		pos += bytesRead;
 	}
 	fs.closeSync(fdr);
@@ -224,21 +212,21 @@ function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
 	console.log('[DEBUG] copyDirSyncRecursiveEx src ' + sourceDir + " destination " + newDirLocation); /*  Create the directory where all our junk is moving to; read the mode of the source directory and mirror it */
 	var checkDir = fs.statSync(sourceDir);
 	try {
-		if(!fs.existsSync(newDirLocation)) {
+		if (!fs.existsSync(newDirLocation)) {
 			fs.mkdirSync(newDirLocation, checkDir.mode);
 		}
 	} catch(e) {
 		//if the directory already exists, that's okay
-		if(e.code !== 'EEXIST') throw e;
+		if (e.code !== 'EEXIST') throw e;
 	}
 
 	var files = fs.readdirSync(sourceDir);
 	console.log('[DEBUG] copyDirSyncRecursiveEx created filelist for ' + sourceDir + " it contains " + files.length);
 	for(var i = 0; i < files.length; i++) {
 		var currFile = fs.lstatSync(sourceDir + "/" + files[i]);
-		if(currFile.isDirectory()) { /*  recursion this thing right on back. */
+		if (currFile.isDirectory()) { /*  recursion this thing right on back. */
 			copyDirSyncRecursiveEx(sourceDir + "/" + files[i], newDirLocation + "/" + files[i]);
-		} else if(currFile.isSymbolicLink()) {
+		} else if (currFile.isSymbolicLink()) {
 			console.log('[WARRNING] copyDirSyncRecursiveEx symlink instead of file: ' + sourceDir + "/" + files[i]);
 			var symlinkFull = fs.readlinkSync(sourceDir + "/" + files[i]);
 			fs.symlinkSync(symlinkFull, newDirLocation + "/" + files[i]);
@@ -252,7 +240,7 @@ function find7za() {
 	var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..', 'tools', '7zip', '7za.exe'));
 	console.log('7za.exe detected. Path is ' + path.normalize(zippath));
 
-	if(fs.existsSync(zippath)) {
+	if (fs.existsSync(zippath)) {
 		return zippath;
 	} else {
 		console.log('Not found 7za.exe path is wrong ' + path.normalize(zippath));
@@ -271,22 +259,22 @@ function packagingSDK7z(finish) {
 		stdout += data.toString();
 	});
 	child.on('exit', function(code, signal) {
-		if(finish) {
-			if(code) {
+		if (finish) {
+			if (code) {
 				// if we're on windows, the error message is actually in stdout, so scan for it
-				if(process.platform === 'win32') {
+				if (process.platform === 'win32') {
 					var foundError = false,
 						err = [];
 
 					stdout.split('\n').forEach(function(line) {
-						if(/^Error\:/.test(line)) {
+						if (/^Error\:/.test(line)) {
 							foundError = true;
 						}
-						if(foundError) {
+						if (foundError) {
 							line && err.push(line.trim());
 						}
 					});
-					if(err.length) {
+					if (err.length) {
 						stderr = err.join('\n') + stderr;
 					}
 				}
@@ -309,23 +297,23 @@ function unzip7za(src, dest, callback) {
 		stdout += data.toString();
 	});
 	child.on('exit', function(code, signal) {
-		if(callback) {
-			if(code) {
+		if (callback) {
+			if (code) {
 				// if we're on windows, the error message is actually in stdout, so scan for it
-				if(process.platform === 'win32') {
+				if (process.platform === 'win32') {
 					var foundError = false,
 						err = [];
 
 					stdout.split('\n').forEach(function(line) {
-						if(/^Error\:/.test(line)) {
+						if (/^Error\:/.test(line)) {
 							foundError = true;
 						}
-						if(foundError) {
+						if (foundError) {
 							line && err.push(line.trim());
 						}
 					});
 
-					if(err.length) {
+					if (err.length) {
 						stderr = err.join('\n') + stderr;
 					}
 				}
@@ -346,7 +334,7 @@ function packagingSDKLinux(finish) {
 		cwd: workingDir
 	}, function(err, stdout, stderr) {
 		console.log(stdout);
-		if(err != null) {
+		if (err != null) {
 			console.log(stderr);
 		} else {
 			console.log('compressing ok');

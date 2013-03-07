@@ -56,19 +56,7 @@ function tizen_media_content_files(args) {
 			Ti.API.error(e.message);
 		}
 
-		try {
-			source = Ti.Tizen.MediaContent.getLocalMediaSource();
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
-
-		try {
-			source.findItems(onMediaItemArraySuccess, onError, null, filter);
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
+		Ti.Tizen.Content.find(onMediaItemArraySuccess, onError, null, filter);
 	}
 
 	function onMediaItemArraySuccess(items) {
@@ -77,6 +65,11 @@ function tizen_media_content_files(args) {
 			itemsCount = items.length;
 			
 		itemsArray = items;
+
+		(itemsCount == 0) && Titanium.UI.createAlertDialog({
+								title: 'Info',
+								message: 'Content is empty. Add some files first.'
+							}).show();
 
 		for (; i < itemsCount; i++) {
 			var item = items[i],
@@ -88,13 +81,15 @@ function tizen_media_content_files(args) {
             
 			tableData.push(row);
 		}
+
 		filesList.setData(tableData);
 	}
+
 	filesList.addEventListener('click', function(e) {
 		var index = e.rowData.itemIdOwn,
 			propArray = [
 				{ title: 'Item name: ' + itemsArray[index].title },
-				{ title: 'Item URI: ' + itemsArray[index].itemURI },
+				{ title: 'Item URI: ' + itemsArray[index].contentURI },
 				{ title: 'Item type: ' + itemsArray[index].type },
 				{ title: 'Item identifier: ' + itemsArray[index].id },
 				{ title: 'Item mimeType: ' + itemsArray[index].mimeType },
@@ -102,7 +97,7 @@ function tizen_media_content_files(args) {
 				{ title: 'Item modifiedDate: ' + itemsArray[index].modifiedDate },
 				{ title: 'Item description: ' + itemsArray[index].description },
 				{ title: 'Item rating: ' + itemsArray[index].rating }
-		];
+			];
 
 		switch (itemsArray[index].type) {
 			case 'IMAGE':
@@ -207,6 +202,7 @@ function tizen_media_content_files(args) {
 	self.add(viewFiles);
 
 	self.add(filesList);
+
 	return self;
 }
 

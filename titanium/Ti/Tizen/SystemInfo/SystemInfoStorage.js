@@ -1,21 +1,18 @@
-define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemInfo/SystemInfoStorageUnit'], function(declare, SystemInfoProperty, SystemInfoStorageUnit) {
+define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
 	return declare('Ti.Tizen.SystemInfo.SystemInfoStorage', SystemInfoProperty, {
 		constructor: function(args) {
-			var i = 0,
-				units = args,
-				unitsCount = units.length,
-				result = [];
-
-			for (; i < unitsCount; i++) {
-				result.push(new SystemInfoStorageUnit(units[i]));
+			if(args.toString() === '[object SystemInfoStorage]') {
+				this._obj = args;
+			} else {
 			}
-
-			this._obj = args;
-			this.constants.__values__.units = result;
 		},
 
 		constants: {
-			units: {},
+			units: {
+				get: function() {
+					return this._obj.units;
+				}
+			},
 		},
 
 	});

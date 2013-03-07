@@ -27,27 +27,32 @@ function tizen_alarm() {
 
 	removeButton.addEventListener('click', function() {
 		Ti.Tizen.Notification.removeAll();
+
+		Ti.UI.createAlertDialog({
+			title: 'Info',
+			message: 'All notifications removed successfully'
+		}).show();
 	});
 
 	postButton.addEventListener('click', createNotification);
 
 	function createNotification() {
-		var appService = Ti.Tizen.Application.createApplicationService({
-				operation: 'http://tizen.org/appcontrol/operation/default',
-				uri: null
-			}),
-			// Create notification`s parameters
-			notificationDict = {
-				content: titleInput.value,
-				vibration: true, 
-				service: appService
-			},
-			// Create and post notification
-			notification = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
-				title: 'Simple notification',
-				notificationInitDict: notificationDict
-			});
+		var appControl = Ti.Tizen.Application.createApplicationControl({
+			operation: "http://tizen.org/appcontrol/operation/create_content",
+			uri: null
+		}),
+		// Create notification`s parameters
+		notificationDict = {
+			content: titleInput.value,
+			vibration: true, 
+			appControl: appControl
+		},
+		// Create and post notification
+		notification = Ti.Tizen.Notification.createStatusNotification({
+			statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			title: 'Simple notification',
+			notificationInitDict: notificationDict
+		});
 
 		Ti.Tizen.Notification.post(notification);
 		titleInput.value = '';

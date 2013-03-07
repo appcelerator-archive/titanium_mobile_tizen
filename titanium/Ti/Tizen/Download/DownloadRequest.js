@@ -1,10 +1,11 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
-	return declare('Ti.Tizen.Download.URLDownload', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Ti.Tizen.Download.DownloadRequest', Evented, {
 		constructor: function(args) {
-			if(args.toString() === '[object URLDownload]') {
+			console.log('[object DownloadRequest]=='+args.toString());
+			if(args.toString() === '[object DownloadRequest]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.URLDownload(args.url, args.destination, args.fileName);
+				this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
 			}
 		},
 
@@ -32,8 +33,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
 				set: function(value) {
 					this._obj.fileName = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

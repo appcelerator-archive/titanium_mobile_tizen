@@ -4,7 +4,11 @@ define(['Ti/_/declare'], function(declare) {
 			if(args.toString() === '[object CalendarAttendee]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
+				if (args.hasOwnProperty('uri')) {
+					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);	
+				} else {
+					Ti.API.error("Constructor with such parameters not found in CalendarAttendee.");
+				}
 			}
 		},
 

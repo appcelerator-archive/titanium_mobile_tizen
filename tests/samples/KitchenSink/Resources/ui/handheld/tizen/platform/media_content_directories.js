@@ -35,38 +35,41 @@ function tizen_media_content_directories(args) {
 	function getSelectedFoldersList() {
 		var source = null;
 
-		try {
-			source = Ti.Tizen.MediaContent.getLocalMediaSource();
-		} catch (exc) {
-			Ti.API.error('Ti.Tizen.MediaContent.getLocalMediaSource() exception:' + exc.message);
-			return;
-		}
-
 		function onError(e) {
 			Ti.API.error(e.message);
 		}
 
-		source.getFolders(onMediaFolderArrayFilteredSuccess, onError);
+		Ti.Tizen.Content.getDirectories(onMediaFolderArrayFilteredSuccess, onError);
 	}
 
 	function onMediaFolderArrayFilteredSuccess(folders) {
 		var tableData = [],
 			i = 0,
-			foldersCount = folders.length
+			foldersCount = folders.length;
+		
 		for (; i < foldersCount; i++) {
 			if (folders[i].storageType === folderType) {
 				var row = Ti.UI.createTableViewRow({
 					title: folders[i].title
 				});
+
 				tableData.push(row);
 			}
 		}
+
+		(tableData.length == 0) && Titanium.UI.createAlertDialog({
+									title: 'Info',
+									message: 'Content is empty. Create some directories first.'
+								}).show();
+
 		foldersList.setData(tableData);
 	}
 
-	pickerFolders.addEventListener('change', function(e){
+	pickerFolders.addEventListener('change', function(e) {
 		folderType = e.row.value;
 		getSelectedFoldersList(e.row.value);
+
+		Ti.API.info("folderType: " + folderType);
 	});
 	//Get folders with a media content End
 
