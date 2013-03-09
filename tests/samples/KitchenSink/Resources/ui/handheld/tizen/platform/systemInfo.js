@@ -6,11 +6,7 @@ function tizenSystemInfo(title) {
 
 	function getSystemProperty(property, onSuccess, onError) {
 		try {
-			if (Ti.Tizen.SystemInfo.isSupported(property)) {
-				Ti.Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
-			} else {
-				onError({ message: 'Property ' + property + ' not supported' })
-			}
+			Ti.Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
 		} catch (e) {
 			onError(e)
 		}
@@ -29,7 +25,7 @@ function tizenSystemInfo(title) {
 				}
 			}else{
 				try {
-					gBatteryListener = Ti.Tizen.SystemInfo.addPropertyValueChangeListener('Power',
+					gBatteryListener = Ti.Tizen.SystemInfo.addPropertyValueChangeListener(Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY,
 						function(power) { messageWin.showToast('Battery level: ' + power.level, 1500); },
 						function(e) { messageWin.showToast('Battery monitoring error! \n' + e.message, 2500); });
 
@@ -50,16 +46,16 @@ function tizenSystemInfo(title) {
 	var win = Ti.UI.createWindow({ backgroundColor: '#fff' }),
 		batteryMonitoring = { isOn: false, onCaption: 'Battery monitoring is on', offCaption: 'Battery monitoring is off' },
 		data = [
-			{ title: 'Storage information', propertyName: 'Storage', propertyCallback: onStorageSuccess },
-			{ title: 'Power state', propertyName: 'Power', propertyCallback: onPowerSuccess },
+			{ title: 'Storage information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorageSuccess },
+			{ title: 'Power state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, propertyCallback: onPowerSuccess },
 			{ title: batteryMonitoring.offCaption, clickCallback: batteryMonitoringClicked },
-			{ title: 'Cpu load', propertyName:'Cpu', propertyCallback: onCpuInfoSuccess },
-			{ title: 'Display information', propertyName: 'Display', propertyCallback: onDisplaySuccess },
-			{ title: 'Device information', propertyName: 'Device', propertyCallback: onDeviceSuccess },
-			{ title: 'Current network type', propertyName: 'Network', propertyCallback: onNetworkSuccess },
-			{ title: 'Wifi network state', propertyName: 'WifiNetwork', propertyCallback: onWifiSuccess },
-			{ title: 'Cellular network state', propertyName: 'CellularNetwork', propertyCallback: onCellSuccess },
-			{ title: 'SIM information', propertyName: 'SIM', propertyCallback: onSimSuccess }
+			{ title: 'Cpu load', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfoSuccess },
+			{ title: 'Display information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DISPLAY, propertyCallback: onDisplaySuccess },
+			{ title: 'Device information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BUILD, propertyCallback: onDeviceSuccess },
+			{ title: 'Current network type', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_NETWORK, propertyCallback: onNetworkSuccess },
+			{ title: 'Wifi network state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK, propertyCallback: onWifiSuccess },
+			{ title: 'Cellular network state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCellSuccess },
+			{ title: 'SIM information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM, propertyCallback: onSimSuccess }
 		],
 		i = 0,
 		dataLength = data.length,
@@ -103,7 +99,7 @@ function tizenSystemInfo(title) {
 	function onStorageSuccess(storages) {
 		var storagesInfo = '',
 			i = 0,
-			units = storages.units,			
+			units = storages.units,		
 			storagesCount = units.length;
 
 		for (; i < storagesCount; i++) {
@@ -134,16 +130,13 @@ function tizenSystemInfo(title) {
 
 	function onDeviceSuccess(device) {
 		showDetailsDialog('Device', formatSubLines([
-			'IMEI:&nbsp;' + device.imei,
-			'Model:&nbsp;' + device.model,
-			'Version:&nbsp;' + device.version,
-			'Vendor:&nbsp;' + device.vendor
+			'Model:&nbsp;' + device.model
 		]));
 	}
 
 	function onNetworkSuccess(network) {
 		var networkTypes = [ 'NONE', '2G', '2.5G','3G', '4G', 'WIFI', 'ETHERNET', 'UNKNOWN' ];
-		showDetailsDialog('Network', formatSubLines([ 'Current data network type: ' + networkTypes[ network.networkType ] ]));
+		showDetailsDialog('Network', formatSubLines([ 'Current data network type: ' + network.networkType]));
 	}
 
 	function onWifiSuccess(wifi) {
