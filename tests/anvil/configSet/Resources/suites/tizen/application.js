@@ -19,7 +19,7 @@ module.exports = new function() {
 		{name: 'apps_contexts_no_params'},
 		{name: 'launch_not_exist'},
 		{name: 'calc_launch'},
-		{name: 'launchAppControl'},
+		//{name: 'launchAppControl'},
 		// This test impact to another and can not be launched with others
 		// {name: 'harness_hide'}
 	];

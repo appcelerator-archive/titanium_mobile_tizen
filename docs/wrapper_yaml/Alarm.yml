@@ -1,6 +1,6 @@
 ---
 name: Titanium.Tizen.Alarm
-summary: This interface provides methods to manage alarms.
+summary: This API provides the functionality for setting and unsetting of alarms.
     
 extends: Titanium.Module
 platforms: [tizen]

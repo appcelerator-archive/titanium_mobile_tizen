@@ -3,7 +3,6 @@ define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(decl
 		constructor: function(args) {
 			if(args.toString() === '[object SystemInfoWifiNetwork]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

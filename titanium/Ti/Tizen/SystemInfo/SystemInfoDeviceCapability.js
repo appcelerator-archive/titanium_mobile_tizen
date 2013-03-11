@@ -3,7 +3,6 @@ define(['Ti/_/declare'], function(declare) {
 		constructor: function(args) {
 			if(args.toString() === '[object SystemInfoDeviceCapability]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

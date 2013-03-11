@@ -2,14 +2,11 @@ define(['Ti/_/lang', 'Ti/Tizen/Callhistory/CallHistoryEntry', 'Ti/Tizen/WebAPIEr
 	return lang.setObject('Ti.Tizen.Callhistory', Evented, {
 
 		find: function(successCallback /*CallHistoryEntryArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-			console.log('begin')
 			tizen.callhistory.find(function(histories) {
 				var result = [],
 					historiesCount = histories.length,
 					i = 0;
-				console.log("historiesCount=" + historiesCount);
 				for (; i < historiesCount; i++) {
-					console.log(histories[i].direction);
 					result.push(new CallHistoryEntry(histories[i]));
 				}
 				successCallback.call(null, result);

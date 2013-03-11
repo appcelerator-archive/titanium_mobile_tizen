@@ -2,7 +2,6 @@
 name: Titanium.Tizen.Alarm.AlarmAbsolute
 summary: This interface provides an absolute alarm, which triggers at a specified absolute date.
 description: |
-    This interface provides an absolute alarm, which triggers at a specified absolute date. 
     If a period is provided, the alarm keeps triggering for the given interval. 
     If the daysOfTheWeek array is not empty, the alarm triggers every week, for the given days, at the time defined by date attribute. 
 extends: Titanium.Tizen.Alarm.Alarm
