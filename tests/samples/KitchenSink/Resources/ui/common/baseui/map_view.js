@@ -6,7 +6,7 @@ function mapview() {
 	if (Titanium.Platform.name == 'android') {
 		isAndroid = true;
 	}
-	if (Titanium.Platform.name == 'tizen') {
+	if (Titanium.Platform.osname == 'tizen') {
 		isTizen = true;
 	}
 	
