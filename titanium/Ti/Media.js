@@ -1,5 +1,7 @@
 define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c"], function(Evented, lang, photoGallery, Blob, h2c) {
 
+	var deviceCapabilities = tizen.systeminfo.getCapabilities();
+
 	return lang.setObject("Ti.Media", Evented, {
 
 		constants: {
@@ -36,7 +38,10 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			VIDEO_FINISH_REASON_USER_EXITED: 2,
 
 			MEDIA_TYPE_PHOTO: "public.image",
-			MEDIA_TYPE_VIDEO: "public.video"
+			MEDIA_TYPE_VIDEO: "public.video",
+
+			canRecord: deviceCapabilities.microphone,
+			hasCamera: false || false
 		},
 
 		//beep: function() {},
