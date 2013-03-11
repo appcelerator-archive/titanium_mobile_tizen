@@ -84,7 +84,7 @@ module.exports = new function() {
 
 	this.connectToDriver = function() {
 		var connectMessage = {type: "ready"};
-		if (Ti.Platform.name == "mobileweb" || Ti.Platform.name == "tizen") {
+		if (Ti.Platform.name == "mobileweb" || Ti.Platform.osname == "tizen") {
 			Ti.API.info("connecting to driver...");
 			harnessGlobal.util.sendData(connectMessage);
 
