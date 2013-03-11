@@ -161,7 +161,7 @@ function sound_file() {
 	//  PROGRESS BAR TO TRACK SOUND DURATION
 	//
 	var flexSpace = Titanium.UI.createButton();
-	Ti.Platform.name !== 'tizen' && (flexSpace.systemButton = Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE); 
+	Ti.Platform.osname !== 'tizen' && (flexSpace.systemButton = Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE); 
 	
 	var pb = Titanium.UI.createProgressBar({
 		min:0,
@@ -169,7 +169,7 @@ function sound_file() {
 		width:200
 	});
 	
-	if (Ti.Platform.name === 'tizen') {
+	if (Ti.Platform.osname === 'tizen') {
 		pb.top = 210;
 		win.add(pb);
 	}else if (Ti.Platform.name !== 'android') {
@@ -196,7 +196,7 @@ function sound_file() {
 	win.addEventListener('close', function()
 	{
 		clearInterval(i);
-		if ( Ti.Platform.name === 'tizen') {
+		if ( Ti.Platform.osname === 'tizen') {
 			sound.release();
 		}
 	});

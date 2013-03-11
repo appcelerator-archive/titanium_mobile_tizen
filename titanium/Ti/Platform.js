@@ -1,13 +1,13 @@
-define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/dom", "Ti/UI"],
+define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/dom', 'Ti/UI'],
 	function(_, browser, Evented, lang, Locale, dom, UI) {
-		
+
 	var doc = document,
-		midName = "ti:mid",
-		matches = doc.cookie.match(new RegExp("(?:^|; )" + midName + "=([^;]*)")),
+		midName = 'ti:mid',
+		matches = doc.cookie.match(new RegExp('(?:^|; )' + midName + '=([^;]*)')),
 		mid = matches ? decodeURIComponent(matches[1]) : void 0,
 		unloaded,
 		on = require.on,
-		hiddenIFrame = dom.create("iframe",{id: "urlOpener", style: {display: "none"} },doc.body);
+		hiddenIFrame = dom.create('iframe', { id: 'urlOpener', style: { display: 'none' } }, doc.body);
 		//wifiNetworkPropertyValueChangeListenerId;
 
 	mid || (mid = localStorage.getItem(midName));
@@ -17,11 +17,10 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		if (!unloaded) {
 			unloaded = 1;
 			// expire cookie in 20 years... forever in mobile terms
-			doc.cookie = midName + "=" + encodeURIComponent(mid) + "; expires=" + (new Date(Date.now() + 63072e7)).toUTCString();
+			doc.cookie = midName + '=' + encodeURIComponent(mid) + '; expires=' + (new Date(Date.now() + 63072e7)).toUTCString();
 			localStorage.setItem(midName, mid);
 		}
 	};
-	
 
 	// Do we need to unsubsctibe? Do we need ot call it anywhere?
 	function deInitPlatformData(){
@@ -30,7 +29,7 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 	};
 
 	// initialize values that should be initialized via fucntions with callbacks
-	function initPlatformData() {		
+	function initPlatformData() {
 		var deviceCapabilities;
 		
 		//Default values for Device and Model
@@ -42,7 +41,7 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		try {
 			Platform.constants.__values__.id = tizen.application.getAppInfo().id; //The unique ID for an installed application. 
 		} catch (e) {
-			Platform.constants.__values__.id = "ID001"; //The unique ID for an installed application. 
+			Platform.constants.__values__.id = 'ID001'; //The unique ID for an installed application. 
 		}
 
 		//detect is WIFI exist, if yes we can find ip address
@@ -51,11 +50,11 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
 			// subscribing to WiFi property changes
 			 wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
-		}		
+		}
 	};
 
 	function onErrorCallback(error) {
-		console.log('An error occurred ' + error.message);
+		Ti.API.error('An error occurred ' + error.message);
 	};
 
 	// Callback to update WiFi's IP address
@@ -63,26 +62,26 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 		//receive SystemInfoWifiNetwork 
 		try{
 			//console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
-			if (wifiNetwork.status == 'ON') {
+			if (wifiNetwork.status === 'ON') {
 				Platform.constants.__values__.address = wifiNetwork.ipAddress;	
+			} else {
+				Platform.constants.__values__.address = void 0;
 			}
-			else{
-				Platform.constants.__values__.address = undefined;
-			}
-			console.log("Platform.address is set to " + Platform.address);
+			Ti.API.info('Platform.address is set to ' + Platform.address);
 		}
 		catch (e) {
-			//console.log("Error on getting WifiNetwork info. Error: " + e.message);
-			Platform.constants.__values__.address = undefined;
+			Ti.API.error('Error on getting WifiNetwork info. Error: ' + e.message);
+			Platform.constants.__values__.address = void 0;
 		}
 	}
 
-	on(window, "beforeunload", saveMid);
-	on(window, "unload", saveMid);
+	on(window, 'beforeunload', saveMid);
+	on(window, 'unload', saveMid);
 
 	var nav = navigator,
 		battery = nav.battery || nav.webkitBattery || nav.mozBattery,
-		Platform = lang.setObject("Ti.Platform", Evented, {
+		deviceCapabilities = tizen.systeminfo.getCapabilities(),
+		Platform = lang.setObject('Ti.Platform', Evented, {
 
 			canOpenURL: function(url) {
 				return !!url;
@@ -100,18 +99,18 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				} else { 
 					var win = UI.createWindow({
 							layout: UI._LAYOUT_CONSTRAINING_VERTICAL,
-							backgroundColor: "#888"
+							backgroundColor: '#888'
 						}),
 						backButton = UI.createButton({
 							top: 2,
 							bottom: 2,
-							title: "Close"
+							title: 'Close'
 						}),
 						webview = UI.createWebView({
 							width: UI.FILL,
 							height: UI.FILL
 						});
-					backButton.addEventListener("singletap", function(){
+					backButton.addEventListener('singletap', function(){
 						win.close();
 					});
 					win.add(backButton);
@@ -133,7 +132,7 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				BATTERY_STATE_UNKNOWN: -1,
 				BATTERY_STATE_UNPLUGGED: 0,
 				address: void 0,
-				architecture: void 0,
+				architecture: deviceCapabilities.platformCoreCpuArch, //void 0,
 				availableMemory: void 0,
 				batteryLevel: function() {
 					return this.batteryMonitoring && battery ? battery.level * 100 : -1;
@@ -146,20 +145,20 @@ define(["Ti/_", "Ti/_/browser", "Ti/_/Evented", "Ti/_/lang", "Ti/Locale", "Ti/_/
 				locale: Locale,
 				macaddress: void 0,
 				model: nav.userAgent,
-				name: "tizen",
+				name: deviceCapabilities.platformName,
 				netmask: void 0,
-				osname: "tizen",
+				osname: 'tizen',
 				ostype: nav.platform,
 				runtime: browser.runtime,
 				processorCount: void 0,
 				username: void 0,
-				version: require.config.ti.version
+				version: deviceCapabilities.platformVersion //require.config.ti.version
 			}
 
 		});
 
-	battery && require.on(battery, "chargingchange", function() {
-		Platform.batteryMonitoring && Platform.fireEvent("battery", {
+	battery && require.on(battery, 'chargingchange', function() {
+		Platform.batteryMonitoring && Platform.fireEvent('battery', {
 			level: Platform.batteryLevel,
 			state: Platform.batteryState
 		});
