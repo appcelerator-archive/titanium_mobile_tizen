@@ -1,12 +1,61 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
 	return declare('Ti.Tizen.Download.DownloadRequest', Evented, {
 		constructor: function(args) {
-			console.log('[object DownloadRequest]=='+args.toString());
-			if(args.toString() === '[object DownloadRequest]') {
+			if (args.toString() === '[object DownloadRequest]') {
 				this._obj = args;
 			} else {
-				this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
+				if (args.hasOwnProperty('url')) {
+					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);	
+				} else {
+					Ti.API.error('Constructor with such parameters does not exist in DownloadRequest.');
+				}
 			}
+		},
+
+		_getDownloadCallback: function(downloadCallback) {
+			var self = this;
+
+			return {
+				onprogress: downloadCallback.onDataStream && function(id, receivedSize, totalSize) {
+					downloadCallback.onDataStream(self, receivedSize, totalSize);
+				},
+				onpaused: downloadCallback.onPause && function(id) {
+					downloadCallback.onPause(self);
+				},
+				oncanceled: downloadCallback.onCancel && function(id) {
+					downloadCallback.onCancel(self);
+				},
+				oncompleted: downloadCallback.onLoad && function(id, fullPath) {
+					downloadCallback.onLoad(self, fullPath);
+				},
+				onfailed: downloadCallback.onError && function(id, error) {
+					downloadCallback.onError(self, new WebAPIError(error));
+				}
+			}
+		},
+
+		send: function(downloadCallback /*DownloadCallback*/) {
+			return this.constants.__values__.id = tizen.download.start(this._obj, downloadCallback && this._getDownloadCallback(downloadCallback));
+		},
+
+		setListener: function(downloadCallback /*DownloadCallback*/) {
+			return tizen.download.setListener(this.id, downloadCallback && this._getDownloadCallback(downloadCallback));
+		},
+
+		abort: function() {
+			tizen.download.cancel(this.id);
+		},
+
+		pause: function() {
+			tizen.download.pause(this.id);
+		},
+
+		resume: function() {
+			tizen.download.resume(this.id);
+		},
+
+		constants: {
+			id: {}
 		},
 
 		properties: {
@@ -33,8 +82,17 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				set: function(value) {
 					this._obj.fileName = value;
 				}
+			},
+			state: {
+				get: function() {
+					return tizen.download.getState(this.id);
+				}
+			},
+			MIMEType: {
+				get: function() {
+					return tizen.download.getMIMEType(this.id);
+				}
 			}
 		}
-
 	});
 });
