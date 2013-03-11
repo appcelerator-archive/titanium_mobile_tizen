@@ -3,7 +3,6 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		constructor: function(args) {
 			if(args.toString() === '[object Notification]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

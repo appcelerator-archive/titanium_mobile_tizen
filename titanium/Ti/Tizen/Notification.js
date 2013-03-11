@@ -9,7 +9,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 		},
 
 		post: function(notification /*Notification*/) {
-			console.log('it work here');
 			tizen.notification.post(notification._obj);
 		},
 

@@ -1,6 +1,6 @@
 ---
 name: Titanium.Tizen.Application
-summary: This module provides methods to manage application.
+summary: This API provides a way to launch other applications and access application management.
     
 extends: Titanium.Module
 platforms: [tizen]
