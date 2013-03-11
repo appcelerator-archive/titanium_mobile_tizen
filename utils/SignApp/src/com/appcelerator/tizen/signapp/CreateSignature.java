@@ -87,7 +87,7 @@ public class CreateSignature {
 
 			// The signatureFilePath is the URI that's used to prepend to
 			// relative URIs
-			signatureFilePath = signatureFile.toURI().toURL().toString();
+			signatureFilePath =  signatureFile.toURI().toURL().toString();
 
 			KeyStore ks = extracteKeyStore(inputParams, inputParams.getKeystorePass());
 
@@ -113,7 +113,7 @@ public class CreateSignature {
 			e.printStackTrace();
 		} finally {
 			if (fileOutputStream == null)
-				System.out.println("Wrote signature to " + signatureFilePath);
+				System.out.println("Failed write signature to " + signatureFilePath);
 			else
 				fileOutputStream.close();
 			System.out.println("Wrote signature to " + signatureFilePath);
@@ -202,7 +202,6 @@ public class CreateSignature {
 
 		DocumentBuilder db = factory.newDocumentBuilder();
 		Document doc = db.newDocument();
-		Constants.setSignatureSpecNSprefix("");
 		return doc;
 	}
 
