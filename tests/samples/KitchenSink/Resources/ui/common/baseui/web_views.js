@@ -166,7 +166,7 @@ function webviews(_args) {
 					alert("HTML is: "+webview.html);
 				}
 				
-				if (Titanium.Platform.name == 'tizen') {
+				if (Titanium.Platform.osname == 'tizen') {
 					Ti.App.addEventListener('image', function(d) {
 						webview.evalJS("document.getElementById('image').src = '" + d.path + "';");
 					});										
@@ -267,7 +267,7 @@ function webviews(_args) {
 			// hide toolbar for local web view
 			Ti.App.addEventListener('webview_hidetoolbar', hideToolbar);
 						
-			if ((Titanium.Platform.name == 'tizen') && (e.index == 1)) {
+			if ((Titanium.Platform.osname == 'tizen') && (e.index == 1)) {
 				toolbar.addEventListener('click', function(e) {
 					Ti.App.fireEvent('webview_hidetoolbar', {foo: 'bar'});
 				});	

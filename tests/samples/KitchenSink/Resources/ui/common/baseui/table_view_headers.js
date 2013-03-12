@@ -72,7 +72,7 @@ function tv_headers() {
 		if (Ti.Platform.name === "android") {
 			Ti.API.info('Going to hide soft Keyboard as we are shifting focus away from the SearchBar.');
 			Ti.UI.Android.hideSoftKeyboard();
-		} else if (Ti.Platform.name === "tizen") {
+		} else if (Ti.Platform.osname === "tizen") {
 			Ti.API.info('Going to hide soft Keyboard as we are shifting focus away from the SearchBar.');
 			Ti.UI.Tizen.hideSoftKeyboard(search);
 		}

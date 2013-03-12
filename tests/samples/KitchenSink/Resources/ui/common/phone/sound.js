@@ -10,7 +10,7 @@ function sound(_args) {
 	];
 	
 	//This test is incorrect because it uses property "url" of Titanium.Sound as type "File" instead of "String" 
-	if (Titanium.Platform.name !== 'tizen') {
+	if (Titanium.Platform.osname !== 'tizen') {
 		data.push({title:'Local with File', hasChild:true, test:'ui/common/phone/sound_file'});
 	}
 	

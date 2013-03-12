@@ -20,7 +20,6 @@ module.exports = new function() {
 	this.name = "contacts";
 	this.tests = [
 		{name: "getDefaultAddressBook"},
-		{name: "getAddressBook"},
 		{name: "getAddressBooks"},
 		{name: "getAddressBookInvalid"},
 		{name: "getContact"},
@@ -30,7 +29,6 @@ module.exports = new function() {
 		{name: "removeContact"},
 		{name: "removeBatch"},
 		{name: "find"},
-		{name: "getCategories"},
 		{name: "addAddressBookChangeListener"},
 		{name: "removeAddressbookChangeListener"},
 		{name: "convertToString"},
@@ -63,18 +61,10 @@ module.exports = new function() {
 
 	this.getDefaultAddressBook = function(testRun) {
 		var addressbook = tizen.contact.getDefaultAddressBook();
-		valueOf(testRun, addressbook.id).shouldBeString();
+		valueOf(testRun, addressbook.id).shouldBeNull();
 		finish(testRun);
 	}
-	
-	this.getAddressBook = function(testRun) {
-		var defAddressbook = tizen.contact.getDefaultAddressBook();
-		var defAddressbookId = defAddressbook.id;
-		var addressbook = tizen.contact.getAddressBook(defAddressbookId);
-		valueOf(testRun, addressbook).shouldBeObject();
-		finish(testRun);
-	}
-	
+
 	this.getAddressBooks = function(testRun) {
 		tizen.contact.getAddressBooks(function(addressbooks){
 			var addressbooksCount = addressbooks.length;
@@ -85,7 +75,7 @@ module.exports = new function() {
 		});
 		
 	}
-	
+
 	this.getAddressBookInvalid = function(testRun) {
 		
 		valueOf(testRun, function(){
@@ -93,7 +83,7 @@ module.exports = new function() {
 		}).shouldThrowException();
 		finish(testRun);
 	}
-	
+
 	this.getContact = function(testRun) {
 		var contact = new tizen.Contact({
 			name: new tizen.ContactName({
@@ -106,7 +96,7 @@ module.exports = new function() {
 		valueOf(testRun, function(){tizen.contact.getDefaultAddressBook().get(contact.id)}).shouldNotThrowException();
 		finish(testRun);
 	}
-	
+
 	this.getContactsBatch = function(testRun) {
 		var addressbook = tizen.contact.getDefaultAddressBook();
 		addressbook.find(function(contacts){
@@ -128,7 +118,7 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
 	}
-	
+
 	this.updateContact = function(testRun) {
 		var contact = new tizen.Contact({
 			name: new tizen.ContactName({
@@ -146,7 +136,7 @@ module.exports = new function() {
 		valueOf(testRun, contact.firstName === firstName).shouldBeFalse();
 		finish(testRun);
 	}
-	
+
 	this.updateBatch = function(testRun) {
 		var addressbook = tizen.contact.getDefaultAddressBook();
 		addressbook.find(function(contacts){
@@ -179,7 +169,7 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
 	}
-	
+
 	this.removeContact = function(testRun) {
 		var addressbook = tizen.contact.getDefaultAddressBook();
 		addressbook.find(function(contacts) {
@@ -232,23 +222,6 @@ module.exports = new function() {
 		}, function(err) {
 			reportError(testRun, 'The following error occured: ' + err.message);
 		});
-	}
-	
-	this.getCategories = function(testRun) {
-		var contact = new tizen.Contact({
-				name: new tizen.ContactName({
-					firstName:'Jeffrey', 
-					lastName:'Hyman', 
-					nicknames:['joey ramone']
-				}),
-				categories: ["test"]
-			}),
-			addressbook = tizen.contact.getDefaultAddressBook();
-		addressbook.add(contact);
-		contact = addressbook.get(contact.id);
-		valueOf(testRun, contact.categories).shouldBeArray();
-		valueOf(testRun, contact.categories).shouldContainDeprecated("test");
-		finish(testRun);
 	}
 
 	this.addAddressBookChangeListener = function(testRun) {
@@ -372,7 +345,7 @@ module.exports = new function() {
 	}
 	
 	this.contactWebsite = function(testRun) {
-		var website = new tizen.ContactWebSite('http://google.com',  'HOMEPAGE'),
+		var website = new tizen.ContactWebSite('http://google.com', 'HOMEPAGE'),
 			contact = new tizen.Contact({
 				urls: [website]
 			}), status = true;
@@ -382,7 +355,7 @@ module.exports = new function() {
 		valueOf(testRun,  status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactAnniversary = function(testRun) {
 		var anniv = new tizen.ContactAnniversary(new Date(1986, 11, 2), 'Marriage'),
 			contact = new tizen.Contact({
@@ -394,11 +367,11 @@ module.exports = new function() {
 			}), status = true;
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		status = ((contact.anniversaries[0].date.toString() == new Date(1976, 11, 2).toString()) && (contact.anniversaries[0].label === 'Marriage'));
+		status = ((contact.anniversaries[0].date.toString() === new Date(1986, 11, 2).toString()) && (contact.anniversaries[0].label === 'Marriage'));
 		valueOf(testRun, status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactAddress = function(testRun) {
 		var address = new tizen.ContactAddress({
 				country: 'Ukraine',
@@ -418,7 +391,7 @@ module.exports = new function() {
 		valueOf(testRun, status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactPhoneNumber = function(testRun) {
 		var phoneNumber = new tizen.ContactPhoneNumber('123456789', ['WORK']),
 			status = true,
@@ -427,11 +400,11 @@ module.exports = new function() {
 			});
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		status = ((contact.phoneNumbers[0].number === '123456789') && (contact.phoneNumbers[0].types[1] === 'WORK'));
+		status = ((contact.phoneNumbers[0].number === '123456789') && (contact.phoneNumbers[0].types[0] === 'WORK'));
 		valueOf(testRun, status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactEmailAddress = function(testRun) {
 		var email = new tizen.ContactEmailAddress('user@domain.com', ['WORK','PREF']), status = true,
 			contact = new tizen.Contact({
@@ -439,11 +412,11 @@ module.exports = new function() {
 			});
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		status = ((contact.emails[0].email === 'user@domain.com') && (contact.emails[0].types[1] === 'WORK'));
+		status = ((contact.emails[0].email === 'user@domain.com') && (contact.emails[0].types[0] === 'WORK'));
 		valueOf(testRun, status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactBirthday = function(testRun) {
 		var contact = new tizen.Contact({
 			birthday: new Date(1996, 4, 15)
@@ -468,15 +441,15 @@ module.exports = new function() {
 
 	this.contactNote = function(testRun) {
 		var contact = new tizen.Contact({
-			note: 'test note'
+			notes: ['test note']
 		}), status = true;
 		_addressbook.add(contact);
 		contact = _addressbook.get(contact.id);
-		status = contact.note === 'test note';
+		status = contact.notes[0] === 'test note';
 		valueOf(testRun, status).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.isFavorite = function(testRun) {
 		var contact = new tizen.Contact({
 			isFavorite: true,
@@ -489,7 +462,7 @@ module.exports = new function() {
 		valueOf(testRun,  contact.isFavorite).shouldBeTrue();
 		finish(testRun);
 	}
-	
+
 	this.contactRingtoneURI = function(testRun) {
 		var contact = new tizen.Contact({
 			name: new tizen.ContactName({
@@ -502,7 +475,7 @@ module.exports = new function() {
 		valueOf(testRun, contact.ringtoneURI).shouldBeString();
 		finish(testRun);
 	}
-	
+
 	this.contactLastUpdated = function(testRun) {
 		var contact = new tizen.Contact({
 				name: new tizen.ContactName({
@@ -515,7 +488,7 @@ module.exports = new function() {
 		valueOf(testRun, contact.lastUpdated.toString()).shouldBeString();
 		finish(testRun);
 	}
-	
+
 	this.contactAddressBookId = function(testRun) {
 		var contact = new tizen.Contact({
 			name: new tizen.ContactName({
@@ -547,12 +520,20 @@ module.exports = new function() {
 
 	this.getAllGroups = function(testRun) {
 		// We need to add contact with category through tizen, because titaium doesn't support it
-		var group = Ti.Contacts.createGroup({name: "friends"});
+		var group = Ti.Contacts.createGroup({name: 'test_friends'}),
+			groups = Ti.Contacts.getAllGroups();
+			status = 0,
+			i = 0,
+			groupsCount = groups.length;
 
-		group.add({firstName: "John", lastName: "Smith"});
-		groups = Ti.Contacts.getAllGroups();
-		
-		valueOf(testRun,  groups).shouldContainDeprecated("friends");
+		for (; i < groupsCount; i++) {
+			if (groups[i].name === 'test_friends') {
+				status = 1;
+				break;
+			}
+		}
+
+		valueOf(testRun, status).shouldBe(1);
 
 		finish(testRun);
 	}
@@ -576,7 +557,7 @@ module.exports = new function() {
 
 	this.getContactsAuthorization = function(testRun) {
 		valueOf(testRun,  Ti.Contacts.getContactsAuthorization()).shouldBe(Ti.Contacts.AUTHORIZATION_AUTHORIZED);
-		
+
 		finish(testRun);
 	}
 
@@ -654,7 +635,7 @@ module.exports = new function() {
 		Ti.Contacts.Tizen.getAllPeople(function(persons){
 			var i = 0, 
 				personsCount = persons.length;
-			
+
 			for (; i < personsCount; i++) {
 				Ti.Contacts.removePerson(persons[i]);
 			}
@@ -665,7 +646,7 @@ module.exports = new function() {
 			});
 
 			person.firstName = 'Oleh';
-			
+
 			Ti.Contacts.save([person]);
 			Ti.Contacts.Tizen.getAllPeople(function(persons) {
 				valueOf(testRun, persons.length).shouldBe(1);
@@ -677,6 +658,6 @@ module.exports = new function() {
 			});
 		}, function(err) {
 			reportError(testRun, 'The following error occured: ' + err.message);
-		});		
+		});
 	}
 }

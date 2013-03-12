@@ -8,7 +8,7 @@ function xhr_download() {
 		max:1,
 		value:0,
 		top:10,
-		message:'Downloading ' + (Ti.Platform.name == 'android'||Titanium.Platform.name == 'tizen'? 'PNG' : 'PDF') + ' File',
+		message:'Downloading ' + (Ti.Platform.name == 'android'||Titanium.Platform.osname == 'tizen'? 'PNG' : 'PDF') + ' File',
 		font:{fontSize:12, fontWeight:'bold'},
 		color:'#888'
 	});
@@ -36,7 +36,7 @@ function xhr_download() {
 		var filename;
 		if (Titanium.Platform.name == 'android') {
 			filename = 'test.png';
-		} else if (Titanium.Platform.name == 'tizen') {
+		} else if (Titanium.Platform.osname == 'tizen') {
 			filename = 'test.html';
 			ind.message = 'Downloading html File';
 		} else {
@@ -76,7 +76,7 @@ function xhr_download() {
 		if (Titanium.Platform.name == 'android') {
 			//android's WebView doesn't support embedded PDF content
 			c.open('GET', 'http://developer.appcelerator.com/blog/wp-content/themes/newapp/images/appcelerator_avatar.png?s=48');
-		} else if (Titanium.Platform.name == 'tizen') {
+		} else if (Titanium.Platform.osname == 'tizen') {
 			c.open('GET','https://mobile.twitter.com/session/new');
 			//Property "file" is path to file. It is not object "file" !!!
 			//See documentation about Titanium.Network.HTTPClient
@@ -103,7 +103,7 @@ function xhr_download() {
 	b2.addEventListener('click', function()
 	{
 		ind.value = 0;
-		Titanium.Platform.name === 'tizen' && (ind.message = 'Downloading png File');
+		Titanium.Platform.osname === 'tizen' && (ind.message = 'Downloading png File');
 		
 		c = Titanium.Network.createHTTPClient();
 
@@ -117,7 +117,7 @@ function xhr_download() {
 				var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "test.html");
 				f.write(text);
 				data = f.read();
-			} else if (Titanium.Platform.name == 'tizen') {
+			} else if (Titanium.Platform.osname == 'tizen') {
 				//like Android but without "this.responseData.toBase64()" !!!
 				var text = "<img src=\"" + this.responseData + "\" />";
 				var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "test.html");
@@ -143,7 +143,7 @@ function xhr_download() {
 		};
 	
 		// open the client
-		if (Titanium.Platform.name == 'android' || Titanium.Platform.name == 'tizen') {
+		if (Titanium.Platform.name == 'android' || Titanium.Platform.osname == 'tizen') {
 			//android's WebView doesn't support embedded PDF content
 			c.open('GET', 'http://developer.appcelerator.com/blog/wp-content/themes/newapp/images/appcelerator_avatar.png?s=48');
 		} else {
@@ -204,7 +204,7 @@ function xhr_download() {
 		};
 		
 		c.open('GET','http://titanium-studio.s3.amazonaws.com/latest/Titanium_Studio.exe');
-		if ( Titanium.Platform.name !== 'tizen') {
+		if ( Titanium.Platform.osname !== 'tizen') {
 			//Maybe it is wrong because "c.file" must be 'String'.  
 			c.file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'tiStudio.exe');
 		} else {
