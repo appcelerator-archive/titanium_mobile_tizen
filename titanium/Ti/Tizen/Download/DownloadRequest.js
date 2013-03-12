@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declar
 		},
 
 		setListener: function(downloadCallback /*DownloadCallback*/) {
-			return tizen.download.setListener(this.id, downloadCallback && this._getDownloadCallback(downloadCallback));
+			tizen.download.setListener(this.id, downloadCallback && this._getDownloadCallback(downloadCallback));
 		},
 
 		abort: function() {
