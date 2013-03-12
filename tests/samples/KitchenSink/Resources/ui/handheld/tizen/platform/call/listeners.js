@@ -34,7 +34,7 @@ function listeners() {
 			onchanged: function(changedItems) {
 				var i = 0,
 					itemsCount = changedItems.length;
-		    	
+
 				Ti.API.info('Items changed');
 
 				for (; i < itemsCount; i++) {
@@ -43,7 +43,8 @@ function listeners() {
 					tableView.appendRow({ title: changedItems[i].remoteParties[0].remoteParty + ': ' + changedItems[i].direction });
 				}
 			}
-		};
+		},
+		callhistoryObj = require('Ti/Tizen/Callhistory');
 
 		addListenerBtn.addEventListener('click', function(e) {
 			var alertDialog = Ti.UI.createAlertDialog({
@@ -52,19 +53,19 @@ function listeners() {
 
 			try {
 				// Register a call history callback
-				var handle = Ti.Tizen.Callhistory.addChangeListener(onListenerCB);
+				var handle = callhistoryObj.addChangeListener(onListenerCB);
 
 				addListenerBtn.enabled = false;
 
 				alertDialog.message = 'Listener added';
 				alertDialog.show();
-				
+
 				removeListenerBtn.addEventListener('click', function(e) {
 					try {
 						// Unregister a previously registered listener
-						Ti.Tizen.Callhistory.removeChangeListener(handle);
+						callhistoryObj.removeChangeListener(handle);
 						win.remove(removeListenerBtn);
-						
+
 						alertDialog.message = 'Listener removed';
 						alertDialog.show();
 					} catch (removeExc) {
@@ -82,7 +83,7 @@ function listeners() {
 				alertDialog.title = 'The following error occurred: ';
 				alertDialog.message = 'Exception - code: ' + error.name + ' message: ' + error.message;
 				alertDialog.show();
-				
+
 				Ti.API.info('Exception - code: ' + error.name + ' message: ' + error.message);
 			}
 		});
