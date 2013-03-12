@@ -71,9 +71,6 @@ methods:
     summary: Sets the download callback to the download operation of given id.
         It's possible to change or register the listener of download operation using the saved id.
     parameters:
-      - name: downloadId
-        summary: The ID to set the download callback.
-        type: Number
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
