@@ -5,7 +5,8 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/Evented", "Ti/_/lang"],
 
 		open: function() {
 			var self = this,
-				fields = {//Dictionary between two API's
+				//Dictionary between the corresonding Titanium and Tizen property names
+				fields = {
 					toRecipients: 'to',
 					ccRecipients: 'cc',
 					bccRecipients: 'bcc',
@@ -13,23 +14,20 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/Evented", "Ti/_/lang"],
 					messageBody: "text",
 					attachment: "attachments"
 				},
-				appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/compose',null,null,null,getAllParameters());
+				appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/compose',null,null,null,createAllParameters());
 
-			//Create a parameter for one of field
-			function setParameter(name, valueArray){
-
+			// ApplicationControlData requires an array as the value
+			// even if there is only one array item.
+			function createParameter(name, valueArray){
 				require.is(valueArray, "Array") || (valueArray = [valueArray]);
-
-				if(valueArray.length > 0) {
-					return new tizen.ApplicationControlData(name, valueArray);
-				}
+				return new tizen.ApplicationControlData(name, valueArray);
 			};
 
 			//create all parameters what was filled
-			function getAllParameters(){
+			function createAllParameters(){
 				var params = [];
 				for(i in fields) {
-					params.push(setParameter(fields[i], self[i]));
+					self[i] && params.push(createParameter(fields[i], self[i]));
 				}
 				return params;
 			};
@@ -58,16 +56,11 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/Evented", "Ti/_/lang"],
 			return true;
 		},
 
-		setHtml: function() {
-			Ti.API.info('Tizen does not support the content of email as HTML');
-		},
-
 		constants: {
 			CANCELLED: 0,
 			FAILED: 3,
 			SAVED: 1,
-			SENT: 2,
-			html: false
+			SENT: 2
 		},
 
 		properties: {
@@ -78,7 +71,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/Evented", "Ti/_/lang"],
 		    toRecipients: void 0,
 			attachment: void 0
 		}
-
 	});
 
 });
