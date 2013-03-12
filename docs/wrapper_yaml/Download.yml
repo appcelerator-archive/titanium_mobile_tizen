@@ -5,99 +5,12 @@ summary: |
 extends: Titanium.Module
 
 methods:
-  - name: start
-    summary: Starts a download operation with the specified URL information.
-    description: |
-        Returns an identifier for each download operation.
-    returns:
-        type: Number
-    parameters:
-      - name: downloadRequest
-        summary: The URL and destination information of the object to download.
-        type: Titanium.Tizen.Download.DownloadRequest
-      - name: downloadCallback
-        summary: The method to invoke when the download state changes or an error occurs.
-        type: DownloadCallback
-        optional: true
-    examples:
-      - example: |
-            var listener = {
-                onprogress: function(id, receivedSize, totalSize) {
-                    console.log('Received with id: ' + id + ', ' + receivedSize + '/' + totalSize);
-                },
-                onpaused: function(id) {
-                    console.log('Paused with id: ' + id);
-                },
-                oncanceled: function(id) {
-                    console.log('Canceled with id: ' + id);
-                },
-                oncompleted: function(id, fullPath) {
-                    console.log('Completed with id: ' + id + ', full path: ' + fullPath);
-                },
-                onfailed: function(id, error) {
-                    console.log('Failed with id: ' + id + ', error name: ' + error.name);
-                }
-            };
-            // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Titanium.Tizen.Download.createDownloadRequest({url: "http://download.tizen.org/tools/README.txt",
-                                                                                 destination: "documents"});
-            downloadId = Titanium.Tizen.Download.start(downloadRequest, listener);
-
-  - name: cancel
-    summary: Cancels an ongoing download operation that is specified by the downloadId parameter.
-    parameters:
-      - name: downloadId
-        summary: The ID of the ongoing download operation to stop.
-        type: Number
-    examples:
-      - example: |
-            // Cancels the ongoing download operation with the specified id.
-            Titanium.Tizen.Download.cancel(downloadId);
- 
-  - name: pause
-    summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
-        The paused download operation can be resumed later by the resume() method.
-    parameters:
-      - name: downloadId
-        summary: The ID of the ongoing download operation to pause.
-        type: Number
-    examples:
-      - example: |
-            // Pauses the ongoing download operation with the specified id.
-            Titanium.Tizen.Download.pause(downloadId);
-
-  - name: resume  
-    summary: Resumes a paused download operation that is specified by the downloadId parameter.
-    parameters:
-      - name: downloadId  
-        summary: The ID of the paused download operation to be resume.
-        type: Number
-    examples:
-      - example: |
-            // Resumes the paused download operation with the specified id.
-            Titanium.Tizen.Download.resume(downloadId);
- 
-  - name: getState
-    summary: Gets the download state of an operation synchronously with the specified ID.
-    description: |
-        Returns the current download state of the specified ID.
-    returns: 
-        type: String 
-    parameters:  
-      - name: downloadId
-        summary: The ID to get the current state of download operation.
-        type: Number  
-    examples:
-      - example: |
-            // Gets the state of the download operation with the given id.
-            var state = Titanium.Tizen.Download.getState(downloadId);
-
   - name: getDownloadRequest
     summary: Gets the DownloadRequest object from a given id.
     description: |
         Returns the download request information of the given id.
     returns:
-        type: Titanium.Tizen.Download.DownloadRequest
+        type: <Titanium.Tizen.Download.DownloadRequest>
     parameters:
       - name: downloadId
         summary: The ID to get the download request information.
@@ -107,57 +20,6 @@ methods:
             // Gets the download request information with the given id.
             var downloadRequest = Titanium.Tizen.Download.getDownloadRequest(downloadId);
 
-  - name: getMIMEType
-    summary: Gets the MIME type of the downloaded file.
-    description: |
-        Returns a valid MIME type of the downloaded file when the download operation has been started and successfully retrieved the file header.
-    returns:
-        type: String
-    parameters:
-      - name: downloadId
-        summary: The ID to get the MIME type information.
-        type: Number
-    examples:
-      - example: |
-            // Get the MIME type of the download operation with the given id.
-            var MIMEtype = Titanium.Tizen.Download.getMIMEType(downloadId);
-
-  - name: setListener
-    summary: Sets the download callback to the download operation of given id.
-        It's possible to change or register the listener of download operation using the saved id.
-    parameters:
-      - name: downloadId
-        summary: The ID to set the download callback.
-        type: Number
-      - name: downloadCallback
-        summary: The method to invoke when the download state changes or an error occurs.
-        type: DownloadCallback
-    examples:
-      - example: |
-            var listener = {
-                onprogress: function(id, receivedSize, totalSize) {
-                    console.log('Received with id: ' + id + ', ' + receivedSize + '/' + totalSize);
-                },
-                onpaused: function(id) {
-                    console.log('Paused with id: ' + id);
-                },
-                oncanceled: function(id) {
-                    console.log('Canceled with id: ' + id);
-                },
-                oncompleted: function(id, fullPath) {
-                    console.log('Completed with id: ' + id + ', full path: ' + fullPath);
-                },
-                onfailed: function(id, error) {
-                    console.log('Failed with id: ' + id + ', error name: ' + error.name);
-                }
-            };
-             // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Titanium.Tizen.Download.createDownloadRequest({url: "http://download.tizen.org/tools/README.txt",
-                                                                                 destination: "documents"});
-            downloadId = Titanium.Tizen.Download.start(downloadRequest);
-            // Add the listener.
-            Titanium.Tizen.Download.setListener(downloadId, listener);
- 
   - name: createDownloadRequest
     summary: Creates <Titanium.Tizen.Download.DownloadRequest> object.
     parameters:
@@ -165,10 +27,9 @@ methods:
         summary: Initial parameters for <Titanium.Tizen.Download.DownloadRequest>.
         type: Dictionary<createDownloadRequestParameters>
     returns:
-        type: Titanium.Tizen.Download.DownloadRequest
+        type: <Titanium.Tizen.Download.DownloadRequest>
         
 properties:
-
   - name: DOWNLOAD_STATE_QUEUED
     summary: Indicates that the download operation is listed in a queue.
     type: STRING
@@ -198,54 +59,6 @@ properties:
     type: STRING
     permission: read-only
 
----
-name: DownloadCallback
-summary: Defines notification callbacks for the download state change or progress.
-methods:
-  - name: onprogress
-    summary: Called when a download is successful and it called multiple times as the download progresses.
-        The interval between onprogress() callback is platform-dependent. When the download is started, the receivedSize can be 0.
-    parameters:
-      - name: downloadId
-        summary: The ID of the corresponding download operation.
-        type: Number
-      - name: receivedSize
-        summary: The size of data received in bytes.
-        type: Number
-      - name: totalSize
-        summary: The total size of data to receive in bytes.
-        type: Number
-  - name: onpaused
-    summary: Called when the download operation is paused by the pause() method.
-    parameters:
-      - name: downloadId
-        summary: The ID of the corresponding download operation.
-        type: Number
-  - name: oncanceled
-    summary: Called when download is canceled by the cancel() method.
-    parameters:
-      - name: downloadId
-        summary: The ID of the corresponding download operation.
-        type: Number
-  - name: oncompleted
-    summary: Called when the download operation is completed with the final full path.
-        If the same file name already exists in the destination, it is changed according to the platform policy and delivered in this callback.
-    parameters:
-      - name: downloadId
-        summary: The ID of the corresponding download operation.
-        type: Number
-      - name: fullPath
-        summary: The final full path for the downloaded file.
-        type: String
-  - name: onfailed
-    summary: Called when the download operation fails.
-    parameters:
-      - name: downloadId
-        summary: The ID of the corresponding download operation.
-        type: Number
-      - name: error
-        summary: The reason for the download failure.
-        type: Callback<Titanium.Tizen.WebAPIError>
 ---
 name: createDownloadRequestParameters
 summary: Parameters for the <Titanium.Tizen.Download.createDownloadRequest>.
