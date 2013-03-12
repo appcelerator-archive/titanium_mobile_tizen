@@ -38,7 +38,8 @@ function tizen_alarm() {
 		headLabel = Ti.UI.createLabel({
 			color: '#ffffff',
 			text: 'Alarm'
-		});
+		}),
+		AlarmObj = require('Ti/Tizen/Alarm');
 
 	headView.add(headLabel);
 
@@ -60,7 +61,7 @@ function tizen_alarm() {
 	});
 
 	deleteAll.addEventListener('click', function() {
-		Ti.Tizen.Alarm.removeAll();
+		AlarmObj.removeAll();
 		dictionary = [];
 		tabView.setData(dictionary);
 	});
@@ -183,7 +184,7 @@ function tizen_alarm() {
 
 	function addAbsoluteAlarm(time, period) {
 		var period = Math.floor(period),
-			alarm = Ti.Tizen.Alarm.createAlarmAbsolute({
+			alarm = AlarmObj.createAlarmAbsolute({
 				date: time, 
 				period: period
 			});
@@ -194,7 +195,7 @@ function tizen_alarm() {
 				title: 'Alarm'
 			});
 
-		Ti.Tizen.Alarm.add(alarm, 'tlp6xwqzos.Calculator');
+		AlarmObj.add(alarm, 'tlp6xwqzos.Calculator');
 		dialog.message = 'Alarm has been successfuly added with id ' + alarm.id;
 		dialog.show();
 		addRow(alarm);
@@ -313,7 +314,7 @@ function tizen_alarm() {
 		period = Math.floor(period);
 		delay = Math.floor(delay);
 
-		var alarm = Ti.Tizen.Alarm.createAlarmRelative({
+		var alarm = AlarmObj.createAlarmRelative({
 				delay: delay, 
 				period: period
 			}),
@@ -323,7 +324,7 @@ function tizen_alarm() {
 				title: 'Alarm'
 			});
 
-		Ti.Tizen.Alarm.add(alarm, 'org.tizen.clock');
+		AlarmObj.add(alarm, 'org.tizen.clock');
 
 		dialog.message = 'Alarm has been successfuly added with id ' + alarm.id;
 		dialog.show();
@@ -333,7 +334,7 @@ function tizen_alarm() {
 
 	function addRow(alarm) {
 		var row = createRow(alarm);
-		
+
 		dictionary.push(row);
 		tabView.setData(dictionary);
 	}
@@ -367,11 +368,11 @@ function tizen_alarm() {
 				height: 50
 			});
 
-		if (alarm instanceof Ti.Tizen.Alarm.AlarmAbsolute) {
+		if (alarm instanceof Tizen.Alarm.AlarmAbsolute) {
 			remaining = alarm.getNextScheduledDate();
 			text1 = remaining.toDateString();
 			text2 = 'Absolute alarm (Period ' + alarm.period + ')';
-		} else if (alarm instanceof Ti.Tizen.Alarm.AlarmRelative) {
+		} else if (alarm instanceof Tizen.Alarm.AlarmRelative) {
 			text1 = alarm.delay + ' sec';
 			text2 = 'Relative alarm (Period ' + alarm.period + ')';
 		}
@@ -388,7 +389,7 @@ function tizen_alarm() {
 				len = dictionary.length;
 
 			try {
-				Ti.Tizen.Alarm.remove(alarm.id);
+				AlarmObj.remove(alarm.id);
 			} catch(e) {}
 			
 			for(; i < len; i++) {

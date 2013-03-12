@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
-	return declare('Ti.Tizen.Alarm.AlarmAbsolute', Alarm, {
+	return declare('Tizen.Alarm.AlarmAbsolute', Alarm, {
 		constructor: function(args) {
 			if(args.toString() === '[object AlarmAbsolute]') {
 				this._obj = args;
