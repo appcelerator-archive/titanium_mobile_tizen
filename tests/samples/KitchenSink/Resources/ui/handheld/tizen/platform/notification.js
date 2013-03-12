@@ -23,10 +23,11 @@ function tizen_alarm() {
 			width: '60%',
 			top: 95,
 			title: 'Remove all notifications'
-		});
+		}),
+		notificationObj = require('Ti/Tizen/Notification');
 
 	removeButton.addEventListener('click', function() {
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		Ti.UI.createAlertDialog({
 			title: 'Info',
@@ -38,23 +39,23 @@ function tizen_alarm() {
 
 	function createNotification() {
 		var appControl = Ti.Tizen.Application.createApplicationControl({
-			operation: "http://tizen.org/appcontrol/operation/create_content",
+			operation: 'http://tizen.org/appcontrol/operation/create_content',
 			uri: null
 		}),
-		// Create notification`s parameters
+		// Notifications init parameters
 		notificationDict = {
 			content: titleInput.value,
 			vibration: true, 
 			appControl: appControl
 		},
 		// Create and post notification
-		notification = Ti.Tizen.Notification.createStatusNotification({
-			statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+		notification = notificationObj.createStatusNotification({
+			statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 			title: 'Simple notification',
 			notificationInitDict: notificationDict
 		});
 
-		Ti.Tizen.Notification.post(notification);
+		notificationObj.post(notification);
 		titleInput.value = '';
 	}
 
