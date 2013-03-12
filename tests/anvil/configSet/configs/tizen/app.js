@@ -8,7 +8,6 @@
 // start customization here
 var suites = [
 	{name: "tizen/messaging"},
-	{name: "tizen/media_content"},
 	{name: "tizen/calendar"},
 	{name: "tizen/alarm"},
 	{name: "tizen/contacts"},
