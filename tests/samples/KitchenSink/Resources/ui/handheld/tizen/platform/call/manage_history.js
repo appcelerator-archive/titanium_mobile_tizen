@@ -24,60 +24,61 @@ function manageHistory() {
 			height: 10,
 			width: 10
 		}),
-		filter = Ti.Tizen.createAttributeFilter({
+		tizenObj = require('Ti/Tizen'),
+		filter = tizenObj.createAttributeFilter({
 			attributeName: 'type',
-			matchFlag: 'EXACTLY',
+			matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
 			matchValue: 'TEL'
 		}),
-		sortMode = Ti.Tizen.createSortMode({
+		sortMode = tizenObj.createSortMode({
 			attributeName: 'startTime', 
-			order: 'DESC'
-		});
-
+			order: tizenObj.SORT_MODE_ORDER_DESC
+		}),
+		callhistoryObj = require('Ti/Tizen/Callhistory');
 
 	function onSuccess(results) {
 		var resultsCount = results.length,
 			i = 0;
 		Ti.API.info('Results length: ' + resultsCount);
-		
+
 		if (resultsCount > 0) {
 			function removeRow(item) {
 				if (item.rowData.title) {
 					Ti.API.info('item.index: ' + item.index);
-					
+
 					try {
-						Ti.Tizen.Callhistory.remove(results[item.index]);
+						callhistoryObj.remove(results[item.index]);
 						tableView.deleteRow(item.index);
-						
-						if (tableView.sections[0].rowCount == 0) {
+
+						if (tableView.sections[0].rowCount === 0) {
 							win.remove(tableView);
 							win.remove(removeAllHistoryBtn);
 							win.add(emptyHistoryLbl);
 						}
 					} catch (removeExc) {
 						Ti.UI.createAlertDialog({
-						    message: removeExc.message,
-						    title: 'The following error occurred: ',
-						    ok: 'Ok'
+							message: removeExc.message,
+							title: 'The following error occurred: ',
+							ok: 'Ok'
 						}).show();
 					}
 				}
 			}
 
 			function removeAll(e) {
-				Ti.Tizen.Callhistory.removeAll(
+				callhistoryObj.removeAll(
 					function() {
 						Ti.API.info('All history removed.');
-						
+
 						win.remove(tableView);
 						win.remove(removeAllHistoryBtn);
 						win.add(emptyHistoryLbl);
 					},
 					function(error) {
 						Ti.UI.createAlertDialog({
-						    message: removeExc.message,
-						    title: 'The following error occurred: ',
-						    ok: 'Ok'
+							message: removeExc.message,
+							title: 'The following error occurred: ',
+							ok: 'Ok'
 						}).show();
 					}
 				);
@@ -85,7 +86,7 @@ function manageHistory() {
 
 			tableView.addEventListener('click', removeRow);
 			removeAllHistoryBtn.addEventListener('click', removeAll);
-						
+
 			for (; i < resultsCount; i++) {
 				tableView.appendRow({ title: results[i].remoteParties[0].remoteParty + ' (' + results[i].direction + ')' });
 			}
@@ -98,28 +99,15 @@ function manageHistory() {
 	}
 
 	function onError(error) {
-		console.log('ERROR');
+		Ti.API.error('ERROR');
 		Ti.UI.createAlertDialog({
 			message: exep.message,
 			title: 'The following error occurred: ',
 			ok: 'Ok'
 		}).show();
 	}
-	console.log('Before find');
 
-	function tmpCallback(histories)
-	{
-		console.log('begin')
-		var result = [],
-			historiesCount = histories.length,
-			i = 0;
-		console.log("historiesCount=" + historiesCount);
-		for (; i < historiesCount; i++) {
-			console.log(histories[i]);
-		}
-	}
-
-	Ti.Tizen.Callhistory.find(onSuccess, onError, filter._obj, sortMode._obj);
+	callhistoryObj.find(onSuccess, onError, filter, sortMode);
 
 	return win;
 }
