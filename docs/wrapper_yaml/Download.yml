@@ -10,7 +10,7 @@ methods:
     description: |
         Returns the download request information of the given id.
     returns:
-        type: Titanium.Tizen.Download.DownloadRequest
+        type: <Titanium.Tizen.Download.DownloadRequest>
     parameters:
       - name: downloadId
         summary: The ID to get the download request information.
@@ -27,7 +27,7 @@ methods:
         summary: Initial parameters for <Titanium.Tizen.Download.DownloadRequest>.
         type: Dictionary<createDownloadRequestParameters>
     returns:
-        type: Titanium.Tizen.Download.DownloadRequest
+        type: <Titanium.Tizen.Download.DownloadRequest>
         
 properties:
   - name: DOWNLOAD_STATE_QUEUED

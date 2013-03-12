@@ -209,7 +209,8 @@ module.exports = new function() {
 			fileName: 'tmp' + (new Date().getTime())
 		});
 
-		downloadId = downloadRequest.send(listener);
+		downloadId = downloadRequest.send();
+		downloadRequest.setListener(listener);
 
 		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');	
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
