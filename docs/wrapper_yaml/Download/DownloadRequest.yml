@@ -12,9 +12,6 @@ methods:
     returns:
         type: Number
     parameters:
-      - name: downloadRequest
-        summary: The URL and destination information of the object to download.
-        type: Titanium.Tizen.Download.DownloadRequest
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
