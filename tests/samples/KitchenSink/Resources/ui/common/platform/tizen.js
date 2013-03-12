@@ -12,7 +12,6 @@ function tizen(_args) {
 			{title: 'NFC demo', hasChild: true, test: 'ui/handheld/tizen/platform/nfc'},
 			{title: 'Bluetooth demo', hasChild: true, test: 'ui/handheld/tizen/platform/bluetooth'},
 			{title: 'Messaging', hasChild: true, test: 'ui/handheld/tizen/platform/messaging/messaging'},
-			{title: 'Media content', hasChild: true, test: 'ui/handheld/tizen/platform/media_content'},
 			{title: 'Alarm', hasChild: true, test: 'ui/handheld/tizen/platform/alarm'},
 			{title: 'Notification', hasChild: true, test: 'ui/handheld/tizen/platform/notification'},
 			{title: 'Calendar', hasChild: true, test: 'ui/handheld/tizen/platform/calendar'}
