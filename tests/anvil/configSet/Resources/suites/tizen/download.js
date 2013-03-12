@@ -29,15 +29,15 @@ module.exports = new function() {
 		// Test for Tizen Device API: Download
 		Ti.API.debug('Checking Download object availability.');
 
-		var downloadRequest = Ti.Tizen.Download.createDownloadRequest({
+		var downloadRequest = Tizen.Download.createDownloadRequest({
 			url: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin',
 			destination: 'documents',
 			fileName: 'tmp' + (new Date().getTime())
 		});
 
-		valueOf(testRun, Ti.Tizen).shouldBeObject();
-		valueOf(testRun, Ti.Tizen.Download).shouldBeObject();
-		valueOf(testRun, downloadRequest).shouldBe('[object TiTizenDownloadDownloadRequest]');
+		valueOf(testRun, Tizen).shouldBeObject();
+		valueOf(testRun, Tizen.Download).shouldBeObject();
+		valueOf(testRun, downloadRequest).shouldBe('[object TizenDownloadDownloadRequest]');
 		valueOf(testRun, downloadRequest.send).shouldBeFunction();
 		valueOf(testRun, downloadRequest.pause).shouldBeFunction();
 		valueOf(testRun, downloadRequest.abort).shouldBeFunction();
@@ -95,7 +95,7 @@ module.exports = new function() {
 				onError: function(downloadRequest, error) {
 					Ti.API.debug('onError event. id=' + downloadRequest.id +', error=' + JSON.stringify(error));
 
-					valueOf(localTestRun, error).shouldBe('[object TiTizenWebAPIError]');					
+					valueOf(localTestRun, error).shouldBe('[object TizenWebAPIError]');					
 					clearFakeTimeout();
 					reportError(localTestRun, JSON.stringify(error));
 				}
@@ -108,7 +108,7 @@ module.exports = new function() {
 		}
 
 		// Downloading large file to test callbacks.
-		var downloadRequest = Ti.Tizen.Download.createDownloadRequest({
+		var downloadRequest = Tizen.Download.createDownloadRequest({
 			url: 'http://download.tizen.org/sdk/InstallManager/tizen-sdk-2.0-ubuntu32.bin',
 			destination: 'documents',
 			fileName: 'tmp' + (new Date().getTime())
@@ -116,7 +116,7 @@ module.exports = new function() {
 
 		downloadId = downloadRequest.send(listener);
 
-		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');	
+		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TizenDownloadDownloadRequest]');	
 		valueOf(testRun, downloadId).shouldBeNumber();
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
@@ -139,7 +139,7 @@ module.exports = new function() {
 				onError: function(downloadRequest, error) {
 					Ti.API.debug('onError event. id=' + downloadRequest.id + ', error=' + JSON.stringify(error));
 
-					valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+					valueOf(testRun, error).shouldBe('[object TizenWebAPIError]');
 					valueOf(testRun, error).shouldNotBeNull();
 
 					reportError(testRun, JSON.stringify(error));
@@ -148,7 +148,7 @@ module.exports = new function() {
 			};
 
 		// Start downloading large file to be able to test callbacks.
-		var downloadRequest = Ti.Tizen.Download.createDownloadRequest({
+		var downloadRequest = Tizen.Download.createDownloadRequest({
 				url: 'http://download.tizen.org/Magic-Sofware-Package-v4.2.bin',
 				destination: 'documents',
 				fileName: 'tmp' + (new Date().getTime())
@@ -156,7 +156,7 @@ module.exports = new function() {
 
 		downloadId = downloadRequest.send(listener);
 
-		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');
+		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TizenDownloadDownloadRequest]');
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 	}
 
@@ -196,14 +196,14 @@ module.exports = new function() {
 					Ti.API.debug('onError event. id=' + downloadRequest.id + ', error=' + JSON.stringify(error));
 
 					valueOf(testRun, downloadRequest.id).shouldBeEqual(downloadId);
-					valueOf(testRun, error).shouldBe('[object TiTizenWebAPIError]');
+					valueOf(testRun, error).shouldBe('[object TizenWebAPIError]');
 
 					reportError(testRun, JSON.stringify(error));
 				}
-			},
+			};
 
 		// Start downloading large file to initate callbacks.
-		downloadRequest = Ti.Tizen.Download.createDownloadRequest({
+		downloadRequest = Tizen.Download.createDownloadRequest({
 			url: 'http://download.tizen.org/sdk/1_0-larkspur/pkg_list_windows',
 			destination: 'documents',
 			fileName: 'tmp' + (new Date().getTime())
@@ -212,7 +212,7 @@ module.exports = new function() {
 		downloadId = downloadRequest.send();
 		downloadRequest.setListener(listener);
 
-		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TiTizenDownloadDownloadRequest]');	
+		valueOf(testRun, downloadRequest.toString()).shouldBe('[object TizenDownloadDownloadRequest]');
 		valueOf(testRun, downloadId).shouldBeGreaterThanEqual(0);
 		valueOf(testRun, downloadId).shouldBeNumber();
 	}
