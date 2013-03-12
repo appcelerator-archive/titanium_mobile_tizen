@@ -41,6 +41,7 @@ var ti = require('titanium-sdk'),
 		'.jpeg': 'image/jpg'
 	},
 	devId,
+	tizenConfigXmlSources,
 	defaultPrivilegesList = 
 			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>'+
@@ -1040,34 +1041,43 @@ build.prototype = {
 	},
 
 	addTizenToTiAppXml: function (tizenAppId) {		
-		this.logger.info('Processing tiapp.xml for tizen node');
+		this.logger.info('Processing tizen section of tiapp.xml ');
 		var XMLSerializer = xmldom.XMLSerializer,
 			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
 			doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml'),
-			parsedTiXml = doc.documentElement;
+			parsedTiXml = doc.documentElement,
 			tizenTagFound = false, //check for Tizen section
-			node = parsedTiXml.firstChild;
+			node = parsedTiXml.firstChild,
+			existingId,
+			confNode;
 
 		while (node) {
 			if (node.nodeType == 1 && node.tagName == 'tizen') {
 				//tizen section exists, nothing to do
 				tizenTagFound = true;
-				var existingId =  node.getAttribute('appid');
+				existingId =  node.getAttribute('appid');
 				this.logger.info('<tizen> node. tizen app id:' +  existingId);
 				if (existingId) {
 					this.tiapp.tizen.appid = existingId;
 				}
+				confNode = node.firstChild;
+				while (confNode) {
+					if (tizenConfigXmlSources) {
+						tizenConfigXmlSources = confNode.toString() + tizenConfigXmlSources;
+					} else {
+						tizenConfigXmlSources = confNode.toString();
+					}
+					confNode = confNode.nextSibling;
+				}
 			}
 			node = node.nextSibling;
 		}
-
 		if (tizenTagFound) {
-			this.logger.info('<tizen> node available.');
+			this.logger.info('tiapp.xml does not contains <tizen> node. Using default values');
 			return;
 		}
 
-		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');		
-		
+		//<tizen> node absent in tiapp.xml, adding it.		
 		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'">' + defaultPrivilegesList + '</tizen>',
 			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
 			result;
@@ -1077,8 +1087,6 @@ build.prototype = {
 	},
 
 	createConfigXml: function () {
-		this.logger.info(__('createConfigXml'));		
-
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
 		if (!this.tiapp.url || 0 === this.tiapp.url) {
 			templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);
@@ -1087,7 +1095,7 @@ build.prototype = {
 		}
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%FEATURES_LIST%%', defaultPrivilegesList);
+		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
@@ -1234,6 +1242,7 @@ build.prototype = {
 			}
 		);			
 	},
+
 	uninstallWidgetForce: function(logger, callback) {
 		if (devId) {
 			var runner = require("child_process"),
@@ -1250,7 +1259,7 @@ build.prototype = {
 				cmd,
 				function (err, stdout, stderr) {
 					logger.info(stdout);
-					if (err != null){
+					if (err != null) {
 						logger.info('wgt uninstall failed');
 						logger.info(stderr);
 					} else {
@@ -1363,7 +1372,6 @@ build.prototype = {
 			reg.exec(
 				'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
 				function (err, stdout, stderr) {
-
 					if (stdout !== null && (typeof stdout != 'undefined')) {
 						var arr = stdout.split(" ");
 						keyvalue = arr[arr.length-1];//last parameter is path
@@ -1417,6 +1425,7 @@ build.prototype = {
 	},
 
 	signTizenApp: function(logger, callback) {
+		// sign Tizen application with out custom signer utility. 
 		logger.info(__('signing application in  "%s" ', this.buildDir));
 		var packer = require('child_process');
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
@@ -1442,7 +1451,7 @@ build.prototype = {
 		packer.exec(
 			cmdSign,
 			function (err, stdout, stderr) {				
-				if (err != null){
+				if (err != null) {
 					logger.error('Signing failed ');
 					logger.error(stderr);
 				}
