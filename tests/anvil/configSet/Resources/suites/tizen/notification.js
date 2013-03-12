@@ -7,11 +7,13 @@
 
 module.exports = new function() {
 	var finish,
-		valueOf;
+		valueOf,
+		notificationObj;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		notificationObj = require('Ti/Tizen/Notification');
 	}
 
 	// Most of the tests fail due to the Tizen bug:
@@ -26,7 +28,7 @@ module.exports = new function() {
 
 	this.notificationPost = function(testRun) {
 		// Clear notification tray
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		// Create app service for notification
 		var notificationArr,
@@ -43,21 +45,21 @@ module.exports = new function() {
 				vibration: true, 
 				appControl: appControl
 			},
-			notification = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			notification = notificationObj.createStatusNotification({
+				statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification',
 				notificationInitDict: notificationDict
 			});
 
 		// Post created notification to tray               
 		valueOf(testRun, function() {
-			Ti.Tizen.Notification.post(notification);
+			notificationObj.post(notification);
 		}).shouldNotThrowException();
 
-		notificationArr = Ti.Tizen.Notification.getAll();
+		notificationArr = notificationObj.getAll();
 		// Get notification from tray and check is it instance of status notification
-		valueOf(testRun, notificationArr[0] instanceof Ti.Tizen.Notification.StatusNotification).shouldBeTrue();
-		Ti.Tizen.Notification.removeAll();
+		valueOf(testRun, notificationArr[0] instanceof Tizen.Notification.StatusNotification).shouldBeTrue();
+		notificationObj.removeAll();
 
 		finish(testRun);
 	}
@@ -65,7 +67,7 @@ module.exports = new function() {
 	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationGet = function(testRun) {
 		// Clear notification tray
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		// Create notification and add it to tray
 		var notId,
@@ -83,15 +85,15 @@ module.exports = new function() {
 				vibration: true, 
 				appControl: appControl
 			},
-			notification = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			notification = notificationObj.createStatusNotification({
+				statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification',
 				notificationInitDict: notificationDict
 			});
 			
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Notification.post(notification);
+			notificationObj.post(notification);
 		}).shouldNotThrowException();
 
 		// Memorize notification id for use later
@@ -99,14 +101,14 @@ module.exports = new function() {
 		Ti.API.info(notId);
 		// Try to get notification by id
 		valueOf(testRun, function() {      
-			notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = notificationObj.get(notId);
 		}).shouldNotThrowException();
 		// Compare property of gotten notification with coresponding property of posted notification
 		valueOf(testRun, notificationFrom.content).shouldBe(notificationDict.content);
 		valueOf(testRun, notificationFrom.statusType).shouldBe(notification.statusType);
 		valueOf(testRun, notificationFrom.title).shouldBe(notification.title);
 
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		finish(testRun);
 	}
@@ -114,7 +116,7 @@ module.exports = new function() {
 	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationUpdate = function(testRun) {
 		// Clear notification tray
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		// Create notification and add it to tray
 		var notId,
@@ -130,14 +132,14 @@ module.exports = new function() {
 					iconPath: 'images/image1.jpg', 
 					vibration: true, 
 					appControl: appControl},
-			notification = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			notification = notificationObj.createStatusNotification({
+				statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification',
 				notificationInitDict: notificationDict
 			});
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Notification.post(notification);
+			notificationObj.post(notification);
 		}).shouldNotThrowException();
 
 		// Memorize notification id for use later
@@ -147,16 +149,16 @@ module.exports = new function() {
 		notification.content = 'New Content';
 
 		valueOf(testRun, function() {      
-			Ti.Tizen.Notification.update(notification);
+			notificationObj.update(notification);
 		}).shouldNotThrowException();
 
 		// Get notification by id and compare it content attribute
 		valueOf(testRun, function() {      
-			notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = notificationObj.get(notId);
 		}).shouldNotThrowException();
 		valueOf(testRun, notificationFrom.content).shouldBe(notification.content);
 
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		finish(testRun);
 	}
@@ -164,7 +166,7 @@ module.exports = new function() {
 	// Fails https://bugs.tizen.org/jira/browse/TDIST-148
 	this.notificationRemove = function(testRun) {
 		// Clear notification tray
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		// Create first notification and add it to tray
 		var notId,
@@ -183,8 +185,8 @@ module.exports = new function() {
 				vibration: true, 
 				appControl: appControl
 			},
-			notification = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			notification = notificationObj.createStatusNotification({
+				statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification 1',
 				notificationInitDict: notificationDict
 			}),
@@ -200,22 +202,22 @@ module.exports = new function() {
 				vibration: true, 
 				appControl: appControl1
 			},
-			notification1 = Ti.Tizen.Notification.createStatusNotification({
-				statusType: Ti.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+			notification1 = notificationObj.createStatusNotification({
+				statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
 				title: 'Simple notification 2',
 				notificationInitDict: notificationDict
 			});
 
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Notification.post(notification);
+			notificationObj.post(notification);
 		}).shouldNotThrowException();
 
 		// Memorize id for use later
 		notId = notification.id;
 
 		valueOf(testRun, function() {      
-			Ti.Tizen.Notification.post(notification1);
+			notificationObj.post(notification1);
 		}).shouldNotThrowException();
 
 		// Memorize second id 
@@ -223,25 +225,25 @@ module.exports = new function() {
 
 		// Try to remove notification by id
 		valueOf(testRun, function() {      
-			Ti.Tizen.Notification.remove(notId);
+			notificationObj.remove(notId);
 		}).shouldNotThrowException();
 
 		// Try to get removed notification: it should cause exception
 		valueOf(testRun, function() {      
-			notificationFrom = Ti.Tizen.Notification.get(notId);
+			notificationFrom = notificationObj.get(notId);
 		}).shouldThrowException();
 
 		// Try to remove all notification in tray
 		valueOf(testRun, function() {      
-			Ti.Tizen.Notification.removeAll();
+			notificationObj.removeAll();
 		}).shouldNotThrowException();
 
 		//try to get second notification and it should be removed
 		valueOf(testRun, function() {      
-			notificationFrom1 = Ti.Tizen.Notification.get(notId1);
+			notificationFrom1 = notificationObj.get(notId1);
 		}).shouldThrowException();
 
-		Ti.Tizen.Notification.removeAll();
+		notificationObj.removeAll();
 
 		finish(testRun);
 	}
