@@ -57,7 +57,7 @@ function tizenDownload(title) {
 	}
 
 	function startDownload() {
-		// Listener object must be "local" for call "Ti.Tizen.Download.start". Don't move this declaration it out of this function.
+		// Listener object must be "local" for call "Tizen.Download.start". Don't move this declaration it out of this function.
 		var listener = {
 			onDataStream: function(request, receivedSize, totalSize) {
 				Titanium.API.info('"onDataStream" event. id=' + request.id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
@@ -104,7 +104,7 @@ function tizenDownload(title) {
 			if (downloadRequest) {
 				messageWin.showToast('Please, stop current download before start new one.', 3000);
 			} else {
-				downloadRequest = Ti.Tizen.Download.createDownloadRequest({
+				downloadRequest = Tizen.Download.createDownloadRequest({
 					url: urlTextField.value,
 					destination: 'documents',
 					fileName: 'tmp' + (new Date().getTime())
