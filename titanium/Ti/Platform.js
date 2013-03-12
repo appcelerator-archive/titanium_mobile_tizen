@@ -132,7 +132,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				BATTERY_STATE_UNKNOWN: -1,
 				BATTERY_STATE_UNPLUGGED: 0,
 				address: void 0,
-				architecture: deviceCapabilities.platformCoreCpuArch, //void 0,
+				architecture: deviceCapabilities.platformCoreCpuArch,
 				availableMemory: void 0,
 				batteryLevel: function() {
 					return this.batteryMonitoring && battery ? battery.level * 100 : -1;
@@ -152,7 +152,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				runtime: browser.runtime,
 				processorCount: void 0,
 				username: void 0,
-				version: deviceCapabilities.platformVersion //require.config.ti.version
+				version: deviceCapabilities.platformVersion
 			}
 
 		});
