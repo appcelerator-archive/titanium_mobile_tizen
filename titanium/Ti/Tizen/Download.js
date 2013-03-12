@@ -1,5 +1,5 @@
 define(['Ti/_/lang', 'Ti/Tizen/Download/DownloadRequest', 'Ti/_/Evented'], function(lang, DownloadRequest, Evented) {
-	return lang.setObject('Ti.Tizen.Download', Evented, {
+	return lang.setObject('Tizen.Download', Evented, {
 
 		constants: {
 			DOWNLOAD_STATE_QUEUED: 'QUEUED',
