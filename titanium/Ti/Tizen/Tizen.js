@@ -2,7 +2,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/AttributeFilter', 'Ti/Tizen/Attri
         'Ti/Tizen/CompositeFilter', 'Ti/Tizen/SortMode', 'Ti/Tizen/SimpleCoordinates'],
         
     function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates) {
-        return lang.setObject('Ti.Tizen', Evented, {
+        return lang.setObject('Tizen', Evented, {
 
             constants: {
                 FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
