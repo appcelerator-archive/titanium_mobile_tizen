@@ -1,6 +1,6 @@
 ---
-name: Titanium.Tizen.CallHistory
-summary: The top level CallHistory module.  
+name: Tizen.Callhistory
+summary: The top level Callhistory module.  
 description: |
     This API provides interfaces and methods for retrieving information from the call history.
 
@@ -13,23 +13,23 @@ methods:
     summary: Finds and returns call history items.
     parameters:
       - name: successCallback
-        summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
+        summary: This is a callback interface of Callhistory operations. For example code see Callhistory interface.
         type: Callback<CallHistoryEntry>
       - name: errorCallback
         summary: The method to call when an error occurs.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
       - name: filter
         summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
         description: |
             AbstractFilter is a common interface used by different types of object filters. 
             Never use this base interface directly, instead use AbstractFilter subtypes, such as AttributeFilter, AttributeRangeFilter, and CompositeFilter. 
         optional: true
-        type: Titanium.Tizen.AbstractFilter
+        type: Tizen.AbstractFilter
       - name: sortMode
         summary: The sorting order preference of the result set.
         optional: true
-        type: Titanium.Tizen.SortMode
+        type: Tizen.SortMode
       - name: limit
         summary: The maximum limits the query result is set to as specified by the parameter (It is the same meaning as SQL LIMIT). If 0, there is no limit set.
         optional: true
@@ -43,7 +43,7 @@ methods:
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
-        type: CallHistoryEntry
+        type: Tizen.Callhistory.CallHistoryEntry
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     parameters: 
@@ -57,7 +57,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     parameters: 
@@ -68,7 +68,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
     parameters: 
@@ -86,7 +86,7 @@ methods:
 # Pseudo-type
 ---
 name: CallHistoryChangeCallback
-summary: This is a callback interface of a CallHistory operations. For example code, see CallHistory interface.
+summary: This is a callback interface of a Callhistory operations. For example code, see Callhistory interface.
 platforms: [tizen]
 methods:
   - name: onadded
