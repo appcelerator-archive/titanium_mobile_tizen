@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
-	return declare('Ti.Tizen.Download.DownloadRequest', Evented, {
+	return declare('Tizen.Download.DownloadRequest', Evented, {
 		constructor: function(args) {
 			if (args.toString() === '[object DownloadRequest]') {
 				this._obj = args;
