@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Power
+name: Tizen.Power
 summary: This Module provides  support for requesting power management related resource states.
 description: |
     The `Power` module is a thin wrapper on the Tizen `Power` class.	
@@ -32,7 +32,8 @@ methods:
         type: String
     examples:
       - example: |
-            Ti.Tizen.Power.request("SCREEN", "SCREEN_NORMAL");
+            var powerObj = require('Ti/Tizen/Power');
+            powerObj.request("SCREEN", "SCREEN_NORMAL");
 
   - name: release
     summary: Releases the power state request for the given resource.
@@ -46,53 +47,8 @@ methods:
     examples:
       - example: |
             // Release SCREEN resource.
-            Ti.Tizen.Power.release("SCREEN");
-
-  - name: setScreenStateChangeListener
-    summary: Sets the screen state change callback and monitors its state changes.
-    parameters:
-      - name: listener 
-        summary: |
-            The screen state change callback. There are 'previousState' and 'changedState' parameters
-            in callback. The 'previousState' and 'changedState' are one of the constants defined for this type: 
-            "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT"
-        type: Callback<String, String>
-    examples:
-      - example: |
-            function onScreenStateChanged(previousState, changedState) {
-               Ti.API.info("Screen state changed from " + previousState + " to " + changedState);
-            }
-
-            // Set the screen state change listener.
-            Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
-        
-  - name: unsetScreenStateChangeListener
-    summary: Unsets the screen state change callback and stops monitoring it.
-    examples:
-      - example: |
-            // Unet the screen state change listener.
-            Ti.Tizen.Power.unsetScreenStateChangeListener();
-
-  - name: getScreenBrightness
-    summary: Gets the screen brightness level of an application, from 0 to 1.
-    returns:
-        summary: double Current screen brightness value.
-        type: Number
-    examples:
-      - example: |
-            // Get the current screen brightness value.
-            var screenBrightness = Ti.Tizen.Power.getScreenBrightness();
-    
-  - name: setScreenBrightness
-    summary: Sets the screen brightness level for an application, from 0 to 1.
-    parameters:
-      - name: brightness 
-        summary: The screen brightness value to set.
-        type: Number
-    examples:
-      - example: |
-            // Set the screen brightness value for the application.
-            Ti.Tizen.Power.setScreenBrightness(1);
+            var powerObj = require('Ti/Tizen/Power');
+            powerObj.release("SCREEN");
 
   - name: isScreenOn
     summary: Returns true if the screen is on.
@@ -102,28 +58,24 @@ methods:
     examples:
       - example: |
             // Check whether the screen is on or off.
-            var isScreenOn = Ti.Tizen.Power.isScreenOn();
-
-  - name: restoreScreenBrightness
-    summary: Restores the screen brightness to the system default setting value.
-    examples:
-      - example: |
-            // Restore the screen brightness value to the system default setting value.
-            Ti.Tizen.Power.restoreScreenBrightness();
+            var powerObj = require('Ti/Tizen/Power');
+            var isScreenOn = powerObj.isScreenOn();
 
   - name: turnScreenOn
     summary: Turns on the screen.
     examples:
       - example: |
             // Turn on the screen.
-            Ti.Tizen.Power.turnScreenOn();
+            var powerObj = require('Ti/Tizen/Power');
+            powerObj.turnScreenOn();
 
   - name: turnScreenOff
     summary: Turns off the screen.
     examples:
       - example: |
             // Turn off the screen.
-            Ti.Tizen.Power.turnScreenOff();
+            var powerObj = require('Ti/Tizen/Power');
+            powerObj.turnScreenOff();
     
 properties:
 
@@ -167,3 +119,18 @@ properties:
     summary: CPU_AWAKE - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
     type: STRING
     permission: read-only
+
+  - name: screenBrightness
+    summary: An attribute to store the screen brightness level for an application, from 0 to 1.
+    type: Number
+
+events:
+  - name: screenStateChanged
+    summary: Called on screen state change.
+    properties:
+      - name: previousState
+        type: String
+        summary: The previous screen state.
+      - name: changedState 
+        type: String
+        summary: The changed screen state.
