@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Application.Application
+name: Tizen.Application.Application
 summary: This interface defines the current application's information and the basic operations (such as exit or hide) for the current application.
 extends: Titanium.Module
 platforms: [tizen]
@@ -18,13 +18,13 @@ methods:
         For example, an application might be launched to display an image on a page by other application's request. 
         In all of these cases, the application is responsible for checking the contents of the application control and responding appropriately when it is launched. 
     returns: 
-      - type: Titanium.Tizen.Application.RequestedApplicationControl
+      - type: Tizen.Application.RequestedApplicationControl
         summary: The details of an requested application control
 
 properties:
   - name: appInfo
     summary: An attribute to store the application information for the current application. 
-    type: Titanium.Tizen.Application.ApplicationInformation
+    type: Tizen.Application.ApplicationInformation
     permission: read-only
 
   - name: contextId

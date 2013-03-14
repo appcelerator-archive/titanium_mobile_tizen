@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen
+name: Tizen
 summary: The mine module of Titanium.Tizen Web Device API
 description: "This is the Tizen root interface."
 extends: Titanium.Module
@@ -7,31 +7,19 @@ platforms: [tizen]
 methods:
 
   - name: createAttributeFilter
-    summary: Creates and returns an instance of <Titanium.Tizen.AttributeFilter>.
+    summary: Creates and returns an instance of <Tizen.AttributeFilter>.
     returns: 
-        type: Titanium.Tizen.AttributeFilter
+        type: Tizen.AttributeFilter
     parameters: 
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
         type: Dictionary<AttributeFilterUnit>
 
-    examples:
-      - example: |
-            function successCallback(contacts) {
-                console.log(contacts.length + " contacts found.");
-            }
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-            var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
-                                                         matchValue: "Chris"});
-            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
   - name: createAttributeRangeFilter
-    summary: Creates and returns an instance of <Titanium.Tizen.AttributeRangeFilter>.
+    summary: Creates and returns an instance of <Tizen.AttributeRangeFilter>.
     returns: 
-        type: Titanium.Tizen.AttributeRangeFilter
+        type: Tizen.AttributeRangeFilter
     parameters: 
 
       - name: Options
@@ -60,70 +48,31 @@ methods:
             Ti.Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
 
   - name: createCompositeFilter
-    summary: Creates and returns an instance of <Titanium.Tizen.CompositeFilter>.
+    summary: Creates and returns an instance of <Tizen.CompositeFilter>.
     returns: 
-        type: Titanium.Tizen.CompositeFilter
+        type: Tizen.CompositeFilter
     parameters: 
 
       - name: Options
         summary: Dictionary with initial arguments for CompositeFilter.
         type: Dictionary<CompositeFilterUnit>
 
-    examples:
-      - example: |
-            function successCallback(contacts) {
-                console.log(contacts.length + " contacts found.");
-            }
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
-            var firstNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                                  matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
-                                                                  matchValue: "Chris"});
-            // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
-            var lastNameFilter = Ti.Tizen.createAttributeFilter({attributeName: "name.lastName",
-                                                                 matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_EXACTLY,
-                                                                 matchValue: "Smith"});
-            // Create a filter based on the intersection of these two filter:
-            // "First name should contain 'Chris' AND last name should be 'Smith'".
-            var filter = Ti.Tizen.createCompositeFilter({type: Ti.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
-                                                         filters: [firstNameFilter, lastNameFilter]});
-            // Send request on contact address book.
-            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
             
   - name: createSortMode
-    summary: Creates and returns an instance of <Titanium.Tizen.SortMode>.
+    summary: Creates and returns an instance of <Tizen.SortMode>.
     returns: 
-        type: Titanium.Tizen.SortMode
+        type: Tizen.SortMode
     parameters: 
 
       - name: Options
         summary: Dictionary with initial arguments for SortMode.
         type: Dictionary<SortModeUnit>
 
-    examples:
-      - example: |
-            function successCallback(contacts) {
-                console.log(contacts.length + " contacts found.");
-            }
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
-            var filter = Ti.Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: Ti.Tizen.FILTER_MUCH_FLAG_CONTAINS,
-                                                         matchValue: "Chris"});
-            // Sort by first name, ascending
-            var sortMode = Ti.Tizen.createSortMode({attributeName: "name.firstName",
-                                                    order: Ti.Tizen.SORT_ORDER_MODE_ASC});
-            // Send request on contact address book.
-            Ti.Tizen.Contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
             
   - name: createSimpleCoordinates
-    summary: Creates and returns an instance of <Titanium.Tizen.SimpleCoordinates>.
+    summary: Creates and returns an instance of <Tizen.SimpleCoordinates>.
     returns: 
-        type: Titanium.Tizen.SimpleCoordinates
+        type: Tizen.SimpleCoordinates
     parameters: 
 
       - name: Options

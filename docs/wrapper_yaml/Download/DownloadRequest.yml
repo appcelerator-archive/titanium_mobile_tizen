@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Download.DownloadRequest
+name: Tizen.Download.DownloadRequest
 summary: Defines the download request object.
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -36,7 +36,7 @@ methods:
                 }
             };
             // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Titanium.Tizen.Download.createDownloadRequest({
+            var downloadRequest = Tizen.Download.createDownloadRequest({
                 url: "http://download.tizen.org/tools/README.txt",
                 destination: "documents"
             });
@@ -91,7 +91,7 @@ methods:
                 }
             };
             // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Titanium.Tizen.Download.createDownloadRequest({
+            var downloadRequest = Tizen.Download.createDownloadRequest({
                 url: "http://download.tizen.org/tools/README.txt",
                 destination: "documents"
             });
@@ -99,12 +99,11 @@ methods:
             // Add the listener.
             downloadRequest.setListener(listener);
 
-constants:
+properties:
   - name: id
     summary: The ID of the corresponding download operation.
     type: Number
-
-properties:
+    permission: read-only
   - name: url
     summary: Store the URL of the object to download.
     type: String
@@ -134,7 +133,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Titanium.Tizen.Download.DownloadRequest>
+        type: <Tizen.Download.DownloadRequest>
       - name: receivedSize
         summary: The size of data received in bytes.
         type: Number
@@ -146,20 +145,20 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Titanium.Tizen.Download.DownloadRequest>
+        type: <Tizen.Download.DownloadRequest>
   - name: onCancel
     summary: Called when download is canceled by the cancel() method.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Titanium.Tizen.Download.DownloadRequest>
+        type: <Tizen.Download.DownloadRequest>
   - name: onLoad
     summary: Called when the download operation is completed with the final full path.
         If the same file name already exists in the destination, it is changed according to the platform policy and delivered in this callback.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Titanium.Tizen.Download.DownloadRequest>
+        type: <Tizen.Download.DownloadRequest>
       - name: fullPath
         summary: The final full path for the downloaded file.
         type: String
@@ -168,7 +167,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Titanium.Tizen.Download.DownloadRequest>
+        type: <Tizen.Download.DownloadRequest>
       - name: error
         summary: The reason for the download failure.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>

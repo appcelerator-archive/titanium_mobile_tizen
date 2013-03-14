@@ -1,5 +1,5 @@
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
-	return lang.setObject('Ti.Tizen.Power', Evented, {
+	var Power = lang.setObject('Tizen.Power', Evented, {
 
 		constants: {
 			POWER_RESOURCE_SCREEN: 'SCREEN',
@@ -11,6 +11,17 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 			POWER_CPU_STATE_CPU_AWAKE: 'CPU_AWAKE'
 		},
 
+        properties: {
+			screenBrightness: {
+				get: function() {
+					return tizen.power.getScreenBrightness();
+				},
+				set: function(value) {
+					return tizen.power.setScreenBrightness(value);
+				}
+			}
+		},
+
 		request: function(resource /*PowerResource*/, state /*PowerState*/) {
 			return tizen.power.request(resource, state);
 		},
@@ -19,28 +30,8 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 			return tizen.power.release(resource);
 		},
 
-		setScreenStateChangeListener: function(listener /*ScreenStateChangeCallback*/) {
-			return tizen.power.setScreenStateChangeListener(listener);
-		},
-
-		unsetScreenStateChangeListener: function() {
-			return tizen.power.unsetScreenStateChangeListener();
-		},
-
-		getScreenBrightness: function() {
-			return tizen.power.getScreenBrightness();
-		},
-
-		setScreenBrightness: function(brightness /*double*/) {
-			return tizen.power.setScreenBrightness(brightness);
-		},
-
 		isScreenOn: function() {
 			return tizen.power.isScreenOn();
-		},
-
-		restoreScreenBrightness: function() {
-			return tizen.power.restoreScreenBrightness();
 		},
 
 		turnScreenOn: function() {
@@ -50,6 +41,12 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		turnScreenOff: function() {
 			return tizen.power.turnScreenOff();
 		}
-
 	});
+
+	function onTizenEventScreenStateChange(previousState, changedState) {
+		Power.fireEvent('screenStateChanged', {previousState: previousState, changedState: changedState});
+	}
+	tizen.power.setScreenStateChangeListener(onTizenEventScreenStateChange);
+
+	return Power;	
 });
