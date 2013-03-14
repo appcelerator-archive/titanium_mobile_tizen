@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarItem) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarTask', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarTask]') {
@@ -7,12 +7,18 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				if (args.hasOwnProperty('stringRepresentation') && args.hasOwnProperty('format')) {
 					this._obj = new tizen.CalendarTask(args.stringRepresentation, args.format);
 				} else {
-					var eventInitDict = args;
+					var taskInitDict = args,
+						startDate = args.startDate,
+						dueDate = args.dueDate,
+						completedDate = args.completedDate;
 
-					args.hasOwnProperty('startDate') && (eventInitDict.startDate = args.startDate._obj);
-					args.hasOwnProperty('duration') && (eventInitDict.duration = args.duration._obj);
+					args.hasOwnProperty('startDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
+					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = calendarHelper.createTZDate(dueDate));
+					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
 
-					this._obj = new tizen.CalendarTask(eventInitDict);
+					args.hasOwnProperty('duration') && (taskInitDict.duration = args.duration._obj);
+
+					this._obj = new tizen.CalendarTask(taskInitDict);
 				}
 			}
 		},
@@ -20,18 +26,20 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 		properties: {
 			dueDate: {
 				get: function() {
-					return this._obj.dueDate;
+					var dueDate = this._obj.dueDate;
+					return createDate(dueDate);
 				},
 				set: function(value) {
-					this._obj.dueDate = value;
+					this._obj.dueDate = calendarHelper.createTZDate(value);
 				}
 			},
 			completedDate: {
 				get: function() {
-					return this._obj.completedDate;
+					var completedDate = this._obj.completedDate;
+					return createDate(completedDate);
 				},
 				set: function(value) {
-					this._obj.completedDate = value;
+					this._obj.completedDate = calendarHelper.createTZDate(value);
 				}
 			},
 			progress: {
@@ -41,8 +49,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				set: function(value) {
 					this._obj.progress = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

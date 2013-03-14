@@ -110,13 +110,7 @@ function add_event(args) {
 			d = getCalendarStartDate();
 
 		try {
-			var startDate = Ti.Tizen.Time.createTZDate({
-					year: d.yy,
-					month: d.mm,
-					day: d.dd,
-					hours: d.h,
-					minutes: d.m
-				}),
+				var startDate = new Date(d.yy, d.mm, d.dd, d.h, d.m),
 				duration = Ti.Tizen.Time.createTimeDuration({
 					length: 1, 
 					unit: 'HOURS'
@@ -128,7 +122,6 @@ function add_event(args) {
 					duration: duration,
 					location: location
 				});
-
 			calendar.add(calendarEvent);
 		} catch (err) {
 			alert('Error. Type: ' + err.type + ", message: " + err.message);

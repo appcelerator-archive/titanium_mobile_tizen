@@ -28,7 +28,13 @@ methods:
         type: Dictionary<createDownloadRequestParameters>
     returns:
         type: <Tizen.Download.DownloadRequest>
-        
+    examples:
+      - example: |
+            var downloadRequest = Tizen.Download.createDownloadRequest({
+                                        url: "http://download.tizen.org/tools/README.txt",
+                                        destination: "documents"
+                                  });
+
 properties:
   - name: DOWNLOAD_STATE_QUEUED
     summary: Indicates that the download operation is listed in a queue.

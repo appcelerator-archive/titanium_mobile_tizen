@@ -10,7 +10,7 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example:    |
-        var attendee = Titanium.Tizen.createCalendarAttendee('mailto:bob@domain.com',
+        var attendee = Titanium.Tizen.Calendar.createCalendarAttendee('mailto:bob@domain.com',
                                            {role: "CHAIR", RSVP: true});
         event.attendees = [attendee];
  

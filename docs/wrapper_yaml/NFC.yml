@@ -175,6 +175,17 @@ methods:
         NFC adapter interface provides access to control the NFC adapter. 
     returns:
         type: Titanium.Tizen.NFC.NFCAdapter
+    examples:
+      - example: |
+            try {
+            
+                var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+                
+            } catch (err) {
+            
+                console.log (err.name +": " + err.message);
+                
+            }
 
   - name: createNDEFMessage
     summary: Creates a <Titanium.Tizen.NFC.NDEFMessage> object.
@@ -212,6 +223,11 @@ methods:
         type: createNDEFRecordURIParameters
     returns:
         type: Titanium.Tizen.NFC.NDEFRecordURI
+    examples:
+      - example: |
+            // create a new NDEFRecord
+            var newRecord = Titanium.Tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
+            var payload = newRecord.payload;
 
   - name: createNDEFRecordMedia
     summary: Creates a <Titanium.Tizen.NFC.NDEFRecordMedia>.

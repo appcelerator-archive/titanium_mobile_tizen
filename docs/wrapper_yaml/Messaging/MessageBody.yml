@@ -27,7 +27,7 @@ properties:
     summary: |
         The HTML representation of the message body.
         This attribute holds an empty string if the message does not have HTML body content. This property is used only with Email messages.
-    type: Stirng
+    type: String
 
   - name: inlineAttachments
     summary: | 

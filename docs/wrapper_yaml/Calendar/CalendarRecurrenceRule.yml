@@ -40,7 +40,7 @@ properties:
         This property corresponds to INTERVAL in RFC 5545.
         
   - name: untilDate
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: |
         An attribute to indicate the end date of a recurrence duration of an event using either an end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
         By default, this attribute is set to null, meaning that the event recurs infinitely, unless occurrenceCount is set.
@@ -78,7 +78,7 @@ properties:
         By default, this attribute is set to an empty array
         
   - name: exceptions
-    type: Array<Titanium.Tizen.Time.TZDate>
+    type: Array<Date>
     summary: |
         An attribute to list date/time exceptions for the recurring event. (See RFC 5545, Section 3.8.5.1.)
         This attribute is precise to the second. Milliseconds are ignored.

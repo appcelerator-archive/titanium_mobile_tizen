@@ -44,7 +44,7 @@ properties:
     summary: |
         The type of the given message. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
         <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
-    type: Stirng
+    type: String
     permission: read-only
 
   - name: timestamp
@@ -57,7 +57,7 @@ properties:
   - name: from
     summary: The source address (or source phone number) of a message. 
     description: This property is set up by the device or the web runtime environment. By default, this attribute is set to null. 
-    type: Stirng
+    type: String
     permission: read-only
 
   - name: to

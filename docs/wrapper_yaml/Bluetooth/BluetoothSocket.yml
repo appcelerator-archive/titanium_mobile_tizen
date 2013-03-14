@@ -16,14 +16,118 @@ methods:
       - name: data
         summary: Data to send. 
         type: Array<Number>
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+        
+            function onSocketConnected(socket) {
+            
+                console.log ("Opened connection to remote device");
+                
+                socket.onmessage = function () {
+                    console.log ("Message received: " + socket.readData());
+                };
 
+                socket.onerror = function(e) {
+                    console.log("Socket Error:" + e.message);
+                };
+
+                socket.onclose = function() {
+                    console.log("Socket closed with " + socket.peer.name);
+                };
+
+                // send data to peer.
+                var textmsg = "Test";
+                
+                var sendtextmsg = new Array();
+                
+                for (var i = 0; i< textmsg.length; i++)
+                {
+                    sendtextmsg[i] = textmsg.charCodeAt(i);
+                }
+                socket.writeData (sendtextmsg);
+            }
+            
+
+            function onSocketError(e) {
+            
+               console.log ("Error connecting to service. Reason: " + e.message);
+            }
+
+            function onDeviceReady(device) {
+            
+                // validate service uuid
+                if (device.uuids.indexOf("5BCE9431-6C75-32AB-AFE0-2EC108A30860") != -1) {
+                
+                    // open socket
+                    device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860", onSocketConnected, onSocketError );
+                }
+            }
+            
+            function onSetPowered() {
+            
+                // get the BluetoothDevice object
+                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
+            }
+
+            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
+ 
   - name: readData
     summary: Reads data from the socket. 
     description: This should be called only in the BluetoothSocket.onmessage handler, that is, when data is ready on the socket. 
     returns: 
       - type: Array<Number>
         summary: Sequence of bytes successfully read. 
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
 
+            function onError(e) {
+            
+                console.log ("Error connecting to service. Reason: " + e.message);
+            }
+
+            function onSocketConnected(socket) {
+            
+                console.log ("Opening socket success!!!");
+
+                socket.onmessage = function() {
+                
+                    // got a message from peer, read it
+                    var data = socket.readData();
+
+                    //
+                    // code to evaluate message goes here
+                    //
+                };
+
+                socket.onerror = function(err) {
+                   console.log("Socket Error:" + err.message);
+                };
+
+                socket.onclose = function() {
+                   console.log("Socket closed with " + socket.peer.name);
+                };
+            }
+
+            function onDeviceReady(device) {
+            
+                // validate service uuid
+                if (device.uuids.indexOf("5BCE9431-6C75-32AB-AFE0-2EC108A30860") != -1) {
+                
+                    // open socket
+                    device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860", onSocketConnected, onError);
+                }
+            }
+
+            function onSetPowered() {
+            
+                // get the BluetoothDevice object
+                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
+            }
+
+            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
+ 
   - name: close
     summary: Closes the socket.  
     description: Calling this method closes the socket. BluetoothSocket.state changes to "CLOSED", and BluetoothSocket.onclose is invoked on success. 

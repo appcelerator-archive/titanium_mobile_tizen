@@ -29,8 +29,10 @@ examples:
             console.log("An error occurred: " + error.message);
         }
         // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
-        var filter = Titanium.Tizen.AttributeFilter({"name.firstName", Titanium.Tizen.FILTER_MUCH_FLAG_CONTAINS, "Chris"});
+        var filter = Titanium.Tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                           matchFlag: Titanium.Tizen.FILTER_MUCH_FLAG_CONTAINS,
+                                                           matchValue: "Chris"});
         // Sort by first name, ascending
-        var sortMode = Titanium.Tizen.SortMode({"name.firstName", Titanium.Tizen.SORT_ORDER_MODE_ASC});
+        var sortMode = Titanium.Tizen.createSortMode({attributeName: "name.firstName", order: Titanium.Tizen.SORT_ORDER_MODE_ASC});
         // Send request on contact address book.
         tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);

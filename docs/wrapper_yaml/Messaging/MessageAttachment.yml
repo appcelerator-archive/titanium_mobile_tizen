@@ -24,7 +24,7 @@ properties:
         The attachment MIME type.
         It describes the MIME type of the attachment, for example; "text/html".
         By default, this attribute is set to null.
-    type: Stirng
+    type: String
     permission: read-only
 
 
