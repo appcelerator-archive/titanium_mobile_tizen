@@ -3,11 +3,13 @@ module.exports = new function() {
 		NOT_EXIST_APP_ID = 'Not_exist_app_id.asdfs',
 		finish,
 		valueOf,
+		reportError,
 		applicationObj;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		reportError = testUtils.reportError;
 		applicationObj = require('Ti/Tizen/Application');
 	}
 
@@ -20,8 +22,8 @@ module.exports = new function() {
 		{name: 'apps_contexts_harness'},
 		{name: 'apps_contexts_no_params'},
 		{name: 'launch_not_exist'},
+		{name: 'launchAppControl'},
 		{name: 'calc_launch'},
-		//{name: 'launchAppControl'},
 		// This test impact to another and can not be launched with others
 		// {name: 'harness_hide'}
 	];
@@ -249,50 +251,46 @@ module.exports = new function() {
 	// Test - launch image from another appControl
 	this.launchAppControl = function(testRun) {
 		var serviceLaunched,
-			isError,
+			isError = false,
 			appControl,
 			appControlReplyCallback = { 
 				// Callee sent a reply
 				onsuccess: function(data) {
-					Ti.API.info('success');
-					valueOf(testRun, data).shouldBe('[object TizenApplicationApplicationControlData]');
+					Ti.API.info('Success reply.');
 
 					for (var i = 0; i < data.length; i++) {
-						Ti.API.info("#" + i + " key:" + data[i].key);
-						
-						for (var j = 0; j < data[i].value.length; j++) {
-							Ti.API.info("   value#" + j + ":" + data[i].value[j]);
-						}
+						valueOf(testRun, data[i]).shouldBe('[object TizenApplicationApplicationControlData]');
 					}
 				},
 				// Something went wrong
 				onfailure: function() {
-				   Ti.API.info('The launch application control failed');
+				   Ti.API.info('The launch application control failed.');
+
+				   reportError(testRun, 'The following error occurred: ' + e.message);
 				}
 			};
 
 		valueOf(testRun, function() {
 			appControl = applicationObj.createApplicationControl({
-				operation: 'http://tizen.org/appcontrol/operation/create_content',
+				operation: "http://tizen.org/appcontrol/operation/create_content",
 				uri: null,
-				mime: 'image/jpeg',
+				mime: "image/jpeg",
 				category: null
 			});
 		}).shouldNotThrowException();
 		valueOf(testRun, appControl).shouldBe('[object TizenApplicationApplicationControl]');
 		valueOf(testRun, function() {
-			applicationObj.launchAppControl(
-				appControl, 
-				null,
-				function() { 
-					Ti.API.info("Launch application control succeed.");
-
+			applicationObj.launchAppControl(appControl, null,
+				function() {
 					serviceLaunched = true;
+
+					Ti.API.info("launch application control succeed"); 
 				},
 				function(e) {
-					Ti.API.info("Launch application control failed. reason: " + e.message);
-
 					isError = true;
+
+					Ti.API.info("launch application control failed. reason: " + e.message); 
+					reportError(testRun, 'The following error occurred: ' + e.message);
 				},
 				appControlReplyCallback
 			);
@@ -304,5 +302,5 @@ module.exports = new function() {
 
 			finish(testRun);
 		}, 5000);
-	};
+	}
 }

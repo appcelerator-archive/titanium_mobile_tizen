@@ -15,12 +15,29 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 			tizen.application.launch(id, successCallback, errorCallback && wrappedErrorCallback);
 		},
 
-		launchAppControl: function(appControl /*ApplicationControl*/, id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, replyCallback /*ApplicationControlReplyCallback*/) {
-			return tizen.application.launchAppControl(appControl._obj, id, successCallback, errorCallback, replyCallback);
+		launchAppControl: function(appControl /*ApplicationControl*/, id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, replyCallback /*ApplicationControlDataArrayReplyCallback*/) {
+			var wrappedReplyCallback = {
+				onsuccess: replyCallback.onsuccess && function(data) {
+					var i = 0,
+						len = data.length,
+						wrappedItems = [];
+
+					for (; i < len; i++) {
+						wrappedItems.push(new TiTizenApplicationApplicationControlData(data[i]));
+					}
+
+					replyCallback.onsuccess(wrappedItems);
+				},
+				onfailure: replyCallback.onfailure && function() {
+				   replyCallback.onfailure();
+				}
+			}
+
+			tizen.application.launchAppControl(appControl._obj, id, successCallback, errorCallback, replyCallback && wrappedReplyCallback);
 		},
 
 		findAppControl: function(appControl /*ApplicationControl*/, successCallback /*FindAppControlSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return tizen.application.findAppControl(appControl._obj, successCallback, errorCallback);
+			tizen.application.findAppControl(appControl._obj, successCallback, errorCallback);
 		},
 
 		getAppsContext: function(successCallback /*ApplicationContextArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
@@ -72,11 +89,11 @@ define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationIn
 		},
 
 		addAppInfoEventListener: function(eventCallback /*ApplicationInformationEventCallback*/) {
-			return tizen.application.addAppInfoEventListener(eventCallback);
+			tizen.application.addAppInfoEventListener(eventCallback);
 		},
 
 		removeAppInfoEventListener: function(watchId /*long*/) {
-			return tizen.application.removeAppInfoEventListener(watchId);
+			tizen.application.removeAppInfoEventListener(watchId);
 		},
 
 		createApplicationControlData: function(args) {
