@@ -1,12 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration'], function(declare, CalendarEventId, TimeDuration) {
-
-	function createTZDate(dateObj) {
-		return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes())
-	}
-	function createDate(tzDateObj){
-		return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
-	}
-
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarEventId, TimeDuration, calendar_helper) {
 	return declare('Ti.Tizen.Calendar.CalendarItem', null, {
 		constructor: function(args) {
 			this._obj = args;
@@ -56,12 +48,12 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/Time
 					if (value instanceof tizen.TZDate) {
 						this._obj.startDate = value;
 					} else {
-						this._obj.startDate = createTZDate(value);
+						this._obj.startDate = calendar_helper.createTZDate(value);
 					}
 				},
 				get: function() {
 					var startDate = this._obj.startDate;
-					return createDate(startDate);
+					return calendar_helper.createDate(startDate);
 				}
 			},
 			duration: {

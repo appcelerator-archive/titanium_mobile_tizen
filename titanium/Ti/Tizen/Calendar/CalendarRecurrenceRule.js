@@ -1,12 +1,4 @@
-define(['Ti/_/declare'], function(declare) {
-
-	function createTZDate(dateObj) {
-		return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes())
-	}
-	function createDate(tzDateObj){
-		return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
-	}
-
+define(['Ti/_/declare', 'Ti/Tizen/_/calendar_helper'], function(declare, calendar_helper) {
 	return declare('Ti.Tizen.Calendar.CalendarRecurrenceRule', null, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarRecurrenceRule]') {
@@ -22,11 +14,11 @@ define(['Ti/_/declare'], function(declare) {
 						exceptionsTmp = [];
 
 					if(untilDate) {
-						args.ruleInitDict.hasOwnProperty('untilDate') && (initDict.ruleInitDict.untilDate = createTZDate(untilDate));
+						args.ruleInitDict.hasOwnProperty('untilDate') && (initDict.ruleInitDict.untilDate = calendar_helper.createTZDate(untilDate));
 					}
 					if(exceptions) {
 						for(; i<len; i++) {
-							exceptionsTmp.push(createTZDate(exceptions[i]));
+							exceptionsTmp.push(calendar_helper.createTZDate(exceptions[i]));
 						}
 						args.ruleInitDict.hasOwnProperty('exceptions') && (initDict.ruleInitDict.exceptions = exceptionsTmp);
 					}
@@ -59,10 +51,10 @@ define(['Ti/_/declare'], function(declare) {
 			untilDate: {
 				get: function() {
 					var untilDate = this._obj.untilDate;
-					return createDate(untilDate);
+					return calendar_helper.createDate(untilDate);
 				},
 				set: function(value) {
-					this._obj.untilDate = createTZDate(value);
+					this._obj.untilDate = calendar_helper.createTZDate(value);
 				}
 			},
 			occurrenceCount: {
@@ -97,7 +89,7 @@ define(['Ti/_/declare'], function(declare) {
 						len = exceptions.length;
 
 					for(; i<len; i++) {
-						res.push(createDate(exceptions[i]));
+						res.push(calendar_helper.createDate(exceptions[i]));
 					}
 					return res;
 				},
@@ -108,7 +100,7 @@ define(['Ti/_/declare'], function(declare) {
 						len = exceptions.length;
 
 					for(; i<len; i++) {
-						res.push(createTZDate(exceptions[i]));
+						res.push(calendar_helper.createTZDate(exceptions[i]));
 					}
 					this._obj.exceptions = res;
 				}

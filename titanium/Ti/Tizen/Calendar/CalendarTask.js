@@ -1,12 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarItem) {
-
-	function createTZDate(dateObj) {
-		return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes())
-	}
-	function createDate(tzDateObj){
-		return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
-	}
-
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarItem, calendar_helper) {
 	return declare('Ti.Tizen.Calendar.CalendarTask', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarTask]') {
@@ -20,9 +12,9 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 						dueDate = args.dueDate,
 						completedDate = args.completedDate;
 
-					args.hasOwnProperty('startDate') && (taskInitDict.startDate = createTZDate(startDate));
-					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = createTZDate(dueDate));
-					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = createTZDate(startDate));
+					args.hasOwnProperty('startDate') && (taskInitDict.startDate = calendar_helper.createTZDate(startDate));
+					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = calendar_helper.createTZDate(dueDate));
+					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = calendar_helper.createTZDate(startDate));
 
 					args.hasOwnProperty('duration') && (taskInitDict.duration = args.duration._obj);
 
@@ -38,7 +30,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 					return createDate(dueDate);
 				},
 				set: function(value) {
-					this._obj.dueDate = createTZDate(value);
+					this._obj.dueDate = calendar_helper.createTZDate(value);
 				}
 			},
 			completedDate: {
@@ -47,7 +39,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 					return createDate(completedDate);
 				},
 				set: function(value) {
-					this._obj.completedDate = createTZDate(value);
+					this._obj.completedDate = calendar_helper.createTZDate(value);
 				}
 			},
 			progress: {
