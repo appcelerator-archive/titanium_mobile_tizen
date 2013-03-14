@@ -27,17 +27,28 @@ examples:
         function successCallback(contacts) {
             console.log(contacts.length + " contacts found.");
         }
+
         // Define error callback
         function errorCallback(error) {
             console.log("An error occurred: " + error.message);
         }
+    
+        var tizenObj = require('Ti/Tizen');
+        
         // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
-        var firstNameFilter = Titanium.Tizen.AttributeFilter({"name.firstName", Titanium.Tizen.FILTER_MUCH_FLAG_CONTAINS, "Chris"});
+        var firstNameFilter = tizenObj.createAttributeFilter({attributeName: "name.firstName",
+                                                     matchFlag: tizenObj.FILTER_MATCH_FLAG_CONTAINS,
+                                                     matchValue: "Chris"});
+    
         // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
-        var lastNameFilter = Titanium.Tizen.AttributeFilter({"name.lastName", Titanium.Tizen.
-            FILTER_MUCH_FLAG_EXACTLY, "Smith"});
+        var lastNameFilter = tizenObj.createAttributeFilter({attributeName: "name.lastName",
+                                                             matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+                                                             matchValue: "Smith"});
+    
         // Create a filter based on the intersection of these two filter:
         // "First name should contain 'Chris' AND last name should be 'Smith'".
-        var filter = Titanium.Tizen.CompositeFilter({Titanium.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION, [firstNameFilter, lastNameFilter]});
+        var filter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION,
+                                                     filters: [firstNameFilter, lastNameFilter]});
+    
         // Send request on contact address book.
         tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);

@@ -59,7 +59,20 @@ methods:
                 <Titanium.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
                 <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
                 <Titanium.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
-        type: Array<Stirng>
+        type: Array<String>
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+            
+            var onSuccessCB = {
+            	onattach: function(nfcTag) {            
+                	console.log("NFC Tag's type is " + nfcTag.type);
+                },
+                ondetach: function() {
+                    console.log("NFC Tag is detached");
+                }
+            };
+            adapter.setTagListener(onSuccessCB);
 
   - name: setPeerListener
     summary: Registers a callback function to be invoked when NFC peer-to-peer target is detected.
@@ -69,13 +82,68 @@ methods:
       - name: detectCallback 
         summary: Invoked in case of successful detection of the NFC peer-to-peer target.
         type: NFCPeerDetectCallback
- 
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+            
+            var onSuccessCB = {
+            	onattach: function(nfcPeer) {            
+                	console.log("NFC Target is detected");
+            	},
+            	ondetach: function() {
+                	console.log("NFC Target is detached");
+            	}
+            };
+            adapter.setPeerListener(onSuccessCB);
+
   - name: unsetTagListener
     summary: Unregisters the listener for detecting an NFC tag.
- 
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+
+            // Receives NFCTag
+            var onSuccessCB = {
+                onattach: function(nfcTag) {
+                    console.log("NFC Tag's type is " + nfcTag.type);
+                },
+                ondetach: function() {
+                    console.log("NFC Tag is detached");
+                }
+            };
+
+            // Unregister the listener
+            function unsetListen() {
+                adapter.unsetTagListener();
+            }
+
+            // registers to be notified when NFC tag is detected.
+            adapter.setTagListener(onSuccessCB)
+
   - name: unsetPeerListener
     summary: Unregisters the listener for detecting an NFC peer-to-peer target.
- 
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+
+            // Receives NFCPeer
+            var onSuccessCB = {
+                onattach: function(nfcPeer) {
+                    console.log("NFC Target is detected");
+                },
+                ondetach: function() {
+                    console.log("NFC Target is detached");
+                }
+            };
+
+            // Unregister the listener
+            function unsetListen() {
+                adapter.unsetPeerListener();
+            }
+
+            // registers to be notified when NFC peer-to-peer target is detected.
+            adapter.setPeerListener(onSuccessCB)
+
   - name: getCachedMessage
     summary: Gets NDEF message cached when the tag was detected.
     description: |
@@ -84,6 +152,10 @@ methods:
         successfully retrieved, a WebAPIError with the reason for the error MUST be thrown.
     returns:
         type: Titanium.Tizen.NFC.NDEFMessage
+    examples:
+      - example: |
+            // gets the cached message
+            var cachedMessage = Titanium.Tizen.NFC.getDefaultAdapter().getCachedMessage();
 
 ---
 name: NFCTagDetectCallback

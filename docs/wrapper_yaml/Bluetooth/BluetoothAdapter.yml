@@ -34,7 +34,28 @@ methods:
         summary: Method invoked when an error occurs.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+ 
+            function changeName(newName) 
+            {
+            
+                if(adapter.name != newName) {
+                
+                    // initiate change name
+                    adapter.setName(newName, function() {
+                        console.log("Adapter name changed to " + adapter.name);
+                    },
+                    
+                    function(e) {
+                        console.log("Failed to change name: " + e.message);
+                    });
+                }
+            }
 
+            changeName("myDevice");
+ 
   - name: setPowered
     summary: Turns Bluetooth adapter on or off. 
     description: |
@@ -57,6 +78,43 @@ methods:
         summary: Method to be called in case Bluetooth activation/deactivation failed.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+ 
+            function powerOn() 
+            {
+            
+                // if not powered on
+                if(!adapter.powered) {
+                
+                    // initiate power on
+                    adapter.setPowered(true, function() {
+                        console.log("Bluetooth powered on success.");
+                    },
+                    
+                    function(e) {
+                        console.log("Failed to power on Bluetooth: " + e.message);
+                    });
+                }
+            }
+
+            function powerOff()
+            {
+            
+                // if powered on
+                if(adapter.powered) {
+                
+                    // initiate power off
+                    adapter.setPowered(false, function() {
+                        console.log("Bluetooth powered off successfully.");
+                    },
+                    
+                    function(e) {
+                        console.log("Failed to power off Bluetooth: " + e.message);
+                    });
+                }
+            }
 
   - name: discoverDevices
     summary: Searches for nearby Bluetooth devices.  
@@ -72,12 +130,50 @@ methods:
       - name: successCallback
         summary: Method to be invoked when the asynchronous call completes successfully. 
         type: BluetoothDiscoverDevicesSuccessCallback
-        optional: ture
+        optional: true
 
       - name: errorCallback
         summary: Method to be invoked when an error occurs.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            
+            function startDiscovery() {
+            
+                var discoverDevicesSuccessCallback = {
+                
+                    onstarted: function() { 
+                        console.log ("Device discovery started...");
+                    },
+                    ondevicefound: function(device) { 
+                        console.log("Found device - name: " + device.name + ", Address: "+ device.address); 
+                    },
+                    ondevicedisappeared: function(address) { 
+                        console.log("Device disappeared: " + address); 
+                    },
+                    onfinished: function(devices) { 
+                        console.log("Found Devices");
+                        for (var i=0; i<devices.length; i++) {
+                            console.log("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                        }
+                        console.log("Total: " + devices.length);
+                    }
+                    
+                };
+ 
+                // start searching for nearby devices, for about 10 sec.
+                adapter.discoverDevices(discoverDevicesSuccessCallback, function(e){
+                                            console.log ("Failed to search devices: " + e.message + "(" + e.name + ")");
+                                        });
+            }
+
+            function onSetPoweredError(e) {
+                console.log ("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
+            }
+
+            adapter.setPowered(true, startDiscovery, onSetPoweredError);
 
   - name: stopDiscovery
     summary: Stops the device discovery process session, if active.   
@@ -97,6 +193,63 @@ methods:
         summary: Method to be invoked when an error occurs. 
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+ 
+            // Call this whenever use selects one of the device
+            
+            function cancelDiscovery() {
+            
+                adapter.stopDiscovery(function() {
+                    console.log("Stop discovery success.");
+                },
+                function (e) {
+                    console.log("Error while stopDiscovery:" + e.message);
+                });
+                
+            }
+
+            function startDiscovery() {
+            
+                var discoverDevicesSuccessCallback = {
+                
+                    onstarted: function() { 
+                        console.log ("Device discovery started...") ;
+                    },
+                    ondevicefound: function(device) {
+                        console.log("Found device - name: " + device.name + ", Address: "+ device.address);
+                        // Show device to user, if this is the one he is looking for
+                        // for example, add this to list view.
+
+                        cancelDiscovery();
+                    },
+                    ondevicedisappeared: function(address) { 
+                        console.log("Device disappeared: " + address);
+                        // Remove from list, as it is no longer valid.
+                    },
+                    onfinished: function(devices) { 
+                        console.log("Found Devices");
+                        for (var i=0; i<devices.length; i++) {
+                            console.log("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                        }
+                        console.log("Total: " + devices.length);
+                    }
+                    
+                };
+ 
+                // starts searching for nearby devices, for 12 sec.
+                adapter.discoverDevices(discoverDevicesSuccessCallback, function(e){
+                    console.log ("Failed to search devices: " + e.message + "(" + e.name + ")");
+                });
+                
+            }
+
+            function onSetPoweredError(e) {
+                console.log ("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
+            }
+
+            adapter.setPowered(true, startDiscovery, onSetPoweredError);
 
   - name: getKnownDevices
     summary: Gets all the devices that have information stored in the local Bluetooth adapter.    
@@ -119,6 +272,28 @@ methods:
         summary: Method invoked in case of failure to get bonded devices. 
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+ 
+            function onGotDevices(devices) {
+                console.log("Devices");
+                for (var i=0; i < devices.length; i++) {
+                    console.log(" Name: " + devices[i].name + ", Address: " + devices[i].address);
+                }
+                console.log("Total: " + devices.length);
+            }
+
+            function onError(e) {
+                console.log ("Error: " + e.message);
+            }
+
+            function onBluetoothsetPowered() {
+                adapter.getKnownDevices(onGotDevices, onError);
+            }
+ 
+            // turn on Bluetooth
+            adapter.setPowered(true, onBluetoothsetPowered);
 
   - name: getDevice
     summary: Gets the BluetoothDevice object for a given device hardware address. 
@@ -143,6 +318,21 @@ methods:
         summary:  Method to be invoked when an error occurs.
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            function gotDeviceInfo(device) {
+                console.log("Device Name: " + device.name);
+                console.log("Device Address: " + device.address);
+                console.log("Device Class: " + device.deviceClass.major);
+                console.log("Is Bonded: " + device.isBonded ? "Yes" : "No");
+            }
+
+            function onError(e) {
+                console.log ("Could not get device info:" + e.message);
+            }
+
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            adapter.getDevice("35:F4:59:D1:7A:03", gotDeviceInfo, onError);
 
   - name: createBonding
     summary: Initiates the bonding process with a remote device.  
@@ -168,6 +358,20 @@ methods:
         summary:  Method to be invoked when an error occurs
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            function onBondingSuccess(device) {
+                console.log("Device Name:" + device.name);
+                console.log("Device Address:" + device.address);
+                console.log("Device Service UUIDs:" + device.uuids.join("\n"));
+            }
+
+            function onError(e) {
+                console.log ("Could not create bonding, reason:" + e.message);
+            }
+
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            adapter.createBonding("35:F4:59:D1:7A:03", onBondingSuccess, onError);
 
   - name: destroyBonding
     summary: Destroys bonding with a remote device.   
@@ -192,7 +396,27 @@ methods:
         summary:  Method to be invoked when an error occurs
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+ 
+            function gotDevice(device) {
+                if (device.isBonded) {
+                    // initiate destroying bonding
+                    adapter.destroyBonding(device.address, function() { 
+                       console.log("Unbound success with:" + device.address);
+                    },
+                    function(e) { 
+                       console.log("Unbounding failed with " + device.address + ", reason: " + e.message); 
+                    });
+                }
+            }
 
+            var deviceAddress = "35:F4:59:D1:7A:03";
+            adapter.getDevice(deviceAddress, gotDevice, function(e) { 
+                    console.log("Failed to get device info for " + deviceAddress + ", reason: " + e.message); 
+            });
+ 
   - name: registerRFCOMMServiceByUUID
     summary: Registers a service for other devices to consume.    
     description: |
@@ -223,7 +447,72 @@ methods:
         summary: Method to be invoked when an error occurs
         type: Callback<Titanium.Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            
+            // Holds currently registered service record
+            
+            var chatServiceHandler = null;
+            
+            // Holds currently open socket
+            
+            var serviceSocket = null;
 
+            function chatServiceSuccessCb(recordHandler) {
+            
+                console.log("Chat service registration succeeds!");
+                chatServiceHandler = recordHandler;
+                
+                recordHandler.onconnect = function(socket) {
+                
+                    console.log("Client connected: " + socket.peer.name + "," + socket.peer.address);
+                    serviceSocket = socket;
+                    
+                    // Message received from remote device
+                    socket.onmessage = function() {
+                        var data = socket.readData();
+                        
+                        // handle message code goes here
+                        //....
+                    };
+                    
+                    socket.onerror = function(e) {
+                        console.log('Error: ' + e.message);
+                    };
+
+                    socket.onclose = function() {
+                        console.log('The socket is closed.');
+                        serviceSocket = null;
+                    };
+                    
+                };
+            };
+
+            function publishChatService() {
+            
+                var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
+
+                adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
+                
+                    // Error handler
+                    function(e) {
+                        console.log( "Could not register service record, Error: " + e.message);
+                });
+            }
+ 
+            function unregisterChatService() {
+            
+                if (chatServiceHandler != null) {
+                    chatServiceHandler.unregister(function() {
+                        console.log("Chat service is unregistered");
+                        chatServiceHandler = null;
+                    }, function(e) {
+                        console.log("Failed to unregister service: " + e.message);
+                    });
+                }
+            }
+ 
 properties:
   - name: name
     summary: The readable name of the Bluetooth adapter.

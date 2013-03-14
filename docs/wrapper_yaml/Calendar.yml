@@ -167,7 +167,18 @@ methods:
     parameters:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
-                
+    examples:
+      - example: |
+            // Gets the default calendar
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+        
+            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+                                            summary:'HTML5 Webinar ', 
+                                            startDate: new Date(2011, 3, 30, 10, 0), 
+                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            location:'Huesca'});                   
+            calendar.add(ev);
+  
   - name: createCalendarAttendee
     summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
     returns:
