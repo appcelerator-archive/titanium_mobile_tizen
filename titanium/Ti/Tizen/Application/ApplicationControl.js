@@ -1,11 +1,11 @@
 define(['Ti/_/declare'], function(declare) {
 	return declare('Ti.Tizen.Application.ApplicationControl', null, {
 		constructor: function(args) {
-			if(args.toString() === '[object ApplicationControl]') {
+			if (args.toString() === '[object ApplicationControl]') {
 				this._obj = args;
 			} else {
-				if (args.operation) {
-					if (args.data) {
+				if (args.hasOwnProperty('operation')) {
+					if (args.hasOwnProperty('data')) {
 						var i = 0,
 							len = args.data.length,
 							unwrappedItems = [];
@@ -15,7 +15,7 @@ define(['Ti/_/declare'], function(declare) {
 						}
 					}
 
-					this._obj = new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data ? unwrappedItems : args.data);
+					this._obj = new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.hasOwnProperty('data') ? unwrappedItems : args.data);
 				} else {
 					Ti.API.error('Constructor with such parameters not found for ApplicationControl.');
 				}
@@ -36,7 +36,7 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.uri;
 				},
 				set: function(value) {
-					this._obj.uri = value;
+					this._obj.uri = value === null ? '' : value;
 				}
 			},
 			mime: {
@@ -52,7 +52,7 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.category;
 				},
 				set: function(value) {
-					this._obj.category = value;
+					this._obj.category = value === null ? '' : value;
 				}
 			},
 			data: {
