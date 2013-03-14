@@ -272,10 +272,10 @@ module.exports = new function() {
 
 		valueOf(testRun, function() {
 			appControl = applicationObj.createApplicationControl({
-				operation: "http://tizen.org/appcontrol/operation/create_content"
-				, uri: null
-				, mime: "image/jpeg"
-				, category: null
+				operation: "http://tizen.org/appcontrol/operation/create_content",
+				uri: null,
+				mime: "image/jpeg",
+				category: null
 			});
 		}).shouldNotThrowException();
 		valueOf(testRun, appControl).shouldBe('[object TizenApplicationApplicationControl]');
