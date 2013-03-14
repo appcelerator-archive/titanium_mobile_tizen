@@ -7,12 +7,14 @@
 
 module.exports = new function() {
 	var finish,
-		valueOf;
+		valueOf,
+		powerObj;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
+		powerObj = require('Ti/Tizen/Power');
 	}
 
 	this.name = 'power';
@@ -23,36 +25,35 @@ module.exports = new function() {
 
 	this.checkPower  = function(testRun) {
 		Ti.API.debug('Checking power object availability.');
-		valueOf(testRun, Ti.Tizen).shouldBeObject();
-		valueOf(testRun, Ti.Tizen.Power).shouldBeObject();
-		valueOf(testRun, Ti.Tizen.Power.request).shouldBeFunction();
-		valueOf(testRun, Ti.Tizen.Power.release).shouldBeFunction();
+		valueOf(testRun, powerObj).shouldBeObject();
+		valueOf(testRun, powerObj.request).shouldBeFunction();
+		valueOf(testRun, powerObj.release).shouldBeFunction();
 		finish(testRun);
 	}
 	
 
 	this.powerStateListener = function(testRun) {
 
-		function onScreenStateChanged(previousState, changedState) {
-			Ti.API.info("Screen state changed from " + previousState + " to " + changedState);
-			Ti.Tizen.Power.turnScreenOn();
+		function onScreenStateChanged(state) {
+			Ti.API.info("Screen state changed from " + state.previousState + " to " + state.changedState);
+			powerObj.turnScreenOn();
 			finish(testRun);
 		}
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Power.request(Ti.Tizen.Power.POWER_RESOURCE_SCREEN, Ti.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL);
+			powerObj.request(powerObj.POWER_RESOURCE_SCREEN, powerObj.POWER_SCREEN_STATE_SCREEN_NORMAL);
 		}).shouldNotThrowException();
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Power.turnScreenOn();
+			powerObj.turnScreenOn();
 		}).shouldNotThrowException();
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
+			powerObj.addEventListener('screenStateChanged', onScreenStateChanged);
 		}).shouldNotThrowException();
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Power.turnScreenOff();
+			powerObj.turnScreenOff();
 		}).shouldNotThrowException();
 	}
 }

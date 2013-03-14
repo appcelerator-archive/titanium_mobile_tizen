@@ -24,7 +24,8 @@ function tizen_alarm() {
 			top: 95,
 			title: 'Remove all notifications'
 		}),
-		notificationObj = require('Ti/Tizen/Notification');
+		notificationObj = require('Ti/Tizen/Notification'),
+		applicationObj = require('Ti/Tizen/Application');
 
 	removeButton.addEventListener('click', function() {
 		notificationObj.removeAll();
@@ -38,7 +39,7 @@ function tizen_alarm() {
 	postButton.addEventListener('click', createNotification);
 
 	function createNotification() {
-		var appControl = Ti.Tizen.Application.createApplicationControl({
+		var appControl = applicationObj.createApplicationControl({
 			operation: 'http://tizen.org/appcontrol/operation/create_content',
 			uri: null
 		}),

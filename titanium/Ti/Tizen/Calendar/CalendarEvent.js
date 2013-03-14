@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarItem) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarItem, calendar_helper) {
 	return declare('Ti.Tizen.Calendar.CalendarEvent', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEvent]') {
@@ -7,11 +7,13 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				if (args.hasOwnProperty('stringRepresentation') && args.hasOwnProperty('format')) {
 					this._obj = new tizen.CalendarEvent(args.stringRepresentation, args.format);
 				} else {
-					var eventInitDict = args;
+					var eventInitDict = args,
+						startDate = args.startDate,
+						endDate = args.startDate;
 
-					args.hasOwnProperty('startDate') && (eventInitDict.startDate = args.startDate._obj);
+					args.hasOwnProperty('startDate') && (eventInitDict.startDate = calendar_helper.createTZDate(startDate));
+					args.hasOwnProperty('endDate') && (eventInitDict.endDate = calendar_helper.createTZDate(endDate));
 					args.hasOwnProperty('duration') && (eventInitDict.duration = args.duration._obj);
-
 					this._obj = new tizen.CalendarEvent(eventInitDict);
 				}
 			}
@@ -22,16 +24,17 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				get: function() {
 					return this._obj.isDetached;
 				}
-			},
+			}
 		},
 
 		properties: {
 			endDate: {
 				get: function() {
-					return this._obj.endDate;
+					var endDate = this._obj.endDate;
+					return calendar_helper.createDate(endDate);
 				},
 				set: function(value) {
-					this._obj.endDate = value;
+					this._obj.endDate = calendar_helper.createTZDate(value);
 				}
 			},
 			availability: {
@@ -49,11 +52,15 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Cal
 				set: function(value) {
 					this._obj.recurrenceRule = value;
 				}
-			},
+			}
 		},
 
-		expandRecurrence: function(startDate /*TZDate*/, endDate /*TZDate*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.expandRecurrence(startDate._obj, endDate._obj, successCallback, errorCallback);
+		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
+
+			var startDateTizen = new tizen.TZDate(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate(), startDate.getUTCHours(), startDate.getUTCMinutes()),
+				endDateTizen = new tizen.TZDate(endDate.getUTCFullYear(), endDate.getMonth(), endDate.getUTCDate(), endDate.getHours(), endDate.getUTCMinutes());
+
+			return this._obj.expandRecurrence(startDateTizen, endDateTizen, successCallback, errorCallback);
 		}
 	});
 });

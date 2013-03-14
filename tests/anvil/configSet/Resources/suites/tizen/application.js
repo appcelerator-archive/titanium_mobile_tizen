@@ -2,13 +2,15 @@ module.exports = new function() {
 	var CALC_APP_ID = 'tlp6xwqzos.Calculator',
 		NOT_EXIST_APP_ID = 'Not_exist_app_id.asdfs',
 		finish,
+		valueOf,
 		reportError,
-		valueOf;
+		applicationObj;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
+		applicationObj = require('Ti/Tizen/Application');
 	}
 
 	this.name = 'application';
@@ -43,7 +45,7 @@ module.exports = new function() {
 			appInstalledCount = 0;
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsInfo(function(applications) {
+			applicationObj.getAppsInfo(function(applications) {
 				appInstalledCount = applications.length;
 				Ti.API.info("appInstalledCount: " + appInstalledCount);
 
@@ -52,7 +54,7 @@ module.exports = new function() {
 				for (var i = 0, len = appInstalledCount; i < len; i++) {
 					valueOf(testRun, applications[i]).shouldNotBeUndefined();
 					valueOf(testRun, applications[i]).shouldBeObject();
-					valueOf(testRun, applications[i].toString()).shouldBe('[object TiTizenApplicationApplicationInformation]');
+					valueOf(testRun, applications[i].toString()).shouldBe('[object TizenApplicationApplicationInformation]');
 
 					if (applications[i].id && applications[i].id === CALC_APP_ID) {
 						isCalcAppOnEmulator = true;
@@ -72,10 +74,10 @@ module.exports = new function() {
 		var calcAppInfo,
 			harnessAppInfo;
 
-		calcAppInfo = Ti.Tizen.Application.getAppInfo(CALC_APP_ID),
-		harnessAppInfo = Ti.Tizen.Application.getAppInfo();
+		calcAppInfo = applicationObj.getAppInfo(CALC_APP_ID),
+		harnessAppInfo = applicationObj.getAppInfo();
 
-		valueOf(testRun, calcAppInfo).shouldBe('[object TiTizenApplicationApplicationInformation]');
+		valueOf(testRun, calcAppInfo).shouldBe('[object TizenApplicationApplicationInformation]');
 		valueOf(testRun, calcAppInfo).shouldNotBeUndefined();
 		valueOf(testRun, calcAppInfo.id).shouldBeEqual(CALC_APP_ID);
 		valueOf(testRun, calcAppInfo.name).shouldBeEqual('Calculator-Ref');
@@ -85,7 +87,7 @@ module.exports = new function() {
 		valueOf(testRun, calcAppInfo.iconPath).shouldBeString();
 		valueOf(testRun, calcAppInfo.show).shouldBeBoolean();
 
-		valueOf(testRun, harnessAppInfo).shouldBe('[object TiTizenApplicationApplicationInformation]');
+		valueOf(testRun, harnessAppInfo).shouldBe('[object TizenApplicationApplicationInformation]');
 		valueOf(testRun, harnessAppInfo).shouldNotBeUndefined();
 		valueOf(testRun, harnessAppInfo.id).shouldBeString();
 		valueOf(testRun, harnessAppInfo.name).shouldBeEqual('test_harness');
@@ -102,7 +104,7 @@ module.exports = new function() {
 	// Test - Negative scenario - get Application info with NOT correct parameters
 	this.app_info_not_exist = function(testRun) {
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppInfo(NOT_EXIST_APP_ID);
+			applicationObj.getAppInfo(NOT_EXIST_APP_ID);
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -113,14 +115,14 @@ module.exports = new function() {
 			runingAppArray;
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext(function(contexts) {
+			applicationObj.getAppsContext(function(contexts) {
 				var i = 0,
 					contextsCount = contexts.length;
 
 				Ti.API.info("contextsCount: " + contextsCount);
 
 				for (; i < contextsCount; i++) {
-					valueOf(testRun, contexts[i].toString()).shouldBe('[object TiTizenApplicationApplicationContext]');
+					valueOf(testRun, contexts[i].toString()).shouldBe('[object TizenApplicationApplicationContext]');
 				}
 
 				isSuccess = true; 
@@ -148,12 +150,12 @@ module.exports = new function() {
 
 		var runingAppArray = [],
 			isHarness,
-			harness = Ti.Tizen.Application.getAppInfo();
+			harness = applicationObj.getAppInfo();
 
-		valueOf(testRun, harness).shouldBe('[object TiTizenApplicationApplicationInformation]');
+		valueOf(testRun, harness).shouldBe('[object TizenApplicationApplicationInformation]');
 		valueOf(testRun, harness.id).shouldNotBeUndefined();
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext(function(contexts) {
+			applicationObj.getAppsContext(function(contexts) {
 				runingAppArray = contexts;
 			});
 		}).shouldNotThrowException();
@@ -173,7 +175,7 @@ module.exports = new function() {
 	// Test - Negative scenario - Does getAppsContext catch exception with no parameters
 	this.apps_contexts_no_params = function(testRun) {
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext();
+			applicationObj.getAppsContext();
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -183,12 +185,12 @@ module.exports = new function() {
 	this.calc_launch = function(testRun) {
 		// Launch Calculator
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.launch(CALC_APP_ID); 
+			applicationObj.launch(CALC_APP_ID); 
 		}).shouldNotThrowException();
 
 		// Call getAppsContext for recieving all running application
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.getAppsContext(function(contexts) {
+			applicationObj.getAppsContext(function(contexts) {
 				isRuningCalc = _runingAppWithId(contexts, CALC_APP_ID);
 
 				valueOf(testRun, contexts.length).shouldBeGreaterThan(0);
@@ -204,7 +206,7 @@ module.exports = new function() {
 		var isError;
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.launch(
+			applicationObj.launch(
 				NOT_EXIST_APP_ID,
 				function() {
 					Ti.APi.info('Launched success.');
@@ -229,11 +231,11 @@ module.exports = new function() {
 		var currApp,
 			appId;
 
-		currApp = Titanium.Tizen.Application.getCurrentApplication();
+		currApp = applicationObj.getCurrentApplication();
 		appId = currApp.appInfo.id;
 
-		valueOf(testRun, currApp).shouldBe('[object TiTizenApplicationApplication]');
-		valueOf(testRun, currApp.appInfo).shouldBe('[object TiTizenApplicationApplicationInformation]');
+		valueOf(testRun, currApp).shouldBe('[object TizenApplicationApplication]');
+		valueOf(testRun, currApp.appInfo).shouldBe('[object TizenApplicationApplicationInformation]');
 		valueOf(testRun, appId).shouldNotBeUndefined();
 		valueOf(testRun, function() {
 			Ti.API.info('hide');
@@ -241,7 +243,7 @@ module.exports = new function() {
 			currApp.hide();
 		}).shouldNotThrowException();
 
-		Ti.Tizen.Application.launch(appId);
+		applicationObj.launch(appId);
 
 		finish(testRun);
 	};
@@ -257,7 +259,7 @@ module.exports = new function() {
 					Ti.API.info('Success reply.');
 
 					for (var i = 0; i < data.length; i++) {
-						valueOf(testRun, data[i]).shouldBe('[object TiTizenApplicationApplicationControlData]');
+						valueOf(testRun, data[i]).shouldBe('[object TizenApplicationApplicationControlData]');
 					}
 				},
 				// Something went wrong
@@ -269,16 +271,16 @@ module.exports = new function() {
 			};
 
 		valueOf(testRun, function() {
-			appControl = Ti.Tizen.Application.createApplicationControl({
+			appControl = applicationObj.createApplicationControl({
 				operation: "http://tizen.org/appcontrol/operation/create_content"
 				, uri: null
 				, mime: "image/jpeg"
 				, category: null
 			});
 		}).shouldNotThrowException();
-		valueOf(testRun, appControl).shouldBe('[object TiTizenApplicationApplicationControl]');
+		valueOf(testRun, appControl).shouldBe('[object TizenApplicationApplicationControl]');
 		valueOf(testRun, function() {
-			Ti.Tizen.Application.launchAppControl(appControl, null,
+			applicationObj.launchAppControl(appControl, null,
 				function() {
 					serviceLaunched = true;
 

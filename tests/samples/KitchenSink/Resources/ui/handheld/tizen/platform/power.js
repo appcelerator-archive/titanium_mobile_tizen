@@ -3,10 +3,11 @@ function tizen_power() {
 		buttonTurnOffScreen = Ti.UI.createButton({
 			title: 'Turn Off Screen',
 			top: 10
-		});
+		}),
+		powerObj = require('Ti/Tizen/Power');
 
 	buttonTurnOffScreen.addEventListener('click', function(){
-		Ti.Tizen.Power.turnScreenOff();
+		powerObj.turnScreenOff();
 	});
 
 	win.add(buttonTurnOffScreen);

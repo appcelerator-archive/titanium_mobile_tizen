@@ -1,5 +1,5 @@
 define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Application.ApplicationControlData', null, {
+	return declare('Tizen.Application.ApplicationControlData', null, {
 		constructor: function(args) {
 			if(args.toString() === '[object ApplicationControlData]') {
 				this._obj = args;

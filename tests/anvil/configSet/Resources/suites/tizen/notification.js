@@ -8,12 +8,14 @@
 module.exports = new function() {
 	var finish,
 		valueOf,
-		notificationObj;
+		notificationObj,
+		applicationObj;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		notificationObj = require('Ti/Tizen/Notification');
+		applicationObj = require('Ti/Tizen/Application');
 	}
 
 	// Most of the tests fail due to the Tizen bug:
@@ -32,7 +34,7 @@ module.exports = new function() {
 
 		// Create app service for notification
 		var notificationArr,
-			appControl = Ti.Tizen.Application.createApplicationControl({
+			appControl = applicationObj.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -72,7 +74,7 @@ module.exports = new function() {
 		// Create notification and add it to tray
 		var notId,
 			notificationFrom,
-			appControl = Ti.Tizen.Application.createApplicationControl({
+			appControl = applicationObj.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -121,7 +123,7 @@ module.exports = new function() {
 		// Create notification and add it to tray
 		var notId,
 			notificationFrom,
-			appControl = Ti.Tizen.Application.createApplicationControl({
+			appControl = applicationObj.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -173,7 +175,7 @@ module.exports = new function() {
 			notificationFrom,
 			notId1,
 			notificationFrom1,
-			appControl = Ti.Tizen.Application.createApplicationControl({
+			appControl = applicationObj.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',
@@ -190,7 +192,7 @@ module.exports = new function() {
 				title: 'Simple notification 1',
 				notificationInitDict: notificationDict
 			}),
-			appControl1 = Ti.Tizen.Application.createApplicationControl({
+			appControl1 = applicationObj.createApplicationControl({
 				operation: 'http://tizen.org/appcontrol/operation/create_content',
 				uri: null,
 				mime: 'image/jpg',

@@ -1,27 +1,29 @@
 ---
-name: Titanium.Tizen.Alarm.AlarmAbsolute
+name: Tizen.Alarm.AlarmAbsolute
 summary: This interface provides an absolute alarm, which triggers at a specified absolute date.
 description: |
     If a period is provided, the alarm keeps triggering for the given interval. 
     If the daysOfTheWeek array is not empty, the alarm triggers every week, for the given days, at the time defined by date attribute. 
-extends: Titanium.Tizen.Alarm.Alarm
+extends: Tizen.Alarm.Alarm
 platforms: [tizen]
 examples:
   - example: |
+        var alarmObj = require("Ti/Tizen/Alarm");
+        var calendarObj = require("Ti/Tizen/Calendar");
         var date = new Date(2012, 0, 1, 8, 0);
         // Sets an alarm on January 1st 2012 08:00
-        var alarm1 = Ti.Tizen.Alarm.createAlarmAbsolute({date: date});
-        Ti.Tizen.Alarm.add(alarm1, "org.tizen.clock");
+        var alarm1 = alarmObj.createAlarmAbsolute({date: date});
+        alarmObj.add(alarm1, "org.tizen.clock");
         // Sets an alarm on January 1st 2012 08:00, repeating every 2 days
-        var alarm2 = Ti.Tizen.Alarm.createAlarmAbsolute({date: date, period: 2 * Ti.Tizen.Alarm.PERIOD_DAY});
-        tizen.alarm.add(alarm2, "org.tizen.clock");
+        var alarm2 = alarmObj.createAlarmAbsolute({date: date, period: 2 * alarmObj.PERIOD_DAY});
+        alarmObj.add(alarm2, "org.tizen.clock");
         // Sets an alarm occurring on every Saturday and Sunday, at 08:00, starting from January 1st 2012
-        var alarm3 = Ti.Tizen.Alarm.createAlarmAbsolute({date: date, daysOfTheWeek: [Ti.Tizen.Calendar.BY_DAY_VALUE_SA, Ti.Tizen.Calendar.BY_DAY_VALUE_SU]});
-        tizen.alarm.add(alarm3, "org.tizen.clock");
+        var alarm3 = alarmObj.createAlarmAbsolute({date: date, daysOfTheWeek: [calendarObj.BY_DAY_VALUE_SA, calendarObj.BY_DAY_VALUE_SU]});
+        alarmObj.add(alarm3, "org.tizen.clock");
 
 methods:
   - name: getNextScheduledDate
-    summary: Returns the date / time of the next alarm trigger. 
+    summary: Returns the date/time of the next alarm trigger. 
     description: If the alarm has expired, this method returns null. The returned date is precise to the second.
     returns: 
       - type: Date

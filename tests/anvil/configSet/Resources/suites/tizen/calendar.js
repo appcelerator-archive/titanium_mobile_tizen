@@ -41,19 +41,7 @@ module.exports = new function() {
 		Ti.API.info('Start to get default calendar.');
 
 		var calendar = Ti.Tizen.Calendar.getDefaultCalendar(calendarType),
-			today = new Date(),
-			h = today.getHours(),
-			m = today.getMinutes(),
-			dd = today.getDate(),
-			mm = today.getMonth(),
-			yy = today.getFullYear(),
-			startDate = Ti.Tizen.Time.createTZDate({
-				year: yy,
-				month: mm,
-				day: dd,
-				hours: h,
-				minutes: m
-			}),
+			startDate = new Date(),
 			duration = Ti.Tizen.Time.createTimeDuration({
 				length: 1, 
 				unit: 'HOURS'
@@ -69,7 +57,7 @@ module.exports = new function() {
 			item;
 
 		valueOf(testRun, startDate).shouldBeObject();
-		valueOf(testRun, startDate instanceof Ti.Tizen.Time.TZDate).shouldBeTrue();
+		valueOf(testRun, startDate instanceof Date).shouldBeTrue();
 		valueOf(testRun, duration instanceof Ti.Tizen.Time.TimeDuration).shouldBeTrue();
 		valueOf(testRun, duration).shouldBe('[object TiTizenTimeTimeDuration]');		
 
@@ -88,7 +76,7 @@ module.exports = new function() {
 		}
 
 		valueOf(testRun, item.duration).shouldBe('[object TiTizenTimeTimeDuration]');
-		valueOf(testRun, item.startDate instanceof Ti.Tizen.Time.TZDate).shouldBeTrue();
+		valueOf(testRun, item.startDate instanceof Date).shouldBeTrue();
 		valueOf(testRun, calendar).shouldBe('[object TiTizenCalendarCalendar]');
 		valueOf(testRun, calendar.add).shouldBeFunction();
 		valueOf(testRun, calendar.find).shouldBeFunction();

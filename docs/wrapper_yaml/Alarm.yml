@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Alarm
+name: Tizen.Alarm
 summary: This API provides the functionality for setting and unsetting of alarms.
     
 extends: Titanium.Module
@@ -14,7 +14,7 @@ methods:
 
       - name: alarm
         summary: An alarm to add.
-        type: Titanium.Tizen.Alarm.Alarm
+        type: Tizen.Alarm.Alarm
 
       - name: applicationId
         summary: The ID of the application to execute when the alarm is triggered. 
@@ -22,14 +22,16 @@ methods:
 
       - name: appControl
         summary: The data structure describing application control details.
-        type: Titanium.Tizen.Application.ApplicationControl
+        type: Tizen.Application.ApplicationControl
         optional: true
     examples:
       - example: |
             // Triggers an alarm on a given date/time
-            var alarm = Ti.Tizen.Alarm.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
-            var appControl = Ti.Tizen.Alarm.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
-            Ti.Tizen.Alarm.add({alarm: alarm, applicationId: "org.tizen.browser", appControl: appControl});
+            var alarmObj = require("Ti/Tizen/Alarm");
+            var applicationObj = require("Ti/Tizen/Application");
+            var alarm = alarmObj.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
+            var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
+            alarmObj.add({alarm: alarm, applicationId: "org.tizen.browser", appControl: appControl});
             Ti.API.info("Alarm added with id: " + alarm.id);
 
   - name: remove
@@ -41,11 +43,12 @@ methods:
         type: String
     examples:
       - example: |
-            var alarms = Ti.Tizen.Alarm.getAll();
+            var alarmObj = require("Ti/Tizen/Alarm");
+            var alarms = alarmObj.getAll();
             // Removes the first alarm
             if (alarms.length > 0) {
                 try {
-                    Ti.Tizen.Alarm.remove(alarms[0].id);
+                    alarmObj.remove(alarms[0].id);
                     Ti.API.info("Successfully removed the first alarm.");
                 } catch(error) {
                     Ti.API.info("Failed to remove the first alarm.");
@@ -59,7 +62,7 @@ methods:
   - name: get
     summary: Returns an alarm as per the specified identifier.
     returns: 
-      - type: Titanium.Tizen.Alarm.Alarm
+      - type: Tizen.Alarm.Alarm
         summary: Alarm An alarm object with the specified ID. 
     parameters:
 
@@ -68,7 +71,8 @@ methods:
         type: String
     examples:
       - example: |
-            var alarm = Ti.Tizen.Alarm.get(myAlarmID);
+            var alarmObj = require("Ti/Tizen/Alarm");
+            var alarm = alarmObj.get(myAlarmID);
             Ti.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
 
   - name: getAll
@@ -77,26 +81,27 @@ methods:
         This method returns all alarms in an application storage. 
         Alarms that have already been triggered are removed automatically from the storage. 
     returns: 
-      - type: Array<Titanium.Tizen.Alarm.Alarm>
+      - type: Array<Tizen.Alarm.Alarm>
         summary: All Alarm objects.
     examples:
       - example: |
-            var alarms = Ti.Tizen.Alarm.getAll();
+            var alarmObj = require("Ti/Tizen/Alarm");
+            var alarms = alarmObj.getAll();
             Ti.API.info(alarms.length + " alarms present in the storage.");
 
   - name: createAlarmRelative
-    summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmRelative>.
+    summary: Creates and returns an instance of <Tizen.Alarm.AlarmRelative>.
     returns: 
-        type: Titanium.Tizen.Alarm.AlarmAlarmRelative
+        type: Tizen.Alarm.AlarmAlarmRelative
     parameters:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
         type: alarmRelativeParameters
 
   - name: createAlarmAbsolute
-    summary: Creates and returns an instance of <Titanium.Tizen.Alarm.AlarmAbsolute>.
+    summary: Creates and returns an instance of <Tizen.Alarm.AlarmAbsolute>.
     returns: 
-        type: Titanium.Tizen.Alarm.AlarmAlarmAbsolute
+        type: Tizen.Alarm.AlarmAlarmAbsolute
     parameters:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
@@ -152,13 +157,13 @@ properties:
     summary: |
         (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
         Valid days of the week constants:
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_MO>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_TU>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_WE>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_TH>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_FR>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_SA>
-        <Titanium.Tizen.Calendar.BY_DAY_VALUE_SU>
+        <Tizen.Calendar.BY_DAY_VALUE_MO>
+        <Tizen.Calendar.BY_DAY_VALUE_TU>
+        <Tizen.Calendar.BY_DAY_VALUE_WE>
+        <Tizen.Calendar.BY_DAY_VALUE_TH>
+        <Tizen.Calendar.BY_DAY_VALUE_FR>
+        <Tizen.Calendar.BY_DAY_VALUE_SA>
+        <Tizen.Calendar.BY_DAY_VALUE_SU>
     type: Array<String>
     optional: true
 

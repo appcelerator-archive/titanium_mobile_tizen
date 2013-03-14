@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Application.ApplicationControlData
+name: Tizen.Application.ApplicationControlData
 summary: This interface defines a key/value pair used to pass data between applications through the ApplicationControl interface. 
 extends: Titanium.Proxy
 platforms: [tizen]
