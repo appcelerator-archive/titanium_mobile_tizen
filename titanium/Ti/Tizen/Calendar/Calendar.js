@@ -14,7 +14,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/Ca
 				get: function() {
 					return this._obj.name;
 				}
-			},
+			}
 		},
 
 		get: function(id /*CalendarItemId*/) {

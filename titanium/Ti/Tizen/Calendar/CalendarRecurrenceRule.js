@@ -1,11 +1,38 @@
 define(['Ti/_/declare'], function(declare) {
+
+	function createTZDate(dateObj) {
+		return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes())
+	}
+	function createDate(tzDateObj){
+		return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
+	}
+
 	return declare('Ti.Tizen.Calendar.CalendarRecurrenceRule', null, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarRecurrenceRule]') {
 				this._obj = args;
 			} else {
 				if (args.hasOwnProperty('frequency')) {
-					this._obj = new tizen.CalendarRecurrenceRule(args.frequency, args.ruleInitDict);
+
+					var initDict = args,
+						untilDate = args.ruleInitDict && args.ruleInitDict.untilDate,
+						exceptions = args.ruleInitDict && args.ruleInitDict.exceptions,
+						i=0,
+						len = exceptions && exceptions.length,
+						exceptionsTmp = [];
+
+					if(untilDate) {
+						args.ruleInitDict.hasOwnProperty('untilDate') && (initDict.ruleInitDict.untilDate = createTZDate(untilDate));
+					}
+					if(exceptions) {
+						for(; i<len; i++) {
+							exceptionsTmp.push(createTZDate(exceptions[i]));
+						}
+						args.ruleInitDict.hasOwnProperty('exceptions') && (initDict.ruleInitDict.exceptions = exceptionsTmp);
+					}
+
+					this._obj = new tizen.CalendarRecurrenceRule(initDict.frequency, initDict.ruleInitDict);
+
 				} else {
 					Ti.API.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
 				}
@@ -31,10 +58,11 @@ define(['Ti/_/declare'], function(declare) {
 			},
 			untilDate: {
 				get: function() {
-					return this._obj.untilDate;
+					var untilDate = this._obj.untilDate;
+					return createDate(untilDate);
 				},
 				set: function(value) {
-					this._obj.untilDate = value;
+					this._obj.untilDate = createTZDate(value);
 				}
 			},
 			occurrenceCount: {
@@ -63,13 +91,29 @@ define(['Ti/_/declare'], function(declare) {
 			},
 			exceptions: {
 				get: function() {
-					return this._obj.exceptions;
+					var res = [],
+						exceptions = this._obj.exceptions,
+						i=0,
+						len = exceptions.length;
+
+					for(; i<len; i++) {
+						res.push(createDate(exceptions[i]));
+					}
+					return res;
 				},
 				set: function(value) {
-					this._obj.exceptions = value;
+					var res = [],
+						exceptions = value,
+						i=0,
+						len = exceptions.length;
+
+					for(; i<len; i++) {
+						res.push(createTZDate(exceptions[i]));
+					}
+					this._obj.exceptions = res;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

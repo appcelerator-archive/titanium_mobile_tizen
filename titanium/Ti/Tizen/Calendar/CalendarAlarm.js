@@ -1,4 +1,12 @@
 define(['Ti/_/declare'], function(declare) {
+
+	function createTZDate(dateObj) {
+		return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes())
+	}
+	function createDate(tzDateObj){
+		return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
+	}
+
 	return declare('Ti.Tizen.Calendar.CalendarAlarm', null, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarAlarm]') {
@@ -7,7 +15,12 @@ define(['Ti/_/declare'], function(declare) {
 				if (args.hasOwnProperty('before') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
 					this._obj = new tizen.CalendarAlarm(args.before, args.method, args.description);
 				} else if (args.hasOwnProperty('absoluteDate') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
-					this._obj = new tizen.CalendarAlarm(args.absoluteDate, args.method, args.description);
+					var alarmInitDict = args,
+						absoluteDate = args.absoluteDate;
+
+					args.hasOwnProperty('absoluteDate') && (alarmInitDict.absoluteDate = createTZDate(absoluteDate));
+
+					this._obj = new tizen.CalendarAlarm(alarmInitDict.absoluteDate, alarmInitDict.method, alarmInitDict.description);
 				} else {
 					Ti.API.error('Constructor with such parameters does not exist in CalendarAlarm.');
 				}
@@ -17,10 +30,11 @@ define(['Ti/_/declare'], function(declare) {
 		properties: {
 			absoluteDate: {
 				get: function() {
-					return this._obj.absoluteDate;
+					var absoluteDate = this._obj.absoluteDate;
+					return createDate(absoluteDate);
 				},
 				set: function(value) {
-					this._obj.absoluteDate = value;
+					this._obj.absoluteDate = createTZDate(value);
 				}
 			},
 			before: {
@@ -46,8 +60,8 @@ define(['Ti/_/declare'], function(declare) {
 				set: function(value) {
 					this._obj.description = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

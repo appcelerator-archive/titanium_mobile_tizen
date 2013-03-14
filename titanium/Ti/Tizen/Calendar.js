@@ -51,7 +51,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTa
 			CALENDAR_ITEM_STATUS_CANCELLED: 'CANCELLED',
 			CALENDAR_ITEM_STATUS_NEEDS_ACTION: 'NEEDS_ACTION',
 			CALENDAR_ITEM_STATUS_IN_PROCESS: 'IN_PROCESS',
-			CALENDAR_ITEM_STATUS_COMPLETED: 'COMPLETED',
+			CALENDAR_ITEM_STATUS_COMPLETED: 'COMPLETED'
 		},
 
 		getCalendars: function(type /*CalendarType*/, successCallback /*CalendarArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
@@ -104,7 +104,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTa
 
 		createCalendarAlarm: function(args) {
 			return new CalendarAlarm(args);
-		},
+		}
 	});
 
 	function onCalendarEventArraySuccessCallback(object, onsuccess) { 

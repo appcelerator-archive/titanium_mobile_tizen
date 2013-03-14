@@ -92,8 +92,8 @@ define(['Ti/_/declare'], function(declare) {
 				set: function(value) {
 					this._obj.contactRef = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });
