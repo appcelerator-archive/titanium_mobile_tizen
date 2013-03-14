@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, CalendarEvent, CalendarItem) {
-	return declare('Ti.Tizen.Calendar.Calendar', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Evented, CalendarEvent, CalendarItem) {
+	return declare('Ti.Tizen.Calendar.Calendar', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},

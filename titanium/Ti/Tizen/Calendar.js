@@ -1,8 +1,8 @@
-define(['Ti/_/lang', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTask', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarAttendee', 
+define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/Calendar/Calendar', 'Ti/Tizen/Calendar/CalendarTask', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarAttendee',
 		'Ti/Tizen/Calendar/CalendarRecurrenceRule', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Calendar/CalendarAlarm', 'Ti/Tizen/Calendar/CalendarItem'], 
-		function(lang, Calendar, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
+		function(lang, Evented, Calendar, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
 	
-	return lang.setObject('Ti.Tizen.Calendar', {
+	return lang.setObject('Ti.Tizen.Calendar', Evented, {
 
 		constants: {
 			CALENDAR_TYPE_EVENT: 'EVENT',

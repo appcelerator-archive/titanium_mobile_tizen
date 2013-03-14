@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarEventId, TimeDuration, calendar_helper) {
-	return declare('Ti.Tizen.Calendar.CalendarItem', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendar_helper'], function(declare, Evented, CalendarEventId, TimeDuration, calendar_helper) {
+	return declare('Ti.Tizen.Calendar.CalendarItem', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 			this._obj.duration && (this.properties.__values__.duration = new TimeDuration(this._obj.duration));
