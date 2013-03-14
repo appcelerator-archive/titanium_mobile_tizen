@@ -49,7 +49,6 @@ function(next) {
 		var archiveName = path.basename(args[0]);
 		archiveName = archiveName.replace('.zip', '-tizen.zip');
 
-		//TODO: get rid of file-utils
 		//Logic on on Windows and Linux are different:
 		//win32: file-utils will remove temporary dir 
 		//linux: cannot use file-utils because 
@@ -68,7 +67,6 @@ function(next) {
 				next(null, 'ok');
 			});
 		} else {
-			//use mktemp command
 			var random = Math.random ().toString ().substring (2);
 			workingDir = path.join(tempdir(), random);
 			fs.mkdirSync(workingDir);
