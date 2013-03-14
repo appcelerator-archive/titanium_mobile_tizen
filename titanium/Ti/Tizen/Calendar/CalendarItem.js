@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendar_helper'], function(declare, Evented, CalendarEventId, TimeDuration, calendar_helper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, CalendarEventId, TimeDuration, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarItem', Evented, {
 		constructor: function(args) {
 			this._obj = args;
@@ -48,12 +48,12 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti
 					if (value instanceof tizen.TZDate) {
 						this._obj.startDate = value;
 					} else {
-						this._obj.startDate = calendar_helper.createTZDate(value);
+						this._obj.startDate = calendarHelper.createTZDate(value);
 					}
 				},
 				get: function() {
 					var startDate = this._obj.startDate;
-					return calendar_helper.createDate(startDate);
+					return calendarHelper.createDate(startDate);
 				}
 			},
 			duration: {

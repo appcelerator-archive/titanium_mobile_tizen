@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/calendar_helper'], function(declare, Evented, calendar_helper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarAlarm', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarAlarm]') {
@@ -10,7 +10,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/calendar_helper'], function(
 					var alarmInitDict = args,
 						absoluteDate = args.absoluteDate;
 
-					args.hasOwnProperty('absoluteDate') && (alarmInitDict.absoluteDate = calendar_helper.createTZDate(absoluteDate));
+					alarmInitDict.absoluteDate = calendarHelper.createTZDate(absoluteDate);
 
 					this._obj = new tizen.CalendarAlarm(alarmInitDict.absoluteDate, alarmInitDict.method, alarmInitDict.description);
 				} else {
@@ -23,10 +23,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/calendar_helper'], function(
 			absoluteDate: {
 				get: function() {
 					var absoluteDate = this._obj.absoluteDate;
-					return calendar_helper.createDate(absoluteDate);
+					return calendarHelper.createDate(absoluteDate);
 				},
 				set: function(value) {
-					this._obj.absoluteDate = calendar_helper.createTZDate(value);
+					this._obj.absoluteDate = calendarHelper.createTZDate(value);
 				}
 			},
 			before: {

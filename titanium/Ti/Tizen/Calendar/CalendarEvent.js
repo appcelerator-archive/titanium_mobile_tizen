@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarItem, calendar_helper) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarEvent', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEvent]') {
@@ -11,8 +11,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_h
 						startDate = args.startDate,
 						endDate = args.startDate;
 
-					args.hasOwnProperty('startDate') && (eventInitDict.startDate = calendar_helper.createTZDate(startDate));
-					args.hasOwnProperty('endDate') && (eventInitDict.endDate = calendar_helper.createTZDate(endDate));
+					args.hasOwnProperty('startDate') && (eventInitDict.startDate = calendarHelper.createTZDate(startDate));
+					args.hasOwnProperty('endDate') && (eventInitDict.endDate = calendarHelper.createTZDate(endDate));
 					args.hasOwnProperty('duration') && (eventInitDict.duration = args.duration._obj);
 					this._obj = new tizen.CalendarEvent(eventInitDict);
 				}
@@ -31,10 +31,10 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_h
 			endDate: {
 				get: function() {
 					var endDate = this._obj.endDate;
-					return calendar_helper.createDate(endDate);
+					return calendarHelper.createDate(endDate);
 				},
 				set: function(value) {
-					this._obj.endDate = calendar_helper.createTZDate(value);
+					this._obj.endDate = calendarHelper.createTZDate(value);
 				}
 			},
 			availability: {
