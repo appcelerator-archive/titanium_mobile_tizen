@@ -234,7 +234,6 @@ properties:
     type: String
     summary: |
         Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
-    permission: read-only
 
   - name: title
     type: String
@@ -242,4 +241,5 @@ properties:
 
   - name: notificationInitDict
     type: StatusNotificationInit
-    summary: Dictionary.
+    summary: (optional) Dictionary.
+    optional: true

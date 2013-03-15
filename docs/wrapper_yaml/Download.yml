@@ -74,13 +74,13 @@ properties:
     type: String
 
   - name: destination
-    summary: Destination folder to which a requested file object will be downloaded.
+    summary: (optional) Destination folder to which a requested file object will be downloaded.
         If the destination is not specified, the file will be downloaded to the default storage "Downloads".
     type: String
     optional: true
 
   - name: fileName
-    summary: An attribute to store the file name for the specified URL. If the file name is not given, 
+    summary: (optional) An attribute to store the file name for the specified URL. If the file name is not given, 
         the original file name from URL is used.
     type: String
     optional: true
