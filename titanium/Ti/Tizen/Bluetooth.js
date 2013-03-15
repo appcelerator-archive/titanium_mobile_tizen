@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], function(lang, BluetoothAdapter) {
-	return lang.setObject('Ti.Tizen.Bluetooth', {
+define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], function(lang, Evented, BluetoothAdapter) {
+	return lang.setObject('Tizen.Bluetooth', Evented, {
 
 		constants: {
 			BLUETOOTH_SECURITY_LEVEL_LOW: 'LOW',
@@ -30,7 +30,11 @@ define(['Ti/_/lang', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], function(lang, Blue
 		},
 
 		getDefaultAdapter: function() {
-			return this._wrap(tizen.bluetooth.getDefaultAdapter());
+            try {
+                return this._wrap(tizen.bluetooth.getDefaultAdapter());
+            } catch(e) {
+                Ti.API.error(e.message);
+            }
 		},
 
 		_wrap: function(object) {
@@ -41,24 +45,5 @@ define(['Ti/_/lang', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], function(lang, Blue
 		createBluetoothAdapter: function(object) { 
 			return new BluetoothAdapter(object);
 		}
-
-
 	});
-
-	function onBluetoothDeviceSuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new BluetoothDevice(object));
-	};
-
-	function onBluetoothDeviceArraySuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new BluetoothDevice(object));
-	};
-
-	function onBluetoothSocketSuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new BluetoothSocket(object));
-	};
-
-	function onBluetoothServiceSuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new BluetoothServiceHandler(object));
-	};
-
 });
