@@ -59,8 +59,8 @@ methods:
             var today_begin = Titanium.Tizen.Time.createTZDate({year: now_dt.getFullYear(),
                                                           month: now_dt.getMonth(),
                                                           day: now_dt.getDate()});
-            var today_end = today_begin.addDuration(Titanium.Tizen.Time.createTimeDuration({length: 1, 
-                                                                                 unit: "DAYS"}));
+            var today_end = today_begin.addDuration(Tizen.Time.createTimeDuration({length: 1, 
+                                                                                 unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}));
             var filter = tizenObj.createAttributeRangeFilter({attributeName: "startDate",
                                                               initialValue: today_begin,
                                                               endValue: today_end});
@@ -226,7 +226,7 @@ properties:
     optional: ture
   - name: matchValue
     type: any
-    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
+    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to Tizen.FILTER_MUCH_FLAG_EXISTS. By default, this attribute is set to null.
     optional: true
 
 ---

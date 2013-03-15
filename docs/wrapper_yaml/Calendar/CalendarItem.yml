@@ -49,9 +49,9 @@ methods:
     examples:
       - example: |    
             // Gets default calendar.
-            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
-            var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: Titanium.Tizen.createTimeDuration(3, "DAYS"),
+            var calendar = Tizen.Calendar.getDefaultCalendar();
+            var html5seminar = Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
+                                                        duration: Tizen.Time.createTimeDuration(3, Tizen.Time.TIME_DURATION_UNIT_DAYS),
                                                         summary: "HTML5 Seminar"});
                                      
             calendar.add(html5seminar);
@@ -133,7 +133,7 @@ properties:
     examples:
       - example: |    
             // 1 hour meeting
-            event.duration = Titanium.Tizen.createTimeDuration(1, "HOURS");
+            event.duration = Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS);
 
   - name: location 
     summary: |
@@ -200,7 +200,7 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
+            var alarm = Tizen.Calendar.createCalendarAlarm(Tizen.Time.createTimeDuration(30, Tizen.Time.TIME_DURATION_UNIT_MINS),
                                                    "SOUND");
             ev.alarms = [alarm];
 

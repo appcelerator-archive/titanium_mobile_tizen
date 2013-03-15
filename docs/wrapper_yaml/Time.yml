@@ -169,7 +169,7 @@ properties:
   - name: unit
     type: String
     summary: |
-        (optional) Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+        (optional) Time property value: Tizen.Time.TIME_DURATION_UNIT_MSECS, Tizen.Time.TIME_DURATION_UNIT_SECS, Tizen.Time.TIME_DURATION_UNIT_MINS, Tizen.Time.TIME_DURATION_UNIT_HOURS, Tizen.Time.TIME_DURATION_UNIT_DAYS
     optional: true
 ---
 

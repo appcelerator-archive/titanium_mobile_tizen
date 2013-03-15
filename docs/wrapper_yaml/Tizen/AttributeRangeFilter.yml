@@ -42,8 +42,8 @@ examples:
         var today_begin = Titanium.Tizen.Time.createTZDate({year: now_dt.getFullYear(),
                                                             month: now_dt.getMonth(),
                                                             day: now_dt.getDate()});
-        var today_end = today_begin.addDuration(Titanium.Tizen.Time.createTimeDuration({length: 1, 
-                                                                                 unit: "DAYS"}));
+        var today_end = today_begin.addDuration(Tizen.Time.createTimeDuration({length: 1, 
+                                                                                 unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}));
         var filter = tizenObj.createAttributeRangeFilter({attributeName: "startDate",
                                                           initialValue: today_begin,
                                                           endValue: today_end});

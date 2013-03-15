@@ -66,10 +66,10 @@ methods:
                     calendar = calendars[0];
                     Titanium.API.info('The calendar id is ' + calendar.id + ' and name ' + calendar.name);
                     
-                    var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
+                    var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
                                                      summary:'HTML5 Webinar', 
                                                      startDate: new Date(2011, 3, 30, 10, 0), 
-                                                     duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                                     duration: Titanium.Tizen.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
                                                      location:'Huesca'});
                     calendar.add(ev);
                     
@@ -114,10 +114,10 @@ methods:
             // Gets a list of available calendars
             myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
             
-            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
                                             location:'Huesca'});
                           
             myCalendar.add(ev);
@@ -175,10 +175,10 @@ methods:
             // Gets the default calendar
             var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
         
-            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
                                             location:'Huesca'});                   
             calendar.add(ev);
   
@@ -520,7 +520,7 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
+            var alarm = Tizen.Calendar.createCalendarAlarm(Tizen.Time.createTimeDuration(30, Tizen.Time.TIME_DURATION_UNIT_MINS),
                                                             "SOUND");
             ev.alarms = [alarm];
 
