@@ -1,133 +1,128 @@
 #!/usr/bin/env node
 
 // simple hack to enable debugger output
-
 process.env.DEBUG = process.env.DEBUG || 'BUILD:info';
 
-/**
- * Module dependencies.
- */
 
-var shell = require('shelljs/global')
-	, debug = require('debug')
-	,	Zip = require('adm-zip');
+
+var fs = require('fs'),
+	path = require('path'),
+	async = require('async'),
+	wrench = require('wrench'),
+	shell = require('shelljs/global'),
+	debug = require('debug'),
+	args = process.argv.slice(2),
+	branchName, repoPath, titaniumTizenSdk;
 
 // silence shelljs output
-
 config.silent = true;
 
 // create info logger
 var info = debug('BUILD:info');
 
-// parse argv
+info('Starting');
 
-var args = process.argv.slice(2);
+//args[0] path to titanium_mobile repo
+//args[1] target branch, master by default
+repoPath = args[0];
+titaniumTizenSdk = path.join(repoPath, 'tizen');
+branchName = args[1] || 'master';
 
-// set zip file path
-
-var zipFile = new Zip(args[0]);
-
-// create temp folder to unzip base sdk
-
-var TMP_DIR = tempdir() + 'tizen_sdk/';
-
-// remove tmp dir if exists
-
-try { rm('-rf', TMP_DIR); } catch(e){}
-
-// extract base titanium sdk to temp directory
-
-info(' start extracting zip contents');
-zipFile.extractAllTo(TMP_DIR, true);
-info(' done extracting zip contents');
-
-// get sdk OS type
-
-var OS = (ls(TMP_DIR + 'mobilesdk' ))[0];
-
-// get sdk os version
-
-var SDK_VER = (ls(TMP_DIR + 'mobilesdk/' + OS + '/'))[0];
-
-// set output directory path
-
-var outFile = (args[1] || '') + 'tizen-' + SDK_VER + '-' + OS + '.zip';
-
-// set path file and sdk base directory paths
-
-var PATH = {
-	PATCH_DIR: pwd() + '/',
-	SDK_DIR: TMP_DIR + 'mobilesdk/' + OS + '/' + SDK_VER + '/'
-};
-
-// rename mobileweb sdk to tizen
-
-info('renaming base sdk folder');
-mv('-f', PATH.SDK_DIR + 'mobileweb', PATH.SDK_DIR + 'tizen_sdk');
-mv('-f', PATH.SDK_DIR + 'tizen_sdk/templates/app/default/Resources/mobileweb', PATH.SDK_DIR + 'tizen_sdk/templates/app/default/Resources/tizen');
-
-// patch file paths
-
-var src = [
-	'titanium/Ti',
-	'cli/commands',
-	'titanium/Ti.js',
-	'templates/app/config.tmpl',
-	'templates/app/default/Resources/tizen',
-	'src/loader.js',
-	'src/index.html',
-	'dependencyAnalyzer',
-	'themes',
-	'utils/signapp.jar'
-];
-
-// files to exclude from base sdk
-
-var exclude = [
-	PATH.SDK_DIR + 'tizen_sdk/Ti/Facebook',
-	PATH.SDK_DIR + 'tizen_sdk/titanium/Ti/Facebook.js',
-	PATH.SDK_DIR + 'tizen_sdk/resources/tizen/apple_startup_images',
-	PATH.SDK_DIR + 'tizen_sdk/templates/app/default/Resources/tizen/apple_startup_images'
-];
-
-// remove excluded files and dirs
-
-info('removing excluded files and folders');
-rm('-rf', exclude);
-
-// patch base sdk
-
-info('patching base sdk');
-mkdir(PATH.SDK_DIR + 'tizen_sdk/utils');
-src.forEach( function (patch) {
-	var patchFile = PATH.PATCH_DIR + patch;
-	var patchParts = patch.split('/');
-	patchParts.pop();
-	var patchPath = patchParts.join('/');
-	cp('-fR', patchFile, PATH.SDK_DIR + 'tizen_sdk/' + patchPath);
-});
-
-// generate dependency JSON file
-
-info('start dependency analyzer');
-try{
-	var depCheck = require(PATH.PATCH_DIR + 'dependencyAnalyzer/dependencyAnalyzer');
-	depCheck(PATH.SDK_DIR);
-} catch(e) {
-	info('ERROR! ' + e);
+//validate path to repo
+if (!fs.existsSync(repoPath)) {
+	info('Error: param 1 should point existng zip archive. Current value: ' + args[0]);
+	process.exit(1);
 }
-info('done dependency analyzer');
 
-// package tizen sdk
+async.series([
 
-info('packaging tizen ' + SDK_VER + ' sdk ');
+function(next) {
+	//check out and switch branch
+	gitCheckout(repoPath, branchName, function(){
+		next(null, 'ok');
+	});
 
-try{ rm('-rf', outFile); }catch(e){}
-pushd(PATH.SDK_DIR);
+}, function(next) {
+	var exclude = [
+			path.join(titaniumTizenSdk, 'titanium/Ti/Facebook'),
+			path.join(titaniumTizenSdk, 'titanium/Ti/Facebook.js'),
+			path.join(titaniumTizenSdk, 'resources/apple_startup_images'),
+			path.join(titaniumTizenSdk, 'templates/app/default/Resources/mobileweb/apple_startup_images')
+	],
+	createDirs = [
+			'utils'
+	],
+	supportFiles = [
+		'support/mobileweb/closureCompiler',
+		'support/mobileweb/imageResizer',
+		'support/mobileweb/minify',
+		'support/mobileweb/resources'
+	]
+	overrideFiles = [
+			{src : 'titanium/Ti/*', dst : 'titanium/Ti/'},
+			{src : 'cli/commands/*', dst : 'cli/commands/'},
+			{src : 'titanium/Ti.js', dst : 'titanium/'},
+			{src : 'templates/*', dst : 'templates/'},
+			{src : 'src/*', dst : 'src/'},
+			{src : 'dependencyAnalyzer/*', dst : 'dependencyAnalyzer/'},
+			{src : 'themes/*', dst : 'themes/'},
+			{src : 'utils/signapp.jar', dst : 'utils/'},
+		]
 
-var cmd = (which('zip'))
-	?	'zip -r ' + PATH.PATCH_DIR + outFile + ' ./tizen_sdk/*'
-	: path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..', 'tools', '7zip', '7za.exe')) +' a ' + PATH.PATCH_DIR + outFile + ' ./tizen_sdk/* -tzip';
+	info('Clean up, deleting ' + titaniumTizenSdk);
+	rm('-rf', titaniumTizenSdk);//cleanup
 
-exec(cmd);
-info('done packaging ' + outFile);
+	cp('-fR', path.join(repoPath, 'mobileweb','*'), titaniumTizenSdk);
+
+	supportFiles.forEach( function (pth) {
+		info('copy ' + path.join(repoPath, pth) + ' into ' + titaniumTizenSdk);
+		cp('-fR', path.join(repoPath, pth), titaniumTizenSdk);
+	});
+	
+	createDirs.forEach( function (dirpath) {
+		//fs.mkdirSync(path.join(titaniumTizenSdk, dirpath));
+		mkdir(path.join(titaniumTizenSdk, dirpath));
+	});
+	rm('-rf', exclude);
+	overrideFiles.forEach( function (patch) {
+		info('copy ' + path.join(__dirname, patch.src) + ' into ' + path.join(titaniumTizenSdk, patch.dst));
+		cp('-fR', path.join(__dirname, patch.src), path.join(titaniumTizenSdk, patch.dst));
+	});
+	next(null, 'ok');
+
+}, function(next) {
+	try{
+		info('Loading dependencyAnalyzer.js');
+		var depCheck = require('./dependencyAnalyzer/dependencyAnalyzer');
+		depCheck(repoPath + '/');
+	} catch(e) {
+		info('dependencyAnalyzer failed: ' + e);
+	}	
+	next(null, 'ok');
+}], function(err) {
+	if (err) {
+		info(err);
+	}
+	info('Finished.');
+});	
+
+function gitCheckout(workingDir, branch, finish) {
+	var executor = require('child_process'),
+		cmd = 'git checkout -f ' + branch;
+	info('git cmd: ' + cmd);
+	executor.exec(
+	cmd, {
+		cwd: workingDir
+	}, function(err, stdout, stderr) {
+		info(stdout);
+		if (stdout) {
+			info(stdout);
+		}
+		if (err != null) {
+			info(stderr);
+		} else {
+			info('git ok');
+		}
+		finish(null);
+	});
+}
