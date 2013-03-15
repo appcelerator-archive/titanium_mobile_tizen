@@ -1,6 +1,6 @@
 define(['Ti/_/lang', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Application/ApplicationInformation', 'Ti/Tizen/Application/ApplicationContext', 'Ti/Tizen/Application/Application', 
 		'Ti/Tizen/Application/ApplicationControl', 'Ti/Tizen/Application/ApplicationControlData'], 
-		function(lang, WebAPIError, ApplicationInformation, ApplicationContext, Application, ApplicationControl) {
+		function(lang, WebAPIError, ApplicationInformation, ApplicationContext, Application, ApplicationControl, ApplicationControlData) {
 
 	return lang.setObject('Ti.Tizen.Application', {
 		getCurrentApplication: function() {
