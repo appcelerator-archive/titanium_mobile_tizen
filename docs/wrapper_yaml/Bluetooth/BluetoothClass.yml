@@ -24,7 +24,18 @@ methods:
       - name: service
         summary: The service to check.  
         type: Number
-
+    examples:
+      - example: |
+            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            
+            adapter.getDevice("12:34:56:78:9A:BC", function(device) {
+                if (device.deviceClass.hasService(tizen.bluetooth.deviceService.POSITIONING)) {
+                    console.log("Device supports Positioning service");
+                }
+            }, function(e) {
+                console.log("Couldn't get device for given address: " + e.message);
+            });
+ 
 properties:
   - name: major
     summary: | 

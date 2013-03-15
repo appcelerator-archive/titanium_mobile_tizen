@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
-	return declare('Ti.Tizen.Alarm.Alarm', Evented, {
+	return declare('Tizen.Alarm.Alarm', Evented, {
 		constants: {
 			id: {
 				get: function() {

@@ -1,7 +1,33 @@
-define(["Ti/_/declare", "Ti/_/Evented"], function(declare, Evented) {
-	
-	return declare("Ti.Contacts.Person", Evented, {
-		
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/contact_helper'], function(declare, Evented, contact_helper) {
+
+//	var addressbook = tizen.contact.getDefaultAddressBook();
+
+	return declare('Ti.Contacts.Person', Evented, {
+		constructor: function(args) {
+			if (!args.id) {
+				this._contact = contact_helper.createTizenContact(args);
+				var addressbook = tizen.contact.getDefaultAddressBook();
+				addressbook.add(this._contact);
+				this.constants.__values__.id = this._contact.id;
+			}
+		},
+
+		constants: {
+			id: {},
+			fullName: {
+				get: function() {
+					return this.firstName + ' ' + this.lastName;
+				}
+			},
+			kind: {
+				get: function() {
+					return Ti.Contacts.CONTACT_KIND_PERSON;
+				}
+			},
+			modified: {},
+			prefix: {},
+		},
+
 		properties: {
 			address: {},
 			birthday: '',
@@ -9,41 +35,18 @@ define(["Ti/_/declare", "Ti/_/Evented"], function(declare, Evented) {
 			department: '',
 			email: {},
 			firstName: '',
-			middleName: '',
-			lastName: '',
-			nickname: '',
 			firstPhonetic: '',
-			lastPhonetic: '',
-			phone: {},
-			organization: '',
 			jobTitle: '',
+			lastName: '',
+			lastPhonetic: '',
+			middleName: '',
+			nickname: '',
 			note: '',
-			url: {},
-			image: {
-				set: function(value){
-					if(value !== null){
-						throw TypeError('You can set image only to null');
-					}
-					return value;
-				},
-				value : null
-			}
-		},
-		
-		constants: {
-			CONTACTS_KIND_ORGANIZATION: 0,
-			CONTACTS_KIND_PERSON: 1,
-			
-			kind: this.CONTACTS_KIND_PERSON,
-			prefix: '',
-			fullName: {
-				get: function() {
-					return this.firstName + " " + this.lastName;
-				}
-			},
-			created: '',
-			id: 0
-		},
-				
+			organization: '',
+			phone: {},
+			suffix: '',
+			url: {}
+		}
 	});
+	
 });

@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/Tizen/AbstractFilter'], function(declare, AbstractFilter){
-	return declare('Ti.Tizen.AttributeFilter', AbstractFilter, {
+	return declare('Tizen.AttributeFilter', AbstractFilter, {
 		constructor: function(args) {
 			if(args.toString() === '[object AttributeFilter]') {
 				this._obj = args;

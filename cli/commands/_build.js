@@ -20,6 +20,7 @@ var ti = require('titanium-sdk'),
 	path = require('path'),
 	wrench = require('wrench'),
 	xmldom = require('xmldom'),
+	runner = require('child_process'),
 	DOMParser = xmldom.DOMParser,
 	jsExtRegExp = /\.js$/,
 	HTML_HEADER = [
@@ -41,6 +42,7 @@ var ti = require('titanium-sdk'),
 		'.jpeg': 'image/jpg'
 	},
 	devId,
+	tizenConfigXmlSources, //here we keep content of <tizen> node from tiapp.xml and add it into config.xml directly
 	defaultPrivilegesList = 
 			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
 			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>'+
@@ -349,72 +351,72 @@ function build(logger, config, cli, finished) {
 				}
 			], function () {
 				async.series([
-					function(next) {
+					function (next) {
 						this.minifyJavaScript();
 						next(null, 'ok');
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 						this.createFilesystemRegistry();
 						next(null, 'ok');
 
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 						this.createIndexHtml();
 						next(null, 'ok');
 
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 						this.createConfigXml();
 						next(null, 'ok');
 
-					}.bind(this), function(next) {
-						this.signTizenApp(logger, function() {
+					}.bind(this), function (next) {
+						this.signTizenApp(logger, function () {
 							next(null, 'ok');
 						});						
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 						if (process.platform === 'win32') {
-							this.wgtPackaging7z(logger, function() {
+							this.wgtPackaging7z(logger, function () {
 								next(null, 'ok');
 							});
 						} else {
-							this.wgtPackagingLinux(logger, function() {
+							this.wgtPackagingLinux(logger, function () {
 								next(null, 'ok');
 							});
 						}
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 							//find Tizen SDK location. Needs it to use Tizen CLI
 							this.detectTizenSDK(logger, next);
-					}.bind(this),function(next) {
+					}.bind(this),function (next) {
 						if (devId) {
-							this.uninstallWidgetForce(logger, function() {
+							this.uninstallWidgetForce(logger, function () {
 									next(null, 'ok');
 								});
 						} else {
 							next(null, 'ok');
 						}
-					}.bind(this), function(next) {
+					}.bind(this), function (next) {
 						if (devId && devId != 'none') {
-							this.installOnDevice(logger, function() {
+							this.installOnDevice(logger, function () {
 									next(null, 'ok');
 								});
 						} else {
 							next(null, 'ok');
 						}
-					}.bind(this),function(next) {
+					}.bind(this),function (next) {
 						if (this.runDevice && this.runDevice != 'none') {
-							this.runOnDevice(logger, function() {
+							this.runOnDevice(logger, function () {
 									next(null, 'ok');
 								});
 						} else {							
 							next(null, 'ok');
 						}
-					}.bind(this),function(next) {
+					}.bind(this),function (next) {
 						if (this.debugDevice && this.debugDevice != 'none') {
-							this.debugOnDevice(logger, function() {
+							this.debugOnDevice(logger, function () {
 									next(null, 'ok');
 								});
 						} else {							
 							next(null, 'ok');
 						}
 					}.bind(this)
-					], function(err) {
+					], function (err) {
 						if (err) 
 							console.log('Failed:' + err)						
 						finished && finished.call(this);
@@ -773,7 +775,7 @@ build.prototype = {
 			}
 		}, this);
 		
-		this.precacheImages.forEach(function (url) {
+		this.precacheImages.forEach (function (url) {
 			url = url.replace(/\\/g, '/');
 			
 			var img = path.join(this.projectResDir, /^\//.test(url) ? '.' + url : url),
@@ -1040,34 +1042,43 @@ build.prototype = {
 	},
 
 	addTizenToTiAppXml: function (tizenAppId) {		
-		this.logger.info('Processing tiapp.xml for tizen node');
+		this.logger.info(__('Processing tizen section of tiapp.xml'));
 		var XMLSerializer = xmldom.XMLSerializer,
 			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
 			doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml'),
-			parsedTiXml = doc.documentElement;
+			parsedTiXml = doc.documentElement,
 			tizenTagFound = false, //check for Tizen section
-			node = parsedTiXml.firstChild;
+			node = parsedTiXml.firstChild,
+			existingId,
+			confNode;
 
 		while (node) {
 			if (node.nodeType == 1 && node.tagName == 'tizen') {
 				//tizen section exists, nothing to do
 				tizenTagFound = true;
-				var existingId =  node.getAttribute('appid');
-				this.logger.info('<tizen> node. tizen app id:' +  existingId);
+				existingId =  node.getAttribute('appid');
+				this.logger.info(__('<tizen> node. tizen app id: %s', existingId));
 				if (existingId) {
 					this.tiapp.tizen.appid = existingId;
+				}
+				confNode = node.firstChild;
+				while (confNode) {
+					if (tizenConfigXmlSources) {
+						tizenConfigXmlSources = confNode.toString() + tizenConfigXmlSources;
+					} else {
+						tizenConfigXmlSources = confNode.toString();
+					}
+					confNode = confNode.nextSibling;
 				}
 			}
 			node = node.nextSibling;
 		}
-
 		if (tizenTagFound) {
-			this.logger.info('<tizen> node available.');
+			this.logger.info(__('tiapp.xml does not contains <tizen> node. Using default values'));
 			return;
 		}
 
-		this.logger.info('<tizen> node absent in tiapp.xml, adding it.');		
-		
+		//<tizen> node absent in tiapp.xml, adding it.		
 		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'">' + defaultPrivilegesList + '</tizen>',
 			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
 			result;
@@ -1077,8 +1088,6 @@ build.prototype = {
 	},
 
 	createConfigXml: function () {
-		this.logger.info(__('createConfigXml'));		
-
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
 		if (!this.tiapp.url || 0 === this.tiapp.url) {
 			templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);
@@ -1087,7 +1096,7 @@ build.prototype = {
 		}
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%FEATURES_LIST%%', defaultPrivilegesList);
+		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
@@ -1161,28 +1170,26 @@ build.prototype = {
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
 		
 		var deps = this.dependenciesMap[dep[1]];
-		for (var i = 0, l = deps.length; i < l; i++) {
-			dep = deps[i];
-			ref = mid.split('/');
-			ref.pop();
-			ref = ref.join('/') + '/';
-			this.parseModule(dep, ref);
+		if(deps){
+			for (var i = 0, l = deps.length; i < l; i++) {
+				dep = deps[i];
+				ref = mid.split('/');
+				ref.pop();
+				ref = ref.join('/') + '/';
+				this.parseModule(dep, ref);
+			}
+			this.moduleMap[mid] = deps;
 		}
-		this.moduleMap[mid] = deps;
 	},
 
-	wgtPackaging7z: function(logger, callback) {
+	wgtPackaging7z: function (logger, callback) {
 		logger.info(__('Packaging application into wgt'));
-
-		logger.info(__('wgtPackaging7z  buildDir "%s" ', this.buildDir));
-		var packer = require('child_process');
-
 		// Create the tasks to unzip each entry in the zip file
 		var child,
-		stdout = '',
-		stderr = '';
+			stdout = '',
+			stderr = '';
 
-		child = packer.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
+		child = runner.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
 		child.stdout.on('data', function (data) {
 			stdout += data.toString();
 		});
@@ -1215,12 +1222,11 @@ build.prototype = {
 		});		
 	},
 
-	wgtPackagingLinux : function(logger, callback) {
-		logger.info('Packaging application into wgt');
-		var packer = require('child_process'),
-			cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
-		console.log('zip cmd: ' + cmdzip);
-		packer.exec(
+	wgtPackagingLinux : function (logger, callback) {
+		logger.info(__('Packaging application into wgt'));
+		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
+		console.log(__('zip cmd: %s', cmdzip));
+		runner.exec(
 			cmdzip,
 			{ cwd: this.buildDir },
 			function (err, stdout, stderr) {
@@ -1234,123 +1240,71 @@ build.prototype = {
 			}
 		);			
 	},
-	uninstallWidgetForce: function(logger, callback) {
-		if (devId) {
-			var runner = require("child_process"),
-				pathToCmd;
-			if (process.platform === 'win32') {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall.bat');
-			} else {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-uninstall');
-			}
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + devId;;
-			logger.info('Forsing widget uninstall cmd: ' + cmd);
-			runner.exec(
-				cmd,
-				function (err, stdout, stderr) {
-					logger.info(stdout);
-					if (err != null){
-						logger.info('wgt uninstall failed');
-						logger.info(stderr);
-					} else {
-						logger.info('UnInstalled wgt: success');
-					}
-					callback();
-			});
-		} else {
-			callback();
-		}
-	},
 
-	installOnDevice : function(logger, callback) {
-		if (devId && devId != 'none') {
-			var runner = require("child_process"),
+	executeTizenCLICommand : function (command, params, logger, callback) {
+		var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', process.platform === 'win32' ? command + '.bat' : command) + ' ' +params;
+		logger.info(__('Executing: %s', pathToCmd));
+		runner.exec(
 				pathToCmd,
-				pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			if (process.platform === 'win32') {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install.bat');
-			} else {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-install');
-			}			
-			var cmd = pathToCmd + ' -t 10 ' + ' --widget="' + pathToWgt + '"' + ' --device=' + devId;
-			logger.info('install cmd: ' + cmd);
-			runner.exec(
-				cmd,
 				function (err, stdout, stderr) {
 					logger.info(stdout);
 					if (err != null) {
-						logger.info('wgt installation failed');
+						logger.info(__('CLI command failed with error output:'));
 						logger.info(stderr);
-					} else {
-						logger.info('Installed on device: ' + pathToWgt);
-					}
-					callback();
-			});	
-		} else {
-			callback();
-		}		
-	},
-
-	runOnDevice : function(logger, callback) {		
-		if (this.runDevice && this.runDevice != 'none') {
-			var runner = require("child_process");
-			var pathToCmd;
-			if (process.platform === 'win32') {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run.bat');
-			} else {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-run');
-			}
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice;
-			logger.info('install cmd: ' + cmd);
-			runner.exec(
-				cmd,
-				function (err, stdout, stderr) {
-					logger.info(stdout);
-					if (err != null) {
-						logger.info('wgt installation failed');
-						logger.info(stderr);
-					} else {
-						logger.info('Run on device:' + pathToWgt);
-					}
-					callback();
-			});	
-		} else {
-			callback();
-		}		
-	},
-
-	debugOnDevice : function(logger, callback) {
-		if (this.debugDevice && this.debugDevice != 'none') {
-			var runner = require("child_process");
-			var pathToWgt = path.join(this.buildDir, 'tizenapp.wgt');
-			var pathToCmd;
-			if (process.platform === 'win32') {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug.bat');
-			} else {
-				pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', 'web-debug');
-			}
-			var cmd = pathToCmd + ' -t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.debugDevice;
-			logger.info('install cmd: ' + cmd);
-			runner.exec(
-				cmd,
-				function (err, stdout, stderr) {
-					logger.info(stdout);
-					if (err != null) {
-						logger.info('wgt installation failed');
-						logger.info(stderr);
-					} else {
-						logger.info('Debug initiated for: ' + pathToWgt);
 					}
 					callback();
 			});
+	},
+
+	uninstallWidgetForce: function (logger, callback) {
+		if (devId) {
+			this.executeTizenCLICommand(
+				'web-uninstall',
+				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + devId,
+				logger,
+				callback);
 		} else {
 			callback();
 		}
 	},
 
-	detectTizenSDK: function(logger, next) {
+	installOnDevice : function (logger, callback) {
+		if (devId && devId != 'none') {
+			this.executeTizenCLICommand(
+				'web-install',
+				'-t 10 ' + ' --widget="' + path.join(this.buildDir, 'tizenapp.wgt') + '"' + ' --device=' + devId,
+				logger,
+				callback);
+		} else {
+			callback();
+		}		
+	},
+
+	runOnDevice : function (logger, callback) {		
+		if (this.runDevice && this.runDevice != 'none') {
+			this.executeTizenCLICommand(
+				'web-run',
+				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
+				logger,
+				callback);
+		} else {
+			callback();
+		}		
+	},
+
+	debugOnDevice : function (logger, callback) {
+		if (this.debugDevice && this.debugDevice != 'none') {			
+			this.executeTizenCLICommand(
+				'web-debug',
+				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.debugDevice,
+				logger,
+				callback);
+		} else {
+			callback();
+		}
+	},
+
+	detectTizenSDK: function (logger, next) {
 		var self = this;
 		if (process.platform === 'win32') {
 			//Detect Tizen SDK
@@ -1359,25 +1313,23 @@ build.prototype = {
 			// key "Local AppData" has path e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpathirst line from it 
 			//"C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath
 			var keyvalue = null;
-			var reg = require('child_process');
-			reg.exec(
+			runner.exec(
 				'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
 				function (err, stdout, stderr) {
-
 					if (stdout !== null && (typeof stdout != 'undefined')) {
-						var arr = stdout.split(" ");
+						var arr = stdout.split(' ');
 						keyvalue = arr[arr.length-1];//last parameter is path
 						keyvalue = keyvalue.slice(0, -4);
 						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-						logger.info(__('reading file: ' + keyvalue));
+						logger.info(__('Reading Tizen SDK location from: ' + keyvalue));
 						fs.readFile(keyvalue, 'utf8', function (err,data) {
 							if (err) {
 								logger.info(err);
 								return;
 							}
-							var arr = data.split("=");
+							var arr = data.split('=');
 							self.tizenSdkDir =  arr[1];
-							logger.info("Tizen SDK found at: " + self.tizenSdkDir);
+							logger.info('Tizen SDK found at: ' + self.tizenSdkDir);
 							next(null, 'ok');
 						});
 					} else {
@@ -1396,9 +1348,9 @@ build.prototype = {
 							next('Failed to find Installed Tizen SDK for Linux', 'failed');
 							return;
 						}
-						var arr = data.split("=");
+						var arr = data.split('=');
 						self.tizenSdkDir =  arr[1];
-						logger.info("Tizen SDK found at: " + self.tizenSdkDir);
+						logger.info(__('Tizen SDK found at: %s', self.tizenSdkDir));
 						next(null, 'ok');
 					});
 			} else {
@@ -1407,7 +1359,7 @@ build.prototype = {
 		}
 	},
 
-	find7za: function(logger) {
+	find7za: function (logger) {
 		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
 		if (fs.existsSync(zippath)) {
 			return zippath;
@@ -1416,11 +1368,10 @@ build.prototype = {
 		}
 	},
 
-	signTizenApp: function(logger, callback) {
-		logger.info(__('signing application in  "%s" ', this.buildDir));
-		var packer = require('child_process');
+	signTizenApp: function (logger, callback) {
+		// sign Tizen application with out custom signer utility. 
 		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
-		logger.info("this.tizenCert = " + this.tizenCert);
+		logger.info(__('Signing application in  "%s" ', this.buildDir));
 		if (this.tizenCert) {
 			//use user`s certificate to sign application
 			cmdSign = cmdSign + ' -cert ' + this.tizenCert;
@@ -1439,10 +1390,10 @@ build.prototype = {
 		}
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 
-		packer.exec(
+		runner.exec(
 			cmdSign,
 			function (err, stdout, stderr) {				
-				if (err != null){
+				if (err != null) {
 					logger.error('Signing failed ');
 					logger.error(stderr);
 				}
@@ -1500,7 +1451,6 @@ function randomString(length) {
     if (! length) {
         length = Math.floor(Math.random() * chars.length);
     }
-
     for (var i = 0; i < length; i++) {
         str += chars[Math.floor(Math.random() * chars.length)];
     }

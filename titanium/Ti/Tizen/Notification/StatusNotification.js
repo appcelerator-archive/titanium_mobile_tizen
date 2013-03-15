@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare, Notification) {
-	return declare('Ti.Tizen.Notification.StatusNotification', Notification, {
+	return declare('Tizen.Notification.StatusNotification', Notification, {
 		constructor: function(args) {
 			if(args.toString() === '[object StatusNotification]') {
 				this._obj = args;

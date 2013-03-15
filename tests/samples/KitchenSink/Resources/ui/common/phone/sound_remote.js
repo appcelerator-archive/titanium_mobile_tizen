@@ -75,7 +75,7 @@ function sound_remote() {
 	win.add(pauseButton);
 	win.add(progressLabel);
 	win.add(stateLabel);
-	if (Ti.Platform.name != 'android' && Ti.Platform.name != 'tizen') {
+	if (Ti.Platform.name != 'android' && Ti.Platform.osname != 'tizen') {
 		win.add(streamSize1);
 		win.add(streamSize2);
 		win.add(streamSize3);
@@ -126,7 +126,7 @@ function sound_remote() {
 	streamButton.addEventListener('click',function()
 	{
 		//Tizen
-		if ( Ti.Platform.name === 'tizen') {
+		if ( Ti.Platform.osname === 'tizen') {
 			start_stop() ;
 		} else {
 		//Other platform ???	
@@ -157,7 +157,7 @@ function sound_remote() {
 	pauseButton.addEventListener('click', function()
 	{
 		//Tizen
-		if ( Ti.Platform.name === 'tizen') {
+		if ( Ti.Platform.osname === 'tizen') {
 			pause_resume();
 		} else {
 		//Other platform ???	
@@ -194,7 +194,7 @@ function sound_remote() {
 	streamer.addEventListener('change',function(e)
 	{
 		
-		if ( Ti.Platform.name === 'tizen') {
+		if ( Ti.Platform.osname === 'tizen') {
 			change_state(e);
 		} else {
 		//Other platform ???	
@@ -222,7 +222,7 @@ function sound_remote() {
 		// restore previous idle state when closed
 		Ti.App.idleTimerDisabled = idleTimer;
 		
-		if ( Ti.Platform.name === 'tizen') {
+		if ( Ti.Platform.osname === 'tizen') {
 			streamer.release();
 		}
 	});

@@ -7,11 +7,13 @@
 
 module.exports = new function() {
 	var finish,
-		valueOf;
-	
+		valueOf,
+		alarmObj;
+
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
+		alarmObj = require('Ti/Tizen/Alarm');
 	}
 
 	this.name = 'alarm';
@@ -28,30 +30,30 @@ module.exports = new function() {
 			tizenArr,
 			date = new Date(2012, 12, 21, 8, 0);
 
-		Ti.Tizen.Alarm.removeAll();
-		
+		alarmObj.removeAll();
+
 		// Alarm in 10 seconds (relative)
-		alarm = Ti.Tizen.Alarm.createAlarmRelative({
+		alarm = alarmObj.createAlarmRelative({
 			delay: 10
 		});
-		
-		valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmRelative).shouldBeTrue();
 
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
-		
+		valueOf(testRun, alarm instanceof Tizen.Alarm.AlarmRelative).shouldBeTrue();
+
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
+
 		// Set an alarm on December 21st 2012 08:00
-		alarm = Ti.Tizen.Alarm.createAlarmAbsolute({ 
+		alarm = alarmObj.createAlarmAbsolute({ 
 			date: date
 		});
-		
-		valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
 
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
-		
-		tizenArr = Ti.Tizen.Alarm.getAll();
-		
-		valueOf(testRun, (tizenArr[0] instanceof Ti.Tizen.Alarm.AlarmAbsolute || tizenArr[0] instanceof Ti.Tizen.Alarm.AlarmRelative)).shouldBeTrue();
-		
+		valueOf(testRun, alarm instanceof Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
+
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
+
+		tizenArr = alarmObj.getAll();
+
+		valueOf(testRun, (tizenArr[0] instanceof Tizen.Alarm.AlarmAbsolute || tizenArr[0] instanceof Tizen.Alarm.AlarmRelative)).shouldBeTrue();
+
 		valueOf(testRun, tizenArr.length).shouldBe(2);
 
 		finish(testRun);
@@ -66,39 +68,39 @@ module.exports = new function() {
 			absolute_id,
 			date = new Date(2012, 12, 21, 8, 0);
 
-		Ti.Tizen.Alarm.removeAll();		
+		alarmObj.removeAll();
 
 		// Alarm in 10 seconds (relative)
-		alarm = Ti.Tizen.Alarm.createAlarmRelative({
+		alarm = alarmObj.createAlarmRelative({
 			delay: 10
 		});
 
 		// Set an alarm on December 21st 2012 08:00
-		alarm1 = Ti.Tizen.Alarm.createAlarmAbsolute({ 
+		alarm1 = alarmObj.createAlarmAbsolute({ 
 			date: date
 		});
 
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
-		Ti.Tizen.Alarm.add(alarm1, 'http://tizen.org/alarm-clock');
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
+		alarmObj.add(alarm1, 'http://tizen.org/alarm-clock');
 
 		relative_id = alarm.id;
 		absolute_id = alarm1.id;
 
 		valueOf(testRun, function() {
-			alarm2 = Ti.Tizen.Alarm.get(relative_id);
-			alarm3 = Ti.Tizen.Alarm.get(absolute_id);
+			alarm2 = alarmObj.get(relative_id);
+			alarm3 = alarmObj.get(absolute_id);
 		}).shouldNotThrowException();
 
-		valueOf(testRun, alarm2 instanceof Ti.Tizen.Alarm.AlarmRelative).shouldBeTrue();
-		valueOf(testRun, alarm3 instanceof Ti.Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
+		valueOf(testRun, alarm2 instanceof Tizen.Alarm.AlarmRelative).shouldBeTrue();
+		valueOf(testRun, alarm3 instanceof Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
 
-		Ti.Tizen.Alarm.removeAll();
+		alarmObj.removeAll();
 
 		valueOf(testRun, function() {
-			var alarmTmp = Ti.Tizen.Alarm.get(absolute_id);
-			valueOf(testRun, alarm instanceof Ti.Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
+			var alarmTmp = alarmObj.get(absolute_id);
+			valueOf(testRun, alarm instanceof Tizen.Alarm.AlarmAbsolute).shouldBeTrue();
 			
-			alarmTmp = Ti.Tizen.Alarm.get(relative_id);
+			alarmTmp = alarmObj.get(relative_id);
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -112,28 +114,28 @@ module.exports = new function() {
 			absolute_id,
 			date = new Date(2012, 12, 21, 8, 0);
 		
-		Ti.Tizen.Alarm.removeAll();
-		alarmArr = Ti.Tizen.Alarm.getAll();
+		alarmObj.removeAll();
+		alarmArr = alarmObj.getAll();
 		valueOf(testRun, alarmArr.length).shouldBe(0);
 
 		//Alarm in 10 seconds (relative)
-		alarm = Ti.Tizen.Alarm.createAlarmRelative({
+		alarm = alarmObj.createAlarmRelative({
 			delay: 10
 		});
-		alarm1 = Ti.Tizen.Alarm.createAlarmAbsolute({ 
+		alarm1 = alarmObj.createAlarmAbsolute({ 
 			date: date
 		});
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
-		Ti.Tizen.Alarm.add(alarm1, 'http://tizen.org/alarm-clock');
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
+		alarmObj.add(alarm1, 'http://tizen.org/alarm-clock');
 		relative_id = alarm.id;
 		absolute_id = alarm1.id;
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Alarm.remove(absolute_id);	
+			alarmObj.remove(absolute_id);
 		}).shouldNotThrowException();
 
 		valueOf(testRun, function() {
-			Ti.Tizen.Alarm.remove(absolute_id);
+			alarmObj.remove(absolute_id);
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -142,15 +144,15 @@ module.exports = new function() {
 	this.alarmRelative = function(testRun) {
 		var alarm,
 			alarmId,
-			delay = 2 * Ti.Tizen.Alarm.PERIOD_MINUTE,
-			period = Ti.Tizen.Alarm.PERIOD_HOUR;
+			delay = 2 * alarmObj.PERIOD_MINUTE,
+			period = alarmObj.PERIOD_HOUR;
 
-		Ti.Tizen.Alarm.removeAll();
-		alarm = Ti.Tizen.Alarm.createAlarmRelative({
+		alarmObj.removeAll();
+		alarm = alarmObj.createAlarmRelative({
 			delay: delay,
 			period: period
 		});
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
 		alarmId = alarm.id;
 
 		valueOf(testRun, function() {
@@ -158,7 +160,7 @@ module.exports = new function() {
 		}).shouldNotThrowException();
 		valueOf(testRun, alarm.delay).shouldBe(delay);
 
-		alarm = Ti.Tizen.Alarm.get(alarmId);
+		alarm = alarmObj.get(alarmId);
 
 		valueOf(testRun, function() {
 			var fromReaming = alarm.getRemainingSeconds();
@@ -169,7 +171,7 @@ module.exports = new function() {
 	}
 
 	this.alarmAbsolute = function(testRun) {
-		Ti.Tizen.Alarm.removeAll();
+		alarmObj.removeAll();
 
 		var alarm,
 			alarmId,
@@ -178,24 +180,24 @@ module.exports = new function() {
 			fromReaming,
 			date = new Date(),
 			time = date.getTime() + 60000,
-			period = Ti.Tizen.Alarm.PERIOD_HOUR;
-		
+			period = alarmObj.PERIOD_HOUR;
+
 		date.setTime(time);
-		alarm = Ti.Tizen.Alarm.createAlarmAbsolute({
+		alarm = alarmObj.createAlarmAbsolute({
 			date: date, period: period
-		});		
-		Ti.Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
+		});
+		alarmObj.add(alarm, 'http://tizen.org/alarm-clock');
 		alarmId = alarm.id;
 		remaining = alarm.getNextScheduledDate();
 
 		valueOf(testRun, remaining.toDateString()).shouldBe(alarm.date.toDateString());
 
-		alarmFrom = Ti.Tizen.Alarm.get(alarmId),
+		alarmFrom = alarmObj.get(alarmId),
 		fromReaming = alarmFrom.getNextScheduledDate();
 
 		valueOf(testRun, fromReaming.toDateString()).shouldBe(date.toDateString());
 
-		Ti.Tizen.Alarm.removeAll();
+		alarmObj.removeAll();
 		finish(testRun);
 	}
 }

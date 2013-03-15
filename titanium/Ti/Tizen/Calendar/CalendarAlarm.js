@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Calendar.CalendarAlarm', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, calendarHelper) {
+	return declare('Ti.Tizen.Calendar.CalendarAlarm', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarAlarm]') {
 				this._obj = args;
@@ -7,7 +7,12 @@ define(['Ti/_/declare'], function(declare) {
 				if (args.hasOwnProperty('before') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
 					this._obj = new tizen.CalendarAlarm(args.before, args.method, args.description);
 				} else if (args.hasOwnProperty('absoluteDate') && args.hasOwnProperty('method') && args.hasOwnProperty('description')) {
-					this._obj = new tizen.CalendarAlarm(args.absoluteDate, args.method, args.description);
+					var alarmInitDict = args,
+						absoluteDate = args.absoluteDate;
+
+					alarmInitDict.absoluteDate = calendarHelper.createTZDate(absoluteDate);
+
+					this._obj = new tizen.CalendarAlarm(alarmInitDict.absoluteDate, alarmInitDict.method, alarmInitDict.description);
 				} else {
 					Ti.API.error('Constructor with such parameters does not exist in CalendarAlarm.');
 				}
@@ -17,10 +22,11 @@ define(['Ti/_/declare'], function(declare) {
 		properties: {
 			absoluteDate: {
 				get: function() {
-					return this._obj.absoluteDate;
+					var absoluteDate = this._obj.absoluteDate;
+					return calendarHelper.createDate(absoluteDate);
 				},
 				set: function(value) {
-					this._obj.absoluteDate = value;
+					this._obj.absoluteDate = calendarHelper.createTZDate(value);
 				}
 			},
 			before: {
@@ -46,8 +52,8 @@ define(['Ti/_/declare'], function(declare) {
 				set: function(value) {
 					this._obj.description = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });

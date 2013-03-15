@@ -1,5 +1,5 @@
 define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
-	return lang.setObject('Ti.Tizen.Notification', Evented, {
+	return lang.setObject('Tizen.Notification', Evented, {
 
 		constants: {
 			NOTIFICATION_TYPE_STATUS: 'STATUS',
@@ -48,7 +48,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 		},
 
 		createStatusNotification: function(args) {
-			return new StatusNotification(args); //Need to add this module StatusNotification in define, with path Ti/Tizen/Notification/StatusNotification
+			return new StatusNotification(args);
 		},
 	});
 });

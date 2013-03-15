@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Application.ApplicationContext
+name: Tizen.Application.ApplicationContext
 summary: This interface defines the information available about a running application. 
 extends: Titanium.Module
 platforms: [tizen]

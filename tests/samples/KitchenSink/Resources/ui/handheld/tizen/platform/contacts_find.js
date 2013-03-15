@@ -73,7 +73,7 @@ function find_contacts(args) {
 						wnd = new  (require('ui/handheld/tizen/platform/contact_edit'))({title: 'Edit contact details', contactId: persons[index].id});
 						args.containingTab.open(wnd, {animated: true});
 						contactsTable.data = [];
-						searchInput.value = "";						
+						searchInput.value = "";
 					});
 				})(i);
 				

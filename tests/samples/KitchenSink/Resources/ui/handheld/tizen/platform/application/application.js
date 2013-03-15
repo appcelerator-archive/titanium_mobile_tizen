@@ -6,7 +6,8 @@ function tizen_application(_args) {
 				{ title: 'Running App Info', hasChild: true, test: 'ui/handheld/tizen/platform/application/appscontext' }, 
 				{ title: 'Exit / Hide / Launch', hasChild: true, test: 'ui/handheld/tizen/platform/application/exit_hide_launch' }
 			]
-		});
+		}),
+		appObj = require('Ti/Tizen/Application');
 
 	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {
@@ -31,7 +32,7 @@ function tizen_application(_args) {
 		if (e.rowData && e.rowData.app_id) {
 			var appInfo;
 			try {
-				appInfo = Ti.Tizen.Application.getAppInfo(e.rowData.app_id);
+				appInfo = appObj.getAppInfo(e.rowData.app_id);
 			} catch (error) {
 				_showErrorDialog(error, 'Could not call tizen.application.getAppInfo function');
 				return;
