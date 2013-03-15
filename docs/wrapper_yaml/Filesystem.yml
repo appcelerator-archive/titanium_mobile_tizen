@@ -61,36 +61,36 @@ examples:
         var documentsDir;
         function onsuccess(files) {
            for(var i = 0; i < files.length; i++) {
-             Ti.API.info("File Name is " + files[i].name); // displays file name
+             Titanium.API.info("File Name is " + files[i].name); // displays file name
            }
 
            var testFile = documentsDir.createFile("test.txt");
 
            if (testFile != null) {
              testFile.openStream(
-               Ti.Tizen.Filesystem.FILE_MODE_W,
+               Tizen.Filesystem.FILE_MODE_W,
                function(fs){
                  fs.write("HelloWorld");
                  fs.close();
                }, function(e){
-                 Ti.API.info("Error " + e.message);
+                 Titanium.API.info("Error " + e.message);
                }, "UTF-8"
              );
            }
         }
 
         function onerror(error) {
-           Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+           Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
         }
 
-        Ti.Tizen.Filesystem.resolve(
+        Tizen.Filesystem.resolve(
            'documents',
            function(dir){
              documentsDir = dir;
              dir.listFiles(onsuccess,onerror);
            }, function(e){
-             Ti.API.info("Error" + e.message);
-           }, Ti.Tizen.Filesystem.FILE_MODE_RW
+             Titanium.API.info("Error" + e.message);
+           }, Tizen.Filesystem.FILE_MODE_RW
         );
 methods:
   - name: resolve
@@ -107,14 +107,14 @@ methods:
             - wgt-private: Describes a private folder in which a widget can store information. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT access the information stored there.
             - wgt-private-tmp: Describes a temporary, private folder in which a widget can store data that is available during one widget execution cycle. Content of this folder MAY be removed from this directory when the widget is closed or the Web Runtime is restarted. This folder MUST be accessible only to the widget. Other widgets or applications MUST NOT have access to it.
 
-        The mode parameter specifies whether the resulting File object has read-only access (Ti.Tizen.Filesystem.FILE_MODE_R access),
-        read and write access (Ti.Tizen.Filesystem.FILE_MODE_RW access), append access (Ti.Tizen.Filesystem.FILE_MODE_A access), or write access (Ti.Tizen.Filesystem.FILE_MODE_W access) to the root location containing directory tree.
+        The mode parameter specifies whether the resulting File object has read-only access (<Tizen.Filesystem.FILE_MODE_R> access),
+        read and write access (<Tizen.Filesystem.FILE_MODE_RW> access), append access (<Tizen.Filesystem.FILE_MODE_A> access), or write access (<Tizen.Filesystem.FILE_MODE_W> access) to the root location containing directory tree.
         Permission for the requested access is obtained from the security framework.
         Once the resulting File object has access, access is inherited by any other File objects derived
         from this instance without any further reference to the security framework, as noted in descriptions of certain methods of File.
 
         The ErrorCallback is launched with these error types:
-            - InvalidValuesError: If any of the input parameters contain an invalid value. For example, the mode is not valid (that is not Ti.Tizen.Filesystem.FILE_MODE_R, Ti.Tizen.Filesystem.FILE_MODE_RW, Ti.Tizen.Filesystem.FILE_MODE_A, or Ti.Tizen.Filesystem.FILE_MODE_W).
+            - InvalidValuesError: If any of the input parameters contain an invalid value. For example, the mode is not valid (that is not <Tizen.Filesystem.FILE_MODE_R>, <Tizen.Filesystem.FILE_MODE_RW>, <Tizen.Filesystem.FILE_MODE_A>, or <Tizen.Filesystem.FILE_MODE_W>).
             - NotFoundError: The location input argument does not correspond to a valid location.
             - UnknownError: In any other error case.
     parameters:
@@ -126,25 +126,25 @@ methods:
         type: Callback<Titanium.Tizen.Filesystem.File>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
       - name: mode
         summary: |
-            Optional string of value Ti.Tizen.Filesystem.FILE_MODE_R to obtain read-only access,
-            Ti.Tizen.Filesystem.FILE_MODE_RW to obtain read and write access, Ti.Tizen.Filesystem.FILE_MODE_A to obtain append access,
-            or Ti.Tizen.Filesystem.FILE_MODE_W to obtain write access to all files and directories that can be reached from the File object passed to onsuccess.
-            Defaults to Ti.Tizen.Filesystem.FILE_MODE_RW if absent or null.
+            Optional string of value <Tizen.Filesystem.FILE_MODE_R> to obtain read-only access,
+            <Tizen.Filesystem.FILE_MODE_RW> to obtain read and write access, <Tizen.Filesystem.FILE_MODE_A> to obtain append access,
+            or <Tizen.Filesystem.FILE_MODE_W> to obtain write access to all files and directories that can be reached from the File object passed to onsuccess.
+            Defaults to <Tizen.Filesystem.FILE_MODE_RW> if absent or null.
         type: String
         optional: true
     examples:
        - example: |
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                 'images',
                 function(dir) {
-                   Ti.API.info("Mount point Name is " +  dir.path);
+                   Titanium.API.info("Mount point Name is " +  dir.path);
                 }, function(e) {
-                   Ti.API.info("Error: " + e.message);
-                }, Ti.Tizen.Filesystem.FILE_MODE_R
+                   Titanium.API.info("Error: " + e.message);
+                }, Tizen.Filesystem.FILE_MODE_R
              );
   - name: getStorage
     summary: Gets information about a storage based on its label.Gets information about a storage based on its label.
@@ -166,7 +166,7 @@ methods:
         type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
       - name: onerror
         summary: Called if an error occurred.
-        type: Callback<WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -174,9 +174,9 @@ methods:
                // Do something
             }
             function onStorageError(e) {
-               Ti.API.info("Storage not found!" + e.message);
+               Titanium.API.info("Storage not found!" + e.message);
             }
-            Ti.Tizen.Filesystem.getStorage("MMC", onStorage, onStorageError);
+            Tizen.Filesystem.getStorage("MMC", onStorage, onStorageError);
   - name: listStorages
     summary: Lists the available storages on the device.
     description: |
@@ -191,19 +191,19 @@ methods:
         type: Callback<Array<Titanium.Tizen.Filesystem.FileSystemStorage>>
       - name: onerror
         summary: Called if an error occurred.
-        type: Callback<WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
             function alertForCorruptedRemovableDrives(storages) {
                  for (var i = 0; i < storages.length; i++) {
-                     if (storages[i].type != "EXTERNAL")
+                     if (storages[i].type != Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL)
                          continue;
-                     if (storages[i].state == "UNMOUNTABLE")
-                         Ti.API.info("External drive " + storages[i].label + " is corrupted.");
+                     if (storages[i].state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE)
+                         Titanium.API.info("External drive " + storages[i].label + " is corrupted.");
                  }
              }
-             Ti.Tizen.Filesystem.listStorages(alertForCorruptedRemovableDrives);
+             Tizen.Filesystem.listStorages(alertForCorruptedRemovableDrives);
   - name: addStorageStateChangeListener
     summary: Subscribes to notifications when a storage state changes.
     description: |
@@ -223,17 +223,17 @@ methods:
         type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
       - name: onerror
         summary: To be invoked in case of error during the watch process.
-        type: Callback<WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
             var watchID;
             function onStorageStateChanged(storage) {
-                if (storage.state == "MOUNTED")
-                    Ti.API.info("Storage " + storage.label + " was added!");
+                if (storage.state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
+                    Titanium.API.info("Storage " + storage.label + " was added!");
                 }
 
-            watchID = Ti.Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
+            watchID = Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
   - name: removeStorageStateChangeListener
     summary: Unsubscribes a storage watch operation.
     description: |
@@ -247,12 +247,12 @@ methods:
       - example: |
             var watchID;
              function onStorageStateChanged(storage) {
-                 if (storage.state == "MOUNTED")
-                     Ti.API.info("Storage " + storage.label + " was added!");
-                 Ti.Tizen.filesystem.removeStorageStateChangeListener(watchID);
+                 if (storage.state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
+                     Titanium.API.info("Storage " + storage.label + " was added!");
+                 Tizen.filesystem.removeStorageStateChangeListener(watchID);
              }
 
-             watchID = Ti.Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
+             watchID = Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
 
 properties:
 

@@ -26,10 +26,10 @@ methods:
         type: Number
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             
             adapter.getDevice("12:34:56:78:9A:BC", function(device) {
-                if (device.deviceClass.hasService(tizen.bluetooth.deviceService.POSITIONING)) {
+                if (device.deviceClass.hasService(Tizen.Bluetooth.BluetoothClassDeviceService.POSITIONING)) {
                     console.log("Device supports Positioning service");
                 }
             }, function(e) {
@@ -40,20 +40,20 @@ properties:
   - name: major
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
-        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
+        The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
     type: Number
     permission: read-only
 
   - name: minor
     summary: |
       The minor device class. The value is one of the constants defined for this type. 
-      The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
+      The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
     type: String
     permission: read-only
 
   - name:  services
     summary: |
         The services provided by this device.The value is one of the constants defined for this type. 
-        The supported major types are: <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Titanium.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
+        The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
     type: Array<Number>
     permission: read-only

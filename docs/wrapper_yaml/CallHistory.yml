@@ -83,7 +83,7 @@ methods:
             // Creates a filter to find all video calls (including cellular, skype, etc)
             // The filter matches exactly any features from the "features" array
             var tfilter = tizenObj.createAttributeFilter({attributeName: "features",
-                                                          matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,"EXACTLY",
+                                                          matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
                                                           matchValue: "VIDEOCALL"});
             // Creates composite filter
             var ifilter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION,
@@ -126,7 +126,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
     examples:
       - example: |
             var callhistoryObj = require('Ti/Tizen/Callhistory');

@@ -119,6 +119,7 @@ methods:
       - example: |
             var alarmObj = require("Ti/Tizen/Alarm");
             var date = new Date(2012, 0, 1, 8, 0);
+            var calendarObj = require("Ti/Tizen/Calendar");
             // Sets an alarm on January 1st 2012 08:00
             var alarm1 = alarmObj.createAlarmAbsolute({date: date});
             alarmObj.add(alarm1, "org.tizen.clock");
@@ -126,7 +127,7 @@ methods:
             var alarm2 = alarmObj.createAlarmAbsolute({date: date, period: 2 * alarmObj.PERIOD_DAY});
             alarmObj.add(alarm2, "org.tizen.clock");
             // Sets an alarm occurring on every Saturday and Sunday, at 08:00, starting from January 1st 2012
-            var alarm3 = alarmObj.createAlarmAbsolute({date: date, period: ["SA", "SU"]});
+            var alarm3 = alarmObj.createAlarmAbsolute({date: date, period: [calendarObj.BY_DAY_VALUE_SA, calendarObj.BY_DAY_VALUE_SU]});
             alarmObj.add(alarm3, "org.tizen.clock");
  
 properties:

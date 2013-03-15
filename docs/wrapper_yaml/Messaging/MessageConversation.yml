@@ -17,8 +17,8 @@ properties:
 
   - name: type
     summary: |
-        The type of the given conversation. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of the given conversation. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 

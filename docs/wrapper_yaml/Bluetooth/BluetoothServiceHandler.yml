@@ -20,11 +20,11 @@ methods:
 
       - name: errorCallback
         summary:   Method to be invoked in case of failure (to unregister).
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             
             var chatServiceHandler = null;
 
