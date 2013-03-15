@@ -153,12 +153,13 @@ methods:
             }
 
   - name: createCalendarTask
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarTask 
+    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarTask
     returns:
         type: Titanium.Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
         type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
+        optional: true
   
   - name: createCalendarEvent
     summary: Creates an instance of Titanium.Tizen.Calendar.CalendarEvent
@@ -167,6 +168,7 @@ methods:
     parameters:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
+        optional: true
                 
   - name: createCalendarAttendee
     summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
@@ -539,18 +541,15 @@ platforms: [tizen]
 properties:
   - name: dueDate 
     type: Titanium.Tizen.Time.TZDate
-    summary: (optional) An attribute to store the due date and time for completing a task.
-    optional: true
+    summary: An attribute to store the due date and time for completing a task.
     
   - name: completedDate
     type: Titanium.Tizen.Time.TZDate
-    summary: (optional) An attribute to record the date and time when an task is completed.
-    optional: true
+    summary: An attribute to record the date and time when an task is completed.
         
   - name: progress
     type: Number
-    summary: (optional) An attribute to denote the percent of completion of a task.
-    optional: true
+    summary: An attribute to denote the percent of completion of a task.
 
 ---
 name: CalendarEventInit
@@ -611,6 +610,17 @@ properties:
   - name: uri 
     summary: An attribute to store the URI for the attendee.
     type: STRING
+
+  - name: attendeeInitDict
+    summary: (optional) The properties of a CalendarAttendee, to pass to its constructor.
+    type: Dictionary<AttendeeInitDict>
+    optional: true
+
+---
+name: AttendeeInitDict
+summary: The properties of a CalendarAttendee, to pass to its constructor.
+platforms: [tizen]
+properties: 
 
   - name: name
     summary: An attribute to store the name of an attendee.
@@ -682,6 +692,27 @@ summary: |
     The properties of a CalendarRecurrenceRule to pass to its creator.
     
     For more information about the members, see CalendarRecurrenceRule interface.
+platforms: [tizen]
+properties: 
+  - name: frequency
+    summary: |
+         An attribute to store the frequency of a recurrence rule.
+         This property corresponds to FREQ in RFC 5545.
+    description: |
+        Can be set to one of the following constants:
+          - RECURRENTCE_RULE_FREQUENCY_DAILY
+          - RECURRENTCE_RULE_FREQUENCY_WEEKLY
+          - RECURRENTCE_RULE_FREQUENCY_MONTHLY
+          - RECURRENTCE_RULE_FREQUENCY_YEARLY
+    type: String
+
+  - name: ruleInitDict
+    summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
+    type: Dictionary<CalendarRecurrenceRuleInitDict>
+
+---
+name: CalendarRecurrenceRuleInitDict
+summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
 platforms: [tizen]
 properties:
  

@@ -86,7 +86,7 @@ properties:
     type: String
 
   - name: options
-    summary: Provides specifying message attributes upon message creation.
+    summary: (optional) Provides specifying message attributes upon message creation.
     type: messageInitDict
     optional: true
 
@@ -138,7 +138,7 @@ properties:
     type: String
 
   - name: mimeType
-    summary: Provides specifying mimeType of file.
+    summary: (optional) Provides specifying mimeType of file.
     type: String
     optional: true
 

@@ -200,10 +200,11 @@ properties:
   - name: matchFlag
     type: String
     summary: |
-        Used for attribute-based filtering: FILTER_MUCH_FLAG_EXACTLY, FILTER_MUCH_FLAG_FULLSTRING, FILTER_MUCH_FLAG_CONTAINS, FILTER_MUCH_FLAG_STARTSWITH, FILTER_MUCH_FLAG_ENDSWITH, FILTER_MUCH_FLAG_EXISTS.
+        (optional) Used for attribute-based filtering: FILTER_MUCH_FLAG_EXACTLY, FILTER_MUCH_FLAG_FULLSTRING, FILTER_MUCH_FLAG_CONTAINS, FILTER_MUCH_FLAG_STARTSWITH, FILTER_MUCH_FLAG_ENDSWITH, FILTER_MUCH_FLAG_EXISTS.
+    optional: ture
   - name: matchValue
     type: any
-    summary: The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
+    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to "EXISTS". By default, this attribute is set to null.
     optional: true
 
 ---
@@ -218,11 +219,11 @@ properties:
              For attributes of an array type, the filter will match if any value in the array matches.
   - name: initialValue
     type: any
-    summary: Objects with an attribute that is greater than or equal to initialValue will match. By default, this attribute is set to null.
+    summary: (optional) Objects with an attribute that is greater than or equal to initialValue will match. By default, this attribute is set to null.
     optional: true
   - name: endValue
     type: any
-    summary: Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
+    summary: (optional) Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
     optional: true
  
 ---
@@ -236,7 +237,7 @@ properties:
         The composite filter type: COMPOSITE_FILTER_TYPE_UNION, COMPOSITE_FILTER_TYPE_INTERSECTION.
   - name: filters
     type: AbstractFilter[]
-    summary: The list of filters in the composite filter.
+    summary: (optional) The list of filters in the composite filter.
     optional: true
     
 ---
@@ -250,7 +251,7 @@ properties:
   - name: order
     type: String
     summary: |
-        The type of the sorting: SORT_ORDER_MODE_ASC, SORT_ORDER_MODE_DESC.
+        (optional) The type of the sorting: SORT_ORDER_MODE_ASC, SORT_ORDER_MODE_DESC.
     optional: true
 
 ---
