@@ -12,7 +12,7 @@ examples:
  
 properties:
   - name: absoluteDate 
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: |
         An attribute to record the absolute date and time when an alarm should be triggered.
         absoluteDate and before are mutually exclusive.

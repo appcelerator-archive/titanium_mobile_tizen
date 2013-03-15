@@ -20,12 +20,15 @@
     "url": "http://github.com/appcelerator/titanium_mobile_tizen.git"
   },
   "dependencies": {
-	"uglify-js": "1.3.x",
+    "async": "0.2.x",
+	  "uglify-js": "1.3.x",
     "node-appc": ">=0.1.0",
     "wrench": "1.3.x",
     "debug": "~0.7.2",
     "adm-zip": "~0.2.0",
-    "shelljs": "~0.1.2"
+    "shelljs": "~0.1.2",
+    "xmldom": ">=0.1.11",
+    "file-utils" : ">=0.3.0"
   },
   "license": "Apache Public License v2",
   "engines": {

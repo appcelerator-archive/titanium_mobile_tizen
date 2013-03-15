@@ -68,7 +68,7 @@ methods:
                     
                     var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
                                                      summary:'HTML5 Webinar', 
-                                                     startDate: Titanium.Tizen.createTZDate(2011, 3, 30, 10, 0), 
+                                                     startDate: new Date(2011, 3, 30, 10, 0), 
                                                      duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
                                                      location:'Huesca'});
                     calendar.add(ev);
@@ -116,7 +116,7 @@ methods:
             
             var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
-                                            startDate: Titanium.Tizen.createTZDate(2011, 3, 30, 10, 0), 
+                                            startDate: new Date(2011, 3, 30, 10, 0), 
                                             duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
                                             location:'Huesca'});
                           
@@ -169,7 +169,19 @@ methods:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
         optional: true
-                
+
+    examples:
+      - example: |
+            // Gets the default calendar
+            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+        
+            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+                                            summary:'HTML5 Webinar ', 
+                                            startDate: new Date(2011, 3, 30, 10, 0), 
+                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            location:'Huesca'});                   
+            calendar.add(ev);
+  
   - name: createCalendarAttendee
     summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
     returns:
@@ -457,7 +469,7 @@ properties:
     
   - name: startDate 
     summary: An attribute to store the start date/time for an item.e / dueDate if provided.
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     
   - name: duration
     summary: An attribute to denote the duration of the calendar component.
@@ -506,7 +518,7 @@ properties:
     type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
-            ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
+            ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
             var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
                                                             "SOUND");
@@ -540,11 +552,11 @@ extends: CalendarItemInit
 platforms: [tizen]
 properties:
   - name: dueDate 
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: An attribute to store the due date and time for completing a task.
     
   - name: completedDate
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: An attribute to record the date and time when an task is completed.
         
   - name: progress
@@ -567,7 +579,7 @@ platforms: [tizen]
 properties:
    
   - name: endDate 
-    type: Titanium.Tizen.Date.TZDate
+    type: Date
     summary: An attribute to store the end date/time of an event.
         
   - name: availability
@@ -577,7 +589,7 @@ properties:
         The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
                 
   - name: recurrenceRule 
-    type: Titanium.Tizen.Date.TZDate
+    type: Date
     summary: An attribute to denote the recurrence rule for the event.
 
 ---
@@ -721,7 +733,7 @@ properties:
     summary: An attribute to specify how often the recurrence rule repeats over the unit of time indicated by its frequency.
         
   - name: untilDate
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: An attribute to indicate the end date of a recurrence duration of an event using either an end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
         
   - name: occurrenceCount
@@ -747,7 +759,7 @@ properties:
         By default, this attribute is set to an empty array
         
   - name: exceptions
-    type: Array<Titanium.Tizen.Time.TZDate>
+    type: Array<Date>
     summary: An attribute to list date/time exceptions for the recurring event.
 ---
 name: CalendarAlarmInitWithDate
@@ -756,7 +768,7 @@ platforms: [tizen]
 properties:
 
   - name: absoluteDate 
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: An attribute to record the absolute date and time when an alarm should be triggered.
              
   - name: method 

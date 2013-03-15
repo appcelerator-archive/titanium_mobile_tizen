@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Notification.StatusNotification
+name: Tizen.Notification.StatusNotification
 summary: The interface which represents status notification.
 description: |
     All notification must have the title attribute.
@@ -7,7 +7,7 @@ description: |
     This interface offers additional attributes to represent notification 
     displayed in the notification tray.
     
-extends: Titanium.Tizen.Notification.Notification
+extends: Tizen.Notification.Notification
 platforms: [tizen]
 
 properties:
@@ -16,7 +16,7 @@ properties:
    summary: The status notification type.
    type: String
    permission: read-only
-   default: Titanium.Tizen.Notification.NOTIFICATION_TYPE_STATUS
+   default: Tizen.Notification.NOTIFICATION_TYPE_STATUS
  
  - name: iconPath
    summary: The path to the icon to display in the notification.
@@ -39,9 +39,11 @@ properties:
    type: String
    examples:
      - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
+          var applicationObj = require("Ti/Tizen/Application");
           try {
                 // gets a current application inforamtion with tizen.application.getAppInfo
-                var myappInfo = Ti.Tizen.Application.getAppInfo();
+                var myappInfo = applicationObj.getAppInfo();
 
                 var notificationDict = {
                             content : "This is a simple notificaiton.",
@@ -51,13 +53,13 @@ properties:
                             appId : myappInfo.id
                           };
 
-                var notification = Ti.Tizen.Notification.createStatusNotification({
-                                      statusType: "SIMPLE",
+                var notification = notificationObj.createStatusNotification({
+                                      statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
                                       title: "Simple notification",
                                       notificationInitDict: notificationDict
                                    });
 
-                Ti.Tizen.Notification.post(notification);
+                notificationObj.post(notification);
            } catch (err) {
                 Ti.API.info (err.name + ": " + err.message);
            }
@@ -75,8 +77,10 @@ properties:
    type: Number
    examples:
      - example: |
+          var applicationObj = require("Ti/Tizen/Application");
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
-                var appControl = Ti.Tizen.Application.createApplicationControl({
+                var appControl = applicationObj.createApplicationControl({
                                      operation: "http://tizen.org/appcontrol/operation/create_content",
                                      uri: null,
                                      mime: "image/jpg",
@@ -92,17 +96,17 @@ properties:
                             progressValue : 20
                       };
                 // constructs the progress notification.
-                var notification = Ti.Tizen.Notification.createStatusNotification({
-                                      statusType: "PROGRESS",
+                var notification = notificationObj.createStatusNotification({
+                                      statusType: notificationObj.STATUS_NOTIFICATION_TYPE_PROGRESS,
                                       title: "Progress notification",
                                       notificationInitDict: notificationDict
                                    });
                 // posts the notification
-                Ti.Tizen.Notification.post(notification);
+                notificationObj.post(notification);
 
                 // updates the progress value of the notification.
                 notification.progressValue = 59;
-                Ti.Tizen.Notification.update(notification);
+                notificationObj.update(notification);
 
 
            } catch (err) {

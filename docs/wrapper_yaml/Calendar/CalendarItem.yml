@@ -50,7 +50,7 @@ methods:
       - example: |    
             // Gets default calendar.
             var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
-            var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: Titanium.Tizen.createTZDate(2012, 3, 4),
+            var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
                                                         duration: Titanium.Tizen.createTimeDuration(3, "DAYS"),
                                                         summary: "HTML5 Seminar"});
                                      
@@ -73,7 +73,7 @@ properties:
         An attribute to identify the last modified date and time of an item.
         This attribute is automatically populated and cannot be edited by the client.
         (See RFC 5545 - Section 3.8.7.3).
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     permission: read-only
     optional: true
     
@@ -115,11 +115,11 @@ properties:
         The default value for this attribute is null.
         
         startDate must be specified in the same time zone as endDate / dueDate if provided.
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     examples:
       - example: |    
             // 2010-04-30 09:00
-            event.startDate = Titanium.Tizen.createTZDate(2010, 3, 30, 9, 0);
+            event.startDate = new Date(2010, 3, 30, 9, 0);
 
   - name: duration
     summary: |
@@ -198,7 +198,7 @@ properties:
     type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
-            ev.startDate = Titanium.Tizen.createTZDate(2011, 2, 11, 8, 0, 0);
+            ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
             var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
                                                    "SOUND");

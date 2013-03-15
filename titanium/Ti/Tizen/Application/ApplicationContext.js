@@ -1,5 +1,5 @@
 define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Application.ApplicationContext', null, {
+	return declare('Tizen.Application.ApplicationContext', null, {
 		constructor: function(args) {
 			this._obj = args;
 		},

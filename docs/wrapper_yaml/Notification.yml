@@ -1,9 +1,9 @@
 ---
-name: Titanium.Tizen.Notification
+name: Tizen.Notification
 summary: Module for managing notifications created based on application events.
 description: |
     This module provides a way to notify user events that occur in applications to users.
-    which are represented by the <Titanium.Tizen.Notification> object.
+    which are represented by the <Tizen.Notification> object.
     
     The `Notification` module is a thin wrapper on the Tizen `NotificationManager`
     class.
@@ -23,17 +23,18 @@ methods:
     parameters:
       - name: notification
         summary: A notification to post.
-        type: Titanium.Tizen.Notification
+        type: Tizen.Notification
     examples:
       - example: |
           try {
-                var appControl = Ti.Tizen.Application.createApplicationControl({
+                var applicationObj = require("Ti/Tizen/Application");
+                var notificationObj = require("Ti/Tizen/Notification");
+                var appControl = applicationObj.createApplicationControl({
                                      operation: "http://tizen.org/appcontrol/operation/create_content",
                                      uri: null,
                                      mime: "image/jpg",
                                      category: null
                                  });
-
                 var notificationDict = {
                             content : "This is a simple notificaiton.",
                             iconPath : "images/image1.jpg",
@@ -41,14 +42,12 @@ methods:
                             vibration : true,
                             appControl : appControl
                         };
-
-                var notification = Ti.Tizen.Notification.createStatusNotification({
-                                        statusType: "SIMPLE",
+                var notification = notificationObj.createStatusNotification({
+                                        statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
                                         title: "Simple notification",
                                         notificationInitDict: notificationDict
                                    });
-
-                Ti.Tizen.Notification.post(notification);
+                notificationObj.post(notification);
            } catch (err) {
                 Ti.API.info(err.name + ": " + err.message);
            }
@@ -58,13 +57,14 @@ methods:
     parameters:
       - name: notification
         summary: A notification to update.
-        type: Titanium.Tizen.Notification
+        type: Tizen.Notification
     examples:
       - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
                 // use a varible for the previoulsy posted notification.
                 notification.content = "My notification";
-                Ti.Tizen.Notification.update(notification);
+                notificationObj.update(notification);
            } catch (err) {
                 Ti.API.info (err.name + ": " + err.message);
            }
@@ -77,9 +77,10 @@ methods:
         type: String
     examples:
       - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
                 // use a varible for the previoulsy posted notification.
-                Ti.Tizen.Notification.remove(notification.id);;
+                notificationObj.remove(notification.id);;
            } catch (err) {
                 Ti.API.info (err.name + ": " + err.message);
            }
@@ -88,8 +89,9 @@ methods:
     summary: Removes all previously posted notifications by the current application.
     examples:
       - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
-              Ti.Tizen.Notification.removeAll();
+              notificationObj.removeAll();
           } catch (err) {
               Ti.API.info (err.name + ": " + err.message);
           }
@@ -97,19 +99,19 @@ methods:
   - name: get
     summary: Gets a previously posted notification by the current application.
     returns:
-        type: Titanium.Tizen.Notification
+        type: Tizen.Notification
     parameters:
       - name: id
         summary: A previously posted notification ID.
         type: String
     examples:
       - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
               // use a varible for the previoulsy posted notification.
               // keeps notification id to use later.
               var myId = notification.id;
-                
-              var myNotification = Ti.Tizen.Notification.get(myId);
+              var myNotification = notificationObj.get(myId);
           } catch (err) {
               Ti.API.info (err.name + ": " + err.message);
           }
@@ -117,13 +119,13 @@ methods:
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
     returns:
-        type: Titanium.Tizen.Notification.Notification[]
+        type: Tizen.Notification.Notification[]
     examples:
       - example: |
+          var notificationObj = require("Ti/Tizen/Notification");
           try {
-              var notifications = Ti.Tizen.Notification.getAll();
+              var notifications = notificationObj.getAll();
               var index = 0;
-               
               for ( index = 0; notifications.length > index; index++ )
               {
                   Ti.API.info(notifications[index].id);
@@ -142,9 +144,9 @@ methods:
           }
 
   - name: createStatusNotification
-    summary: Creates and returns an instance of <Titanium.Tizen.SystemSettings.StatusNotification>.
+    summary: Creates and returns an instance of <Tizen.Notification.StatusNotification>.
     returns:
-        type: Ti.Tizen.SystemSettings.StatusNotification
+        type: Tizen.Notification.StatusNotification
     parameters:
       - name: Options
         summary: The dictionary representing information about the new notification.
@@ -212,7 +214,7 @@ properties:
     summary: Holds whether to use vibration when the notification is shown.
 
   - name: appControl
-    type: Ti.Tizen.Aplication.ApplicationControl
+    type: Tizen.Aplication.ApplicationControl
     summary: Holds the application control to launch when the notification is selected from the notification tray.
 
   - name: appId

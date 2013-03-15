@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Calendar.CalendarAttendee', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Ti.Tizen.Calendar.CalendarAttendee', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarAttendee]') {
 				this._obj = args;
@@ -92,8 +92,8 @@ define(['Ti/_/declare'], function(declare) {
 				set: function(value) {
 					this._obj.contactRef = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 });
