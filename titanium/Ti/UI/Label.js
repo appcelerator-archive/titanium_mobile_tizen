@@ -4,7 +4,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 	var serviceReply = {
 		onsuccess: function(){},
 		onfail:    function(){
-			console.log('Request failed');
+			Ti.API.error('Request failed');
 		}
 	};
 
@@ -21,14 +21,25 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 	};
 
 	if(! window.autoLinkClick){
-		window.autoLinkClick = function (e, ap_service, ap_id, link){
-			var service = new tizen.ApplicationService(ap_service, link);
-			tizen.application.launchService(
+		window.autoLinkClick = function (e, ap_service, ap_id, link, key, value){
+			var service;
+			if(key && value){
+				service = new tizen.ApplicationControl(
+					ap_service,
+					link,
+					null,
+					null,
+					[new tizen.ApplicationControlData(key,	[value])]
+				)
+			} else {
+				service = new tizen.ApplicationControl(ap_service, link);
+			}
+			tizen.application.launchAppControl(
 				service,
-				ap_id,
+				null,
 				function() {}, 
-				function(e) {},  
-				serviceReply
+				function(e) {Ti.API.error("launch appControl failed. Reason: " + e.name)},  
+				null
 			);
 			e.stopPropagation();
 	  	}
@@ -58,7 +69,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				matches = text_arg.match(reg);
 				if(matches != null){
 					arrayRemoveDuplicates(matches);
-					var replace_text =  '<a href="[$1]" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/default\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>';
+					var replace_text =  '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>';
 					var i = 0,
 						l = matches.length;
 					for(; i < l; i++){
@@ -74,7 +85,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				matches = text_arg.match(reg);
 				if(matches != null){
 					arrayRemoveDuplicates(matches);
-					var replace_text = '<a href="mailto:[$1]" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/default\', \'email-composer-efl\', \'mailto:[$1]\')">[$1]</a>';
+					var replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>';
 					var i = 0,
 						l = matches.length;
 					for(; i < l; i++){
@@ -89,13 +100,13 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				var reg_alone = /^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$/g;
 
 				if(reg_alone.test(text_arg)){
-					text_arg = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\', \'tel:' + text_arg + '\')">' + text_arg + '</a>';
+					text_arg = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/dial\', \'org.tizen.phone\', \'null\', \'tel\', \'[$1]\')">' + text_arg + '</a>';
 				} else {
 					var reg = /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
 					matches = text_arg.match(reg);
 					if(matches != null){						
 						arrayRemoveDuplicates(matches);
-						var replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\', \'tel:[$1]\')">[$1]</a>';
+						var replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>';
 						var i = 0,
 							l = matches.length;
 						for(; i < l; i++){

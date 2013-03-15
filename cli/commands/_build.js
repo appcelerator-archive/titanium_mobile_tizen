@@ -1170,14 +1170,16 @@ build.prototype = {
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
 		
 		var deps = this.dependenciesMap[dep[1]];
-		for (var i = 0, l = deps.length; i < l; i++) {
-			dep = deps[i];
-			ref = mid.split('/');
-			ref.pop();
-			ref = ref.join('/') + '/';
-			this.parseModule(dep, ref);
+		if(deps){
+			for (var i = 0, l = deps.length; i < l; i++) {
+				dep = deps[i];
+				ref = mid.split('/');
+				ref.pop();
+				ref = ref.join('/') + '/';
+				this.parseModule(dep, ref);
+			}
+			this.moduleMap[mid] = deps;
 		}
-		this.moduleMap[mid] = deps;
 	},
 
 	wgtPackaging7z: function (logger, callback) {

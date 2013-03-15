@@ -74,7 +74,7 @@ methods:
                 Titanium.API.info("An error occurred " + error.message);
             }
         
-            Titanium.Tizen.SystemInfo.getPropertyValue( "BATTERY", onSuccessCallback, onErrorCallback );
+            Titanium.Tizen.SystemInfo.getPropertyValue(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, onErrorCallback );
         
   - name: addPropertyValueChangeListener
     summary: Allows tracking the change of one or several system properties.
@@ -82,7 +82,7 @@ methods:
         When called, it immediately returns and then asynchronously starts a watch process defined as this set of steps:
         1. Acquire the system's current values for the property requested. If successful, it invokes the associated successCallback, 
            passing the resulting property value. The type of the passed object is indicated by the property's value type in the definitions below. For example,
-           if you are passing "BATTERY" for SystemInfoPropertyId, you'll get SystemInfoBattery object.
+           if you are passing Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY for SystemInfoPropertyId, you'll get SystemInfoBattery object.
         2. Register the successCallback to receive system events that the status of the requested properties may have changed.
         3. When a system event is successfully received invoke the associated successCallback with an object containing the property values.
         4. Repeat step 3 until removePropertyValueChangeListener function is called.
@@ -106,7 +106,7 @@ methods:
                 Titanium.API.info("Low battery:  " + battery.level);
             }
             
-            Titanium.Tizen.SystemInfo.addPropertyValueChangeListener("BATTERY", onSuccessCallback, {lowThreshold : 0.2});
+            Titanium.Tizen.SystemInfo.addPropertyValueChangeListener(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, {lowThreshold : 0.2});
     
   - name: removePropertyValueChangeListener
     summary: |
@@ -126,10 +126,10 @@ methods:
             function onSuccessCallback(battery) {
                Titanium.API.info("New value for Battery level is " + battery.level);
                if (id != null) // After receiving the first notification, we clear it
-                   Titanium.Tizen.SystemInfo.removePropertyValueChangeListener(id);
+                  Tizen.SystemInfo.removePropertyValueChangeListener(id);
             }
             
-            id = Titanium.Tizen.SystemInfo.addPropertyValueChangeListener("BATTERY", onSuccessCallback);
+            id = Tizen.SystemInfo.addPropertyValueChangeListener(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback);
             
 properties:
 

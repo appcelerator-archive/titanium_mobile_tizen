@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_helper'], function(declare, CalendarItem, calendar_helper) {
+define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarTask', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarTask]') {
@@ -12,9 +12,9 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_h
 						dueDate = args.dueDate,
 						completedDate = args.completedDate;
 
-					args.hasOwnProperty('startDate') && (taskInitDict.startDate = calendar_helper.createTZDate(startDate));
-					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = calendar_helper.createTZDate(dueDate));
-					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = calendar_helper.createTZDate(startDate));
+					args.hasOwnProperty('startDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
+					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = calendarHelper.createTZDate(dueDate));
+					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
 
 					args.hasOwnProperty('duration') && (taskInitDict.duration = args.duration._obj);
 
@@ -30,7 +30,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_h
 					return createDate(dueDate);
 				},
 				set: function(value) {
-					this._obj.dueDate = calendar_helper.createTZDate(value);
+					this._obj.dueDate = calendarHelper.createTZDate(value);
 				}
 			},
 			completedDate: {
@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendar_h
 					return createDate(completedDate);
 				},
 				set: function(value) {
-					this._obj.completedDate = calendar_helper.createTZDate(value);
+					this._obj.completedDate = calendarHelper.createTZDate(value);
 				}
 			},
 			progress: {

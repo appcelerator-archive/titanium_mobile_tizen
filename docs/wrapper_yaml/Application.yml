@@ -35,7 +35,7 @@ methods:
 
       - name: errorCallback
         summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -71,7 +71,7 @@ methods:
 
       - name: errorCallback
         summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true    
 
       - name: replyCallback
@@ -128,7 +128,7 @@ methods:
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -175,7 +175,7 @@ methods:
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |

@@ -25,14 +25,16 @@ methods:
             // Defines the event search success callback.
             function eventSearchSuccessCallback(events) {
                 // Converts the first event to iCalendar 2.0 format (default)
-                var vevent = events[0].convertToString("ICALENDAR_20");
+                var vevent = events[0].convertToString(Tizen.Calendar.CALENDAR_TEXT_FORMAT_ICALENDAR_20);
                 Titanium.API.info('iCalendar 2.0 representation of the event is: ' + vevent);
             }
             // Gets the default calendar
-            var myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            var myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events in the first calendar that contain in the summary the string Tizen.
-            var filter = Titanium.Tizen.createAttributeFilter('summary', 'CONTAINS', 'Tizen');
+            var filter = Tizen.createAttributeFilter({attributeName: 'summary',
+                                                               matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                               matchValue: 'Tizen'});
             myCalendar.find(eventSearchSuccessCallback, errorCallback, filter);    
         
   - name: clone
@@ -49,9 +51,9 @@ methods:
     examples:
       - example: |    
             // Gets default calendar.
-            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
-            var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: Titanium.Tizen.createTimeDuration(3, "DAYS"),
+            var calendar = Tizen.Calendar.getDefaultCalendar();
+            var html5seminar = Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
+                                                        duration: Tizen.Time.createTimeDuration({length: 3, unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}),
                                                         summary: "HTML5 Seminar"});
                                      
             calendar.add(html5seminar);
@@ -133,7 +135,7 @@ properties:
     examples:
       - example: |    
             // 1 hour meeting
-            event.duration = Titanium.Tizen.createTimeDuration(1, "HOURS");
+            event.duration = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS});
 
   - name: location 
     summary: |
@@ -147,10 +149,10 @@ properties:
     
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place. (See RFC 5545 - Section 3.8.1.6).
-    type: Titanium.Tizen.SimpleCoordinates
+    type: Tizen.SimpleCoordinates
     examples:
       - example: |    
-            event.geolocation = Titanium.Tizen.createSimpleCoordinates(60.175, 24.934);
+            event.geolocation = Tizen.createSimpleCoordinates(60.175, 24.934);
 
   - name: organizer
     summary: |
@@ -164,34 +166,34 @@ properties:
   - name: visibility
     summary: |
         An attribute to mark the visibility (secrecy) level of the item. (See RFC 5545 - Section 3.8.1.3).
-        The value is one of the constants defined for this parameter : CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
-        CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
-        The default value is PUBLIC.
+        The value is one of the constants defined for this parameter : Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
+        Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
+        The default value is Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC.
     type: STRING
 
   - name: status
     summary: |
         An attribute to store the overall confirmation status for a calendar component. (See RFC 5545 - Section 3.8.1.11).
-        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
-        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
+        For an event, the default value is Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
+        For a task, the default value is Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
     type: STRING
     examples:
       - example: |    
-            event.status = "TENTATIVE";
+            event.status = Tizen.Calendar.CALENDAR_ITEM_STATUS_TENTATIVE;
 
   - name: priority
     summary: |
         An attribute to indicate the priority level of an item and may be used to relatively prioritize multiple items during a given period of time. (See RFC 5545 - Section 3.8.1.9).
-        The default value for this attribute is LOW priority.
+        The default value for this attribute is Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW priority.
         If the native item database supports another priority schema (such as a range from 1 to 9), the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
-            - 1-4 to HIGH,
-            - 5 to MEDIUM,
-            - 6-9 to LOW.
+            - 1-4 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH,
+            - 5 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
+            - 6-9 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
     type: STRING
     examples:
       - example: |    
-            task.priority = "HIGH";
+            task.priority = Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH;
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
@@ -200,8 +202,8 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
-                                                   "SOUND");
+            var alarm = Tizen.Calendar.createCalendarAlarm({before: Tizen.Time.createTimeDuration(30, Tizen.Time.TIME_DURATION_UNIT_MINS),
+                                                   method: Tizen.Calendar.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
   - name: categories
@@ -224,8 +226,8 @@ properties:
     type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
     examples:
       - example: |    
-            var attendee = Titanium.Tizen.createCalendarAttendee('mailto:bob@domain.com',
-                                           {role: "CHAIR", RSVP: true});
+            var attendee = Tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',
+                                           attendeeInitDict: {role: Tizen.Calendar.ATTENDEE_ROLE_CHAIR, RSVP: true}});
             event.attendees = [attendee];
 
   

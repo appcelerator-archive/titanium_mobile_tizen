@@ -31,7 +31,7 @@ methods:
             var applicationObj = require("Ti/Tizen/Application");
             var alarm = alarmObj.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
             var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
-            alarmObj.add({alarm: alarm, applicationId: "org.tizen.browser", appControl: appControl});
+            alarmObj.add(alarm, "org.tizen.browser");
             Ti.API.info("Alarm added with id: " + alarm.id);
 
   - name: remove
@@ -92,21 +92,44 @@ methods:
   - name: createAlarmRelative
     summary: Creates and returns an instance of <Tizen.Alarm.AlarmRelative>.
     returns: 
-        type: Tizen.Alarm.AlarmAlarmRelative
+        type: Tizen.Alarm.AlarmRelative
     parameters:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
         type: alarmRelativeParameters
-
+    examples:
+      - example: |
+            var alarmObj = require("Ti/Tizen/Alarm");
+            // Sets an alarm in 3 hours from now
+            var alarm1 = alarmObj.createAlarmRelative({delay: 3 * alarmObj.PERIOD_HOUR});
+            alarmObj.add(alarm1, "org.tizen.clock");
+            // Sets an alarm in one hour, recurring after every 2 minutes
+            var alarm2 = alarmObj.createAlarmRelative({delay: alarmObj.PERIOD_HOUR, 2 * alarmObj.PERIOD_MINUTE});
+            alarmObj.add(alarm2, "org.tizen.clock");
+ 
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Tizen.Alarm.AlarmAbsolute>.
     returns: 
-        type: Tizen.Alarm.AlarmAlarmAbsolute
+        type: Tizen.Alarm.AlarmAbsolute
     parameters:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
         type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
-
+    examples:
+      - example: |
+            var alarmObj = require("Ti/Tizen/Alarm");
+            var date = new Date(2012, 0, 1, 8, 0);
+            var calendarObj = require("Ti/Tizen/Calendar");
+            // Sets an alarm on January 1st 2012 08:00
+            var alarm1 = alarmObj.createAlarmAbsolute({date: date});
+            alarmObj.add(alarm1, "org.tizen.clock");
+            // Sets an alarm on January 1st 2012 08:00, repeating every 2 days
+            var alarm2 = alarmObj.createAlarmAbsolute({date: date, period: 2 * alarmObj.PERIOD_DAY});
+            alarmObj.add(alarm2, "org.tizen.clock");
+            // Sets an alarm occurring on every Saturday and Sunday, at 08:00, starting from January 1st 2012
+            var alarm3 = alarmObj.createAlarmAbsolute({date: date, period: [calendarObj.BY_DAY_VALUE_SA, calendarObj.BY_DAY_VALUE_SU]});
+            alarmObj.add(alarm3, "org.tizen.clock");
+ 
 properties:
   - name: PERIOD_MINUTE
     summary: 60 - The period of a minute. It defines the number of seconds per minute. 

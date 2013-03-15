@@ -18,7 +18,7 @@ methods:
       - name: errorCallback
         summary: The method to call when an error occurs.
         optional: true
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
       - name: filter
         summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
         description: |
@@ -38,12 +38,81 @@ methods:
         summary: The offset in the result set, from where the results are listed (It is the same semantics as SQL OFFSET). The number of results listed is maximum the specified limit parameter. Defaults to 0, meaning no offset.
         optional: true
         type: Number
+    examples:
+      - example: |
+            var tizenObj = require('Ti/Tizen');
+            var callhistoryObj = require('Ti/Tizen/Callhistory');
+        
+            // Defines success callback
+            function onSuccess(results) {
+                console.log(results.length + " call history item(s) found!");
+                for (var i=0; i<results.length; i++) {
+                    console.log(i + ". " + results[i].toString()); // process the CallHistoryEntry
+                }
+            }
+            // Defines error callback
+            function onError(error) {
+                console.log("Query failed" + error.name);
+            }
+        
+            // Defines filter: list CS calls, most recent first
+            var filter = tizenObj.createAttributeFilter({attributeName: "type",
+                                                         matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+                                                         matchValue: "TEL"});
+        
+            // Defines sort mode: descending on call start time.
+            var sortMode = tizenObj.createSortMode({attributeName: "startTime",
+                                                    order: tizenObj.SORT_MODE_ORDER_DESC});
+            
+            // Makes the query and wire up the callbacks
+            callhistoryObj.find(onSuccess, onError, filter, sortMode);
+        
+            var numberfilter = tizenObj.createAttributeFilter({attributeName: "remoteParties.remoteParty",
+                                                               matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+                                                               matchValue: "123456789"});
+        
+            // Creates a composite filter for time constraints
+            var y2009Filter = tizenObj.createAttributeRangeFilter({attributeName: "startTime",
+                                                                   initialValue: new Date(2009, 0, 1),
+                                                                   endValue: new Date(2010, 0, 1)});
+            var y2011Filter = tizenObj.createAttributeRangeFilter({attributeName: "startTime",
+                                                                   initialValue: new Date(2011, 0, 1),
+                                                                   endValue: new Date(2012, 0, 1)});
+            var datefilter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_UNION,
+                                                             filters: [y2009Filter, y2011Filter]});
+            // Creates a filter to find all video calls (including cellular, skype, etc)
+            // The filter matches exactly any features from the "features" array
+            var tfilter = tizenObj.createAttributeFilter({attributeName: "features",
+                                                          matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+                                                          matchValue: "VIDEOCALL"});
+            // Creates composite filter
+            var ifilter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION,
+                                                          filters: [numberFilter, dateFilter, tfilter]});
+            // Makes the query and wire up the callbacks; reuse sortMode
+            callhistoryObj.find(onSuccess, onError, ifilter, sortMode);
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
-        type: Tizen.Callhistory.CallHistoryEntry
+        type: CallHistoryEntry
+    examples:
+      - example: |
+            var callhistoryObj = require('Ti/Tizen/Callhistory');
+        
+            // Defines success callback
+            function onSuccess(results) {
+                if (results.length > 0)
+                    callhistoryObj.remove(results[0]);
+            }
+        
+            // Defines error callback
+            function onError(error) {
+                console.log("Query failed" + error.name);
+            }
+        
+            // Makes the query and wires up the callbacks
+            callhistoryObj.find(onSuccess, onError);
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     parameters: 
@@ -58,6 +127,22 @@ methods:
         summary:  An error handler.
         optional: true
         type: Callback<Tizen.WebAPIError>
+    examples:
+      - example: |
+            var callhistoryObj = require('Ti/Tizen/Callhistory');
+        
+            // Defines success callback
+            function onSuccess(results) {
+                callhistoryObj.removeBatch(results);
+            }
+        
+            // Defines error callback
+            function onError(error) {
+                console.log("Query failed" + error.name);
+            }
+        
+            // Makes the query and wires up the callbacks
+            callhistoryObj.find(onSuccess, onError);
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     parameters: 
@@ -68,7 +153,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<Titanium.Tizen.WebAPIError>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
     parameters: 
@@ -82,6 +167,41 @@ methods:
       - name: handle
         summary: The previously obtained listener handle. 
         type: Number
+    examples:
+      - example: |
+            var callhistoryObj = require('Ti/Tizen/Callhistory');
+            
+            var onListenerCB = {
+            
+                onadded: function(newItems) {
+                    console.log("New Item added");
+                    for (var i in newItems) {
+                        console.log("Item " + i + " startTime: " + newItems[i].startTime);
+                    }
+                },
+                
+                onchanged: function(changedItems) {
+                    console.log("Items changed");
+                    for (var i in changedItems) {
+                        console.log("Item " + i + " direction: " + changedItems[i].direction);
+                    }
+                }
+                
+            };
+            
+            try {
+            
+                // Registers a call history callback
+                var handle = callhistoryObj.addChangeListener(onListenerCB);
+        
+                // Unregisters a previously registered listener
+                callhistoryObj.removeChangeListener(handle);
+                
+            } catch (error) {
+            
+                consloe.log("Exception - code: " + error.name + " message: " + error.message);
+                
+            }
 
 # Pseudo-type
 ---

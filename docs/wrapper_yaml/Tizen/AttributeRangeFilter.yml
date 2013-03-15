@@ -29,18 +29,23 @@ properties:
 examples:
   - title: Example with using AttributeRangeFilter
     example: |
-        // Define success callback
         function successCallback(events) {
             console.log(events.length + " events today.");
         }
-        // Define error callback
         function errorCallback(error) {
             console.log("An error occurred: " + error.message);
         }
+        var tizenObj = require('Ti/Tizen');
+        
         // Create an attribute range filter based on event start date: "All events occurring today".
         var now_dt = Titanium.Tizen.Time.getCurrentDateTime();
-        var today_begin = Titanium.Tizen.TZDate({now_dt.getFullYear(), now_dt.getMonth(), now_dt.getDate()});
-        var today_end = today_begin.addDuration(Titanium.Tizen.TimeDuration(1, "DAYS"));
-        var filter = Titanium.Tizen.AttributeRangeFilter({"startDate", today_begin, today_end});
+        var today_begin = Titanium.Tizen.Time.createTZDate({year: now_dt.getFullYear(),
+                                                            month: now_dt.getMonth(),
+                                                            day: now_dt.getDate()});
+        var today_end = today_begin.addDuration(Tizen.Time.createTimeDuration({length: 1, 
+                                                                                 unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}));
+        var filter = tizenObj.createAttributeRangeFilter({attributeName: "startDate",
+                                                          initialValue: today_begin,
+                                                          endValue: today_end});
         // Send a search request to default event calendar.
-        Titanium.Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
+        Titanium.Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT).find(successCallback, errorCallback, filter);

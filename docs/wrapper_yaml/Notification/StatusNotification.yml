@@ -69,7 +69,7 @@ properties:
    summary: The current progress value of notification.
    description: |
         If progressValue is set, the progressbar will be displayed in notification. 
-        If not, the progressbar will not be shown. This attribute is only available for StatusNotifcation "PROGRESS" type.
+        If not, the progressbar will not be shown. This attribute is only available for StatusNotifcation Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS type.
         
         Application should keep the progress value for its job because the saved value 
         in the notification status tray would be different from exact progress value.

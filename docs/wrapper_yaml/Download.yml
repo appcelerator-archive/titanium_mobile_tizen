@@ -28,7 +28,13 @@ methods:
         type: Dictionary<createDownloadRequestParameters>
     returns:
         type: <Tizen.Download.DownloadRequest>
-        
+    examples:
+      - example: |
+            var downloadRequest = Tizen.Download.createDownloadRequest({
+                                        url: "http://download.tizen.org/tools/README.txt",
+                                        destination: "documents"
+                                  });
+
 properties:
   - name: DOWNLOAD_STATE_QUEUED
     summary: Indicates that the download operation is listed in a queue.
@@ -68,13 +74,13 @@ properties:
     type: String
 
   - name: destination
-    summary: Destination folder to which a requested file object will be downloaded.
+    summary: (optional) Destination folder to which a requested file object will be downloaded.
         If the destination is not specified, the file will be downloaded to the default storage "Downloads".
     type: String
     optional: true
 
   - name: fileName
-    summary: An attribute to store the file name for the specified URL. If the file name is not given, 
+    summary: (optional) An attribute to store the file name for the specified URL. If the file name is not given, 
         the original file name from URL is used.
     type: String
     optional: true
