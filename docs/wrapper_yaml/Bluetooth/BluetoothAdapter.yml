@@ -32,11 +32,11 @@ methods:
 
       - name: errorCallback
         summary: Method invoked when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
  
             function changeName(newName) 
             {
@@ -76,11 +76,11 @@ methods:
 
       - name: errorCallback
         summary: Method to be called in case Bluetooth activation/deactivation failed.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
  
             function powerOn() 
             {
@@ -134,11 +134,11 @@ methods:
 
       - name: errorCallback
         summary: Method to be invoked when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             
             function startDiscovery() {
             
@@ -191,11 +191,11 @@ methods:
 
       - name: errorCallback
         summary: Method to be invoked when an error occurs. 
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
  
             // Call this whenever use selects one of the device
             
@@ -270,11 +270,11 @@ methods:
 
       - name: errorCallback
         summary: Method invoked in case of failure to get bonded devices. 
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
  
             function onGotDevices(devices) {
                 console.log("Devices");
@@ -316,7 +316,7 @@ methods:
 
       - name: errorCallback
         summary:  Method to be invoked when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -331,7 +331,7 @@ methods:
                 console.log ("Could not get device info:" + e.message);
             }
 
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             adapter.getDevice("35:F4:59:D1:7A:03", gotDeviceInfo, onError);
 
   - name: createBonding
@@ -356,7 +356,7 @@ methods:
 
       - name: errorCallback
         summary:  Method to be invoked when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -370,7 +370,7 @@ methods:
                 console.log ("Could not create bonding, reason:" + e.message);
             }
 
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             adapter.createBonding("35:F4:59:D1:7A:03", onBondingSuccess, onError);
 
   - name: destroyBonding
@@ -394,11 +394,11 @@ methods:
 
       - name: errorCallback
         summary:  Method to be invoked when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
  
             function gotDevice(device) {
                 if (device.isBonded) {
@@ -445,11 +445,11 @@ methods:
 
       - name: errorCallback
         summary: Method to be invoked when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             
             // Holds currently registered service record
             

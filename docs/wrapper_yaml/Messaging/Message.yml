@@ -42,8 +42,8 @@ properties:
 
   - name: type
     summary: |
-        The type of the given message. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of the given message. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -133,8 +133,9 @@ examples:
         }
         function serviceListCB(services) {
            if (services.length > 0) {
-              var msg = Titanium.Tizen.Messaging.Message(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, {plainBody: "Tizen first SMS message."});
+              var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+                                                                messageInitDict: {plainBody: 'Tizen first SMS message.'}});
               services[0].sendMessage(msg, messageSentCallback, errorCallback);
            }
         }
-        tizen.messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);
+        Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);

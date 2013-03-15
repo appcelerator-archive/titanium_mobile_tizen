@@ -1,10 +1,14 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Bluetooth.BluetoothServiceHandler', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket'], function(declare, Evented, BluetoothSocket) {
+	return declare('Tizen.Bluetooth.BluetoothServiceHandler', Evented, {
 		constructor: function(args) {
+			var self = this;
 			if(args.toString() === '[object BluetoothServiceHandler]') {
-				this._obj = args;
-			} else {
+				self._obj = args;
 			}
+            
+			self._obj.onconnect = function(socket) {
+				self.fireEvent('remotedeviceconnected', new BluetoothSocket(socket));
+            };
 		},
 
 		constants: {
@@ -21,17 +25,6 @@ define(['Ti/_/declare'], function(declare) {
 			isConnected: {
 				get: function() {
 					return this._obj.isConnected;
-				}
-			},
-		},
-
-		properties: {
-			onconnect: {
-				get: function() {
-					return this._obj.onconnect;
-				},
-				set: function(value) {
-					this._obj.onconnect = value;
 				}
 			},
 		},

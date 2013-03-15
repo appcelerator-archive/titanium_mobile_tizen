@@ -1,9 +1,8 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Bluetooth.BluetoothClassDeviceService', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Tizen.Bluetooth.BluetoothClassDeviceService', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object BluetoothClassDeviceService]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

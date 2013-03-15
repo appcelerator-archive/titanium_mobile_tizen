@@ -25,12 +25,12 @@ examples:
         function onsuccess(files) {
            for(var i = 0; i < files.length; i++) {
              // alerts each name of dir's contents
-             Ti.API.info(files[i].name);
+             Titanium.API.info(files[i].name);
            }
          }
 
          function onerror(error) {
-           Ti.API.info("The error " + error.message + "
+           Titanium.API.info("The error " + error.message + "
                        occurred when listing the files in the selected folder");
          }
 
@@ -58,7 +58,7 @@ methods:
       - example: |
              /*'file://music/ramones/RockawayBeach.mp3' or 'file:///opt/media/music/ramones/RockawayBeach.mp3' if the file is
              music/ramones/RockawayBeach.mp3*/
-             Ti.API.info(file.toURI());
+             Titanium.API.info(file.toURI());
 
   - name: listFiles
     summary: Returns the list of all files in this directory.
@@ -77,7 +77,7 @@ methods:
         type: Callback<Array<Titanium.Tizen.Filesystem.File>>
       - name: onerror
         summary: Called if an error occurred
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
       - name: filter 
         summary: Used to restrict the listed files.
@@ -86,26 +86,26 @@ methods:
     examples:
       - example: |
              function onsuccess(files) {
-                 Ti.API.info("There are " + files.length  + " in the selected folder");
+                 Titanium.API.info("There are " + files.length  + " in the selected folder");
              }
 
              function onerror(error) {
-                 Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+                 Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
 
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                 "documents",
                 function(dir){
                   dir.listFiles(onsuccess, onerror);
                 }, function(e){
-                  Ti.API.info("Error " + e.message);
-                }, Ti.Tizen.Filesystem.FILE_MODE_R
+                  Titanium.API.info("Error " + e.message);
+                }, Tizen.Filesystem.FILE_MODE_R
              );
         
   - name: openStream
     summary: Opens the file in the given mode supporting the given encoding.
     description: |
-        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append (Ti.Tizen.Filesystem.FILE_MODE_A) mode, in which case the filepointer points to the end of the file.
+        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append (<Titanium.Tizen.Filesystem.FILE_MODE_A>) mode, in which case the filepointer points to the end of the file.
         The ErrorCallback is launched with these error types:
             - InvalidValuesError: If any of the input parameters contains an invalid value.
             - IOError: The operation is launched on a directory (not a file), the file is not valid or it does not exist.
@@ -113,14 +113,14 @@ methods:
     parameters:
       - name: mode  
         summary: |
-            The mode for opening a file: Ti.Tizen.Filesystem.FILE_MODE_R for reading Ti.Tizen.Filesystem.FILE_MODE_A for appending Ti.Tizen.Filesystem.FILE_MODE_W for [over]writing Ti.Tizen.Filesystem.FILE_MODE_RW for reading and writing
+            The mode for opening a file: <Tizen.Filesystem.FILE_MODE_R> for reading <Tizen.Filesystem.FILE_MODE_A> for appending <Tizen.Filesystem.FILE_MODE_W> for [over]writing <Tizen.Filesystem.FILE_MODE_RW> for reading and writing
         type: String
       - name: onsuccess
         summary: Called when the file has been opened.
         type: Callback<Titanium.Tizen.Filesystem.FileStream>
       - name: onerror
         summary: Called if an error occurred.
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
       - name: encoding  
         summary:  |
@@ -134,34 +134,34 @@ methods:
 
             function onsuccess(files) {
                 for(var i = 0; i < files.length; i++) {
-                   Ti.API.info("File Name is " + files[i].name); // displays file name
+                   Titanium.API.info("File Name is " + files[i].name); // displays file name
                 }
                 var testFile = documentsDir.createFile("test.txt");
                 if (testFile != null) {
                    testFile.openStream(
-                      Ti.Tizen.Filesystem.FILE_MODE_W,
+                      Tizen.Filesystem.FILE_MODE_W,
                       function(fs){
                          fs.write("HelloWorld");
                          fs.close();
                       }, function(e){
-                         Ti.API.info("Error " + e.message);
+                         Titanium.API.info("Error " + e.message);
                       }, "UTF-8"
                    );
                 }
             }
 
             function onerror(error) {
-                Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+                Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
             }
 
-            Ti.Tizen.Filesystem.resolve(
+            Tizen.Filesystem.resolve(
                 'documents',
                 function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                 }, function(e) {
-                   Ti.API.info("Error" + e.message);
-                }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                   Titanium.API.info("Error" + e.message);
+                }, Tizen.Filesystem.FILE_MODE_RW
             );
 
   - name: readAsText
@@ -178,7 +178,7 @@ methods:
         type: Callback<String>
       - name: onerror
         summary: If an error occurs while reading the file.
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
       - name: encoding  
         summary:  |
@@ -190,31 +190,31 @@ methods:
       - example: |
             function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
-                 Ti.API.info("File Name is " + files[i].name); // displays file name
+                 Titanium.API.info("File Name is " + files[i].name); // displays file name
                  if (files[i].isDirectory == false)
                    files[i].readAsText(
                        function(str){
-                         Ti.API.info("The file content " + str);
+                         Titanium.API.info("The file content " + str);
                        }, function(e){
-                         Ti.API.info("Error " + e.message);
+                         Titanium.API.info("Error " + e.message);
                        }, "UTF-8"
                    );
                }
              }
 
              function onerror(error) {
-               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+               Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
 
              var documentsDir;
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
-                   Ti.API.info("Error" + e.message);
-                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                   Titanium.API.info("Error" + e.message);
+                 }, Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: copyTo
@@ -245,7 +245,7 @@ methods:
         type: Callback<Object>
       - name: onerror
         summary: Called if an error occurred.
-        type: Callback<WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -256,23 +256,23 @@ methods:
                    documentsDir.copyTo(files[i].fullPath,
                                        "images/backup/"+files[i].name,
                                        false,
-                                       function(){Ti.API.info("file copied");});
+                                       function(){Titanium.API.info("file copied");});
                }
              }
 
              function onerror(error) {
-               Ti.API.info("The error " + error.message +
+               Titanium.API.info("The error " + error.message +
                            " occurred when listing the files in the selected folder");
              }
 
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
-                   Ti.API.info("Error" + e.message);
-                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                   Titanium.API.info("Error" + e.message);
+                 }, Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: moveTo
@@ -303,7 +303,7 @@ methods:
         type: Callback<Object>
       - name: onerror
         summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
     examples:
       - example: |
@@ -314,23 +314,23 @@ methods:
                    documentsDir.moveTo(files[i].fullPath,
                                        "images/newFolder/"+files[i].name,
                                        false,
-                                       function(){Ti.API.info("file moved");});
+                                       function(){Titanium.API.info("file moved");});
                }
              }
 
              function onerror(error) {
-               Ti.API.info("The error " + error.message +
+               Titanium.API.info("The error " + error.message +
                            " occurred during listing the files in the selected folder");
              }
 
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
-                   Ti.API.info("Error" + e.message);
-                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                   Titanium.API.info("Error" + e.message);
+                 }, Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: createDirectory
@@ -342,8 +342,8 @@ methods:
         If the directory is successfully created, it will be returned.
         In case the directory cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
-        summary: The file handle of the new directory. The new File object will have Ti.Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createDirectory() method is called.
-        type: Titanium.Filesystem.File
+        summary: The file handle of the new directory. The new File object will have Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createDirectory() method is called.
+        type: Titanium.Tizen.Filesystem.File
     parameters:
       - name: dirPath   
         summary: The relative directory path, it should only contain characters supported by the underlying filesystem.
@@ -365,8 +365,8 @@ methods:
         
         In case the file cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
-        summary: The file handle of the new empty file. The new File object will have Ti.Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createFile() method is called.
-        type: Titanium.Filesystem.File
+        summary: The file handle of the new empty file. The new File object will have Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createFile() method is called.
+        type: Titanium.Tizen.Filesystem.File
     parameters:
       - name: filePath   
         summary: The new file path, it should only contain characters supported by the underlying filesystem.
@@ -383,7 +383,7 @@ methods:
         The encoding of file paths is UTF-8.
     returns:
         summary: The file handle of the file. The new File object will inherit its access rights from the File object on which this resolve() method is called.
-        type: Titanium.Filesystem.File
+        type: Titanium.Tizen.Filesystem.File
     parameters:
       - name: filePath   
         summary: The relative file/directory path to resolve.
@@ -393,11 +393,11 @@ methods:
             var file;
             // Resolves helloWorld.doc file that is located in the
             // documents root location
-            Ti.Tizen.Filesystem.resolve(
+            Tizen.Filesystem.resolve(
                'documents',
                function(dir){ file = dir.resolve("helloWorld.doc");},
-               function(e){ Ti.API.info("Error" + e.message);},
-               Ti.Tizen.Filesystem.FILE_MODE_RW);
+               function(e){ Titanium.API.info("Error" + e.message);},
+               Tizen.Filesystem.FILE_MODE_RW);
 
   - name: deleteDirectory
     summary: Deletes a specified directory and directory tree if specified.
@@ -423,7 +423,7 @@ methods:
         optional: true
       - name: onerror
         summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
     examples:
       - example: |
@@ -435,33 +435,33 @@ methods:
                        files[i].fullPath,
                        false,
                        function(){
-                         Ti.API.info("Directory Deleted");
+                         Titanium.API.info("Directory Deleted");
                        }, function(e) {
-                         Ti.API.info("Error" + e.message);
+                         Titanium.API.info("Error" + e.message);
                        });
                  else
                    documentsDir.deleteFile(
                        files[i].fullPath,
                        function(){
-                         Ti.API.info("File Deleted");
+                         Titanium.API.info("File Deleted");
                        }, function(e) {
-                         Ti.API.info("Error" + e.message);
+                         Titanium.API.info("Error" + e.message);
                        });
                }
              }
 
              function onerror(error) {
-               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+               Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
 
-             Ti.Tizen.Filesystem.resolve(
+             Tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
-                   Ti.API.info("Error" + e.message);
-                 }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                   Titanium.API.info("Error" + e.message);
+                 }, Tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: deleteFile
@@ -486,7 +486,7 @@ methods:
         optional: true
       - name: onerror
         summary: Called if an error occurred. 
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
     examples:
       - example: |
@@ -497,34 +497,34 @@ methods:
                        files[i].fullPath,
                        false,
                        function(){
-                         Ti.API.info("File Deleted");
+                         Titanium.API.info("File Deleted");
                        }, function(e) {
-                         Ti.API.info("Error" + e.message);
+                         Titanium.API.info("Error" + e.message);
                        });
                  else
                    documentsDir.deleteFile(
                        files[i].fullPath,
                        function(){
-                         Ti.API.info("Directory Deleted");
+                         Titanium.API.info("Directory Deleted");
                        }, function(e) {
-                         Ti.API.info("Error" + e.message);
+                         Titanium.API.info("Error" + e.message);
                        });
                }
             }
 
             function onerror(error) {
-               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+               Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
             }
 
             var documentsDir;
-            Ti.Tizen.Filesystem.resolve(
+            Tizen.Filesystem.resolve(
                'documents',
                function(dir){
                  documentsDir = dir;
                  dir.listFiles(onsuccess,onerror);
                }, function(e){
-                 Ti.API.info("Error" + e.message);
-               }, Ti.Tizen.Filesystem.FILE_MODE_RW
+                 Titanium.API.info("Error" + e.message);
+               }, Tizen.Filesystem.FILE_MODE_RW
             );
  
 properties:
@@ -534,7 +534,7 @@ properties:
         The parent directory handle.
         null if there is no parent directory.
         If there is no parent directory, this represents a root location.
-    type: Titanium.Filesystem.File
+    type: Titanium.Tizen.Filesystem.File
     permission: read-only
     examples:
       - example: |
@@ -545,12 +545,12 @@ properties:
                for(var i = 0; i < files.length; i++) {
                  // prints the file parent, should contain the
                  // same value for all the files in the loop
-                 Ti.API.info("All the files should have the same parent " + files[i].parent);
+                 Titanium.API.info("All the files should have the same parent " + files[i].parent);
                }
              }
 
              function onerror(error){
-               Ti.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
+               Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
   - name: readOnly
     summary: |
@@ -614,7 +614,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.modified); // displays the modification timestamp
+            Titanium.API.info(file.modified); // displays the modification timestamp
 
   - name: path
     summary: |
@@ -632,7 +632,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.path); // should be 'music/' if the file is music/foo.mp3
+            Titanium.API.info(file.path); // should be 'music/' if the file is music/foo.mp3
 
   - name: name
     summary: |
@@ -648,7 +648,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.name); // should be foo.mp3 if the file path is music/foo.mp3
+            Titanium.API.info(file.name); // should be foo.mp3 if the file path is music/foo.mp3
 
   - name: fullPath
     summary: |
@@ -666,7 +666,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.fullPath); // should be music/track1.mp3 if the file is music/track1.mp3
+            Titanium.API.info(file.fullPath); // should be music/track1.mp3 if the file is music/track1.mp3
 
   - name: fileSize
     summary: |
@@ -677,7 +677,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.fileSize); // displays the file size
+            Titanium.API.info(file.fileSize); // displays the file size
 
   - name: length
     summary: |
@@ -688,7 +688,7 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(file.length); // '3' if the directory contains two files and one sub-directory
+            Titanium.API.info(file.length); // '3' if the directory contains two files and one sub-directory
 
 # Pseudo-type
 ---

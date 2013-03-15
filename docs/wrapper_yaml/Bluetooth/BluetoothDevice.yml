@@ -34,11 +34,11 @@ methods:
 
       - name: errorCallback
         summary: Method to be invoked in case of failure to open a socket.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
-            var adapter = Titanium.Tizen.Bluetooth.getDefaultAdapter();
+            var adapter = Tizen.Bluetooth.getDefaultAdapter();
             
             var clientSocket = null;
 
@@ -47,7 +47,7 @@ methods:
             function sendMessage(msg) {
             
                 // Validate socket state, if everything is ok.
-                if (clientSocket != null && clientSocket.state == "OPEN") {
+                if (clientSocket != null && clientSocket.state == Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
                     //Send
                     clientSocket.writeData(msg);
                 }

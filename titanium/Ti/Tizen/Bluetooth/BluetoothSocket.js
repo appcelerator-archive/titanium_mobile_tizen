@@ -1,10 +1,22 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Bluetooth.BluetoothSocket', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError'], function(declare, Evented, WebAPIError) {
+	return declare('Tizen.Bluetooth.BluetoothSocket', Evented, {
 		constructor: function(args) {
+			var self = this;
 			if(args.toString() === '[object BluetoothSocket]') {
-				this._obj = args;
-			} else {
+				self._obj = args;
 			}
+            
+			self._obj.onmessage = function() {
+				self.fireEvent('socketmessagereceived');
+            };
+            
+            self._obj.onclose = function() {
+            	self.fireEvent('socketclosed');
+            };
+            
+            self._obj.onerror  = function(e) {
+            	self.fireEvent('socketerror', new WebAPIError(e));
+            };
 		},
 
 		constants: {
@@ -30,35 +42,8 @@ define(['Ti/_/declare'], function(declare) {
 			},
 		},
 
-		properties: {
-			onmessage: {
-				get: function() {
-					return this._obj.onmessage;
-				},
-				set: function(value) {
-					this._obj.onmessage = value;
-				}
-			},
-			onclose: {
-				get: function() {
-					return this._obj.onclose;
-				},
-				set: function(value) {
-					this._obj.onclose = value;
-				}
-			},
-			onerror: {
-				get: function() {
-					return this._obj.onerror;
-				},
-				set: function(value) {
-					this._obj.onerror = value;
-				}
-			},
-		},
-
-		writeData: function(data /*byte*/) {
-			return this._obj.writeData(data._obj);
+		writeData: function(data) {
+			return this._obj.writeData(data);
 		},
 
 		readData: function() {

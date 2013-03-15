@@ -23,7 +23,6 @@ var fs = require('fs'),
 	appc = require('node-appc'),
 	xmldom = require('xmldom'),
 	wrench = require('wrench'),
-	fileUtils = require("file-utils").File,
 	shell = require('shelljs/global'),
 	debug = require('debug'),
 	admzip = require('adm-zip'),
@@ -45,33 +44,11 @@ async.series([
 
 function(next) {
 	if (validateArgs(args)) {
-		//build name for output zip with SDK
-		var archiveName = path.basename(args[0]);
-		archiveName = archiveName.replace('.zip', '-tizen.zip');
-
-		//Logic on on Windows and Linux are different:
-		//win32: file-utils will remove temporary dir 
-		//linux: cannot use file-utils because 
-		if (runningOnWin32) {
-			//create temporary dir to unzip and modify sdk content. The dir is removed when the process finishes
-			var settings = {
-				directory: tempdir()
-			};
-			fileUtils.createTempFolder(settings, function(error, folder) {
-				if (folder == null) {
-					next('Cannot create temporary directory', 'failed');
-				}
-				info('created temporary directory:' + folder.toString());
-				workingDir = folder.toString();
-
-				next(null, 'ok');
-			});
-		} else {
-			var random = Math.random ().toString ().substring (2);
-			workingDir = path.join(tempdir(), random);
-			fs.mkdirSync(workingDir);
-			next(null, 'ok');
-		}
+		//creating temporary working directory
+		var random = Math.random ().toString ().substring (2);
+		workingDir = path.join(tempdir(), random);
+		fs.mkdirSync(workingDir);
+		next(null, 'ok');
 	}
 }, function(next) {
 	info('Start unzip');
@@ -87,8 +64,24 @@ function(next) {
 	unzip = runningOnWin32 ? unzip7za : appc.zip.unzip;
 	unzip(args[0], workingDir, resultCb);
 }, function(next) {
+	//after unzip we use directories names to find target OS and SDK names and create output file name
+	// get sdk os version
+	var os = (ls(workingDir + '/' + 'mobilesdk' ))[0],
+		sdkVersion = (ls(workingDir + '/' + 'mobilesdk/' + os + '/'))[0];
+
+	info('os:' + os);	
+	info('sdkVersion:' + sdkVersion);
+	// create output file path and remove if it already exists
+	resultPath = (args[1] || path.dirname(args[0])) + '/tizen-' + sdkVersion + '-' + os + '.zip';
+	info('outFile:' + resultPath);
+	if (fs.existsSync(resultPath)) {
+		fs.unlinkSync(resultPath);
+	}	
+	sdkRoot = path.join(workingDir, 'mobilesdk', os, sdkVersion);
+	next(null, 'ok');
+}, function(next) {	
 	info('Create tizen platform, initially copy it from mobileweb');
-	copyMobileWebToTizen(function() {
+	patchingSDK(function() {
 		next(null, 'ok');
 	});
 }, function(next) {
@@ -108,10 +101,8 @@ function(next) {
 	}
 }, function(next) {
 	//cleanup
-	if (!runningOnWin32) {
-		info('Deleting temporary directory ' + workingDir);
-		rm('-rf', workingDir);
-	} 
+	info('Deleting temporary directory ' + workingDir);
+	rm('-rf', workingDir);
 }], function(err) {
 	if (err) {
 		info(err);
@@ -137,49 +128,30 @@ function validateArgs(params) {
 	return workOk;
 }
 
-function copyMobileWebToTizen(finish) {
-
-	var os = (ls(workingDir + '/' + 'mobilesdk' ))[0];
-	// get sdk os version
-	info('os:' + os);
-
-	var sdkVersion = (ls(workingDir + '/' + 'mobilesdk/' + os + '/'))[0];
-	info('sdkVersion:' + sdkVersion);
-
-	// create output directory path and
-	resultPath = (args[1] || '.') + '/tizen-' + sdkVersion + '-' + os + '.zip';
-	info('outFile:' + resultPath);
-	if (fs.existsSync(resultPath)) {
-		fs.unlinkSync(resultPath);
-	}
-
-	sdkRoot = path.join(workingDir, 'mobilesdk', os, sdkVersion);
-	info('sdkRoot:' + sdkRoot);
-
+function patchingSDK(finish) {
 	var createDirs = [
-		'utils'
-	];
-	var overrideFiles = [
-		'titanium/Ti',
-		'cli/commands',
-		'titanium/Ti.js',
-		'templates/app/config.tmpl',
-		'templates/app/default/Resources/tizen',
-		'src/loader.js',
-		'src/index.html',
-		'dependencyAnalyzer',
-		'themes',
-		'utils/signapp.jar'
-	];
+			'utils'
+		],
+		overrideFiles = [
+			'titanium/Ti',
+			'cli/commands',
+			'titanium/Ti.js',
+			'templates/app/config.tmpl',
+			'templates/app/default/Resources/tizen',
+			'src/loader.js',
+			'src/index.html',
+			'dependencyAnalyzer',
+			'themes',
+			'utils/signapp.jar'
+		],
+		exclude = [
+			'titanium/Ti/Facebook',
+			'titanium/Ti/Facebook.js',
+			'resources/apple_startup_images',
+			'templates/app/default/Resources/mobileweb/apple_startup_images'		
+		],
+		pathToTizenInInSdk = path.join(sdkRoot, 'tizen');
 
-	var exclude = [
-		'titanium/Ti/Facebook',
-		'titanium/Ti/Facebook.js',
-		'resources/apple_startup_images',
-		'templates/app/default/Resources/mobileweb/apple_startup_images'		
-	];
-
-	var pathToTizenInInSdk = path.join(sdkRoot, 'tizen');
 	//Directory tizen may already exists in archive if we re-pack sdk with tizen support. Remove it
 	if (fs.existsSync(pathToTizenInInSdk)) {
 		wrench.rmdirSyncRecursive(pathToTizenInInSdk, true);
@@ -193,8 +165,8 @@ function copyMobileWebToTizen(finish) {
 	});
 
 	overrideFiles.forEach( function (patch) {
-		var source = path.join(titaniumTizenDir, patch);
-		var stats = fs.statSync(source);
+		var source = path.join(titaniumTizenDir, patch),
+			stats = fs.statSync(source);
 		info('Copy ' + source + ' into '+ path.join(pathToTizenInInSdk, patch));
 		if (stats.isDirectory()) {
 			copyDirSyncRecursiveEx(source, path.join(pathToTizenInInSdk, patch));
@@ -204,8 +176,8 @@ function copyMobileWebToTizen(finish) {
 	});
 
 	exclude.forEach( function (target) {
-		var source = path.join(pathToTizenInInSdk, target)
-		var stats = fs.statSync(source);
+		var source = path.join(pathToTizenInInSdk, target),
+			stats = fs.statSync(source);
 		info('Deleting ' + source);
 		if (stats.isDirectory()) {
 			wrench.rmdirSyncRecursive(source, false);
@@ -229,7 +201,6 @@ function executeDependenciesAnalyzer(finished) {
 }
 
 function copyFileSync(srcFile, destFile) {
-	//info('copyFileSync from ' + srcFile + " to " + destFile);
 	var bytesRead = 1, 
 		fdr, fdw, 
 		pos = 0,
@@ -246,9 +217,9 @@ function copyFileSync(srcFile, destFile) {
 	return fs.closeSync(fdw);
 }
 
-function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
-	//info('copyDirSyncRecursiveEx src ' + sourceDir + " destination " + newDirLocation); /*  Create the directory where all our junk is moving to; read the mode of the source directory and mirror it */
-	var checkDir = fs.statSync(sourceDir);
+function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {	
+	var checkDir = fs.statSync(sourceDir),
+		files;
 	try {
 		if (!fs.existsSync(newDirLocation)) {
 			fs.mkdirSync(newDirLocation, checkDir.mode);
@@ -258,8 +229,7 @@ function copyDirSyncRecursiveEx(sourceDir, newDirLocation) {
 		if (e.code !== 'EEXIST') throw e;
 	}
 
-	var files = fs.readdirSync(sourceDir);
-	//info('copyDirSyncRecursiveEx created filelist for ' + sourceDir + " it contains " + files.length);
+	files = fs.readdirSync(sourceDir);
 	for(var i = 0; i < files.length; i++) {
 		var currFile = fs.lstatSync(sourceDir + "/" + files[i]);
 		if (currFile.isDirectory()) { /*  recursion this thing right on back. */
@@ -287,9 +257,8 @@ function find7za() {
 
 function packagingSDK7z(finish) {
 	info('Packaging application into zip');
-	var packer = require('child_process');
-	// Create the tasks to unzip each entry in the zip file
-	var child, stdout = '',
+	var packer = require('child_process'),
+		child, stdout = '',
 		stderr = '';
 
 	child = packer.spawn(path.resolve(find7za().toString()), ['a', resultPath, workingDir + '/*', '-tzip']);
@@ -325,9 +294,8 @@ function packagingSDK7z(finish) {
 }
 
 function unzip7za(src, dest, callback) {
-	var packer = require('child_process');
-	// Create the tasks to unzip each entry in the zip file
-	var child, stdout = '',
+	var packer = require('child_process'),
+		child, stdout = '',
 		stderr = '';
 
 	child = packer.spawn(path.resolve(find7za().toString()), ['x', src, '-o' + dest, '-y', '-bd']);
@@ -364,8 +332,8 @@ function unzip7za(src, dest, callback) {
 }
 
 function packagingSDKLinux(finish) {
-	var packer = require('child_process');
-	var cmdzip = 'zip -q -r  "' + resultPath + '" *';
+	var packer = require('child_process'),
+		cmdzip = 'zip -q -r  "' + resultPath + '" *';
 	info('zip cmd: ' + cmdzip);
 	packer.exec(
 	cmdzip, {

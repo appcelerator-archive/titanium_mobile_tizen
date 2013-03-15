@@ -28,7 +28,7 @@ methods:
 
       - name: errorCallback
         summary: To be invoked if the sending request fails.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -43,11 +43,12 @@ methods:
             // Define service query success callback.
             function serviceListCB(services) {
                 if (services.length > 0) {
-                    var msg = new tizen.Message(MESSAGE_SERVICE_TAG_MESSAGING_SMS, {plainBody: "Tizen draft SMS message."});
+                    var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+                                                             messageInitDict: {plainBody: 'Tizen draft SMS message.'}});
                     services[0].messageStorage.addDraftMessage(msg, successCallback, errorCallback);
                 }
             }
-            Titanium.Tizen.Messaging.getMessageServices(MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
+            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: findMessages
     summary: Queries messages from MessageStorage. 
@@ -58,7 +59,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
-        type: Titanium.Tizen.AbstractFilter 
+        type: Tizen.AbstractFilter 
 
       - name: successCallback
         summary: Function called when the invocation ends successfully. 
@@ -66,12 +67,12 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
 
       - name: sort
         summary: Sorting mode for the query. 
-        type: Titanium.Tizen.SortMode
+        type: Tizen.SortMode
         optional: true
 
       - name: limit
@@ -97,7 +98,9 @@ methods:
             function errorCallback(error) {
                 console.log("Cannot query messages" + error.message);
             }
-            var filter = Titanium.Tizen.createAttributeFilter("from", "CONTAINS", "2593");
+            var filter = Tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                      matchValue: '2593'});
             messageStorage.findMessages(filter, messageArrayCB, errorCallback);
 
   - name: removeMessages
@@ -118,7 +121,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
 
     examples:
@@ -136,7 +139,9 @@ methods:
             function messageArrayCB(messages) {
                 messageStorage.removeMessages(messages, successCallback, errorCallback);
             }
-            var filter = Titanium.Tizen.createAttributeFilter("from", "CONTAINS", "2593");
+            var filter = Tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                      matchValue: '2593'});
             messageStorage.findMessages(filter, messageArrayCB);
 
   - name: updateMessages
@@ -159,7 +164,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -177,7 +182,9 @@ methods:
                 messages[0].isRead = true;
                 messageStorage.updateMessages(messages, successCallback, errorCallback);
             }
-            var filter = Titanium.Tizen.createAttributeFilter('isRead', 'EXACTLY', 'false');
+            var filter = Tizen.createAttributeFilter({attributeName: 'isRead',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+                                                      matchValue: 'false'});
             messageStorage.findMessages(filter, messageArrayCB);
 
   - name: findConversations
@@ -189,7 +196,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
-        type: Titanium.Tizen.AbstractFilter 
+        type: Tizen.AbstractFilter 
 
       - name: successCallback
         summary:  Function called when the invocation ends successfully. 
@@ -197,12 +204,12 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
 
       - name: sort
         summary: Sorting rules for the query.
-        type: Titanium.Tizen.SortMode
+        type: Tizen.SortMode
         optional: true
 
       - name: limit
@@ -228,7 +235,9 @@ methods:
             function errorCallback(error) {
                 console.log("Cannot query conversations" + error.message);
             }
-            var filter = new Titanium.Tizen.createAttributeFilter('from', 'CONTAINS', '2593');
+            var filter = Tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                      matchValue: '2593'});
             messageStorage.findConversations(filter, conversationsArrayCB, errorCallback)
 
   - name: removeConversations
@@ -249,7 +258,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -271,7 +280,9 @@ methods:
             function queryErrorCB(error) {
                 console.log("Cannot query conversations" + error.message);
             }
-            var filter = Titanium.Tizen.createAttributeFilter('from', 'CONTAINS', '2593');
+            var filter = Tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                      matchValue: '2593'});
             messageStorage.findConversations(filter, conversationsArrayCB, queryErrorCB);
 
   - name: findFolders
@@ -283,7 +294,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
-        type: Titanium.Tizen.AbstractFilter
+        type: Tizen.AbstractFilter
 
       - name: successCallback
         summary: Function called when the invocation ends successfully. 
@@ -291,7 +302,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs. 
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -303,7 +314,9 @@ methods:
                 console.log(i + ", folder: " + folders[i].name);
               }
             }
-            var filter = Titanium.Tizen.createAttributeFilter("serviceId", "EXACTLY", service.id);
+            var filter = Tizen.createAttributeFilter({attributeName: 'serviceId',
+                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+                                                      matchValue: service.id});
             messageStorage.findFolders(filter, folderArrayCB);
 
   - name: addMessagesChangeListener
@@ -322,7 +335,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Titanium.Tizen.AbstractFilter
+        type: Tizen.AbstractFilter
         optional: true
     examples:
       - example: |
@@ -357,7 +370,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Titanium.Tizen.AbstractFilter
+        type: Tizen.AbstractFilter
         optional: true
 
   - name: addFoldersChangeListener
@@ -376,7 +389,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Titanium.Tizen.AbstractFilter
+        type: Tizen.AbstractFilter
         optional: true
     examples:
       - example: |

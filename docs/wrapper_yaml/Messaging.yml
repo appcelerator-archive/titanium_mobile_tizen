@@ -15,8 +15,8 @@ methods:
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-            <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+            Type of the services to be retrieved. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
       - name: successCallback
@@ -25,7 +25,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -37,7 +37,7 @@ methods:
             function serviceListCB(services) {
                 console.log("Found " + services.html + "email services");
             }
-            Titanium.Tizen.Messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
+            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
 
   - name: createMessage
     summary: Returns the <Titanium.Tizen.Messaging.Message> object.
@@ -62,13 +62,13 @@ methods:
  
             function serviceListCB(services) {
                 if (services.length > 0) {
-                    var msg = Titanium.Tizen.Messaging.createMessage({type: "messaging.sms", 
+                    var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, 
                                                                       messageInitDict: {plainBody: "Tizen first SMS message."}});
                     services[0].sendMessage(msg, messageSentCallback, errorCallback);
                 }
             }
 
-            Titanium.Tizen.Messaging.getMessageServices("messaging.sms", serviceListCB, errorCallback);
+            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB, errorCallback);
 
   - name: createMessageAttachment
     summary: Returns the <Titanium.Tizen.Messaging.MessageAttachment> object.
@@ -103,7 +103,7 @@ summary: An object containing the various options for inititalized <Titanium.Tiz
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of message. The supported types are: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options
