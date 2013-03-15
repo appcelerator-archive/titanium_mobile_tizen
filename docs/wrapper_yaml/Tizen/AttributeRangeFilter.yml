@@ -48,4 +48,4 @@ examples:
                                                           initialValue: today_begin,
                                                           endValue: today_end});
         // Send a search request to default event calendar.
-        Titanium.Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
+        Titanium.Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT).find(successCallback, errorCallback, filter);
