@@ -10,7 +10,7 @@ module.exports = new function() {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		applicationObj = require('Ti/Tizen/Application');
+		applicationObj = require('Ti/Tizen/Apps');
 	}
 
 	this.name = 'application';
