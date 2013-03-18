@@ -4,7 +4,7 @@ function tizen_exit_hide_launch(_args) {
 		butttonHeightOffset = 10, 
 		butttonHeight = 40,
 		butttonWidth = 200,
-		appObj = require('Ti/Tizen/Application'),
+		appObj = require('Ti/Tizen/Apps'),
 		kitchenSinkApp = appObj.getCurrentApplication();
 
 	// Create button for Exit

@@ -1,6 +1,6 @@
 function tizen_appsinfo(_args) {
 	var self = Ti.UI.createWindow(),
-	appObj = require('Ti/Tizen/Application');
+	appObj = require('Ti/Tizen/Apps');
 
 	// Return list installed on the device applications 
 	appObj.getAppsInfo(function(applications) {

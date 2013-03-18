@@ -7,7 +7,7 @@ function tizen_application(_args) {
 				{ title: 'Exit / Hide / Launch', hasChild: true, test: 'ui/handheld/tizen/platform/application/exit_hide_launch' }
 			]
 		}),
-		appObj = require('Ti/Tizen/Application');
+		appObj = require('Ti/Tizen/Apps');
 
 	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {
