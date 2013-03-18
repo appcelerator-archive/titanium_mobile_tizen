@@ -1,8 +1,9 @@
 ---
 name: Tizen.Apps.Application
 summary: This interface defines the current application's information and the basic operations (such as exit or hide) for the current application.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
+createable: false
 methods:
   - name: exit
     summary: Exits the current application.

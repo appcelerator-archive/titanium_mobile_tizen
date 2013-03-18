@@ -1,9 +1,9 @@
 ---
 name: Tizen.Apps.ApplicationInformation
 summary: This interface defines the metadata information available to an installed application. 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
-
+createable: false
 properties:
   - name: id
     summary: An attribute to store the identifier of an application for application management. 
@@ -32,7 +32,7 @@ properties:
 
   - name: categories
     summary: An array of attributes to store the categories that the app belongs to. 
-    type: "String[]"
+    type: Array<String>
     permission: read-only
 
   - name: installDate
