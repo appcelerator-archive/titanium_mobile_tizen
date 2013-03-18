@@ -15,8 +15,8 @@ methods:
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-            <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+            Type of the services to be retrieved. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
       - name: successCallback
@@ -25,7 +25,7 @@ methods:
 
       - name: errorCallback
         summary: Function called when an error occurs
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -37,7 +37,7 @@ methods:
             function serviceListCB(services) {
                 console.log("Found " + services.html + "email services");
             }
-            tizen.messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
+            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
 
   - name: createMessage
     summary: Returns the <Titanium.Tizen.Messaging.Message> object.
@@ -48,6 +48,27 @@ methods:
       - name: initDict
         summary: Provides specifying message attributes upon message creation.
         type: MessageInit
+    examples:
+      - example: |
+            // Define the success callback.
+            var messageSentCallback = function(recipients) {
+                console.log("Message sent successfully to " + recipients.length + " recipients.");
+            }
+
+            // Define the error callback.
+            function errorCallback(err) {
+                console.log(err.name + " error: " + err.message);
+            }
+ 
+            function serviceListCB(services) {
+                if (services.length > 0) {
+                    var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, 
+                                                                      messageInitDict: {plainBody: "Tizen first SMS message."}});
+                    services[0].sendMessage(msg, messageSentCallback, errorCallback);
+                }
+            }
+
+            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB, errorCallback);
 
   - name: createMessageAttachment
     summary: Returns the <Titanium.Tizen.Messaging.MessageAttachment> object.
@@ -82,11 +103,11 @@ summary: An object containing the various options for inititalized <Titanium.Tiz
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of message. The supported types are: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options
-    summary: Provides specifying message attributes upon message creation.
+    summary: (optional) Provides specifying message attributes upon message creation.
     type: messageInitDict
     optional: true
 
@@ -138,7 +159,7 @@ properties:
     type: String
 
   - name: mimeType
-    summary: Provides specifying mimeType of file.
+    summary: (optional) Provides specifying mimeType of file.
     type: String
     optional: true
 

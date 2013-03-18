@@ -21,15 +21,15 @@ properties:
     summary: |
         The storage type.
                 
-        Defines whether the storage is Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_INTERNAL or Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL.
+        Defines whether the storage is <Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_INTERNAL> or <Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL>.
     type: String
     permission: read-only
 
   - name: state
     summary: |
         The storage state.
-        The value is one of the constants defined for this parameter : Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED, Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_REMOVED,
-        Ti.Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE
+        The value is one of the constants defined for this parameter : <Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED>, <Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_REMOVED>,
+        <Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE>
         
         Defines whether the storage is mounted or not.
     type: String

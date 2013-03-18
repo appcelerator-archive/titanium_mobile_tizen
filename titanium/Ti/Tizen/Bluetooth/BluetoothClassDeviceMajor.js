@@ -1,9 +1,8 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Bluetooth.BluetoothClassDeviceMajor', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Tizen.Bluetooth.BluetoothClassDeviceMajor', Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object BluetoothClassDeviceMajor]') {
 				this._obj = args;
-			} else {
 			}
 		},
 

@@ -4,10 +4,10 @@ summary: This Module provides interfaces and methods providing web applications 
 description: |
     This API provides interface and method through features such as:
     
-        HOME_SCREEN
-        LOCK_SCREEN
-        INCOMING_CALL
-        NOTIFICATION_EMAIL
+        Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN
+        Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN
+        Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL
+        Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL
         
     The `SystemSetting` module is a thin wrapper on the Tizen `SystemSetting` class.
 extends: Titanium.Module
@@ -48,7 +48,7 @@ methods:
              Ti.API.info("Fail to setProperty" + error.message);
            }
 
-           Ti.Tizen.SystemSetting.setProperty("HOME_SCREEN", "images/image1.jpg", successCallback, errorCallback);
+           Ti.Tizen.SystemSetting.setProperty(Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, "images/image1.jpg", successCallback, errorCallback);
         
   - name: getProperty
     summary: Gets the setting of the device
@@ -82,7 +82,7 @@ methods:
              Ti.API.info("Fail to getProperty" + error.message);
            }
 
-           Ti.Tizen.SystemSetting.getProperty("HOME_SCREEN", getPropertySuccessCallback, errorCallback);
+           Ti.Tizen.SystemSetting.getProperty(Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, getPropertySuccessCallback, errorCallback);
     
 properties:
 

@@ -169,7 +169,8 @@ properties:
   - name: unit
     type: String
     summary: |
-        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+        (optional) Time property value: Tizen.Time.TIME_DURATION_UNIT_MSECS, Tizen.Time.TIME_DURATION_UNIT_SECS, Tizen.Time.TIME_DURATION_UNIT_MINS, Tizen.Time.TIME_DURATION_UNIT_HOURS, Tizen.Time.TIME_DURATION_UNIT_DAYS
+    optional: true
 ---
 
 name: TZDateUnit1
@@ -177,12 +178,12 @@ summary: An object containing the various options for fetching the properties re
 properties:
   - name: datetime
     type: Date
-    summary: Time format according to the system's locale settings.
+    summary: (optional) Time format according to the system's locale settings.
     optional: true
 
   - name: timezone
     type: String
-    summary: Predefined timezone.
+    summary: (optional) Predefined timezone.
     optional: true
 
 ---
@@ -203,25 +204,25 @@ properties:
 
   - name: hours
     type: Number
-    summary: Hours to check.
+    summary: (optional) Hours to check.
     optional: true
 
   - name: minutes
     type: Number
-    summary: Minutes to check.
+    summary: (optional) Minutes to check.
     optional: true
 
   - name: seconds
     type: Number
-    summary: Seconds to check.
+    summary: (optional) Seconds to check.
     optional: true
 
   - name: milliseconds
     type: Number
-    summary: Milliseconds to check.
+    summary: (optional) Milliseconds to check.
     optional: true
 
   - name: timezone
     type: String
-    summary: Predefined timezone.
+    summary: (optional) Predefined timezone.
     optional: true

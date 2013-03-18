@@ -8,7 +8,7 @@ methods:
   - name: getCurrentApplication
     summary: Gets the Application object defining the current application.
     returns: 
-      - type: Tizen.Application.Application
+      - type: Tizen.Apps.Application
         summary: Application The data structure that defines current application.
     examples:
       - example: |
@@ -24,7 +24,6 @@ methods:
         InvalidValuesError - If any of the input parameters contain an invalid value.
         UnknownError - If any other error occurs.
     parameters:
- 
       - name: id
         summary: A unique string representing application ID.
         type: String
@@ -36,7 +35,7 @@ methods:
 
       - name: errorCallback
         summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -56,12 +55,10 @@ methods:
             NotFoundError - If system cannot find the application that matches the specified application control.
             InvalidValuesError - If any of the input parameters contain an invalid value.
             UnknownError: If any other error occurs.
-
     parameters:
-
       - name: appControl
         summary: The data structure describing application control details.
-        type: Tizen.Application.ApplicationControl
+        type: ApplicationControlObject
  
       - name: id
         summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
@@ -74,7 +71,7 @@ methods:
 
       - name: errorCallback
         summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true    
 
       - name: replyCallback
@@ -83,7 +80,7 @@ methods:
             Pass a dictionary with the following supported keys: `onsuccess` a function that accepts as parameter array of Tizen.Application.ApplicationControlData, 
             and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
             and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
-        type: ApplicationControlReplyCallback
+        type: ApplicationControlDataArrayReplyCallback
         optional: true
     examples:
       - example: |
@@ -121,18 +118,17 @@ methods:
             InvalidValuesError - If any of the input parameters contain an invalid value.
             UnknownError - If any other error occurs.
     parameters: 
-
       - name: appControl
         summary: A data structure describing application control details.
-        type: Tizen.Application.ApplicationControl
+        type: ApplicationControlObject
 
       - name: successCallback
         summary: The method to call that returns a list of application information. 
-        type: Callback<Tizen.Application.ApplicationInformation[], Tizen.Application.ApplicationControl>
+        type: Callback<Tizen.Apps.ApplicationInformation[], ApplicationControlObject>
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -175,11 +171,11 @@ methods:
 
       - name: successCallback
         summary: The method to call when the invocation ends successfully.  
-        type: Callback<Tizen.Application.ApplicationContext[]>
+        type: Callback<Tizen.Apps.ApplicationContext[]>
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -196,10 +192,9 @@ methods:
         If the ID is set to null or is not set at all, the method returns the application context of the current application. 
         The list of running applications and their application IDs is obtained with getAppsContext().
     returns: 
-      - type: Tizen.Application.ApplicationContext
+      - type: Tizen.Apps.ApplicationContext
         summary: A data structure that lists running application details.
     parameters: 
-
       - name: contextId
         summary: "A string representing an application context ID. If the ID is not provided, the application context of the calling application will be returned."
         type: String
@@ -209,12 +204,10 @@ methods:
     description: |
         The errorCallback() is launched with this error type:
         UnknownError - If an unknown error occurs.
-
     parameters:
-
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Tizen.Application.ApplicationInformation[]>
+        type: Callback<Tizen.Apps.ApplicationInformation[]>
 
       - name: errorCallback
         summary: The method to call when an error occurs. Accepts error object as parameter.
@@ -235,10 +228,9 @@ methods:
         If the ID is set to null or not set at all, it returns application information for the current application. 
         The list of installed applications and their application IDs is obtained with getAppsInfo(). 
     returns:
-      - type: Tizen.Application.ApplicationInformation
+      - type: Tizen.Apps.ApplicationInformation
         summary: The application metadata
     parameters: 
-
       - name: id
         summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
         type: String
@@ -256,16 +248,14 @@ methods:
         When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
         The ApplicationInformationEventCallback must be invoked every time a new application is installed, removed, or updated.
         The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
-
     returns:
       - type: Number
         summary: ID of the listener that can be used to remove the listener later. 
     parameters: 
-
       - name: eventCallback
         summary: |
-            Pass a dictionary with the following supported keys: `oninstalled` a function that accepts parameter of type Tizen.Application.ApplicationInformation,  
-            called when the application is installed, `onupdated` a function that accepts parameter of type Tizen.Application.ApplicationInformation, and will be 
+            Pass a dictionary with the following supported keys: `oninstalled` a function that accepts parameter of type <Tizen.Apps.ApplicationInformation>,  
+            called when the application is installed, `onupdated` a function that accepts parameter of type <Tizen.Apps.ApplicationInformation>, and will be 
             called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
         type: Object
     examples:
@@ -283,10 +273,10 @@ methods:
             };
             var applicationObj = require('Ti/Tizen/Application');
             var watchId = applicationObj.addAppInfoEventListener(appEventCallback);
+
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
     parameters: 
-
       - name: watchId
         summary: An ID that identifies the listener.
         type: Number
@@ -296,42 +286,39 @@ methods:
             applicationObj.removeAppInfoEventListener(watchId);
  
   - name: createApplicationControlData
-    summary: Creates and returns an instance of <Tizen.Application.ApplicationControlData>.
+    summary: Creates and returns an instance of <ApplicationControlDataObject>.
     returns: 
-        type: Tizen.Application
+        type: Object
     parameters: 
-
       - name: Options
         summary: Dictionary with initial arguments for ApplicationControlDataUnit.
         type: Dictionary<ApplicationControlDataUnit>
-
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var appControlData = applicationObj.createApplicationControlData({key: "image", value: [imagedata1]});
+            var applicationObj = require('Ti/Tizen/Application'),
+                appControlData = applicationObj.createApplicationControlData({key: "image", value: [imagedata1]});
 
   - name: createApplicationControl
-    summary: Creates and returns an instance of <Tizen.Application.ApplicationControl>.
+    summary: Creates and returns an instance of <ApplicationControlObject>.
     returns: 
-        type: Tizen.ApplicationControl
+        type: Object
     parameters: 
-
       - name: Options
         summary: Dictionary with initial arguments for ApplicationControlUnit.
         type: Dictionary<ApplicationControlUnit>
-
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/share",
+            var applicationObj = require('Ti/Tizen/Application'),
+                appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/share",
                                                                 uri: "share.html",
                                                                 mime: "image/*",
                                                                 category: null,
                                                                 data: [applicationObj.createApplicationControlData(key: "images", value: [imagedata1, imagedata2])]});
+
 # Pseudo-type
 ---
 name: ApplicationControlDataUnit
-summary: Contains information required to initialize a <Tizen.Application.ApplicationControlData>.
+summary: Contains information required to initialize a <ApplicationControlDataObject>.
 platforms: [tizen]
 properties:
   - name: key
@@ -343,7 +330,7 @@ properties:
     
 ---
 name: ApplicationControlUnit
-summary: Contains information required to initialize an <Tizen.Application.ApplicationControl>.
+summary: Contains information required to initialize an <ApplicationControlObject>.
 platforms: [tizen]
 properties:
   - name: operation
@@ -362,11 +349,12 @@ properties:
     summary: (optional) An attribute to store the category of the application to be launched.
     optional: true
   - name: data  
-    type: Tizen.Application.ApplicationControlData
+    type: ApplicationControlDataObject
     summary: (optional) An array of attributes to store the data needed for an application control.
     optional: true
+
 ---
-name: ApplicationControlReplyCallback
+name: ApplicationControlDataArrayReplyCallback
 summary: This call back interface specifies success callbacks that are invoked as a reply from the requseted application control within the application control requestor. 
 description: |
     This callback interface specifies two methods:
@@ -378,11 +366,12 @@ methods:
     parameters:
       - name: data 
         summary: An array of ApplicationControlData objects 
-        type: Tizen.Application.ApplicationControlData[]
+        type: Array<ApplicationControlDataObject>
         optional: true
 
   - name: onfailure 
     summary: Called when the callee application calls RequestedApplicationControl.replyFailure(). 
+
 ---
 name: ApplicationInformationEventCallback
 summary: The callback interface to specify for subscribing for notification of changes in the list of installed applications on a device. 
@@ -393,7 +382,7 @@ methods:
     parameters:
       - name: info 
         summary: The application information of the installed application. 
-        type: Tizen.Application.ApplicationInformation[]
+        type: Array<Tizen.Apps.ApplicationInformation>
 
   - name: onupdated 
     summary: Called when an application is updated. 
@@ -408,3 +397,44 @@ methods:
       - name: id
         summary: The ID of the uninstalled application.  
         type: String
+
+---
+name: ApplicationControlObject
+summary: "This interface consists of an operation, URI, MIME type, and data."
+description: |
+    It describes an action to be performed by other applications and is passed to launch other applications. 
+    If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application. 
+platforms: [tizen]
+properties:
+  - name: operation
+    summary: An attribute to store the string that defines the action to be performed by an application control. 
+    type: String
+
+  - name: uri
+    summary: An attribute to store the URI needed by application control.  
+    type: String
+
+  - name: mime
+    summary: An attribute to store the MIME type of a content. 
+    type: String
+
+  - name: category
+    summary: An attribute to store the category of the application to be launched.   
+    type: Boolean
+
+  - name: data
+    summary: An array of attributes to store the data needed for an application control.  
+    type: Array<ApplicationControlDataObject>
+
+---
+name: ApplicationControlDataObject
+summary: "This object defines a key/value pair used to pass data between applications through the ApplicationControl interface. "
+platforms: [tizen]
+properties:
+  - name: key
+    summary: An attribute to store the name of a key. 
+    type: String
+
+  - name: value
+    summary: An attribute to store the value associated with a key. 
+    type: Array<String>
