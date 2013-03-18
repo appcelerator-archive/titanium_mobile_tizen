@@ -1,6 +1,6 @@
 define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Apps/ApplicationInformation', 'Ti/Tizen/Apps/ApplicationContext', 'Ti/Tizen/Apps/Application'], 
 		function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application) {
-	return lang.setObject('Tizen.Application', Evented, {
+	return lang.setObject('Tizen.Apps', Evented, {
 		getCurrentApplication: function() {
 			return new Application(tizen.application.getCurrentApplication());
 		},
@@ -46,7 +46,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Apps/Appl
 		},
 
 		findAppControl: function(appControl /*Object*/, successCallback /*FindAppControlSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			function wrapperdSuccessCallback(informationArray, appControl) {
+			function wrappedSuccessCallback(informationArray, appControl) {
 				var wrappedInformationArray = [],
 					wrappedAppControl,
 					i = 0,
@@ -67,7 +67,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Apps/Appl
 				successCallback(wrappedInformationArray, wrappedAppControl);
 			}
 
-			tizen.application.findAppControl(appControl._obj, successCallback && wrapperdSuccessCallback, errorCallback);
+			tizen.application.findAppControl(appControl._obj, successCallback && wrappedSuccessCallback, errorCallback);
 		},
 
 		getAppsContext: function(successCallback /*ApplicationContextArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
