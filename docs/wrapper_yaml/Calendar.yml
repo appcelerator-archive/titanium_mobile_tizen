@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar
+name: Tizen.Calendar
 summary:  interfaces and methods for users to manage their schedule. 
 description: |
     Separate calendars can be implemented for group related events or tasks. For example, a user may have a work, personal, and family calendar. A calendar entry is called an event and is composed of a series of attributes, such as purpose, starting time, and duration. A calendar is a collection of events.
@@ -35,19 +35,21 @@ methods:
     parameters:
       - name: type
         summary:  |
-            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+            The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT="EVENT" or Tizen.Calendar.CALENDAR_TYPE_TASK="TASK"
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Array<Titanium.Tizen.Calendar.Calendar>>
+        type: Callback<Array<Tizen.Calendar.Calendar>>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<Titanium.Tizen.WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
     examples:
       - example: |    
             var calendar;
+            
             function eventFoundCallback(events) {
+            
                 // The event has been successfully found
                 // Changes the summary
                 events[0].summary = 'HTML6 Webinar'; 
@@ -56,43 +58,53 @@ methods:
             }
             
             // Defines the error callback for all the asynchronous calls
+            
             function errorCallback(response) {
+            
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
             }
             
             // Defines the success callback for retrieving the list of calendars
+            
             function calendarListCallback(calendars) {
+            
                 if(calendars.length > 0) {
                     calendar = calendars[0];
                     Titanium.API.info('The calendar id is ' + calendar.id + ' and name ' + calendar.name);
                     
-                    var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
+                    var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
                                                      summary:'HTML5 Webinar', 
                                                      startDate: new Date(2011, 3, 30, 10, 0), 
-                                                     duration: 100000,
+                                                     duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
                                                      location:'Huesca'});
                     calendar.add(ev);
                     
                     // The event has been successfully added
                     // Checks if the added event can be retrieved from the calendar
                     // If the calendar was empty, only the item added through add() should be returned
-                    var filter = Titanium.Tizen.createAttributeFilter('summary', 'CONTAINS', 'HTML5');
+                    
+                    var tizenObj = require('Ti/Tizen');
+                    
+                    var filter = tizenObj.createAttributeFilter({attributeName: 'summary',
+                                                                 matchFlag: tizenObj.FILTER_MATCH_FLAG_CONTAINS,
+                                                                 matchValue: 'HTML5'});
                     calendar.find(eventFoundCallback, errorCallback, filter);
                 }
             }
             
             // Gets a list of available calendars
-            Titanium.Tizen.Calendar.getCalendars("EVENT", calendarListCallback, errorCallback);    
+            
+            Tizen.Calendar.getCalendars(Tizen.Calendar.CALENDAR_TYPE_EVENT, calendarListCallback, errorCallback);    
 
   - name: getDefaultCalendar
     summary: Gets the default calendar, which is used for new items.
     returns:
         summary: The default Calendar object.
-        type: Titanium.Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.Calendar       
     parameters:
       - name: type
         summary:  |
-            The type of calendar. "EVENT" or "TASK"
+            The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT or Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
     examples:
       - example: |    
@@ -112,12 +124,12 @@ methods:
             }
             
             // Gets a list of available calendars
-            myCalendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
             
-            var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: 100000,
+                                            duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
                                             location:'Huesca'});
                           
             myCalendar.add(ev);
@@ -125,18 +137,20 @@ methods:
             // The event has been added
             // Checks if the added event can be retrieved from the calendar
             // If the calendar was empty, only the item added through add() should be returned
-            var filter = Titanium.Tizen.createAttributeFilter('summary', 'CONTAINS', 'HTML5');
+            var filter = tizenObj.createAttributeFilter({attributeName: 'summary',
+                                                         matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                         matchValue: 'HTML5'});
             myCalendar.find(eventFoundCallback, errorCallback, filter);
           
   - name: getCalendar
     summary: Gets the calendar with the specified identifier and type.
     returns:
         summary: The matching Calendar object.
-        type: Titanium.Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.Calendar       
     parameters:
       - name: type
         summary:  |
-            The type of calendar. "EVENT" or "TASK"
+            The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT or Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
       - name: id
         summary:  The calendar identifier.
@@ -146,48 +160,62 @@ methods:
             var calendarId; // calendarId supposed to be initialized
             
             try {
-                var calendar = Titanium.Tizen.Calendar.getCalendar("EVENT", calendarId);
+                var calendar = Tizen.Calendar.getCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT, calendarId);
                 Titanium.API.info("Successfully retrieved event calendar with id: " + calendarId);
             } catch(err) {
                 Titanium.API.info("Error: " + err.name);
             }
 
   - name: createCalendarTask
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarTask 
+    summary: Creates an instance of <Tizen.Calendar.CalendarTask>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarTask       
+        type: Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
         type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
+        optional: true
   
   - name: createCalendarEvent
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarEvent
+    summary: Creates an instance of <Tizen.Calendar.CalendarEvent>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarEvent       
+        type: Tizen.Calendar.CalendarEvent       
     parameters:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
-                
+        optional: true
+
+    examples:
+      - example: |
+            // Gets the default calendar
+            var calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+        
+            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+                                            summary:'HTML5 Webinar ', 
+                                            startDate: new Date(2011, 3, 30, 10, 0), 
+                                            duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
+                                            location:'Huesca'});                   
+            calendar.add(ev);
+  
   - name: createCalendarAttendee
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
+    summary: Creates an instance of <Tizen.Calendar.CalendarAttendee>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarAttendee
+        type: Tizen.Calendar.CalendarAttendee
     parameters:
       - name: attendeeParameters
         type: Dictionary<CalendarAttendeeInit>
                 
   - name: createCalendarRecurrenceRule
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarRecurrenceRule
+    summary: Creates an instance of <Tizen.Calendar.CalendarRecurrenceRule>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarRecurrenceRule
+        type: Tizen.Calendar.CalendarRecurrenceRule
     parameters:
       - name: recurrenceRuleParameters
         type: Dictionary<CalendarRecurrenceRuleInit>
                 
   - name: createCalendarAlarm
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAlarm
+    summary: Creates an instance of <Tizen.Calendar.CalendarAlarm>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarAlarm
+        type: Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
         type: [Dictionary<CalendarAlarmInitWithDate>, Dictionary<CalendarAlarmInitWithDuration>]
@@ -458,8 +486,8 @@ properties:
     type: Date
     
   - name: duration
-    summary: An attribute to denote the duration of the calendar component (milliseconds).
-    type: Number
+    summary: An attribute to denote the duration of the calendar component.
+    type: Tizen.Time.TimeDuration
     
   - name: location 
     summary: An attribute to store the location or the intended venue for the activity defined by the calendar item.
@@ -467,7 +495,7 @@ properties:
 
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place.
-    type: Titanium.Tizen.SimpleCoordinates
+    type: Tizen.SimpleCoordinates
 
   - name: organizer
     summary: An attribute to store the name of the person who organized this event.
@@ -477,37 +505,37 @@ properties:
     summary: |
         An attribute to mark the visibility (secrecy) level of the item.
         The value is one of the constants defined for this parameter : 
-            CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
-            CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
+            Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
+            Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
     type: STRING
 
   - name: status
     summary: |
         An attribute to store the overall confirmation status for a calendar component.
-        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
-        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
+        For an event, the default value is Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
+        For a task, the default value is Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
     type: STRING
     
   - name: priority
     summary: |
         An attribute to indicate the priority level of an item and may be used to relatively prioritize multiple items during a given period of time. (See RFC 5545 - Section 3.8.1.9).
-        The default value for this attribute is LOW priority.
+        The default value for this attribute is Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW priority.
         If the native item database supports another priority schema (such as a range from 1 to 9), the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
-            - 1-4 to HIGH,
-            - 5 to MEDIUM,
-            - 6-9 to LOW.
+            - 1-4 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH,
+            - 5 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
+            - 6-9 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
     type: STRING
     
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
+    type: Array<Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm({before: 100000,
-                                                            method: "SOUND"});
+            var alarm = Tizen.createCalendarAlarm({before: Tizen.createTimeDuration({length: 30, unit: Tizen.Time.TIME_DURATION_UNIT_MINS}),
+                                                            method: Tizen.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
   - name: categories
@@ -522,7 +550,7 @@ properties:
     
   - name: attendees
     summary: An attribute array that lists the people attending an event.
-    type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
+    type: Array<Tizen.Calendar.CalendarAttendee>
 
 ---
 name: CalendarTaskInit
@@ -539,18 +567,15 @@ platforms: [tizen]
 properties:
   - name: dueDate 
     type: Date
-    summary: (optional) An attribute to store the due date and time for completing a task.
-    optional: true
+    summary: An attribute to store the due date and time for completing a task.
     
   - name: completedDate
     type: Date
-    summary: (optional) An attribute to record the date and time when an task is completed.
-    optional: true
+    summary: An attribute to record the date and time when an task is completed.
         
   - name: progress
     type: Number
-    summary: (optional) An attribute to denote the percent of completion of a task.
-    optional: true
+    summary: An attribute to denote the percent of completion of a task.
 
 ---
 name: CalendarEventInit
@@ -575,7 +600,7 @@ properties:
     type: String
     summary: |
         An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
-        The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
+        The value is one of the constants defined for this parameter : Tizen.Calendar.EVENT_AVAILABILITY_BUSY = 'BUSY' or Tizen.Calendar.EVENT_AVAILABILITY_FREE = 'FREE'
                 
   - name: recurrenceRule 
     type: Date
@@ -596,8 +621,8 @@ properties:
         Indicates the type of textual format of a Calendar.
         
         The value is one of the constants defined for this parameter :
-            CALENDAR_TEXT_FORMAT_ICALENDAR_20 = "ICALENDAR_20",
-            CALENDAR_TEXT_FORMAT_VCALENDAR_10 = "VCALENDAR_10".
+            Tizen.Calendar.CALENDAR_TEXT_FORMAT_ICALENDAR_20 = "ICALENDAR_20",
+            Tizen.Calendar.CALENDAR_TEXT_FORMAT_VCALENDAR_10 = "VCALENDAR_10".
             
 ---
 name: CalendarAttendeeInit
@@ -612,6 +637,17 @@ properties:
     summary: An attribute to store the URI for the attendee.
     type: STRING
 
+  - name: attendeeInitDict
+    summary: (optional) The properties of a CalendarAttendee, to pass to its constructor.
+    type: Dictionary<AttendeeInitDict>
+    optional: true
+
+---
+name: AttendeeInitDict
+summary: The properties of a CalendarAttendee, to pass to its constructor.
+platforms: [tizen]
+properties: 
+
   - name: name
     summary: An attribute to store the name of an attendee.
     type: STRING
@@ -621,9 +657,9 @@ properties:
         An attribute to denote the role of the attendee.
         
         The value is one of the constants defined for this type:
-            - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
-            - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
-            - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+            - Tizen.Calendar.ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
+            - Tizen.Calendar.ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
+            - Tizen.Calendar.ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
         
     type: STRING
 
@@ -632,13 +668,13 @@ properties:
         An attribute to store the participant's attendance status.
         
         The value is one of the constants defined for this type:
-            - ATTENDEE_STATUS_PENDING = 'PENDING'
-            - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
-            - ATTENDEE_STATUS_DECLINED = 'DECLINED'
-            - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
-            - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
-            - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
-            - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+            - Tizen.Calendar.ATTENDEE_STATUS_PENDING = 'PENDING'
+            - Tizen.Calendar.ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
+            - Tizen.Calendar.ATTENDEE_STATUS_DECLINED = 'DECLINED'
+            - Tizen.Calendar.ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
+            - Tizen.Calendar.ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
+            - Tizen.Calendar.ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
+            - Tizen.Calendar.ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
             
     type: STRING
 
@@ -651,11 +687,11 @@ properties:
         An attribute to indicate the type of a participant.
         
         The value is one of the constants defined for this type: 
-            - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
-            - ATTENDEE_TYPE_GROUP = 'GROUP'
-            - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
-            - ATTENDEE_TYPE_ROOM = 'ROOM'
-            - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+            - Tizen.Calendar.ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
+            - Tizen.Calendar.ATTENDEE_TYPE_GROUP = 'GROUP'
+            - Tizen.Calendar.ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
+            - Tizen.Calendar.ATTENDEE_TYPE_ROOM = 'ROOM'
+            - Tizen.Calendar.ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
     type: STRING
 
   - name: group 
@@ -675,13 +711,34 @@ properties:
     summary: |
         An attribute to store the participant's reference in the Contact API.
         If the contact is not resolved, this attribute will be set to null. 
-    type: Titanium.Tizen.Contacts.ContactsRef
+    type: Tizen.Contacts.ContactsRef
 ---
 name: CalendarRecurrenceRuleInit
 summary: |
     The properties of a CalendarRecurrenceRule to pass to its creator.
     
     For more information about the members, see CalendarRecurrenceRule interface.
+platforms: [tizen]
+properties: 
+  - name: frequency
+    summary: |
+         An attribute to store the frequency of a recurrence rule.
+         This property corresponds to FREQ in RFC 5545.
+    description: |
+        Can be set to one of the following constants:
+          - Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY
+          - Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY
+          - Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY
+          - Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY
+    type: String
+
+  - name: ruleInitDict
+    summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
+    type: Dictionary<CalendarRecurrenceRuleInitDict>
+
+---
+name: CalendarRecurrenceRuleInitDict
+summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
 platforms: [tizen]
 properties:
  
@@ -701,7 +758,7 @@ properties:
     type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of WEEKLY, MONTHLY, and YEARLY.
+        This property value is valid only for recurrence rules with a frequency type of Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY, Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY, and Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY.
         This property corresponds to BYDAY in RFC 5545.
                 
   - name: setPositions
@@ -734,8 +791,8 @@ properties:
         An attribute to denote the notification method used by an alarm.
         
         The value is one of the constants defined for this type:
-            - ALARM_METHOD_SOUND = 'SOUND'
-            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+            - Tizen.Calendar.ALARM_METHOD_SOUND = 'SOUND'
+            - Tizen.Calendar.ALARM_METHOD_DISPLAY = 'DISPLAY'
     
   - name: description
     type: String
@@ -749,8 +806,8 @@ platforms: [tizen]
 properties:
    
   - name: before 
-    type: Number
-    summary: An attribute to store the duration before an event starts on which the alarm should be triggered (milliseconds).
+    type: Tizen.Time.TimeDuration
+    summary: An attribute to store the duration before an event starts on which the alarm should be triggered.
         
   - name: method 
     type: String
@@ -758,8 +815,8 @@ properties:
         An attribute to denote the notification method used by an alarm.
         
         The value is one of the constants defined for this type:
-            - ALARM_METHOD_SOUND = 'SOUND'
-            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+            - Tizen.Calendar.ALARM_METHOD_SOUND = 'SOUND'
+            - Tizen.Calendar.ALARM_METHOD_DISPLAY = 'DISPLAY'
     
   - name: description
     type: String
