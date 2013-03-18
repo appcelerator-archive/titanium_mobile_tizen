@@ -1,8 +1,8 @@
 ---
-name: Titanium.Tizen.SystemInfo.SystemInfoBuild
+name: Tizen.SystemInfo.SystemInfoBuild
 summary: This property reflects the information of the current device.
     
-extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 

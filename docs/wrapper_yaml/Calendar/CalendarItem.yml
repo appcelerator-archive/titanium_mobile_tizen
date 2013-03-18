@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarItem
+name: Tizen.Calendar.CalendarItem
 summary:  |
     This is a parent interface that is used to create Calendar events and tasks. 
     These attributes are shared by both events and tasks.
@@ -47,7 +47,7 @@ methods:
     parameters:
       - name: item
         summary: The new clone of the CalendarItem object.
-        type: Titanium.Tizen.Calendar.CalendarItem
+        type: Tizen.Calendar.CalendarItem
     examples:
       - example: |    
             // Gets default calendar.
@@ -131,7 +131,7 @@ properties:
         duration and endDate / dueDate are mutually exclusive, hence, only one of them have null.
         
         This attribute is precise to the second. Milliseconds are ignored.
-    type: Titanium.Tizen.Time.TimeDuration
+    type: Tizen.Time.TimeDuration
     examples:
       - example: |    
             // 1 hour meeting
@@ -197,7 +197,7 @@ properties:
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
+    type: Array<Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
@@ -223,7 +223,7 @@ properties:
     summary: |
         An attribute array that lists the people attending an event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is set to an empty array.
-    type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
+    type: Array<Tizen.Calendar.CalendarAttendee>
     examples:
       - example: |    
             var attendee = Tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',

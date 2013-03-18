@@ -80,12 +80,12 @@ methods:
 properties:
 
   - name: POWER_RESOURCE_SCREEN
-    summary: SCREEN is aligned with <Titanium.Tizen.SystemInfo> property value.
+    summary: SCREEN is aligned with <Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 
   - name: POWER_RESOURCE_CPU
-    summary: CPU is aligned with <Titanium.Tizen.SystemInfo> property value.
+    summary: CPU is aligned with <Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 

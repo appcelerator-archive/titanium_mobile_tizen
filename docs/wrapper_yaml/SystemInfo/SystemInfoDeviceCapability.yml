@@ -1,8 +1,8 @@
 ---
-name: Titanium.Tizen.SystemInfo.SystemInfoDeviceCapability
+name: Tizen.SystemInfo.SystemInfoDeviceCapability
 summary: SystemInfoDeviceCapability object.
 
-extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 

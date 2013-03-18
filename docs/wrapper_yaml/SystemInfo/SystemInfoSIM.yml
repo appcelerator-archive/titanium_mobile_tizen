@@ -1,8 +1,8 @@
 ---
-name: Titanium.Tizen.SystemInfo.SystemInfoSim
+name: Tizen.SystemInfo.SystemInfoSim
 summary: This property reflects the information of the SIM card information.
     
-extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 

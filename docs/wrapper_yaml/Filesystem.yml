@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Filesystem
+name: Tizen.Filesystem
 summary: This Module provides  provides access to a device's filesystem.
 description: |
     The filesystem is represented as an abstract collection of disjointed filesystem virtual root locations,
@@ -123,7 +123,7 @@ methods:
         type: String
       - name: onsuccess
         summary: Called when the location has been successfully resolved, passing the newly created File object.
-        type: Callback<Titanium.Tizen.Filesystem.File>
+        type: Callback<Tizen.Filesystem.File>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
         type: Callback<Tizen.WebAPIError>
@@ -163,7 +163,7 @@ methods:
         type: String
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
-        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
+        type: Callback<Tizen.Filesystem.FileSystemStorage>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<Tizen.WebAPIError>
@@ -188,7 +188,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list of storage is available, passing the storage list to the callback.
-        type: Callback<Array<Titanium.Tizen.Filesystem.FileSystemStorage>>
+        type: Callback<Array<Tizen.Filesystem.FileSystemStorage>>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<Tizen.WebAPIError>
@@ -220,7 +220,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: To be invoked in every change on storage state.
-        type: Callback<Titanium.Tizen.Filesystem.FileSystemStorage>
+        type: Callback<Tizen.Filesystem.FileSystemStorage>
       - name: onerror
         summary: To be invoked in case of error during the watch process.
         type: Callback<Tizen.WebAPIError>

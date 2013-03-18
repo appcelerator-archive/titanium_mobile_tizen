@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarAlarm
+name: Tizen.Calendar.CalendarAlarm
 summary:  An interface that contains information related to an event alarm or reminder.
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -21,7 +21,7 @@ properties:
         This attribute is precise to the second. Milliseconds are ignored.
     
   - name: before 
-    type: Titanium.Tizen.Time.TimeDuration
+    type: Tizen.Time.TimeDuration
     summary: |
         An attribute to store the duration before an event starts on which the alarm should be triggered.
         The duration should be positive.

@@ -246,7 +246,7 @@ methods:
     description: |
         It install a callback that is triggered every time a change occurs on the list of installed applications on a device. This change may be occured by a new installation, uninstallation, or update of an application.
         When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
-        The ApplicationInformationEventCallback must be invoked every time a new application is installed, removed, or updated.
+        The <ApplicationInformationEventCallback> must be invoked every time a new application is installed, removed, or updated.
         The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
     returns:
       - type: Number

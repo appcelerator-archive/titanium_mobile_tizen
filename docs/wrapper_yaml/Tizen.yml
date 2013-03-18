@@ -1,6 +1,6 @@
 ---
 name: Tizen
-summary: The mine module of Titanium.Tizen Web Device API
+summary: The mine module of Tizen Web Device API
 description: "This is the Tizen root interface."
 extends: Titanium.Module
 platforms: [tizen]
@@ -55,8 +55,8 @@ methods:
             var tizenObj = require('Ti/Tizen');
         
             // Create an attribute range filter based on event start date: "All events occurring today".
-            var now_dt = Titanium.Tizen.Time.getCurrentDateTime();
-            var today_begin = Titanium.Tizen.Time.createTZDate({year: now_dt.getFullYear(),
+            var now_dt = Tizen.Time.getCurrentDateTime();
+            var today_begin = Tizen.Time.createTZDate({year: now_dt.getFullYear(),
                                                           month: now_dt.getMonth(),
                                                           day: now_dt.getDate()});
             var today_end = today_begin.addDuration(Tizen.Time.createTimeDuration({length: 1, 
@@ -65,7 +65,7 @@ methods:
                                                               initialValue: today_begin,
                                                               endValue: today_end});
             // Send a search request to default event calendar.
-            Titanium.Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
+            Tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
 
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Tizen.CompositeFilter>.

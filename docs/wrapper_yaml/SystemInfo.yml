@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.SystemInfo
+name: Tizen.SystemInfo
 summary: This Module provides  interfaces and methods providing web applications with access to various properties of the system.
 description: |
     This API also provides interfaces and methods for users to get hardware devices status, to get the value of selected properties, and to set up asynchronous notifications of changes for selected values. The following provides an overview of the tree data structure:
@@ -32,10 +32,10 @@ methods:
     description: |
         The function must synchronously acquire the capabilities of the device.
     returns:
-        type: Titanium.Tizen.SystemInfo.SystemInfoDeviceCapability
+        type: Tizen.SystemInfo.SystemInfoDeviceCapability
     examples:
       - example: |    
-            var deviceCapabilities = Titanium.Tizen.SystemInfo.getCapabilities();
+            var deviceCapabilities = Tizen.SystemInfo.getCapabilities();
             
             if (deviceCapabilities.bluetooth) {
                 Titanium.API.info("Bluetooth is supported");
@@ -59,10 +59,10 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Titanium.Tizen.SystemInfo.SystemInfoProperty>
+        type: Callback<Tizen.SystemInfo.SystemInfoProperty>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -74,7 +74,7 @@ methods:
                 Titanium.API.info("An error occurred " + error.message);
             }
         
-            Titanium.Tizen.SystemInfo.getPropertyValue(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, onErrorCallback );
+            Tizen.SystemInfo.getPropertyValue(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, onErrorCallback );
         
   - name: addPropertyValueChangeListener
     summary: Allows tracking the change of one or several system properties.
@@ -95,7 +95,7 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Titanium.Tizen.SystemInfo.SystemInfoProperty>
+        type: Callback<Tizen.SystemInfo.SystemInfoProperty>
       - name: options
         summary:  An object containing the various options for fetching the properties requested.
         type: Dictionary<SystemInfoOptions>
@@ -106,7 +106,7 @@ methods:
                 Titanium.API.info("Low battery:  " + battery.level);
             }
             
-            Titanium.Tizen.SystemInfo.addPropertyValueChangeListener(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, {lowThreshold : 0.2});
+            Tizen.SystemInfo.addPropertyValueChangeListener(Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, {lowThreshold : 0.2});
     
   - name: removePropertyValueChangeListener
     summary: |

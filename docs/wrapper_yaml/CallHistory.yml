@@ -18,7 +18,7 @@ methods:
       - name: errorCallback
         summary: The method to call when an error occurs.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
       - name: filter
         summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
         description: |
@@ -153,7 +153,7 @@ methods:
       - name: errorCallback
         summary:  An error handler.
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
     parameters: 

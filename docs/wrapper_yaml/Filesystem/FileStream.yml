@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Filesystem.FileStream
+name: Tizen.Filesystem.FileStream
 summary: FileStream API.
 description: |
     A FileStream represents a handle to a File opened for read and/or write operations. 

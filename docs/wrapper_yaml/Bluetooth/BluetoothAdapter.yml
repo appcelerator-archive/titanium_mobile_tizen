@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothAdapter
+name: Tizen.Bluetooth.BluetoothAdapter
 summary: The Bluetooth adapter interface that provides access to control the device's Bluetooth adapter.  
 description: |
     This interface offers methods to control local Bluetooth behavior, such as:
@@ -311,7 +311,7 @@ methods:
 
       - name: successCallback
         summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Titanium.Tizen.Bluetooth.BluetoothDevice> 
+        type: Callback<Tizen.Bluetooth.BluetoothDevice> 
         optional: true
 
       - name: errorCallback
@@ -351,7 +351,7 @@ methods:
 
       - name: successCallback
         summary: Method to be invoked when the asynchronous call completes successfully.  
-        type: Callback<Titanium.Tizen.Bluetooth.BluetoothDevice> 
+        type: Callback<Tizen.Bluetooth.BluetoothDevice> 
         optional: true
 
       - name: errorCallback
@@ -440,7 +440,7 @@ methods:
 
       - name: successCallback
         summary: Method to be called on successful service registration.   
-        type: Callback<Titanium.Tizen.Bluetooth.BluetoothServiceHandler> 
+        type: Callback<Tizen.Bluetooth.BluetoothServiceHandler> 
         optional: true
 
       - name: errorCallback
@@ -547,7 +547,7 @@ methods:
     parameters:
       - name: device 
         summary: Found device. 
-        type: Titanium.Tizen.Bluetooth.BluetoothDevice
+        type: Tizen.Bluetooth.BluetoothDevice
 
   - name: ondevicedisappeared
     summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible. 
@@ -561,4 +561,4 @@ methods:
     parameters:
       - name: foundDevices 
         summary: Array of devices found in this discovery session. 
-        type: Array<Titanium.Tizen.Bluetooth.BluetoothDevice>
+        type: Array<Tizen.Bluetooth.BluetoothDevice>

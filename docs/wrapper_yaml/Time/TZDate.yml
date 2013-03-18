@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Time.TZDate
+name: Tizen.Time.TZDate
 summary: The TZDate object represents information regarding a given date / time in a predefined timezone.
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -202,7 +202,7 @@ methods:
     summary: Returns a copy of the TZDate converted to a given time zone.
     returns:
       - summary:  New TZDate in given Timezone.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     parameters:
       - name: tzid
         summary:  Timezone identifier to set.
@@ -212,13 +212,13 @@ methods:
     summary: Returns a copy of the TZDate converted to the local time zone.
     returns:
       - summary:  New TZDate in local Timezone.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     
   - name: toUTC
     summary: Returns a copy of the TZDate converted to Coordinated Universal Time (UTC).
     returns:
       - summary: Date/Time in UTC.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     
   - name: difference
     summary: Calculates the difference with another TZDate object.
@@ -234,11 +234,11 @@ methods:
         - Positive, if other is in the past
     returns:
       - summary: Duration in milliseconds between the two date or time objects (or in days for comparison between dates with no time component).
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     parameters:
       - name: other
         summary:  Other Date/Time to compare to.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
 
   - name: equalsTo
     summary: Checks if the TZDate is equal to another.
@@ -251,7 +251,7 @@ methods:
     parameters:
       - name: other
         summary:  Other Date/Time to compare to.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
 
   - name: earlierThan
     summary: Checks if the TZDate is earlier than another.
@@ -263,7 +263,7 @@ methods:
     parameters:
       - name: other
         summary:  Other Date/Time to compare to.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
 
   - name: laterThan
     summary: Checks if the TZDate is later than another.
@@ -274,7 +274,7 @@ methods:
     parameters:
       - name: other
         summary:  Other Date/Time to compare to.
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
 
   - name: addDuration
     summary: Returns a new date by adding a duration to the current TZDate object.
@@ -283,11 +283,11 @@ methods:
         Note that calling this method does not alter the current object.
         
     returns:
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     parameters:
       - name: duration
         summary:  TimeDuration to add.
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     examples:
       - example: |
             now = Tizen.Time.getCurrentDateTime(); //TZDate
@@ -342,7 +342,7 @@ methods:
         type: Number
     examples:
       - example: |
-            var offset = Titanium.Tizen.Time.getCurrentDateTime().secondsFromUTC();
+            var offset = Tizen.Time.getCurrentDateTime().secondsFromUTC();
             var myDate = new Date();
             var exp_offset = myDate.getTimezoneOffset()*60;//offset is equals to exp_offset.
   - name: isDST
@@ -354,10 +354,10 @@ methods:
     summary: Returns the date of the previous daylight saving time transition for the timezone.
     returns:
       - summary: Date of the next daylight saving transition (before the instant identified by the TZDate).
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
   
   - name: getNextDSTTransition
     summary: Returns the date of the next daylight saving time transition for the timezone.
     returns:
       - summary: Date of the next daylight saving transition (after the instant identified by the TZDate).
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
