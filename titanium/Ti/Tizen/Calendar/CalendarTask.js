@@ -10,13 +10,13 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHe
 					var taskInitDict = args,
 						startDate = args.startDate,
 						dueDate = args.dueDate,
-						completedDate = args.completedDate;
+						completedDate = args.completedDate,
+						duration = args.duration;
 
-					args.hasOwnProperty('startDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
-					args.hasOwnProperty('dueDate') && (taskInitDict.dueDate = calendarHelper.createTZDate(dueDate));
-					args.hasOwnProperty('completedDate') && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
-
-					args.hasOwnProperty('duration') && (taskInitDict.duration = args.duration._obj);
+					startDate && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
+					dueDate && (taskInitDict.dueDate = calendarHelper.createTZDate(dueDate));
+					completedDate && (taskInitDict.startDate = calendarHelper.createTZDate(startDate));
+					duration && (taskInitDict.duration = calendarHelper.createTimeDuration(duration));
 
 					this._obj = new tizen.CalendarTask(taskInitDict);
 				}

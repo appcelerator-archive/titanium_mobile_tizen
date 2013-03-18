@@ -69,7 +69,7 @@ methods:
                     var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
                                                      summary:'HTML5 Webinar', 
                                                      startDate: new Date(2011, 3, 30, 10, 0), 
-                                                     duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                                     duration: 100000,
                                                      location:'Huesca'});
                     calendar.add(ev);
                     
@@ -117,7 +117,7 @@ methods:
             var ev = Titanium.Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Titanium.Tizen.createTimeDuration(1, "HOURS"),
+                                            duration: 100000,
                                             location:'Huesca'});
                           
             myCalendar.add(ev);
@@ -458,8 +458,8 @@ properties:
     type: Date
     
   - name: duration
-    summary: An attribute to denote the duration of the calendar component.
-    type: Titanium.Tizen.Time.TimeDuration
+    summary: An attribute to denote the duration of the calendar component (milliseconds).
+    type: Number
     
   - name: location 
     summary: An attribute to store the location or the intended venue for the activity defined by the calendar item.
@@ -506,8 +506,8 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
-                                                            "SOUND");
+            var alarm = Titanium.Tizen.createCalendarAlarm({before: 100000,
+                                                            method: "SOUND"});
             ev.alarms = [alarm];
 
   - name: categories
@@ -749,8 +749,8 @@ platforms: [tizen]
 properties:
    
   - name: before 
-    type: Titanium.Tizen.Time.TimeDuration
-    summary: An attribute to store the duration before an event starts on which the alarm should be triggered.
+    type: Number
+    summary: An attribute to store the duration before an event starts on which the alarm should be triggered (milliseconds).
         
   - name: method 
     type: String

@@ -51,7 +51,7 @@ methods:
             // Gets default calendar.
             var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
             var html5seminar = Titanium.Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: Titanium.Tizen.createTimeDuration(3, "DAYS"),
+                                                        duration: 100000,
                                                         summary: "HTML5 Seminar"});
                                      
             calendar.add(html5seminar);
@@ -123,17 +123,17 @@ properties:
 
   - name: duration
     summary: |
-        An attribute to denote the duration of the calendar component. (See RFC 5545 - Section 3.8.2.5).
+        An attribute to denote the duration of the calendar component (milliseconds). (See RFC 5545 - Section 3.8.2.5).
         By default, this attribute is set to null.
         
         duration and endDate / dueDate are mutually exclusive, hence, only one of them have null.
         
-        This attribute is precise to the second. Milliseconds are ignored.
-    type: Titanium.Tizen.Time.TimeDuration
+        Be rounded to the second
+    type: Number
     examples:
       - example: |    
             // 1 hour meeting
-            event.duration = Titanium.Tizen.createTimeDuration(1, "HOURS");
+            event.duration = 100000;
 
   - name: location 
     summary: |
@@ -200,8 +200,8 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"),
-                                                   "SOUND");
+            var alarm = Titanium.Tizen.createCalendarAlarm({before: 100000,
+                                                            method: "SOUND"});
             ev.alarms = [alarm];
 
   - name: categories

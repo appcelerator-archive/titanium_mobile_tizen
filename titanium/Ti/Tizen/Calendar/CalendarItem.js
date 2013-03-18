@@ -1,8 +1,7 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/Time/TimeDuration', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, CalendarEventId, TimeDuration, calendarHelper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, CalendarEventId, calendarHelper) {
 	return declare('Ti.Tizen.Calendar.CalendarItem', Evented, {
 		constructor: function(args) {
 			this._obj = args;
-			this._obj.duration && (this.properties.__values__.duration = new TimeDuration(this._obj.duration));
 		},
 
 		constants: {
@@ -58,13 +57,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti
 			},
 			duration: {
 				set: function(value) {
-					if (value.toString() == '[object TiTizenTimeTimeDuration]') {
-						this._obj.duration = value._obj;
-					} else {
+					if (value instanceof tizen.TimeDuration) {
 						this._obj.duration = value;
+					} else {
+						this._obj.duration = calendarHelper.createTimeDuration(value);
 					}
-
-					return new TimeDuration(this._obj.duration);
+				},
+				get: function() {
+					return calendarHelper.toMsec(this._obj.duration);
 				}
 			},
 			location: {

@@ -8,7 +8,7 @@ examples:
   - title: Code example
     example:    |
         // Creates a sound alarm 30 minutes before the event's start time
-        var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"), "SOUND");
+        var alarm = Titanium.Tizen.createCalendarAlarm({before: 100000, method: "SOUND"});
  
 properties:
   - name: absoluteDate 
@@ -20,13 +20,13 @@ properties:
         This attribute is precise to the second. Milliseconds are ignored.
     
   - name: before 
-    type: Titanium.Tizen.Time.TimeDuration
+    type: Number
     summary: |
         An attribute to store the duration before an event starts on which the alarm should be triggered.
-        The duration should be positive.
+        The duration should be positive (milliseconds).
         absoluteDate and before are mutually exclusive.
         
-        This attribute is precise to the second. Milliseconds are ignored.
+        Be rounded to the second
         
   - name: method 
     type: String
