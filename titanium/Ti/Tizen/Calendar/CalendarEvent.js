@@ -9,11 +9,12 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHe
 				} else {
 					var eventInitDict = args,
 						startDate = args.startDate,
-						endDate = args.startDate;
+						endDate = args.endDate,
+						duration = args.duration;
 
-					args.hasOwnProperty('startDate') && (eventInitDict.startDate = calendarHelper.createTZDate(startDate));
-					args.hasOwnProperty('endDate') && (eventInitDict.endDate = calendarHelper.createTZDate(endDate));
-					args.hasOwnProperty('duration') && (eventInitDict.duration = args.duration._obj);
+					startDate && (eventInitDict.startDate = calendarHelper.createTZDate(startDate));
+					endDate && (eventInitDict.endDate = calendarHelper.createTZDate(endDate));
+					duration && (eventInitDict.duration = calendarHelper.createTimeDuration(duration));
 					this._obj = new tizen.CalendarEvent(eventInitDict);
 				}
 			}

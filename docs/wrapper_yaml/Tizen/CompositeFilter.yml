@@ -12,7 +12,7 @@ extends: Tizen.AbstractFilter
 properties:
   - name: type
     summary: The name of the object attribute used for filtering.
-    description: Use Tizen.COMPOSITE_FILTER_TYPE_UNION or Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION 
+    description: Use <Tizen.COMPOSITE_FILTER_TYPE_UNION> or <Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION> 
     type: String
 
   - name:  filters

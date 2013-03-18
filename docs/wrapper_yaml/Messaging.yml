@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging
+name: Tizen.Messaging
 summary: This specification defines interfaces to manage Message, retrieve messaging services.
 description: There is a object that allows access to the messaging API. Fetches all existing messaging services by type or a messaging service of a given type for concrete account. 
 extends: Titanium.Module
@@ -21,7 +21,7 @@ methods:
 
       - name: successCallback
         summary: Invoked if the services are successfully retrieved. 
-        type: Callback<Titanium.Tizen.Messaging.MessageService>
+        type: Callback<Tizen.Messaging.MessageService>
 
       - name: errorCallback
         summary: Function called when an error occurs
@@ -40,9 +40,9 @@ methods:
             Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
 
   - name: createMessage
-    summary: Returns the <Titanium.Tizen.Messaging.Message> object.
+    summary: Returns the <Tizen.Messaging.Message> object.
     returns:
-      - type: Titanium.Tizen.Messaging.Message
+      - type: Tizen.Messaging.Message
     parameters: 
 
       - name: initDict
@@ -71,9 +71,9 @@ methods:
             Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB, errorCallback);
 
   - name: createMessageAttachment
-    summary: Returns the <Titanium.Tizen.Messaging.MessageAttachment> object.
+    summary: Returns the <Tizen.Messaging.MessageAttachment> object.
     returns:
-      - type: Titanium.Tizen.Messaging.MessageAttachment
+      - type: Tizen.Messaging.MessageAttachment
     parameters:
 
       - name: initDict
@@ -99,7 +99,7 @@ properties:
 # Pseudo-type    
 ---
 name: MessageInit
-summary: An object containing the various options for inititalized <Titanium.Tizen.Messaging.Message> object. It passing into constructor <Titanium.Tizen.Message.createMessage>.
+summary: An object containing the various options for inititalized <Tizen.Messaging.Message> object. It passing into constructor <Tizen.Message.createMessage>.
 properties:
   - name: type
     summary: |

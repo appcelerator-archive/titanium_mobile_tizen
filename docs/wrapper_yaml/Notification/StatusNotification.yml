@@ -32,7 +32,7 @@ properties:
 
  - name: appControl 
    summary: Holds the application control to launch when the notification is selected from the notification tray.
-   type: Titanium.Tizen.ApplicationControl 
+   type: Tizen.ApplicationControl 
    
  - name: appId  
    summary: Holds the application id to launch when the notification is selected from the notification tray.

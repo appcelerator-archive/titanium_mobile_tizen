@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarItem
+name: Tizen.Calendar.CalendarItem
 summary:  |
     This is a parent interface that is used to create Calendar events and tasks. 
     These attributes are shared by both events and tasks.
@@ -47,13 +47,13 @@ methods:
     parameters:
       - name: item
         summary: The new clone of the CalendarItem object.
-        type: Titanium.Tizen.Calendar.CalendarItem
+        type: Tizen.Calendar.CalendarItem
     examples:
       - example: |    
             // Gets default calendar.
             var calendar = Tizen.Calendar.getDefaultCalendar();
             var html5seminar = Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: Tizen.Time.createTimeDuration({length: 3, unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}),
+                                                        duration: 3600000,
                                                         summary: "HTML5 Seminar"});
                                      
             calendar.add(html5seminar);
@@ -130,12 +130,12 @@ properties:
         
         duration and endDate / dueDate are mutually exclusive, hence, only one of them have null.
         
-        This attribute is precise to the second. Milliseconds are ignored.
-    type: Titanium.Tizen.Time.TimeDuration
+        Be rounded to second.
+    type: Number
     examples:
       - example: |    
             // 1 hour meeting
-            event.duration = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS});
+            event.duration = 3600000;
 
   - name: location 
     summary: |
@@ -197,12 +197,12 @@ properties:
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
+    type: Array<Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Tizen.Calendar.createCalendarAlarm({before: Tizen.Time.createTimeDuration(30, Tizen.Time.TIME_DURATION_UNIT_MINS),
+            var alarm = Tizen.Calendar.createCalendarAlarm({before: 3600000,
                                                    method: Tizen.Calendar.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
@@ -223,7 +223,7 @@ properties:
     summary: |
         An attribute array that lists the people attending an event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is set to an empty array.
-    type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
+    type: Array<Tizen.Calendar.CalendarAttendee>
     examples:
       - example: |    
             var attendee = Tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',

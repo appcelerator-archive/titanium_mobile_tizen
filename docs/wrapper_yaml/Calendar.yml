@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar
+name: Tizen.Calendar
 summary:  interfaces and methods for users to manage their schedule. 
 description: |
     Separate calendars can be implemented for group related events or tasks. For example, a user may have a work, personal, and family calendar. A calendar entry is called an event and is composed of a series of attributes, such as purpose, starting time, and duration. A calendar is a collection of events.
@@ -39,7 +39,7 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Array<Titanium.Tizen.Calendar.Calendar>>
+        type: Callback<Array<Tizen.Calendar.Calendar>>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
         type: Callback<Tizen.WebAPIError>        
@@ -75,7 +75,7 @@ methods:
                     var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
                                                      summary:'HTML5 Webinar', 
                                                      startDate: new Date(2011, 3, 30, 10, 0), 
-                                                     duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
+                                                     duration: 3600000,
                                                      location:'Huesca'});
                     calendar.add(ev);
                     
@@ -100,7 +100,7 @@ methods:
     summary: Gets the default calendar, which is used for new items.
     returns:
         summary: The default Calendar object.
-        type: Titanium.Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.Calendar       
     parameters:
       - name: type
         summary:  |
@@ -129,7 +129,7 @@ methods:
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
+                                            duration: 3600000,
                                             location:'Huesca'});
                           
             myCalendar.add(ev);
@@ -146,7 +146,7 @@ methods:
     summary: Gets the calendar with the specified identifier and type.
     returns:
         summary: The matching Calendar object.
-        type: Titanium.Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.Calendar       
     parameters:
       - name: type
         summary:  |
@@ -167,18 +167,18 @@ methods:
             }
 
   - name: createCalendarTask
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarTask
+    summary: Creates an instance of <Tizen.Calendar.CalendarTask>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarTask       
+        type: Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
         type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
         optional: true
   
   - name: createCalendarEvent
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarEvent
+    summary: Creates an instance of <Tizen.Calendar.CalendarEvent>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarEvent       
+        type: Tizen.Calendar.CalendarEvent       
     parameters:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
@@ -192,30 +192,30 @@ methods:
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}),
+                                            duration: 3600000,
                                             location:'Huesca'});                   
             calendar.add(ev);
   
   - name: createCalendarAttendee
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAttendee
+    summary: Creates an instance of <Tizen.Calendar.CalendarAttendee>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarAttendee
+        type: Tizen.Calendar.CalendarAttendee
     parameters:
       - name: attendeeParameters
         type: Dictionary<CalendarAttendeeInit>
                 
   - name: createCalendarRecurrenceRule
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarRecurrenceRule
+    summary: Creates an instance of <Tizen.Calendar.CalendarRecurrenceRule>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarRecurrenceRule
+        type: Tizen.Calendar.CalendarRecurrenceRule
     parameters:
       - name: recurrenceRuleParameters
         type: Dictionary<CalendarRecurrenceRuleInit>
                 
   - name: createCalendarAlarm
-    summary: Creates an instance of Titanium.Tizen.Calendar.CalendarAlarm
+    summary: Creates an instance of <Tizen.Calendar.CalendarAlarm>
     returns:
-        type: Titanium.Tizen.Calendar.CalendarAlarm
+        type: Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
         type: [Dictionary<CalendarAlarmInitWithDate>, Dictionary<CalendarAlarmInitWithDuration>]
@@ -486,8 +486,8 @@ properties:
     type: Date
     
   - name: duration
-    summary: An attribute to denote the duration of the calendar component.
-    type: Titanium.Tizen.Time.TimeDuration
+    summary: An attribute to denote the duration of the calendar component (milliseconds).
+    type: Number
     
   - name: location 
     summary: An attribute to store the location or the intended venue for the activity defined by the calendar item.
@@ -529,13 +529,13 @@ properties:
     
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Titanium.Tizen.Calendar.CalendarAlarm>
+    type: Array<Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Tizen.createCalendarAlarm({before: Tizen.createTimeDuration({length: 30, unit: Tizen.Time.TIME_DURATION_UNIT_MINS}),
-                                                            method: Tizen.Calendar.ALARM_METHOD_SOUND});
+            var alarm = Tizen.createCalendarAlarm({before: 3600000,
+                                                   method: Tizen.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
   - name: categories
@@ -550,7 +550,7 @@ properties:
     
   - name: attendees
     summary: An attribute array that lists the people attending an event.
-    type: Array<Titanium.Tizen.Calendar.CalendarAttendee>
+    type: Array<Tizen.Calendar.CalendarAttendee>
 
 ---
 name: CalendarTaskInit
@@ -711,7 +711,7 @@ properties:
     summary: |
         An attribute to store the participant's reference in the Contact API.
         If the contact is not resolved, this attribute will be set to null. 
-    type: Titanium.Tizen.Contacts.ContactsRef
+    type: Tizen.Contacts.ContactsRef
 ---
 name: CalendarRecurrenceRuleInit
 summary: |
@@ -806,8 +806,8 @@ platforms: [tizen]
 properties:
    
   - name: before 
-    type: Titanium.Tizen.Time.TimeDuration
-    summary: An attribute to store the duration before an event starts on which the alarm should be triggered.
+    type: Number
+    summary: An attribute to store the duration before an event starts on which the alarm should be triggered (milliseconds).
         
   - name: method 
     type: String

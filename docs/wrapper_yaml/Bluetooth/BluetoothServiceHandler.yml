@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothServiceHandler
+name: Tizen.Bluetooth.BluetoothServiceHandler
 summary: The Bluetooth service interface. 
 extends: Titanium.Module
 platforms: [tizen]
@@ -100,4 +100,4 @@ properties:
 
   - name: onconnect
     summary: The success callback to be invoked when a remote device connected to this service.   
-    type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket>
+    type: Callback<Tizen.Bluetooth.BluetoothSocket>

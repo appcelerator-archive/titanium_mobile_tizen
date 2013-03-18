@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarAttendee
+name: Tizen.Calendar.CalendarAttendee
 summary:  |
     This interface implements the CalendarAttendee object that contains information about an event attendee.
     
@@ -95,4 +95,4 @@ properties:
     summary: |
         An attribute to store the participant's reference in the Contact API.
         If the contact is not resolved, this attribute will be set to null. 
-    type: Titanium.Tizen.Contacts.ContactsRef
+    type: Tizen.Contacts.ContactsRef

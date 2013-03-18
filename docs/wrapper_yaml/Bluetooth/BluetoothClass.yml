@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothClass
+name: Tizen.Bluetooth.BluetoothClass
 summary: Interface to represent Bluetooth Class of Device/Service(CoD). 
 description: |
     Bluetooth device class describes the characteristics and capabilities of a device.

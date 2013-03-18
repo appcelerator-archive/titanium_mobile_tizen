@@ -108,28 +108,22 @@ function add_event(args) {
 			description = descriptionInput.value.trim(),
 			location = locationInput.value.trim(),
 			d = getCalendarStartDate();
-
 		try {
-				var startDate = new Date(d.yy, d.mm, d.dd, d.h, d.m),
-				duration = Ti.Tizen.Time.createTimeDuration({
-					length: 1, 
-					unit: 'HOURS'
-				}),
-				calendarEvent = Ti.Tizen.Calendar.createCalendarEvent({
-					description: description,
-					summary: summary,
-					startDate: startDate,
-					duration: duration,
-					location: location
-				});
+			var calendarEvent = Ti.Tizen.Calendar.createCalendarEvent({
+				description: description,
+				summary: summary,
+				startDate: new Date(d.yy, d.mm, d.dd, d.h, d.m),
+				duration: 3600000,
+				location: location
+			});
 			calendar.add(calendarEvent);
 		} catch (err) {
-			alert('Error. Type: ' + err.type + ", message: " + err.message);
+			Ti.API.error('Error. Type: ' + err.type + ", message: " + err.message);
 
 			return;
 		}
 
-		alert('Event was added successfully.');
+		Ti.API.info('Event was added successfully.');
 
 		summaryInput.value = '';
 		descriptionInput.value = '';

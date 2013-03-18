@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.Calendar
+name: Tizen.Calendar.Calendar
 summary:  |
     This interface that has methods to manage events or tasks in a calendar. 
     A Calendar object contains a set of events or tasks, depending on the calendar type.
@@ -21,7 +21,7 @@ methods:
     summary: Gets the calendar item with the specified identifier.
     returns:
         summary: The matching CalendarItem object
-        type: Titanium.Tizen.Calendar.CalendarItem       
+        type: Tizen.Calendar.CalendarItem       
     parameters:
       - name: id
         summary:  The Calendar item identifier.
@@ -48,14 +48,14 @@ methods:
     parameters:
       - name: item
         summary:  The calendar item to be added.
-        type: Titanium.Tizen.Calendar.CalendarItem
+        type: Tizen.Calendar.CalendarItem
     examples:
       - example: |    
             var calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
+                                            duration: 3600000,
                                             location:'Huesca'});
             calendar.add(ev);
             Titanium.API.info('Event added with uid ' + ev.id.uid);        
@@ -76,10 +76,10 @@ methods:
     parameters:
       - name: items
         summary:  The list of calendar items to add.
-        type: Array<Titanium.Tizen.Calendar.CalendarItem>
+        type: Array<Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
+        type: Callback<Array<Tizen.Calendar.CalendarItem>>
         optional: true
       - name: errorCallback
         summary:  The method to invoke when the request fails.
@@ -101,7 +101,7 @@ methods:
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
+                                            duration: 3600000,
                                             location:'Huesca'});
             calendar.addBatch([ev], addEventsSuccess, errorCallback);    
 
@@ -113,7 +113,7 @@ methods:
     parameters:
       - name: item
         summary: The Item object to update.
-        type: Titanium.Tizen.Calendar.CalendarItem      
+        type: Tizen.Calendar.CalendarItem      
       - name: updateAllInstances
         summary:  |
             The flag indicating whether all the event instances should be updated as well or not (default value is true). 
@@ -151,7 +151,7 @@ methods:
     parameters:
       - name: items
         summary: The list of calendar item objects to update.
-        type: Array<Titanium.Tizen.Calendar.CalendarItem>
+        type: Array<Tizen.Calendar.CalendarItem>
       - name: successCallback
         summary: The method to invoke when the updateEvents() request succeeds.
         type: Callback<Object>
@@ -278,7 +278,7 @@ methods:
     parameters:
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
+        type: Callback<Array<Tizen.Calendar.CalendarItem>>
       - name: errorCallback
         summary: The method to call when an error occurs
         type: Callback<Tizen.WebAPIError>        
@@ -435,13 +435,13 @@ name: CalendarChangeCallback
 summary: An object containing the various options for fetching the properties requested.
 properties:
   - name: onitemsadded
-    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
+    type: Callback<Array<Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are added to the calendar.
         Array<CalendarItem> -  The list of items that were added.
     
   - name: onitemsupdated
-    type: Callback<Array<Titanium.Tizen.Calendar.CalendarItem>>
+    type: Callback<Array<Tizen.Calendar.CalendarItem>>
     summary: |
         Called when items are updated in the calendar.
         Array<CalendarItem> - The list of items that were updated.
