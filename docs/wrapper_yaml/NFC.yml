@@ -1,4 +1,4 @@
-name: Titanium.Tizen.NFC
+name: Tizen.NFC
 summary: |
   This API provides interfaces and methods for access to NFC devices.
 description: |
@@ -174,12 +174,12 @@ methods:
     description: |
         NFC adapter interface provides access to control the NFC adapter. 
     returns:
-        type: Titanium.Tizen.NFC.NFCAdapter
+        type: Tizen.NFC.NFCAdapter
     examples:
       - example: |
             try {
             
-                var adapter = Titanium.Tizen.NFC.getDefaultAdapter();
+                var adapter = Tizen.NFC.getDefaultAdapter();
                 
             } catch (err) {
             
@@ -188,63 +188,63 @@ methods:
             }
 
   - name: createNDEFMessage
-    summary: Creates a <Titanium.Tizen.NFC.NDEFMessage> object.
+    summary: Creates a <Tizen.NFC.NDEFMessage> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Titanium.Tizen.NFC.NDEFMessage>.
+        summary: Initial parameters for <Tizen.NFC.NDEFMessage>.
         type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
         optional: true
     returns:
-        type: Titanium.Tizen.NFC.NDEFMessage
+        type: Tizen.NFC.NDEFMessage
 
   - name: createNDEFRecord
-    summary: Creates a <Titanium.Tizen.NFC.NDEFRecord> object.
+    summary: Creates a <Tizen.NFC.NDEFRecord> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecord>.
+        summary: Initial parameters for <Tizen.NFC.NDEFRecord>.
         type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
     returns:
-        type: Titanium.Tizen.NFC.NDEFRecord
+        type: Tizen.NFC.NDEFRecord
 
   - name: createNDEFRecordText
-    summary: Creates a <Titanium.Tizen.NFC.NDEFRecordText> object.
+    summary: Creates a <Tizen.NFC.NDEFRecordText> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecordText> object.
+        summary: Initial parameters for <Tizen.NFC.NDEFRecordText> object.
         type: createNDEFRecordTextParameters
     returns:
-        type: Titanium.Tizen.NFC.NDEFRecordText
+        type: Tizen.NFC.NDEFRecordText
 
   - name: createNDEFRecordURI
-    summary: Creates a <Titanium.Tizen.NFC.NDEFRecordURI> object.
+    summary: Creates a <Tizen.NFC.NDEFRecordURI> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecordURI>.
+        summary: Initial parameters for <Tizen.NFC.NDEFRecordURI>.
         type: createNDEFRecordURIParameters
     returns:
-        type: Titanium.Tizen.NFC.NDEFRecordURI
+        type: Tizen.NFC.NDEFRecordURI
     examples:
       - example: |
             // create a new NDEFRecord
-            var newRecord = Titanium.Tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
+            var newRecord = Tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
             var payload = newRecord.payload;
 
   - name: createNDEFRecordMedia
-    summary: Creates a <Titanium.Tizen.NFC.NDEFRecordMedia>.
+    summary: Creates a <Tizen.NFC.NDEFRecordMedia>.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Titanium.Tizen.NFC.NDEFRecordMedia>.
+        summary: Initial parameters for <Tizen.NFC.NDEFRecordMedia>.
         type: createNDEFRecordMediaParameters
     returns:
-        type: Titanium.Tizen.NFC.NDEFRecordMedia
+        type: Tizen.NFC.NDEFRecordMedia
 
 ---
 name: createNDEFMessageParametersNDEFRecord
 summary: Parameters for the createNDEFMessage.
 properties:
   - name: ndefRecords
-    summary: The array of NDEFRecord objects in the <Titanium.Tizen.NFC.NDEFMessage>.
-    type: Array<Titanium.Tizen.NFC.NDEFRecord>
+    summary: The array of NDEFRecord objects in the <Tizen.NFC.NDEFMessage>.
+    type: Array<Tizen.NFC.NDEFRecord>
 
 ---
 name: createNDEFMessageParametersrawData
@@ -293,7 +293,7 @@ properties:
     type: String
   - name: encoding
     summary:  |
-        The encoding type. Possible values are: <Titanium.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Titanium.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
+        The encoding type. Possible values are: <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
     type: String
     optional: true
 

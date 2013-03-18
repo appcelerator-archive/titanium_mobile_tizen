@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Filesystem.FileSystemStorage
+name: Tizen.Filesystem.FileSystemStorage
 summary: The FileSystemStorage interface.
 description: |
     This interface gives additional information about a storage, such as if the device is mounted, if it's a removable drive or not, or the device's name. 

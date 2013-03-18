@@ -1,7 +1,7 @@
-name: Titanium.Tizen.NFC.NDEFRecordMedia
+name: Tizen.NFC.NDEFRecordMedia
 summary: |
   The NDEFRecord that has mime type payload.
-extends: Titanium.Tizen.NFC.NDEFRecord
+extends: Tizen.NFC.NDEFRecord
 platforms: [tizen]
 
 properties:

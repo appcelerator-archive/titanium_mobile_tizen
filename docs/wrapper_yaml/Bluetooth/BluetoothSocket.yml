@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothSocket
+name: Tizen.Bluetooth.BluetoothSocket
 summary: The interface to represent the Bluetooth socket.   
 description: The socket object is created by BluetoothDevice.connectToServiceByUUID() or BluetoothAdapter.registerRFCOMMServiceByUUID().
 extends: Titanium.Module
@@ -146,7 +146,7 @@ properties:
 
   - name: peer
     summary: The peer device to which this socket is connected. 
-    type: Titanium.Tizen.Bluetooth.BluetoothDevice
+    type: Tizen.Bluetooth.BluetoothDevice
     permission: read-only
 
   - name: onmessage

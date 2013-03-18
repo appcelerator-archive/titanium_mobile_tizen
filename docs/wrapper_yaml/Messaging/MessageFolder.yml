@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.MessageFolder
+name: Tizen.Messaging.MessageFolder
 summary: Defines the email folder.
 description: |
     This interface allows a web application to get the set of properties that are linked to an email folder.

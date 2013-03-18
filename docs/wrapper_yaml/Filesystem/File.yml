@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Filesystem.File
+name: Tizen.Filesystem.File
 summary: The file interface.
 description: |
     This interface represents the file abstraction in use. 
@@ -74,7 +74,7 @@ methods:
     parameters:
       - name: onsuccess
         summary: Called when the list operation has been successfully completed
-        type: Callback<Array<Titanium.Tizen.Filesystem.File>>
+        type: Callback<Array<Tizen.Filesystem.File>>
       - name: onerror
         summary: Called if an error occurred
         type: Callback<Tizen.WebAPIError>        
@@ -105,7 +105,7 @@ methods:
   - name: openStream
     summary: Opens the file in the given mode supporting the given encoding.
     description: |
-        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append (<Titanium.Tizen.Filesystem.FILE_MODE_A>) mode, in which case the filepointer points to the end of the file.
+        This operation is performed asynchronously. If the file is opened successfully, the onsuccess is invoked with a FileStream that can be used for reading and writing the file, depending on the mode. The return FileStream instance includes a file pointer, which represents the current position in the file. The filepointer will, by default, be at the start of the file, except in the case of opening with append (<Tizen.Filesystem.FILE_MODE_A>) mode, in which case the filepointer points to the end of the file.
         The ErrorCallback is launched with these error types:
             - InvalidValuesError: If any of the input parameters contains an invalid value.
             - IOError: The operation is launched on a directory (not a file), the file is not valid or it does not exist.
@@ -117,7 +117,7 @@ methods:
         type: String
       - name: onsuccess
         summary: Called when the file has been opened.
-        type: Callback<Titanium.Tizen.Filesystem.FileStream>
+        type: Callback<Tizen.Filesystem.FileStream>
       - name: onerror
         summary: Called if an error occurred.
         type: Callback<Tizen.WebAPIError>        
@@ -343,7 +343,7 @@ methods:
         In case the directory cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
         summary: The file handle of the new directory. The new File object will have Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createDirectory() method is called.
-        type: Titanium.Tizen.Filesystem.File
+        type: Tizen.Filesystem.File
     parameters:
       - name: dirPath   
         summary: The relative directory path, it should only contain characters supported by the underlying filesystem.
@@ -366,7 +366,7 @@ methods:
         In case the file cannot be created, an error MUST be thrown with the appropriate error type.
     returns:
         summary: The file handle of the new empty file. The new File object will have Tizen.Filesystem.FILE_MODE_RW access rights, as it inherits this from the File object on which the createFile() method is called.
-        type: Titanium.Tizen.Filesystem.File
+        type: Tizen.Filesystem.File
     parameters:
       - name: filePath   
         summary: The new file path, it should only contain characters supported by the underlying filesystem.
@@ -383,7 +383,7 @@ methods:
         The encoding of file paths is UTF-8.
     returns:
         summary: The file handle of the file. The new File object will inherit its access rights from the File object on which this resolve() method is called.
-        type: Titanium.Tizen.Filesystem.File
+        type: Tizen.Filesystem.File
     parameters:
       - name: filePath   
         summary: The relative file/directory path to resolve.
@@ -534,7 +534,7 @@ properties:
         The parent directory handle.
         null if there is no parent directory.
         If there is no parent directory, this represents a root location.
-    type: Titanium.Tizen.Filesystem.File
+    type: Tizen.Filesystem.File
     permission: read-only
     examples:
       - example: |

@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Time
+name: Tizen.Time
 summary: The Module provides information regarding date / time and time zones.
 description: |
     The JavaScript Date object does not have full timezone support.
@@ -30,10 +30,10 @@ methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
     returns:
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     examples:
       - example: |
-            var current_dt = Titanium.Tizen.Time.getCurrentDateTime();
+            var current_dt = Tizen.Time.getCurrentDateTime();
             Titanium.API.info("current date / time is " + current_dt.toLocaleString());
 
   - name: getLocalTimezone
@@ -42,7 +42,7 @@ methods:
         type: String
     examples:
       - example: |
-            Titanium.API.info("The local time zone is " + Titanium.Tizen.Time.getLocalTimezone());
+            Titanium.API.info("The local time zone is " + Tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
     summary: Returns synchronously the identifiers of the timezones supported by the device.
@@ -55,7 +55,7 @@ methods:
         type: String[]
     examples:
       - example: |
-            var tzids = Titanium.Tizen.Time.getAvailableTimezones();
+            var tzids = Tizen.Time.getAvailableTimezones();
             Titanium.API.info("The device supports " + tzids.length + " time zones.");
         
   - name: getDateFormat
@@ -105,26 +105,26 @@ methods:
         type: Number 
     examples:
       - example: |
-            var current_dt = Titanium.Tizen.Time.getCurrentDateTime(),
-                is_leap = Titanium.Tizen.Time.isLeapYear(current_dt.getFullYear());
+            var current_dt = Tizen.Time.getCurrentDateTime(),
+                is_leap = Tizen.Time.isLeapYear(current_dt.getFullYear());
                 
             if (is_leap) {
                 console.log("This year is a leap year.");
             }
     
   - name: createTZDate
-    summary: Returns the <Titanium.Tizen.Time.TZDate>.
+    summary: Returns the <Tizen.Time.TZDate>.
     returns:
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     parameters:
       - name: tzDateParameters
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
     
   - name: createTimeDuration
-    summary: Returns the <Titanium.Tizen.Time.TimeDuration>.
+    summary: Returns the <Tizen.Time.TimeDuration>.
     returns:
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     parameters:
       - name: timeDurationParameters
         summary: The TimeDuration object that contains the length and its associated time unit.

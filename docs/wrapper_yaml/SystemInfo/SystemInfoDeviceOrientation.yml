@@ -1,8 +1,8 @@
 ---
-name: Titanium.Tizen.SystemInfo.SystemInfoDeviceOrientation
+name: Tizen.SystemInfo.SystemInfoDeviceOrientation
 summary: This property reflects the information of the device orientation in this system.
     
-extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 

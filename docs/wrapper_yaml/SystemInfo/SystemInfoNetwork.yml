@@ -1,7 +1,7 @@
 ---
-name: Titanium.Tizen.SystemInfo.SystemInfoNetwork
+name: Tizen.SystemInfo.SystemInfoNetwork
 summary: This property reflects the information of the data network in this system.
-extends: Titanium.Tizen.SystemInfo.SystemInfoProperty
+extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 

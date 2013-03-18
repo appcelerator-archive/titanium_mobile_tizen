@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.MessageService
+name: Tizen.Messaging.MessageService
 summary: Message creating, sending, and fetching capabilities. 
 description: |
     This interface allows a web application to manipulate and send messages.
@@ -24,7 +24,7 @@ methods:
     parameters: 
       - name: message
         summary: The message to be sent. 
-        type: Titanium.Tizen.Messaging.Message
+        type: Tizen.Messaging.Message
 
       - name: successCallback
         summary: To be invoked if the message is successfully sent
@@ -69,11 +69,11 @@ methods:
     parameters: 
       - name: message
         summary: Message with the body to be loaded. 
-        type: Titanium.Tizen.Messaging.Message
+        type: Tizen.Messaging.Message
 
       - name: successCallback
         summary: Function to be invoked if the message body is successfully loaded. 
-        type: Callback<Titanium.Tizen.Messaging.Message> 
+        type: Callback<Tizen.Messaging.Message> 
 
       - name: errorCallback
         summary:  Function to be invoked if the loading request fails
@@ -111,11 +111,11 @@ methods:
     parameters: 
       - name: attachment
         summary: Message attachment to be loaded. 
-        type: Titanium.Tizen.Messaging.MessageAttachment
+        type: Tizen.Messaging.MessageAttachment
 
       - name: successCallback
         summary: Function to be invoked if the message attachment is successfully loaded. 
-        type: Callback<Titanium.Tizen.Messaging.MessageAttachment> 
+        type: Callback<Tizen.Messaging.MessageAttachment> 
 
       - name: errorCallback
         summary: Function to be invoked if the loading request fails. 
@@ -203,7 +203,7 @@ methods:
     parameters: 
       - name: folder
         summary: Folder to be synchronized. 
-        type: Titanium.Tizen.Messaging.MessageFolder
+        type: Tizen.Messaging.MessageFolder
 
       - name: successCallback
         summary: Function to be invoked if all actions are completed successfully. 
@@ -267,5 +267,5 @@ properties:
     summary: | 
         The interface for accessing MessageStorage for this Messaging service.
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
-    type: Titanium.Tizen.Messaging.MessageStorage
+    type: Tizen.Messaging.MessageStorage
     permission: read-only

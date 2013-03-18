@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothDevice
+name: Tizen.Bluetooth.BluetoothDevice
 summary: The interface which represents a remote Bluetooth device.   
 description: |
     This interface holds information about a remote device available on a local Bluetooth device, such as device name, address, bonding status, etc.
@@ -30,7 +30,7 @@ methods:
 
       - name: successCallback
         summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket> 
+        type: Callback<Tizen.Bluetooth.BluetoothSocket> 
 
       - name: errorCallback
         summary: Method to be invoked in case of failure to open a socket.
@@ -116,7 +116,7 @@ properties:
 
   - name: deviceClass
     summary: The device class, which represents the type of the device and the services it provides.  
-    type: Titanium.Tizen.Bluetooth.BluetoothClass
+    type: Tizen.Bluetooth.BluetoothClass
     permission: read-only
 
   - name: isBonded

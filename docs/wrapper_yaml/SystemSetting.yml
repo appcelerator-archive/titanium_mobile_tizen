@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.SystemSetting
+name: Tizen.SystemSetting
 summary: This Module provides interfaces and methods providing web applications with access to various values of the system.
 description: |
     This API provides interface and method through features such as:

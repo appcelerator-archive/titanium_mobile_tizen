@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.MessageAttachment
+name: Tizen.Messaging.MessageAttachment
 summary: Defines the content and attributes of a message attachment. 
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -32,5 +32,5 @@ properties:
     summary: | 
         The location path to the loaded attachment file.
         It holds the location path to the loaded attachment file, appropriate for the File System API, NULL if the attachment is not loaded from the remote server.
-    type: <Titanium.Tizen.Messaging.MessageAttachment>
+    type: <Tizen.Messaging.MessageAttachment>
     permission: read-only

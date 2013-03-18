@@ -1,7 +1,7 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarEvent
+name: Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
-extends: Titanium.Tizen.Calendar.CalendarItem
+extends: Tizen.Calendar.CalendarItem
 platforms: [tizen]
 
 examples:
@@ -52,7 +52,7 @@ methods:
         
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Titanium.Tizen.Calendar.CalendarEvent>>
+        type: Callback<Array<Tizen.Calendar.CalendarEvent>>
         
       - name: errorCallback
         summary:  The method to invoke when the request fails.
