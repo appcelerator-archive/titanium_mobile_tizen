@@ -55,7 +55,7 @@ methods:
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
+                                            duration: 3600000,
                                             location:'Huesca'});
             calendar.add(ev);
             Titanium.API.info('Event added with uid ' + ev.id.uid);        
@@ -101,7 +101,7 @@ methods:
             var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: Tizen.Time.createTimeDuration(1, Tizen.Time.TIME_DURATION_UNIT_HOURS),
+                                            duration: 3600000,
                                             location:'Huesca'});
             calendar.addBatch([ev], addEventsSuccess, errorCallback);    
 

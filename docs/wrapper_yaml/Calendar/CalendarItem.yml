@@ -53,7 +53,7 @@ methods:
             // Gets default calendar.
             var calendar = Tizen.Calendar.getDefaultCalendar();
             var html5seminar = Tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: Tizen.Time.createTimeDuration({length: 3, unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}),
+                                                        duration: 3600000,
                                                         summary: "HTML5 Seminar"});
                                      
             calendar.add(html5seminar);
@@ -130,12 +130,12 @@ properties:
         
         duration and endDate / dueDate are mutually exclusive, hence, only one of them have null.
         
-        This attribute is precise to the second. Milliseconds are ignored.
-    type: Tizen.Time.TimeDuration
+        Be rounded to second.
+    type: Number
     examples:
       - example: |    
             // 1 hour meeting
-            event.duration = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS});
+            event.duration = 3600000;
 
   - name: location 
     summary: |
@@ -202,7 +202,7 @@ properties:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Tizen.Calendar.createCalendarAlarm({before: Tizen.Time.createTimeDuration(30, Tizen.Time.TIME_DURATION_UNIT_MINS),
+            var alarm = Tizen.Calendar.createCalendarAlarm({before: 3600000,
                                                    method: Tizen.Calendar.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
