@@ -27,12 +27,11 @@ methods:
     examples:
       - example: |
             // Triggers an alarm on a given date/time
-            var alarmObj = require("Ti/Tizen/Alarm");
-            var applicationObj = require("Ti/Tizen/Application");
-            var alarm = alarmObj.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
-            var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
-            alarmObj.add(alarm, "org.tizen.browser");
-            Ti.API.info("Alarm added with id: " + alarm.id);
+            var tizen = require("tizen");
+            var alarm = tizen.Alarm.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
+            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
+            tizen.Alarm.add(alarm, "org.tizen.browser");
+            Titanium.API.info("Alarm added with id: " + alarm.id);
 
   - name: remove
     summary: Removes an alarm from the storage. 
@@ -43,15 +42,15 @@ methods:
         type: String
     examples:
       - example: |
-            var alarmObj = require("Ti/Tizen/Alarm");
-            var alarms = alarmObj.getAll();
+            var tizen = require("tizen");
+            var alarms = tizen.Alarm.getAll();
             // Removes the first alarm
             if (alarms.length > 0) {
                 try {
-                    alarmObj.remove(alarms[0].id);
-                    Ti.API.info("Successfully removed the first alarm.");
+                    tizen.Alarm.remove(alarms[0].id);
+                    Titanium.API.info("Successfully removed the first alarm.");
                 } catch(error) {
-                    Ti.API.info("Failed to remove the first alarm.");
+                    Titanium.API.info("Failed to remove the first alarm.");
                 }
             }
 
@@ -71,9 +70,9 @@ methods:
         type: String
     examples:
       - example: |
-            var alarmObj = require("Ti/Tizen/Alarm");
-            var alarm = alarmObj.get(myAlarmID);
-            Ti.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
+            var tizen = require("tizen");
+            var alarm = tizen.Alarm.get(myAlarmID);
+            Titanium.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
 
   - name: getAll
     summary: Returns all alarms.
@@ -85,9 +84,9 @@ methods:
         summary: All Alarm objects.
     examples:
       - example: |
-            var alarmObj = require("Ti/Tizen/Alarm");
-            var alarms = alarmObj.getAll();
-            Ti.API.info(alarms.length + " alarms present in the storage.");
+            var tizen = require("tizen");
+            var alarms = tizen.Alarm..getAll();
+            Titanium.API.info(alarms.length + " alarms present in the storage.");
 
   - name: createAlarmRelative
     summary: Creates and returns an instance of <Tizen.Alarm.AlarmRelative>.
@@ -99,13 +98,13 @@ methods:
         type: alarmRelativeParameters
     examples:
       - example: |
-            var alarmObj = require("Ti/Tizen/Alarm");
+            var tizen = require("tizen");
             // Sets an alarm in 3 hours from now
-            var alarm1 = alarmObj.createAlarmRelative({delay: 3 * alarmObj.PERIOD_HOUR});
-            alarmObj.add(alarm1, "org.tizen.clock");
+            var alarm1 = tizen.Alarm.createAlarmRelative({delay: 3 * tizen.Alarm.PERIOD_HOUR});
+            tizen.Alarm.add(alarm1, "org.tizen.clock");
             // Sets an alarm in one hour, recurring after every 2 minutes
-            var alarm2 = alarmObj.createAlarmRelative({delay: alarmObj.PERIOD_HOUR, 2 * alarmObj.PERIOD_MINUTE});
-            alarmObj.add(alarm2, "org.tizen.clock");
+            var alarm2 = tizen.Alarm.createAlarmRelative({delay: tizen.Alarm.PERIOD_HOUR, 2 * tizen.Alarm.PERIOD_MINUTE});
+            tizen.Alarm.add(alarm2, "org.tizen.clock");
  
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Tizen.Alarm.AlarmAbsolute>.
@@ -117,18 +116,17 @@ methods:
         type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
     examples:
       - example: |
-            var alarmObj = require("Ti/Tizen/Alarm");
+            var tizen = require("tizen");
             var date = new Date(2012, 0, 1, 8, 0);
-            var calendarObj = require("Ti/Tizen/Calendar");
             // Sets an alarm on January 1st 2012 08:00
-            var alarm1 = alarmObj.createAlarmAbsolute({date: date});
-            alarmObj.add(alarm1, "org.tizen.clock");
+            var alarm1 = tizen.Alarm.createAlarmAbsolute({date: date});
+            tizen.Alarm.add(alarm1, "org.tizen.clock");
             // Sets an alarm on January 1st 2012 08:00, repeating every 2 days
-            var alarm2 = alarmObj.createAlarmAbsolute({date: date, period: 2 * alarmObj.PERIOD_DAY});
-            alarmObj.add(alarm2, "org.tizen.clock");
+            var alarm2 = tizen.Alarm.createAlarmAbsolute({date: date, period: 2 * tizen.Alarm.PERIOD_DAY});
+            tizen.Alarm.add(alarm2, "org.tizen.clock");
             // Sets an alarm occurring on every Saturday and Sunday, at 08:00, starting from January 1st 2012
-            var alarm3 = alarmObj.createAlarmAbsolute({date: date, period: [calendarObj.BY_DAY_VALUE_SA, calendarObj.BY_DAY_VALUE_SU]});
-            alarmObj.add(alarm3, "org.tizen.clock");
+            var alarm3 = tizen.Alarm.createAlarmAbsolute({date: date, period: [tizen.Calendar.BY_DAY_VALUE_SA, tizen.Calendar.BY_DAY_VALUE_SU]});
+            tizen.Alarm.add(alarm3, "org.tizen.clock");
  
 properties:
   - name: PERIOD_MINUTE

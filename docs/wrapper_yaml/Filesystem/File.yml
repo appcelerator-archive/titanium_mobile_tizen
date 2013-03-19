@@ -92,14 +92,14 @@ methods:
              function onerror(error) {
                  Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
-
-             Tizen.Filesystem.resolve(
+             var tizen = require("tizen");
+             tizen.Filesystem.resolve(
                 "documents",
                 function(dir){
                   dir.listFiles(onsuccess, onerror);
                 }, function(e){
                   Titanium.API.info("Error " + e.message);
-                }, Tizen.Filesystem.FILE_MODE_R
+                }, tizen.Filesystem.FILE_MODE_R
              );
         
   - name: openStream
@@ -131,7 +131,8 @@ methods:
     examples:
       - example: |
             var documentsDir;
-
+            var tizen = require("tizen");
+            
             function onsuccess(files) {
                 for(var i = 0; i < files.length; i++) {
                    Titanium.API.info("File Name is " + files[i].name); // displays file name
@@ -139,7 +140,7 @@ methods:
                 var testFile = documentsDir.createFile("test.txt");
                 if (testFile != null) {
                    testFile.openStream(
-                      Tizen.Filesystem.FILE_MODE_W,
+                      tizen.Filesystem.FILE_MODE_W,
                       function(fs){
                          fs.write("HelloWorld");
                          fs.close();
@@ -154,14 +155,14 @@ methods:
                 Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
             }
 
-            Tizen.Filesystem.resolve(
+            tizen.Filesystem.resolve(
                 'documents',
                 function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                 }, function(e) {
                    Titanium.API.info("Error" + e.message);
-                }, Tizen.Filesystem.FILE_MODE_RW
+                }, tizen.Filesystem.FILE_MODE_RW
             );
 
   - name: readAsText
@@ -188,6 +189,8 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  Titanium.API.info("File Name is " + files[i].name); // displays file name
@@ -207,14 +210,14 @@ methods:
              }
 
              var documentsDir;
-             Tizen.Filesystem.resolve(
+             tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
                    Titanium.API.info("Error" + e.message);
-                 }, Tizen.Filesystem.FILE_MODE_RW
+                 }, tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: copyTo
@@ -250,6 +253,8 @@ methods:
     examples:
       - example: |
             var documentsDir;
+            var tizen = require("tizen");
+            
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  if (files[i].isDirectory == false)
@@ -265,14 +270,14 @@ methods:
                            " occurred when listing the files in the selected folder");
              }
 
-             Tizen.Filesystem.resolve(
+             tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
                    Titanium.API.info("Error" + e.message);
-                 }, Tizen.Filesystem.FILE_MODE_RW
+                 }, tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: moveTo
@@ -308,6 +313,8 @@ methods:
     examples:
       - example: |
             var documentsDir;
+            var tizen = require("tizen");
+            
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  if (files[i].isDirectory == false)
@@ -323,14 +330,14 @@ methods:
                            " occurred during listing the files in the selected folder");
              }
 
-             Tizen.Filesystem.resolve(
+             tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess, onerror);
                  }, function(e) {
                    Titanium.API.info("Error" + e.message);
-                 }, Tizen.Filesystem.FILE_MODE_RW
+                 }, tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: createDirectory
@@ -391,13 +398,15 @@ methods:
     examples:
       - example: |
             var file;
+            var tizen = require("tizen");
+            
             // Resolves helloWorld.doc file that is located in the
             // documents root location
-            Tizen.Filesystem.resolve(
+            tizen.Filesystem.resolve(
                'documents',
                function(dir){ file = dir.resolve("helloWorld.doc");},
                function(e){ Titanium.API.info("Error" + e.message);},
-               Tizen.Filesystem.FILE_MODE_RW);
+               tizen.Filesystem.FILE_MODE_RW);
 
   - name: deleteDirectory
     summary: Deletes a specified directory and directory tree if specified.
@@ -428,6 +437,8 @@ methods:
     examples:
       - example: |
             var documentsDir;
+            var tizen = require("tizen");
+                        
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  if (files[i].isDirectory)
@@ -454,14 +465,14 @@ methods:
                Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
              }
 
-             Tizen.Filesystem.resolve(
+             tizen.Filesystem.resolve(
                  'documents',
                  function(dir){
                    documentsDir = dir;
                    dir.listFiles(onsuccess,onerror);
                  }, function(e) {
                    Titanium.API.info("Error" + e.message);
-                 }, Tizen.Filesystem.FILE_MODE_RW
+                 }, tizen.Filesystem.FILE_MODE_RW
              );
 
   - name: deleteFile
@@ -490,6 +501,8 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  if (files[i].isDirectory)
@@ -517,14 +530,14 @@ methods:
             }
 
             var documentsDir;
-            Tizen.Filesystem.resolve(
+            tizen.Filesystem.resolve(
                'documents',
                function(dir){
                  documentsDir = dir;
                  dir.listFiles(onsuccess,onerror);
                }, function(e){
                  Titanium.API.info("Error" + e.message);
-               }, Tizen.Filesystem.FILE_MODE_RW
+               }, tizen.Filesystem.FILE_MODE_RW
             );
  
 properties:
@@ -540,7 +553,7 @@ properties:
       - example: |
             // list directory contents
              dir.listFiles(onsuccess, onerror);
-
+            
              function onsuccess(files) {
                for(var i = 0; i < files.length; i++) {
                  // prints the file parent, should contain the

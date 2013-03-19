@@ -21,7 +21,8 @@ methods:
         type: NDEFMessageReadCallback
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
 
             // Receives NFCPeer
             
@@ -46,7 +47,8 @@ methods:
     summary: Unregisters the listener for receiving NDEF messages from the NFC peer-to-peer target connected.
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
             
             var onSuccessCB = {
             

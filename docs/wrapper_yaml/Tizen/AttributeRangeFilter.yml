@@ -35,17 +35,17 @@ examples:
         function errorCallback(error) {
             console.log("An error occurred: " + error.message);
         }
-        var tizenObj = require('Ti/Tizen');
+        var tizen = require("tizen");
         
         // Create an attribute range filter based on event start date: "All events occurring today".
-        var now_dt = Tizen.Time.getCurrentDateTime();
-        var today_begin = Tizen.Time.createTZDate({year: now_dt.getFullYear(),
+        var now_dt = tizen.Time.getCurrentDateTime();
+        var today_begin = tizen.Time.createTZDate({year: now_dt.getFullYear(),
                                                             month: now_dt.getMonth(),
                                                             day: now_dt.getDate()});
-        var today_end = today_begin.addDuration(Tizen.Time.createTimeDuration({length: 1, 
-                                                                                 unit: Tizen.Time.TIME_DURATION_UNIT_DAYS}));
-        var filter = tizenObj.createAttributeRangeFilter({attributeName: "startDate",
+        var today_end = today_begin.addDuration(tizen.Time.createTimeDuration({length: 1, 
+                                                                                 unit: tizen.Time.TIME_DURATION_UNIT_DAYS}));
+        var filter = tizen.createAttributeRangeFilter({attributeName: "startDate",
                                                           initialValue: today_begin,
                                                           endValue: today_end});
         // Send a search request to default event calendar.
-        Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT).find(successCallback, errorCallback, filter);
+        tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT).find(successCallback, errorCallback, filter);

@@ -7,8 +7,9 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example: |
+        var tizen = require("tizen");
         // Repeats daily for 7 days
-        var rule = Tizen.Calendar.createCalendarRecurrenceRule({frequency: Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
+        var rule = tizen.Calendar.createCalendarRecurrenceRule({frequency: tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
                                                                 ruleInitDict: {occurrenceCount:7}});
         event.recurrenceRule = rule;
          
@@ -20,10 +21,10 @@ properties:
         This property corresponds to FREQ in RFC 5545.
         
         The value is one of the constants defined for this type:
-            - Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY = 'DAILY'
-            - Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_WEEKLY = 'WEEKLY'
-            - Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_MONTHLY = 'MONTHLY'
-            - Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_YEARLY = 'YEARLY'
+            - ECURRENTCE_RULE_FREQUENCY_DAILY = 'DAILY'
+            - RECURRENTCE_RULE_FREQUENCY_WEEKLY = 'WEEKLY'
+            - RECURRENTCE_RULE_FREQUENCY_MONTHLY = 'MONTHLY'
+            - RECURRENTCE_RULE_FREQUENCY_YEARLY = 'YEARLY'
   
   - name: interval
     type: Number
@@ -32,11 +33,11 @@ properties:
         This attribute is linked to the frequency attribute and for a interval of n, 
         the event will recur every n of recurrence attribute.
         
-        For example, if the interval attribute is set to 2 and frequency attribute is set to Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_WEEKLY, 
+        For example, if the interval attribute is set to 2 and frequency attribute is set to <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, 
         then the event will recur every 2 weeks.
         
-        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY, 
-        every week if frequency is Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_WEEKLY, every month if frequency is Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_MONTHLY or every year if frequency is Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_YEARLY.
+        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY>, 
+        every week if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, every month if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY> or every year if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         
         This property corresponds to INTERVAL in RFC 5545.
         
@@ -62,7 +63,7 @@ properties:
     type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_WEEKLY, Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_MONTHLY, and Tizen.Calendar.RRECURRENTCE_RULE_FREQUENCY_YEARLY.
+        This property value is valid only for recurrence rules with a frequency type of <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY>, and <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         This property corresponds to BYDAY in RFC 5545.
         
         By default, this attribute is set to an empty array.

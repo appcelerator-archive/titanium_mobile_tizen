@@ -8,8 +8,9 @@ extends: Tizen.Alarm.Alarm
 platforms: [tizen]
 examples:
   - example: |
-        var alarmObj = require("Ti/Tizen/Alarm");
-        var calendarObj = require("Ti/Tizen/Calendar");
+        var tizen = require("tizen");
+        var alarmObj = tizen.Alarm;
+        var calendarObj = tizen.Calendar;
         var date = new Date(2012, 0, 1, 8, 0);
         // Sets an alarm on January 1st 2012 08:00
         var alarm1 = alarmObj.createAlarmAbsolute({date: date});
@@ -48,7 +49,7 @@ properties:
     summary: An attribute to store the days of the week associated with the recurrence rule.
     description: |
         By default, this attribute is set to an empty array. 
-        If this array is non-empty, the period attribute will be set to Ti.Tizen.Alarm.PERIOD_WEEK, since the alarm will recur weekly.
+        If this array is non-empty, the period attribute will be set to <Tizen.Alarm.PERIOD_WEEK>, since the alarm will recur weekly.
         The period and daysOfTheWeek attributes are mutually exclusive. 
     type: Array<String>
     permission: read-only

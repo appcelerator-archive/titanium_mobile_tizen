@@ -28,6 +28,7 @@ methods:
     examples:
       - example: |
             // gets the cached message
-            var cachedMessage = Tizen.NFC.getDefaultAdapter().getCachedMessage();
+            var tizen = require("tizen");
+            var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
             var raw = cachedMessage.toByte();
 

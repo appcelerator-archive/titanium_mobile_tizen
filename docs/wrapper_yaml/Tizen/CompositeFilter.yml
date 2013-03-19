@@ -33,21 +33,21 @@ examples:
             console.log("An error occurred: " + error.message);
         }
     
-        var tizenObj = require('Ti/Tizen');
+        var tizen = require("tizen");
         
         // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
-        var firstNameFilter = tizenObj.createAttributeFilter({attributeName: "name.firstName",
-                                                     matchFlag: tizenObj.FILTER_MATCH_FLAG_CONTAINS,
+        var firstNameFilter = tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                     matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                      matchValue: "Chris"});
     
         // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
-        var lastNameFilter = tizenObj.createAttributeFilter({attributeName: "name.lastName",
-                                                             matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+        var lastNameFilter = tizen.createAttributeFilter({attributeName: "name.lastName",
+                                                             matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                              matchValue: "Smith"});
     
         // Create a filter based on the intersection of these two filter:
         // "First name should contain 'Chris' AND last name should be 'Smith'".
-        var filter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION,
+        var filter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                      filters: [firstNameFilter, lastNameFilter]});
     
         // Send request on contact address book.

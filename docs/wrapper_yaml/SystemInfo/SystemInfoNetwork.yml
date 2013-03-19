@@ -11,7 +11,7 @@ properties:
         Represents the network type of the current data network.
         
         The value is one of the constants defined for this type:
-        Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_NONE, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2G, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2_5G, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_3G, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_4G, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_WIFI, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_ETHERNET, Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_UNKNOWN
+        <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_NONE>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2G>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2_5G>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_3G>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_4G>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_WIFI>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_ETHERNET>, <Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_UNKNOWN>
         
     type: String
     permission: read-only

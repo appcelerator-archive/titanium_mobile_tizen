@@ -290,8 +290,9 @@ methods:
         type: Tizen.Time.TimeDuration
     examples:
       - example: |
-            now = Tizen.Time.getCurrentDateTime(); //TZDate
-            in_one_week = now.addDuration(Tizen.Time.createTimeDuration({length: 7, unit: Tizen.Time.TIME_DURATION_UNIT_DAYS})); //TZDate
+            var tizen = require("tizen");
+            now = tizen.Time.getCurrentDateTime(); //TZDate
+            in_one_week = now.addDuration(tizen.Time.createTimeDuration({length: 7, unit: tizen.Time.TIME_DURATION_UNIT_DAYS})); //TZDate
 
   - name: toLocaleTimeString
     summary: Returns the date portion of a TZDate object as a string, using locale conventions.
@@ -342,7 +343,8 @@ methods:
         type: Number
     examples:
       - example: |
-            var offset = Tizen.Time.getCurrentDateTime().secondsFromUTC();
+            var tizen = require("tizen");
+            var offset = tizen.Time.getCurrentDateTime().secondsFromUTC();
             var myDate = new Date();
             var exp_offset = myDate.getTimezoneOffset()*60;//offset is equals to exp_offset.
   - name: isDST

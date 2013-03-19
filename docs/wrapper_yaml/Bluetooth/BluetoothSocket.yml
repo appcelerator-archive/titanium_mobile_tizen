@@ -18,7 +18,8 @@ methods:
         type: Array<Number>
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
         
             function onSocketConnected(socket) {
             
@@ -80,7 +81,8 @@ methods:
         summary: Sequence of bytes successfully read. 
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
 
             function onError(e) {
             

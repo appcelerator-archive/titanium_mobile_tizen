@@ -33,7 +33,8 @@ methods:
         type: Tizen.Time.TZDate
     examples:
       - example: |
-            var current_dt = Tizen.Time.getCurrentDateTime();
+            var tizen = require("tizen");
+            var current_dt = tizen.Time.getCurrentDateTime();
             Titanium.API.info("current date / time is " + current_dt.toLocaleString());
 
   - name: getLocalTimezone
@@ -42,7 +43,8 @@ methods:
         type: String
     examples:
       - example: |
-            Titanium.API.info("The local time zone is " + Tizen.Time.getLocalTimezone());
+            var tizen = require("tizen");
+            Titanium.API.info("The local time zone is " + tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
     summary: Returns synchronously the identifiers of the timezones supported by the device.
@@ -55,7 +57,8 @@ methods:
         type: String[]
     examples:
       - example: |
-            var tzids = Tizen.Time.getAvailableTimezones();
+            var tizen = require("tizen");
+            var tzids = tizen.Time.getAvailableTimezones();
             Titanium.API.info("The device supports " + tzids.length + " time zones.");
         
   - name: getDateFormat
@@ -105,8 +108,9 @@ methods:
         type: Number 
     examples:
       - example: |
-            var current_dt = Tizen.Time.getCurrentDateTime(),
-                is_leap = Tizen.Time.isLeapYear(current_dt.getFullYear());
+            var tizen = require("tizen"),
+                current_dt = tizen.Time.getCurrentDateTime(),
+                is_leap = tizen.Time.isLeapYear(current_dt.getFullYear());
                 
             if (is_leap) {
                 console.log("This year is a leap year.");
@@ -169,7 +173,7 @@ properties:
   - name: unit
     type: String
     summary: |
-        (optional) Time property value: Tizen.Time.TIME_DURATION_UNIT_MSECS, Tizen.Time.TIME_DURATION_UNIT_SECS, Tizen.Time.TIME_DURATION_UNIT_MINS, Tizen.Time.TIME_DURATION_UNIT_HOURS, Tizen.Time.TIME_DURATION_UNIT_DAYS
+        (optional) Time property value: <Tizen.Time.TIME_DURATION_UNIT_MSECS>, <Tizen.Time.TIME_DURATION_UNIT_SECS>, <Tizen.Time.TIME_DURATION_UNIT_MINS>, <Tizen.Time.TIME_DURATION_UNIT_HOURS>, <Tizen.Time.TIME_DURATION_UNIT_DAYS>
     optional: true
 ---
 

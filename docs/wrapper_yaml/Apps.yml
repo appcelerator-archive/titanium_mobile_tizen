@@ -12,8 +12,8 @@ methods:
         summary: Application The data structure that defines current application.
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var app = applicationObj.getCurrentApplication();
+            var tizen = require('tizen');
+            var app = tizen.Application.getCurrentApplication();
             console.log("Current application's app id is " + app.appInfo.id);
 
   - name: launch
@@ -42,8 +42,8 @@ methods:
             function onsuccess() {
                 console.log("The application has launched successfully");
             }
-            var applicationObj = require('Ti/Tizen/Application');
-            applicationObj.launch("org.tizen.calculator", onsuccess);
+            var tizen = require('tizen');
+            tizen.Application.launch("org.tizen.calculator", onsuccess);
 
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
@@ -84,8 +84,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
+            var tizen = require('tizen');
+            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
                                                                 uri: null,
                                                                 mime: "image/jpeg",
                                                                 category: null});
@@ -104,7 +104,7 @@ methods:
                     console.log('The launch application control failed');
                 }
             }
-            applicationObj.launchAppControl(appControl, null,
+            tizen.Application.launchAppControl(appControl, null,
                                                   function() {console.log("launch application control succeed");},
                                                   function(e) {console.log("launch application control failed. reason: " + e.message);},
                                                   appControlReplyCallback );
@@ -132,8 +132,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var appControl = applicationObj.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
+            var tizen = require('tizen');
+            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
                                                                 uri: null,
                                                                 mime: "image/jpeg",
                                                                 category: null});
@@ -155,12 +155,12 @@ methods:
                     }
                 }
                 var appId = appInfos[0].id; // select first app's id
-                applicationObj.launchAppControl(appControl, appId,
+                tizen.Application.launchAppControl(appControl, appId,
                                                       function() {console.log("launch application control succeed"); },
                                                       function(e) {console.log("launch application control failed. reason: " + e.message); },
                                                       appControlReplyCallback );
             }
-            applicationObj.findAppControl(appControl, successCB); 
+            tizen.Application.findAppControl(appControl, successCB); 
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
@@ -182,8 +182,8 @@ methods:
                 for (var i = 0; i < contexts.length; i++)
                 addToTaskManager(contexts[i]);
             }
-            var applicationObj = require('Ti/Tizen/Application');
-            applicationObj.getAppsContext(onRunningAppsContext);
+            var tizen = require('tizen');
+            tizen.Application.getAppsContext(onRunningAppsContext);
  
   - name: getAppContext
     summary: |
@@ -218,8 +218,8 @@ methods:
                 for (var i = 0; i < applications.length; i++)
                     addToApplicationGrid(applications[i]);
                 }
-            var applicationObj = require('Ti/Tizen/Application');
-            applicationObj.getAppsInfo(onListInstalledApps);
+            var tizen = require('tizen');
+            tizen.Application.getAppsInfo(onListInstalledApps);
  
   - name: getAppInfo
     summary: Gets application information for a specified application ID.  
@@ -236,8 +236,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            var appContext = applicationObj.getAppContext(null);
+            var tizen = require('tizen');
+            var appContext = tizen.Application.getAppContext(null);
             console.log("Application context retrieved for app " + appContext.id);
  
   - name: addAppInfoEventListener
@@ -270,8 +270,8 @@ methods:
                     console.log('The application ' + appid + ' is uninstalled');
                 }
             };
-            var applicationObj = require('Ti/Tizen/Application');
-            var watchId = applicationObj.addAppInfoEventListener(appEventCallback);
+            var tizen = require('tizen');
+            var watchId = tizen.Application.addAppInfoEventListener(appEventCallback);
 
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
@@ -281,8 +281,8 @@ methods:
         type: Number
     examples:
       - example: |
-            var applicationObj = require('Ti/Tizen/Application');
-            applicationObj.removeAppInfoEventListener(watchId);
+            var tizen = require('tizen');
+            tizen.Application.removeAppInfoEventListener(watchId);
 
 # Pseudo-type
 ---

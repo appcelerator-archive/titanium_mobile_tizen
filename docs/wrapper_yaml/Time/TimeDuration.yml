@@ -7,8 +7,9 @@ platforms: [tizen]
 examples: 
   - title: Simple code example
     example:    |
-        var now = Tizen.Time.getCurrentDateTime();
-        var tomorrow = now.addDuration(Tizen.Time.createTimeDuration({length: 1, unit: Time.TIME_DURATION_UNIT_DAYS})); // Becomes tomorrow, same time.
+        var tizen = require("tizen");
+        var now = tizen.Time.getCurrentDateTime();
+        var tomorrow = now.addDuration(tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_DAYS})); // Becomes tomorrow, same time.
 
 
 methods:
@@ -50,8 +51,9 @@ methods:
         type: Tizen.Time.TimeDuration
     examples:
       - example: |
-            var d1 = Tizen.Time.createTimeDuration({length: 60, unit: Tizen.Time.TIME_DURATION_UNIT_MINS}); // 60 minutes
-            var d2 = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
+            var tizen = require("tizen");
+            var d1 = tizen.Time.createTimeDuration({length: 60, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 60 minutes
+            var d2 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
             var ret = d1.equalsTo(d2); // Returns true
 
   - name: lessThan
@@ -67,8 +69,9 @@ methods:
         type: Tizen.Time.TimeDuration
     examples:
       - example: |
-             var d1 = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
-             var d2 = Tizen.Time.createTimeDuration({length: 120, unit: Tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
+             var tizen = require("tizen");
+             var d1 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
+             var d2 = tizen.Time.createTimeDuration({length: 120, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
              var ret = d1.lessThan(d2); // Returns true
 
   - name: greaterThan
@@ -84,8 +87,9 @@ methods:
         type: Tizen.Time.TimeDuration
     examples:
       - example: |
-            var d1 = Tizen.Time.createTimeDuration({length: 120, unit: Tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
-            var d2 = Tizen.Time.createTimeDuration({length: 1, unit: Tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
+            var tizen = require("tizen");
+            var d1 = tizen.Time.createTimeDuration({length: 120, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
+            var d2 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
             var ret = d1.greaterThan(d2); // Returns true
 
 properties:

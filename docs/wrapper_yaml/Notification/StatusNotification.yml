@@ -39,11 +39,11 @@ properties:
    type: String
    examples:
      - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
-          var applicationObj = require("Ti/Tizen/Application");
+          var tizen = require("tizen");
+          
           try {
                 // gets a current application inforamtion with tizen.application.getAppInfo
-                var myappInfo = applicationObj.getAppInfo();
+                var myappInfo = tizen.Application.getAppInfo();
 
                 var notificationDict = {
                             content : "This is a simple notificaiton.",
@@ -53,15 +53,15 @@ properties:
                             appId : myappInfo.id
                           };
 
-                var notification = notificationObj.createStatusNotification({
-                                      statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
+                var notification = tizen.Notification.createStatusNotification({
+                                      statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
                                       title: "Simple notification",
                                       notificationInitDict: notificationDict
                                    });
 
-                notificationObj.post(notification);
+                tizen.Notification.post(notification);
            } catch (err) {
-                Ti.API.info (err.name + ": " + err.message);
+                Titanium.API.info (err.name + ": " + err.message);
            }
 
    
@@ -77,10 +77,10 @@ properties:
    type: Number
    examples:
      - example: |
-          var applicationObj = require("Ti/Tizen/Application");
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
+          
           try {
-                var appControl = applicationObj.createApplicationControl({
+                var appControl = tizen.Application.createApplicationControl({
                                      operation: "http://tizen.org/appcontrol/operation/create_content",
                                      uri: null,
                                      mime: "image/jpg",
@@ -96,20 +96,20 @@ properties:
                             progressValue : 20
                       };
                 // constructs the progress notification.
-                var notification = notificationObj.createStatusNotification({
-                                      statusType: notificationObj.STATUS_NOTIFICATION_TYPE_PROGRESS,
+                var notification = tizen.Notification.createStatusNotification({
+                                      statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS,
                                       title: "Progress notification",
                                       notificationInitDict: notificationDict
                                    });
                 // posts the notification
-                notificationObj.post(notification);
+                tizen.Notification.post(notification);
 
                 // updates the progress value of the notification.
                 notification.progressValue = 59;
-                notificationObj.update(notification);
+                tizen.Notification.update(notification);
 
 
            } catch (err) {
-               Ti.API.info (err.name + ": " + err.message);
+               Titanium.API.info (err.name + ": " + err.message);
            }
 

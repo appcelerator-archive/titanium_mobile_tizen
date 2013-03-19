@@ -9,14 +9,14 @@ methods:
     summary: Exits the current application.
     examples:
       - example: |
-            var appObj = require('Ti/Tizen/Application')
+            var appObj = require("tizen").Application;
             var app = appObj.getCurrentApplication();
             app.exit();
   - name: hide
     summary: Hides the current application. 
     examples:
       - example: |
-            var appObj = require('Ti/Tizen/Application')
+            var appObj = require("tizen").Application;
             var app = appObj.getCurrentApplication();
             app.hide();
   - name: getRequestedAppControl
