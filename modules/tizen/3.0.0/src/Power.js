@@ -1,5 +1,6 @@
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
-	var Power = lang.setObject('Tizen.Power', Evented, {
+    console.log('Power.js');
+	var Power = lang.mixProps(lang.mixProps({},Evented), {
 
 		constants: {
 			POWER_RESOURCE_SCREEN: 'SCREEN',
@@ -41,12 +42,14 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		turnScreenOff: function() {
 			return tizen.power.turnScreenOff();
 		}
-	});
-
+  
+	}, true);
+    
+    
 	function onTizenEventScreenStateChange(previousState, changedState) {
 		Power.fireEvent('screenStateChanged', {previousState: previousState, changedState: changedState});
 	}
 	tizen.power.setScreenStateChangeListener(onTizenEventScreenStateChange);
-
+        
 	return Power;	
 });

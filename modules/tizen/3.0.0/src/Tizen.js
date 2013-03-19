@@ -1,10 +1,8 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/AttributeFilter', 'Ti/Tizen/AttributeRangeFilter', 
-        'Ti/Tizen/CompositeFilter', 'Ti/Tizen/SortMode', 'Ti/Tizen/SimpleCoordinates'],
-        
-    function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates) {
-        return lang.setObject('Tizen', Evented, {
-
-            constants: {
+define(['Ti/_/lang', 'Ti/_/Evented', /*'./AttributeFilter', './AttributeRangeFilter', './CompositeFilter', './SortMode', './SimpleCoordinates',*/ 'Power'], 
+function(lang, Evented , /*AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates,*/ Power) {
+   
+    var Tizen = lang.mixProps( lang.mixProps({},Evented), {
+        constants: {
                 FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
                 FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
                 FILTER_MATCH_FLAG_CONTAINS: 'CONTAINS',
@@ -15,26 +13,41 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/AttributeFilter', 'Ti/Tizen/Attri
                 SORT_MODE_ORDER_DESC: 'DESC',
                 COMPOSITE_FILTER_TYPE_UNION: 'UNION',
                 COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
-            },
+                Power: Power// OR Tizen.Power = Power ???
+        },
+      
+        createAttributeFilter: function(args) {
+            return new AttributeFilter(args);
+        },
 
-            createAttributeFilter: function(args) {
-                return new AttributeFilter(args);
-            },
+        createAttributeRangeFilter: function(args) {
+            return new AttributeRangeFilter(args);
+        },
 
-            createAttributeRangeFilter: function(args) {
-                return new AttributeRangeFilter(args);
-            },
+        createCompositeFilter: function(args) {
+            return new CompositeFilter(args);
+        },
 
-            createCompositeFilter: function(args) {
-                return new CompositeFilter(args);
-            },
+        createSortMode: function(args) {
+            return new SortMode(args);
+        },
 
-            createSortMode: function(args) {
-                return new SortMode(args);
-            },
-
-            createSimpleCoordinates: function(args) {
-                return new SimpleCoordinates(args);
-            }
-        });
+        createSimpleCoordinates: function(args) {
+            return new SimpleCoordinates(args);
+        }
+    
+    }, true);
+    
+    console.log('-------------------------------');
+    console.log('Tizen');
+    for(k in Tizen) {
+        console.log(k);
+    }
+    console.log('-------------------------------');
+    console.log('Tizen.Power');
+    for(k in Tizen.Power) {
+        console.log(k);
+    }
+        
+    return Tizen;
 });
