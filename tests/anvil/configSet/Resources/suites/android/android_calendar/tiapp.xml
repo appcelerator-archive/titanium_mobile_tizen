@@ -35,4 +35,7 @@
 
 	<property name="ti.ios.enablecoverage" type="bool">true</property>
 	<property name="ti.ios.enablemdfind" type="bool">false</property>
+    <modules>
+        <module platform="tizen">tizen</module>
+    </modules>
 </ti:app>

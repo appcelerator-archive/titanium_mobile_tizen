@@ -52,6 +52,7 @@
     </mobileweb>
     <modules>
         <module platform="commonjs" version="2.3.0">ti.cloud</module>
+        <module platform="tizen">tizen</module>
     </modules>
     <tizen appid="tdYjfldf8t">
         <feature name="http://tizen.org/api/alarm" required="true"/>
