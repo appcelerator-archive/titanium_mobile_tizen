@@ -40,8 +40,7 @@ methods:
         type: Number
     examples:
       - example: |
-            var tizenObj = require('Ti/Tizen');
-            var callhistoryObj = require('Ti/Tizen/Callhistory');
+            var tizen = require("tizen");
         
             // Defines success callback
             function onSuccess(results) {
@@ -56,40 +55,40 @@ methods:
             }
         
             // Defines filter: list CS calls, most recent first
-            var filter = tizenObj.createAttributeFilter({attributeName: "type",
-                                                         matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+            var filter = tizen.createAttributeFilter({attributeName: "type",
+                                                         matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                          matchValue: "TEL"});
         
             // Defines sort mode: descending on call start time.
-            var sortMode = tizenObj.createSortMode({attributeName: "startTime",
-                                                    order: tizenObj.SORT_MODE_ORDER_DESC});
+            var sortMode = tizen.createSortMode({attributeName: "startTime",
+                                                    order: tizen.SORT_MODE_ORDER_DESC});
             
             // Makes the query and wire up the callbacks
-            callhistoryObj.find(onSuccess, onError, filter, sortMode);
+            tizen.Callhistory.find(onSuccess, onError, filter, sortMode);
         
-            var numberfilter = tizenObj.createAttributeFilter({attributeName: "remoteParties.remoteParty",
-                                                               matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+            var numberfilter = tizen.createAttributeFilter({attributeName: "remoteParties.remoteParty",
+                                                               matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                                matchValue: "123456789"});
         
             // Creates a composite filter for time constraints
-            var y2009Filter = tizenObj.createAttributeRangeFilter({attributeName: "startTime",
+            var y2009Filter = tizen.createAttributeRangeFilter({attributeName: "startTime",
                                                                    initialValue: new Date(2009, 0, 1),
                                                                    endValue: new Date(2010, 0, 1)});
-            var y2011Filter = tizenObj.createAttributeRangeFilter({attributeName: "startTime",
+            var y2011Filter = tizen.createAttributeRangeFilter({attributeName: "startTime",
                                                                    initialValue: new Date(2011, 0, 1),
                                                                    endValue: new Date(2012, 0, 1)});
-            var datefilter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_UNION,
+            var datefilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_UNION,
                                                              filters: [y2009Filter, y2011Filter]});
             // Creates a filter to find all video calls (including cellular, skype, etc)
             // The filter matches exactly any features from the "features" array
-            var tfilter = tizenObj.createAttributeFilter({attributeName: "features",
-                                                          matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+            var tfilter = tizen.createAttributeFilter({attributeName: "features",
+                                                          matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                           matchValue: "VIDEOCALL"});
             // Creates composite filter
-            var ifilter = tizenObj.createCompositeFilter({type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION,
+            var ifilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                           filters: [numberFilter, dateFilter, tfilter]});
             // Makes the query and wire up the callbacks; reuse sortMode
-            callhistoryObj.find(onSuccess, onError, ifilter, sortMode);
+            tizen.Callhistory.find(onSuccess, onError, ifilter, sortMode);
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
     parameters:
@@ -98,12 +97,12 @@ methods:
         type: CallHistoryEntry
     examples:
       - example: |
-            var callhistoryObj = require('Ti/Tizen/Callhistory');
+            var tizen = require("tizen");
         
             // Defines success callback
             function onSuccess(results) {
                 if (results.length > 0)
-                    callhistoryObj.remove(results[0]);
+                    tizen.Callhistory.remove(results[0]);
             }
         
             // Defines error callback
@@ -112,7 +111,7 @@ methods:
             }
         
             // Makes the query and wires up the callbacks
-            callhistoryObj.find(onSuccess, onError);
+            tizen.Callhistory.find(onSuccess, onError);
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     parameters: 
@@ -129,11 +128,11 @@ methods:
         type: Callback<Tizen.WebAPIError>
     examples:
       - example: |
-            var callhistoryObj = require('Ti/Tizen/Callhistory');
+            var tizen = require("tizen");
         
             // Defines success callback
             function onSuccess(results) {
-                callhistoryObj.removeBatch(results);
+                tizen.Callhistory.removeBatch(results);
             }
         
             // Defines error callback
@@ -142,7 +141,7 @@ methods:
             }
         
             // Makes the query and wires up the callbacks
-            callhistoryObj.find(onSuccess, onError);
+            tizen.Callhistory.find(onSuccess, onError);
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     parameters: 
@@ -169,7 +168,7 @@ methods:
         type: Number
     examples:
       - example: |
-            var callhistoryObj = require('Ti/Tizen/Callhistory');
+            var tizen = require("tizen");
             
             var onListenerCB = {
             
@@ -192,10 +191,10 @@ methods:
             try {
             
                 // Registers a call history callback
-                var handle = callhistoryObj.addChangeListener(onListenerCB);
+                var handle = tizen.Callhistory.addChangeListener(onListenerCB);
         
                 // Unregisters a previously registered listener
-                callhistoryObj.removeChangeListener(handle);
+                tizen.Callhistory.removeChangeListener(handle);
                 
             } catch (error) {
             

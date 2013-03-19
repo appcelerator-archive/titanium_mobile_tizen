@@ -58,7 +58,9 @@ platforms: [tizen]
 examples:
   - title: Code example
     example: |
-        var documentsDir;
+        var documentsDir,
+            tizen = require("tizen");
+        
         function onsuccess(files) {
            for(var i = 0; i < files.length; i++) {
              Titanium.API.info("File Name is " + files[i].name); // displays file name
@@ -68,7 +70,7 @@ examples:
 
            if (testFile != null) {
              testFile.openStream(
-               Tizen.Filesystem.FILE_MODE_W,
+               tizen.Filesystem.FILE_MODE_W,
                function(fs){
                  fs.write("HelloWorld");
                  fs.close();
@@ -83,14 +85,14 @@ examples:
            Titanium.API.info("The error " + error.message + " occurred when listing the files in the selected folder");
         }
 
-        Tizen.Filesystem.resolve(
+        tizen.Filesystem.resolve(
            'documents',
            function(dir){
              documentsDir = dir;
              dir.listFiles(onsuccess,onerror);
            }, function(e){
              Titanium.API.info("Error" + e.message);
-           }, Tizen.Filesystem.FILE_MODE_RW
+           }, tizen.Filesystem.FILE_MODE_RW
         );
 methods:
   - name: resolve
@@ -138,13 +140,15 @@ methods:
         optional: true
     examples:
        - example: |
-             Tizen.Filesystem.resolve(
+            var tizen = require("tizen");
+        
+             tizen.Filesystem.resolve(
                 'images',
                 function(dir) {
                    Titanium.API.info("Mount point Name is " +  dir.path);
                 }, function(e) {
                    Titanium.API.info("Error: " + e.message);
-                }, Tizen.Filesystem.FILE_MODE_R
+                }, tizen.Filesystem.FILE_MODE_R
              );
   - name: getStorage
     summary: Gets information about a storage based on its label.Gets information about a storage based on its label.
@@ -170,13 +174,15 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             function onStorage(storage) {
                // Do something
             }
             function onStorageError(e) {
                Titanium.API.info("Storage not found!" + e.message);
             }
-            Tizen.Filesystem.getStorage("MMC", onStorage, onStorageError);
+            tizen.Filesystem.getStorage("MMC", onStorage, onStorageError);
   - name: listStorages
     summary: Lists the available storages on the device.
     description: |
@@ -195,15 +201,17 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             function alertForCorruptedRemovableDrives(storages) {
                  for (var i = 0; i < storages.length; i++) {
-                     if (storages[i].type != Tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL)
+                     if (storages[i].type != tizen.Filesystem.FILE_SYSTEM_STORAGE_TYPE_EXTERNAL)
                          continue;
-                     if (storages[i].state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE)
+                     if (storages[i].state == tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_UNMOUNTABLE)
                          Titanium.API.info("External drive " + storages[i].label + " is corrupted.");
                  }
              }
-             Tizen.Filesystem.listStorages(alertForCorruptedRemovableDrives);
+             tizen.Filesystem.listStorages(alertForCorruptedRemovableDrives);
   - name: addStorageStateChangeListener
     summary: Subscribes to notifications when a storage state changes.
     description: |
@@ -227,13 +235,15 @@ methods:
         optional: true
     examples:
       - example: |
-            var watchID;
+            var watchID,
+                tizen = require("tizen");
+        
             function onStorageStateChanged(storage) {
-                if (storage.state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
+                if (storage.state == tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
                     Titanium.API.info("Storage " + storage.label + " was added!");
                 }
 
-            watchID = Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
+            watchID = tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
   - name: removeStorageStateChangeListener
     summary: Unsubscribes a storage watch operation.
     description: |
@@ -245,14 +255,16 @@ methods:
         type: Number
     examples:
       - example: |
-            var watchID;
+            var watchID,
+                tizen = require("tizen");
+        
              function onStorageStateChanged(storage) {
-                 if (storage.state == Tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
+                 if (storage.state == tizen.Filesystem.FILE_SYSTEM_STORAGE_STATE_MOUNTED)
                      Titanium.API.info("Storage " + storage.label + " was added!");
-                 Tizen.filesystem.removeStorageStateChangeListener(watchID);
+                 tizen.filesystem.removeStorageStateChangeListener(watchID);
              }
 
-             watchID = Tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
+             watchID = tizen.Filesystem.addStorageStateChangeListener(onStorageStateChanged);
 
 properties:
 

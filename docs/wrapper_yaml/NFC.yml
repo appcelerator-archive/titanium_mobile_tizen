@@ -177,9 +177,11 @@ methods:
         type: Tizen.NFC.NFCAdapter
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             try {
             
-                var adapter = Tizen.NFC.getDefaultAdapter();
+                var adapter = tizen.NFC.getDefaultAdapter();
                 
             } catch (err) {
             
@@ -226,7 +228,8 @@ methods:
     examples:
       - example: |
             // create a new NDEFRecord
-            var newRecord = Tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
+            var tizen = require("tizen");
+            var newRecord = tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
             var payload = newRecord.payload;
 
   - name: createNDEFRecordMedia

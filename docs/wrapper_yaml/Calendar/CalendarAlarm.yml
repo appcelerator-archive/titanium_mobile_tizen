@@ -7,9 +7,10 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example:    |
+        var tizen = require("tizen");
         // Creates a sound alarm 30 minutes before the event's start time
-        var alarm = Tizen.Calendar.createCalendarAlarm({before: 3600000,
-                                                        method: Tizen.Calendar.ALARM_METHOD_SOUND});
+        var alarm = tizen.Calendar.createCalendarAlarm({before: 3600000,
+                                                        method: tizen.Calendar.ALARM_METHOD_SOUND});
  
 properties:
   - name: absoluteDate 
@@ -35,12 +36,12 @@ properties:
         An attribute to denote the notification method used by an alarm.
         
         The value is one of the constants defined for this type:
-            - Tizen.Calendar.ALARM_METHOD_SOUND = 'SOUND'
-            - Tizen.Calendar.ALARM_METHOD_DISPLAY = 'DISPLAY'
+            - ALARM_METHOD_SOUND = 'SOUND'
+            - ALARM_METHOD_DISPLAY = 'DISPLAY'
     
   - name: description  
     type: String
     summary: |
         An attribute to store the description of an alarm.
-        When the method is Tizen.Calendar.ALARM_METHOD_DISPLAY, the alarm must also include a non-null description attribute, 
+        When the method is <Tizen.Calendar.ALARM_METHOD_DISPLAY>, the alarm must also include a non-null description attribute, 
         which contains the text to be displayed when the alarm is triggered. 

@@ -18,6 +18,7 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
             var listener = {
                 onDataStream: function(downloadRequest, receivedSize, totalSize) {
                     console.log('Received with id: ' + downloadRequest.id + ', ' + receivedSize + '/' + totalSize);
@@ -36,7 +37,7 @@ methods:
                 }
             };
             // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Tizen.Download.createDownloadRequest({
+            var downloadRequest = tizen.Download.createDownloadRequest({
                 url: "http://download.tizen.org/tools/README.txt",
                 destination: "documents"
             });
@@ -73,6 +74,7 @@ methods:
         type: DownloadCallback
     examples:
       - example: |
+            var tizen = require("tizen");
             var listener = {
                 onDataStream: function(downloadRequest, receivedSize, totalSize) {
                     console.log('Received with id: ' + downloadRequest.id + ', ' + receivedSize + '/' + totalSize);
@@ -91,7 +93,7 @@ methods:
                 }
             };
             // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = Tizen.Download.createDownloadRequest({
+            var downloadRequest = tizen.Download.createDownloadRequest({
                 url: "http://download.tizen.org/tools/README.txt",
                 destination: "documents"
             });

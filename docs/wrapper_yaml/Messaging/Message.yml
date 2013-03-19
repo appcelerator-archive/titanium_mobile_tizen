@@ -123,6 +123,8 @@ properties:
 
 examples:
   - example: |
+        var tizen = require("tizen");
+        
         // Define the success callback.
         var messageSentCallback = function(recipients) {
             console.log("Message sent successfully to " + recipients.length + " recipients.");
@@ -133,9 +135,9 @@ examples:
         }
         function serviceListCB(services) {
            if (services.length > 0) {
-              var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+              var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
                                                                 messageInitDict: {plainBody: 'Tizen first SMS message.'}});
               services[0].sendMessage(msg, messageSentCallback, errorCallback);
            }
         }
-        Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);
+        tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);

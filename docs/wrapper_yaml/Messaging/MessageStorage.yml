@@ -32,6 +32,8 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             // Define success callback
             function successCallback() {
                 console.log("Draft message added");
@@ -43,12 +45,12 @@ methods:
             // Define service query success callback.
             function serviceListCB(services) {
                 if (services.length > 0) {
-                    var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+                    var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
                                                              messageInitDict: {plainBody: 'Tizen draft SMS message.'}});
                     services[0].messageStorage.addDraftMessage(msg, successCallback, errorCallback);
                 }
             }
-            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
+            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: findMessages
     summary: Queries messages from MessageStorage. 
@@ -86,6 +88,7 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
             var service; // Assume messaging service is initialized
             var messageStorage = service.messageStorage; 
             function messageArrayCB(messages) {
@@ -98,8 +101,8 @@ methods:
             function errorCallback(error) {
                 console.log("Cannot query messages" + error.message);
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+            var filter = tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                       matchValue: '2593'});
             messageStorage.findMessages(filter, messageArrayCB, errorCallback);
 
@@ -129,6 +132,8 @@ methods:
             // Define success callback
             var service; // Assume messaging service is initialized
             var messageStorage = service.messageStorage; 
+            var tizen = require("tizen");
+            
             function successCallback() {
                 console.log("Messages were deleted");
             }
@@ -139,8 +144,8 @@ methods:
             function messageArrayCB(messages) {
                 messageStorage.removeMessages(messages, successCallback, errorCallback);
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+            var filter = tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                       matchValue: '2593'});
             messageStorage.findMessages(filter, messageArrayCB);
 
@@ -169,7 +174,9 @@ methods:
     examples:
       - example: |
             var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
+            var messageStorage = service.messageStorage;
+            var tizen = require("tizen");
+            
             // Define success callback
             function successCallback() {
                 console.log("Messages were updated");
@@ -182,8 +189,8 @@ methods:
                 messages[0].isRead = true;
                 messageStorage.updateMessages(messages, successCallback, errorCallback);
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'isRead',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+            var filter = tizen.createAttributeFilter({attributeName: 'isRead',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                       matchValue: 'false'});
             messageStorage.findMessages(filter, messageArrayCB);
 
@@ -224,7 +231,9 @@ methods:
     examples:
       - example: |
             var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
+            var messageStorage = service.messageStorage;
+            var tizen = require("tizen");
+            
             function conversationsArrayCB(conversations) {
                 console.log(conversations.length + " conversation(s) found!");
                 for (var i = 0; i < conversations.length; i++) {
@@ -235,8 +244,8 @@ methods:
             function errorCallback(error) {
                 console.log("Cannot query conversations" + error.message);
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+            var filter = tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                       matchValue: '2593'});
             messageStorage.findConversations(filter, conversationsArrayCB, errorCallback)
 
@@ -263,7 +272,9 @@ methods:
     examples:
       - example: |
             var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
+            var messageStorage = service.messageStorage;
+            var tizen = require("tizen");
+            
             // Define success callback.
             function successCallback() {
                 console.log("Conversations deleted");
@@ -280,8 +291,8 @@ methods:
             function queryErrorCB(error) {
                 console.log("Cannot query conversations" + error.message);
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+            var filter = tizen.createAttributeFilter({attributeName: 'from',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                       matchValue: '2593'});
             messageStorage.findConversations(filter, conversationsArrayCB, queryErrorCB);
 
@@ -307,15 +318,17 @@ methods:
     examples:
       - example: |
             var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
+            var messageStorage = service.messageStorage;
+            var tizen = require("tizen");
+            
             function folderArrayCB(folders) {
               console.log(folders.length + " folders(s) found!");
               for (var i = 0; i < folders.length; i++) {
                 console.log(i + ", folder: " + folders[i].name);
               }
             }
-            var filter = Tizen.createAttributeFilter({attributeName: 'serviceId',
-                                                      matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+            var filter = tizen.createAttributeFilter({attributeName: 'serviceId',
+                                                      matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
                                                       matchValue: service.id});
             messageStorage.findFolders(filter, folderArrayCB);
 
@@ -340,7 +353,8 @@ methods:
     examples:
       - example: |
             var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
+            var messageStorage = service.messageStorage;
+            
             var messageChangeCallback = {
                 messagesupdated: function(messages) {
                     console.log(messages.length + " message(s) updated");

@@ -50,9 +50,10 @@ methods:
         summary:  The calendar item to be added.
         type: Tizen.Calendar.CalendarItem
     examples:
-      - example: |    
-            var calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
-            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+      - example: |
+            var tizen = require("tizen");
+            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
+            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
                                             duration: 3600000,
@@ -95,10 +96,11 @@ methods:
             function addEventsSuccess(events) {
                 Titanium.API.info("Successfully added " + events.length + " events!");
             }
+            var tizen = require("tizen");
             
             // Gets the default calendar
-            var calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
-            var ev = Tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
+            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
+            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
                                             summary:'HTML5 Webinar ', 
                                             startDate: new Date(2011, 3, 30, 10, 0), 
                                             duration: 3600000,
@@ -122,7 +124,8 @@ methods:
         optional: true
     examples:
       - example: |    
-            var myCalendar;
+            var myCalendar,
+                tizen = require("tizen");
             
             // Defines the error callback.
             function errorCallback(response) {
@@ -138,7 +141,7 @@ methods:
             }
             
             // Gets the default calendar
-            myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events in a Calendar
             myCalendar.find(eventSearchSuccessCallback, errorCallback);    
@@ -168,7 +171,9 @@ methods:
         optional: true
     examples:
       - example: |    
-            var myCalendar;
+            var myCalendar,
+                tizen = require("tizen");
+                
             // Defines the error callback.
             function errorCallback(response) {
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
@@ -188,7 +193,7 @@ methods:
             }
             
             // Gets the default calendar
-            myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events in Calendar
             myCalendar.find(eventSearchSuccessCallback, errorCallback);    
@@ -203,7 +208,9 @@ methods:
         type: CalendarEventId
     examples:
       - example: |    
-            var myCalendar;
+            var myCalendar,
+                tizen = require("tizen");
+                
             // Defines the error callback.
             function errorCallback(response) {
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
@@ -215,7 +222,7 @@ methods:
                 Titanium.API.info('The first event was removed');
             }
             // Gets default calendar
-            myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             // Finds all events in Calendar
             myCalendar.find(eventSearchSuccessCallback, errorCallback);    
 
@@ -243,7 +250,9 @@ methods:
         optional: true
     examples:
       - example: |    
-            var myCalendar;
+            var myCalendar,
+                tizen = require("tizen");
+                
             // Defines the error callback.
             function errorCallback(response) {
                 Titanium.API.info( 'The following error occurred: ' +  response.name);
@@ -260,7 +269,7 @@ methods:
                                        errorCallback);
             }
             // Gets default calendar
-            myCalendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             // Retrieves all events in Calendar
             myCalendar.find(eventSearchSuccessCallback, errorCallback);        
   - name: find
@@ -302,17 +311,18 @@ methods:
             function eventSearchSuccessCallback(events) {
                 Titanium.API.info(events.length + ' results found.');
             }
+            var tizen = require("tizen");
             
             // Gets default calendar
-            calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events the calendar that contain in the summary the string Tizen.
-            var filter = Tizen.createAttributeFilter({attributeName: 'summary',
-                                                               matchFlag: Tizen.FILTER_MATCH_FLAG_CONTAINS,
+            var filter = tizen.createAttributeFilter({attributeName: 'summary',
+                                                               matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                                matchValue: 'Tizen'});
             // The events returned by the find() query will be sorted by ascending summary
-            var sortingMode = Tizen.createSortMode({attributeName: 'summary',
-                                                             order: Tizen.SORT_MODE_ORDER_ASC});
+            var sortingMode = tizen.createSortMode({attributeName: 'summary',
+                                                             order: tizen.SORT_MODE_ORDER_ASC});
             
             calendar.find(eventSearchSuccessCallback, errorCallback, filter, sortingMode);        
 

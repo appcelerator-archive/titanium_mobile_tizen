@@ -22,18 +22,18 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: Tizen.Power.POWER_RESOURCE_SCREEN, Tizen.Power.POWER_RESOURCE_CPU
+            The supported request types are: <Tizen.Power.POWER_RESOURCE_SCREEN>, <Tizen.Power.POWER_RESOURCE_CPU>
         type: String
       - name: state
         summary: |
             The minimal power state in which the power resource is desired to be. 
             The value is one of the constants defined for this type. 
-            The supported request types are: Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF, Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM, Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL, Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT, Tizen.Power.POWER_SCREEN_STATE_CPU_AWAKE
+            The supported request types are: <Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, <Tizen.Power.POWER_CPU_STATE_CPU_AWAKE>
         type: String
     examples:
       - example: |
-            var powerObj = require('Ti/Tizen/Power');
-            powerObj.request(Tizen.Power.POWER_RESOURCE_SCREEN, Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL);
+            var tizen = require("tizen");
+            tizen.Power.request(tizen.Power.POWER_RESOURCE_SCREEN, tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL);
 
   - name: release
     summary: Releases the power state request for the given resource.
@@ -42,13 +42,13 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: Tizen.Power.POWER_RESOURCE_SCREEN, Tizen.Power.POWER_RESOURCE_CPU
+            The supported request types are: <Tizen.Power.POWER_RESOURCE_SCREEN>, <Tizen.Power.POWER_RESOURCE_CPU>
         type: String
     examples:
       - example: |
             // Release SCREEN resource.
-            var powerObj = require('Ti/Tizen/Power');
-            powerObj.release(Tizen.Power.POWER_RESOURCE_SCREEN);
+            var tizen = require("tizen");
+            tizen.Power.release(tizen.Power.POWER_RESOURCE_SCREEN);
 
   - name: isScreenOn
     summary: Returns true if the screen is on.
@@ -58,24 +58,24 @@ methods:
     examples:
       - example: |
             // Check whether the screen is on or off.
-            var powerObj = require('Ti/Tizen/Power');
-            var isScreenOn = powerObj.isScreenOn();
+            var tizen = require("tizen");
+            var isScreenOn = tizen.Power.isScreenOn();
 
   - name: turnScreenOn
     summary: Turns on the screen.
     examples:
       - example: |
             // Turn on the screen.
-            var powerObj = require('Ti/Tizen/Power');
-            powerObj.turnScreenOn();
+            var tizen = require("tizen");
+            tizen.Power.turnScreenOn();
 
   - name: turnScreenOff
     summary: Turns off the screen.
     examples:
       - example: |
             // Turn off the screen.
-            var powerObj = require('Ti/Tizen/Power');
-            powerObj.turnScreenOff();
+            var tizen = require("tizen");
+            tizen.Power.turnScreenOff();
     
 properties:
 

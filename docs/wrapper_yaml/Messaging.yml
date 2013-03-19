@@ -29,6 +29,8 @@ methods:
         optional: true
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             // Define the error callback.
             function errorCallback(error) {
                 console.log("Cannot get messaging service " + error.message);
@@ -37,7 +39,7 @@ methods:
             function serviceListCB(services) {
                 console.log("Found " + services.html + "email services");
             }
-            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
+            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB, errorCallback);
 
   - name: createMessage
     summary: Returns the <Tizen.Messaging.Message> object.
@@ -50,6 +52,8 @@ methods:
         type: MessageInit
     examples:
       - example: |
+            var tizen = require("tizen");
+            
             // Define the success callback.
             var messageSentCallback = function(recipients) {
                 console.log("Message sent successfully to " + recipients.length + " recipients.");
@@ -62,13 +66,13 @@ methods:
  
             function serviceListCB(services) {
                 if (services.length > 0) {
-                    var msg = Tizen.Messaging.createMessage({type: Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, 
+                    var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, 
                                                                       messageInitDict: {plainBody: "Tizen first SMS message."}});
                     services[0].sendMessage(msg, messageSentCallback, errorCallback);
                 }
             }
 
-            Tizen.Messaging.getMessageServices(Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB, errorCallback);
+            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB, errorCallback);
 
   - name: createMessageAttachment
     summary: Returns the <Tizen.Messaging.MessageAttachment> object.

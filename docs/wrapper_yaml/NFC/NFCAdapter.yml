@@ -62,7 +62,8 @@ methods:
         type: Array<String>
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
             
             var onSuccessCB = {
             	onattach: function(nfcTag) {            
@@ -84,7 +85,8 @@ methods:
         type: NFCPeerDetectCallback
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
             
             var onSuccessCB = {
             	onattach: function(nfcPeer) {            
@@ -100,7 +102,8 @@ methods:
     summary: Unregisters the listener for detecting an NFC tag.
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
 
             // Receives NFCTag
             var onSuccessCB = {
@@ -124,7 +127,8 @@ methods:
     summary: Unregisters the listener for detecting an NFC peer-to-peer target.
     examples:
       - example: |
-            var adapter = Tizen.NFC.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
 
             // Receives NFCPeer
             var onSuccessCB = {
@@ -155,7 +159,8 @@ methods:
     examples:
       - example: |
             // gets the cached message
-            var cachedMessage = Tizen.NFC.getDefaultAdapter().getCachedMessage();
+            var tizen = require("tizen");
+            var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
 
 ---
 name: NFCTagDetectCallback

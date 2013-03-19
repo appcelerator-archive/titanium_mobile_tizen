@@ -38,7 +38,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             var clientSocket = null;
 
@@ -47,7 +48,7 @@ methods:
             function sendMessage(msg) {
             
                 // Validate socket state, if everything is ok.
-                if (clientSocket != null && clientSocket.state == Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
+                if (clientSocket != null && clientSocket.state == tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
                     //Send
                     clientSocket.writeData(msg);
                 }

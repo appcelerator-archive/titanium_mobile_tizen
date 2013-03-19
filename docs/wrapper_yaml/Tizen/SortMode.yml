@@ -28,11 +28,13 @@ examples:
         function errorCallback(error) {
             console.log("An error occurred: " + error.message);
         }
+        var tizen = require("tizen");
+        
         // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
-        var filter = Tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                           matchFlag: Tizen.FILTER_MUCH_FLAG_CONTAINS,
+        var filter = tizen.createAttributeFilter({attributeName: "name.firstName",
+                                                           matchFlag: tizen.FILTER_MUCH_FLAG_CONTAINS,
                                                            matchValue: "Chris"});
         // Sort by first name, ascending
-        var sortMode = Tizen.createSortMode({attributeName: "name.firstName", order: Tizen.SORT_ORDER_MODE_ASC});
+        var sortMode = tizen.createSortMode({attributeName: "name.firstName", order: tizen.SORT_ORDER_MODE_ASC});
         // Send request on contact address book.
         tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);

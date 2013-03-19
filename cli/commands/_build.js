@@ -1370,7 +1370,7 @@ build.prototype = {
 
 	signTizenApp: function (logger, callback) {
 		// sign Tizen application with out custom signer utility. 
-		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
+		var cmdSign = 'java -jar "' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + '" -sig_proj ' +this.buildDir;
 		logger.info(__('Signing application in  "%s" ', this.buildDir));
 		if (this.tizenCert) {
 			//use user`s certificate to sign application

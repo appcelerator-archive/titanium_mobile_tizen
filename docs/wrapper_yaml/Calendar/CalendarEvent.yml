@@ -7,12 +7,12 @@ platforms: [tizen]
 examples:
       - example: |    
             // Gets the default calendar
-
-            var calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            var tizen = require("tizen");
+            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             try {
 
-                var ev = Tizen.Calendar.createCalendarEvent({stringRepresentation: "BEGIN:VCALENDAR\r\n" +
+                var ev = tizen.Calendar.createCalendarEvent({stringRepresentation: "BEGIN:VCALENDAR\r\n" +
                                                                                             "BEGIN:VEVENT\r\n" +
                                                                                             "DTSTAMP:19970901T1300Z\r\n" +
                                                                                             "DTSTART:19970903T163000Z\r\n" +
@@ -69,8 +69,8 @@ methods:
             function eventExpandingSuccessCallback(events) {
                 Titanium.API.info(events.length + ' event instances were returned.');
             }
-            
-            var calendar = Tizen.Calendar.getDefaultCalendar();
+            var tizen = require("tizen");
+            var calendar = tizen.Calendar.getDefaultCalendar();
             var event = calendar.get(evId);
             
             if (event.recurrenceRule != null) {
@@ -106,9 +106,9 @@ properties:
     type: String
     summary: |
         An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
-        The value is one of the constants defined for this parameter : Tizen.Calendar.EVENT_AVAILABILITY_BUSY = 'BUSY' or Tizen.Calendar.EVENT_AVAILABILITY_FREE = 'FREE'
+        The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
         
-        The default value is Tizen.Calendar.EVENT_AVAILABILITY_BUSY.
+        The default value is EVENT_AVAILABILITY_BUSY.
         
   - name: recurrenceRule 
     type: Date
@@ -124,7 +124,8 @@ properties:
     examples:
       - example: |    
             // Repeats daily for 7 days
-            var rule = Tizen.Calendar.createCalendarRecurrenceRule({frequency: Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
+            var tizen = require("tizen");
+            var rule = tizen.Calendar.createCalendarRecurrenceRule({frequency: tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
                                                                     ruleInitDict: {occurrenceCount: 7}});
             event.recurrenceRule = rule;
         

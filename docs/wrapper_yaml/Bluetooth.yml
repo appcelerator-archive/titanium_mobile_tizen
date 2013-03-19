@@ -14,7 +14,8 @@ methods:
     examples:
       - example: |
             try {
-                var adapter = Tizen.Bluetooth.getDefaultAdapter() ;
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter() ;
             } catch (err) {
                 Titanium.API.info(err.name +": " + err.message);
             }

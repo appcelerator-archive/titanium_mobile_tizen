@@ -24,7 +24,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             var chatServiceHandler = null;
 

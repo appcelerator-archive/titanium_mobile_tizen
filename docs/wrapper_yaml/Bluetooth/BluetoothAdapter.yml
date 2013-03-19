@@ -36,7 +36,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
  
             function changeName(newName) 
             {
@@ -80,7 +81,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
  
             function powerOn() 
             {
@@ -138,7 +140,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             function startDiscovery() {
             
@@ -195,7 +198,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
  
             // Call this whenever use selects one of the device
             
@@ -274,7 +278,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
  
             function onGotDevices(devices) {
                 console.log("Devices");
@@ -330,8 +335,8 @@ methods:
             function onError(e) {
                 console.log ("Could not get device info:" + e.message);
             }
-
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             adapter.getDevice("35:F4:59:D1:7A:03", gotDeviceInfo, onError);
 
   - name: createBonding
@@ -369,8 +374,8 @@ methods:
             function onError(e) {
                 console.log ("Could not create bonding, reason:" + e.message);
             }
-
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             adapter.createBonding("35:F4:59:D1:7A:03", onBondingSuccess, onError);
 
   - name: destroyBonding
@@ -398,7 +403,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
  
             function gotDevice(device) {
                 if (device.isBonded) {
@@ -449,7 +455,8 @@ methods:
         optional: true
     examples:
       - example: |
-            var adapter = Tizen.Bluetooth.getDefaultAdapter();
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             // Holds currently registered service record
             
