@@ -79,6 +79,7 @@
         <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>
         <access origin="http://appc.me/Test/Cookies/" subdomains="true"/>
     </tizen>
-	<modules>
-	</modules>
+    <modules>
+        <module platform="tizen">tizen</module>
+    </modules>
 </ti:app>

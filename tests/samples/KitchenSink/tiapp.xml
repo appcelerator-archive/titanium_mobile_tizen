@@ -58,7 +58,9 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules/>
+    <modules>
+        <module platform="tizen">tizen</module>
+    </modules>
     <tizen appid="nmgg3ski3z">
         <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
         <tizen:privilege name="http://tizen.org/privilege/application.read"/>
