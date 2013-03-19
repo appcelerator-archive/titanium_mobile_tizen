@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	return declare('Tizen.SortMode', Evented, {
 		constructor: function(args) {
 			if (args.toString() === '[object SortMode]') {

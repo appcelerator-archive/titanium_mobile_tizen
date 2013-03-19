@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/_/Evented', /*'./AttributeFilter', './AttributeRangeFilter', './CompositeFilter', './SortMode', './SimpleCoordinates',*/ 'Power'], 
-function(lang, Evented , /*AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates,*/ Power) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power'], 
+function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power) {
    
     var Tizen = lang.mixProps( lang.mixProps({},Evented), {
         constants: {
@@ -13,7 +13,7 @@ function(lang, Evented , /*AttributeFilter, AttributeRangeFilter, CompositeFilte
                 SORT_MODE_ORDER_DESC: 'DESC',
                 COMPOSITE_FILTER_TYPE_UNION: 'UNION',
                 COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
-                Power: Power// OR Tizen.Power = Power ???
+                Power: Power
         },
       
         createAttributeFilter: function(args) {
@@ -38,16 +38,5 @@ function(lang, Evented , /*AttributeFilter, AttributeRangeFilter, CompositeFilte
     
     }, true);
     
-    console.log('-------------------------------');
-    console.log('Tizen');
-    for(k in Tizen) {
-        console.log(k);
-    }
-    console.log('-------------------------------');
-    console.log('Tizen.Power');
-    for(k in Tizen.Power) {
-        console.log(k);
-    }
-        
     return Tizen;
 });

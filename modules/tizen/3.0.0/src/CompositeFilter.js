@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/Tizen/AbstractFilter'], function(declare, AbstractFilter){
+define(['_/declare', 'AbstractFilter'], function(declare, AbstractFilter){
 	return declare('Tizen.CompositeFilter', AbstractFilter, {
 		constructor: function(args) {
 			if(args.toString() === '[object CompositeFilter]') {
