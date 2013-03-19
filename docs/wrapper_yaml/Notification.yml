@@ -27,9 +27,8 @@ methods:
     examples:
       - example: |
           try {
-                var applicationObj = require("Ti/Tizen/Application");
-                var notificationObj = require("Ti/Tizen/Notification");
-                var appControl = applicationObj.createApplicationControl({
+                var tizen = require("tizen");
+                var appControl = tizen.Application.createApplicationControl({
                                      operation: "http://tizen.org/appcontrol/operation/create_content",
                                      uri: null,
                                      mime: "image/jpg",
@@ -42,14 +41,14 @@ methods:
                             vibration : true,
                             appControl : appControl
                         };
-                var notification = notificationObj.createStatusNotification({
-                                        statusType: notificationObj.STATUS_NOTIFICATION_TYPE_SIMPLE,
+                var notification = tizen.Notification.createStatusNotification({
+                                        statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
                                         title: "Simple notification",
                                         notificationInitDict: notificationDict
                                    });
-                notificationObj.post(notification);
+                tizen.Notification.post(notification);
            } catch (err) {
-                Ti.API.info(err.name + ": " + err.message);
+                Titanium.API.info(err.name + ": " + err.message);
            }
 
   - name: update
@@ -60,13 +59,13 @@ methods:
         type: Tizen.Notification
     examples:
       - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
           try {
                 // use a varible for the previoulsy posted notification.
                 notification.content = "My notification";
-                notificationObj.update(notification);
+                tizen.Notification.update(notification);
            } catch (err) {
-                Ti.API.info (err.name + ": " + err.message);
+                Titanium.API.info (err.name + ": " + err.message);
            }
         
   - name: remove
@@ -77,23 +76,23 @@ methods:
         type: String
     examples:
       - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
           try {
                 // use a varible for the previoulsy posted notification.
-                notificationObj.remove(notification.id);;
+                tizen.Notification.remove(notification.id);;
            } catch (err) {
-                Ti.API.info (err.name + ": " + err.message);
+                Titanium.API.info (err.name + ": " + err.message);
            }
         
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
     examples:
       - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
           try {
-              notificationObj.removeAll();
+              tizen.Notification.removeAll();
           } catch (err) {
-              Ti.API.info (err.name + ": " + err.message);
+              Titanium.API.info (err.name + ": " + err.message);
           }
     
   - name: get
@@ -106,14 +105,14 @@ methods:
         type: String
     examples:
       - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
           try {
               // use a varible for the previoulsy posted notification.
               // keeps notification id to use later.
               var myId = notification.id;
-              var myNotification = notificationObj.get(myId);
+              var myNotification = tizen.Notification.get(myId);
           } catch (err) {
-              Ti.API.info (err.name + ": " + err.message);
+              Titanium.API.info (err.name + ": " + err.message);
           }
     
   - name: getAll
@@ -122,25 +121,25 @@ methods:
         type: Tizen.Notification.Notification[]
     examples:
       - example: |
-          var notificationObj = require("Ti/Tizen/Notification");
+          var tizen = require("tizen");
           try {
-              var notifications = notificationObj.getAll();
+              var notifications = tizen.Notification.getAll();
               var index = 0;
               for ( index = 0; notifications.length > index; index++ )
               {
-                  Ti.API.info(notifications[index].id);
-                  Ti.API.info(notifications[index].title);
-                  Ti.API.info(notifications[index].statusType);
-                  Ti.API.info(notifications[index].type);
-                  Ti.API.info(notifications[index].content);
-                  Ti.API.info(notifications[index].postedTime);
-                  Ti.API.info(notifications[index].iconPath);
-                  Ti.API.info(notifications[index].soundPath);
-                  Ti.API.info(notifications[index].vibration);
-                  Ti.API.info(notifications[index].appControl);
+                  Titanium.API.info(notifications[index].id);
+                  Titanium.API.info(notifications[index].title);
+                  Titanium.API.info(notifications[index].statusType);
+                  Titanium.API.info(notifications[index].type);
+                  Titanium.API.info(notifications[index].content);
+                  Titanium.API.info(notifications[index].postedTime);
+                  Titanium.API.info(notifications[index].iconPath);
+                  Titanium.API.info(notifications[index].soundPath);
+                  Titanium.API.info(notifications[index].vibration);
+                  Titanium.API.info(notifications[index].appControl);
               } 
           } catch (err) {
-              Ti.API.info (err.name + ": " + err.message);
+              Titanium.API.info (err.name + ": " + err.message);
           }
 
   - name: createStatusNotification
@@ -233,8 +232,7 @@ properties:
   - name: statusType
     type: String
     summary: |
-        Notification type (supported values: "SIMPLE", "ONGOING", "PROGRESS")
-    permission: read-only
+        Notification type (supported values: <Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, <Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, <Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>)
 
   - name: title
     type: String
@@ -242,4 +240,5 @@ properties:
 
   - name: notificationInitDict
     type: StatusNotificationInit
-    summary: Dictionary.
+    summary: (optional) Dictionary.
+    optional: true

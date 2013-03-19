@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Filesystem.FileStream
+name: Tizen.Filesystem.FileStream
 summary: FileStream API.
 description: |
     A FileStream represents a handle to a File opened for read and/or write operations. 
@@ -138,7 +138,7 @@ properties:
     type: Number
     examples:
       - example: |
-            Ti.API.info(stream.position); // displays current stream position
+            Titanium.API.info(stream.position); // displays current stream position
             // alters current stream position to the begin of the file,
             // like seek() in C
             stream.position = 0;
@@ -154,4 +154,4 @@ properties:
     permission: read-only
     examples:
       - example: |
-            Ti.API.info(stream.bytesAvailable); // displays the available bytes to be read
+            Titanium.API.info(stream.bytesAvailable); // displays the available bytes to be read

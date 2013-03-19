@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothDevice
+name: Tizen.Bluetooth.BluetoothDevice
 summary: The interface which represents a remote Bluetooth device.   
 description: |
     This interface holds information about a remote device available on a local Bluetooth device, such as device name, address, bonding status, etc.
@@ -30,13 +30,80 @@ methods:
 
       - name: successCallback
         summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket> 
+        type: Callback<Tizen.Bluetooth.BluetoothSocket> 
 
       - name: errorCallback
         summary: Method to be invoked in case of failure to open a socket.
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            
+            var clientSocket = null;
 
+            // Method to be called when user wants to send a message to a remote device
+            
+            function sendMessage(msg) {
+            
+                // Validate socket state, if everything is ok.
+                if (clientSocket != null && clientSocket.state == tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
+                    //Send
+                    clientSocket.writeData(msg);
+                }
+            }
+
+            // Method to be invoked when a socket is open
+            
+            function onSocketConnected(socket) {
+            
+                clientSocket = socket;
+                console.log("Opening a socket successfully!!!");
+                
+                socket.onmessage = function () {
+                    var data = socket.readData();
+                    var recvmsg = "";
+                    for (var i=0; i< data.length; i++)
+                    {
+                        recvmsg += String.fromCharCode(data[i]);
+                    }
+                    console.log("server msg >> " + recvmsg);
+                };
+
+                socket.onerror = function (e) {
+                    console.log("Socket Error: " + e.message);
+                };
+
+                socket.onclose = function() {
+                    console.log("socket disconnected.");
+                };
+            }
+
+            function onDeviceReady(device) {
+            
+                // validate service uuid
+                if (device.uuids.indexOf("5BCE9431-6C75-32AB-AFE0-2EC108A30860") != -1) {
+                
+                    // open socket
+                    device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860", onSocketConnected, function(e) {
+                        console.log ("Error connecting to service. Reason: " + e.message);
+                    });
+                }
+                else {
+                    console.log ("Char service is not supported by this device");
+                }
+            }
+
+            function onSetPowered() {
+                
+                // get the BluetoothDevice object
+                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
+                
+            }
+
+            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
+ 
 properties:
   - name: name
     summary: The readable name of the device.
@@ -50,7 +117,7 @@ properties:
 
   - name: deviceClass
     summary: The device class, which represents the type of the device and the services it provides.  
-    type: Titanium.Tizen.Bluetooth.BluetoothClass
+    type: Tizen.Bluetooth.BluetoothClass
     permission: read-only
 
   - name: isBonded

@@ -1,26 +1,27 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarEvent
+name: Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
-extends: Titanium.Tizen.Calendar.CalendarItem
+extends: Tizen.Calendar.CalendarItem
 platforms: [tizen]
 
 examples:
       - example: |    
             // Gets the default calendar
-
-            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar("EVENT");
+            var tizen = require("tizen");
+            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             try {
 
-                var ev = Titanium.Tizen.Calendar.createCalendarEvent("BEGIN:VCALENDAR\r\n" +
-                            "BEGIN:VEVENT\r\n" +
-                            "DTSTAMP:19970901T1300Z\r\n" +
-                            "DTSTART:19970903T163000Z\r\n" +
-                            "DTEND:19970903T190000Z\r\n" +
-                            "SUMMARY:Annual Employee Review\r\n" +
-                            "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
-                            "END:VEVENT\r\n" +
-                            "END:VCALENDAR", "ICALENDAR_20");
+                var ev = tizen.Calendar.createCalendarEvent({stringRepresentation: "BEGIN:VCALENDAR\r\n" +
+                                                                                            "BEGIN:VEVENT\r\n" +
+                                                                                            "DTSTAMP:19970901T1300Z\r\n" +
+                                                                                            "DTSTART:19970903T163000Z\r\n" +
+                                                                                            "DTEND:19970903T190000Z\r\n" +
+                                                                                            "SUMMARY:Annual Employee Review\r\n" +
+                                                                                            "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
+                                                                                            "END:VEVENT\r\n" +
+                                                                                            "END:VCALENDAR",
+                                                                      format: "ICALENDAR_20"});
                            
                 calendar.add(ev);
                 Titanium.API.info('Event added with UID ' + ev.id.uid);
@@ -43,19 +44,19 @@ methods:
     parameters:
       - name: startDate
         summary:  The start date/ time of an event(inclusive).
-        type: Titanium.Tizen.Time.TZDate
+        type: Date
 
       - name: endDate 
         summary:   The end date/ time of an event (inclusive).
-        type: Titanium.Tizen.Time.TZDate
+        type: Date
         
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Titanium.Tizen.Calendar.CalendarEvent>>
+        type: Callback<Array<Tizen.Calendar.CalendarEvent>>
         
       - name: errorCallback
         summary:  The method to invoke when the request fails.
-        type: Callback<WebAPIError>        
+        type: Callback<Tizen.WebAPIError>        
         optional: true
     examples:
       - example: |    
@@ -68,14 +69,14 @@ methods:
             function eventExpandingSuccessCallback(events) {
                 Titanium.API.info(events.length + ' event instances were returned.');
             }
-            
-            var calendar = Titanium.Tizen.Calendar.getDefaultCalendar();
+            var tizen = require("tizen");
+            var calendar = tizen.Calendar.getDefaultCalendar();
             var event = calendar.get(evId);
             
             if (event.recurrenceRule != null) {
                 // This is a recurring event. Expand all the instances during August 2011.
-                event.expandRecurrence(Titanium.Tizen.createTZDate(2011, 7, 1),
-                                    Titanium.Tizen.createTZDate(2011, 7, 31),
+                event.expandRecurrence(new Date(2011, 7, 1),
+                                    new Date(2011, 7, 31),
                                     eventExpandingSuccessCallback,
                                     errorCallback);
             }
@@ -87,7 +88,7 @@ properties:
     permission: read-only
     
   - name: endDate 
-    type: Titanium.Tizen.Date.TZDate
+    type: Date
     summary: |
         An attribute to store the end date/time of an event.(see RFC 5545 - Section 3.8.2.2).
         This endDate must be in the same time zone as the startDate. 
@@ -99,7 +100,7 @@ properties:
     examples:
       - example: |    
             // 2010-04-30 09:00
-            event.endDate = Titanium.Tizen.createTZDate(2010, 3, 30, 9, 0);    
+            event.endDate = new Date(2010, 3, 30, 9, 0);    
         
   - name: availability
     type: String
@@ -107,10 +108,10 @@ properties:
         An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
         The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
         
-        The default value is 'BUSY'.
+        The default value is EVENT_AVAILABILITY_BUSY.
         
   - name: recurrenceRule 
-    type: Titanium.Tizen.Date.TZDate
+    type: Date
     summary: |
         An attribute to denote the recurrence rule for the event.
         
@@ -123,6 +124,8 @@ properties:
     examples:
       - example: |    
             // Repeats daily for 7 days
-            var rule = Titanium.Tizen.createCalendarRecurrenceRule("DAILY", {occurrenceCount: 7});
+            var tizen = require("tizen");
+            var rule = tizen.Calendar.createCalendarRecurrenceRule({frequency: tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
+                                                                    ruleInitDict: {occurrenceCount: 7}});
             event.recurrenceRule = rule;
         

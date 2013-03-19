@@ -1,4 +1,4 @@
-name: Titanium.Tizen.NFC.NDEFMessage
+name: Tizen.NFC.NDEFMessage
 summary: |
   The NDEFMessage interface.
 extends: Titanium.Module
@@ -13,7 +13,7 @@ properties:
     permission: read-only
 
   - name: records
-    type: Array<Titanium.Tizen.NFC.NDEFRecord>
+    type: Array<Tizen.NFC.NDEFRecord>
     summary: |
         The array of NDEFRecord objects in the NDEFMessage.
 
@@ -25,4 +25,10 @@ methods:
         If the result cannot be successfully retrieved, a WebAPIError with the reason for the error MUST be thrown.
     returns:
         type: Array<Number>
+    examples:
+      - example: |
+            // gets the cached message
+            var tizen = require("tizen");
+            var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
+            var raw = cachedMessage.toByte();
 

@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Bluetooth.BluetoothServiceHandler
+name: Tizen.Bluetooth.BluetoothServiceHandler
 summary: The Bluetooth service interface. 
 extends: Titanium.Module
 platforms: [tizen]
@@ -20,9 +20,69 @@ methods:
 
       - name: errorCallback
         summary:   Method to be invoked in case of failure (to unregister).
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
         optional: true
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            
+            var chatServiceHandler = null;
 
+            function chatServiceSuccessCb(handler) {
+            
+                console.log("Chat service registration was successful!");
+
+                chatServiceHandler = handler;
+                
+                handler.onconnect = function(socket) {
+                    console.log("Client is connected: " + socket.peer.name + "," + socket.peer.address);
+                    socket.onmessage = function() {
+                       var data = socket.readData();
+                       // handle message code goes here
+                       //....
+                    };
+
+                    // Something went wrong
+                    socket.onerror = function(e) {
+                       console.log('Error: ' + e.message);
+                    };
+
+                    // Expected close
+                    socket.onclose = function() {
+                       console.log('The socket is closed.');
+                    };
+                };
+            }
+
+            function publishChatService()
+            {
+
+                var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
+                
+                adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
+                
+                    // Error handler
+                    function(e) {
+                        console.log( "Could not register service record, Error: " + e.message);
+                    });
+            }
+
+            function unRegisterChatService()
+            {
+            
+                if (chatServiceHandler != null) {
+                
+                    chatServiceHandler.unregister(function() {
+                        chatServiceHandler = null;
+                        console.log("Chat service is unregistered.");
+                    },
+                    
+                    function(e) {
+                        console.log ("Error: " + e.message);
+                    });
+                }
+            }
 properties:
   - name: uuid
     summary: UUID of the service. 
@@ -41,4 +101,4 @@ properties:
 
   - name: onconnect
     summary: The success callback to be invoked when a remote device connected to this service.   
-    type: Callback<Titanium.Tizen.Bluetooth.BluetoothSocket>
+    type: Callback<Tizen.Bluetooth.BluetoothSocket>

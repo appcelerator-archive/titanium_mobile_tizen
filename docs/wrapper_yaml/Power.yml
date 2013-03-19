@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Power
+name: Tizen.Power
 summary: This Module provides  support for requesting power management related resource states.
 description: |
     The `Power` module is a thin wrapper on the Tizen `Power` class.	
@@ -22,17 +22,18 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: "SCREEN", "CPU
+            The supported request types are: <Tizen.Power.POWER_RESOURCE_SCREEN>, <Tizen.Power.POWER_RESOURCE_CPU>
         type: String
       - name: state
         summary: |
             The minimal power state in which the power resource is desired to be. 
             The value is one of the constants defined for this type. 
-            The supported request types are: "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT", "CPU_AWAKE"
+            The supported request types are: <Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, <Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, <Tizen.Power.POWER_CPU_STATE_CPU_AWAKE>
         type: String
     examples:
       - example: |
-            Ti.Tizen.Power.request("SCREEN", "SCREEN_NORMAL");
+            var tizen = require("tizen");
+            tizen.Power.request(tizen.Power.POWER_RESOURCE_SCREEN, tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL);
 
   - name: release
     summary: Releases the power state request for the given resource.
@@ -41,58 +42,13 @@ methods:
         summary: |
             The power resource for which the request is made.
             The value is one of the constants defined for this type. 
-            The supported request types are: "SCREEN", "CPU"
+            The supported request types are: <Tizen.Power.POWER_RESOURCE_SCREEN>, <Tizen.Power.POWER_RESOURCE_CPU>
         type: String
     examples:
       - example: |
             // Release SCREEN resource.
-            Ti.Tizen.Power.release("SCREEN");
-
-  - name: setScreenStateChangeListener
-    summary: Sets the screen state change callback and monitors its state changes.
-    parameters:
-      - name: listener 
-        summary: |
-            The screen state change callback. There are 'previousState' and 'changedState' parameters
-            in callback. The 'previousState' and 'changedState' are one of the constants defined for this type: 
-            "SCREEN_OFF", "SCREEN_DIM", "SCREEN_NORMAL", "SCREEN_BRIGHT"
-        type: Callback<String, String>
-    examples:
-      - example: |
-            function onScreenStateChanged(previousState, changedState) {
-               Ti.API.info("Screen state changed from " + previousState + " to " + changedState);
-            }
-
-            // Set the screen state change listener.
-            Ti.Tizen.Power.setScreenStateChangeListener(onScreenStateChanged);
-        
-  - name: unsetScreenStateChangeListener
-    summary: Unsets the screen state change callback and stops monitoring it.
-    examples:
-      - example: |
-            // Unet the screen state change listener.
-            Ti.Tizen.Power.unsetScreenStateChangeListener();
-
-  - name: getScreenBrightness
-    summary: Gets the screen brightness level of an application, from 0 to 1.
-    returns:
-        summary: double Current screen brightness value.
-        type: Number
-    examples:
-      - example: |
-            // Get the current screen brightness value.
-            var screenBrightness = Ti.Tizen.Power.getScreenBrightness();
-    
-  - name: setScreenBrightness
-    summary: Sets the screen brightness level for an application, from 0 to 1.
-    parameters:
-      - name: brightness 
-        summary: The screen brightness value to set.
-        type: Number
-    examples:
-      - example: |
-            // Set the screen brightness value for the application.
-            Ti.Tizen.Power.setScreenBrightness(1);
+            var tizen = require("tizen");
+            tizen.Power.release(tizen.Power.POWER_RESOURCE_SCREEN);
 
   - name: isScreenOn
     summary: Returns true if the screen is on.
@@ -102,38 +58,34 @@ methods:
     examples:
       - example: |
             // Check whether the screen is on or off.
-            var isScreenOn = Ti.Tizen.Power.isScreenOn();
-
-  - name: restoreScreenBrightness
-    summary: Restores the screen brightness to the system default setting value.
-    examples:
-      - example: |
-            // Restore the screen brightness value to the system default setting value.
-            Ti.Tizen.Power.restoreScreenBrightness();
+            var tizen = require("tizen");
+            var isScreenOn = tizen.Power.isScreenOn();
 
   - name: turnScreenOn
     summary: Turns on the screen.
     examples:
       - example: |
             // Turn on the screen.
-            Ti.Tizen.Power.turnScreenOn();
+            var tizen = require("tizen");
+            tizen.Power.turnScreenOn();
 
   - name: turnScreenOff
     summary: Turns off the screen.
     examples:
       - example: |
             // Turn off the screen.
-            Ti.Tizen.Power.turnScreenOff();
+            var tizen = require("tizen");
+            tizen.Power.turnScreenOff();
     
 properties:
 
   - name: POWER_RESOURCE_SCREEN
-    summary: SCREEN is aligned with <Titanium.Tizen.SystemInfo> property value.
+    summary: SCREEN is aligned with <Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 
   - name: POWER_RESOURCE_CPU
-    summary: CPU is aligned with <Titanium.Tizen.SystemInfo> property value.
+    summary: CPU is aligned with <Tizen.SystemInfo> property value.
     type: STRING
     permission: read-only
 
@@ -167,3 +119,18 @@ properties:
     summary: CPU_AWAKE - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
     type: STRING
     permission: read-only
+
+  - name: screenBrightness
+    summary: An attribute to store the screen brightness level for an application, from 0 to 1.
+    type: Number
+
+events:
+  - name: screenStateChanged
+    summary: Called on screen state change.
+    properties:
+      - name: previousState
+        type: String
+        summary: The previous screen state.
+      - name: changedState 
+        type: String
+        summary: The changed screen state.

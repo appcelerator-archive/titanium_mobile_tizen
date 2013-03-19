@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.MessageFolder
+name: Tizen.Messaging.MessageFolder
 summary: Defines the email folder.
 description: |
     This interface allows a web application to get the set of properties that are linked to an email folder.
@@ -29,7 +29,7 @@ properties:
   - name: contentType  
     summary: |
         The type of the messages contained within this folder.
-        Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -59,6 +59,6 @@ properties:
   - name: synchronizable 
     summary:  |
         This attribute shows whether this folder should be synchronized.
-        This attribute affects the behavior of the Titinium.Tizen.Messaging.MessageService.sync() method.
+        This attribute affects the behavior of the Tizen.Messaging.MessageService.sync() method.
     type: Boolean
     permission: read-only

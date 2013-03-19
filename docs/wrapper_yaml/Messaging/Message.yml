@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.Message
+name: Tizen.Messaging.Message
 summary: Defines the content and attributes of a message. 
 description: |
     This interface allows a web application to define the set of properties linked to a message.
@@ -42,9 +42,9 @@ properties:
 
   - name: type
     summary: |
-        The type of the given message. Can be one of this constants: <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
-    type: Stirng
+        The type of the given message. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
     permission: read-only
 
   - name: timestamp
@@ -57,7 +57,7 @@ properties:
   - name: from
     summary: The source address (or source phone number) of a message. 
     description: This property is set up by the device or the web runtime environment. By default, this attribute is set to null. 
-    type: Stirng
+    type: String
     permission: read-only
 
   - name: to
@@ -74,7 +74,7 @@ properties:
 
   - name: body
     summary: The body of a message. 
-    type: Titanium.Tizen.Messaging.MessageBody
+    type: Tizen.Messaging.MessageBody
 
   - name: isRead
     summary: The flag for read state. This property is true, if the message has been read. False, if not. 
@@ -119,10 +119,12 @@ properties:
     summary: |
         The list of the message attachments.
         This array is empty if the message does not have attachments or the message body is not loaded and the attachment info is inaccessible (in this case, the "hasAttachment" attribute has to be checked).
-    type: Array<Titanium.Tizen.Messaging.MessageAttachment>
+    type: Array<Tizen.Messaging.MessageAttachment>
 
 examples:
   - example: |
+        var tizen = require("tizen");
+        
         // Define the success callback.
         var messageSentCallback = function(recipients) {
             console.log("Message sent successfully to " + recipients.length + " recipients.");
@@ -133,8 +135,9 @@ examples:
         }
         function serviceListCB(services) {
            if (services.length > 0) {
-              var msg = Titanium.Tizen.Messaging.Message(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, {plainBody: "Tizen first SMS message."});
+              var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+                                                                messageInitDict: {plainBody: 'Tizen first SMS message.'}});
               services[0].sendMessage(msg, messageSentCallback, errorCallback);
            }
         }
-        tizen.messaging.getMessageServices(Titanium.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);
+        tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);

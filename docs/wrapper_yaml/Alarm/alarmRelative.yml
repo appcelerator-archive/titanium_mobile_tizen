@@ -8,7 +8,8 @@ extends: Tizen.Alarm.Alarm
 platforms: [tizen]
 examples:
   - example: |
-        var alarmObj = require("Ti/Tizen/Alarm");
+        var tizen = require("tizen");
+        var alarmObj = tizen.Alarm;
         // Sets an alarm in 3 hours from now
         var alarm1 = alarmObj.createAlarmRelative({delay: 3 * alarmObj.PERIOD_HOUR});
         alarmObj.add(alarm1, "org.tizen.clock");

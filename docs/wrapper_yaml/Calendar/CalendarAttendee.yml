@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarAttendee
+name: Tizen.Calendar.CalendarAttendee
 summary:  |
     This interface implements the CalendarAttendee object that contains information about an event attendee.
     
@@ -10,8 +10,9 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example:    |
-        var attendee = Titanium.Tizen.createCalendarAttendee('mailto:bob@domain.com',
-                                           {role: "CHAIR", RSVP: true});
+        var tizen = require("tizen");
+        var attendee = tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',
+                                           attendeeInitDict: {role: tizen.Calendar.ATTENDEE_ROLE_CHAIR, RSVP: true}});
         event.attendees = [attendee];
  
 properties:
@@ -36,7 +37,7 @@ properties:
             - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
             - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
             
-        The default value is 'REQ_PARTICIPANT'.
+        The default value is ATTENDEE_ROLE_REQ_PARTICIPANT.
     type: STRING
 
   - name: status
@@ -52,7 +53,7 @@ properties:
             - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
             - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
             
-        The default value is PENDING.
+        The default value is ATTENDEE_STATUS_PENDING.
     type: STRING
 
   - name: RSVP 
@@ -73,7 +74,7 @@ properties:
             - ATTENDEE_TYPE_ROOM = 'ROOM'
             - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
             
-        The default value is INDIVIDUAL.
+        The default value is ATTENDEE_TYPE_INDIVIDUAL.
     type: STRING
 
   - name: group 
@@ -95,4 +96,4 @@ properties:
     summary: |
         An attribute to store the participant's reference in the Contact API.
         If the contact is not resolved, this attribute will be set to null. 
-    type: Titanium.Tizen.Contacts.ContactsRef
+    type: Tizen.Contacts.ContactsRef

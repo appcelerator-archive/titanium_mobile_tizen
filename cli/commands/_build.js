@@ -546,7 +546,7 @@ build.prototype = {
 		}
 		
 		this.logger.info(__n('Searching for %s Titanium Module', 'Searching for %s Titanium Modules', this.tiapp.modules.length));
-		appc.timodule.find(this.tiapp.modules, 'mobileweb', this.deployType, this.titaniumSdkVersion, this.moduleSearchPaths, this.logger, function (modules) {
+		appc.timodule.find(this.tiapp.modules, 'tizen', this.deployType, this.titaniumSdkVersion, this.moduleSearchPaths, this.logger, function (modules) {
 			if (modules.missing.length) {
 				this.logger.error(__('Could not find all required Titanium Modules:'))
 				modules.missing.forEach(function (m) {
@@ -1170,14 +1170,16 @@ build.prototype = {
 		parts.length > 1 && (this.requireCache['url:' + parts[1]] = 1);
 		
 		var deps = this.dependenciesMap[dep[1]];
-		for (var i = 0, l = deps.length; i < l; i++) {
-			dep = deps[i];
-			ref = mid.split('/');
-			ref.pop();
-			ref = ref.join('/') + '/';
-			this.parseModule(dep, ref);
+		if(deps){
+			for (var i = 0, l = deps.length; i < l; i++) {
+				dep = deps[i];
+				ref = mid.split('/');
+				ref.pop();
+				ref = ref.join('/') + '/';
+				this.parseModule(dep, ref);
+			}
+			this.moduleMap[mid] = deps;
 		}
-		this.moduleMap[mid] = deps;
 	},
 
 	wgtPackaging7z: function (logger, callback) {
@@ -1368,7 +1370,7 @@ build.prototype = {
 
 	signTizenApp: function (logger, callback) {
 		// sign Tizen application with out custom signer utility. 
-		var cmdSign = 'java -jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + ' -sig_proj ' +this.buildDir;
+		var cmdSign = 'java -jar "' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + '" -sig_proj ' +this.buildDir;
 		logger.info(__('Signing application in  "%s" ', this.buildDir));
 		if (this.tizenCert) {
 			//use user`s certificate to sign application

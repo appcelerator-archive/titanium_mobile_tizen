@@ -1,4 +1,4 @@
-name: Titanium.Tizen.NFC.NFCAdapter
+name: Tizen.NFC.NFCAdapter
 summary: |
   NFC adapter interface that provides access to control the adapter.
 extends: Titanium.Module
@@ -27,7 +27,7 @@ methods:
       - name: errorCallback 
         summary: Function called when an error has occurred. 
         optional: true
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
   
   - name: setTagListener
     summary: Registers a callback function to invoke when an NFC tag is detected.
@@ -43,23 +43,37 @@ methods:
         summary: | 
             Filter to be used when specific NFC tag is detected.
             Valid values are:
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_FELICA>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
-                <Titanium.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
-        type: Array<Stirng>
+                <Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+                <Tizen.NFC.NFC_TAG_TYPE_FELICA>
+                <Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+                <Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+                <Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+        type: Array<String>
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
+            
+            var onSuccessCB = {
+            	onattach: function(nfcTag) {            
+                	console.log("NFC Tag's type is " + nfcTag.type);
+                },
+                ondetach: function() {
+                    console.log("NFC Tag is detached");
+                }
+            };
+            adapter.setTagListener(onSuccessCB);
 
   - name: setPeerListener
     summary: Registers a callback function to be invoked when NFC peer-to-peer target is detected.
@@ -69,13 +83,71 @@ methods:
       - name: detectCallback 
         summary: Invoked in case of successful detection of the NFC peer-to-peer target.
         type: NFCPeerDetectCallback
- 
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
+            
+            var onSuccessCB = {
+            	onattach: function(nfcPeer) {            
+                	console.log("NFC Target is detected");
+            	},
+            	ondetach: function() {
+                	console.log("NFC Target is detached");
+            	}
+            };
+            adapter.setPeerListener(onSuccessCB);
+
   - name: unsetTagListener
     summary: Unregisters the listener for detecting an NFC tag.
- 
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
+
+            // Receives NFCTag
+            var onSuccessCB = {
+                onattach: function(nfcTag) {
+                    console.log("NFC Tag's type is " + nfcTag.type);
+                },
+                ondetach: function() {
+                    console.log("NFC Tag is detached");
+                }
+            };
+
+            // Unregister the listener
+            function unsetListen() {
+                adapter.unsetTagListener();
+            }
+
+            // registers to be notified when NFC tag is detected.
+            adapter.setTagListener(onSuccessCB)
+
   - name: unsetPeerListener
     summary: Unregisters the listener for detecting an NFC peer-to-peer target.
- 
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
+
+            // Receives NFCPeer
+            var onSuccessCB = {
+                onattach: function(nfcPeer) {
+                    console.log("NFC Target is detected");
+                },
+                ondetach: function() {
+                    console.log("NFC Target is detached");
+                }
+            };
+
+            // Unregister the listener
+            function unsetListen() {
+                adapter.unsetPeerListener();
+            }
+
+            // registers to be notified when NFC peer-to-peer target is detected.
+            adapter.setPeerListener(onSuccessCB)
+
   - name: getCachedMessage
     summary: Gets NDEF message cached when the tag was detected.
     description: |
@@ -83,7 +155,12 @@ methods:
         launching your application should be returned. If the NDEF Message cannot be 
         successfully retrieved, a WebAPIError with the reason for the error MUST be thrown.
     returns:
-        type: Titanium.Tizen.NFC.NDEFMessage
+        type: Tizen.NFC.NDEFMessage
+    examples:
+      - example: |
+            // gets the cached message
+            var tizen = require("tizen");
+            var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
 
 ---
 name: NFCTagDetectCallback
@@ -93,7 +170,7 @@ methods:
     parameters:
       - name: nfcTag
         summary: The attached NFC tag.
-        type: Titanium.Tizen.NFC.NFCTag
+        type: Tizen.NFC.NFCTag
 
   - name: ondetach
     summary: The method invoked when the connected tag is detached.
@@ -107,7 +184,7 @@ methods:
     parameters:
       - name: nfcPeer
         summary: The attached NFC peer-to-peer target.
-        type: Titanium.Tizen.NFC.NFCPeer
+        type: Tizen.NFC.NFCPeer
 
   - name: ondetach
     summary: The method invoked when the NFC peer-to-peer target connected is detached.

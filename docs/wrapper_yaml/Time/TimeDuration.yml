@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Time.TimeDuration
+name: Tizen.Time.TimeDuration
 summary: The TimeDuration object that contains the length and its associated time unit.
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -7,8 +7,9 @@ platforms: [tizen]
 examples: 
   - title: Simple code example
     example:    |
-        var now = Titanium.Tizen.Time.getCurrentDateTime();
-        var tomorrow = now.addDuration(Titanium.Tizen.Time.createTimeDuration({length: 1, unit: "DAYS"})); // Becomes tomorrow, same time.
+        var tizen = require("tizen");
+        var now = tizen.Time.getCurrentDateTime();
+        var tomorrow = now.addDuration(tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_DAYS})); // Becomes tomorrow, same time.
 
 
 methods:
@@ -21,11 +22,11 @@ methods:
         The returned TimeDuration is the biggest possible unit without losing the precision.
     returns:
         summary: New TimeDuration object corresponding to the result of this - other.
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     parameters:    
       - name: other
-        summary:  Other <Titanium.Tizen.Time.TimeDuration> object to compare to.
-        type: Titanium.Tizen.Time.TimeDuration
+        summary:  Other <Tizen.Time.TimeDuration> object to compare to.
+        type: Tizen.Time.TimeDuration
     examples:
       - example: |
              // Compute event1.duration - event2.duration
@@ -47,11 +48,12 @@ methods:
     parameters:
       - name: other
         summary:  TimeDuration object to compare to.
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     examples:
       - example: |
-            var d1 = Titanium.Tizen.Time.createTimeDuration({length: 60, unit: "MINS"}); // 60 minutes
-            var d2 = Titanium.Tizen.Time.createTimeDuration({length: 1, unit: "HOURS"}); // 1 hour
+            var tizen = require("tizen");
+            var d1 = tizen.Time.createTimeDuration({length: 60, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 60 minutes
+            var d2 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
             var ret = d1.equalsTo(d2); // Returns true
 
   - name: lessThan
@@ -64,11 +66,12 @@ methods:
     parameters:
       - name: other
         summary: Other TimeDuration object to compare to.
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     examples:
       - example: |
-             var d1 = Titanium.Tizen.Time.createTimeDuration({length: 1, unit: "HOURS"}); // 1 hour
-             var d2 = Titanium.Tizen.Time.createTimeDuration({length: 120, unit: "MINS"}); // 120 minutes
+             var tizen = require("tizen");
+             var d1 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
+             var d2 = tizen.Time.createTimeDuration({length: 120, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
              var ret = d1.lessThan(d2); // Returns true
 
   - name: greaterThan
@@ -81,11 +84,12 @@ methods:
     parameters:
       - name: other
         summary:  Other TimeDuration object to compare to.
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     examples:
       - example: |
-            var d1 = Titanium.Tizen.Time.createTimeDuration({length: 120, unit: "MINS"}); // 120 minutes
-            var d2 = Titanium.Tizen.Time.createTimeDuration({length: 1, unit: "HOURS"}); // 1 hour
+            var tizen = require("tizen");
+            var d1 = tizen.Time.createTimeDuration({length: 120, unit: tizen.Time.TIME_DURATION_UNIT_MINS}); // 120 minutes
+            var d2 = tizen.Time.createTimeDuration({length: 1, unit: tizen.Time.TIME_DURATION_UNIT_HOURS}); // 1 hour
             var ret = d1.greaterThan(d2); // Returns true
 
 properties:
@@ -99,7 +103,7 @@ properties:
   - name: unit
     summary: |
         Duration unit (milliseconds, seconds, minutes, hours, or days).
-        The default value is "MSECS" (milliseconds unit).
+        The default value is <Tizen.Time.TIME_DURATION_UNIT_MSECS> (milliseconds unit).
     type: String
-    default: Titanium.Tizen.Time.TIME_DURATION_UNIT_MSECS
+    default: Tizen.Time.TIME_DURATION_UNIT_MSECS
 

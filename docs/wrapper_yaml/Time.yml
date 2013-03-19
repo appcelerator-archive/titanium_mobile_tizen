@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Time
+name: Tizen.Time
 summary: The Module provides information regarding date / time and time zones.
 description: |
     The JavaScript Date object does not have full timezone support.
@@ -30,10 +30,11 @@ methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
     returns:
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     examples:
       - example: |
-            var current_dt = Titanium.Tizen.Time.getCurrentDateTime();
+            var tizen = require("tizen");
+            var current_dt = tizen.Time.getCurrentDateTime();
             Titanium.API.info("current date / time is " + current_dt.toLocaleString());
 
   - name: getLocalTimezone
@@ -42,7 +43,8 @@ methods:
         type: String
     examples:
       - example: |
-            Titanium.API.info("The local time zone is " + Titanium.Tizen.Time.getLocalTimezone());
+            var tizen = require("tizen");
+            Titanium.API.info("The local time zone is " + tizen.Time.getLocalTimezone());
         
   - name: getAvailableTimezones
     summary: Returns synchronously the identifiers of the timezones supported by the device.
@@ -55,7 +57,8 @@ methods:
         type: String[]
     examples:
       - example: |
-            var tzids = Titanium.Tizen.Time.getAvailableTimezones();
+            var tizen = require("tizen");
+            var tzids = tizen.Time.getAvailableTimezones();
             Titanium.API.info("The device supports " + tzids.length + " time zones.");
         
   - name: getDateFormat
@@ -105,26 +108,27 @@ methods:
         type: Number 
     examples:
       - example: |
-            var current_dt = Titanium.Tizen.Time.getCurrentDateTime(),
-                is_leap = Titanium.Tizen.Time.isLeapYear(current_dt.getFullYear());
+            var tizen = require("tizen"),
+                current_dt = tizen.Time.getCurrentDateTime(),
+                is_leap = tizen.Time.isLeapYear(current_dt.getFullYear());
                 
             if (is_leap) {
                 console.log("This year is a leap year.");
             }
     
   - name: createTZDate
-    summary: Returns the <Titanium.Tizen.Time.TZDate>.
+    summary: Returns the <Tizen.Time.TZDate>.
     returns:
-        type: Titanium.Tizen.Time.TZDate
+        type: Tizen.Time.TZDate
     parameters:
       - name: tzDateParameters
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
     
   - name: createTimeDuration
-    summary: Returns the <Titanium.Tizen.Time.TimeDuration>.
+    summary: Returns the <Tizen.Time.TimeDuration>.
     returns:
-        type: Titanium.Tizen.Time.TimeDuration
+        type: Tizen.Time.TimeDuration
     parameters:
       - name: timeDurationParameters
         summary: The TimeDuration object that contains the length and its associated time unit.
@@ -169,7 +173,8 @@ properties:
   - name: unit
     type: String
     summary: |
-        Time property value: "MSECS", "SECS", "MINS", "HOURS", "DAYS"
+        (optional) Time property value: <Tizen.Time.TIME_DURATION_UNIT_MSECS>, <Tizen.Time.TIME_DURATION_UNIT_SECS>, <Tizen.Time.TIME_DURATION_UNIT_MINS>, <Tizen.Time.TIME_DURATION_UNIT_HOURS>, <Tizen.Time.TIME_DURATION_UNIT_DAYS>
+    optional: true
 ---
 
 name: TZDateUnit1
@@ -177,12 +182,12 @@ summary: An object containing the various options for fetching the properties re
 properties:
   - name: datetime
     type: Date
-    summary: Time format according to the system's locale settings.
+    summary: (optional) Time format according to the system's locale settings.
     optional: true
 
   - name: timezone
     type: String
-    summary: Predefined timezone.
+    summary: (optional) Predefined timezone.
     optional: true
 
 ---
@@ -203,25 +208,25 @@ properties:
 
   - name: hours
     type: Number
-    summary: Hours to check.
+    summary: (optional) Hours to check.
     optional: true
 
   - name: minutes
     type: Number
-    summary: Minutes to check.
+    summary: (optional) Minutes to check.
     optional: true
 
   - name: seconds
     type: Number
-    summary: Seconds to check.
+    summary: (optional) Seconds to check.
     optional: true
 
   - name: milliseconds
     type: Number
-    summary: Milliseconds to check.
+    summary: (optional) Milliseconds to check.
     optional: true
 
   - name: timezone
     type: String
-    summary: Predefined timezone.
+    summary: (optional) Predefined timezone.
     optional: true

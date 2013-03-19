@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarRecurrenceRule
+name: Tizen.Calendar.CalendarRecurrenceRule
 summary:  This interface implements the CalendarRecurrenceRule object, which contains information about the recurrence of an event. (See RFC 5545, Section 3.3.10.)
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -7,8 +7,10 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example: |
+        var tizen = require("tizen");
         // Repeats daily for 7 days
-        var rule = Titanium.Tizen.createCalendarRecurrenceRule("DAILY", {occurrenceCount:7});
+        var rule = tizen.Calendar.createCalendarRecurrenceRule({frequency: tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
+                                                                ruleInitDict: {occurrenceCount:7}});
         event.recurrenceRule = rule;
          
 properties:
@@ -19,7 +21,7 @@ properties:
         This property corresponds to FREQ in RFC 5545.
         
         The value is one of the constants defined for this type:
-            - RECURRENTCE_RULE_FREQUENCY_DAILY = 'DAILY'
+            - ECURRENTCE_RULE_FREQUENCY_DAILY = 'DAILY'
             - RECURRENTCE_RULE_FREQUENCY_WEEKLY = 'WEEKLY'
             - RECURRENTCE_RULE_FREQUENCY_MONTHLY = 'MONTHLY'
             - RECURRENTCE_RULE_FREQUENCY_YEARLY = 'YEARLY'
@@ -31,16 +33,16 @@ properties:
         This attribute is linked to the frequency attribute and for a interval of n, 
         the event will recur every n of recurrence attribute.
         
-        For example, if the interval attribute is set to 2 and frequency attribute is set to WEEKLY, 
+        For example, if the interval attribute is set to 2 and frequency attribute is set to <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, 
         then the event will recur every 2 weeks.
         
-        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is DAILY, 
-        every week if frequency is WEEKLY, every month if frequency is MONTHLY or every year if frequency is YEARLY.
+        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY>, 
+        every week if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, every month if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY> or every year if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         
         This property corresponds to INTERVAL in RFC 5545.
         
   - name: untilDate
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: |
         An attribute to indicate the end date of a recurrence duration of an event using either an end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
         By default, this attribute is set to null, meaning that the event recurs infinitely, unless occurrenceCount is set.
@@ -61,7 +63,7 @@ properties:
     type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of WEEKLY, MONTHLY, and YEARLY.
+        This property value is valid only for recurrence rules with a frequency type of <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY>, and <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         This property corresponds to BYDAY in RFC 5545.
         
         By default, this attribute is set to an empty array.
@@ -78,7 +80,7 @@ properties:
         By default, this attribute is set to an empty array
         
   - name: exceptions
-    type: Array<Titanium.Tizen.Time.TZDate>
+    type: Array<Date>
     summary: |
         An attribute to list date/time exceptions for the recurring event. (See RFC 5545, Section 3.8.5.1.)
         This attribute is precise to the second. Milliseconds are ignored.

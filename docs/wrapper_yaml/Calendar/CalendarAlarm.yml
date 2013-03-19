@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Calendar.CalendarAlarm
+name: Tizen.Calendar.CalendarAlarm
 summary:  An interface that contains information related to an event alarm or reminder.
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -7,12 +7,14 @@ platforms: [tizen]
 examples: 
   - title: Code example
     example:    |
+        var tizen = require("tizen");
         // Creates a sound alarm 30 minutes before the event's start time
-        var alarm = Titanium.Tizen.createCalendarAlarm(Titanium.Tizen.createTimeDuration(30, "MINS"), "SOUND");
+        var alarm = tizen.Calendar.createCalendarAlarm({before: 3600000,
+                                                        method: tizen.Calendar.ALARM_METHOD_SOUND});
  
 properties:
   - name: absoluteDate 
-    type: Titanium.Tizen.Time.TZDate
+    type: Date
     summary: |
         An attribute to record the absolute date and time when an alarm should be triggered.
         absoluteDate and before are mutually exclusive.
@@ -20,13 +22,13 @@ properties:
         This attribute is precise to the second. Milliseconds are ignored.
     
   - name: before 
-    type: Titanium.Tizen.Time.TimeDuration
+    type: Number
     summary: |
         An attribute to store the duration before an event starts on which the alarm should be triggered.
         The duration should be positive.
         absoluteDate and before are mutually exclusive.
         
-        This attribute is precise to the second. Milliseconds are ignored.
+        Be rounded to second.
         
   - name: method 
     type: String
@@ -41,5 +43,5 @@ properties:
     type: String
     summary: |
         An attribute to store the description of an alarm.
-        When the method is DISPLAY, the alarm must also include a non-null description attribute, 
+        When the method is <Tizen.Calendar.ALARM_METHOD_DISPLAY>, the alarm must also include a non-null description attribute, 
         which contains the text to be displayed when the alarm is triggered. 

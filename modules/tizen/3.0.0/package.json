@@ -1,0 +1,9 @@
+{
+    "description": "test tizen module", 
+    "directories": {
+        "lib": "./src"
+    }, 
+    "main": "Tizen", 
+    "name": "Tizen", 
+    "version": "3.0.0"
+}

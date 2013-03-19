@@ -1,7 +1,7 @@
-name: Titanium.Tizen.NFC.NDEFRecordURI
+name: Tizen.NFC.NDEFRecordURI
 summary: |
   The NDEFRecord that has URI type payload.
-extends: Titanium.Tizen.NFC.NDEFRecord
+extends: Tizen.NFC.NDEFRecord
 platforms: [tizen]
 
 properties:

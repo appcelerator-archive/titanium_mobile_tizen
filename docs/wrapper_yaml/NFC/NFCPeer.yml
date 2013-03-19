@@ -1,4 +1,4 @@
-name: Titanium.Tizen.NFC.NFCPeer
+name: Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
 extends: Titanium.Module
@@ -19,16 +19,62 @@ methods:
       - name: successCallback 
         summary: Invoked in case of successful receiving the message.
         type: NDEFMessageReadCallback
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
 
+            // Receives NFCPeer
+            
+            var onSuccessCB = {
+
+                onattach : function(nfcPeer) {
+                
+                    console.log("NFC Target is detected");
+                    nfcPeer.setReceiveNDEFListener(
+                    function(message){
+                        console.log("Receive message");
+                    });
+                },
+                ondetach : function() {
+                    console.log("NFC Target is detached");
+                }
+            };
+
+            adapter.setPeerListener(onSuccessCB);
+ 
   - name: unsetReceiveNDEFListener
     summary: Unregisters the listener for receiving NDEF messages from the NFC peer-to-peer target connected.
+    examples:
+      - example: |
+            var tizen = require("tizen");
+            var adapter = tizen.NFC.getDefaultAdapter();
+            
+            var onSuccessCB = {
+            
+            	onattach : function(nfcPeer) {
 
+                    console.log("NFC Target is detected");
+                    nfcPeer.setReceiveNDEFListener(
+                        function(message){
+                            console.log("Receive message");
+                            nfcPeer.unsetReceiveNDEFListener();
+                        });
+                    },
+                    ondetach : function() {
+                        console.log("NFC Target is detached");
+                    }
+                };
+            }
+
+            adapter.setPeerListener(onSuccessCB);
+ 
   - name: sendNDEF
     summary: Registers a callback function to be invoked when an NDEF message is received from the connected NFC peer-to-peer target.
     parameters:
       - name: ndefMessage  
         summary: NDEF message to send to NFC peer-to-peer target.
-        type: Titanium.Tizen.NFC.NDEFMessage
+        type: Tizen.NFC.NDEFMessage
 
       - name: successCallback  
         summary: Invoked in case of successfully sending data to NFC peer-to-peer target.
@@ -36,7 +82,7 @@ methods:
 
       - name: errorCallback  
         summary: Invoked in case of any error during sending. 
-        type: Callback<Titanium.Tizen.WebAPIError>
+        type: Callback<Tizen.WebAPIError>
 
 
 ---
@@ -48,4 +94,4 @@ methods:
     parameters:
       - name: ndefMessage
         summary: NDEF message that is read from the NFC tag or target.
-        type: Titanium.Tizen.NFC.NDEFMessage
+        type: Tizen.NFC.NDEFMessage

@@ -1,5 +1,5 @@
 ---
-name: Titanium.Tizen.Messaging.MessageBody
+name: Tizen.Messaging.MessageBody
 summary: Describes a message body. 
 description: Message body is comprised of a plain text part, an HTML part, and inline attachments. 
 extends: Titanium.Proxy
@@ -27,10 +27,10 @@ properties:
     summary: |
         The HTML representation of the message body.
         This attribute holds an empty string if the message does not have HTML body content. This property is used only with Email messages.
-    type: Stirng
+    type: String
 
   - name: inlineAttachments
     summary: | 
         The list of the inline attachments.
         This array is empty, if the message does not have inline attachment or the message body is not loaded and attachments info is inaccessible (in this case the "loaded" attribute has to be checked).
-    type: Titanium.Tizen.Messaging.MessageAttachment
+    type: Tizen.Messaging.MessageAttachment
