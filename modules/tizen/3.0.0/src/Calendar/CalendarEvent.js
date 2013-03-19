@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
-	return declare('Ti.Tizen.Calendar.CalendarEvent', CalendarItem, {
+define(['_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
+	return declare('Tizen.Calendar.CalendarEvent', CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEvent]') {
 				this._obj = args;

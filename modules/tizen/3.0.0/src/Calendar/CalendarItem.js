@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti/Tizen/_/calendarHelper'], function(declare, Evented, CalendarEventId, calendarHelper) {
-	return declare('Ti.Tizen.Calendar.CalendarItem', Evented, {
+define(['_/declare', 'Ti/_/Evented', 'Calendar/CalendarEventId', '_/calendarHelper'], function(declare, Evented, CalendarEventId, calendarHelper) {
+	return declare('Tizen.Calendar.CalendarItem', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -7,7 +7,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti
 		constants: {
 			id: {
 				get: function() {
-					return (this._obj == '[object CalendarEvent]') ? (new Ti.Tizen.Calendar.CalendarEventId(this._obj.id)) : this._obj.id;
+					return (this._obj == '[object CalendarEvent]') ? (new CalendarEventId(this._obj.id)) : this._obj.id;
 				}
 			},
 			lastModificationDate: {
@@ -146,7 +146,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEventId', 'Ti
 		},
 
 		clone: function() {
-			return new (require('Ti/Tizen/Calendar/CalendarEvent'))(this._obj.clone());
+			return new (require('Calendar/CalendarEvent'))(this._obj.clone());
 		}
 	});
 });
