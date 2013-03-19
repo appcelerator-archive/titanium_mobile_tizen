@@ -1,0 +1,167 @@
+0: 
+       Ti.Buffer
+       Ti.Geolocation.Android
+       Ti.Geolocation.Android.LocationProvider
+       Ti.Geolocation.Android.LocationRule
+       Ti.Geolocation.MobileWeb
+       Ti.IOStream
+       Ti.Platform.DisplayCaps
+       Ti.UI.EmailDialog
+       Ti.UI.MobileWeb.TableViewSeparatorStyle
+       Ti.XML.CharacterData
+       Ti.XML.DocumentType
+       Ti.XML.Entity
+       Ti.XML.Notation
+
+0.037037037037037: 
+       Ti.XML.DocumentFragment
+
+0.0588235294117647: 
+       Ti.Geolocation
+
+0.0740740740740741: 
+       Ti.XML.EntityReference
+
+0.107692307692308: 
+       Ti.XML.CDATASection
+
+0.125: 
+       Ti.XML.Comment
+
+0.142857142857143: 
+       Ti.Media
+
+0.157894736842105: 
+       Ti.Network
+
+0.169230769230769: 
+       Ti.XML.Text
+
+0.2: 
+       Ti.UI.TableViewRow
+
+0.234042553191489: 
+       Ti.UI.TableView
+
+0.25: 
+       Ti.UI.ActivityIndicatorStyle
+
+0.266666666666667: 
+       Ti.Media.VideoPlayer
+
+0.27027027027027: 
+       Ti.UI.Window
+
+0.301587301587302: 
+       Ti.XML.Attr
+
+0.318181818181818: 
+       Ti.UI.WebView
+
+0.326923076923077: 
+       Ti.Network.HTTPClient
+
+0.333333333333333: 
+       Ti.Analytics
+
+0.351351351351351: 
+       Ti.XML.Document
+
+0.352941176470588: 
+       Ti.UI.Tab
+
+0.464285714285714: 
+       Ti.UI.ScrollView
+
+0.485714285714286: 
+       Ti.UI.TabGroup
+
+0.506024096385542: 
+       Ti.UI
+
+0.52112676056338: 
+       Ti.XML.Element
+
+0.583333333333333: 
+       Ti.App
+
+0.611111111111111: 
+       Ti.Blob
+
+0.636363636363636: 
+       Ti.UI.Label
+
+0.666666666666667: 
+       Ti.API
+       Ti.UI.Button
+
+0.714285714285714: 
+       Ti.UI.ActivityIndicator
+
+0.75: 
+       Ti.Gesture
+
+0.777777777777778: 
+       Ti.UI.Switch
+       Ti.UI.TextField
+
+0.8: 
+       Ti.UI.OptionDialog
+
+0.814814814814815: 
+       Ti.UI.View
+       Ti.XML.Node
+
+0.818181818181818: 
+       Ti.Map.Annotation
+
+0.823529411764706: 
+       Ti.UI.ScrollableView
+
+0.842105263157895: 
+       Ti.UI.AlertDialog
+
+0.846153846153846: 
+       Ti.UI.ImageView
+
+0.857142857142857: 
+       Ti.Locale
+
+0.863636363636364: 
+       Ti.Platform
+
+0.888888888888889: 
+       Ti.UI.Animation
+
+0.923076923076923: 
+       Ti.Filesystem.File
+
+0.933333333333333: 
+       Ti.App.Properties
+
+0.947368421052632: 
+       Ti.Codec
+
+1: 
+       Ti.Filesystem
+       Ti.Filesystem.FileStream
+       Ti.Map
+       Ti.Map.View
+       Ti.UI.Clipboard
+       Ti.UI.MobileWeb
+       Ti.UI.MobileWeb.NavigationGroup
+       Ti.UI.Picker
+       Ti.UI.PickerColumn
+       Ti.UI.PickerRow
+       Ti.UI.ProgressBar
+       Ti.UI.Slider
+       Ti.UI.TableViewSection
+       Ti.UI.TextArea
+       Ti.Utils
+       Ti.XML
+       Ti.XML.DOMImplementation
+       Ti.XML.NamedNodeMap
+       Ti.XML.NodeList
+       Ti.XML.ProcessingInstruction
+       Ti.Yahoo
+
