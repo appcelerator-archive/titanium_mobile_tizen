@@ -113,17 +113,8 @@ function edit_event(args) {
 			description = descriptionInput.value.trim(),
 			location = locationInput.value.trim(),
 			d = getCalendarStartDate(),
-			tzDate = Ti.Tizen.Time.createTZDate({
-				year: d.yy,
-				month: d.mm,
-				day: d.dd,
-				hours: d.h,
-				minutes: d.m
-			}),
-			duration = Ti.Tizen.Time.createTimeDuration({
-				length: 1, 
-				unit: 'HOURS'
-			});
+			tzDate = new Date(d.yy, d.mm, d.dd, d.h, d.m),
+			duration = 3600000;
 
 		try {
 			calendarEvent.summary = summary;

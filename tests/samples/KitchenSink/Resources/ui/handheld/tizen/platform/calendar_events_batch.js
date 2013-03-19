@@ -56,11 +56,8 @@ function events_batch(args) {
 	function addBatch() {
 		var value = summaryInput.value.trim(),
 			eventsArr = [],
-			startDate = Ti.Tizen.Time.getCurrentDateTime(),
-			duration = Ti.Tizen.Time.createTimeDuration({
-				length: 1, 
-				unit: 'HOURS'
-			});
+			startDate = new Date(),
+			duration = 3600000;
 
 		if (!value) {
 			alert('Please enter summary');
