@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Ti.Tizen.WebAPIError', Evented, {
+define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	return declare('Tizen.WebAPIError', Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},

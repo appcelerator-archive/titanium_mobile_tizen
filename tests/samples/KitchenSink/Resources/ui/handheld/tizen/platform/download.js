@@ -27,7 +27,8 @@ function tizenDownload(title) {
 			height: 39,
 			width: '100%',
 			borderStyle: Ti.UI.INPUT_BORDERSTYLE_LINE
-		});
+		}),
+		Tizen = require('tizen');
 
 	// Simplify similar buttons creation
 	function createButton(title, top, clickHandler) {

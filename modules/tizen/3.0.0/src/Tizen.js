@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar'], 
-		function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Download'], 
+		function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download) {
    
 	var Tizen = lang.mixProps(lang.mixProps({}, Evented), {
 		constants: {
@@ -14,6 +14,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 
 				COMPOSITE_FILTER_TYPE_UNION: 'UNION',
 				COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
 				Power: Power,
+				Download: Download,
 				Calendar: Calendar
 		},
 
