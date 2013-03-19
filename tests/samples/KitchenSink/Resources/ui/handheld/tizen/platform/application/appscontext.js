@@ -1,6 +1,6 @@
 function tizen_appscontext(_args) {
 	var self = Titanium.UI.createWindow(),
-	appObj = require('Ti/Tizen/Application');
+	appObj = require('Ti/Tizen/Apps');
 
 	//Return information available about a running application.
 	appObj.getAppsContext(function(contexts) {
