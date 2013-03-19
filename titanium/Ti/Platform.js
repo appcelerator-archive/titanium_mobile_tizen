@@ -7,8 +7,9 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		mid = matches ? decodeURIComponent(matches[1]) : void 0,
 		unloaded,
 		on = require.on,
-		hiddenIFrame = dom.create('iframe', { id: 'urlOpener', style: { display: 'none' } }, doc.body);
-		//wifiNetworkPropertyValueChangeListenerId;
+		deviceCapabilities = tizen.systeminfo.getCapabilities(),
+		hiddenIFrame = dom.create('iframe', { id: 'urlOpener', style: { display: 'none' } }, doc.body),
+		wifiNetworkPropertyValueChangeListenerId, batteryValueChangeListenerId;
 
 	mid || (mid = localStorage.getItem(midName));
 	mid || localStorage.setItem(midName, mid = _.uuid());
@@ -22,20 +23,8 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		}
 	};
 
-	// Do we need to unsubsctibe? Do we need ot call it anywhere?
-	function deInitPlatformData(){
-		if (wifiNetworkPropertyValueChangeListenerId != null) 
-			tizen.systeminfo.removePropertyValueChangeListener(wifiNetworkPropertyValueChangeListenerId);
-	};
-
 	// initialize values that should be initialized via fucntions with callbacks
 	function initPlatformData() {
-		var deviceCapabilities;
-		
-		//Default values for Device and Model
-		Platform.constants.__values__.version = '2.0';
-		Platform.constants.__values__.model = 'Tizen Device';
-
 		//Get our application info.
 		//Workaround for simulator. It throws exception because id is undefined. On Emulator works fine.
 		try {
@@ -44,13 +33,18 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 			Platform.constants.__values__.id = 'ID001'; //The unique ID for an installed application. 
 		}
 
-		//detect is WIFI exist, if yes we can find ip address
-		deviceCapabilities = tizen.systeminfo.getCapabilities();
 		if(deviceCapabilities.wifi) {
 			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
 			// subscribing to WiFi property changes
-			 wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
+			wifiNetworkPropertyValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
 		}
+
+		// Get model property
+		tizen.systeminfo.getPropertyValue('BUILD', onSuccessModelCallback, onErrorCallback);
+
+		// Get battery info 
+		tizen.systeminfo.getPropertyValue('BATTERY', onSuccessBatteryCallback, onErrorCallback);
+		batteryValueChangeListenerId = tizen.systeminfo.addPropertyValueChangeListener('BATTERY', onSuccessBatteryCallback);
 	};
 
 	function onErrorCallback(error) {
@@ -60,18 +54,41 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 	// Callback to update WiFi's IP address
 	function onSuccessWifiNetworkCallback(wifiNetwork) {
 		//receive SystemInfoWifiNetwork 
-		try{
-			//console.log("wifiNetwork = "+JSON.stringify(wifiNetwork));
+		try {
 			if (wifiNetwork.status === 'ON') {
-				Platform.constants.__values__.address = wifiNetwork.ipAddress;	
+				Platform.constants.__values__.address = wifiNetwork.ipAddress;
 			} else {
 				Platform.constants.__values__.address = void 0;
 			}
 			Ti.API.info('Platform.address is set to ' + Platform.address);
-		}
-		catch (e) {
+		} catch (e) {
 			Ti.API.error('Error on getting WifiNetwork info. Error: ' + e.message);
 			Platform.constants.__values__.address = void 0;
+		}
+	}
+
+	// Callback to set Model
+	function onSuccessModelCallback(build) {
+		try {
+			Platform.constants.__values__.model = build.model;
+		} catch (e) {
+			Ti.API.info('Error on getting model info. Error: ' + e.message);
+			Platform.constants.__values__.model = void 0;
+		}
+	}
+
+	function onSuccessBatteryCallback(battery) {
+		try {
+			Platform.constants.__values__.batteryMonitoring = true;
+			Platform.constants.__values__.batteryLevel = battery.level * 100;
+			Platform.constants.__values__.batteryState = battery.isCharging 
+				? Platform.BATTERY_STATE_CHARGING 
+				: (battery.level === 1 ? Platform.BATTERY_STATE_FULL : Platform.BATTERY_STATE_UNPLUGGED); 
+		} catch (e) {
+			Ti.API.error('Error on getting battery info. Error: ' + e.message);
+			Platform.constants.__values__.batteryMonitoring = false;
+			Platform.constants.__values__.batteryLevel = void 0;
+			Platform.constants.__values__.batteryState = Platform.BATTERY_STATE_UNKNOWN;
 		}
 	}
 
@@ -80,7 +97,6 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 
 	var nav = navigator,
 		battery = nav.battery || nav.webkitBattery || nav.mozBattery,
-		deviceCapabilities = tizen.systeminfo.getCapabilities(),
 		Platform = lang.setObject('Ti.Platform', Evented, {
 
 			canOpenURL: function(url) {
@@ -134,12 +150,9 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				address: void 0,
 				architecture: deviceCapabilities.platformCoreCpuArch,
 				availableMemory: void 0,
-				batteryLevel: function() {
-					return this.batteryMonitoring && battery ? battery.level * 100 : -1;
-				},
-				batteryState: function() {
-					return this.batteryMonitoring && battery && battery.charging ? this.BATTERY_STATE_CHARGING : this.BATTERY_STATE_UNKNOWN;
-				},
+				batteryLevel: void 0,
+				batteryMonitoring: false,
+				batteryState: void 0,
 				isBrowser: true,
 				id: mid,
 				locale: Locale,
