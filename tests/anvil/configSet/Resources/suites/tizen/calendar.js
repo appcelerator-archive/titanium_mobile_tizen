@@ -68,8 +68,8 @@ module.exports = new function() {
 
 			valueOf(testRun, item).shouldBe('[object TiTizenCalendarCalendarTask]');
 		}
-		
-		valueOf(testRun, typeof item.duration).shouldBeString();
+
+		valueOf(testRun, item.duration).shouldBeNumber();
 		valueOf(testRun, item.startDate instanceof Date).shouldBeTrue();
 		valueOf(testRun, calendar).shouldBe('[object TiTizenCalendarCalendar]');
 		valueOf(testRun, calendar.add).shouldBeFunction();
@@ -233,13 +233,7 @@ module.exports = new function() {
 				attributeName: 'summary',
 				order: 'ASC'
 			}),
-			startDate = Ti.Tizen.Time.createTZDate({
-				year: yy,
-				month: mm,
-				day: dd,
-				hours: h,
-				minutes: m
-			}),
+			startDate = new Date(yy, mm, dd, h, m),
 			ev = Ti.Tizen.Calendar.createCalendarEvent({
 				description: 'SuperEvent...1',
 				summary: 'Summary 1',
@@ -274,14 +268,7 @@ module.exports = new function() {
 
 		Ti.API.info('event id:' + ev.id +'; ev.id.uid:' + ev.id.uid + 'has been added');
 
-		startDate = Ti.Tizen.Time.createTZDate({
-			year: yy,
-			month: mm,
-			day: dd,
-			hours: h + 1,
-			minutes: m
-		});
-
+		startDate = new Date(yy, mm, dd, h+1, m);
 		// Create event 2
 		ev = Ti.Tizen.Calendar.createCalendarEvent({
 			description: 'SuperEvent...2',
@@ -352,26 +339,14 @@ module.exports = new function() {
 			ev1 = Ti.Tizen.Calendar.createCalendarEvent({
 				description: 'Event 1',
 				summary: 'Summary 1',
-				startDate: Ti.Tizen.Time.createTZDate({
-					year: yy,
-					month: mm,
-					day: dd,
-					hours: h,
-					minutes: m
-				}),
+				startDate: new Date(yy, mm, dd, h, m),
 				duration: 3600000,
 				location: 'Lviv'
 			}),
 			ev2 = Ti.Tizen.Calendar.createCalendarEvent({
 				description: 'Event 2',
 				summary: 'Summary 2',
-				startDate: Ti.Tizen.Time.createTZDate({
-					year: yy,
-					month: mm,
-					day: dd,
-					hours: h + 1,
-					minutes: m
-				}),
+				startDate: new Date(yy, mm, dd, h+1, m),
 				duration: 3600000,
 				location: 'Lviv'
 			});
@@ -485,13 +460,7 @@ module.exports = new function() {
 		var ev = Ti.Tizen.Calendar.createCalendarEvent({
 			description: 'Event 1',
 			summary: 'Summary 1',
-			startDate: Ti.Tizen.Time.createTZDate({
-				year: yy,
-				month: mm,
-				day: dd,
-				hours: h,
-				minutes: m
-			}),
+			startDate: new Date(yy, mm, dd, h, m),
 			duration: 3600000,
 			location: 'Lviv'
 		});
@@ -599,13 +568,7 @@ module.exports = new function() {
 				ev = Ti.Tizen.Calendar.createCalendarEvent({
 					description: 'test events',
 					summary: 'ADDED',
-					startDate: Ti.Tizen.Time.createTZDate({
-						year: yy,
-						month: mm,
-						day: dd,
-						hours: h,
-						minutes: m
-					}),
+					startDate: new Date(yy, mm, dd, h, m),
 					duration: 3600000,
 					location: 'Lviv'
 				});
