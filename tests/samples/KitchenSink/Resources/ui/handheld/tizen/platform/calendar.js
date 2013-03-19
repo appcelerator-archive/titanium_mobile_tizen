@@ -9,7 +9,7 @@ function tizen_calendar(args) {
 		],
 		tableview = Ti.UI.createTableView({data: data});
 
-	tableview.addEventListener('click', function(e){
+	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({ title: e.rowData.title, containingTab: args.containingTab });

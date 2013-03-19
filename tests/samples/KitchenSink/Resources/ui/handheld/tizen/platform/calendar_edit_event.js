@@ -2,7 +2,8 @@ function edit_event(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
+		Tizen = require('tizen'),
+		calendar = Tizen.Calendar.getDefaultCalendar('EVENT'),
 		calendarEvent = calendar.get(args.id),
 		startDate = calendarEvent.startDate,
 		labelLeftPos = 10,
