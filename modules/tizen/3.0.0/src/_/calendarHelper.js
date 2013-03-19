@@ -15,8 +15,16 @@ define(['Ti/API'], function(API) {
 		toMsec: function(tzTimeDuration){
 			var res;
 			
-			tzTimeDuration.unit == 'SECS' && (res = tzTimeDuration.length*1000);
-			tzTimeDuration.unit == 'MSECS' && (res = tzTimeDuration.length);
+			switch(tzTimeDuration.unit){
+				case 'SECS':
+				res = tzTimeDuration.length*1000;
+				break;
+				case 'MSECS': 
+				res = tzTimeDuration.length;
+				break;
+				default: 
+				Ti.API.error('Something happened with get method for duration');
+			}
 			
 			return res;
 		}
