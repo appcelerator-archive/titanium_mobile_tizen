@@ -1,6 +1,5 @@
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
-    console.log('Power.js');
-	var Power = lang.mixProps(lang.mixProps({},Evented), {
+    var Power = lang.mixProps(lang.mixProps({},Evented), {
 
 		constants: {
 			POWER_RESOURCE_SCREEN: 'SCREEN',
