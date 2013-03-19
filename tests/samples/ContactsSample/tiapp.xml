@@ -74,5 +74,7 @@
         <feature name="http://tizen.org/api/alarm" required="true"/>
         <access origin="*"/>
     </tizen>	
-    <modules/>
+    <modules>
+        <module platform="tizen">tizen</module>
+    </modules>
 </ti:app>

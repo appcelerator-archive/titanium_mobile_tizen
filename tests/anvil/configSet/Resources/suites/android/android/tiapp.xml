@@ -34,4 +34,7 @@
 	<property name="ti.android.fastdev" type="bool">false</property>
 	<property name="ti.android.runtime"><%= androidRuntime %></property>
 	<property name="ti.android.bug2373.disableDetection" type="bool">true</property>
+    <modules>
+        <module platform="tizen">tizen</module>
+    </modules>
 </ti:app>
