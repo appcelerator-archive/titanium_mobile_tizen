@@ -1,5 +1,5 @@
-define(['_/declare', 'Ti/_/Evented', '_/calendarHelper'], function(declare, Evented, calendarHelper) {
-	return declare('Tizen.Calendar.CalendarRecurrenceRule', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented', '_/calendarHelper'], function(declare, Evented, calendarHelper) {
+	var calendarRecurrenceRule = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarRecurrenceRule]') {
 				this._obj = args;
@@ -107,6 +107,9 @@ define(['_/declare', 'Ti/_/Evented', '_/calendarHelper'], function(declare, Even
 				}
 			}
 		}
-
 	});
+
+	calendarRecurrenceRule.prototype.declareClass = 'Tizen.Calendar.CalendarRecurrenceRule';
+
+	return calendarRecurrenceRule;
 });
