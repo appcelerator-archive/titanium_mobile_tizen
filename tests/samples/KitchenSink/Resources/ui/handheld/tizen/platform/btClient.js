@@ -1,7 +1,7 @@
 function btClient() {
 	var addressOfServer,
-        btAdapter = require('Ti/Tizen/Bluetooth').getDefaultAdapter(),
-        // simple bluetooth client
+        btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
+        // Simple bluetooth client
         client = {
             SERVICE_UUID: '5BCE9431-6C75-32AB-AFE0-2EC108A30860',
             numberOfClients: 0,
@@ -88,14 +88,14 @@ function btClient() {
         
         // UI
         win = Ti.UI.createWindow({backgroundColor:'#fff'}),
-         //Bluetooth On/Off
+         // Bluetooth On/Off
         btSwitch = Ti.UI.createSwitch({
             top : 10,
             titleOn : 'Bluetooth enabled',
             titleOff : 'Bluetooth disabled',
             value : btAdapter.powered
         }),
-    	//available devices
+    	// available devices
         devicesView = Ti.UI.createTableView({
 			headerTitle: 'Select a server to connect',
 			left: '2%',
@@ -121,7 +121,7 @@ function btClient() {
                     if (addrs[ devices[i].address ]) {
                         continue;
                     }
-                    //create new row
+                    // create new row
                     title = devices[i].name + '('+devices[i].address+')';
                     addrs[ devices[i].address ] = title;
                     row = Ti.UI.createTableViewRow({
@@ -132,7 +132,7 @@ function btClient() {
                     });
                     tableData.push(row);
                 }
-                //clear devicesView
+                // clear devicesView
                 devicesView.removeEventListener('click');
                 devicesView.setData([]);
                     
@@ -182,11 +182,11 @@ function btClient() {
         };
         
     	
-    //Bluetooth ON/OFF click
-    btSwitch.addEventListener('change', function(e) {
+    // Bluetooth ON/OFF click
+    btSwitch.addEventListener('change', function() {
         if (btAdapter.powered != btSwitch.value) {
             btAdapter.setPowered(btSwitch.value,
-                //Success
+                // Success
                 function() {
                     print('Bluetooth has been powered ' + (btSwitch.value ? 'on' : 'off'));
                     btAdapter.powered ? discoverDevices() :  (function() {
@@ -195,7 +195,7 @@ function btClient() {
                         connectButton.enabled = sendButton.enabled = false;
                     })()
                 },
-                //Error
+                // Error
                 function(e) {
                     print('setPowered: ' + e.message);
                     connectButton.enabled = false;
@@ -204,15 +204,13 @@ function btClient() {
         }
     });
     
-    
-    
 	//Bond server
-	connectButton.addEventListener('click', function(e) {
+	connectButton.addEventListener('click', function() {
 		client.bond(addressOfServer);
 	});
     
     //Send msg
-	sendButton.addEventListener('click', function(e) {
+	sendButton.addEventListener('click', function() {
         var currentdate = new Date(),
             strTime = "Time: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 		client.sendMsg(strTime);

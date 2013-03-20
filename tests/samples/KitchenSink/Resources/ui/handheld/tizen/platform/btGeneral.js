@@ -1,5 +1,5 @@
 function tizenBluetooth(title) {
-	var btAdapter = require('Ti/Tizen/Bluetooth').getDefaultAdapter(),
+	var btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
 	//creating UI elements 
 	win = Ti.UI.createWindow({backgroundColor:'#fff'}),
 	self = Ti.UI.createView({}), 
