@@ -41,7 +41,7 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 					getPropertySuccessCallBack(object, successCallback)
 				}, 
 				function(error) {
-					errorCallback.call(null, new WebAPIError(error));
+					errorCallback(new WebAPIError(error));
 				});
 		},
 
@@ -56,7 +56,6 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 		},
 
 		_wrap: function(object) {
-			console.log('>>>>>>>>>>>>>>>>>>' + object.toString());
 			if (object.toString() === '[object devicecapabilitiesinfo]') {
 				return new SystemInfoDeviceCapability(object);
 			}
@@ -64,11 +63,11 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 	});
 	
 	function onSystemInfoPropertySuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new SystemInfoProperty(object));
+		onsuccess(new SystemInfoProperty(object));
 	};
 
 	function getPropertySuccessCallBack(object, successCallback) {
-		successCallback.call(null, wrap(object));
+		successCallback(wrap(object));
 	}
 	
 	function wrap(object) {

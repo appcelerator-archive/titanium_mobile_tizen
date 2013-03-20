@@ -13,7 +13,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 			result.push(new FileSystemStorage(storages[i]));
 		}
 		
-		onsuccess.call(null, result);
+		onsuccess(result);
 	};
 	
 	function onFileSystemStorageSuccessCallback(object, onsuccess) { 
@@ -43,19 +43,19 @@ define(['Ti/_/lang', 'Ti/Tizen/Filesystem/File', 'Ti/Tizen/Filesystem/FileSystem
 		},
 
 		resolve: function(location /*DOMString*/, onsuccess /*FileSuccessCallback*/, onerror /*ErrorCallback*/, mode /*FileMode*/) {
-			return tizen.filesystem.resolve(location, onsuccess && function(object){onFileSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror.call(null, new WebAPIError(e))}, mode);
+			return tizen.filesystem.resolve(location, onsuccess && function(object){onFileSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror(new WebAPIError(e))}, mode);
 		},
 
 		getStorage: function(label /*DOMString*/, onsuccess /*FileSystemStorageSuccessCallback*/, onerror /*ErrorCallback*/) {
-			return tizen.filesystem.getStorage(label, onsuccess && function(object){onFileSystemStorageSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror.call(null, new WebAPIError(e))});
+			return tizen.filesystem.getStorage(label, onsuccess && function(object){onFileSystemStorageSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror(new WebAPIError(e))});
 		},
 
 		listStorages: function(onsuccess /*FileSystemStorageArraySuccessCallback*/, onerror /*ErrorCallback*/) {
-			return tizen.filesystem.listStorages(onsuccess && function(storages){onFileSystemStorageArraySuccessCallback(storages, onsuccess)}, onerror && function(e) {onerror && onerror.call(null, new WebAPIError(e))});
+			return tizen.filesystem.listStorages(onsuccess && function(storages){onFileSystemStorageArraySuccessCallback(storages, onsuccess)}, onerror && function(e) {onerror && onerror(new WebAPIError(e))});
 		},
 
 		addStorageStateChangeListener: function(onsuccess /*FileSystemStorageSuccessCallback*/, onerror /*ErrorCallback*/) {
-			return tizen.filesystem.addStorageStateChangeListener(onsuccess && function(object){onFileSystemStorageSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror.call(null, new WebAPIError(e))});
+			return tizen.filesystem.addStorageStateChangeListener(onsuccess && function(object){onFileSystemStorageSuccessCallback(object, onsuccess)}, onerror && function(e) {onerror(new WebAPIError(e))});
 		},
 
 		removeStorageStateChangeListener: function(watchId /*long*/) {
