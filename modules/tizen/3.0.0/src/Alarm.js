@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Tizen/Alarm/AlarmRelative', 'Tizen/Alarm/AlarmAbsolute', 'Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
-	return lang.setObject('Tizen.Alarm', Evented, {
+define(['Ti/_/lang', 'Alarm/AlarmRelative', 'Alarm/AlarmAbsolute','Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
+	var Alarm = lang.mixProps(require.mix({},Evented), {
 
 		constants: {
 			PERIOD_MINUTE: 60, //unsigned long long
@@ -20,7 +20,7 @@ define(['Ti/_/lang', 'Tizen/Alarm/AlarmRelative', 'Tizen/Alarm/AlarmAbsolute', '
 			return tizen.alarm.removeAll();
 		},
 
-		get: function(id /*AlarmId*/) {
+		getAlarm: function(id /*AlarmId*/) {
 			return this._wrap(tizen.alarm.get(id));
 		},
 
@@ -53,5 +53,7 @@ define(['Ti/_/lang', 'Tizen/Alarm/AlarmRelative', 'Tizen/Alarm/AlarmAbsolute', '
 		createAlarmAbsolute: function(args){
 			return new AlarmAbsolute(args);
 		}
-	});
+	}, true);
+	
+	return Alarm;
 });

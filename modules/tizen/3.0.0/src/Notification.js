@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
-	return lang.setObject('Tizen.Notification', Evented, {
+define(['Ti/_/lang', 'Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
+	return lang.mixProps(require.mix({},Evented), {
 
 		constants: {
 			NOTIFICATION_TYPE_STATUS: 'STATUS',
@@ -8,7 +8,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 			STATUS_NOTIFICATION_TYPE_PROGRESS: 'PROGRESS',
 		},
 
-		post: function(notification /*Notification*/) {
+		postNotification: function(notification /*Notification*/) {
 			tizen.notification.post(notification._obj);
 		},
 
@@ -24,7 +24,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 			tizen.notification.removeAll();
 		},
 
-		get: function(id /*NotificationId*/) {
+		getNotification: function(id /*NotificationId*/) {
 			return this._wrap(tizen.notification.get(id));
 		},
 
@@ -49,6 +49,6 @@ define(['Ti/_/lang', 'Ti/Tizen/Notification/StatusNotification', 'Ti/_/Evented']
 
 		createStatusNotification: function(args) {
 			return new StatusNotification(args);
-		},
-	});
+		}
+	}, true);
 });

@@ -1,5 +1,6 @@
-define(['Ti/_/lang', 'Ti/Tizen/Callhistory/CallHistoryEntry', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
-	return lang.setObject('Tizen.Callhistory', Evented, {
+define(['Ti/_/lang', 'Callhistory/CallHistoryEntry', 'WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
+	console.log('CallHistory.js');
+	var Callhistory = lang.mixProps(require.mix({},Evented), {
 
 		find: function(successCallback /*CallHistoryEntryArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
 			tizen.callhistory.find(successCallback && function(histories) {
@@ -65,7 +66,9 @@ define(['Ti/_/lang', 'Ti/Tizen/Callhistory/CallHistoryEntry', 'Ti/Tizen/WebAPIEr
 
 		removeChangeListener: function(handle /*long*/) {
 			return tizen.callhistory.removeChangeListener(handle);
-		},
+		}
 
-	});
+	}, true);
+
+	return Callhistory;
 });

@@ -62,6 +62,7 @@
         <module platform="tizen">tizen</module>
     </modules>
     <tizen appid="nmgg3ski3z">
+	<tizen:privilege name="http://tizen.org/privilege/alarm"/>
         <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
         <tizen:privilege name="http://tizen.org/privilege/application.read"/>
         <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>
