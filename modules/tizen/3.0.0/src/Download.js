@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/Tizen/Download/DownloadRequest', 'Ti/_/Evented'], function(lang, DownloadRequest, Evented) {
-	return lang.setObject('Tizen.Download', Evented, {
+define(['Ti/_/lang', 'Download/DownloadRequest', 'Ti/_/Evented'], function(lang, DownloadRequest, Evented) {
+    var Download = lang.mixProps(lang.mixProps({},Evented), {
 
 		constants: {
 			DOWNLOAD_STATE_QUEUED: 'QUEUED',
@@ -17,5 +17,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Download/DownloadRequest', 'Ti/_/Evented'], funct
 		createDownloadRequest: function(args){
 			return new DownloadRequest(args);
 		}
-	});
+	}, true);
+	
+	return Download;
 });
