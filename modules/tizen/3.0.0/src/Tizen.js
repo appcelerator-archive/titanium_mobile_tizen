@@ -1,7 +1,7 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Download'], 
-		function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Apps'], 
+		function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Apps) {
    
-	var Tizen = lang.mixProps(lang.mixProps({}, Evented), {
+	var Tizen = lang.mixProps(require.mix({}, Evented), {
 		constants: {
 				FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
 				FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
@@ -14,8 +14,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 
 				COMPOSITE_FILTER_TYPE_UNION: 'UNION',
 				COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
 				Power: Power,
-				Download: Download,
-				Calendar: Calendar
+				Calendar: Calendar,
+				Apps: Apps
 		},
 
 		createAttributeFilter: function(args) {
@@ -39,6 +39,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 
 		}
 	
 	}, true);
-	
+
 	return Tizen;
 });
