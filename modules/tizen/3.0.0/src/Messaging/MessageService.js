@@ -28,7 +28,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 
 		sendMessage: function(message /*Message*/, successCallback /*MessageRecipientsCallback*/, errorCallback /*ErrorCallback*/) {
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.sendMessage(message._obj, successCallback, errorCallback && wrappedErrorCallback);
@@ -40,7 +40,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.loadMessageBody(message._obj, successCallback, errorCallback && wrappedErrorCallback);
@@ -52,7 +52,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.loadMessageAttachment(attachment._obj, successCallback, errorCallback && wrappedErrorCallback);
@@ -60,7 +60,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 
 		sync: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, limit /*unsigned long*/) {
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			return this._obj.sync(successCallback, errorCallback && wrappedErrorCallback, limit);
@@ -68,7 +68,7 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 
 		syncFolder: function(folder /*MessageFolder*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, limit /*unsigned long*/) {
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 			
 			return this._obj.syncFolder(folder._obj, successCallback, errorCallback && wrappedErrorCallback, limit);
