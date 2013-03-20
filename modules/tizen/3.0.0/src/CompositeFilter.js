@@ -1,5 +1,5 @@
-define(['_/declare', 'AbstractFilter'], function(declare, AbstractFilter){
-	return declare('Tizen.CompositeFilter', AbstractFilter, {
+define(['Ti/_/declare', 'AbstractFilter'], function(declare, AbstractFilter){
+	var filter = declare(AbstractFilter, {
 		constructor: function(args) {
 			if(args.toString() === '[object CompositeFilter]') {
 				this._obj = args;
@@ -36,4 +36,8 @@ define(['_/declare', 'AbstractFilter'], function(declare, AbstractFilter){
 		},
 
 	});
+    
+    filter.prototype.declaredClass = 'Tizen.CompositeFilter';
+    
+    return filter;
 });
