@@ -1,5 +1,5 @@
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
-    var Power = lang.mixProps(lang.mixProps({},Evented), {
+    var Power = lang.mixProps(require.mix({}, Evented), {
 
 		constants: {
 			POWER_RESOURCE_SCREEN: 'SCREEN',
@@ -49,6 +49,11 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		Power.fireEvent('screenStateChanged', {previousState: previousState, changedState: changedState});
 	}
 	tizen.power.setScreenStateChangeListener(onTizenEventScreenStateChange);
-        
+    
+    console.log('POWER');
+    for(k in Power) {
+        console.log(k);
+    }
+    
 	return Power;	
 });

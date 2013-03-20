@@ -1,7 +1,7 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Apps/ApplicationInformation', 'Ti/Tizen/Apps/RequestedApplicationControl'], 
+define(['Ti/_/declare', 'Ti/_/Evented', 'Apps/ApplicationInformation', 'Apps/RequestedApplicationControl'], 
 		function(declare, Evented, ApplicationInformation, RequestedApplicationControl) {
 
-	return declare('Tizen.Apps.Application', Evented, {
+	var application = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 			this.constants.__values__.appInfo = new ApplicationInformation(this._obj.appInfo);
@@ -28,4 +28,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Apps/ApplicationInformation', 
 			return new RequestedApplicationControl(this._obj.getRequestedAppControl());
 		}
 	});
+
+	application.prototype.declaredClass = 'Tizen.Apps.Application';
+
+	return application;
 });

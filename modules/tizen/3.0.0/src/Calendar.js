@@ -3,7 +3,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/Calendar', 'Calendar/CalendarTask
 		function(lang, Evented, Calendar, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
 
 	return lang.mixProps(
-		lang.mixProps({}, Evented), 
+		require.mix({}, Evented), 
 		{
 			constants: {
 				CALENDAR_TYPE_EVENT: 'EVENT',

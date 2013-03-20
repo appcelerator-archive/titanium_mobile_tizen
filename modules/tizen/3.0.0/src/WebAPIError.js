@@ -1,5 +1,5 @@
-define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.WebAPIError', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	var error = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -50,4 +50,8 @@ define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 	});
+    
+    error.prototype.declaredClass = 'Tizen.WebAPIError';
+    
+    return error;
 });
