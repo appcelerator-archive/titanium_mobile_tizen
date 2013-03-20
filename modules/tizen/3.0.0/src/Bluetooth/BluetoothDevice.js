@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket', 'WebAPIError'], function(declare, Evented, BluetoothSocket, WebApiError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket', 'Bluetooth/BluetoothClass', 'WebAPIError'], function(declare, Evented, BluetoothSocket, BluetoothClass, WebApiError) {
 	var device = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object BluetoothDevice]') {
@@ -19,7 +19,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket', 'WebAPIErro
 			},
 			deviceClass: {
 				get: function() {
-					return this._obj.deviceClass;// needs to add BluetoothClass
+					return new BluetoothClass(this._obj.deviceClass);
 				}
 			},
 			isBonded: {
