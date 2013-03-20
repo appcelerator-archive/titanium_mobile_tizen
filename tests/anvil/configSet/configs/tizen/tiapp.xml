@@ -78,6 +78,7 @@
         <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>
         <tizen:privilege name="http://tizen.org/privilege/application.read"/>
         <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+	<tizen:privilege name="http://tizen.org/privilege/alarm"/>
         <access origin="*"/>
         <access origin="http://www.appcelerator.com" subdomains="true"/> 
         <access origin="https://my.appcelerator.com/auth/login" subdomains="true"/>

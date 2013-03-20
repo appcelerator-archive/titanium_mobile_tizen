@@ -44,7 +44,7 @@ function listeners() {
 				}
 			}
 		},
-		callhistoryObj = require('Ti/Tizen/Callhistory');
+		Tizen = require('tizen');
 
 		addListenerBtn.addEventListener('click', function(e) {
 			var alertDialog = Ti.UI.createAlertDialog({
@@ -53,7 +53,7 @@ function listeners() {
 
 			try {
 				// Register a call history callback
-				var handle = callhistoryObj.addChangeListener(onListenerCB);
+				var handle = Tizen.Callhistory.addChangeListener(onListenerCB);
 
 				addListenerBtn.enabled = false;
 
@@ -63,7 +63,7 @@ function listeners() {
 				removeListenerBtn.addEventListener('click', function(e) {
 					try {
 						// Unregister a previously registered listener
-						callhistoryObj.removeChangeListener(handle);
+						Tizen.Callhistory.removeChangeListener(handle);
 						win.remove(removeListenerBtn);
 
 						alertDialog.message = 'Listener removed';
