@@ -1,7 +1,7 @@
 define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar'], 
-		function(lang, Evented ,AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar) {
+		function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar) {
    
-	var Tizen = lang.mixProps(lang.mixProps({}, Evented), {
+	var Tizen = lang.mixProps(require.mix({}, Evented), {
 		constants: {
 				FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
 				FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
@@ -38,6 +38,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 
 		}
 	
 	}, true);
-	
+
 	return Tizen;
 });
