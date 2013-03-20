@@ -38,7 +38,8 @@ function tizen_alarm() {
 	postButton.addEventListener('click', createNotification);
 
 	function createNotification() {
-		var appControl = Tizen.Application.createApplicationControl({
+		console.log(Tizen.Apps.createApplicationControl)
+		var appControl = Tizen.Apps.createApplicationControl({
 			operation: 'http://tizen.org/appcontrol/operation/create_content',
 			uri: null
 		}),
@@ -55,7 +56,7 @@ function tizen_alarm() {
 			notificationInitDict: notificationDict
 		});
 
-		Tizen.Notification.post(notification);
+		Tizen.Notification.postNotification(notification);
 		titleInput.value = '';
 	}
 
