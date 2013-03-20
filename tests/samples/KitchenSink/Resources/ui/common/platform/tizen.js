@@ -4,7 +4,6 @@ function tizen(_args) {
 			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/contacts'},
 			{title: 'Call', hasChild: true, test: 'ui/handheld/tizen/platform/call/call'},
 			{title: 'Application', hasChild: true, test: 'ui/handheld/tizen/platform/application/application'},
-			{title: 'Filesystem', hasChild: true, test: 'ui/handheld/tizen/platform/filesystem'},
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/download'},
             {title: 'System setting', hasChild: true, test: 'ui/handheld/tizen/platform/systemsetting'},
 			{title: 'System info', hasChild: true, test: 'ui/handheld/tizen/platform/systemInfo'},
