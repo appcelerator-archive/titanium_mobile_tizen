@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.Apps.ApplicationContext', Evented, {
+	var applicationContext = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -17,4 +17,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			}
 		}
 	});
+
+	applicationContext.prototype.declaredClass = 'Tizen.Apps.ApplicationContext';
+
+	return applicationContext;
 });

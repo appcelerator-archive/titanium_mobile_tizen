@@ -9,7 +9,8 @@ module.exports = new function() {
 	var finish,
 		valueOf,
 		reportError,
-		waitTimeout;
+		waitTimeout,
+		Tizen = require('tizen');
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;

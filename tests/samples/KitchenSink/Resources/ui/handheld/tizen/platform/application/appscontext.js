@@ -1,9 +1,9 @@
 function tizen_appscontext(_args) {
 	var self = Titanium.UI.createWindow(),
-	appObj = require('Ti/Tizen/Apps');
+		Tizen = require('tizen');
 
-	//Return information available about a running application.
-	appObj.getAppsContext(function(contexts) {
+	// Return information available about a running application.
+	Tizen.Apps.getAppsContext(function(contexts) {
 		var data = [],
 			i = 0,
 			contextsCount = contexts.length,
@@ -11,17 +11,17 @@ function tizen_appscontext(_args) {
 
 		for (; i < contextsCount; i++) {
 			data.push({
-				//AlertDialog title
+				// AlertDialog title
 				title: contexts[i].appId + '\n<font size="1">' + contexts[i].id + '</font>',
-				//app_id consist application id used in showAppInfoById
-				//Do not remove it
+				// app_id consist application id used in showAppInfoById
+				// Do not remove it
 				app_id: contexts[i].appId,
 				id: contexts[i].id
 			});
 		}
 		tableview.data = data;
 
-		//Show dialog with Application information
+		// Show dialog with Application information
 		tableview.addEventListener('click', _args.showAppInfoById);
 		self.add(tableview);
 

@@ -1,5 +1,5 @@
-define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.SortMode', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	var sm = declare(Evented, {
 		constructor: function(args) {
 			if (args.toString() === '[object SortMode]') {
 				this._obj = args;
@@ -28,4 +28,8 @@ define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 	});
+    
+    sm.prototype.declaredClass = 'Tizen.SortMode';
+    
+    return sm;
 });

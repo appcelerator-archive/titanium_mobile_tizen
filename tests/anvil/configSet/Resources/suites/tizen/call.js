@@ -11,15 +11,13 @@ module.exports = new function() {
 	var finish,
 		valueOf,
 		reportError,
-		callhistoryObj,
-		tizenObj;
+		Tizen;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		callhistoryObj = require('Ti/Tizen/Callhistory');
-		tizenObj = require('Ti/Tizen');
+		Tizen = require('tizen');
 	}
 
 	this.name = 'call';
@@ -34,32 +32,32 @@ module.exports = new function() {
 	// Search for history of call
 	this.call_history = function(testRun) {
 		// Type of call
-		var tFilter = tizenObj.createAttributeFilter({
+		var tFilter = Tizen.createAttributeFilter({
 				attributeName: 'type',
-				matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+				matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
 				matchValue: 'TEL'
 			}),
 			// Sort output
-			sortMode = tizenObj.createSortMode({
+			sortMode = Tizen.createSortMode({
 				attributeName: 'startTime',
-				order: tizenObj.SORT_MODE_ORDER_DESC
+				order: Tizen.SORT_MODE_ORDER_DESC
 			}),
 			// From number
-			numberFilter = tizenObj.createAttributeFilter({
+			numberFilter = Tizen.createAttributeFilter({
 				attributeName: 'remoteParties.remoteParty',
-				matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+				matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
 				matchValue: '12345678'
 			}),
 			// Add filters
-			iFilter = tizenObj.createCompositeFilter({
-				type: tizenObj.COMPOSITE_FILTER_TYPE_INTERSECTION, 
+			iFilter = Tizen.createCompositeFilter({
+				type: Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION, 
 				filters: [
 					numberFilter,
 					tFilter
 				]
 			});
 
-		valueOf(testRun, callhistoryObj).shouldBeObject();
+		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
 		valueOf(testRun, tFilter).shouldBeObject();
 		valueOf(testRun, sortMode).shouldBeObject();
 		valueOf(testRun, numberFilter).shouldBeObject();
@@ -88,7 +86,7 @@ module.exports = new function() {
 		}
 
 		// Find call history
-		valueOf(testRun, function() { callhistoryObj.find(onSuccess, onError, tFilter, sortMode); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError, tFilter, sortMode); }).shouldNotThrowException();
 
 		setTimeout(
 			function() {
@@ -106,7 +104,7 @@ module.exports = new function() {
 
 			if (results.length > 0) {
 				// Delete call from call history
-				valueOf(testRun, function() { callhistoryObj.remove(results[0]); }).shouldNotThrowException();
+				valueOf(testRun, function() { Tizen.Callhistory.remove(results[0]); }).shouldNotThrowException();
 			} else {
 				reportError(testRun, 'This test requires at least one call in the phone\'s call history. Please make several calls and restart the test.');
 				finish(testRun);
@@ -117,10 +115,10 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
 
-		valueOf(testRun, callhistoryObj).shouldBeObject();
+		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
 
 		// Search for call history
-		valueOf(testRun, function() { callhistoryObj.find(onSuccess, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError); }).shouldNotThrowException();
 
 		setTimeout(
 			function() {
@@ -135,7 +133,7 @@ module.exports = new function() {
 		function onSuccess(results) {
 			valueOf(testRun, results).shouldBeObject();
 			// delete found history
-			valueOf(testRun, function() { callhistoryObj.removeBatch(results, null, onError); }).shouldNotThrowException();
+			valueOf(testRun, function() { Tizen.Callhistory.removeBatch(results, null, onError); }).shouldNotThrowException();
 		}
 
 		function onError(error) {
@@ -144,10 +142,10 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		valueOf(testRun, callhistoryObj).shouldBeObject();
+		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
 
 		// Search for call history
-		valueOf(testRun, function() { callhistoryObj.find(onSuccess, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError); }).shouldNotThrowException();
 
 		// Give some time for execution
 		setTimeout(
@@ -164,10 +162,10 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
 
-		valueOf(testRun, callhistoryObj).shouldBeObject();
+		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
 
 		// Delete all call history
-		valueOf(testRun, function() { callhistoryObj.removeAll(null, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.Callhistory.removeAll(null, onError); }).shouldNotThrowException();
 
 		// Give some time for execution
 		setTimeout(
@@ -190,16 +188,16 @@ module.exports = new function() {
 				}
 			};
 
-		valueOf(testRun, callhistoryObj).shouldBeObject();
+		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
 
 		try {
 			// Add new listener
-			valueOf(testRun, function() { handle = callhistoryObj.addChangeListener(onListenerCB); }).shouldNotThrowException();
+			valueOf(testRun, function() { handle = Tizen.Callhistory.addChangeListener(onListenerCB); }).shouldNotThrowException();
 			valueOf(testRun, handle).shouldNotBeNull();
 			valueOf(testRun, handle).shouldBeNumber();
 
 			// Remove added listener
-			valueOf(testRun, function() { callhistoryObj.removeChangeListener(handle); }).shouldNotThrowException();
+			valueOf(testRun, function() { Tizen.Callhistory.removeChangeListener(handle); }).shouldNotThrowException();
 		} catch (error) {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}

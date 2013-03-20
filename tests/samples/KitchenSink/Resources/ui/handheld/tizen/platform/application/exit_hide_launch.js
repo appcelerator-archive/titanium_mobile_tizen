@@ -4,8 +4,8 @@ function tizen_exit_hide_launch(_args) {
 		butttonHeightOffset = 10, 
 		butttonHeight = 40,
 		butttonWidth = 200,
-		appObj = require('Ti/Tizen/Apps'),
-		kitchenSinkApp = appObj.getCurrentApplication();
+		Tizen = require('tizen'),
+		kitchenSinkApp = Tizen.Apps.getCurrentApplication();
 
 	// Create button for Exit
 	var buttonExit = Titanium.UI.createButton({
@@ -54,7 +54,7 @@ function tizen_exit_hide_launch(_args) {
 	// Call tizen.application.exit when button has been pressed
 	buttonLaunch.addEventListener('click', function() {
 		try {
-			appObj.launch(CALC_APP_ID);
+			Tizen.Apps.launch(CALC_APP_ID);
 		} catch (e) {
 			_args.showErrorDialog(e, 'Could not Launch Calculator');
 		}

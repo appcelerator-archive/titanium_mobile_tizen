@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.Apps.RequestedApplicationControl', Evented, {
+	var requestedApplicationControl = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 			this.constants.__values__.appControl = {
@@ -20,4 +20,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			this._obj.replyFailure();
 		}
 	});
+
+	requestedApplicationControl.prototype.declaredClass = 'Tizen.Apps.RequestedApplicationControl';
+
+	return requestedApplicationControl;
 });

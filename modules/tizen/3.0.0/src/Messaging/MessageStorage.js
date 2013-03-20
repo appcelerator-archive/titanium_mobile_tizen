@@ -6,7 +6,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 
 		addDraftMessage: function(message /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.addDraftMessage(message._obj, successCallback, errorCallback && wrappedErrorCallback);
@@ -26,7 +26,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.findMessages(filter._obj, messagesListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
@@ -42,7 +42,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}			
 
 			this._obj.removeMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
@@ -58,7 +58,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.updateMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
@@ -78,7 +78,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.findConversations(filter._obj, conversationsListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
@@ -94,7 +94,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.removeConversations(tizenConversations, successCallback, errorCallback && wrappedErrorCallback);
@@ -114,7 +114,7 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.findFolders(filter._obj, foldersListSuccessCallBack, errorCallback && wrappedErrorCallback);
