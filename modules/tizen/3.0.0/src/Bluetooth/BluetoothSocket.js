@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError'], function(declare, Evented, WebAPIError) {
-	return declare('Tizen.Bluetooth.BluetoothSocket', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'WebAPIError'], function(declare, Evented, WebAPIError) {
+	var socket = declare(Evented, {
 		constructor: function(args) {
 			var self = this;
 			if(args.toString() === '[object BluetoothSocket]') {
@@ -54,4 +54,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/WebAPIError'], function(declar
 			return this._obj.close();
 		}
 	});
+    
+    socket.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothSocket';
+    
+    return socket;
 });

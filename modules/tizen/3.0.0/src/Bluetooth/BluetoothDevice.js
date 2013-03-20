@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket', 'Ti/Tizen/WebAPIError'], function(declare, Evented, BluetoothSocket, WebApiError) {
-	return declare('Tizen.Bluetooth.BluetoothDevice', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket', 'WebAPIError'], function(declare, Evented, BluetoothSocket, WebApiError) {
+	var device = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object BluetoothDevice]') {
 				this._obj = args;
@@ -19,7 +19,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket', 'T
 			},
 			deviceClass: {
 				get: function() {
-					return this._obj.deviceClass;
+					return this._obj.deviceClass;// needs to add BluetoothClass
 				}
 			},
 			isBonded: {
@@ -55,4 +55,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket', 'T
             );
 		}
 	});
+    
+    device.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothDevice';
+    
+    return device;
 });
