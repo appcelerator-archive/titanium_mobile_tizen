@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/Tizen/Calendar/CalendarItem'], function(declare, Evented, CalendarEvent, CalendarItem) {
-	return declare('Ti.Tizen.Calendar.Calendar', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Calendar/CalendarEvent', 'Calendar/CalendarItem'], function(declare, Evented, CalendarEvent, CalendarItem) {
+	var calendar = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -42,11 +42,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 					wrappedItems.push(new CalendarItem(objects[i]));
 				} 
 
-				successCallback.call(this, wrappedItems);
+				successCallback(wrappedItems);
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.addBatch(unwrappedItems, successCallback && calendarItemsSuccessCallback, errorCallback && wrappedErrorCallback);
@@ -66,7 +66,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.updateBatch(unwrapedItems, successCallback, errorCallback && wrappedErrorCallback, updateAllInstances);
@@ -77,10 +77,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 
 			if (typeof(id) !== 'object' && typeof(id) === 'string') {
 				obj = id;
-			} else if (id.toString() == '[object TiTizenCalendarCalendarEventId]') {
+			} else if (id.toString() == '[object TizenCalendarCalendarEventId]') {
 				obj = id._obj;
 			} else {
-				Ti.API.error('Unexpected type of CalendarItemId.');
+				Ti.API.error('Remove event error: unexpected type of CalendarItemId.');
 			}
 
 			this._obj.remove(obj);
@@ -96,7 +96,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.removeBatch(unwrapedIds, successCallback, errorCallback && wrappedErrorCallback);
@@ -112,18 +112,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 					calendarItems.push(new CalendarItem(items[i]));
 				}
 
-				successCallback.call(this, calendarItems);
+				successCallback(calendarItems);
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			this._obj.find(
 				successCallback && calendarItemsListSuccesscallback,
 				errorCallback && wrappedErrorCallback, 
-				(filter && (filter.toString() == '[object TiTizenAttributeFilter]')) ? filter._obj : filter,
-				(sortMode && (sortMode.toString() == '[object TiTizenSortMode]')) ? sortMode._obj : sortMode
+				(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
+				(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
 			);
 		},
 
@@ -140,25 +140,33 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Calendar/CalendarEvent', 'Ti/T
 				return wrappedItems;
 			}
 
+			function wrappedErrorCallback(error) {
+				errorCallback(new WebAPIError(error));
+			}
+
 			var wrappedCallback = {
 				onitemsadded: successCallback.onitemsadded && function(items) {
-					successCallback.onitemsadded.call(this, getWrappedItems(items));
+					successCallback.onitemsadded(getWrappedItems(items));
 				},
 
 				onitemsupdated: successCallback.onitemsupdated && function(items) {
-					successCallback.onitemsupdated.call(this, getWrappedItems(items));
+					successCallback.onitemsupdated(getWrappedItems(items));
 				},
 
 				onitemsremoved: successCallback.onitemsremoved &&function(items) {
-					successCallback.onitemsremoved.call(this, getWrappedItems(items));
+					successCallback.onitemsremoved(getWrappedItems(items));
 				}
 			};
 
-			return this._obj.addChangeListener(wrappedCallback);
+			return this._obj.addChangeListener(successCallback && wrappedCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		removeChangeListener: function(watchId /*long*/) {
 			this._obj.removeChangeListener(watchId);
 		}
 	});
+
+	calendar.prototype.declaredClass = 'Tizen.Calendar.Calendar';
+
+	return calendar;
 });

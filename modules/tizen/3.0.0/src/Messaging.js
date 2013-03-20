@@ -21,7 +21,7 @@ define(['Ti/_/lang', 'Ti/Tizen/Messaging/MessageService', 'Ti/Tizen/Messaging/Me
 			}
 
 			function wrappedErrorCallback(error) {
-				errorCallback.call(null, new WebAPIError(error));
+				errorCallback(new WebAPIError(error));
 			}
 
 			tizen.messaging.getMessageServices(messageServiceType, servicesListSuccessCallBack, errorCallback && wrappedErrorCallback, serviceId);

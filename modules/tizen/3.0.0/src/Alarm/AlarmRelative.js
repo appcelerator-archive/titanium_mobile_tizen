@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
-	return declare('Tizen.Alarm.AlarmRelative', Alarm, {
+define(['Ti/_/declare', 'Alarm/Alarm'], function(declare, Alarm){
+	var AlarmRelative = declare('Tizen.Alarm.AlarmRelative', Alarm, {
 		constructor: function(args) {
 			if(args.toString() === '[object AlarmRelative]') {
 				this._obj = args;
@@ -25,4 +25,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
 			return this._obj.getRemainingSeconds();
 		}
 	});
+
+	AlarmRelative.prototype.declaredClass = 'Tizen.Alarm.AlarmRelative';
+	return AlarmRelative;
+
 });

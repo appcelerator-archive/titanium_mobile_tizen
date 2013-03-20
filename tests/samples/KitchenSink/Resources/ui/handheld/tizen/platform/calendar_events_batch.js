@@ -6,7 +6,8 @@ function events_batch(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
+		Tizen = require('tizen'),
+		calendar = Tizen.Calendar.getDefaultCalendar('EVENT'),
 		data = [
 			{ title: 'Add three events', test: ADD_BATCH },
 			{ title: 'Update last three events', test: UPDATE_BATCH },
@@ -64,7 +65,7 @@ function events_batch(args) {
 			return ;
 		}
 
-		eventsArr[0] = Ti.Tizen.Calendar.createCalendarEvent({
+		eventsArr[0] = Tizen.Calendar.createCalendarEvent({
 			summary : value,
 			startDate : startDate,
 			duration : duration

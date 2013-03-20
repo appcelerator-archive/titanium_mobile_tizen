@@ -2,7 +2,8 @@ function events_list(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
+		Tizen = require('tizen'),
+		calendar = Tizen.Calendar.getDefaultCalendar('EVENT'),
 		tableview = Ti.UI.createTableView(),
 		emptyList = Ti.UI.createLabel({
 			text: 'List empty.',
@@ -66,15 +67,19 @@ function events_list(args) {
 					var rowsCount = data.length,
 						i = 0,
 						row;
+
 					for (; i < rowsCount; i++) {
 						row = data[i];
+
 						if (row.id !== index) {
 							continue;
 						}
+
 						data.splice(i, 1);
 						tableview.data = data;
 						break;
 					}
+
 					calendar.remove(events[index].id);
 					tableview.data = data;
 
@@ -89,6 +94,7 @@ function events_list(args) {
 
 			data.push(row);
 		}
+
 		return data;
 	}
 
@@ -98,4 +104,5 @@ function events_list(args) {
 
 	return self;
 }
+
 module.exports = events_list;

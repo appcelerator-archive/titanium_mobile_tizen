@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
-	return declare('Tizen.Download.DownloadRequest', Evented, {
+define(['Ti/_/declare', 'WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
+	var downloadRequest = declare(Evented, {
 		constructor: function(args) {
 			if (args.toString() === '[object DownloadRequest]') {
 				this._obj = args;
@@ -95,4 +95,8 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'], function(declar
 			}
 		}
 	});
+
+	downloadRequest.prototype.declaredClass = 'Tizen.Download.DownloadRequest';
+
+	return downloadRequest;
 });

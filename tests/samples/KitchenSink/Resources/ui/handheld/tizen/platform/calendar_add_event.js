@@ -2,7 +2,8 @@ function add_event(args) {
 	var self = Ti.UI.createWindow({
 			title: args.title
 		}),
-		calendar = Ti.Tizen.Calendar.getDefaultCalendar('EVENT'),
+		Tizen = require('tizen'),
+		calendar = Tizen.Calendar.getDefaultCalendar('EVENT'),
 		labelLeftPos = 10,
 		labelWidth = '40%',
 		height = 30,
@@ -109,7 +110,7 @@ function add_event(args) {
 			location = locationInput.value.trim(),
 			d = getCalendarStartDate();
 		try {
-			var calendarEvent = Ti.Tizen.Calendar.createCalendarEvent({
+			var calendarEvent = Tizen.Calendar.createCalendarEvent({
 				description: description,
 				summary: summary,
 				startDate: new Date(d.yy, d.mm, d.dd, d.h, d.m),

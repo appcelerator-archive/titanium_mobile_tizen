@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
-	return declare('Ti.Tizen.Calendar.CalendarTask', CalendarItem, {
+define(['Ti/_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
+	var calendarTask = declare(CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarTask]') {
 				this._obj = args;
@@ -51,6 +51,9 @@ define(['Ti/_/declare', 'Ti/Tizen/Calendar/CalendarItem', 'Ti/Tizen/_/calendarHe
 				}
 			}
 		}
-
 	});
+
+	calendarTask.prototype.declaredClass = 'Tizen.Calendar.CalendarTask';
+
+	return calendarTask;
 });

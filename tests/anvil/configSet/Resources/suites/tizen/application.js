@@ -4,13 +4,13 @@ module.exports = new function() {
 		finish,
 		valueOf,
 		reportError,
-		applicationObj;
+		Tizen;
 
 	this.init = function(testUtils) {
 		finish = testUtils.finish;
 		valueOf = testUtils.valueOf;
 		reportError = testUtils.reportError;
-		applicationObj = require('Ti/Tizen/Apps');
+		Tizen = require('tizen');
 	}
 
 	this.name = 'application';
@@ -46,7 +46,7 @@ module.exports = new function() {
 			appInstalledCount = 0;
 
 		valueOf(testRun, function() {
-			applicationObj.getAppsInfo(function(applications) {
+			Tizen.Apps.getAppsInfo(function(applications) {
 				appInstalledCount = applications.length;
 				Ti.API.info("appInstalledCount: " + appInstalledCount);
 
@@ -74,8 +74,8 @@ module.exports = new function() {
 		var calcAppInfo,
 			harnessAppInfo;
 
-		calcAppInfo = applicationObj.getAppInfo(CALC_APP_ID),
-		harnessAppInfo = applicationObj.getAppInfo();
+		calcAppInfo = Tizen.Apps.getAppInfo(CALC_APP_ID),
+		harnessAppInfo = Tizen.Apps.getAppInfo();
 
 		valueOf(testRun, calcAppInfo).shouldBe('[object TizenAppsApplicationInformation]');
 		valueOf(testRun, calcAppInfo).shouldNotBeUndefined();
@@ -104,7 +104,7 @@ module.exports = new function() {
 	// Test - Negative scenario - get Application info with NOT correct parameters
 	this.app_info_not_exist = function(testRun) {
 		valueOf(testRun, function() {
-			applicationObj.getAppInfo(NOT_EXIST_APP_ID);
+			Tizen.Apps.getAppInfo(NOT_EXIST_APP_ID);
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -115,7 +115,7 @@ module.exports = new function() {
 			runingAppArray;
 
 		valueOf(testRun, function() {
-			applicationObj.getAppsContext(function(contexts) {
+			Tizen.Apps.getAppsContext(function(contexts) {
 				var i = 0,
 					contextsCount = contexts.length;
 
@@ -150,12 +150,12 @@ module.exports = new function() {
 
 		var runingAppArray = [],
 			isHarness,
-			harness = applicationObj.getAppInfo();
+			harness = Tizen.Apps.getAppInfo();
 
 		valueOf(testRun, harness).shouldBe('[object TizenAppsApplicationInformation]');
 		valueOf(testRun, harness.id).shouldNotBeUndefined();
 		valueOf(testRun, function() {
-			applicationObj.getAppsContext(function(contexts) {
+			Tizen.Apps.getAppsContext(function(contexts) {
 				runingAppArray = contexts;
 			});
 		}).shouldNotThrowException();
@@ -175,7 +175,7 @@ module.exports = new function() {
 	// Test - Negative scenario - Does getAppsContext catch exception with no parameters
 	this.apps_contexts_no_params = function(testRun) {
 		valueOf(testRun, function() {
-			applicationObj.getAppsContext();
+			Tizen.Apps.getAppsContext();
 		}).shouldThrowException();
 
 		finish(testRun);
@@ -185,12 +185,12 @@ module.exports = new function() {
 	this.calc_launch = function(testRun) {
 		// Launch Calculator
 		valueOf(testRun, function() {
-			applicationObj.launch(CALC_APP_ID); 
+			Tizen.Apps.launch(CALC_APP_ID); 
 		}).shouldNotThrowException();
 
 		// Call getAppsContext for recieving all running application
 		valueOf(testRun, function() {
-			applicationObj.getAppsContext(function(contexts) {
+			Tizen.Apps.getAppsContext(function(contexts) {
 				isRuningCalc = _runingAppWithId(contexts, CALC_APP_ID);
 
 				valueOf(testRun, contexts.length).shouldBeGreaterThan(0);
@@ -206,7 +206,7 @@ module.exports = new function() {
 		var isError;
 
 		valueOf(testRun, function() {
-			applicationObj.launch(
+			Tizen.Apps.launch(
 				NOT_EXIST_APP_ID,
 				function() {
 					Ti.APi.info('Launched success.');
@@ -249,7 +249,7 @@ module.exports = new function() {
 			};
 
 		valueOf(testRun, function() {
-			appControl = applicationObj.createApplicationControl({
+			appControl = Tizen.Apps.createApplicationControl({
 				operation: "http://tizen.org/appcontrol/operation/create_content",
 				uri: null,
 				mime: "image/jpeg",
@@ -258,7 +258,7 @@ module.exports = new function() {
 		}).shouldNotThrowException();
 		valueOf(testRun, appControl).shouldBeObject();
 		valueOf(testRun, function() {
-			applicationObj.launchAppControl(appControl, null,
+			Tizen.Apps.launchAppControl(appControl, null,
 				function() {
 					serviceLaunched = true;
 
@@ -289,7 +289,7 @@ module.exports = new function() {
 			mime = "image/jpeg";
 
 		valueOf(testRun, function() {
-			appControl = applicationObj.createApplicationControl({
+			appControl = Tizen.Apps.createApplicationControl({
 				operation: operation,
 				uri: null,
 				mime: mime,
@@ -319,7 +319,7 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		applicationObj.findAppControl(appControl, successCB, errorCB);
+		Tizen.Apps.findAppControl(appControl, successCB, errorCB);
 	}
 
 	// Hides harnes app - MAY HAVE PROBLEM FOR OTHER TESTS
@@ -327,7 +327,7 @@ module.exports = new function() {
 		var currApp,
 			appId;
 
-		currApp = applicationObj.getCurrentApplication();
+		currApp = Tizen.Apps.getCurrentApplication();
 		appId = currApp.appInfo.id;
 
 		valueOf(testRun, currApp).shouldBe('[object TizenAppsApplication]');
@@ -339,7 +339,7 @@ module.exports = new function() {
 			currApp.hide();
 		}).shouldNotThrowException();
 		valueOf(testRun, function() {
-			applicationObj.launch(appId);
+			Tizen.Apps.launch(appId);
 		}).shouldNotThrowException();
 
 		finish(testRun);
@@ -373,7 +373,7 @@ module.exports = new function() {
 			currApp.hide();
 		}).shouldNotThrowException();
 		valueOf(testRun, function() {
-			applicationObj.launch(appId);
+			Tizen.Apps.launch(appId);
 		}).shouldNotThrowException();
 
 		finish(testRun);
