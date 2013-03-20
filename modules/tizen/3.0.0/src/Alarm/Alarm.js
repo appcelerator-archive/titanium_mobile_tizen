@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
-	return declare('Tizen.Alarm.Alarm', Evented, {
+	var Alarm = declare('Tizen.Alarm.Alarm', Evented, {
 		constants: {
 			id: {
 				get: function() {
@@ -9,4 +9,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented){
 		}
 
 	});
+
+	Alarm.prototype.declaredClass = 'Tizen.Alarm.Alarm';
+	return Alarm;
+
 });

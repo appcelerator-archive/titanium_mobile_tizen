@@ -24,17 +24,18 @@ function manageHistory() {
 			height: 10,
 			width: 10
 		}),
-		tizenObj = require('Ti/Tizen'),
-		filter = tizenObj.createAttributeFilter({
+		Tizen = require('tizen'),
+		filter = Tizen.createAttributeFilter({
 			attributeName: 'type',
-			matchFlag: tizenObj.FILTER_MATCH_FLAG_EXACTLY,
+			matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
 			matchValue: 'TEL'
 		}),
-		sortMode = tizenObj.createSortMode({
+		sortMode = Tizen.createSortMode({
 			attributeName: 'startTime', 
-			order: tizenObj.SORT_MODE_ORDER_DESC
-		}),
-		callhistoryObj = require('Ti/Tizen/Callhistory');
+			order: Tizen.SORT_MODE_ORDER_DESC
+		});
+		Ti.API.info(Tizen);
+		Ti.API.info(Tizen.Callhistory);
 
 	function onSuccess(results) {
 		var resultsCount = results.length,
@@ -47,7 +48,7 @@ function manageHistory() {
 					Ti.API.info('item.index: ' + item.index);
 
 					try {
-						callhistoryObj.remove(results[item.index]);
+						Tizen.Callhistory.remove(results[item.index]);
 						tableView.deleteRow(item.index);
 
 						if (tableView.sections[0].rowCount === 0) {
@@ -66,7 +67,7 @@ function manageHistory() {
 			}
 
 			function removeAll(e) {
-				callhistoryObj.removeAll(
+				Tizen.Callhistory.removeAll(
 					function() {
 						Ti.API.info('All history removed.');
 
@@ -107,7 +108,7 @@ function manageHistory() {
 		}).show();
 	}
 
-	callhistoryObj.find(onSuccess, onError, filter, sortMode);
+	Tizen.Callhistory.find(onSuccess, onError, filter, sortMode);
 
 	return win;
 }

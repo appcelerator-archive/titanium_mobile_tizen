@@ -65,11 +65,11 @@ function(lang,NDEFMessage,NDEFRecord,NDEFRecordText,NDEFRecordURI,NDEFRecordMedi
 		},
 	});
 	function onNDEFMessageReadCallback(object, onsuccess) { 
-		onsuccess.call(null, new NDEFMessage(object));
+		onsuccess(new NDEFMessage(object));
 	};
 
 	function onByteArraySuccessCallback(object, onsuccess) { 
-		onsuccess.call(null, new byte(object));
+		onsuccess(new byte(object));
 	};
 
 });

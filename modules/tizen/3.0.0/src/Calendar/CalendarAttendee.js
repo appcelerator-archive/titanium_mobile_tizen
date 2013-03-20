@@ -1,5 +1,5 @@
-define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.Calendar.CalendarAttendee', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	var calendarAttendee = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object CalendarAttendee]') {
 				this._obj = args;
@@ -94,6 +94,9 @@ define(['_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				}
 			}
 		}
-
 	});
+
+	calendarAttendee.prototype.declaredClass = 'Tizen.Calendar.CalendarAttendee';
+
+	return calendarAttendee;
 });

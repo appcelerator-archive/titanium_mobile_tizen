@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
-	return declare('Tizen.Alarm.AlarmAbsolute', Alarm, {
+define(['Ti/_/declare', 'Alarm/Alarm'], function(declare, Alarm){
+	var AlarmAbsolute = declare('Tizen.Alarm.AlarmAbsolute', Alarm, {
 		constructor: function(args) {
 			if(args.toString() === '[object AlarmAbsolute]') {
 				this._obj = args;
@@ -38,4 +38,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Alarm/Alarm'], function(declare, Alarm){
 			return this._obj.getNextScheduledDate();
 		}
 	});
+
+	AlarmAbsolute.prototype.declaredClass = 'Tizen.Alarm.AlarmAbsolute';
+	return AlarmAbsolute;
+
 });

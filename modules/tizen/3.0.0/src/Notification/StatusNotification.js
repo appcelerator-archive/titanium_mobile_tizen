@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare, Notification) {
-	return declare('Tizen.Notification.StatusNotification', Notification, {
+define(['Ti/_/declare', 'Notification/Notification'], function(declare, Notification) {
+	var StatusNotification = declare('Tizen.Notification.StatusNotification', Notification, {
 		constructor: function(args) {
 			if(args.toString() === '[object StatusNotification]') {
 				this._obj = args;
@@ -73,4 +73,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Notification/Notification'], function(declare,
 		},
 
 	});
+
+	StatusNotification.prototype.declaredClass = 'Tizen.Notification.StatusNotification';
+	return StatusNotification;
+
 });

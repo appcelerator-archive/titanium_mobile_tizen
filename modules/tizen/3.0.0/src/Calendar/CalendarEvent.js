@@ -1,5 +1,5 @@
-define(['_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
-	return declare('Tizen.Calendar.CalendarEvent', CalendarItem, {
+define(['Ti/_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(declare, CalendarItem, calendarHelper) {
+	var calendarEvent = declare(CalendarItem, {
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEvent]') {
 				this._obj = args;
@@ -57,11 +57,14 @@ define(['_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(decl
 		},
 
 		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-
 			var startDateTizen = new tizen.TZDate(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate(), startDate.getUTCHours(), startDate.getUTCMinutes()),
 				endDateTizen = new tizen.TZDate(endDate.getUTCFullYear(), endDate.getMonth(), endDate.getUTCDate(), endDate.getHours(), endDate.getUTCMinutes());
 
 			return this._obj.expandRecurrence(startDateTizen, endDateTizen, successCallback, errorCallback);
 		}
 	});
+
+	calendarEvent.prototype.declaredClass = 'Tizen.Calendar.CalendarEvent';
+
+	return calendarEvent;
 });

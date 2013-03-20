@@ -17,7 +17,6 @@ var suites = [
 	{name: "tizen/power"},
 	{name: "tizen/download"},
 	{name: "tizen/application"},
-	{name: "tizen/filesystem"},
     {name: "tizen/systemsetting"}
 ];
 
