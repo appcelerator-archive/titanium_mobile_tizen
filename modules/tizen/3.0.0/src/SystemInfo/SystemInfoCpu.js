@@ -1,5 +1,6 @@
-define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
-	return declare('Ti.Tizen.SystemInfo.SystemInfoCpu', SystemInfoProperty, {
+define(['Ti/_/declare', 'SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
+
+	var cpu = declare(SystemInfoProperty, {
 		constructor: function(args) {
 			if(args.toString() === '[object SystemInfoCpu]') {
 				this._obj = args;
@@ -12,7 +13,10 @@ define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(decl
 					return this._obj.load;
 				}
 			},
-		},
-
+		}
 	});
+
+	cpu.prototype.decloaredClass = 'Tizen.SystemInfo.SystemInfoCpu';
+
+	return cpu;
 });
