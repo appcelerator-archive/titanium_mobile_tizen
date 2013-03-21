@@ -150,7 +150,8 @@ function patchingSDK(finish) {
 			'resources/apple_startup_images',
 			'templates/app/default/Resources/mobileweb/apple_startup_images'		
 		],
-		pathToTizenInInSdk = path.join(sdkRoot, 'tizen');
+		pathToTizenInInSdk = path.join(sdkRoot, 'tizen'),
+		pathToModule = path.join(workingDir, 'modules','tizen');
 
 	//Directory tizen may already exists in archive if we re-pack sdk with tizen support. Remove it
 	if (fs.existsSync(pathToTizenInInSdk)) {
@@ -186,6 +187,14 @@ function patchingSDK(finish) {
 		}
 	});
 
+	//copy module with Tizen API
+	if (fs.existsSync(pathToModule)) {
+		//deleting existing tizen module module in source titanium sdk
+		info('Deleting ' + pathToModule);
+		wrench.rmdirSyncRecursive(pathToModule, true);
+	}
+	fs.mkdirSync(pathToModule);	
+	cp('-R', path.join(titaniumTizenDir, 'modules', 'tizen'), path.join(workingDir, 'modules'));
 	finish();
 }
 
