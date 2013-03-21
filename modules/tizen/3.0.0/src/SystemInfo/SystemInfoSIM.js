@@ -1,5 +1,6 @@
-define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
-	return declare('Ti.Tizen.SystemInfo.SystemInfoSIM', SystemInfoProperty, {
+define(['Ti/_/declare', 'SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
+
+	var sim = declare(SystemInfoProperty, {
 		constructor: function(args) {
 			if(args.toString() === '[object SystemInfoSIM]') {
 				this._obj = args;
@@ -45,4 +46,8 @@ define(['Ti/_/declare', 'Ti/Tizen/SystemInfo/SystemInfoProperty'], function(decl
 		},
 
 	});
+
+	sim.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoSIM';
+
+	return sim;
 });

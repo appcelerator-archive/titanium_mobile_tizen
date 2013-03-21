@@ -1,5 +1,6 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.SystemInfo.SystemInfoDeviceCapability', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
+	var capability =  declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object SystemInfoDeviceCapability]') {
 				this._obj = args;
@@ -27,11 +28,6 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.inputKeyboard;
 				}
 			},
-			wifi: {
-				get: function() {
-					return this._obj.wifi;
-				}
-			},
 			wifiDirect: {
 				get: function() {
 					return this._obj.wifiDirect;
@@ -52,29 +48,9 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.fmRadio;
 				}
 			},
-			platformVersion: {
-				get: function() {
-					return this._obj.platformVersion;
-				}
-			},
-			platformName: {
-				get: function() {
-					return this._obj.platformName;
-				}
-			},
-			cameraFront: {
-				get: function() {
-					return this._obj.cameraFront;
-				}
-			},
 			cameraFrontFlash: {
 				get: function() {
 					return this._obj.cameraFrontFlash;
-				}
-			},
-			cameraBack: {
-				get: function() {
-					return this._obj.cameraBack;
 				}
 			},
 			cameraBackFlash: {
@@ -97,11 +73,6 @@ define(['Ti/_/declare'], function(declare) {
 					return this._obj.locationWps;
 				}
 			},
-			microphone: {
-				get: function() {
-					return this._obj.microphone;
-				}
-			},
 			usbHost: {
 				get: function() {
 					return this._obj.usbHost;
@@ -120,11 +91,6 @@ define(['Ti/_/declare'], function(declare) {
 			screenOutputHdmi: {
 				get: function() {
 					return this._obj.screenOutputHdmi;
-				}
-			},
-			platformCoreCpuArch: {
-				get: function() {
-					return this._obj.platformCoreCpuArch;
 				}
 			},
 			platformCoreFpuArch: {
@@ -171,8 +137,12 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.proximity;
 				}
-			},
-		},
+			}
+		}
 
 	});
+
+	capability.prototype.declasredClass = 'Tizen.SystemInfo.SystemInfoDeviceCapability';
+
+	return capability;
 });

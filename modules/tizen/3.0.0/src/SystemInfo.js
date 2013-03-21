@@ -1,34 +1,17 @@
-define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemInfo/SystemInfoBuild', 'Ti/Tizen/SystemInfo/SystemInfoProperty', 'Ti/Tizen/SystemInfo/SystemInfoCpu', 'Ti/Tizen/SystemInfo/SystemInfoStorage', 
-		'Ti/Tizen/SystemInfo/SystemInfoDisplay', 'Ti/Tizen/SystemInfo/SystemInfoDeviceCapability', 'Ti/Tizen/SystemInfo/SystemInfoNetwork', 'Ti/Tizen/SystemInfo/SystemInfoWifiNetwork', 'Ti/Tizen/SystemInfo/SystemInfoCellularNetwork',
-		'Ti/Tizen/SystemInfo/SystemInfoSIM', 'Ti/Tizen/SystemInfo/SystemInfoDeviceOrientation', 'Ti/Tizen/SystemInfo/SystemInfoStorageUnit', 'Ti/Tizen/WebAPIError', 'Ti/_/Evented'],
-		function(lang, SystemInfoBattery, SystemInfoBuild, SystemInfoProperty, SystemInfoCpu, SystemInfoStorage, SystemInfoDisplay, SystemInfoDeviceCapability,
-			SystemInfoNetwork,	SystemInfoWifiNetwork, SystemInfoCellularNetwork, SystemInfoSIM, SystemInfoDeviceOrientation, SystemInfoStorageUnit, WebAPIError, Evented) {
+define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu', 'SystemInfo/SystemInfoStorage', 
+		'SystemInfo/SystemInfoDeviceCapability', 'SystemInfo/SystemInfoCellularNetwork',
+		'SystemInfo/SystemInfoSIM', 'SystemInfo/SystemInfoStorageUnit', 'WebAPIError', 'Ti/_/Evented'],
+		function(lang, SystemInfoProperty, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability,
+			SystemInfoCellularNetwork, SystemInfoSIM, SystemInfoStorageUnit, WebAPIError, Evented) {
 
-	return lang.setObject('Ti.Tizen.SystemInfo', Evented, {
+	var SystemInfo = lang.mixProps(require.mix({}, Evented), {
 
 		constants: {
-			SYSTEM_INFO_PROPERTY_ID_BATTERY: 'BATTERY',
 			SYSTEM_INFO_PROPERTY_ID_CPU: 'CPU',
 			SYSTEM_INFO_PROPERTY_ID_STORAGE: 'STORAGE',
-			SYSTEM_INFO_PROPERTY_ID_DISPLAY: 'DISPLAY',
-			SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION: 'DEVICE_ORIENTATION',
-			SYSTEM_INFO_PROPERTY_ID_BUILD: 'BUILD',
-			SYSTEM_INFO_PROPERTY_ID_NETWORK: 'NETWORK',
 			SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK: 'WIFI_NETWORK',
 			SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK: 'CELLULAR_NETWORK',
-			SYSTEM_INFO_PROPERTY_ID_SIM: 'SIM',
-			SYSTEM_INFO_NETWORK_TYPE_NONE: 'NONE',
-			SYSTEM_INFO_NETWORK_TYPE_2G: '2G',
-			SYSTEM_INFO_NETWORK_TYPE_25G: '2.5G',
-			SYSTEM_INFO_NETWORK_TYPE_3G: '3G',
-			SYSTEM_INFO_NETWORK_TYPE_4G: '4G',
-			SYSTEM_INFO_NETWORK_TYPE_WIFI: 'WIFI',
-			SYSTEM_INFO_NETWORK_TYPE_ETHERNET: 'ETHERNET',
-			SYSTEM_INFO_NETWORK_TYPE_UNKNOWN: 'UNKNOWN',
-			SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY: 'PORTRAIT_PRIMARY',
-			SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY: 'PORTRAIT_SECONDARY',
-			SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY: 'LANDSCAPE_PRIMARY',
-			SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY: 'LANDSCAPE_SECONDARY',
+			SYSTEM_INFO_PROPERTY_ID_SIM: 'SIM'
 		},
 
 		getCapabilities: function() {
@@ -59,9 +42,9 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 			if (object.toString() === '[object devicecapabilitiesinfo]') {
 				return new SystemInfoDeviceCapability(object);
 			}
-		},
-	});
-	
+		}
+	}, true);
+
 	function onSystemInfoPropertySuccessCallback(object, onsuccess) { 
 		onsuccess(new SystemInfoProperty(object));
 	};
@@ -74,17 +57,8 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 		if (object.toString() === '[object cpuinfo]') {
 			return new SystemInfoCpu(object);
 		}
-		if (object.toString() === '[object storageinfo]') {		
+		if (object.toString() === '[object storageinfo]') {
 			return new SystemInfoStorage(object);
-		}
-		if (object.toString() === '[object displayinfo]') {
-			return new SystemInfoDisplay(object);
-		}
-		if (object.toString() === '[object networkinfo]') {
-			return new SystemInfoNetwork(object);
-		}
-		if (object.toString() === '[object wifinetworkinfo]') {
-			return new SystemInfoWifiNetwork(object);
 		}
 		if (object.toString() === '[object cellularnetworkinfo]') {
 			return new SystemInfoCellularNetwork(object);
@@ -92,14 +66,12 @@ define(['Ti/_/lang', 'Ti/Tizen/SystemInfo/SystemInfoBattery', 'Ti/Tizen/SystemIn
 		if (object.toString() === '[object siminfo]') {
 			return new SystemInfoSIM(object);
 		}
-		if (object.toString() === '[object deviceorientationinfo]') {
-			return new SystemInfoDeviceOrientation(object);
-		}
-		if (object.toString() === '[object buildinfo]') {
-			return new SystemInfoBuild(object);
-		}
-		if (object.toString() === '[object batteryinfo]') {
-			return new SystemInfoBattery(object);
-		}
 	};
+
+	console.log('SystemInfo');
+    for(k in SystemInfo) {
+        console.log(k);
+    }
+
+	return SystemInfo;
 });
