@@ -48,7 +48,8 @@ function smsSend(args) {
 		   left: 70
 		}),
 		serviceType = 'messaging.sms',
-		smsService = null;
+		Tizen = require('tizen'),
+		smsService;
 
 	// Initialize smsservice
 	function initSmsService(callBack) {
@@ -71,7 +72,7 @@ function smsSend(args) {
 			callBack && callBack();
 		}
 
-		Ti.Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
+		Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
 	}
 
 	// Check message data. Tizen function doesn't check it yet 
@@ -123,7 +124,7 @@ function smsSend(args) {
 			try {
 				Ti.API.info('Start to add draft message.');
 
-				var msg = Ti.Tizen.Messaging.createMessage({
+				var msg = Tizen.Messaging.createMessage({
 					type: serviceType,
 					messageInitDict: { 
 						plainBody: textArea.value, 
@@ -161,7 +162,7 @@ function smsSend(args) {
 			try {
 				Ti.API.info('Start to send message.');
 
-				var msg = Ti.Tizen.Messaging.createMessage({
+				var msg = Tizen.Messaging.createMessage({
 					type: serviceType,
 					messageInitDict: { 
 						plainBody: textArea.value, 
