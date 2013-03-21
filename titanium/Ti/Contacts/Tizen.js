@@ -1,4 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/Person'], function(Evented, lang, contact_helper, Person) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
 	
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 		
@@ -11,7 +11,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/P
 					persons = [];
 				console.log('Found ' + contactsCount + ' contacts');
 				for (; i < contactsCount; i++) {
-					persons.push(new Person(contact_helper.createTitaniumContact(contacts[i])));
+					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
 				successCallback(persons);
 			}, errorCallback);
@@ -43,7 +43,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/P
 					persons = [];
 				console.log('Found ' + contactsCount + ' contact(s)');
 				for (i = 0; i < contactsCount; i++) {
-					persons.push(new Person(contact_helper.createTitaniumContact(contacts[i])));
+					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
 				successCallback(persons);
 			}, errorCallback, resultFilter);

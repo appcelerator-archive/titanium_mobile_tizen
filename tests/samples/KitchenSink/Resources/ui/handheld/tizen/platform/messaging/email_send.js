@@ -61,6 +61,7 @@ function emailSend(args) {
 			left: 70
 		}),
 		serviceType = 'messaging.email',
+		Tizen = require('tizen'),
 		emailService;
 
 	// Initialize email service
@@ -84,7 +85,7 @@ function emailSend(args) {
 			callBack && callBack();
 		}
 
-		Ti.Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
+		Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
 	}
 
 	// Check email message data. Tizen is not support it function yet.
@@ -135,7 +136,7 @@ function emailSend(args) {
 			try {
 				Ti.API.info('Start addding draft email message.');
 
-				var msg = Ti.Tizen.Messaging.createMessage({
+				var msg = Tizen.Messaging.createMessage({
 					type: serviceType,
 					messageInitDict: {
 						subject: subjectField.value,
@@ -175,7 +176,7 @@ function emailSend(args) {
 			try {
 				Ti.API.info('Start to add new email message.');
 
-				var msg = Ti.Tizen.Messaging.createMessage({
+				var msg = Tizen.Messaging.createMessage({
 					type: serviceType,
 					messageInitDict: { 
 						subject: subjectField.value, 

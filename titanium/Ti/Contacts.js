@@ -1,4 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/Tizen/_/contact_helper'], function(Evented, lang, Person, Group, contact_helper) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/Tizen/_/contactHelper'], function(Evented, lang, Person, Group, contactHelper) {
 
 	var addressbook = tizen.contact.getDefaultAddressBook();
 
@@ -55,8 +55,8 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 		},
 
 		getPersonByID: function(id) {
-			tizen.contact.getDefaultAddressBook().get(id);
-			return new Person(contact_helper.createTitaniumContact(contact));
+			var contact = tizen.contact.getDefaultAddressBook().get(id);
+			return new Person(contactHelper.createTitaniumContact(contact));
 		},
 
 		removeGroup: function(group) {
@@ -72,7 +72,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 				i = 0, 
 				personsCount = persons.length;
 			for (; i < personsCount; i++) {
-				addressbook.update(contact_helper.updateTizenContact(persons[i]));
+				addressbook.update(contactHelper.updateTizenContact(persons[i]));
 			}
 		},
 		showContacts: function(values){

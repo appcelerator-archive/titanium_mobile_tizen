@@ -1,11 +1,11 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/contact_helper'], function(declare, Evented, contact_helper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/contactHelper'], function(declare, Evented, contactHelper) {
 
 //	var addressbook = tizen.contact.getDefaultAddressBook();
 
 	return declare('Ti.Contacts.Person', Evented, {
 		constructor: function(args) {
 			if (!args.id) {
-				this._contact = contact_helper.createTizenContact(args);
+				this._contact = contactHelper.createTizenContact(args);
 				var addressbook = tizen.contact.getDefaultAddressBook();
 				addressbook.add(this._contact);
 				this.constants.__values__.id = this._contact.id;

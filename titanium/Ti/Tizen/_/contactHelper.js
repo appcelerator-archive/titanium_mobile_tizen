@@ -253,9 +253,7 @@ define(['Ti/API'], function(API) {
 				name;
 
 			contact.addresses = person.address && createTizenAddress(person.address);
-			console.log(1);
 			contact.emails = person.email && createTizenEmail(person.email);
-			console.log(2);
 			name = contact.name;
 			if (name) {
 				name.prefix = person.prefix ||'';
@@ -276,38 +274,25 @@ define(['Ti/API'], function(API) {
 					phoneticLastName: person.lastPhonetic || null
 				});
 			}
-			console.log(3);
 			contact.name = name;
 			contact.phoneNumbers = person.phone && createTizenPhoneNumber(person.phone);
-			console.log(4);
 		//	contact.birthday = person.birthday ? new Date(person.birthday) : null;
-			console.log(44);
 			organization = contact.organizations[0];
-			console.log(organization);
-			try {
 			if (organization) {
 				organization.name = person.organization;
 				organization.department = person.department;
 				organization.title = person.jobTitle;
 			} else {
-			console.log('fuck');
-			console.log(person.organization);
 				organization = new tizen.ContactOrganization({
 					name: person.organization || null,
 					department: null,
 					title:  null
 				});
 			}
-			} catch (e) {
-				console.log(e.message);
-			}
-			console.log(5);
 			contact.organizations = [organization];
-			console.log(6);
 			contact.anniversaries = person.date && createTizenAnniversary(person.date);
 			contact.notes = [person.note] || void 0;
 			contact.urls = person.url && createTizenWebSite(person.url);
-			console.log(contact);
 			return contact;
 		},
 

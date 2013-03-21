@@ -1,4 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/Person'], function(Evented, lang, contact_helper, Person) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
 
 	return lang.setObject('Ti.Contacts.Group.Tizen', Evented, {
 
@@ -21,7 +21,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/P
 					// So we need a loop to find a value
 					for (j = 0; j < groupsCount; j++) {
 						if (groupIds[j] === group.recordId) {
-							persons.push(new Person(contact_helper.createTitaniumContact(contacts[i])));
+							persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 							break;
 						}
 					}
@@ -49,7 +49,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contact_helper', 'Ti/Contacts/P
 					// So we need a loop to find a value
 					for (j = 0; j < groupsCount; j++) {
 						if (groupIds[j] === group.recordId) {
-							persons.push(new Person(contact_helper.createTitaniumContact(contacts[i])));
+							persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 							break;
 						}
 					}
