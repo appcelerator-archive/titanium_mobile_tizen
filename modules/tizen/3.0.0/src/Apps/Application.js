@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Apps/ApplicationInformation', 'Apps/Req
 				get: function() {
 					return this._obj.contextId;
 				}
-			},
+			}
 		},
 
 		exit: function() {

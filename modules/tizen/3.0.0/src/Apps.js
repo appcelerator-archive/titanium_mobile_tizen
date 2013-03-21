@@ -114,7 +114,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'WebAPIError', 'Apps/ApplicationInformation
 					errorCallback(new WebAPIError(error));
 				}
 
-				tizen.application.getAppsInfo(successCallback && applicationsInformationSuccessCallback, errorCallback && wrappedErrorCallback);
+				tizen.application.getAppsInfo(applicationsInformationSuccessCallback, errorCallback && wrappedErrorCallback);
 			},
 
 			getAppInfo: function(id /*ApplicationId*/) {
