@@ -1,12 +1,11 @@
 function btServer() {
-		
-	var btAdapter = require('Ti/Tizen/Bluetooth').getDefaultAdapter(),
-        // simple bluetooth server
+	var btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
+        // Simple bluetooth server
         server = {
         SERVICE_UUID: '5BCE9431-6C75-32AB-AFE0-2EC108A30860',
         numberOfClients: 0,
         connection: false,
-        
+        // Register server
         setServerVisible: function() {
             
             try {
@@ -19,14 +18,14 @@ function btServer() {
                 print(error.message);
             }
         },
-        
+        // Unregister service
         unregisterService: function() {
             
             try {
                 if (server.serviceHandler !== null) {
                     server.serviceHandler.unregister(server._unregisterSuccess, server._unregisterError);
                 } else {
-                    //enable button 'start'
+                    print('server.serviceHandler');
                 }
             } catch (error) {
                 server._unregisterError();
@@ -39,8 +38,8 @@ function btServer() {
             server.numberOfClients = 0;
         },
 
-        _unregisterError: function() {
-        
+        _unregisterError: function(e) {
+            print(e.message);
         },
 
         _registerSuccess: function(handler) {
@@ -100,16 +99,16 @@ function btServer() {
         
     },
     
-    //Window
+    // Window
     win = Ti.UI.createWindow({backgroundColor:'#fff'}),
-    //Bluetooth On/Off
+    // Bluetooth On/Off
     btSwitch = Ti.UI.createSwitch({
 		top: 70,
 		titleOn: 'Bluetooth enabled',
 		titleOff: 'Bluetooth disabled',
 		value: btAdapter.powered
 	}),
-	//Start server button
+	// Start server button
 	startButton = Ti.UI.createButton({
 		top: 220,
 		enabled: btAdapter.powered,
@@ -122,32 +121,32 @@ function btServer() {
         color: '#000000',
         width: '95%'
     }),
-    //Print status and log
+    // Print status and log
     print = function(msg) {
         Ti.API.info(msg);
         statusLabel.text = msg;
     };
 	
-	//Power ON click
-	btSwitch.addEventListener('change', function(e) {
+	// Power ON click
+	btSwitch.addEventListener('change', function() {
         if (btAdapter.powered != btSwitch.value) {
             btAdapter.setPowered(btSwitch.value,
-                //Success
+                // Success
                 function() {
                     print('The bluetooth has been powered ' + (btSwitch.value ? 'on' : 'off'));
                     startButton.enabled = btAdapter.powered;
                     server.numberOfClients = 0;
                 },
-                //Error
+                // Error
                 function(e) {
-                    Ti.API.error('setPowered: ' + e.message);
+                    print('setPowered: ' + e.message);
                     startButton.enabled = false;
                 }
             );
         }
 	});
-	//Start server
-	startButton.addEventListener('click', function(e) {
+	// Start server
+	startButton.addEventListener('click', function() {
 		server.setServerVisible();
 	});
     

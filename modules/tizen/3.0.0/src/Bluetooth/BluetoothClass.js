@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	return declare('Tizen.Bluetooth.BluetoothClass', Evented, {
+	var btClass = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object BluetoothClass]') {
 				this._obj = args;
@@ -28,4 +28,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			return this._obj.hasService(service._obj);
 		}
 	});
+    
+    btClass.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothClass';
+    
+    return btClass;
 });

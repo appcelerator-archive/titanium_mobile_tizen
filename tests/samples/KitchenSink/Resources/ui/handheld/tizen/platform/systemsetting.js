@@ -36,14 +36,15 @@ function systemsetting(args) {
 			left: 0,
 			zIndex: 4
 		}),
-		settingType = Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN,
+		Tizen = require('tizen'),
+		settingType = Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN,
 		settingTypes = [];
 	
 	//settings data
-	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN }));
-	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN }));
-	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL }));
-	settingTypes.push(Ti.UI.createPickerRow({ title: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL, value: Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL }));
+	settingTypes.push(Ti.UI.createPickerRow({ title: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, value: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN }));
+	settingTypes.push(Ti.UI.createPickerRow({ title: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN, value: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN }));
+	settingTypes.push(Ti.UI.createPickerRow({ title: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL, value: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL }));
+	settingTypes.push(Ti.UI.createPickerRow({ title: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL, value: Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL }));
 	
 	settingTypeSwitcher.add(settingTypes);
 
@@ -52,19 +53,15 @@ function systemsetting(args) {
 	window.add(switchPanel);
 	window.add(filesPanel);
 	
-	//load images
+	// Load images
 	function loadFiles(type) {
 		var source,
-			isImage = type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || 
-					  type === Ti.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
-			filter = Ti.Tizen.createAttributeFilter({
-				attributeName: 'type',
-				matchFlag: 'EXACTLY',
-				matchValue: isImage ? 'IMAGE': 'AUDIO'
-			});
+			isImage = type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
+			filter = new tizen.AttributeFilter('type', 'EXACTLY', isImage ? 'IMAGE' : 'AUDIO');
 
-		Ti.Tizen.Content.find( 
-			//Success
+		// Tizen Content module is not supported by Tizen module, but it necessary for getting files to test SystemSetting's functions
+		tizen.content.find(
+			// SuccessCallback
 			function(items) {			
 				var tableData = [],
 					i = 0,
@@ -77,7 +74,7 @@ function systemsetting(args) {
 
 				Ti.API.info('loadImages => success');
 
-				for (; i < length; i++) {                   
+				for (; i < length; i++) {
 					var item = items[i],
 						row = Ti.UI.createTableViewRow({
 							title: items[i].contentURI,
@@ -97,7 +94,9 @@ function systemsetting(args) {
 				filesPanel.addEventListener('click', function(e) {
 					Ti.API.info('click' + e.rowData.title);
 					// SetProperty
-					Ti.Tizen.SystemSetting.setProperty( settingType, e.rowData.title, 
+					Tizen.SystemSetting.setProperty(
+						settingType,
+						e.rowData.title, 
 						// SuccessCallback
 						function() {
 							Titanium.UI.createAlertDialog({
@@ -115,7 +114,7 @@ function systemsetting(args) {
 					);
 				});
 			},
-			//Error
+			// ErrorCallback
 			function onError(e) {
 				Ti.API.error(e.message);
 			},

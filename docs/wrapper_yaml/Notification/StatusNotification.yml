@@ -59,7 +59,7 @@ properties:
                                       notificationInitDict: notificationDict
                                    });
 
-                tizen.Notification.post(notification);
+                tizen.Notification.postNotification(notification);
            } catch (err) {
                 Titanium.API.info (err.name + ": " + err.message);
            }
@@ -102,7 +102,7 @@ properties:
                                       notificationInitDict: notificationDict
                                    });
                 // posts the notification
-                tizen.Notification.post(notification);
+                tizen.Notification.postNotification(notification);
 
                 // updates the progress value of the notification.
                 notification.progressValue = 59;

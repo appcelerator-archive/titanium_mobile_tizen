@@ -1,34 +1,34 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'Ti/Tizen/Bluetooth/BluetoothServiceHandler', 'Ti/Tizen/WebAPIError'], 
+define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothDevice', 'Bluetooth/BluetoothServiceHandler', 'WebAPIError'], 
     function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, WebApiError) {
-	return declare('Tizen.Bluetooth.BluetoothAdapter', Evented, {
-		constructor: function(args) {
-			if(args.toString() === '[object BluetoothAdapter]') {
-				this._obj = args;
-			}
-		},
+        var adapter = declare(Evented, {
+            constructor: function(args) {
+                if(args.toString() === '[object BluetoothAdapter]') {
+                    this._obj = args;
+                }
+            },
 
-		constants: {
-			name: {
-				get: function() {
-					return this._obj.name;
-				}
-			},
-			address: {
-				get: function() {
-					return this._obj.address;
-				}
-			},
-			powered: {
-				get: function() {
-					return this._obj.powered;
-				}
-			},
-			visible: {
-				get: function() {
-					return this._obj.visible;
-				}
-			}
-		},
+            constants: {
+                name: {
+                    get: function() {
+                        return this._obj.name;
+                    }
+                },
+                address: {
+                    get: function() {
+                        return this._obj.address;
+                    }
+                },
+                powered: {
+                    get: function() {
+                        return this._obj.powered;
+                    }
+                },
+                visible: {
+                    get: function() {
+                        return this._obj.visible;
+                    }
+                },
+            },
 
 		setName: function(name /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.setName(name,
@@ -52,37 +52,37 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
             );
 		},
 
-		discoverDevices: function() {
-			var self = this;
-            return self._obj.discoverDevices( 
-                // BluetoothDiscoverDevicesSuccessCallback
-                {
-                    onstarted: function() {
-                    	self.fireEvent('discoverystarted');
-                    },
-                    ondevicefound: function(device) {
-                    	self.fireEvent('devicefound', new BluetoothDevice(device));
-                    },
-                    ondevicedisappeared: function(address) {
-                    	self.fireEvent('devicedisappeared', address);
-                    },
-                    onfinished: function(devices) {
-                        var i = 0,
-                            len = devices.length,
-                            arr = [];
+            discoverDevices: function() {
+                var self = this;
+                return self._obj.discoverDevices( 
+                    // BluetoothDiscoverDevicesSuccessCallback
+                    {
+                        onstarted: function() {
+                            self.fireEvent('discoverystarted');
+                        },
+                        ondevicefound: function(device) {
+                            self.fireEvent('devicefound', new BluetoothDevice(device));
+                        },
+                        ondevicedisappeared: function(address) {
+                            self.fireEvent('devicedisappeared', address);
+                        },
+                        onfinished: function(devices) {
+                            var i = 0,
+                                len = devices.length,
+                                arr = [];
 
-                        for (; i < len; i++) {
-                            arr.push(new BluetoothDevice(devices[i]));
+                            for (; i < len; i++) {
+                                arr.push(new BluetoothDevice(devices[i]));
+                            }
+                            self.fireEvent('discoveryfinished', arr);
                         }
-                        self.fireEvent('discoveryfinished', arr);
+                    },
+                    // ErrorCallback
+                    function(e) {
+                        self.fireEvent('discoveryerror', new WebAPIError(e));
                     }
-                },
-                // ErrorCallback
-                function(e) {
-                	self.fireEvent('discoveryerror', new WebAPIError(e));
-                }
-            );
-		},
+                );
+            },
 
 		stopDiscovery: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.stopDiscovery(
@@ -95,12 +95,12 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
             );
 		},
 
-		getKnownDevices: function(successCallback /*BluetoothDeviceArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.getKnownDevices(
-                function(devices) {
-                    var i = 0,
-                        len = devices.length,
-                        arr = [];
+            getKnownDevices: function(successCallback /*BluetoothDeviceArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
+                return this._obj.getKnownDevices(
+                    function(devices) {
+                        var i = 0,
+                            len = devices.length,
+                            arr = [];
 
                     for (; i < len; i++) {
                         arr.push(new BluetoothDevice(devices[i]));
@@ -146,15 +146,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
             );
 		},
 
-        registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, successCallback /*BluetoothServiceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-            return this._obj.registerRFCOMMServiceByUUID(uuid, name, 
-                function(handler) {
-                    successCallback(new BluetoothServiceHandler(handler));
-                },
-				errorCallback && function(e) {
-                    errorCallback(new WebAPIError(e));
-                }
-            );
-		}
-	});
-});
+            registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, successCallback /*BluetoothServiceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
+                return this._obj.registerRFCOMMServiceByUUID(uuid, name, 
+                    function(handler) {
+                        successCallback(new BluetoothServiceHandler(handler));
+                    }, 
+                    errorCallback && function(e) {
+                        errorCallback(new WebAPIError(e));
+                    }
+                );
+            }
+        });
+        adapter.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothAdapter';
+        return adapter;
+    }
+);

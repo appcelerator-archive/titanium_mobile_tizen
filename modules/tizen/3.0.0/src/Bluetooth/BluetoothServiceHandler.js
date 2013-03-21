@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket'], function(declare, Evented, BluetoothSocket) {
-	return declare('Tizen.Bluetooth.BluetoothServiceHandler', Evented, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket'], function(declare, Evented, BluetoothSocket) {
+	var handler = declare(Evented, {
 		constructor: function(args) {
 			var self = this;
 			if(args.toString() === '[object BluetoothServiceHandler]') {
@@ -36,4 +36,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket'], f
 				});
 		}
 	});
+    
+    handler.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothServiceHandler';
+    
+    return handler;
 });
