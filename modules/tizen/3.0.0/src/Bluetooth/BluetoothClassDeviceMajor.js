@@ -18,7 +18,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			TOY: 0x08, //octet
 			HEALTH: 0x09, //octet
 			UNCATEGORIZED: 0x1F //octet
-		},
+		}
 
 	});
 });

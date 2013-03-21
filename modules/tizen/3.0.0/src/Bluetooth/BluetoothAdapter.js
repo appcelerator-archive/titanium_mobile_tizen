@@ -27,27 +27,27 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
 				get: function() {
 					return this._obj.visible;
 				}
-			},
+			}
 		},
 
 		setName: function(name /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.setName(name,
-                function() {
-                    successCallback && successCallback();
+				successCallback && function() {
+                    successCallback();
                 },
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
 
 		setPowered: function(state /*boolean*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.setPowered(state,
-                function() {
-                    successCallback && successCallback();
-                }, 
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				successCallback && function() {
+                    successCallback();
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
@@ -86,11 +86,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
 
 		stopDiscovery: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			return this._obj.stopDiscovery(
-                function() {
-                    successCallback && successCallback();
+				successCallback && function() {
+                    successCallback();
                 },
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
@@ -107,8 +107,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
                     }
                     successCallback(arr);
                 },
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
@@ -118,8 +118,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
                 function(device) {
                     successCallback(new BluetoothDevice(device));
                 },
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
@@ -128,20 +128,20 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
             return this._obj.createBonding(address, 
                 function(device) {
                     successCallback(new BluetoothDevice(device));
-                }, 
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
 
 		destroyBonding: function(address /*BluetoothAddress*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.destroyBonding(address, 
-                function() {
-                    successCallback && successCallback();
+			return this._obj.destroyBonding(address,
+				successCallback && function() {
+                    successCallback();
                 },
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		},
@@ -150,9 +150,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothDevice', 'T
             return this._obj.registerRFCOMMServiceByUUID(uuid, name, 
                 function(handler) {
                     successCallback(new BluetoothServiceHandler(handler));
-                }, 
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		}

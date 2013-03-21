@@ -21,7 +21,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				get: function() {
 					return this._obj.services;
 				}
-			},
+			}
 		},
 
 		hasService: function(service /*octet*/) {

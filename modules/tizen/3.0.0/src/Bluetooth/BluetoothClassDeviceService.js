@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			AUDIO: 0x0100, //unsigned short
 			TELEPHONY: 0x0200, //unsigned short
 			INFORMATION: 0x0400 //unsigned short
-		},
+		}
 
 	});
 });

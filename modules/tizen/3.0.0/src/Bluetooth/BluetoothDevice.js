@@ -41,16 +41,16 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothSocket', 'T
 				get: function() {
 					return this._obj.uuids;
 				}
-			},
+			}
 		},
 
 		connectToServiceByUUID: function(uuid /*BluetoothUUID*/, successCallback /*BluetoothSocketSuccessCallback*/, errorCallback /*ErrorCallback*/) {
             return this._obj.connectToServiceByUUID(uuid, 
                 function(socket) {
                     successCallback(new BluetoothSocket(socket));
-                }, 
-                function(e) {
-                    errorCallback && errorCallback(new WebAPIError(e));
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
                 }
             );
 		}

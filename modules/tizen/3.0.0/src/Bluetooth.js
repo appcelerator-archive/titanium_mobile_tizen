@@ -26,7 +26,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Ti/Tizen/Bluetooth/BluetoothAdapter'], fun
 				get: function() {
 					return this._obj.deviceService;
 				}
-			},
+			}
 		},
 
 		getDefaultAdapter: function() {

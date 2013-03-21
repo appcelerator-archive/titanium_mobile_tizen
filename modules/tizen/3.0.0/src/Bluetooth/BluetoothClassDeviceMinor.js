@@ -79,7 +79,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			HEALTH_MEDICATION_MONITOR: 0x0b, //octet
 			HEALTH_KNEE_PROSTHESIS: 0x0c, //octet
 			HEALTH_ANKLE_PROSTHESIS: 0x0d //octet
-		},
+		}
 
 	});
 });
