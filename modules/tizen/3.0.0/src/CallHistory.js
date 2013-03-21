@@ -44,7 +44,7 @@ define(['Ti/_/lang', 'CallHistory/CallHistoryEntry', 'WebAPIError', 'Ti/_/Evente
 
 			addChangeListener: function(observer /*CallHistoryChangeCallback*/) {
 				var object = {
-					onadded: observer.onadded && function(entries) {
+					onadded: function(entries) {
 						var result = [],
 							i = 0,
 							entriesCount = entries.length;
@@ -55,7 +55,7 @@ define(['Ti/_/lang', 'CallHistory/CallHistoryEntry', 'WebAPIError', 'Ti/_/Evente
 
 						observer.onadded(result);
 					},
-					onchange: observer.onchange && function(entries) {
+					onchange: function(entries) {
 						var result = [],
 							i = 0,
 							entriesCount = entries.length;

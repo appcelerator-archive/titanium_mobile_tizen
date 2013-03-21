@@ -36,8 +36,8 @@ define(['Ti/_/declare', 'AbstractFilter'], function(declare, AbstractFilter) {
 				set: function(value) {
 					this._obj.matchValue = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
     
