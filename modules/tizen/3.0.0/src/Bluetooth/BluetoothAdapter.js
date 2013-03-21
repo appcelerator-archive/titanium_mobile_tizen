@@ -30,27 +30,27 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothDevice', 'Bluetooth/
                 },
             },
 
-            setName: function(name /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.setName(name,
-                    function() {
-                        successCallback && successCallback();
-                    },
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		setName: function(name /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.setName(name,
+				successCallback && function() {
+                    successCallback();
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
-            setPowered: function(state /*boolean*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.setPowered(state,
-                    function() {
-                        successCallback && successCallback();
-                    }, 
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		setPowered: function(state /*boolean*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.setPowered(state,
+				successCallback && function() {
+                    successCallback();
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
             discoverDevices: function() {
                 var self = this;
@@ -84,16 +84,16 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothDevice', 'Bluetooth/
                 );
             },
 
-            stopDiscovery: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.stopDiscovery(
-                    function() {
-                        successCallback && successCallback();
-                    },
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		stopDiscovery: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.stopDiscovery(
+				successCallback && function() {
+                    successCallback();
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
             getKnownDevices: function(successCallback /*BluetoothDeviceArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
                 return this._obj.getKnownDevices(
@@ -102,57 +102,57 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothDevice', 'Bluetooth/
                             len = devices.length,
                             arr = [];
 
-                        for (; i < len; i++) {
-                            arr.push(new BluetoothDevice(devices[i]));
-                        }
-                        successCallback(arr);
-                    },
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
+                    for (; i < len; i++) {
+                        arr.push(new BluetoothDevice(devices[i]));
                     }
-                );
-            },
+                    successCallback(arr);
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
-            getDevice: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.getDevice(address,
-                    function(device) {
-                        successCallback(new BluetoothDevice(device));
-                    },
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		getDevice: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.getDevice(address,
+                function(device) {
+                    successCallback(new BluetoothDevice(device));
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
-            createBonding: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.createBonding(address, 
-                    function(device) {
-                        successCallback(new BluetoothDevice(device));
-                    }, 
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		createBonding: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
+            return this._obj.createBonding(address, 
+                function(device) {
+                    successCallback(new BluetoothDevice(device));
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
-            destroyBonding: function(address /*BluetoothAddress*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-                return this._obj.destroyBonding(address, 
-                    function() {
-                        successCallback && successCallback();
-                    },
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
-                    }
-                );
-            },
+		destroyBonding: function(address /*BluetoothAddress*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.destroyBonding(address,
+				successCallback && function() {
+                    successCallback();
+                },
+				errorCallback && function(e) {
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+		},
 
             registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, successCallback /*BluetoothServiceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
                 return this._obj.registerRFCOMMServiceByUUID(uuid, name, 
                     function(handler) {
                         successCallback(new BluetoothServiceHandler(handler));
                     }, 
-                    function(e) {
-                        errorCallback && errorCallback(new WebAPIError(e));
+                    errorCallback && function(e) {
+                        errorCallback(new WebAPIError(e));
                     }
                 );
             }

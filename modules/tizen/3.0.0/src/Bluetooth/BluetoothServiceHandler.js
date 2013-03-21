@@ -26,11 +26,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Bluetooth/BluetoothSocket'], function(d
 				get: function() {
 					return this._obj.isConnected;
 				}
-			},
+			}
 		},
 
 		unregister: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.unregister(successCallback, errorCallback);
+			return this._obj.unregister(successCallback,
+				errorCallback && function(e) {
+					errorCallback(new WebAPIError(e));
+				});
 		}
 	});
     

@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'WebAPIError'], function(declare, Evente
 				get: function() {
 					return this._obj.peer;
 				}
-			},
+			}
 		},
 
 		writeData: function(data) {
