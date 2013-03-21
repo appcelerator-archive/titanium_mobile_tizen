@@ -1,5 +1,5 @@
 ---
-name: Tizen.Calendar.Calendar
+name: Tizen.Calendar.CalendarInstance
 summary:  |
     This interface that has methods to manage events or tasks in a calendar. 
     A Calendar object contains a set of events or tasks, depending on the calendar type.

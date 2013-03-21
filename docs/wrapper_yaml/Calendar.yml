@@ -39,7 +39,7 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Array<Tizen.Calendar.Calendar>>
+        type: Callback<Array<Tizen.Calendar.CalendarInstance>>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
         type: Callback<Tizen.WebAPIError>        
@@ -99,7 +99,7 @@ methods:
     summary: Gets the default calendar, which is used for new items.
     returns:
         summary: The default Calendar object.
-        type: Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
         summary:  |
@@ -146,7 +146,7 @@ methods:
     summary: Gets the calendar with the specified identifier and type.
     returns:
         summary: The matching Calendar object.
-        type: Tizen.Calendar.Calendar       
+        type: Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
         summary:  |
