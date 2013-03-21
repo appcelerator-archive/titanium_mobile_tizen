@@ -136,15 +136,15 @@ define(['Ti/_/declare', 'Messaging/Message', 'Messaging/MessageFolder', 'Messagi
 			}
 
 			var wrappedMessagesChangeCallback = {
-				messagesupdated: messagesChangeCallback.messagesupdated && function(items) {
+				messagesupdated: function(items) {
 					messagesChangeCallback.messagesChangeCallback.messagesupdated.call(this, getWrappedItems(items));
 				},
 
-				messagesadded: messagesChangeCallback.messagesadded && function(items) {
+				messagesadded: function(items) {
 					messagesChangeCallback.messagesadded.call(this, getWrappedItems(items));
 				},
 
-				messagesremoved: messagesChangeCallback.messagesremoved && function(items) {
+				messagesremoved: function(items) {
 					messagesChangeCallback.messagesremoved.call(this, getWrappedItems(items));
 				}
 			};
@@ -166,15 +166,15 @@ define(['Ti/_/declare', 'Messaging/Message', 'Messaging/MessageFolder', 'Messagi
 			}
 
 			var wrappedConversationsChangeCallback = {
-				conversationsupdated: conversationsChangeCallback.conversationsupdated && function(items) {
+				conversationsupdated: function(items) {
 					conversationsChangeCallback.conversationsupdated.call(this, getWrappedItems(items));
 				},
 
-				conversationsadded: conversationsChangeCallback.conversationsadded && function(items) {
+				conversationsadded: function(items) {
 					conversationsChangeCallback.conversationsadded.call(this, getWrappedItems(items));
 				},
 
-				conversationsremoved: conversationsChangeCallback.conversationsremoved && function(items) {
+				conversationsremoved: function(items) {
 					conversationsChangeCallback.conversationsremoved.call(this, getWrappedItems(items));
 				}
 			};
@@ -196,20 +196,20 @@ define(['Ti/_/declare', 'Messaging/Message', 'Messaging/MessageFolder', 'Messagi
 			}
 
 			var wrappedFoldersChangeCallback = {
-				foldersupdated: foldersChangeCallback.foldersationsupdated && function(items) {
+				foldersupdated: function(items) {
 					foldersChangeCallback.foldersupdated.call(this, getWrappedItems(items));
 				},
 
-				foldersadded: foldersChangeCallback.foldersadded && function(items) {
+				foldersadded: function(items) {
 					foldersChangeCallback.foldersadded.call(this, getWrappedItems(items));
 				},
 
-				foldersremoved: foldersChangeCallback.foldersremoved && function(items) {
+				foldersremoved: function(items) {
 					foldersChangeCallback.foldersremoved.call(this, getWrappedItems(items));
 				}
 			};
 
-			this._obj.addFoldersChangeListener(foldersChangeCallback && wrappedFoldersChangeCallback, filter ? filter._obj : filter);
+			this._obj.addFoldersChangeListener(wrappedFoldersChangeCallback, filter ? filter._obj : filter);
 		},
 
 		removeChangeListener: function(watchId /*long*/) {
