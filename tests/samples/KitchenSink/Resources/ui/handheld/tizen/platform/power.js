@@ -1,13 +1,14 @@
 function tizen_power() {
+	console.log('Start');
 	var win = Titanium.UI.createWindow(),
 		buttonTurnOffScreen = Ti.UI.createButton({
 			title: 'Turn Off Screen',
 			top: 10
 		}),
-		powerObj = require('Ti/Tizen/Power');
+		Tizen = require('tizen');
 
 	buttonTurnOffScreen.addEventListener('click', function(){
-		powerObj.turnScreenOff();
+		Tizen.Power.turnScreenOff();
 	});
 
 	win.add(buttonTurnOffScreen);
