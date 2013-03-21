@@ -53,76 +53,74 @@ function systemsetting(args) {
 	window.add(switchPanel);
 	window.add(filesPanel);
 	
-	//load images
+	// Load images
 	function loadFiles(type) {
 		var source,
-			isImage = type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || 
-					  type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
-			filter = Tizen.createAttributeFilter({
-				attributeName: 'type',
-				matchFlag: 'EXACTLY',
-				matchValue: isImage ? 'IMAGE': 'AUDIO'
-			});
+			isImage = type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN || type === Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN,
+			filter = new tizen.AttributeFilter('type', 'EXACTLY', isImage ? 'IMAGE' : 'AUDIO');
 
-		// Tizen.Content.find( 
-		// 	//Success
-		// 	function(items) {			
-		// 		var tableData = [],
-		// 			i = 0,
-		// 			length = items.length;
+		// Tizen Content module is not supported by Tizen module, but it necessary for getting files to test SystemSetting's functions
+		tizen.content.find(
+			// SuccessCallback
+			function(items) {			
+				var tableData = [],
+					i = 0,
+					length = items.length;
 				
-		// 		(length == 0) && Titanium.UI.createAlertDialog({
-		// 							title: 'Info',
-		// 							message: 'Content is empty. Add some files first.'
-		// 						}).show();
+				(length == 0) && Titanium.UI.createAlertDialog({
+									title: 'Info',
+									message: 'Content is empty. Add some files first.'
+								}).show();
 
-		// 		Ti.API.info('loadImages => success');
+				Ti.API.info('loadImages => success');
 
-		// 		for (; i < length; i++) {                   
-		// 			var item = items[i],
-		// 				row = Ti.UI.createTableViewRow({
-		// 					title: items[i].contentURI,
-		// 					hasChild: false,
-		// 					itemIdOwn: i
-		// 				});
+				for (; i < length; i++) {
+					var item = items[i],
+						row = Ti.UI.createTableViewRow({
+							title: items[i].contentURI,
+							hasChild: false,
+							itemIdOwn: i
+						});
 					
-		// 			tableData.push(row);
-		// 		}
+					tableData.push(row);
+				}
 				
-		// 		// Clear listeners and rows
-		// 		filesPanel.removeEventListener('click');
-		// 		filesPanel.setData([]);
+				// Clear listeners and rows
+				filesPanel.removeEventListener('click');
+				filesPanel.setData([]);
 				
-		// 		// Set new data and listener
-		// 		filesPanel.setData(tableData);
-		// 		filesPanel.addEventListener('click', function(e) {
-		// 			Ti.API.info('click' + e.rowData.title);
-		// 			// SetProperty
-		// 			Tizen.SystemSetting.setProperty( settingType, e.rowData.title, 
-		// 				// SuccessCallback
-		// 				function() {
-		// 					Titanium.UI.createAlertDialog({
-		// 						title: 'System setting',
-		// 						message: settingType + ' has been changed.'
-		// 					}).show();
-		// 				},
-		// 				// ErrorCallback
-		// 				function(e) {
-		// 					Titanium.UI.createAlertDialog({
-		// 						title:'System setting',
-		// 						message:e.message
-		// 					}).show();
-		// 				} 
-		// 			);
-		// 		});
-		// 	},
-		// 	//Error
-		// 	function onError(e) {
-		// 		Ti.API.error(e.message);
-		// 	},
-		// 	null,
-		// 	filter
-		// );
+				// Set new data and listener
+				filesPanel.setData(tableData);
+				filesPanel.addEventListener('click', function(e) {
+					Ti.API.info('click' + e.rowData.title);
+					// SetProperty
+					Tizen.SystemSetting.setProperty(
+						settingType,
+						e.rowData.title, 
+						// SuccessCallback
+						function() {
+							Titanium.UI.createAlertDialog({
+								title: 'System setting',
+								message: settingType + ' has been changed.'
+							}).show();
+						},
+						// ErrorCallback
+						function(e) {
+							Titanium.UI.createAlertDialog({
+								title:'System setting',
+								message:e.message
+							}).show();
+						} 
+					);
+				});
+			},
+			// ErrorCallback
+			function onError(e) {
+				Ti.API.error(e.message);
+			},
+			null,
+			filter
+		);
 	};
 	
 	loadFiles(settingType);
