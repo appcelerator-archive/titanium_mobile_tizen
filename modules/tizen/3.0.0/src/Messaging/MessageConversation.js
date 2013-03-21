@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare){
-	return declare('Ti.Tizen.Messaging.MessageConversation', null, {
+define(['Ti/_/declare'], function(declare) {
+	var messageConversation = declare(null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -69,8 +69,11 @@ define(['Ti/_/declare'], function(declare){
 				get: function() {
 					return this._obj.lastMessageId;
 				}
-			},
-		},
-
+			}
+		}
 	});
+
+	messageConversation.prototype.declaredClass = 'Tizen.Messaging.MessageConversation';
+
+	return messageConversation;
 });

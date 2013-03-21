@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'SystemInfo/SystemInfoProperty'], function(declare, Syst
 		}
 	});
 
-	cpu.prototype.decloaredClass = 'Tizen.SystemInfo.SystemInfoCpu';
+	cpu.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoCpu';
 
 	return cpu;
 });

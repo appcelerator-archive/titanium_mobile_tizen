@@ -6,6 +6,7 @@ function emailFolders(args) {
 			rowHeight: 35
 		}),
 		serviceType = 'messaging.email',
+		Tizen = require('tizen'),
 		emailService;
 
 	// Initialize email service
@@ -29,7 +30,7 @@ function emailFolders(args) {
 			callBack && callBack();
 		}
 
-		Ti.Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
+		Tizen.Messaging.getMessageServices(serviceType, servicesListCB, errorCB);
 	}
 
 	function errorCB(error) {
@@ -95,7 +96,7 @@ function emailFolders(args) {
 		try {
 			Ti.API.info('Start to search list of folders from email account.');
 
-			var attributeFilter = Ti.Tizen.createAttributeFilter({
+			var attributeFilter = Tizen.createAttributeFilter({
 				attributeName: 'serviceId',
 				matchFlag: 'EXACTLY',
 				matchValue: emailService.id

@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare){
-	return declare('Ti.Tizen.Messaging.MessageFolder', null, {
+define(['Ti/_/declare'], function(declare) {
+	var messageFolder = declare(null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -34,7 +34,7 @@ define(['Ti/_/declare'], function(declare){
 				get: function() {
 					return this._obj.type;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -53,8 +53,11 @@ define(['Ti/_/declare'], function(declare){
 				set: function(value) {
 					this._obj.synchronizable = value;
 				}
-			},
-		},
-
+			}
+		}
 	});
+
+	messageFolder.prototype.declaredClass = 'Tizen.Messaging.MessageFolder';
+
+	return messageFolder;
 });

@@ -1,5 +1,7 @@
-define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/MessageFolder', 'Ti/Tizen/Messaging/MessageConversation'], function(declare, Message, MessageFolder, MessageConversation) {
-	return declare('Ti.Tizen.Messaging.MessageStorage', null, {
+define(['Ti/_/declare', 'Messaging/Message', 'Messaging/MessageFolder', 'Messaging/MessageConversation'], 
+		function(declare, Message, MessageFolder, MessageConversation) {
+
+	var messageStorage = declare(null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -214,4 +216,8 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/Message', 'Ti/Tizen/Messaging/Messag
 			this._obj.removeChangeListener(watchId);
 		}
 	});
+
+	messageStorage.prototype.declareClass = 'Tizen.Messaging.MessageStorage';
+
+	return messageStorage;
 });

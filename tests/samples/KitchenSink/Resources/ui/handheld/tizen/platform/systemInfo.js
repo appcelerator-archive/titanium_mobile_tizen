@@ -42,13 +42,10 @@ function tizenSystemInfo(title) {
 		if (e && e.rowData) {
 			var pName = e.rowData.propertyName;
 			if (pName) {
-				console.log('Click on table row');
 				getSystemProperty(pName, e.rowData.propertyCallback, function(er) {
-					alert('Error');
 					showDetailsDialog(pName, '<b>API error:</b><br/>' + er.message);
 				})
 			} else {
-				console.log('Click on table row 2');
 				e.rowData.clickCallback && e.rowData.clickCallback(e);
 			}
 		}
