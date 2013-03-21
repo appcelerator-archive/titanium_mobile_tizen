@@ -16,19 +16,19 @@ define(['Ti/_/declare', 'WebAPIError', 'Ti/_/Evented'], function(declare, WebAPI
 			var self = this;
 
 			return {
-				onprogress: downloadCallback.onDataStream && function(id, receivedSize, totalSize) {
+				onprogress: function(id, receivedSize, totalSize) {
 					downloadCallback.onDataStream(self, receivedSize, totalSize);
 				},
-				onpaused: downloadCallback.onPause && function(id) {
+				onpaused: function(id) {
 					downloadCallback.onPause(self);
 				},
-				oncanceled: downloadCallback.onCancel && function(id) {
+				oncanceled: function(id) {
 					downloadCallback.onCancel(self);
 				},
-				oncompleted: downloadCallback.onLoad && function(id, fullPath) {
+				oncompleted: function(id, fullPath) {
 					downloadCallback.onLoad(self, fullPath);
 				},
-				onfailed: downloadCallback.onError && function(id, error) {
+				onfailed: function(id, error) {
 					downloadCallback.onError(self, new WebAPIError(error));
 				}
 			}
@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'WebAPIError', 'Ti/_/Evented'], function(declare, WebAPI
 		},
 
 		setListener: function(downloadCallback /*DownloadCallback*/) {
-			tizen.download.setListener(this.id, downloadCallback && this._getDownloadCallback(downloadCallback));
+			tizen.download.setListener(this.id, this._getDownloadCallback(downloadCallback));
 		},
 
 		abort: function() {
