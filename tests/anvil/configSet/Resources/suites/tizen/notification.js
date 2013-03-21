@@ -103,6 +103,7 @@ module.exports = new function() {
 		valueOf(testRun, function() {      
 			notificationFrom = Tizen.Notification.getNotification(notId);
 		}).shouldNotThrowException();
+		valueOf(testRun, notificationFrom.toString()).shouldBe('[object TizenNotificationStatusNotification]');
 		// Compare property of gotten notification with coresponding property of posted notification
 		valueOf(testRun, notificationFrom.content).shouldBe(notificationDict.content);
 		valueOf(testRun, notificationFrom.statusType).shouldBe(notification.statusType);

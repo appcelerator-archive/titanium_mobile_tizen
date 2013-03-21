@@ -174,6 +174,7 @@ module.exports = new function() {
 				}
 			});
 		}).shouldNotThrowException();
+		valueOf(testRun, message.toString()).shouldBe('[object TizenMessagingMessage]');
 		valueOf(testRun, emailService).shouldBeObject();
 		valueOf(testRun, emailService).shouldNotBeNull();		        
 		valueOf(testRun, message).shouldBeObject();

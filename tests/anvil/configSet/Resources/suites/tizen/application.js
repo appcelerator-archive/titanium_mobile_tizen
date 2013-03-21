@@ -24,8 +24,7 @@ module.exports = new function() {
 		{name: 'launch_not_exist'},
 		{name: 'launchAppControl'},
 		{name: 'findAppControl'},
-		{name: 'calc_launch'},
-		{name: 'getRequestedAppControl'}
+		{name: 'calc_launch'}
 		// These tests impact to another and can not be launched with others
 		// {name: 'harness_hide'},
 		// {name: 'harness_hide_tiapp'}
@@ -342,19 +341,6 @@ module.exports = new function() {
 		valueOf(testRun, function() {
 			Tizen.Apps.launch(appId);
 		}).shouldNotThrowException();
-		
-		finish(testRun);
-	}
-
-	this.getRequestedAppControl = function(testRun) {
-		var currApp,
-			reqAppControl;
-
-		currApp = Tizen.Apps.getCurrentApplication();
-		valueOf(testRun, function(){
-			reqAppControl = currApp.getRequestedAppControl()
-		}).shouldNotThrowException();
-		valueOf(testRun, reqAppControl.toString()).shouldBe('[object TizenAppsRequestedApplicationControl]');
 
 		finish(testRun);
 	}
