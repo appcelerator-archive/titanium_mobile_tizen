@@ -53,7 +53,7 @@ function listeners() {
 
 			try {
 				// Register a call history callback
-				var handle = Tizen.Callhistory.addChangeListener(onListenerCB);
+				var handle = Tizen.CallHistory.addChangeListener(onListenerCB);
 
 				addListenerBtn.enabled = false;
 
@@ -63,7 +63,7 @@ function listeners() {
 				removeListenerBtn.addEventListener('click', function(e) {
 					try {
 						// Unregister a previously registered listener
-						Tizen.Callhistory.removeChangeListener(handle);
+						Tizen.CallHistory.removeChangeListener(handle);
 						win.remove(removeListenerBtn);
 
 						alertDialog.message = 'Listener removed';
