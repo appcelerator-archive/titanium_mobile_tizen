@@ -39,7 +39,7 @@ module.exports = new function() {
 
 		Ti.API.info(alarm);
 
-		valueOf(testRun, alarm.toString() === '[object TizenAlarmAlarmRelative]').shouldBeTrue();
+		valueOf(testRun, alarm.toString()).shouldBe('[object TizenAlarmAlarmRelative]');
 
 		Tizen.Alarm.add(alarm, 'http://tizen.org/alarm-clock');
 
