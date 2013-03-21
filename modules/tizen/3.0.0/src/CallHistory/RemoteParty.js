@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	var RemoteParty = declare(null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	var RemoteParty = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -14,12 +14,11 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.personId;
 				}
-			},
+			}
 		}
-
 	});
 
-	RemoteParty.prototype.declaredClass = 'Tizen.Callhistory.RemoteParty';
-	return RemoteParty;
+	RemoteParty.prototype.declaredClass = 'Tizen.CallHistory.RemoteParty';
 
+	return RemoteParty;
 });
