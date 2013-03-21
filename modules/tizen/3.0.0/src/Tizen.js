@@ -1,5 +1,5 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Download', 'Alarm', 'Callhistory', 'Notification', 'Apps', 'SystemSetting', 'Bluetooth'], 
-		function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download, Alarm, Callhistory, Notification, Apps, SystemSetting, Bluetooth) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Download', 'Alarm', 'Callhistory', 'Notification', 'Apps', 'SystemSetting', 'Bluetooth', 'SystemInfo'], 
+		function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download, Alarm, Callhistory, Notification, Apps, SystemSetting, Bluetooth, SystemInfo) {
    
 	var Tizen = lang.mixProps(require.mix({}, Evented), {
 		constants: {
@@ -21,7 +21,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 
 				Apps: Apps,
 				Download: Download,
 				SystemSetting: SystemSetting,
-                Bluetooth: Bluetooth
+                Bluetooth: Bluetooth,
+				SystemInfo: SystemInfo
 		},
 
 		createAttributeFilter: function(args) {
