@@ -1,28 +1,29 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 'Power', 'Calendar', 'Download', 'Alarm', 'Callhistory', 'Notification', 'Apps', 'SystemSetting', 'Bluetooth', 'SystemInfo'], 
-		function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download, Alarm, Callhistory, Notification, Apps, SystemSetting, Bluetooth, SystemInfo) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'AttributeFilter', 'AttributeRangeFilter', 'CompositeFilter', 'SortMode', 'SimpleCoordinates', 
+		'Power', 'Calendar', 'Download', 'Alarm', 'CallHistory', 'Notification', 'Apps', 'SystemSetting', 'Bluetooth'], 
+		function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, 
+				Power, Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth) {
    
 	var Tizen = lang.mixProps(require.mix({}, Evented), {
 		constants: {
-				FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
-				FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
-				FILTER_MATCH_FLAG_CONTAINS: 'CONTAINS',
-				FILTER_MATCH_FLAG_STARTSWITH: 'STARTSWITH',
-				FILTER_MATCH_FLAG_ENDSWITH: 'ENDSWITH',
-				FILTER_MATCH_FLAG_EXISTS: 'EXISTS',
-				SORT_MODE_ORDER_ASC: 'ASC',
-				SORT_MODE_ORDER_DESC: 'DESC',
-				COMPOSITE_FILTER_TYPE_UNION: 'UNION',
-				COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
-				Power: Power,
-				Calendar: Calendar,
-                Alarm: Alarm,
-                Callhistory: Callhistory,
-                Notification: Notification,
-				Apps: Apps,
-				Download: Download,
-				SystemSetting: SystemSetting,
-                Bluetooth: Bluetooth,
-				SystemInfo: SystemInfo
+			FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
+			FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
+			FILTER_MATCH_FLAG_CONTAINS: 'CONTAINS',
+			FILTER_MATCH_FLAG_STARTSWITH: 'STARTSWITH',
+			FILTER_MATCH_FLAG_ENDSWITH: 'ENDSWITH',
+			FILTER_MATCH_FLAG_EXISTS: 'EXISTS',
+			SORT_MODE_ORDER_ASC: 'ASC',
+			SORT_MODE_ORDER_DESC: 'DESC',
+			COMPOSITE_FILTER_TYPE_UNION: 'UNION',
+			COMPOSITE_FILTER_TYPE_INTERSECTION: 'INTERSECTION',
+			Power: Power,
+			Calendar: Calendar,
+			Alarm: Alarm,
+			CallHistory: CallHistory,
+			Notification: Notification,
+			Apps: Apps,
+			Download: Download,
+			SystemSetting: SystemSetting,
+			Bluetooth: Bluetooth
 		},
 
 		createAttributeFilter: function(args) {

@@ -18,7 +18,7 @@ define(['Ti/_/declare', 'Notification/Notification'], function(declare, Notifica
 				get: function() {
 					return this._obj.statusType;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -69,8 +69,8 @@ define(['Ti/_/declare', 'Notification/Notification'], function(declare, Notifica
 				set: function(value) {
 					this._obj.progressValue = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 

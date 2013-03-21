@@ -57,10 +57,7 @@ define(['Ti/_/declare', 'Calendar/CalendarItem', '_/calendarHelper'], function(d
 		},
 
 		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			var startDateTizen = new tizen.TZDate(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate(), startDate.getUTCHours(), startDate.getUTCMinutes()),
-				endDateTizen = new tizen.TZDate(endDate.getUTCFullYear(), endDate.getMonth(), endDate.getUTCDate(), endDate.getHours(), endDate.getUTCMinutes());
-
-			return this._obj.expandRecurrence(startDateTizen, endDateTizen, successCallback, errorCallback);
+			return this._obj.expandRecurrence(calendarHelper.createTZDate(startDate), calendarHelper.createTZDate(endDate), successCallback, errorCallback);
 		}
 	});
 

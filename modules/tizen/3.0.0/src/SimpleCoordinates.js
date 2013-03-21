@@ -24,8 +24,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				set: function(value) {
 					this._obj.longitude = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
     

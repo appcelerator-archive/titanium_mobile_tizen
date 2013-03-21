@@ -2,7 +2,7 @@ function tizen(_args) {
 	var self = Titanium.UI.createWindow(),
 		data = [
 			{title: 'Contacts', hasChild: true, test: 'ui/handheld/tizen/platform/contacts'},
-			{title: 'Call', hasChild: true, test: 'ui/handheld/tizen/platform/call/call'},
+			{title: 'CallHistory', hasChild: true, test: 'ui/handheld/tizen/platform/call_history/call'},
 			{title: 'Application', hasChild: true, test: 'ui/handheld/tizen/platform/application/application'},
 			{title: 'Download demo', hasChild: true, test: 'ui/handheld/tizen/platform/download'},
             {title: 'System setting', hasChild: true, test: 'ui/handheld/tizen/platform/systemsetting'},
@@ -19,7 +19,7 @@ function tizen(_args) {
 			data: data
 		});
 
-	tableview.addEventListener('click', function(e){
+	tableview.addEventListener('click', function(e) {
 		if (e.rowData.test) {
 			var ExampleWindow = require(e.rowData.test),
 				win = new ExampleWindow({title: e.rowData.title, containingTab: _args.containingTab});
