@@ -22,8 +22,8 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 			tizen.systeminfo.getPropertyValue(property, 
 				function(object){
 					getPropertySuccessCallBack(object, successCallback)
-				}, 
-				function(error) {
+				},
+				errorCallback && function(error) {
 					errorCallback(new WebAPIError(error));
 				});
 		},
@@ -47,7 +47,7 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 
 	function onSystemInfoPropertySuccessCallback(object, onsuccess) { 
 		onsuccess(new SystemInfoProperty(object));
-	};
+	}
 
 	function getPropertySuccessCallBack(object, successCallback) {
 		successCallback(wrap(object));
@@ -66,12 +66,7 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 		if (object.toString() === '[object siminfo]') {
 			return new SystemInfoSIM(object);
 		}
-	};
-
-	console.log('SystemInfo');
-    for(k in SystemInfo) {
-        console.log(k);
-    }
+	}
 
 	return SystemInfo;
 });

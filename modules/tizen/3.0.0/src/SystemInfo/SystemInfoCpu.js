@@ -12,7 +12,7 @@ define(['Ti/_/declare', 'SystemInfo/SystemInfoProperty'], function(declare, Syst
 				get: function() {
 					return this._obj.load;
 				}
-			},
+			}
 		}
 	});
 

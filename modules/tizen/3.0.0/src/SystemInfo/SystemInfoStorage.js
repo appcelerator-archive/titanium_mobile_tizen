@@ -16,8 +16,8 @@ define(['Ti/_/declare', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoS
 		},
 
 		constants: {
-			units: {},
-		},
+			units: {}
+		}
 
 	});
 
