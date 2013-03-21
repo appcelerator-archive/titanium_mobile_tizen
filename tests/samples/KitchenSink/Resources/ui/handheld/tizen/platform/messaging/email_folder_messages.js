@@ -1,5 +1,6 @@
 function emailFolderMessages(args) {
-	var folderName = args.folderName,
+	var Tizen = require('tizen'),
+		folderName = args.folderName,
 		emailService = args.emailService,
 		folderId = args.folderId.toString(),
 		win = Ti.UI.createWindow({
@@ -117,7 +118,7 @@ function emailFolderMessages(args) {
 	try {
 		Ti.API.info('Start to find messages in ' + folderName + ' folder.');
 
-		var attributeFilter = Ti.Tizen.createAttributeFilter({
+		var attributeFilter = Tizen.createAttributeFilter({
 			attributeName: 'folderId', 
 			matchFlag: 'EXACTLY',
 			matchValue: folderId

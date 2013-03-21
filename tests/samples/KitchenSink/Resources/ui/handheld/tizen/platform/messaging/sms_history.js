@@ -2,6 +2,7 @@ function smsHistory(args) {
 	var win = Ti.UI.createWindow({
 			title: 'sms history'
 		}),
+		Tizen = require('tizen'),
 		serviceType = 'messaging.sms';
 
 	function serviceListCB(services) {
@@ -82,7 +83,7 @@ function smsHistory(args) {
 
 		if (services.length > 0) {
 			var smsService = services[0],
-				attributeFilter = Ti.Tizen.createAttributeFilter({
+				attributeFilter = Tizen.createAttributeFilter({
 					attributeName: 'type',
 					matchFlag: 'EXACTLY',
 					matchValue: serviceType
@@ -107,7 +108,7 @@ function smsHistory(args) {
 		}).show();
 	}
 
-	Ti.Tizen.Messaging.getMessageServices(serviceType, serviceListCB, errorCB);
+	Tizen.Messaging.getMessageServices(serviceType, serviceListCB, errorCB);
 
 	return win;
 }
