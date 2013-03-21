@@ -1,41 +1,16 @@
 function tizenSystemInfo(title) {
 	var messageWin = require('ui/handheld/tizen/tizenToast'),
 	    alertWin = require('ui/handheld/tizen/tizenAlert'),
+		Tizen = require('tizen'),
 		gBatteryListener;
 
 
 	function getSystemProperty(property, onSuccess, onError) {
 		try {
-			Ti.Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
+			Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
 		} catch (e) {
-			onError(e)
-		}
-	}
-
-	function batteryMonitoringClicked(e) {
-		if  (e && e.rowData) {
-			if (batteryMonitoring.isOn)	{
-				try {
-					Ti.Tizen.SystemInfo.removePropertyValueChangeListener(gBatteryListener);
-					e.rowData.title = batteryMonitoring.offCaption;
-					messageWin.showToast(batteryMonitoring.offCaption, 1500);
-					batteryMonitoring.isOn = false;
-				} catch(e) {
-					messageWin.showToast('Exception on battery monitoring turning off! \n' + e.message, 2500);
-				}
-			}else{
-				try {
-					gBatteryListener = Ti.Tizen.SystemInfo.addPropertyValueChangeListener(Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY,
-						function(power) { messageWin.showToast('Battery level: ' + power.level, 1500); },
-						function(e) { messageWin.showToast('Battery monitoring error! \n' + e.message, 2500); });
-
-					e.rowData.title = batteryMonitoring.onCaption;
-					messageWin.showToast(batteryMonitoring.onCaption, 1500);
-					batteryMonitoring.isOn = true;
-				} catch(e) {
-					messageWin.showToast('Exception on battery monitoring turning on! \n' + e.message,2500);
-				}
-			}
+			alert('Exception while getting proprety');
+			alert(e.type + ': ' + e.message);
 		}
 	}
 
@@ -44,18 +19,12 @@ function tizenSystemInfo(title) {
 	}
 
 	var win = Ti.UI.createWindow({ backgroundColor: '#fff' }),
-		batteryMonitoring = { isOn: false, onCaption: 'Battery monitoring is on', offCaption: 'Battery monitoring is off' },
 		data = [
-			{ title: 'Storage information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorageSuccess },
-			{ title: 'Power state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, propertyCallback: onPowerSuccess },
-			{ title: batteryMonitoring.offCaption, clickCallback: batteryMonitoringClicked },
-			{ title: 'Cpu load', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfoSuccess },
-			{ title: 'Display information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DISPLAY, propertyCallback: onDisplaySuccess },
-			{ title: 'Device information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BUILD, propertyCallback: onDeviceSuccess },
-			{ title: 'Current network type', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_NETWORK, propertyCallback: onNetworkSuccess },
-			{ title: 'Wifi network state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK, propertyCallback: onWifiSuccess },
-			{ title: 'Cellular network state', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCellSuccess },
-			{ title: 'SIM information', propertyName: Ti.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM, propertyCallback: onSimSuccess }
+			{ title: 'Storage information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorageSuccess },
+			{ title: 'Cpu load', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfoSuccess },
+			{ title: 'Wifi network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK, propertyCallback: onWifiSuccess },
+			{ title: 'Cellular network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCellSuccess },
+			{ title: 'SIM information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM, propertyCallback: onSimSuccess }
 		],
 		i = 0,
 		dataLength = data.length,
@@ -73,10 +42,13 @@ function tizenSystemInfo(title) {
 		if (e && e.rowData) {
 			var pName = e.rowData.propertyName;
 			if (pName) {
+				console.log('Click on table row');
 				getSystemProperty(pName, e.rowData.propertyCallback, function(er) {
+					alert('Error');
 					showDetailsDialog(pName, '<b>API error:</b><br/>' + er.message);
 				})
 			} else {
+				console.log('Click on table row 2');
 				e.rowData.clickCallback && e.rowData.clickCallback(e);
 			}
 		}
@@ -85,13 +57,6 @@ function tizenSystemInfo(title) {
 	win.add(tableview);
 	return win;
 
-	function onPowerSuccess(power) {
-		showDetailsDialog('Power', formatSubLines([
-			'Current level: ' + power.level,
-			'Charging: ' + (power.isCharging ? 'Yes' : 'No')
-		]));
-	}
-
 	function onCpuInfoSuccess(cpu) {
 		showDetailsDialog('Cpu', 'Load: ' + cpu.load);
 	}
@@ -99,7 +64,7 @@ function tizenSystemInfo(title) {
 	function onStorageSuccess(storages) {
 		var storagesInfo = '',
 			i = 0,
-			units = storages.units,		
+			units = storages.units,
 			storagesCount = units.length;
 
 		for (; i < storagesCount; i++) {
@@ -115,31 +80,13 @@ function tizenSystemInfo(title) {
 		showDetailsDialog('Storage', storagesInfo);
 	}
 
-	function onDisplaySuccess(display) {
-		var displayInfo = formatHeader('Resolution') +
-			formatSubLines([ 'Width: ' + display.resolutionWidth, 'Height: ' + display.resolutionHeight ]) +
-			formatHeader('Dots per inch (DPI)') +
-			formatSubLines([ 'Horizontal: ' + display.dotsPerInchWidth, 'Vertical: ' + display.dotsPerInchHeight ]) +
-			formatHeader('Physical size') +
-			formatSubLines([ 'Width: ' + display.physicalWidth, 'Height: ' + display.physicalHeight ]) +
-			formatHeader('Brightness') +
-			formatSubLines([ 'Current brightness: ' + display.brightness ]);
-
-		showDetailsDialog('Display', displayInfo);
-	}
-
-	function onDeviceSuccess(device) {
-		showDetailsDialog('Device', formatSubLines([
-			'Model:&nbsp;' + device.model
-		]));
-	}
-
-	function onNetworkSuccess(network) {
-		var networkTypes = [ 'NONE', '2G', '2.5G','3G', '4G', 'WIFI', 'ETHERNET', 'UNKNOWN' ];
-		showDetailsDialog('Network', formatSubLines([ 'Current data network type: ' + network.networkType]));
-	}
-
 	function onWifiSuccess(wifi) {
+		alert('WIFI callback');
+		alert('wifi = ' + wifi);
+		alert('Status: ' + wifi.status);
+		alert('SSID: ' + wifi.ssid);
+		alert('IP address: ' + wifi.ipAddress);
+		alert('Signal strength: ' + wifi.signalStrength);
 		showDetailsDialog('Wifi network', formatSubLines([
 			'Status: ' + wifi.status,
 			'SSID: ' + wifi.ssid,
