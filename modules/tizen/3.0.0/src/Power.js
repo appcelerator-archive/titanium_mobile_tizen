@@ -1,6 +1,5 @@
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
-    var Power = lang.mixProps(require.mix({}, Evented), {
-
+	var Power = lang.mixProps(require.mix({}, Evented), {
 		constants: {
 			POWER_RESOURCE_SCREEN: 'SCREEN',
 			POWER_RESOURCE_CPU: 'CPU',
@@ -11,7 +10,7 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 			POWER_CPU_STATE_CPU_AWAKE: 'CPU_AWAKE'
 		},
 
-        properties: {
+		properties: {
 			screenBrightness: {
 				get: function() {
 					return tizen.power.getScreenBrightness();
@@ -43,17 +42,13 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		}
   
 	}, true);
-    
-    
+	
+	
 	function onTizenEventScreenStateChange(previousState, changedState) {
 		Power.fireEvent('screenStateChanged', {previousState: previousState, changedState: changedState});
 	}
+
 	tizen.power.setScreenStateChangeListener(onTizenEventScreenStateChange);
-    
-    console.log('POWER');
-    for(k in Power) {
-        console.log(k);
-    }
-    
-	return Power;	
+	
+	return Power;
 });
