@@ -20,7 +20,7 @@ module.exports = new function() {
 		Tizen = require('tizen');
 	}
 
-	this.name = 'call';
+	this.name = 'call_history';
 	this.tests = [
 		{name: 'call_history'},
 		{name: 'remove'},
@@ -57,7 +57,7 @@ module.exports = new function() {
 				]
 			});
 
-		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
+		valueOf(testRun, Tizen.CallHistory).shouldBeObject();
 		valueOf(testRun, tFilter).shouldBeObject();
 		valueOf(testRun, sortMode).shouldBeObject();
 		valueOf(testRun, numberFilter).shouldBeObject();
@@ -77,7 +77,7 @@ module.exports = new function() {
 				valueOf(testRun, results[i].startTime).shouldBeObject();
 				valueOf(testRun, results[i].direction).shouldBeString();
 				valueOf(testRun, results[i].type).shouldBeString();
-				valueOf(testRun, results[i].toString()).shouldBe('[object TizenCallhistoryCallHistoryEntry]');
+				valueOf(testRun, results[i].toString()).shouldBe('[object TizenCallHistoryCallHistoryEntry]');
 			}
 		}
 
@@ -86,7 +86,7 @@ module.exports = new function() {
 		}
 
 		// Find call history
-		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError, tFilter, sortMode); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.CallHistory.find(onSuccess, onError, tFilter, sortMode); }).shouldNotThrowException();
 
 		setTimeout(
 			function() {
@@ -104,7 +104,7 @@ module.exports = new function() {
 
 			if (results.length > 0) {
 				// Delete call from call history
-				valueOf(testRun, function() { Tizen.Callhistory.remove(results[0]); }).shouldNotThrowException();
+				valueOf(testRun, function() { Tizen.CallHistory.remove(results[0]); }).shouldNotThrowException();
 			} else {
 				reportError(testRun, 'This test requires at least one call in the phone\'s call history. Please make several calls and restart the test.');
 				finish(testRun);
@@ -115,10 +115,10 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
 
-		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
+		valueOf(testRun, Tizen.CallHistory).shouldBeObject();
 
 		// Search for call history
-		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.CallHistory.find(onSuccess, onError); }).shouldNotThrowException();
 
 		setTimeout(
 			function() {
@@ -133,7 +133,7 @@ module.exports = new function() {
 		function onSuccess(results) {
 			valueOf(testRun, results).shouldBeObject();
 			// delete found history
-			valueOf(testRun, function() { Tizen.Callhistory.removeBatch(results, null, onError); }).shouldNotThrowException();
+			valueOf(testRun, function() { Tizen.CallHistory.removeBatch(results, null, onError); }).shouldNotThrowException();
 		}
 
 		function onError(error) {
@@ -142,10 +142,10 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
+		valueOf(testRun, Tizen.CallHistory).shouldBeObject();
 
 		// Search for call history
-		valueOf(testRun, function() { Tizen.Callhistory.find(onSuccess, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.CallHistory.find(onSuccess, onError); }).shouldNotThrowException();
 
 		// Give some time for execution
 		setTimeout(
@@ -162,10 +162,10 @@ module.exports = new function() {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
 
-		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
+		valueOf(testRun, Tizen.CallHistory).shouldBeObject();
 
 		// Delete all call history
-		valueOf(testRun, function() { Tizen.Callhistory.removeAll(null, onError); }).shouldNotThrowException();
+		valueOf(testRun, function() { Tizen.CallHistory.removeAll(null, onError); }).shouldNotThrowException();
 
 		// Give some time for execution
 		setTimeout(
@@ -188,16 +188,16 @@ module.exports = new function() {
 				}
 			};
 
-		valueOf(testRun, Tizen.Callhistory).shouldBeObject();
+		valueOf(testRun, Tizen.CallHistory).shouldBeObject();
 
 		try {
 			// Add new listener
-			valueOf(testRun, function() { handle = Tizen.Callhistory.addChangeListener(onListenerCB); }).shouldNotThrowException();
+			valueOf(testRun, function() { handle = Tizen.CallHistory.addChangeListener(onListenerCB); }).shouldNotThrowException();
 			valueOf(testRun, handle).shouldNotBeNull();
 			valueOf(testRun, handle).shouldBeNumber();
 
 			// Remove added listener
-			valueOf(testRun, function() { Tizen.Callhistory.removeChangeListener(handle); }).shouldNotThrowException();
+			valueOf(testRun, function() { Tizen.CallHistory.removeChangeListener(handle); }).shouldNotThrowException();
 		} catch (error) {
 			reportError(testRun, 'The following error occurred: ' +  error.message);
 		}
