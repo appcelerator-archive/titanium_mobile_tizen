@@ -109,7 +109,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/calendarHelper'], function(declare, E
 		}
 	});
 
-	calendarRecurrenceRule.prototype.declareClass = 'Tizen.Calendar.CalendarRecurrenceRule';
+	calendarRecurrenceRule.prototype.declaredClass = 'Tizen.Calendar.CalendarRecurrenceRule';
 
 	return calendarRecurrenceRule;
 });
