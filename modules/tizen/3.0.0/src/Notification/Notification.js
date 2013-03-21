@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	var Notification = declare('Tizen.Notification.Notification', Evented, {
+	var Notification = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object Notification]') {
 				this._obj = args;

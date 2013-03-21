@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Callhistory/RemoteParty'], function(declare, RemoteParty) {
-	var CallHistoryEntry = declare('Tizen.Callhistory.CallHistoryEntry', null, {
+	var CallHistoryEntry = declare(null, {
 		constructor: function(args) {
 			this._obj = args;
 		},
