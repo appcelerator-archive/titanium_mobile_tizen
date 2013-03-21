@@ -1,9 +1,8 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.NFC.NFCPeer', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'NFC/NDEFMessage', 'WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
+	var peer = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object NFCPeer]') {
 				this._obj = args;
-			} else {
 			}
 		},
 
@@ -12,19 +11,32 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.isConnected;
 				}
-			},
+			}
 		},
 
-		setReceiveNDEFListener: function(successCallback /*NDEFMessageReadCallback*/) {
-			return this._obj.setReceiveNDEFListener(successCallback);
+		setReceiveNDEFListener: function(readCallback) {
+        	return this._obj.setReceiveNDEFListener(function(ndefMessage) {
+                readCallback( new NDEFMessage(ndefMessage) );
+            });
 		},
 
 		unsetReceiveNDEFListener: function() {
 			return this._obj.unsetReceiveNDEFListener();
 		},
 
-		sendNDEF: function(ndefMessage /*NDEFMessage*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.sendNDEF(ndefMessage._obj, successCallback, errorCallback);
+		sendNDEF: function(ndefMessage, successCallback, errorCallback) {
+			return this._obj.sendNDEF(ndefMessage._obj,
+                successCallback && function() { 
+                    successCallback();
+                },
+                errorCallback && function(e) { 
+                    errorCallback(new WebAPIError(e));
+                }
+            );
 		}
 	});
+    
+    peer.prototype.declaredClass = 'Tizen.NFC.NFCPeer';
+     
+    return peer;
 });

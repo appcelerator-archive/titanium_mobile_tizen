@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.NFC.NFCAdapter', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'NFC/NFCTag', 'NFC/NFCPeer', 'WebAPIError'], function(declare, Evented, NFCTag, NFCPeer, WebAPIError) {
+	var adapter = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object NFCAdapter]') {
 				this._obj = args;
@@ -12,19 +12,41 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.powered;
 				}
-			},
+			}
 		},
 
-		setPowered: function(state /*boolean*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.setPowered(state, successCallback, errorCallback);
+		setPowered: function(state, successCallback, errorCallback) {
+			return this._obj.setPowered(state,
+                successCallback && function() { 
+                    successCallback();
+                },
+                errorCallback && function(e) { 
+                    errorCallback(new WebAPIError(e));
+                }
+            );
 		},
 
-		setTagListener: function(detectCallback /*NFCTagDetectCallback*/, tagFilter /*NFCTagType*/) {
-			return this._obj.setTagListener(detectCallback, tagFilter);
+		setTagListener: function(detectCallback, tagFilter) {
+            
+            return this._obj.setTagListener({
+                onattach: function(nfcTag) {
+                    detectCallback.onattach(new NFCTag(nfcTag));
+                },
+                ondetach: function() {
+                    detectCallback.ondetach();
+                }
+            }, tagFilter);
 		},
 
-		setPeerListener: function(detectCallback /*NFCPeerDetectCallback*/) {
-			return this._obj.setPeerListener(detectCallback);
+		setPeerListener: function(detectCallback) {
+			return this._obj.setPeerListener({
+                onattach: function(nfcPeer) {
+                    detectCallback.onattach(new NFCPeer(nfcPeer));
+                },
+                ondetach: function() {
+                    detectCallback.ondetach();
+                }
+            });
 		},
 
 		unsetTagListener: function() {
@@ -39,4 +61,8 @@ define(['Ti/_/declare'], function(declare) {
 			return this._obj.getCachedMessage();
 		}
 	});
+    
+    adapter.prototype.declaredClass = 'Tizen.NFC.NFCAdapter';
+    
+    return adapter;
 });

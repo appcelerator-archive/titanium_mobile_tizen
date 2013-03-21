@@ -1,9 +1,8 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.NFC.NFCTag', null, {
+define(['Ti/_/declare', 'Ti/_/Evented', 'NFC/NDEFMessage', 'WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
+	var tag = declare(Evented, {
 		constructor: function(args) {
 			if(args.toString() === '[object NFCTag]') {
 				this._obj = args;
-			} else {
 			}
 		},
 
@@ -32,19 +31,44 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.isConnected;
 				}
-			},
+			}
 		},
 
-		readNDEF: function(readCallback /*NDEFMessageReadCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.readNDEF(readCallback, errorCallback);
+		readNDEF: function(readCallback, errorCallback) {
+			return this._obj.readNDEF(
+                function(ndefMessage) {
+					readCallback( new NDEFMessage(ndefMessage) );
+                },
+                errorCallback && function(e) { 
+                    errorCallback(new WebAPIError(e));
+                }
+            );
+        },
+
+		writeNDEF: function(ndefMessage, successCallback, errorCallback) {
+			return this._obj.writeNDEF(ndefMessage._obj,
+                successCallback && function() { 
+                    successCallback();
+                },
+                errorCallback && function(e) { 
+                    errorCallback(new WebAPIError(e));
+                }
+            );
 		},
 
-		writeNDEF: function(ndefMessage /*NDEFMessage*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.writeNDEF(ndefMessage._obj, successCallback, errorCallback);
-		},
-
-		transceive: function(data /*byte*/, dataCallback /*ByteArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.transceive(data._obj, dataCallback, errorCallback);
+		transceive: function(data, byteArrayCallback, errorCallback) {
+            return this._obj.transceive(data._obj, 
+                function(arr) {
+                    byteArrayCallback(arr);
+                },
+                errorCallback && function(e) { 
+                    errorCallback(new WebAPIError(e));
+                }
+            )
 		}
 	});
+    
+    tag.prototype.declaredClass = 'Tizen.NFC.NFCTag';
+    
+    return tag;
 });
