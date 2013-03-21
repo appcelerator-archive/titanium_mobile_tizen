@@ -142,7 +142,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
-	capability.prototype.declasredClass = 'Tizen.SystemInfo.SystemInfoDeviceCapability';
+	capability.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoDeviceCapability';
 
 	return capability;
 });

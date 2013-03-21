@@ -1,10 +1,13 @@
 function btServer() {
+
 	var btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
+	
         // Simple bluetooth server
         server = {
         SERVICE_UUID: '5BCE9431-6C75-32AB-AFE0-2EC108A30860',
         numberOfClients: 0,
         connection: false,
+        
         // Register server
         setServerVisible: function() {
             
@@ -18,6 +21,7 @@ function btServer() {
                 print(error.message);
             }
         },
+        
         // Unregister service
         unregisterService: function() {
             
@@ -101,6 +105,7 @@ function btServer() {
     
     // Window
     win = Ti.UI.createWindow({backgroundColor:'#fff'}),
+    
     // Bluetooth On/Off
     btSwitch = Ti.UI.createSwitch({
 		top: 70,
@@ -108,12 +113,14 @@ function btServer() {
 		titleOff: 'Bluetooth disabled',
 		value: btAdapter.powered
 	}),
+	
 	// Start server button
 	startButton = Ti.UI.createButton({
 		top: 220,
 		enabled: btAdapter.powered,
 		title: 'Start server'
 	}),
+	
     // Status label
     statusLabel = Titanium.UI.createLabel({
         top: 400,
@@ -121,6 +128,7 @@ function btServer() {
         color: '#000000',
         width: '95%'
     }),
+    
     // Print status and log
     print = function(msg) {
         Ti.API.info(msg);
@@ -145,6 +153,7 @@ function btServer() {
             );
         }
 	});
+	
 	// Start server
 	startButton.addEventListener('click', function() {
 		server.setServerVisible();

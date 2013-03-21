@@ -36,8 +36,6 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/calendarHelper'], function(declare, E
 					this._obj.before = calendarHelper.createTimeDuration(value);
 				},
 				get: function() {
-					console.log('ALARM: '+this._obj.before.length);
-					console.log('ALARM: '+this._obj.before.unit);
 					return calendarHelper.toMsec(this._obj.before);
 				}
 			},
