@@ -194,7 +194,7 @@ function patchingSDK(finish) {
 		wrench.rmdirSyncRecursive(pathToModule, true);
 	}
 	fs.mkdirSync(pathToModule);	
-	cp('-R', path.join(titaniumTizenDir, 'modules', 'tizen'), path.join(workingDir, 'modules'));
+	cp('-R', path.join(titaniumTizenDir, 'modules') + '/*', pathToModule);
 	finish();
 }
 
