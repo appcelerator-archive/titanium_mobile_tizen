@@ -72,7 +72,7 @@ module.exports = new function() {
 
 		valueOf(testRun, item.duration).shouldBeNumber();
 		valueOf(testRun, item.startDate instanceof Date).shouldBeTrue();
-		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, calendar.add).shouldBeFunction();
 		valueOf(testRun, calendar.find).shouldBeFunction();
 		valueOf(testRun, calendar.remove).shouldBeFunction();
@@ -149,7 +149,7 @@ module.exports = new function() {
 			for (var i = 0, len = calendars.length; i < len; i++) {				
 				Ti.API.info('The calendar id:' + calendars[i].id + ', name:' + calendars[i].name + ', accountServiceId:' + calendars[i].accountServiceId);
 
-				valueOf(testRun, calendars[i]).shouldBe('[object TizenCalendarCalendar]');
+				valueOf(testRun, calendars[i]).shouldBe('[object TizenCalendarCalendarInstance]');
 				valueOf(testRun, calendars[i].id).shouldNotBeUndefined();
 				valueOf(testRun, calendars[i].id).shouldNotBeNull();
 			}
@@ -158,6 +158,7 @@ module.exports = new function() {
 		}
 
 		valueOf(testRun, Tizen).shouldBeObject();
+		valueOf(testRun, Tizen).shouldNotBeUndefined();
 
 		Ti.API.info("Test getCalendars method for 'EVENT'.");
 
@@ -177,7 +178,7 @@ module.exports = new function() {
 			for (var i = 0, len = calendars.length; i < len; i++) {
 				Ti.API.info('The calendar id:' + calendars[i].id + ', name:' + calendars[i].name + ', accountServiceId:' + calendars[i].accountServiceId);
 
-				valueOf(testRun, calendars[i]).shouldBe('[object TizenCalendarCalendar]');
+				valueOf(testRun, calendars[i]).shouldBe('[object TizenCalendarCalendarInstance]');
 				valueOf(testRun, calendars[i].id).shouldNotBeUndefined();
 				valueOf(testRun, calendars[i].id).shouldNotBeNull();
 			}
@@ -194,7 +195,7 @@ module.exports = new function() {
 		var tc = Tizen.Calendar.getDefaultCalendar('TASK'),
 			ec = Tizen.Calendar.getDefaultCalendar('EVENT');
 
-		valueOf(testRun, tc).shouldBe('[object TizenCalendarCalendar]')
+		valueOf(testRun, tc).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, tc).shouldNotBeUndefined();
 		valueOf(testRun, tc).shouldBeObject();
 		valueOf(testRun, tc.id).shouldBeString();
@@ -202,7 +203,7 @@ module.exports = new function() {
 
 		Ti.API.info('The calendar id:' + tc.id + ', name:' + tc.name + ', accountServiceId:' + tc.accountServiceId);
 	
-		valueOf(testRun, ec).shouldBe('[object TizenCalendarCalendar]')
+		valueOf(testRun, ec).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, ec).shouldNotBeUndefined();
 		valueOf(testRun, ec).shouldBeObject();
 		valueOf(testRun, ec.id).shouldBeString();
@@ -259,7 +260,7 @@ module.exports = new function() {
 			finish(testRun);
 		}
 
-		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, filter).shouldBe('[object TizenAttributeFilter]');
 		valueOf(testRun, sortingMode).shouldBe('[object TizenSortMode]');
 		valueOf(testRun, startDate).shouldBeObject();
@@ -283,7 +284,7 @@ module.exports = new function() {
 			location: 'Lviv'
 		});
 
-		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, startDate).shouldBeObject();
 		valueOf(testRun, ev).shouldBe('[object TizenCalendarCalendarEvent]');
 		valueOf(testRun, calendar.find).shouldBeFunction();
@@ -356,7 +357,7 @@ module.exports = new function() {
 				location: 'Lviv'
 			});
 
-		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, ev1).shouldBe('[object TizenCalendarCalendarEvent]');
 		valueOf(testRun, ev2).shouldBe('[object TizenCalendarCalendarEvent]');
 
@@ -487,7 +488,7 @@ module.exports = new function() {
 		valueOf(testRun, ev.id).shouldBe('[object TizenCalendarCalendarEventId]');
 		valueOf(testRun, ev.id.uid).shouldNotBeUndefined();
 
-		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+		valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 		valueOf(testRun, filter).shouldBe('[object TizenAttributeFilter]');
 
 		calendar.find(findEventsCB, errorCB, filter);
@@ -578,7 +579,7 @@ module.exports = new function() {
 					location: 'Lviv'
 				});
 
-			valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendar]');
+			valueOf(testRun, calendar).shouldBe('[object TizenCalendarCalendarInstance]');
 			valueOf(testRun, calendar.add).shouldBeFunction();
 			valueOf(testRun, calendar.update).shouldBeFunction();
 			valueOf(testRun, calendar.remove).shouldBeFunction();
