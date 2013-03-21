@@ -18,7 +18,7 @@ extends: Titanium.Module
 platforms: [tizen]
 
 methods:
-  - name: post
+  - name: postNotification
     summary: Post the notification to display.
     parameters:
       - name: notification
@@ -46,7 +46,7 @@ methods:
                                         title: "Simple notification",
                                         notificationInitDict: notificationDict
                                    });
-                tizen.Notification.post(notification);
+                tizen.Notification.postNotification(notification);
            } catch (err) {
                 Titanium.API.info(err.name + ": " + err.message);
            }
@@ -95,7 +95,7 @@ methods:
               Titanium.API.info (err.name + ": " + err.message);
           }
     
-  - name: get
+  - name: getNotification
     summary: Gets a previously posted notification by the current application.
     returns:
         type: Tizen.Notification
@@ -110,7 +110,7 @@ methods:
               // use a varible for the previoulsy posted notification.
               // keeps notification id to use later.
               var myId = notification.id;
-              var myNotification = tizen.Notification.get(myId);
+              var myNotification = tizen.Notification.getNotification(myId);
           } catch (err) {
               Titanium.API.info (err.name + ": " + err.message);
           }

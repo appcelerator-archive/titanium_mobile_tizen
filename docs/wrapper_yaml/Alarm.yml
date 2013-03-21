@@ -58,7 +58,7 @@ methods:
     summary: Removes all alarms added by an application.
     description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
 
-  - name: get
+  - name: getAlarm
     summary: Returns an alarm as per the specified identifier.
     returns: 
       - type: Tizen.Alarm.Alarm
@@ -71,7 +71,7 @@ methods:
     examples:
       - example: |
             var tizen = require("tizen");
-            var alarm = tizen.Alarm.get(myAlarmID);
+            var alarm = tizen.Alarm.getAlarm(myAlarmID);
             Titanium.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
 
   - name: getAll
