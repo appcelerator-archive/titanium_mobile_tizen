@@ -55,7 +55,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 		},
 
 		getPersonByID: function(id) {
-			tizen.contact.getDefaultAddressBook().get(id);
+			var contact = tizen.contact.getDefaultAddressBook().get(id);
 			return new Person(contactHelper.createTitaniumContact(contact));
 		},
 
