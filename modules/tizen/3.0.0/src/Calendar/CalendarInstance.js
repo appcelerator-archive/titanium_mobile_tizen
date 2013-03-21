@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented', 'Calendar/CalendarEvent', 'Calendar/CalendarItem'], function(declare, Evented, CalendarEvent, CalendarItem) {
-	var calendar = declare(Evented, {
+	var calendarInstance = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -162,7 +162,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Calendar/CalendarEvent', 'Calendar/Cale
 		}
 	});
 
-	calendar.prototype.declaredClass = 'Tizen.Calendar.Calendar';
+	calendarInstance.prototype.declaredClass = 'Tizen.Calendar.CalendarInstance';
 
-	return calendar;
+	return calendarInstance;
 });

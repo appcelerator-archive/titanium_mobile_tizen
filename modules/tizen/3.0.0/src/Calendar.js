@@ -1,6 +1,6 @@
-define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/Calendar', 'Calendar/CalendarTask', 'Calendar/CalendarEvent', 'Calendar/CalendarAttendee',
+define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/CalendarInstance', 'Calendar/CalendarTask', 'Calendar/CalendarEvent', 'Calendar/CalendarAttendee',
 		'Calendar/CalendarRecurrenceRule', 'Calendar/CalendarEventId', 'Calendar/CalendarAlarm', 'Calendar/CalendarItem'], 
-		function(lang, Evented, Calendar, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
+		function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
 
 	return lang.mixProps(
 		require.mix({}, Evented), 
@@ -62,7 +62,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/Calendar', 'Calendar/CalendarTask
 						calendarsArr = [];
 
 					for (; i < len; i++) {
-						calendarsArr.push(new Calendar(calendars[i]));
+						calendarsArr.push(new CalendarInstance(calendars[i]));
 					}
 
 					successCallback(calendarsArr);
@@ -76,11 +76,11 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/Calendar', 'Calendar/CalendarTask
 			},
 
 			getDefaultCalendar: function(type /*CalendarType*/) {
-				return new Calendar(tizen.calendar.getDefaultCalendar(type));
+				return new CalendarInstance(tizen.calendar.getDefaultCalendar(type));
 			},
 
 			getCalendar: function(type /*CalendarType*/, id /*CalendarId*/) {
-				return new Calendar(tizen.calendar.getCalendar(type, id));
+				return new CalendarInstance(tizen.calendar.getCalendar(type, id));
 			},
 
 			createCalendarTask: function(args) {
