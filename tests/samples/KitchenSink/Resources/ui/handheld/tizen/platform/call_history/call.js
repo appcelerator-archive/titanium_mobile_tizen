@@ -4,8 +4,8 @@ function call(args) {
 		}),
 		tableview = Ti.UI.createTableView({
 			data: [
-				{ title: 'Manage history', test: 'ui/handheld/tizen/platform/call/manage_history' },
-				{ title: 'Listeners', test: 'ui/handheld/tizen/platform/call/listeners' },
+				{ title: 'Manage history', test: 'ui/handheld/tizen/platform/call_history/manage_history' },
+				{ title: 'Listeners', test: 'ui/handheld/tizen/platform/call_history/listeners' },
 			]
 		});
 

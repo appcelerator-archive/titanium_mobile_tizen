@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Callhistory/RemoteParty'], function(declare, RemoteParty) {
-	var CallHistoryEntry = declare(null, {
+define(['Ti/_/declare', 'CallHistory/RemoteParty', 'Ti/_/Evented'], function(declare, RemoteParty, Evented) {
+	var CallHistoryEntry = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -43,7 +43,7 @@ define(['Ti/_/declare', 'Callhistory/RemoteParty'], function(declare, RemotePart
 				get: function() {
 					return this._obj.duration;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -54,12 +54,11 @@ define(['Ti/_/declare', 'Callhistory/RemoteParty'], function(declare, RemotePart
 				set: function(value) {
 					this._obj.direction = value;
 				}
-			},
-		},
-
+			}
+		}
 	});
 
-	CallHistoryEntry.prototype.declaredClass = 'Tizen.Callhistory.CallHistoryEntry';
-	return CallHistoryEntry;
+	CallHistoryEntry.prototype.declaredClass = 'Tizen.CallHistory.CallHistoryEntry';
 
+	return CallHistoryEntry;
 });

@@ -12,7 +12,7 @@ var suites = [
 	{name: "tizen/alarm"},
 	{name: "tizen/contacts"},
 	{name: "tizen/notification"},
-	{name: "tizen/call"},
+	{name: "tizen/call_history"},
 	{name: "tizen/sysinfo"},
 	{name: "tizen/power"},
 	{name: "tizen/download"},
