@@ -38,7 +38,6 @@ function tizen_alarm() {
 	postButton.addEventListener('click', createNotification);
 
 	function createNotification() {
-		console.log(Tizen.Apps.createApplicationControl)
 		var appControl = Tizen.Apps.createApplicationControl({
 			operation: 'http://tizen.org/appcontrol/operation/create_content',
 			uri: null
