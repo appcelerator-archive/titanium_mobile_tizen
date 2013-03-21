@@ -120,14 +120,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Calendar/CalendarEvent', 'Calendar/Cale
 			}
 
 			this._obj.find(
-				successCallback && calendarItemsListSuccesscallback,
+				calendarItemsListSuccesscallback,
 				errorCallback && wrappedErrorCallback, 
 				(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
 				(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
 			);
 		},
 
-		addChangeListener: function(successCallback /*CalendarChangeCallback*/, errorCallback /*ErrorCallback*/) {
+		addChangeListener: function(successCallback /*CalendarChangeCallback*/) {
 			function getWrappedItems(items) {
 				var i = 0,
 					itemsCount = items.length,
@@ -140,25 +140,21 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Calendar/CalendarEvent', 'Calendar/Cale
 				return wrappedItems;
 			}
 
-			function wrappedErrorCallback(error) {
-				errorCallback(new WebAPIError(error));
-			}
-
 			var wrappedCallback = {
-				onitemsadded: successCallback.onitemsadded && function(items) {
+				onitemsadded: function(items) {
 					successCallback.onitemsadded(getWrappedItems(items));
 				},
 
-				onitemsupdated: successCallback.onitemsupdated && function(items) {
+				onitemsupdated: function(items) {
 					successCallback.onitemsupdated(getWrappedItems(items));
 				},
 
-				onitemsremoved: successCallback.onitemsremoved &&function(items) {
+				onitemsremoved: function(items) {
 					successCallback.onitemsremoved(getWrappedItems(items));
 				}
 			};
 
-			return this._obj.addChangeListener(successCallback && wrappedCallback, errorCallback && wrappedErrorCallback);
+			return this._obj.addChangeListener(wrappedCallback);
 		},
 
 		removeChangeListener: function(watchId /*long*/) {

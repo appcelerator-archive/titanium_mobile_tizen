@@ -34,8 +34,9 @@ function manageHistory() {
 			attributeName: 'startTime', 
 			order: Tizen.SORT_MODE_ORDER_DESC
 		});
+
 		Ti.API.info(Tizen);
-		Ti.API.info(Tizen.Callhistory);
+		Ti.API.info(Tizen.CallHistory);
 
 	function onSuccess(results) {
 		var resultsCount = results.length,
@@ -48,7 +49,7 @@ function manageHistory() {
 					Ti.API.info('item.index: ' + item.index);
 
 					try {
-						Tizen.Callhistory.remove(results[item.index]);
+						Tizen.CallHistory.remove(results[item.index]);
 						tableView.deleteRow(item.index);
 
 						if (tableView.sections[0].rowCount === 0) {
@@ -67,7 +68,7 @@ function manageHistory() {
 			}
 
 			function removeAll(e) {
-				Tizen.Callhistory.removeAll(
+				Tizen.CallHistory.removeAll(
 					function() {
 						Ti.API.info('All history removed.');
 
@@ -108,7 +109,7 @@ function manageHistory() {
 		}).show();
 	}
 
-	Tizen.Callhistory.find(onSuccess, onError, filter, sortMode);
+	Tizen.CallHistory.find(onSuccess, onError, filter, sortMode);
 
 	return win;
 }

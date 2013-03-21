@@ -1,19 +1,19 @@
 ---
-name: Tizen.Callhistory
-summary: The top level Callhistory module.  
+name: Tizen.CallHistory
+summary: The top level CallHistory module.  
 description: |
     This API provides interfaces and methods for retrieving information from the call history.
 
-    For more information on the Callhistory features, see [Tizen Web App Programming: Call History](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm)
+    For more information on the CallHistory features, see [Tizen Web App Programming: Call History](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm)
 extends: Titanium.Module
-
 platforms: [tizen]
+
 methods:
   - name: find
     summary: Finds and returns call history items.
     parameters:
       - name: successCallback
-        summary: This is a callback interface of Callhistory operations. For example code see Callhistory interface.
+        summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
         type: Callback<CallHistoryEntry>
       - name: errorCallback
         summary: The method to call when an error occurs.
@@ -64,7 +64,7 @@ methods:
                                                     order: tizen.SORT_MODE_ORDER_DESC});
             
             // Makes the query and wire up the callbacks
-            tizen.Callhistory.find(onSuccess, onError, filter, sortMode);
+            tizen.CallHistory.find(onSuccess, onError, filter, sortMode);
         
             var numberfilter = tizen.createAttributeFilter({attributeName: "remoteParties.remoteParty",
                                                                matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
@@ -88,7 +88,7 @@ methods:
             var ifilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                           filters: [numberFilter, dateFilter, tfilter]});
             // Makes the query and wire up the callbacks; reuse sortMode
-            tizen.Callhistory.find(onSuccess, onError, ifilter, sortMode);
+            tizen.CallHistory.find(onSuccess, onError, ifilter, sortMode);
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
     parameters:
@@ -102,7 +102,7 @@ methods:
             // Defines success callback
             function onSuccess(results) {
                 if (results.length > 0)
-                    tizen.Callhistory.remove(results[0]);
+                    tizen.CallHistory.remove(results[0]);
             }
         
             // Defines error callback
@@ -111,7 +111,7 @@ methods:
             }
         
             // Makes the query and wires up the callbacks
-            tizen.Callhistory.find(onSuccess, onError);
+            tizen.CallHistory.find(onSuccess, onError);
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     parameters: 
@@ -132,7 +132,7 @@ methods:
         
             // Defines success callback
             function onSuccess(results) {
-                tizen.Callhistory.removeBatch(results);
+                tizen.CallHistory.removeBatch(results);
             }
         
             // Defines error callback
@@ -141,7 +141,7 @@ methods:
             }
         
             // Makes the query and wires up the callbacks
-            tizen.Callhistory.find(onSuccess, onError);
+            tizen.CallHistory.find(onSuccess, onError);
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     parameters: 
@@ -191,10 +191,10 @@ methods:
             try {
             
                 // Registers a call history callback
-                var handle = tizen.Callhistory.addChangeListener(onListenerCB);
+                var handle = tizen.CallHistory.addChangeListener(onListenerCB);
         
                 // Unregisters a previously registered listener
-                tizen.Callhistory.removeChangeListener(handle);
+                tizen.CallHistory.removeChangeListener(handle);
                 
             } catch (error) {
             
@@ -205,7 +205,7 @@ methods:
 # Pseudo-type
 ---
 name: CallHistoryChangeCallback
-summary: This is a callback interface of a Callhistory operations. For example code, see Callhistory interface.
+summary: This is a callback interface of a CallHistory operations. For example code, see CallHistory interface.
 platforms: [tizen]
 methods:
   - name: onadded
@@ -248,7 +248,7 @@ properties:
     type: Array<String>
   - name: remoteParties
     summary: An array of attributes to store the remote parties participating in the call. 
-    type: Array<String>
+    type: Array<RemoteParty>
   - name: startTime
     summary: An attribute to store the start time of the call. The exact meaning is defined by the back-end. The intention of this attribute is to give the moment when media channels come up. 
     type: Date
@@ -266,3 +266,16 @@ properties:
             BLOCKED - for blocked calls
             REJECTED - for rejected calls
     type: String
+
+---
+name: RemoteParty
+summary: This interface represents remote parties.
+platforms: [tizen]
+properties:
+  - name: remoteParty
+    summary: An attribute to store the RPID. The remote party identifier (RPID) that is a unique identifier used by a service with call capability. It also includes phone numbers. Contacts are also defined per service, so an RPID can be resolved to a Contact. A null value means that the remote is hidden (private number). 
+    type: String
+  - name: personId
+    summary: An attribute to store the identifier of the person that the raw contact belongs to. If the contact cannot be resolved, the value is null. See Contact API for more information. 
+    type: String
+
