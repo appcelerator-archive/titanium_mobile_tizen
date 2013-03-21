@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageBody', 'Ti/_/Evented'], function(declare, MessageBody, Evented) {
-	return declare('Ti.Tizen.Messaging.Message', Evented, {
+define(['Ti/_/declare', 'Messaging/MessageBody', 'Ti/_/Evented'], function(declare, MessageBody, Evented) {
+	var message = declare(Evented, {
 		constructor: function(args) {
 			if (args.toString && args.toString() === '[object Message]') {
 				this._obj = args;
@@ -130,6 +130,10 @@ define(['Ti/_/declare', 'Ti/Tizen/Messaging/MessageBody', 'Ti/_/Evented'], funct
 					this._obj.attachments = value;
 				}
 			},
-		},
+		}
 	});
+
+	message.prototype.declaredClass = 'Tizen.Messaging.Message';
+
+	return message;
 });

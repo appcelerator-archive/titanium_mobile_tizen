@@ -1,5 +1,5 @@
-define(['Ti/_/declare'], function(declare) {
-	return declare('Ti.Tizen.Messaging.MessageBody', null, {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+	var messageBody = declare(Evented, {
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -14,7 +14,7 @@ define(['Ti/_/declare'], function(declare) {
 				get: function() {
 					return this._obj.loaded;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -41,7 +41,11 @@ define(['Ti/_/declare'], function(declare) {
 				set: function(value) {
 					this._obj.inlineAttachments = value;
 				}
-			},
-		},
+			}
+		}
 	});
+
+	messageBody.prototype.declaredClass = 'Tizen.Messaging.MessageBody';
+
+	return messageBody;
 });

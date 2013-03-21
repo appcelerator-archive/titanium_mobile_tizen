@@ -1,7 +1,7 @@
-define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStorage', 'Ti/Tizen/Messaging/MessageBody', 'Ti/Tizen/Messaging/MessageAttachment'], 
-	function(declare, WebAPIError, MessageStorage, MessageBody, MessageAttachment) {
+define(['Ti/_/declare', 'WebAPIError', 'Messaging/MessageStorage', 'Messaging/MessageBody', 'Messaging/MessageAttachment'], 
+		function(declare, WebAPIError, MessageStorage, MessageBody, MessageAttachment) {
 
-	return declare('Ti.Tizen.Messaging.MessageService', null, {
+	var messageService = declare(null, {
 		constructor: function(args) {
 			this._obj = args;
 			this.constants.__values__.messageStorage = new MessageStorage(this._obj.messageStorage);
@@ -76,6 +76,10 @@ define(['Ti/_/declare', 'Ti/Tizen/WebAPIError', 'Ti/Tizen/Messaging/MessageStora
 
 		stopSync: function(opId /*long*/) {
 			this._obj.stopSync(opId);
-		},
+		}
 	});
+
+	messageService.prototype.declaredClass = 'Tizen.Messaging.MessageService';
+
+	return messageService;
 });
