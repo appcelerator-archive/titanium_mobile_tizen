@@ -1,69 +1,67 @@
 function tizenNFC(title) {
-	var nfcDetectionLabel,
+	var nfc = require('tizen').NFC,
+        nfcDetectionLabel,
 		ndefRecordLabel,
 		nfcSwitch,
 		picker,
 		nfcAdapter,
 		nfcTag;
 
-	// converts byte array to HEX string
-	function byteArrayToString(byteArray) {
-		var stringData = [byteArray.length];
-		for (var i = 0; i < byteArray.length; i++) {
-			stringData[i] = ('0' + byteArray[i].toString(16)).slice(-2);
-		}
-		return stringData.join(' ');
-	}
-
-	// Converts NFC record type to human readable presentation.
-	function NfcRecordTypeToString(tnfType){
+	// Convert NFC record type to string
+	function NfcRecordTypeToString(tnfType) {
 		switch (tnfType) {
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_EMPTY:
+			case nfc.NFC_RECORD_TNF_EMPTY:
 				return 'EMPTY';
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_WELL_KNOWN:
+			case nfc.NFC_RECORD_TNF_WELL_KNOWN:
 				return 'WELL KNOWN';
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_MIME_MEDIA:
+			case nfc.NFC_RECORD_TNF_MIME_MEDIA:
 				return 'MIME MEDIA';
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_URI:
+			case nfc.NFC_RECORD_TNF_URI:
 				return 'URI';
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_EXTERNAL_RTD:
+			case nfc.NFC_RECORD_TNF_EXTERNAL_RTD:
 				return 'EXTERNAL RTD';
-			case Ti.Tizen.NFC.NFC_RECORD_TNF_UNKNOWN:
+			case nfc.NFC_RECORD_TNF_UNKNOWN:
 				return 'UNKNOWN';
 			default:
 				return 'incorrect value';
 		}
 	}
 
-	//Formats property and value into html code
-	function propertyToLine(propertyName, propertyValue){
-		return '<b>'+propertyName+': </b> ' + propertyValue + '<br />';
+	//Format property and value into html code
+	function propertyToLine(propertyName, propertyValue) {
+		return '<b>' + propertyName + ': </b> ' + propertyValue + '<br />';
 	}
 
-	//returns HTML formatted string with nfc record
+	// Format nfc record to html
 	function formatRecordInfo(record) {
 		try {
-			var result = propertyToLine('NFC', NfcRecordTypeToString(record.tnf));
-			result += propertyToLine('id', byteArrayToString(record.id));
-			result += propertyToLine('Payload', byteArrayToString(record.payload));
+			var result,
+                className = record.toString();
 
-			if (record instanceof Ti.Tizen.NFC.NDEFRecordText) {
+            Ti.API.info(className);
+
+            result = propertyToLine('NFC', NfcRecordTypeToString(record.tnf));
+            result += propertyToLine('id', record.id);
+            result += propertyToLine('Payload', record.payload);
+
+            if (className == 'TizenNFCNDEFRecordText') {
 				result += propertyToLine('text', record.text);
 				result += propertyToLine('langCode', record.languageCode);
 				result += propertyToLine('encodeType', (record.encoding == 'UTF8' ? 'UTF-8' : 'UTF-16'));
-			} else if (record instanceof Ti.Tizen.NFC.NDEFRecordURI) {
+			} else if (className == 'TizenNFCNDEFRecordURI') {
 				result += propertyToLine('URI', record.uri);
-			} else if (record instanceof Ti.Tizen.NFC.NDEFRecordMedia) {
-				result += propertyToLine('mimeType', record.mimeType);
+			} else if (className == 'TizenNFCNDEFRecordMedia') {
+                result += propertyToLine('mimeType', record.mimeType);
 			}
 		} catch (e) {
-			result = 'NFC message parse error. \n' + e.name + " : " + e.message;
+			result = 'NFC message parse error. \n' + e.name + ' : ' + e.message;
 		}
+
 		return result;
 	}
 
-	// deletes all items form picker control
-	function clearPicker(){
+	// Clear picker control
+	function clearPicker() {
 		try{
 			if(picker.columns[0]) {
 				var col = picker.columns[0],
@@ -76,17 +74,17 @@ function tizenNFC(title) {
 				picker.reloadColumn(col);
 			}
 		} catch (e) {
-			Titanium.API.info(e.name + " : " + e.message);
+			Titanium.API.info(e.name + ' : ' + e.message);
 		}
 	}
 
-	// fills pickers with items from received message
-	function fillPicker(message){
+	// Add received message to picker
+	function fillPicker(message) {
 		clearPicker();
 
 		var data = [message.recordCount];
 		for ( var i = 0; i < message.recordCount; i++) {
-			data[i] = Ti.UI.createPickerRow({title:"record #"+i,recordsOriginalData:message.records[i]});
+			data[i] = Ti.UI.createPickerRow({title:'record #'+i,recordsOriginalData:message.records[i]});
 		}
 
 		picker.add(data);
@@ -94,45 +92,46 @@ function tizenNFC(title) {
 		picker.show();
 	}
 
-	// reads incoming message abnd fills UI with received data
+	// Read incoming message and put data to UI
 	function readMessage(message) {
-		Ti.API.info("NDEF successfully received.");
+		Ti.API.info('NDEF successfully received.');
+        Ti.API.info(JSON.stringify(message));
 
-		Ti.API.info(JSON.stringify(message));
-		if (message.recordCount > 0){
-			if (message.recordCount == 1)
-			{
+        if (message.recordCount > 0) {
+
+            if (message.recordCount == 1) {
 				ndefRecordLabel.text = formatRecordInfo(message.records[0]);
 				picker.hide();
-			}else{
+			} else {
 				fillPicker(message);
 			}
-		}else{
-			ndefRecordLabel.text = "There is no records in NDEF.";
+
+		} else {
+			ndefRecordLabel.text = 'There are no records in NDEF.';
 		}
 	}
 
-	// On FNC is powered on start listening of incoming NFC messages (Tags)
+	// Start listening to incoming NFC messages
 	function setTagDetect() {
-		// reports to UI about message read error
+		// show reading errors
 		function readMessageErr(e) {
-			ndefRecordLabel.text = 'NDEF read error.  \n' + e.name + " : " + e.message;
+			ndefRecordLabel.text = 'NDEF read error.  \n' + e.name + ' : ' + e.message;
 		}
 
 		var onSuccess = {
-			onattach : function(tag) {
+			onattach: function(tag) {
 				nfcTag = tag;
 				var isNDEF = nfcTag.isSupportedNDEF;
-				nfcDetectionLabel.text = "Tag found:" + nfcTag.type;
+				nfcDetectionLabel.text = 'Tag found:' + nfcTag.type;
 
 				if (isNDEF) {
-					nfcTag.readNDEF(readMessage, readMessageErr);
+                    nfcTag.readNDEF(readMessage, readMessageErr);
 				} else {
-					Ti.API.info("This Tag doesn't support NDEF");
+					Ti.API.info('This Tag does not support NDEF');
 				}
 			},
-			ondetach : function (){
-				//updates UI when NFC is detached
+			ondetach: function () {
+				//update UI when NFC is detached
 				nfcTag = null;
 				picker.hide();
 				nfcDetectionLabel.text = 'Tag successfully detached. \n Searching for new NFC tags around...';
@@ -141,50 +140,52 @@ function tizenNFC(title) {
 		};
 
 		try {
-			nfcAdapter.setTagListener(onSuccess);
+            nfcAdapter.setTagListener(onSuccess);
 		} catch (e) {
-			Ti.API.warn(e.name + " : " + e.message);
+			Ti.API.warn(e.name + ' : ' + e.message);
 		}
 	}
 
-	//Called on NFC is turned off
+	// Turned off detecting NFC tags
 	function unsetTagDetect() {
 		try {
 			nfcAdapter.unsetTagListener();
 			clearPicker()
 			picker.hide();
 			nfcTag = null;
-			nfcDetectionLabel.text = "Tag listener is turned off";
+			nfcDetectionLabel.text = 'Tag listener is turned off';
 			ndefRecordLabel.text = '';
 		} catch (e) {
-			nfcDetectionLabel.text = "Failed to turn off listener  " + e.name + " : " + e.message;
+			nfcDetectionLabel.text = 'Failed to turn off listener  ' + e.name + ' : ' + e.message;
 		}
 	}
 
 	function switchNfc(turnOn){
-		if (turnOn){
+		if (turnOn) {
 			nfcDetectionLabel.text = 'Searching for new NFC tags around...';
 
 			function onPowerOnFails(e) {
 				nfcSwitch.value = false;
-				nfcDetectionLabel.text = "Failed to power on NFC: " + e.message;
+				nfcDetectionLabel.text = 'Failed to power on NFC: ' + e.message;
 			}
+
 			try {
-				nfcAdapter = Ti.Tizen.NFC.getDefaultAdapter();
-				nfcAdapter.setPowered(true, setTagDetect, onPowerOnFails);
+				nfcAdapter = nfc.getDefaultAdapter();
+                nfcAdapter.setPowered(true, setTagDetect, onPowerOnFails);
 			} catch (e) {
 				onPowerOnFails(e);
 				nfcAdapter = null;
 			}
-		}else{
+		} else {
 			if (nfcAdapter) {
 				unsetTagDetect();
 			}else{
-				nfcDetectionLabel.text = "NFC is powered off.";
+				nfcDetectionLabel.text = 'NFC is powered off.';
 			}
 		}
 	}
 
+    // UI
 	var win = Ti.UI.createWindow({backgroundColor:'#fff'});
 	nfcSwitch = Ti.UI.createSwitch({
 		value:false,
@@ -226,8 +227,14 @@ function tizenNFC(title) {
 	win.add(nfcDetectionLabel);
 	win.add(ndefRecordLabel);
 
-	nfcSwitch.addEventListener('change',function(e)	{switchNfc(e.value);});
-	picker.addEventListener('change',function(e){ndefRecordLabel.text = formatRecordInfo(e.row.recordsOriginalData);});
+	nfcSwitch.addEventListener('change', function(e) {
+        switchNfc(e.value);
+    });
+    
+	picker.addEventListener('change', function(e) {
+        ndefRecordLabel.text = formatRecordInfo(e.row.recordsOriginalData);
+    });
+    
 	picker.hide();
 
 	return win;

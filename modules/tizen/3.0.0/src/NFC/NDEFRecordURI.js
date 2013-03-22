@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Tizen/NFC/NDEFRecord'], function(declare, NDEFRecord) {
-	return declare('Ti.Tizen.NFC.NDEFRecordURI', NDEFRecord, {
+define(['Ti/_/declare', 'NFC/NDEFRecord'], function(declare, NDEFRecord) {
+	var record = declare(NDEFRecord, {
 		constructor: function(args) {
 			if(args.toString() === '[object NDEFRecordURI]') {
 				this._obj = args;
@@ -13,8 +13,11 @@ define(['Ti/_/declare', 'Ti/Tizen/NFC/NDEFRecord'], function(declare, NDEFRecord
 				get: function() {
 					return this._obj.uri;
 				}
-			},
-		},
-
+			}
+		}
 	});
+    
+    record.prototype.declaredClass = 'Tizen.NFC.NDEFRecordURI';
+    
+    return record;
 });
