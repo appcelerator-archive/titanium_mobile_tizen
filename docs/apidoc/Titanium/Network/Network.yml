@@ -78,7 +78,7 @@ methods:
     description: |
         Note that `TCPSocket` is still used with the Bonjour services. For other uses,
         see <Titanium.Network.Socket.TCP>.
-    platforms: [iphone, ipad, mobileweb, tizen]
+    platforms: [iphone, ipad, mobileweb]
     returns:
         type: Titanium.Network.TCPSocket
     parameters:
@@ -168,7 +168,7 @@ events:
       - name: reason
         summary: Human-readable text describing the reason for the change.
         type: String
-        platforms: [android, mobileweb, tizen]
+        platforms: [android, mobileweb]
 properties:
   - name: INADDR_ANY
     summary: |
