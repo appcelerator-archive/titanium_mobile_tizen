@@ -20,7 +20,6 @@ function tizenSystemInfo(title) {
 		data = [
 			{ title: 'Storage information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorageSuccess },
 			{ title: 'Cpu load', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfoSuccess },
-			{ title: 'Wifi network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK, propertyCallback: onWifiSuccess },
 			{ title: 'Cellular network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCellSuccess },
 			{ title: 'SIM information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM, propertyCallback: onSimSuccess }
 		],
@@ -73,14 +72,6 @@ function tizenSystemInfo(title) {
 		}
 
 		showDetailsDialog('Storage', storagesInfo);
-	}
-
-	function onWifiSuccess(wifi) {
-		showDetailsDialog('Wifi network', formatSubLines([
-			'Status: ' + wifi.status,
-			'SSID: ' + wifi.ssid,
-			'IP address: ' + wifi.ipAddress,
-			'Signal strength: ' + wifi.signalStrength]));
 	}
 
 	function onCellSuccess(cell) {
