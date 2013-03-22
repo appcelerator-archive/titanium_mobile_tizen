@@ -1,6 +1,6 @@
 define(['Ti/_/lang', 'Ti/_/Evented', 'Calendar/CalendarInstance', 'Calendar/CalendarTask', 'Calendar/CalendarEvent', 'Calendar/CalendarAttendee',
-		'Calendar/CalendarRecurrenceRule', 'Calendar/CalendarEventId', 'Calendar/CalendarAlarm', 'Calendar/CalendarItem'], 
-		function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, CalendarItem) {
+		'Calendar/CalendarRecurrenceRule', 'Calendar/CalendarEventId', 'Calendar/CalendarAlarm'],
+		function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm) {
 
 	return lang.mixProps(
 		require.mix({}, Evented), 

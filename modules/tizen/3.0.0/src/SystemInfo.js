@@ -21,7 +21,7 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 		getPropertyValue: function(property /*SystemInfoPropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			tizen.systeminfo.getPropertyValue(property, 
 				function(object){
-					getPropertySuccessCallBack(object, successCallback)
+					successCallback(wrap(object));
 				},
 				errorCallback && function(error) {
 					errorCallback(new WebAPIError(error));
@@ -29,9 +29,9 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 		},
 
 		addPropertyValueChangeListener: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, options /*SystemInfoOptions*/) {
-			return tizen.systeminfo.addPropertyValueChangeListener(property, function(object){
-				onSystemInfoPropertySuccessCallback(object, successCallback)
-			}, options);
+			return tizen.systeminfo.addPropertyValueChangeListener(property,
+				function(object){successCallback(new SystemInfoProperty(object))},
+				options);
 		},
 
 		removePropertyValueChangeListener: function(listenerId /*unsigned long*/) {
@@ -44,14 +44,6 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 			}
 		}
 	}, true);
-
-	function onSystemInfoPropertySuccessCallback(object, onsuccess) { 
-		onsuccess(new SystemInfoProperty(object));
-	}
-
-	function getPropertySuccessCallBack(object, successCallback) {
-		successCallback(wrap(object));
-	}
 	
 	function wrap(object) {
 		if (object.toString() === '[object cpuinfo]') {

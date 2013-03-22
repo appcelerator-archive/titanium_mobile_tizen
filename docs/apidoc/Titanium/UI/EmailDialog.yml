@@ -1,0 +1,159 @@
+---
+name: Titanium.UI.EmailDialog
+summary: |
+    An email dialog is a modal window that allows users to compose and send an email.
+description: |
+    The Email Dialog is created by <Titanium.UI.createEmailDialog>.
+    
+    On Mobile Web, the `to` addresses, `cc` addresses, `bcc` addresses, `subject`, and `body` are 
+    appended together and formatted into a `mailto:` URL. This URL typically has a limit of 
+    approximately 2000 characters.
+extends: Titanium.Proxy
+since: "0.8"
+platforms: [android, iphone, ipad, mobileweb, tizen]
+
+methods:
+  - name: addAttachment
+    summary: Adds an attachment.
+    description: |
+        On Android, multiple attachments may be added, but will only work if the user chooses to 
+        send via the Android Gmail or K9 mail clients.
+        
+        The Android "Mail" app, which is only available on some handsets, will only accept one 
+        attachment from a Titanium app.
+    parameters:
+      - name: attachment
+        summary: Attachment to include in the email.
+        type: [Titanium.Blob, Titanium.Filesystem.File]
+    platforms: [android, iphone, ipad]
+    
+  - name: isSupported
+    summary: Indicates whether sending email is supported by the system.
+    returns:
+        type: Boolean
+    
+  - name: open
+    summary: Opens this email dialog.
+    parameters:
+      - name: properties
+        summary: |
+            Animation properties. Set `animated` Boolean property to `true` to animate dialog 
+            on open. (iPhone, iPad only)
+        type: Object
+
+events:
+  - name: complete
+    summary: Fired when this email dialog has completed sending an email.
+    description: |
+        On Mobile Web, as the platform cannot determine whether a message has been sent or not, 
+        this event fires immediately after calling open() and always reports success.
+    properties:
+      - name: result
+        summary: |
+            Status of the email send process. One of [SENT](Titanium.UI.EmailDialog.SENT), 
+            [FAILED](Titanium.UI.EmailDialog.FAILED), [SAVED](Titanium.UI.EmailDialog.SAVED) (iOS only) 
+            or [CANCELLED](Titanium.UI.EmailDialog.CANCELLED) (iOS only).
+            
+            Note that on Android this property will return `SENT` when the user discards or saves 
+            a message.
+        type: Number
+        
+      - name: success
+        summary: Indicates whether sending the email was successful.
+        type: Boolean
+        
+      - name: error
+        summary: |
+            Error message generated during an email send failure, or null if successful.
+        type: String
+        
+properties:
+  - name: CANCELLED
+    summary: Constant for the `CANCELLED` status result. On Android, this property exists but is not used.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad]
+    
+  - name: FAILED
+    summary: Constant for the `FAILED` status result.
+    type: Number
+    permission: read-only
+    
+  - name: SAVED
+    summary: Constant for the `SAVED` status result. On Android, this property exists but is not used.
+    type: Number
+    permission: read-only
+    
+  - name: SENT
+    summary: Constant for the `SENT` status result.
+    type: Number
+    permission: read-only
+    
+  - name: barColor
+    summary: |
+        Bar color of the email dialog window, as a color name or hex triplet.
+    description: |
+        For information about color values, see the "Colors" section of <Titanium.UI>.
+    type: String
+    platforms: [iphone, ipad]
+    
+  - name: bccRecipients
+    summary: Recipients of the email included via the `BCC` (Blind Carbon Copy) field.
+    type: Array<String>
+    
+  - name: ccRecipients
+    summary: Recipients of the email included via the `CC` (Carbon Copy) field.
+    type: Array<String>
+    
+  - name: html
+    summary: |
+        Determines whether the email message, specifically the contents of 
+        [messageBody](Titanium.UI.EmailDialog.messageBody), should be sent as HTML content type 
+        rather than plain text.
+    description: |
+        On Mobile Web, while iPhone and iPad properly interpret HTML messages, some email clients, 
+        especially those for the desktop, do not support them.
+    type: Boolean
+    default: false
+    
+  - name: messageBody
+    summary: Email message body.
+    type: String
+    
+  - name: subject
+    summary: Subject line for the email.
+    type: String
+    
+  - name: toRecipients
+    summary: Recipients of the email included via the main `TO` field.
+    type: Array<String>
+    
+examples:
+  - title: Simple Email Dialog with Attachment
+    example: |
+        
+        Create and send an email with a file attachment.
+        
+            var emailDialog = Ti.UI.createEmailDialog()
+            emailDialog.subject = "Hello from Titanium";
+            emailDialog.toRecipients = ['foo@yahoo.com'];
+            emailDialog.messageBody = '<b>Appcelerator Titanium Rocks!</b>';
+            var f = Ti.Filesystem.getFile('cricket.wav');
+            emailDialog.addAttachment(f);
+            emailDialog.open();
+
+  - title: Alloy XML Markup
+    example: |
+        Previous example as an Alloy view.
+
+        emaildialog.xml:
+
+            <Alloy>
+                <EmailDialog id="emailDialog" subject="Hello from Titanium" messageBody="<b>Appcelerator Titanium Rocks!</b>" />
+            </Alloy>
+
+        emaildialog.js:
+
+            $.emailDialog.toRecipients = ['foo@yahoo.com'];
+            var f = Ti.Filesystem.getFile('cricket.wav');
+            $.emailDialog.addAttachment(f);

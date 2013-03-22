@@ -5,7 +5,7 @@ define(['Ti/_/lang', 'Notification/StatusNotification', 'Ti/_/Evented'], functio
 			NOTIFICATION_TYPE_STATUS: 'STATUS',
 			STATUS_NOTIFICATION_TYPE_SIMPLE: 'SIMPLE',
 			STATUS_NOTIFICATION_TYPE_ONGOING: 'ONGOING',
-			STATUS_NOTIFICATION_TYPE_PROGRESS: 'PROGRESS',
+			STATUS_NOTIFICATION_TYPE_PROGRESS: 'PROGRESS'
 		},
 
 		postNotification: function(notification /*Notification*/) {
