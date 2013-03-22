@@ -15,7 +15,7 @@ methods:
     description: This method must be followed by <Titanium.Contacts.save> to commit its changes.
     returns:
         type: Titanium.Contacts.Group
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     parameters:
       - name: parameters
         summary: |
@@ -44,10 +44,11 @@ methods:
     summary: Gets all groups.
     returns:
         type: Array<Titanium.Contacts.Group>
-    platforms: [ipad, iphone]
+    platforms: [ipad, iphone, tizen]
     
   - name: getAllPeople
-    summary: Gets all people, unless a limit is specified.
+    summary: Gets all people, unless a limit is specified. On Tizen, use Titanium.Contacts.Tizen.getAllPeople.
+    platforms: [android, iphone, ipad]
     returns:
         type: Array<Titanium.Contacts.Person>    
     parameters:
@@ -59,7 +60,7 @@ methods:
     summary: Gets the group with the specified identifier.
     returns:
         type: Titanium.Contacts.Group
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     parameters:
       - name: id
         summary: Group identifier.
@@ -68,7 +69,9 @@ methods:
   - name: getPeopleWithName
     summary: |
         Gets people with a `firstName`, `middleName` or `lastName` field, or a combination 
-        of these fields, that match the specified name.
+        of these fields, that match the specified name. On Tizen, use 
+        Titanium.Contacts.Tizen.getAllPeopleWithName.
+    platforms: [android, iphone, ipad]
     returns:
         type: Array<Titanium.Contacts.Person>
     parameters:
@@ -88,7 +91,7 @@ methods:
   - name: removeGroup
     summary: Removes a group from the address book.
     description: This method must be followed by <Titanium.Contacts.save> to commit its changes.
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     parameters:
       - name: group
         summary: Contact group.
@@ -110,7 +113,7 @@ methods:
         
         This method will remove the person from the Contacts book automatically. 
         
-    platforms: [android, iphone, ipad]
+    platforms: [android, iphone, ipad, tizen]
     since: {android: "2.1.0"}
     parameters:
       - name: person
@@ -123,7 +126,7 @@ methods:
     
   - name: save
     summary: Commits all pending changes to the underlying contacts database.
-    platforms: [android, iphone, ipad]
+    platforms: [android, iphone, ipad, tizen]
     parameters:
       - name: contacts
         summary: List of contacts to save. Used on Android only. 
@@ -145,6 +148,7 @@ methods:
 
   - name: requestAuthorization
     summary: If authorization is unknown, will bring up a dialog requesting permission.
+    platforms: [android, iphone, ipad]
     description: |
         Note that the callback may be synchronous or asynchronous. That is, it may be called
         during requestAuthorization or much later. See the "Request access to the address book"
@@ -391,7 +395,7 @@ examples:
 ---
 name: showContactsParams
 summary: Dictionary of options for the <Titanium.Contacts.showContacts> method.
-platforms: [android, iphone, ipad]
+platforms: [android, iphone, ipad, tizen]
 
 properties:
 - name: animated
