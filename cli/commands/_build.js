@@ -296,6 +296,10 @@ function build(logger, config, cli, finished) {
 			theme: 'default'
 		}
 	});
+	
+	//dissable Analytics on Tizen, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
+	this.tiapp.analytics = false;
+	
 	//get device id
 	if (this.debugDevice) {
 		devId = this.debugDevice;
