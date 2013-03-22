@@ -1,16 +1,14 @@
 function tizenSystemInfo(title) {
 	var messageWin = require('ui/handheld/tizen/tizenToast'),
-	    alertWin = require('ui/handheld/tizen/tizenAlert'),
+		alertWin = require('ui/handheld/tizen/tizenAlert'),
 		Tizen = require('tizen'),
 		gBatteryListener;
-
 
 	function getSystemProperty(property, onSuccess, onError) {
 		try {
 			Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
 		} catch (e) {
-			alert('Exception while getting proprety');
-			alert(e.type + ': ' + e.message);
+			onError();
 		}
 	}
 
@@ -78,12 +76,6 @@ function tizenSystemInfo(title) {
 	}
 
 	function onWifiSuccess(wifi) {
-		alert('WIFI callback');
-		alert('wifi = ' + wifi);
-		alert('Status: ' + wifi.status);
-		alert('SSID: ' + wifi.ssid);
-		alert('IP address: ' + wifi.ipAddress);
-		alert('Signal strength: ' + wifi.signalStrength);
 		showDetailsDialog('Wifi network', formatSubLines([
 			'Status: ' + wifi.status,
 			'SSID: ' + wifi.ssid,
