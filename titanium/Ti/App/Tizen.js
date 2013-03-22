@@ -38,11 +38,6 @@ define(['Ti/_/lang'], function(lang) {
 				get: function() {
 					return appInfo.size;
 				}
-			},
-			contextId: {
-				get: function() {
-					return currentTizenApp.contextId;
-				}
 			}
 		},
 
