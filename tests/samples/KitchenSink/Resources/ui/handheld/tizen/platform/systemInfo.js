@@ -1,16 +1,14 @@
 function tizenSystemInfo(title) {
 	var messageWin = require('ui/handheld/tizen/tizenToast'),
-	    alertWin = require('ui/handheld/tizen/tizenAlert'),
+		alertWin = require('ui/handheld/tizen/tizenAlert'),
 		Tizen = require('tizen'),
 		gBatteryListener;
-
 
 	function getSystemProperty(property, onSuccess, onError) {
 		try {
 			Tizen.SystemInfo.getPropertyValue(property, onSuccess, onError);
 		} catch (e) {
-			alert('Exception while getting proprety');
-			alert(e.type + ': ' + e.message);
+			onError();
 		}
 	}
 
@@ -22,7 +20,6 @@ function tizenSystemInfo(title) {
 		data = [
 			{ title: 'Storage information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorageSuccess },
 			{ title: 'Cpu load', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfoSuccess },
-			{ title: 'Wifi network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK, propertyCallback: onWifiSuccess },
 			{ title: 'Cellular network state', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCellSuccess },
 			{ title: 'SIM information', propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM, propertyCallback: onSimSuccess }
 		],
@@ -75,20 +72,6 @@ function tizenSystemInfo(title) {
 		}
 
 		showDetailsDialog('Storage', storagesInfo);
-	}
-
-	function onWifiSuccess(wifi) {
-		alert('WIFI callback');
-		alert('wifi = ' + wifi);
-		alert('Status: ' + wifi.status);
-		alert('SSID: ' + wifi.ssid);
-		alert('IP address: ' + wifi.ipAddress);
-		alert('Signal strength: ' + wifi.signalStrength);
-		showDetailsDialog('Wifi network', formatSubLines([
-			'Status: ' + wifi.status,
-			'SSID: ' + wifi.ssid,
-			'IP address: ' + wifi.ipAddress,
-			'Signal strength: ' + wifi.signalStrength]));
 	}
 
 	function onCellSuccess(cell) {
