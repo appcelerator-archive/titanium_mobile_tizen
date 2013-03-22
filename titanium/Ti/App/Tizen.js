@@ -19,11 +19,6 @@ define(['Ti/_/lang'], function(lang) {
 					return appInfo.iconPath;
 				}
 			},
-			version: {
-				get: function() {
-					return appInfo.version;
-				}
-			},
 			show: {
 				get: function() {
 					return appInfo.show;
