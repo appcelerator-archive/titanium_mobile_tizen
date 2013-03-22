@@ -28,61 +28,68 @@ methods:
             var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             var chatServiceHandler = null;
-
+            
             function chatServiceSuccessCb(handler) {
             
-                console.log("Chat service registration was successful!");
-
+                Ti.API.info("Chat service registration was successful!");
+                
                 chatServiceHandler = handler;
                 
-                handler.onconnect = function(socket) {
-                    console.log("Client is connected: " + socket.peer.name + "," + socket.peer.address);
-                    socket.onmessage = function() {
-                       var data = socket.readData();
-                       // handle message code goes here
-                       //....
+                handler.addEventListener('remotedeviceconnected', function(socket) {
+                    Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
+                    serviceSocket = socket;
+                    
+                    // Message received from remote device
+                    socket.addEventListener('socketmessagereceived', function() {
+                        var data = socket.readData();
+                        
+                        // handle message code goes here
+                        //....
                     };
-
-                    // Something went wrong
-                    socket.onerror = function(e) {
-                       console.log('Error: ' + e.message);
+                    
+                    socket.addEventListener('socketerror', function(e) {
+                        Ti.API.info('Error: ' + e.message);
                     };
-
-                    // Expected close
-                    socket.onclose = function() {
-                       console.log('The socket is closed.');
+                    
+                    socket.addEventListener('socketclosed', function() {
+                        Ti.API.info('The socket is closed.');
+                        serviceSocket = null;
                     };
-                };
+                }
             }
-
-            function publishChatService()
-            {
-
+            
+            function publishChatService() {
                 var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
                 
                 adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
                 
                     // Error handler
                     function(e) {
-                        console.log( "Could not register service record, Error: " + e.message);
+                        Ti.API.info( "Could not register service record, Error: " + e.message);
                     });
             }
-
-            function unRegisterChatService()
-            {
             
+            function unRegisterChatService() {
                 if (chatServiceHandler != null) {
                 
                     chatServiceHandler.unregister(function() {
                         chatServiceHandler = null;
-                        console.log("Chat service is unregistered.");
+                        Ti.API.info("Chat service is unregistered.");
                     },
                     
                     function(e) {
-                        console.log ("Error: " + e.message);
+                        Ti.API.info("Error: " + e.message);
                     });
                 }
             }
+
+events:
+  - name: remotedeviceconnected
+    summary: The callback to be invoked when a remote device connected to this service.
+    properties:
+      - name: socket
+        type: Tizen.Bluetooth.BluetoothSocket
+            
 properties:
   - name: uuid
     summary: UUID of the service. 
@@ -98,7 +105,3 @@ properties:
     summary: The value is necessary to check if any other Bluetooth devices use this service. 
     type: Boolean
     permission: read-only
-
-  - name: onconnect
-    summary: The success callback to be invoked when a remote device connected to this service.   
-    type: Callback<Tizen.Bluetooth.BluetoothSocket>
