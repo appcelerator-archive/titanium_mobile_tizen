@@ -1,0 +1,153 @@
+---
+name: Titanium.App.iOS
+summary: |
+    The top-level App iOS module, available only to iOS devices, that includes the facilities to 
+    create and manage local notifications and background services.
+description: |
+    Local notifications are a way for an application that is not running in the foreground to let 
+    users know that it has information for them. When invoked, an alert dialog is displayed 
+    containing a "Close" button to dismiss and a customizable "View" button to bring the application 
+    into the foreground. Also, they can be configured to set an application icon badge, to show the 
+    number of pending notifications, and to generate a sound.
+
+extends: Titanium.Module
+platforms: [iphone, ipad]
+since: "1.5"
+
+methods:
+  - name: cancelAllLocalNotifications
+    summary: Cancels all scheduled local notifications.
+    
+  - name: cancelLocalNotification
+    summary: Cancels a local notification.
+    parameters:
+      - name: id
+        summary: ID of the local notification to cancel.
+        type: Number
+
+  - name: registerBackgroundService
+    summary: Registers a service to run when the application is placed in the background.
+    returns:
+        type: Titanium.App.iOS.BackgroundService
+    parameters:
+      - name: params
+        summary: |
+            Parameters used to create the service. Must include a `url` property, to specify the 
+            local JavaScript file to execute when the application is placed in the background.
+        type: Dictionary
+        
+  - name: scheduleLocalNotification
+    summary: Schedule a local notification.
+    returns:
+        type: Titanium.App.iOS.LocalNotification
+    parameters:
+      - name: params
+        summary: Parameters used to create a notification.
+        type: Dictionary<NotificationParams>
+        
+properties:
+  - name: EVENT_ACCESSIBILITY_LAYOUT_CHANGED
+    summary: Convenience constant for system event "accessibilitylayoutchanged".
+    type: String
+    permission: read-only
+    since: "3.0.0"
+
+  - name: EVENT_ACCESSIBILITY_SCREEN_CHANGED
+    summary: Convenience constant for system event "accessibilityscreenchanged".
+    type: String
+    permission: read-only
+    since: "3.0.0"
+
+events:
+  - name: notification
+    summary: Fired when a local notification is received by the application.
+    properties:
+      - name: alertAction
+        summary: |
+            Alert button text ('View', by default) or slider text ('slide to unlock...', by default).
+        type: String
+
+      - name: alertBody
+        summary: Alert message.
+        type: String
+        
+      - name: alertLaunchImage
+        summary: Image displayed instead of `Default.png` when launching the application.
+        type: String
+
+      - name: badge
+        summary: Application badge value.
+        type: Number
+
+      - name: date
+        summary: Date and time when the notification was configured to fire.
+        type: Date
+
+      - name: sound
+        summary: Path to the sound file configured to play when the notification was fired.
+        type: String
+
+      - name: timezone
+        summary: Timezone of the date when the notification was configured to fire.
+        type: String
+        
+      - name: userInfo
+        summary: Custom data object.
+        type: Dictionary
+
+---
+name: NotificationParams
+summary: |
+    Dictionary object of parameters used to create a notification using 
+    <Titanium.App.iOS.scheduleLocalNotification>.
+since: "1.7"
+platforms: [iphone, ipad]
+
+properties:
+  - name: alertAction
+    summary: |
+        Alert button text ('View', by default) or slider text ('slide to unlock...', by default) 
+        to display.
+    type: String
+    optional: true
+    
+  - name: alertBody
+    summary: Alert message to display.
+    type: String
+    optional: true
+    
+  - name: alertLaunchImage
+    summary: Image to display instead of `Default.png` when launching the application.
+    type: String
+    optional: true
+    
+  - name: badge
+    summary: Application badge value.
+    type: Number
+    optional: true
+
+  - name: date
+    summary: Date and time for the notification to occur.
+    type: Date
+    
+  - name: repeat
+    summary: Interval to repeat the notification. One of `weekly`, `daily`, `yearly,` `monthly`.
+    type: String
+    optional: true
+    
+  - name: sound
+    summary: |
+        Path to the sound file to play when notification occurs, relative to the `Resources` folder.
+    type: String
+    optional: true
+    
+  - name: timezone
+    summary: |
+        Timezone of the date configured for the notification. If not set, the system timezone is used.
+    type: String
+    optional: true
+    
+  - name: userInfo
+    summary: Data to pass to the application with the notification event.
+    type: Dictionary
+    optional: true  

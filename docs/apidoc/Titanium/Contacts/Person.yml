@@ -1,0 +1,257 @@
+---
+name: Titanium.Contacts.Person
+summary: |
+    An object that represents a contact record for a person or organization in the system contacts 
+    address book.
+description: |
+    A person object is created using <Titanium.Contacts.createPerson>.
+    
+    The following two kinds of properties exist for this object:
+    
+    * single value - contains either a `string` or `number` type value, an array of `string` type 
+    values, or `null` if unset.
+    * multi-value - contains a dictionary with typical keys of `home`, `work` and/or `other`. Each 
+    key contains either a `string` type value, an array of `string` type values, or a dictionary 
+    containing key/value pairs with `string` type values.
+    
+    #### Adding and Modifying Properties
+    
+    Support for adding and modifying properties is currently supported on iOS and Android.
+    
+    #### Keys as Address Book UI Labels
+    
+    Keys act as labels in the address book user interface.
+    
+    Although there is limited support for custom, arbitrarily-named, keys when used with multi-value 
+    properties, there is no support them with single value properties.
+    
+    On iOS, creating custom keys is not recommended, and will lead to undefined results.
+    
+    If a label has been created by the user of the device and used with a multi-value property, it 
+    will exist as a key with the same name.
+    
+    See examples in <Titanium.Contacts> for more information.
+extends: Titanium.Proxy
+since: "0.8"
+platforms: [android, iphone, ipad, tizen]
+
+properties:
+  - name: address
+    summary: Addresses for the person. Multi-value. Read-only on Android.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `home`, `work`, and/or `other`.
+        * Values: arrays of dictionary types with seven keys, `CountryCode`, `Street`, `City`, 
+        `County`, `State`, `Country` and `ZIP`, each with a `string` type value.
+
+        On Android:
+
+        'CountryCode' and 'County' are currently not supported.
+        
+        On iOS:
+        
+        The `CountryCode` key value may be one of the recognized two-character ISO 3166-1 country 
+        codes, and determines the format in which the contact is presented by the address book 
+        user interface. See the wikipedia section 
+        [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) 
+        for a comprehensive list of codes.
+        
+        Every new line in the `Street` value may be created using a backslash followed by a letter 
+        `n`, for example, `\n`.
+        On Tizen:
+        Key `other` does not supported. Values `County` and `CountryCode` are not supported on Tizen too.
+
+    type: Dictionary
+    
+  - name: birthday
+    summary: Date of birth of the person. Single value.
+    description: Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: created
+    summary: Date and time that the person record was created. Single value.
+    description: Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
+    type: String
+    permission: read-only
+    platforms: [iphone, ipad, tizen]
+    
+  - name: date
+    summary: Dates associated with the person. Multi-value.
+    description: |
+        Adding or modifying this property is not currently supported.
+        
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `anniversary` and/or `other`.
+        * Values: array of `string` type.
+        
+        Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
+    type: Dictionary
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: department
+    summary: Department of the person. Single value.
+    type: String
+    platforms: [iphone, ipad]
+    
+  - name: email
+    summary: Email addresses for the person. Multi-value. Read-only on Android.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `home`, `work`, and/or `other`.
+        * Values: array of `string` type.
+
+        Key `other` does not supported on Tizen.
+    type: Dictionary
+    
+  - name: firstName
+    summary: First name of the person. Single value.
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: firstPhonetic
+    summary: Phonetic first name of the person.  Single value.
+    type: String
+    platforms: [iphone, ipad]
+    
+  - name: fullName
+    summary: Localized full name of the person. Single value. Read-only on Android.
+    type: String
+    permission: read-only
+    
+  - name: id
+    summary: Record identifier of the person. Single value.
+    type: Number
+    platforms: [android, tizen]
+    permission: read-only
+    
+  - name: image
+    summary: Image for the person. Single value.
+    description: Set to `null` to remove the image. 
+    type: Titanium.Blob
+    platforms: [android, iphone, ipad]
+    
+  - name: instantMessage
+    summary: |
+        Instant messenger names of the person. Multi-value.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `home`, `work` and/or `other`.
+        * Values: arrays of dictionary types with two keys, `service` and `username`, each with a 
+        `string` type value.
+        
+        The `service` key value may be one of `AIM`, `Facebook`, `GaduGadu`, `GoogleTalk`, `ICQ`, 
+        `MSN`, `QQ`, `Skype`, or `Yahoo`.
+    type: Dictionary
+    platforms: [android, iphone, ipad]
+    
+  - name: jobTitle
+    summary: Job title of the person. Single value.
+    type: String
+    platforms: [iphone, ipad, tizen]
+    
+  - name: kind
+    summary: |
+        Determines the type of information the person record contains; either person or organization. 
+        Read-only on Android.
+    description: |
+        One of <Titanium.Contacts.CONTACTS_KIND_PERSON> or 
+        <Titanium.Contacts.CONTACTS_KIND_ORGANIZATION>.
+        On Tizen always <Titanium.Contacts.CONTACTS_KIND_PERSON>.
+    type: Number
+    
+  - name: lastName
+    summary: Last name of the person. Single value.
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: lastPhonetic
+    summary: Phonetic last name of the person. Single value.
+    type: String
+    platforms: [iphone, ipad]
+    
+  - name: middleName
+    summary: Middle name of the person. Single value.
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: middlePhonetic
+    summary: Phonetic middle name of the person. Single value.
+    type: String
+    platforms: [iphone, ipad]
+    
+  - name: modified
+    summary: Date and time that the person record was last modified. Single value.
+    description: Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
+    type: String
+    permission: read-only
+    platforms: [iphone, ipad]
+    
+  - name: nickname
+    summary: Nickname of the person. Single value.
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: note
+    summary: Notes for the person. Single value.
+    type: String
+    platforms: [android, iphone, ipad]
+    
+  - name: organization
+    summary: Organization to which the person belongs. Single value.
+    type: String
+    platforms: [android, iphone, ipad, tizen]
+    
+  - name: phone
+    summary: Phone numbers for the person. Multi-value. Read-only on Android.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `home`, `work`, `other`, `mobile`, `pager`, `workFax`, `homeFax`, `main`, 
+        and/or `iPhone`.
+        * Values: array of `string` type.
+        On Tizen only the following keys are supported: `work`, `home`, `mobile`, `pager`
+    type: Dictionary
+    
+  - name: prefix
+    summary: Prefix for the person. Single value.
+    type: String
+    permission: read-only
+    description: |
+        On iPhone and iPad is read-only, but on Tizen it is writable.
+    platforms: [iphone, ipad, tizen]
+    
+  - name: recordId
+    summary: Record identifier of the person. Single value.
+    type: Number
+    platforms: [iphone, ipad]
+    
+  - name: relatedNames
+    summary: Names of people to which the person is related. Multi-value.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `mother`, `father`, `parent`, `brother`, `sister`, `child`, `friend`, `spouse`, 
+        `partner`, `assistant`, `manager`, and/or `other`.
+        * Values: array of `string` type.
+    type: Dictionary
+    platforms: [android, iphone, ipad]
+    
+  - name: suffix
+    summary: Suffix for the person. Single value. Read-only on Android.
+    type: String
+    platforms: [android, iphone, ipad]
+
+  - name: url
+    summary: URLs of webpages associated with the person. Multi-value.
+    description: |
+        The format of the dictionary accepted by this property is as follows:
+        
+        * Keys: any of `homepage`, `home`, `work`, and/or `other`.
+        * Values: array of `string` type.
+    type: Dictionary
+    platforms: [android, iphone, ipad, tizen]
