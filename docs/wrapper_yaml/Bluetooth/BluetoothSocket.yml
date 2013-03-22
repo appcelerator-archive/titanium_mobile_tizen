@@ -18,43 +18,44 @@ methods:
         type: Array<Number>
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
-        
+            var tizen = require("tizen"),
+                adapter = tizen.Bluetooth.getDefaultAdapter();
+                
             function onSocketConnected(socket) {
-            
-                console.log ("Opened connection to remote device");
+                Ti.API.info ("Opened connection to remote device");
+                // Message received from remote device
+                socket.addEventListener('socketmessagereceived', function() {
+                    var data = socket.readData();
+                    
+                    // handle message code goes here
+                    //....
+                };
                 
-                socket.onmessage = function () {
-                    console.log ("Message received: " + socket.readData());
+                socket.addEventListener('socketerror', function(e) {
+                    Ti.API.info('Error: ' + e.message);
                 };
-
-                socket.onerror = function(e) {
-                    console.log("Socket Error:" + e.message);
+                
+                socket.addEventListener('socketclosed', function() {
+                    Ti.API.info('The socket is closed.');
+                    serviceSocket = null;
                 };
-
-                socket.onclose = function() {
-                    console.log("Socket closed with " + socket.peer.name);
-                };
-
+                
                 // send data to peer.
-                var textmsg = "Test";
+                var textmsg = "Test",                
+                    sendtextmsg = new Array(),
+                    i = 0,
+                    len = textmsg.length;
                 
-                var sendtextmsg = new Array();
-                
-                for (var i = 0; i< textmsg.length; i++)
-                {
+                for (; i < len; i++) {
                     sendtextmsg[i] = textmsg.charCodeAt(i);
                 }
                 socket.writeData (sendtextmsg);
             }
             
-
             function onSocketError(e) {
-            
-               console.log ("Error connecting to service. Reason: " + e.message);
+               Ti.API.info ("Error connecting to service. Reason: " + e.message);
             }
-
+            
             function onDeviceReady(device) {
             
                 // validate service uuid
@@ -66,16 +67,15 @@ methods:
             }
             
             function onSetPowered() {
-            
                 // get the BluetoothDevice object
-                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
+                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { Ti.API.info("Error: " + e.message()); });
             }
-
-            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
+            
+            adapter.setPowered(true, onSetPowered, function(e) {Ti.API.info("Could not turn on Bluetooth adapter. reason: " + e.message); });
  
   - name: readData
     summary: Reads data from the socket. 
-    description: This should be called only in the BluetoothSocket.onmessage handler, that is, when data is ready on the socket. 
+    description: This should be called only in the 'socketmessagereceived' handler, that is, when data is ready on the socket. 
     returns: 
       - type: Array<Number>
         summary: Sequence of bytes successfully read. 
@@ -83,35 +83,33 @@ methods:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
-
-            function onError(e) {
             
-                console.log ("Error connecting to service. Reason: " + e.message);
+            function onError(e) {
+                Ti.API.info ("Error connecting to service. Reason: " + e.message);
             }
-
+            
             function onSocketConnected(socket) {
             
-                console.log ("Opening socket success!!!");
-
-                socket.onmessage = function() {
+                Ti.API.info ("Opening socket success!!!");
                 
-                    // got a message from peer, read it
+                // Message received from remote device
+                socket.addEventListener('socketmessagereceived', function() {
                     var data = socket.readData();
-
-                    //
-                    // code to evaluate message goes here
-                    //
+                    
+                    // handle message code goes here
+                    //....
                 };
-
-                socket.onerror = function(err) {
-                   console.log("Socket Error:" + err.message);
+                
+                socket.addEventListener('socketerror', function(e) {
+                    Ti.API.info('Error: ' + e.message);
                 };
-
-                socket.onclose = function() {
-                   console.log("Socket closed with " + socket.peer.name);
+                
+                socket.addEventListener('socketclosed', function() {
+                    Ti.API.info("Socket closed with " + socket.peer.name);
                 };
+                
             }
-
+            
             function onDeviceReady(device) {
             
                 // validate service uuid
@@ -121,19 +119,34 @@ methods:
                     device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860", onSocketConnected, onError);
                 }
             }
-
+            
             function onSetPowered() {
             
                 // get the BluetoothDevice object
-                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
+                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { Ti.API.info("Error: " + e.message()); });
             }
-
-            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
+            
+            adapter.setPowered(true, onSetPowered, function(e) {
+                Ti.API.info ("Could not turn on Bluetooth adapter. reason: " + e.message); 
+            });
  
   - name: close
     summary: Closes the socket.  
-    description: Calling this method closes the socket. BluetoothSocket.state changes to <Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and BluetoothSocket.onclose is invoked on success. 
+    description: Calling this method closes the socket. BluetoothSocket.state changes to <Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on success. 
 
+events:
+  - name: socketmessagereceived
+    summary: The callback to be invoked when an incoming message is received from the peer.
+  
+  - name: socketclosed
+    summary: The callback to be invoked when the socket is closed.
+    
+  - name: socketerror
+    summary: The callback to be invoked when an error occurs.
+    properties:
+      - name: error
+        type: Tizen.WebAPIError     
+          
 properties:
   - name: uuid
     summary: Service UUID to which this socket is connected. 
@@ -150,16 +163,3 @@ properties:
     summary: The peer device to which this socket is connected. 
     type: Tizen.Bluetooth.BluetoothDevice
     permission: read-only
-
-  - name: onmessage
-    summary: The success callback to be invoked when an incoming message is received from the peer.     
-    type: Callback<Object>
-
-  - name: onclose
-    summary: The success callback to be invoked when the socket is closed.      
-    type: Callback<Object>
-
-  - name: onerror
-    summary: The error callback to be invoked when an error occurs. 
-    type: Callback<Object>
-

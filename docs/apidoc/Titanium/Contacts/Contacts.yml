@@ -1,0 +1,447 @@
+---
+name: Titanium.Contacts
+summary: |
+    The top-level Contacts module, used for accessing and modifying the system contacts address book.
+description: |
+ 
+    See examples for more information.
+extends: Titanium.Module
+since: "0.8"
+platforms: [android, iphone, ipad, tizen]
+
+methods:
+  - name: createGroup
+    summary: Creates and returns an instance of <Titanium.Contacts.Group>.
+    description: This method must be followed by <Titanium.Contacts.save> to commit its changes.
+    returns:
+        type: Titanium.Contacts.Group
+    platforms: [iphone, ipad, tizen]
+    parameters:
+      - name: parameters
+        summary: |
+            Properties to set on a new object, including any in <Titanium.Contacts.Group> except 
+            those marked as non-creation or read-only.
+        type: Dictionary<Titanium.Contacts.Group>
+        optional: true
+    
+  - name: createPerson
+    summary: |
+        Creates and returns an instance of <Titanium.Contacts.Person>, and commits all pending 
+        changes to the underlying contacts database.
+    returns:
+        type: Titanium.Contacts.Person
+    platforms: [android, ipad, iphone, tizen]
+    since: {android: "2.1.0"}
+    parameters:
+      - name: parameters
+        summary: |
+            Properties to set on a new object, including any in <Titanium.Contacts.Person> except 
+            those marked as non-creation or read-only.
+        type: Dictionary<Titanium.Contacts.Person>
+        optional: true
+    
+  - name: getAllGroups
+    summary: Gets all groups.
+    returns:
+        type: Array<Titanium.Contacts.Group>
+    platforms: [ipad, iphone, tizen]
+    
+  - name: getAllPeople
+    summary: Gets all people, unless a limit is specified. On Tizen, use Titanium.Contacts.Tizen.getAllPeople.
+    platforms: [android, iphone, ipad]
+    returns:
+        type: Array<Titanium.Contacts.Person>    
+    parameters:
+      - name: limit
+        summary: Maximum number of people. Android only.
+        type: Number
+    
+  - name: getGroupByID
+    summary: Gets the group with the specified identifier.
+    returns:
+        type: Titanium.Contacts.Group
+    platforms: [iphone, ipad, tizen]
+    parameters:
+      - name: id
+        summary: Group identifier.
+        type: Number
+    
+  - name: getPeopleWithName
+    summary: |
+        Gets people with a `firstName`, `middleName` or `lastName` field, or a combination 
+        of these fields, that match the specified name. On Tizen, use 
+        Titanium.Contacts.Tizen.getAllPeopleWithName.
+    platforms: [android, iphone, ipad]
+    returns:
+        type: Array<Titanium.Contacts.Person>
+    parameters:
+      - name: name
+        summary: Name to match.
+        type: String
+        
+  - name: getPersonByID
+    summary: Gets the person with the specified identifier.
+    returns:
+        type: Titanium.Contacts.Person
+    parameters:
+      - name: id
+        summary: Contact identifier.
+        type: Number
+        
+  - name: removeGroup
+    summary: Removes a group from the address book.
+    description: This method must be followed by <Titanium.Contacts.save> to commit its changes.
+    platforms: [iphone, ipad, tizen]
+    parameters:
+      - name: group
+        summary: Contact group.
+        type: Titanium.Contacts.Group
+        
+  - name: removePerson
+    summary: Removes a contact from the address book.
+    description: |
+    
+        On iOS:
+          
+        This method must be followed by a save action to commit the data to the underlying database, 
+        which can be done explicitly using <Titanium.Contacts.save> or implicitly using 
+        <Titanium.Contacts.createPerson>. Although the <Titanium.Contacts.Person> object will still 
+        exist once committed, it will no longer be valid. Continuing to use it will result in 
+        unpredictable behavior, including crashes.
+        
+        On Android:
+        
+        This method will remove the person from the Contacts book automatically. 
+        
+    platforms: [android, iphone, ipad, tizen]
+    since: {android: "2.1.0"}
+    parameters:
+      - name: person
+        summary: Contact.
+        type: Titanium.Contacts.Person
+        
+  - name: revert
+    summary: Reverts all changes made by the previous save to the address book.
+    platforms: [iphone, ipad, tizen]
+    
+  - name: save
+    summary: Commits all pending changes to the underlying contacts database.
+    platforms: [android, iphone, ipad, tizen]
+    parameters:
+      - name: contacts
+        summary: List of contacts to save. Used on Android only. 
+        type: Array<Titanium.Contacts.Person>
+    since: {android: "3.0.0"}
+    description: |
+      
+        On Android:
+        
+        Takes an array of <Titanium.Contacts.Person> objects and saves changes for
+        the specified contacts only.
+        
+  - name: showContacts
+    summary: Displays a picker that allows a person to be selected.
+    parameters:
+      - name: params
+        summary: Argument containing parameters for this method. Optional on Android.
+        type: showContactsParams
+
+  - name: requestAuthorization
+    summary: If authorization is unknown, will bring up a dialog requesting permission.
+    platforms: [android, iphone, ipad]
+    description: |
+        Note that the callback may be synchronous or asynchronous. That is, it may be called
+        during requestAuthorization or much later. See the "Request access to the address book"
+        example on how to best use this method. 
+    since: 2.1.3
+    parameters:
+      - name: callback
+        summary: Callback function to execute when when authorization is no longer unknown.
+        type: Callback<ContactsAuthorizationResponse>
+
+properties:
+  - name: CONTACTS_KIND_ORGANIZATION
+    summary: Specifies that a contact is an organization.
+    description:  |
+        Used with the <Titanium.Contacts.Person.kind> property.
+        
+        One of the group of contact "kind" constants 
+        [CONTACTS_KIND_ORGANIZATION](Titanium.Contacts.CONTACTS_KIND_ORGANIZATION), 
+        and [CONTACTS_KIND_PERSON](Titanium.Contacts.CONTACTS_KIND_PERSON).
+    type: Number
+    permission: read-only
+    
+  - name: CONTACTS_KIND_PERSON
+    summary: Specifies that a contact is a person.
+    description: 
+        Used with the <Titanium.Contacts.Person.kind> property.
+        
+        One of the group of contact "kind" constants 
+        [CONTACTS_KIND_ORGANIZATION](Titanium.Contacts.CONTACTS_KIND_ORGANIZATION), 
+        and [CONTACTS_KIND_PERSON](Titanium.Contacts.CONTACTS_KIND_PERSON).
+    type: Number
+    permission: read-only
+    
+  - name: CONTACTS_SORT_FIRST_NAME
+    summary: Specifies that group members will be sorted by first name.
+    description: 
+        Used with the <Titanium.Contacts.Group.sortedMembers> method.
+        
+        One of the group of contact group "sort" constants 
+        [CONTACTS_SORT_FIRST_NAME](Titanium.Contacts.CONTACTS_SORT_FIRST_NAME), 
+        and [CONTACTS_SORT_LAST_NAME](Titanium.Contacts.CONTACTS_SORT_LAST_NAME).
+    type: Number
+    permission: read-only
+    
+  - name: CONTACTS_SORT_LAST_NAME
+    summary: Specifies that group members will be sorted by last name.
+    description: 
+        Used with the <Titanium.Contacts.Group.sortedMembers> method.
+        
+        One of the group of contact group "sort" constants 
+        [CONTACTS_SORT_FIRST_NAME](Titanium.Contacts.CONTACTS_SORT_FIRST_NAME), 
+        and [CONTACTS_SORT_LAST_NAME](Titanium.Contacts.CONTACTS_SORT_LAST_NAME).
+    type: Number
+    permission: read-only
+
+  - name: AUTHORIZATION_AUTHORIZED
+    summary: |
+        A [contactsAuthorization](Titanium.Contacts.contactsAuthorization) value 
+        indicating that the application is authorized to use the address book.
+    description: |
+        This value is always returned if the device is running an iOS release prior to 6.0 and
+        on Android.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad, android, tizen]
+    since: 2.1.3
+
+  - name: AUTHORIZATION_DENIED
+    summary: |
+        A [contactsAuthorization](Titanium.Contacts.contactsAuthorization) value 
+        indicating that the application is not authorized to use the address book.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad, android, tizen]
+    since: 2.1.3
+
+  - name: AUTHORIZATION_RESTRICTED
+    summary: |
+        A [contactsAuthorization](Titanium.Contacts.contactsAuthorization) value 
+        indicating that the application is not authorized to use the address book *and*
+        the user cannot change this application's status.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad, android, tizen]
+    since: 2.1.3
+
+  - name: AUTHORIZATION_UNKNOWN
+    summary: |
+        A [contactsAuthorization](Titanium.Contacts.contactsAuthorization) value 
+        indicating that the authorization state is unknown.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad, android, tizen]
+    since: 2.1.3
+
+  - name: contactsAuthorization
+    summary: Returns an authorization constant indicating if the application has access to the address book.
+    description: |
+         Always returns `AUTHORIZATION_AUTHORIZED` on iOS pre-6.0 and Android devices.
+
+         If `contactsAuthorization` is `AUTHORIZATION_RESTRICTED`, you should not
+         attempt to re-authorize: this will lead to issues.
+
+         On Tizen always `AUTHORIZATION_RESTRICTED`.
+    type: Number
+    permission: read-only
+    platforms: [iphone, ipad, android, tizen]
+    since: 2.1.3
+
+examples:
+  - title: Request access to the address book
+    example: |
+        To safely access the address book given iOS 6's new security model:
+        
+            var performAddressBookFunction = function(){...};
+            var addressBookDisallowed = function(){...};
+            if (Ti.Contacts.contactsAuthorization == Ti.Contacts.AUTHORIZATION_AUTHORIZED){
+                performAddressBookFunction();
+            } else if (Ti.Contacts.contactsAuthorization == Ti.Contacts.AUTHORIZATION_UNKNOWN){
+                Ti.Contacts.requestAuthorization(function(e){
+                    if (e.success) {
+                        performAddressBookFunction();
+                    } else {
+                        addressBookDisallowed();
+                    }
+                });
+            } else {
+                addressBookDisallowed();
+            }
+
+  - title: Query Existing System Address Book Records
+    example: |
+        Output to the console all properties of all people.
+        
+            var singleValue = [
+              'recordId', 'firstName', 'middleName', 'lastName', 'fullName', 'prefix', 'suffix', 
+              'nickname', 'firstPhonetic', 'middlePhonetic', 'lastPhonetic', 'organization', 
+              'jobTitle', 'department', 'note', 'birthday', 'created', 'modified', 'kind'
+            ];
+            var multiValue = [
+              'email', 'address', 'phone', 'instantMessage', 'relatedNames', 'date', 'url'
+            ];
+            var people = Ti.Contacts.getAllPeople();
+            Ti.API.info('Total contacts: ' + people.length);
+            for (var i=0, ilen=people.length; i<ilen; i++){
+              Ti.API.info('---------------------');
+              var person = people[i];
+              for (var j=0, jlen=singleValue.length; j<jlen; j++){
+                Ti.API.info(singleValue[j] + ': ' + person[singleValue[j]]);
+              }
+              for (var j=0, jlen=multiValue.length; j<jlen; j++){
+                Ti.API.info(multiValue[j] + ': ' + JSON.stringify(person[multiValue[j]]));
+              }
+            }
+  - title: Add New System Address Book Records
+    example: |
+        Create two new records in the system address book. Note that the <Titanium.Contacts.Person> 
+        object is queried in the same way that it is created (as shown in previous example.)
+        
+            Ti.API.info('Saving contact...');
+            Ti.Contacts.createPerson({
+              firstName: 'Paul',
+              lastName: 'Dowsett',
+              address:{
+                work:[
+                  {
+                    CountryCode: 'gb', // determines how the address is displayed
+                    Street: '200 Brook Drive\nGreen Park',
+                    City: 'Reading',
+                    County: 'Berkshire',
+                    Country: 'England',
+                    ZIP: 'RG2 6UB'
+                  },
+                  {
+                    CountryCode: 'gb', // determines how the address is displayed
+                    Street: '1 St Pauls Road\nClerkenwell',
+                    City: 'City of London',
+                    State: 'London',
+                    Country: 'England',
+                    ZIP: 'EC1 1AA'
+                  }
+                ],
+                home:[
+                  {
+                    CountryCode: 'gb', // determines how the address is displayed
+                    Street: '2 Boleyn Court',
+                    City: 'London',
+                    State: 'Greenwich',
+                    Country: 'England',
+                    ZIP: 'SE10'
+                  }
+                ]
+              },
+              birthday: '2012-01-01T12:00:00.000+0000',
+              instantMessage:{
+                home:[
+                  {
+                    service: 'AIM',
+                    username: 'leisureAIM'
+                  },
+                  {
+                    service: 'MSN',
+                    username: 'no_paul_here@msn.com'
+                  }
+                ],
+                work:[
+                  {
+                    service: 'AIM',
+                    username: 'seriousAIM'
+                  }
+                ]
+              },
+              organization: 'Appcelerator',
+              phone:{
+                mobile: ['07900 000001', '07900 000002'],
+                work: ['+44 (0)118 925 6128', '+44 (0)118 000 0000']
+              },
+              url:{
+                homepage: ['www.google.com'],
+                work: ['www.appcelerator.com', 'www.example.com']
+              }
+            });
+            Ti.API.info('Contact saved');
+            
+            Ti.API.info('Saving contact...');
+            var workAddress1 = {
+              'CountryCode': 'us',
+              'Street':  '440 N. Bernardo Avenue',
+              'City': 'Mountain View',
+              'State': 'California',
+              'Country': 'United States',
+              'ZIP': '94043'
+            };
+            
+            Ti.Contacts.createPerson({
+              firstName:'Arthur',
+              lastName:'Evans',
+              address:{
+                'work':[workAddress1]
+              }
+            });
+            Ti.API.info('Contact saved');
+
+---
+name: showContactsParams
+summary: Dictionary of options for the <Titanium.Contacts.showContacts> method.
+platforms: [android, iphone, ipad, tizen]
+
+properties:
+- name: animated
+  summary: Determines whether to animate the show/hide of the contacts picker (iPhone, iPad only.)
+  type: Boolean
+  default: true
+  optional: true
+
+- name: fields
+  summary: Field names to show when selecting properties. By default, shows all available.
+  type: Array<String>
+
+- name: cancel
+  summary: Function to call when selection is canceled.
+  type: Callback<Object>
+  optional: true
+  
+- name: selectedPerson
+  summary: |
+      Function to call when a person is selected. Must not be used with `selectedProperty` property.
+  type: Callback<Object>
+  optional: true
+  
+- name: selectedProperty
+  summary: |
+      Function to call when a property is selected. Must not be used with `selectedPerson` 
+      property.
+  type: Callback<Object>
+  optional: true
+
+---
+name: ContactsAuthorizationResponse
+summary: Argument passed to the callback when a request finishes successfully or erroneously.
+
+properties:
+  - name: success
+    summary: Indicates whether the request succeeded.
+    description: Returns `true` if request succeeded.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: May be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code, if any returned.
+    description: May be undefined if `success` is `true`.
+    type: Number

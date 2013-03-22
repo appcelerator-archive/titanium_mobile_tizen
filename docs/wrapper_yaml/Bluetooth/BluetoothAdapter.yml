@@ -38,23 +38,22 @@ methods:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
- 
-            function changeName(newName) 
-            {
+            
+            function changeName(newName) {
             
                 if(adapter.name != newName) {
                 
                     // initiate change name
                     adapter.setName(newName, function() {
-                        console.log("Adapter name changed to " + adapter.name);
+                        Ti.API.info("Adapter name changed to " + adapter.name);
                     },
                     
                     function(e) {
-                        console.log("Failed to change name: " + e.message);
+                        Ti.API.info("Failed to change name: " + e.message);
                     });
                 }
             }
-
+            
             changeName("myDevice");
  
   - name: setPowered
@@ -83,37 +82,34 @@ methods:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
- 
-            function powerOn() 
-            {
             
+            function powerOn() {
                 // if not powered on
                 if(!adapter.powered) {
                 
                     // initiate power on
                     adapter.setPowered(true, function() {
-                        console.log("Bluetooth powered on success.");
+                        Ti.API.info("Bluetooth powered on success.");
                     },
                     
                     function(e) {
-                        console.log("Failed to power on Bluetooth: " + e.message);
+                        Ti.API.info("Failed to power on Bluetooth: " + e.message);
                     });
                 }
             }
-
-            function powerOff()
-            {
+            
+            function powerOff() {
             
                 // if powered on
                 if(adapter.powered) {
                 
                     // initiate power off
                     adapter.setPowered(false, function() {
-                        console.log("Bluetooth powered off successfully.");
+                        Ti.API.info("Bluetooth powered off successfully.");
                     },
                     
                     function(e) {
-                        console.log("Failed to power off Bluetooth: " + e.message);
+                        Ti.API.info("Failed to power off Bluetooth: " + e.message);
                     });
                 }
             }
@@ -121,61 +117,53 @@ methods:
   - name: discoverDevices
     summary: Searches for nearby Bluetooth devices.  
     description: |
-        That is, devices within proximity to the local device.
-        This method initiates the device discovery process. When the discovery process has started successfully, BluetoothDiscoverDevicesSuccessCallback.onstarted() is invoked. If any device is found in the process, then the device information is sent with BluetoothDiscoverDevicesSuccessCallback.ondevicefound(). At the end of the discovery process, BluetoothDiscoverDevicesSuccessCallback.onfinished() is invoked. If a device goes out of proximity then BluetoothDiscoverDevicesSuccessCallback.ondevicedisappeared() is invoked with the address of the device. Note that if no device is found, BluetoothDiscoverDevicesSuccessCallback.ondevicefound() will never be called.
+        That is, devices within proximity to the local device. This method initiates the device discovery process. 
+        When the discovery process has started successfully, event 'discoverystarted' is invoked. 
+        If any device is found in the process, then the device information is sent with 'devicefound'. 
+        At the end of the discovery process, event 'discoveryfinished' is invoked. 
+        If a device goes out of proximity then event 'devicedisappeared' is invoked with the address of the device. 
+        Note that if no device is found, event 'devicefound' will never be called.
         The discovery process can be cancelled anytime, by calling stopDiscovery() on the BluetoothAdapter.
-        The ErrorCallback is launched with these error types:
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
 
-    parameters: 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: BluetoothDiscoverDevicesSuccessCallback
-        optional: true
-
-      - name: errorCallback
-        summary: Method to be invoked when an error occurs.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
     examples:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
             
             function startDiscovery() {
+                // starts searching for nearby devices
+                adapter.discoverDevices();
+            }
             
-                var discoverDevicesSuccessCallback = {
-                
-                    onstarted: function() { 
-                        console.log ("Device discovery started...");
-                    },
-                    ondevicefound: function(device) { 
-                        console.log("Found device - name: " + device.name + ", Address: "+ device.address); 
-                    },
-                    ondevicedisappeared: function(address) { 
-                        console.log("Device disappeared: " + address); 
-                    },
-                    onfinished: function(devices) { 
-                        console.log("Found Devices");
-                        for (var i=0; i<devices.length; i++) {
-                            console.log("Name: " + devices[i].name + ", Address: " + devices[i].address);
-                        }
-                        console.log("Total: " + devices.length);
-                    }
-                    
-                };
- 
-                // start searching for nearby devices, for about 10 sec.
-                adapter.discoverDevices(discoverDevicesSuccessCallback, function(e){
-                                            console.log ("Failed to search devices: " + e.message + "(" + e.name + ")");
-                                        });
+            adapter.addEventListener('discoverystarted', function() {
+                Ti.API.info ("Device discovery started...") ;
             }
-
+            
+            adapter.addEventListener('devicefound', function(device) {
+                Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
+            }
+            
+            adapter.addEventListener('devicedisappeared', function(address) {
+                Ti.API.info("Device disappeared: " + address);
+                // Remove from list, as it is no longer valid.
+            }
+            
+            adapter.addEventListener('discoveryfinished', function(devices) {
+                Ti.API.info("Found Devices");
+                for (var i=0; i<devices.length; i++) {
+                    Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                }
+                Ti.API.info("Total: " + devices.length);
+            }
+            
+            adapter.addEventListener('discoveryerror', function(e) {
+                Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
+            }
+            
             function onSetPoweredError(e) {
-                console.log ("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
+                Ti.API.info("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
             }
-
+            
             adapter.setPowered(true, startDiscovery, onSetPoweredError);
 
   - name: stopDiscovery
@@ -198,61 +186,59 @@ methods:
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
- 
-            // Call this whenever use selects one of the device
+            var tizen = require("tizen"),
+                adapter = tizen.Bluetooth.getDefaultAdapter();
             
+            // Call this whenever use selects one of the device
             function cancelDiscovery() {
             
                 adapter.stopDiscovery(function() {
-                    console.log("Stop discovery success.");
+                    Ti.API.info("Stop discovery success.");
                 },
                 function (e) {
-                    console.log("Error while stopDiscovery:" + e.message);
+                    Ti.API.info("Error while stopDiscovery:" + e.message);
                 });
                 
             }
-
-            function startDiscovery() {
             
-                var discoverDevicesSuccessCallback = {
-                
-                    onstarted: function() { 
-                        console.log ("Device discovery started...") ;
-                    },
-                    ondevicefound: function(device) {
-                        console.log("Found device - name: " + device.name + ", Address: "+ device.address);
-                        // Show device to user, if this is the one he is looking for
-                        // for example, add this to list view.
-
-                        cancelDiscovery();
-                    },
-                    ondevicedisappeared: function(address) { 
-                        console.log("Device disappeared: " + address);
-                        // Remove from list, as it is no longer valid.
-                    },
-                    onfinished: function(devices) { 
-                        console.log("Found Devices");
-                        for (var i=0; i<devices.length; i++) {
-                            console.log("Name: " + devices[i].name + ", Address: " + devices[i].address);
-                        }
-                        console.log("Total: " + devices.length);
-                    }
-                    
-                };
- 
-                // starts searching for nearby devices, for 12 sec.
-                adapter.discoverDevices(discoverDevicesSuccessCallback, function(e){
-                    console.log ("Failed to search devices: " + e.message + "(" + e.name + ")");
-                });
-                
+            function startDiscovery() {
+                // starts searching for nearby devices
+                adapter.discoverDevices();
             }
-
+            
+            adapter.addEventListener('discoverystarted', function() {
+                Ti.API.info ("Device discovery started...") ;
+            }
+            
+            adapter.addEventListener('devicefound', function(device) {
+                Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
+                
+                // Show device to user, if this is the one he is looking for
+                // for example, add this to list view.
+                cancelDiscovery();
+            }
+            
+            adapter.addEventListener('devicedisappeared', function(address) {
+                Ti.API.info("Device disappeared: " + address);
+                // Remove from list, as it is no longer valid.
+            }
+            
+            adapter.addEventListener('discoveryfinished', function(devices) {
+                Ti.API.info("Found Devices");
+                for (var i=0; i<devices.length; i++) {
+                    Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                }
+                Ti.API.info("Total: " + devices.length);
+            }
+            
+            adapter.addEventListener('discoveryerror', function(e) {
+                Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
+            }
+            
             function onSetPoweredError(e) {
-                console.log ("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
+                Ti.API.info("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
             }
-
+            
             adapter.setPowered(true, startDiscovery, onSetPoweredError);
 
   - name: getKnownDevices
@@ -280,23 +266,19 @@ methods:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
- 
             function onGotDevices(devices) {
-                console.log("Devices");
+                Ti.API.info("Devices");
                 for (var i=0; i < devices.length; i++) {
-                    console.log(" Name: " + devices[i].name + ", Address: " + devices[i].address);
+                    Ti.API.info(" Name: " + devices[i].name + ", Address: " + devices[i].address);
                 }
-                console.log("Total: " + devices.length);
+                Ti.API.info("Total: " + devices.length);
             }
-
             function onError(e) {
-                console.log ("Error: " + e.message);
+                Ti.API.info ("Error: " + e.message);
             }
-
             function onBluetoothsetPowered() {
                 adapter.getKnownDevices(onGotDevices, onError);
             }
- 
             // turn on Bluetooth
             adapter.setPowered(true, onBluetoothsetPowered);
 
@@ -326,14 +308,13 @@ methods:
     examples:
       - example: |
             function gotDeviceInfo(device) {
-                console.log("Device Name: " + device.name);
-                console.log("Device Address: " + device.address);
-                console.log("Device Class: " + device.deviceClass.major);
-                console.log("Is Bonded: " + device.isBonded ? "Yes" : "No");
+                Ti.API.info("Device Name: " + device.name);
+                Ti.API.info("Device Address: " + device.address);
+                Ti.API.info("Device Class: " + device.deviceClass.major);
+                Ti.API.info("Is Bonded: " + device.isBonded ? "Yes" : "No");
             }
-
             function onError(e) {
-                console.log ("Could not get device info:" + e.message);
+                Ti.API.info ("Could not get device info:" + e.message);
             }
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
@@ -366,13 +347,12 @@ methods:
     examples:
       - example: |
             function onBondingSuccess(device) {
-                console.log("Device Name:" + device.name);
-                console.log("Device Address:" + device.address);
-                console.log("Device Service UUIDs:" + device.uuids.join("\n"));
+                Ti.API.info("Device Name:" + device.name);
+                Ti.API.info("Device Address:" + device.address);
+                Ti.API.info("Device Service UUIDs:" + device.uuids.join("\n"));
             }
-
             function onError(e) {
-                console.log ("Could not create bonding, reason:" + e.message);
+                Ti.API.info ("Could not create bonding, reason:" + e.message);
             }
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
@@ -405,22 +385,20 @@ methods:
       - example: |
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
- 
             function gotDevice(device) {
                 if (device.isBonded) {
                     // initiate destroying bonding
                     adapter.destroyBonding(device.address, function() { 
-                       console.log("Unbound success with:" + device.address);
+                       Ti.API.info("Unbound success with:" + device.address);
                     },
                     function(e) { 
-                       console.log("Unbounding failed with " + device.address + ", reason: " + e.message); 
+                       Ti.API.info("Unbounding failed with " + device.address + ", reason: " + e.message); 
                     });
                 }
             }
-
             var deviceAddress = "35:F4:59:D1:7A:03";
             adapter.getDevice(deviceAddress, gotDevice, function(e) { 
-                    console.log("Failed to get device info for " + deviceAddress + ", reason: " + e.message); 
+                    Ti.API.info("Failed to get device info for " + deviceAddress + ", reason: " + e.message); 
             });
  
   - name: registerRFCOMMServiceByUUID
@@ -465,61 +443,91 @@ methods:
             // Holds currently open socket
             
             var serviceSocket = null;
-
+            
             function chatServiceSuccessCb(recordHandler) {
             
-                console.log("Chat service registration succeeds!");
+                Ti.API.info("Chat service registration succeeds!");
                 chatServiceHandler = recordHandler;
                 
-                recordHandler.onconnect = function(socket) {
-                
-                    console.log("Client connected: " + socket.peer.name + "," + socket.peer.address);
+                recordHandler.addEventListener('remotedeviceconnected', function(socket) {
+                    Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
                     serviceSocket = socket;
                     
                     // Message received from remote device
-                    socket.onmessage = function() {
+                    socket.addEventListener('socketmessagereceived', function() {
                         var data = socket.readData();
                         
                         // handle message code goes here
                         //....
                     };
                     
-                    socket.onerror = function(e) {
-                        console.log('Error: ' + e.message);
-                    };
-
-                    socket.onclose = function() {
-                        console.log('The socket is closed.');
-                        serviceSocket = null;
+                    socket.addEventListener('socketerror', function(e) {
+                        Ti.API.info('Error: ' + e.message);
                     };
                     
-                };
+                    socket.addEventListener('socketclosed', function() {
+                        Ti.API.info('The socket is closed.');
+                        serviceSocket = null;
+                    };
+                }
             };
-
+            
             function publishChatService() {
             
                 var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
-
+                
                 adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
                 
                     // Error handler
                     function(e) {
-                        console.log( "Could not register service record, Error: " + e.message);
-                });
+                        Ti.API.error( "Could not register service record, Error: " + e.message);
+                    }
+                );
             }
- 
+            
             function unregisterChatService() {
             
                 if (chatServiceHandler != null) {
                     chatServiceHandler.unregister(function() {
-                        console.log("Chat service is unregistered");
+                        Ti.API.info("Chat service is unregistered");
                         chatServiceHandler = null;
                     }, function(e) {
-                        console.log("Failed to unregister service: " + e.message);
+                        Ti.API.info("Failed to unregister service: " + e.message);
                     });
                 }
             }
  
+events:
+  - name: discoverystarted
+    summary: The method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device.
+    
+  - name: devicedisappeared
+    summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible.
+    properties:
+      - name: address
+        summary: Address of the device that is no longer in range or visible.
+        type: String
+        
+  - name: devicefound
+    summary: The method to be invoked when a new device is discovered in the process of inquiry/discovery.
+    properties:
+      - name: device
+        summary: Found device.
+        type: Tizen.Bluetooth.BluetoothDevice
+
+  - name: discoveryfinished
+    summary: The method to be invoked when the device discovery process has finished.
+    properties:
+      - name: foundDevices
+        summary: Array of devices found in this discovery session.
+        type: Array<Tizen.Bluetooth.BluetoothDevice>
+    
+  - name: discoveryerror
+    summary: The method to be invoked when a Bluetooth device is turned off or any other error case.
+    properties:
+      - name: error
+        type: Tizen.WebAPIError
+    
 properties:
   - name: name
     summary: The readable name of the Bluetooth adapter.
@@ -541,31 +549,3 @@ properties:
     type: Boolean
     permission: read-only
 
-# Pseudo-type    
----
-name: BluetoothDiscoverDevicesSuccessCallback
-summary: The success callback for BluetoothAdapter.discoverDevices().
-methods: 
-  - name: onstarted
-    summary: The method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device. 
-    
-  - name: ondevicefound 
-    summary: The method to be invoked when a new device is discovered in the process of inquiry/discovery. 
-    parameters:
-      - name: device 
-        summary: Found device. 
-        type: Tizen.Bluetooth.BluetoothDevice
-
-  - name: ondevicedisappeared
-    summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible. 
-    parameters:
-      - name: address 
-        summary: Address of the device that is no longer in range or visible. 
-        type: String
-
-  - name: onfinished
-    summary: The method to be invoked when the device discovery process has finished. 
-    parameters:
-      - name: foundDevices 
-        summary: Array of devices found in this discovery session. 
-        type: Array<Tizen.Bluetooth.BluetoothDevice>
