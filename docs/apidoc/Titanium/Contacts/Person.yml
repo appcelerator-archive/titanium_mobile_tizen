@@ -75,7 +75,7 @@ properties:
     description: Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
     type: String
     permission: read-only
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     
   - name: date
     summary: Dates associated with the person. Multi-value.
@@ -223,7 +223,7 @@ properties:
     permission: read-only
     description: |
         On iPhone and iPad is read-only, but on Tizen it is writable.
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     
   - name: recordId
     summary: Record identifier of the person. Single value.
