@@ -367,6 +367,10 @@ function build(logger, config, cli, finished) {
 						next(null, 'ok');
 
 					}.bind(this), function (next) {
+						//before signing and zipping lets remove apple specific files. Doind it before zipping allow us keep 
+						//copy files logic same for mobileweb and Tizen. As result it much easy synchronize there files.
+						this.logger.info(__('delete %s', this.buildDir + '/mobileweb/apple_startup_images'));
+						wrench.rmdirSyncRecursive( this.buildDir + '/mobileweb/apple_startup_images', true);
 						this.signTizenApp(logger, function () {
 							next(null, 'ok');
 						});						
