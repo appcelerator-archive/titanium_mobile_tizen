@@ -7,7 +7,7 @@ define(['Ti/_/lang', 'Messaging/MessageService', 'Messaging/Message', 'Messaging
 			constants: {
 				MESSAGE_SERVICE_TAG_MESSAGINGSMS: 'messaging.sms',
 				MESSAGE_SERVICE_TAG_MESSAGINGMMS: 'messaging.mms',
-				MESSAGE_SERVICE_TAG_MESSAGINGEMAIL: 'messaging.email',
+				MESSAGE_SERVICE_TAG_MESSAGINGEMAIL: 'messaging.email'
 			},
 
 			getMessageServices: function(messageServiceType /*MessageServiceTag*/, successCallback /*MessageServiceArraySuccessCallback*/, errorCallback /*ErrorCallback*/, serviceId /*AccountServiceId*/) {

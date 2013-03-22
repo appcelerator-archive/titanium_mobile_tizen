@@ -55,7 +55,7 @@ define(['Ti/_/declare', 'Messaging/MessageBody', 'Ti/_/Evented'], function(decla
 				get: function() {
 					return this._obj.messageStatus;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -129,7 +129,7 @@ define(['Ti/_/declare', 'Messaging/MessageBody', 'Ti/_/Evented'], function(decla
 				set: function(value) {
 					this._obj.attachments = value;
 				}
-			},
+			}
 		}
 	});
 
