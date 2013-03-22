@@ -1,8 +1,8 @@
 define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu', 'SystemInfo/SystemInfoStorage', 
 		'SystemInfo/SystemInfoDeviceCapability', 'SystemInfo/SystemInfoCellularNetwork',
-		'SystemInfo/SystemInfoSIM', 'SystemInfo/SystemInfoStorageUnit', 'WebAPIError', 'Ti/_/Evented', 'SystemInfo/SystemInfoWifiNetwork'],
+		'SystemInfo/SystemInfoSIM', 'SystemInfo/SystemInfoStorageUnit', 'WebAPIError', 'Ti/_/Evented'],
 		function(lang, SystemInfoProperty, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability,
-			SystemInfoCellularNetwork, SystemInfoSIM, SystemInfoStorageUnit, WebAPIError, Evented, SystemInfoWifiNetwork) {
+			SystemInfoCellularNetwork, SystemInfoSIM, SystemInfoStorageUnit, WebAPIError, Evented) {
 
 	var SystemInfo = lang.mixProps(require.mix({}, Evented), {
 
@@ -65,9 +65,6 @@ define(['Ti/_/lang', 'SystemInfo/SystemInfoProperty', 'SystemInfo/SystemInfoCpu'
 		}
 		if (object.toString() === '[object siminfo]') {
 			return new SystemInfoSIM(object);
-		}
-		if (object.toString() === '[object wifinetworkinfo]') {
-			return new SystemInfoWifiNetwork(object);
 		}
 	}
 
