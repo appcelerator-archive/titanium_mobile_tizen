@@ -21,7 +21,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				get: function() {
 					return this._obj.postedTime;
 				}
-			},
+			}
 		},
 
 		properties: {
@@ -40,8 +40,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				set: function(value) {
 					this._obj.content = value;
 				}
-			},
-		},
+			}
+		}
 
 	});
 
