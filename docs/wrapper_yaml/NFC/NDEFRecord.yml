@@ -22,19 +22,22 @@ properties:
     permission: read-only
 
   - name: type
-    type: Array<Number>
+    type: String
     summary: |
-        The specified type in byte array. The byte array contains zero to 255 bytes.
+        
+        The specified type in byte array. The byte array contains zero to 255 bytes. The byte array is converted to string
     permission: read-only
 
   - name: id
-    type: Array<Number>
+    type: String
     summary: |
-        The record ID. The byte array contains zero to 255 bytes. By default, this attribute is set to an empty array.
+        The record ID. The byte array contains zero to 255 bytes. 
+        By default, this attribute is set to an empty array. The byte array is converted to string
     permission: read-only
 
   - name: payload
-    type: Array<Number>
+    type: Titanium.Blob
     summary: |
-        The record payload. The byte array contains zero to (2^32 - 1) bytes.   
+        The record payload. The byte array contains zero to (2^32 - 1) bytes. 
+        The byte array is converted to <Titanium.Blob>
     permission: read-only

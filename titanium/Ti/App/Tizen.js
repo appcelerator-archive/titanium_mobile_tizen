@@ -19,11 +19,6 @@ define(['Ti/_/lang'], function(lang) {
 					return appInfo.iconPath;
 				}
 			},
-			version: {
-				get: function() {
-					return appInfo.version;
-				}
-			},
 			show: {
 				get: function() {
 					return appInfo.show;
@@ -42,11 +37,6 @@ define(['Ti/_/lang'], function(lang) {
 			size: {
 				get: function() {
 					return appInfo.size;
-				}
-			},
-			contextId: {
-				get: function() {
-					return currentTizenApp.contextId;
 				}
 			}
 		},
