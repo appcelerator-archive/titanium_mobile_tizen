@@ -99,6 +99,38 @@ function(next) {
 		info('dependencyAnalyzer failed: ' + e);
 	}	
 	next(null, 'ok');
+}, function(next) {
+	var packer = require('child_process'),
+		packagesModules = path.join(repoPath, 'support','module','packaged'),		
+		random = Math.random ().toString ().substring (2),
+		workingDir = path.join(tempdir(), random),
+		cmdzip = 'zip -q -r  "' + path.join(packagesModules,'tizen-tizen-3.0.0.zip') + '" *';
+
+	//remove  tizen-tizen-3.0.0.zip if it exists
+	rm('-rf', path.join(packagesModules,'tizen-tizen-3.0.0.zip'));
+	
+	//create temporary dir and its structire
+	fs.mkdirSync(workingDir);
+	fs.mkdirSync(path.join(workingDir, 'modules'));
+	fs.mkdirSync(path.join(workingDir, 'modules', 'tizen'));
+	
+	cp('-R', path.join(__dirname, 'modules') + '/*',  path.join(workingDir, 'modules', 'tizen'));
+
+	info('zip cmd: ' + cmdzip);
+	packer.exec(
+	cmdzip, {
+		cwd: workingDir
+	}, function(err, stdout, stderr) {
+		info(stdout);
+		if (err != null) {
+			//info(stderr);
+		} else {
+			info('compressing ok');
+		}
+		//remove temporary directory
+		rm('-rf', workingDir);
+		next(null, 'ok');
+	});		
 }], function(err) {
 	if (err) {
 		info(err);

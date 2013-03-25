@@ -1,0 +1,11 @@
+---
+name: Titanium.Filesystem.FileStream
+summary: Wrapper around `Titanium.Filesystem.File` that implements the `Titanium.IOStream` interface
+extends: Titanium.IOStream
+since: "1.7"
+createable: false
+platforms: [android, iphone, ipad, mobileweb, tizen]
+methods:
+  - name: close
+    summary: closes file stream, exception is thrown on error
+
