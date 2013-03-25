@@ -1,0 +1,26 @@
+---
+name: Titanium.XML.NodeList
+extends: Titanium.Proxy
+summary: A list of <Titanium.XML.Node> objects. Implements the 
+    [DOM Level 2 API](http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177) 
+    on Android and iOS. Exposes the 
+    [DOM Level 3 API](http://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-536297177) implementation on Mobile Web.
+since: "0.9"
+createable: false
+platforms: [android, iphone, ipad, mobileweb, tizen]
+methods:
+  - name: item
+    summary: Returns the <Titanium.XML.Node> object at the specified index.
+    returns:
+        type: Titanium.XML.Node
+        summary: The node at the index, or `null` if the index is out of bounds.
+    parameters:
+      - name: index
+        summary: The index of the node to retrieve. Indexing starts at 0.
+        type: Number
+properties:
+  - name: length
+    summary: The length of the node list.
+    type: Number
+    permission: read-only
+    
