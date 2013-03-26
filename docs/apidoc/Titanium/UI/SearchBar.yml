@@ -108,16 +108,14 @@ properties:
         [TEXT_AUTOCAPITALIZATION_SENTENCES](Titanium.UI.TEXT_AUTOCAPITALIZATION_SENTENCES), or 
         [TEXT_AUTOCAPITALIZATION_ALL](Titanium.UI.TEXT_AUTOCAPITALIZATION_ALL).
 
-        Default value for Tizen is [TEXT_AUTOCAPITALIZATION_SENTENCES](Titanium.UI.TEXT_AUTOCAPITALIZATION_SENTENCES)
-
     type: Number
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: No autocapitalization.
 
   - name: autocorrect
     summary: Determines whether the text in the search bar is autocorrected during typing.
     type: Boolean
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: false
 
   - name: barColor
@@ -146,7 +144,7 @@ properties:
   - name: keyboardType
     summary: Keyboard type constant to use when the field is focused.
     type: Number
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: System default keyboard.
 
   - name: prompt

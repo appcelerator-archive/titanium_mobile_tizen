@@ -107,10 +107,7 @@ methods:
         If the `showControls` option is `false`, you must control the camera explicitly, using
         the [takePicture](Titanium.Media.takePicture) and [hideCamera](Titanium.Media.hideCamera) 
         methods.
-
-        #### Tizen Platform Notes
-        Due to Tizen bug https://bugs.tizen.org/jira/browse/TIVI-254, camera shows but immediately closes.
-    platforms: [iphone, ipad, android, Tizen]
+    platforms: [iphone, ipad, android, tizen]
     parameters:
       - name: options
         summary: A dictionary of camera options as described in <CameraOptionsType>.
@@ -152,7 +149,7 @@ methods:
   - name: vibrate
     summary: Makes the device vibrate.
     description: |
-        On Android and Mobile Web, a `pattern` argument can be provided to specify a
+        On Android, Mobile Web and Tizen, a `pattern` argument can be provided to specify a
         vibration pattern.
 
         The `pattern` is an array of Number values.  Each number in the array is 
@@ -165,7 +162,7 @@ methods:
         Would cause the vibration to start immediately (delay = 0), and perform three
         long vibrations (500 ms) separated by short pauses (100ms).
         
-        On Mobile Web, calling `vibrate` without a `pattern` will stop the vibration.
+        On Mobile Web and Tizen, calling `vibrate` without a `pattern` will stop the vibration.
     parameters: 
       - name: pattern
         summary: Array of values identifying a vibrate pattern (only used on Android).
@@ -1174,7 +1171,7 @@ properties:
 ---
 name: ScreenshotResult
 summary: The parameter passed to the <Titanium.Media.takeScreenshot> callback.
-platforms: [iphone, ipad, android]
+platforms: [iphone, ipad, android, tizen]
 properties:
   - name: media
     summary: The screenshot image.
