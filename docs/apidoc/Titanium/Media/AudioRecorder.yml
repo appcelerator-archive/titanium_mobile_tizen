@@ -1,0 +1,54 @@
+---
+name: Titanium.Media.AudioRecorder
+summary: An audio recorder object used for recording audio from the device microphone.
+description: |
+    Use the <Titanium.Media.createAudioRecorder> method to create an audio recorder. 
+extends: Titanium.Proxy
+since: "0.9"
+platforms: [iphone, ipad]
+methods:
+
+  - name: pause
+    summary: Pauses the current audio recording.
+
+  - name: resume
+    summary: Resumes a paused recording.
+
+  - name: start
+    summary: Starts an audio recording.
+
+  - name: stop
+    summary: Stops the current audio recording and returns the recorded audio file.
+    returns:
+        type: Titanium.Filesystem.File
+
+properties:
+
+  - name: compression
+    summary: Audio compression to be used for the recording.
+    description: |
+        Specify one of the `AUDIO_FORMAT_` constants from <Titanium.Media>.
+    type: Number
+    default: <Titanium.Media.AUDIO_FORMAT_LINEAR_PCM>
+
+  - name: format
+    summary: Audio format to be used for the recording.
+    description: |
+        Specify one of the `AUDIO_FILEFORMAT_` constants from <Titanium.Media>.
+    type: Number
+    default: <Titanium.Media.AUDIO_FILEFORMAT_CAF>
+
+  - name: paused
+    summary: Indicates if the audio recorder is paused.
+    type: Boolean
+    permission: read-only
+
+  - name: recording
+    summary: Indicates if the audio recorder is recording.
+    type: Boolean
+    permission: read-only
+
+  - name: stopped
+    summary: Indicates if the audio recorder is stopped.
+    type: Boolean
+    permission: read-only

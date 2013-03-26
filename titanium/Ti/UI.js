@@ -12,7 +12,7 @@ define(
 		body = doc.body,
 		on = require.on,
 		is = require.is,
-		modules = '2DMatrix,ActivityIndicator,AlertDialog,Animation,Button,EmailDialog,ImageView,Label,OptionDialog,Picker,PickerColumn,PickerRow,ProgressBar,ScrollableView,ScrollView,Slider,Switch,Tab,TabGroup,TableView,TableViewRow,TableViewSection,TextArea,TextField,View,WebView,Window,Notification',
+		modules = '2DMatrix,ActivityIndicator,AlertDialog,Animation,Button,EmailDialog,SMSDialog,ImageView,Label,OptionDialog,Picker,PickerColumn,PickerRow,ProgressBar,ScrollableView,ScrollView,Slider,Switch,Tab,TabGroup,TableView,TableViewRow,TableViewSection,TextArea,TextField,View,WebView,Window,Notification',
 		creators = {},
 		setStyle = style.set,
 		handheld = navigator.userAgent.toLowerCase().match(/(iphone|android|tizen)/),

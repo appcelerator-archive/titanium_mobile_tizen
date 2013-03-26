@@ -36,26 +36,26 @@ define(['Ti/_/declare', 'WebAPIError', 'Messaging/MessageStorage', 'Messaging/Me
 
 		loadMessageBody: function(message /*Message*/, successCallback /*MessageBodySuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			function messageBodyLoadedSuccessCallback(message) {
-				successCallback.call(this, new Ti.Tizen.Messaging.MessageBody(message));
+				successCallback(new Ti.Tizen.Messaging.MessageBody(message));
 			}
 
 			function wrappedErrorCallback(error) {
 				errorCallback(new WebAPIError(error));
 			}
 
-			this._obj.loadMessageBody(message._obj, successCallback, errorCallback && wrappedErrorCallback);
+			this._obj.loadMessageBody(message._obj, messageBodyLoadedSuccessCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		loadMessageAttachment: function(attachment /*MessageAttachment*/, successCallback /*MessageAttachmentSuccessCallback*/, errorCallback /*ErrorCallback*/) {
 			function attachmentLoadedSuccessCallback(attachment) {
-				successCallback.call(this, new Ti.Tizen.Messaging.MessageAttachment(attachment));
+				successCallback(new Ti.Tizen.Messaging.MessageAttachment(attachment));
 			}
 
 			function wrappedErrorCallback(error) {
 				errorCallback(new WebAPIError(error));
 			}
 
-			this._obj.loadMessageAttachment(attachment._obj, successCallback, errorCallback && wrappedErrorCallback);
+			this._obj.loadMessageAttachment(attachment._obj, attachmentLoadedSuccessCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		sync: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, limit /*unsigned long*/) {
