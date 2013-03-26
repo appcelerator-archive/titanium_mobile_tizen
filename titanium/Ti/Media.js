@@ -41,7 +41,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			MEDIA_TYPE_VIDEO: "public.video",
 
 			canRecord: deviceCapabilities.microphone,
-			hasCamera: false || false
+			hasCamera: deviceCapabilities.cameraFront || deviceCapabilities.cameraBack
 		},
 
 		//beep: function() {},
@@ -65,34 +65,34 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 		vibrate: function(pattern) {
 			"vibrate" in navigator && navigator.vibrate(require.is(pattern, "Array") ? pattern : [pattern | 0]);
 		},
-		
+
 		showMusicLibrary: function(args) {
-			var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/view',null,'audio/*');
-			var serviceReplyCB = { 
-					   // callee now sends a reply 
-					   onsuccess: function(reply) {
-						   console.log('onsuccess:'+reply.key + ';'+reply.value);
-					   },
-					   // Something went wrong 
-					   onfail: function() {
-					      console.log('launch service failed');
-					   } 
-			};
-			
+			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null),
+				serviceReplyCB = { 
+					// callee now sends a reply 
+					onsuccess: function(reply) {
+						console.log('onsuccess:'+reply.key + ';'+reply.value);
+					},
+					// Something went wrong 
+					onfailure: function() {
+						console.log('launch service failed');
+					} 
+				};
+
 			function succeeded() {
 				console.log('launch service succeeded');
 			} 
 			function failed(e) { 
 				console.log('launch service failed. Reason : ' + e.name);
 			}
-			
-			tizen.application.launchService(service,'org.tizen.music-player',succeeded, failed, serviceReplyCB); 
+
+			tizen.application.launchAppControl(service, 'org.tizen.music-player', succeeded, failed, serviceReplyCB); 
 		},
-		
+
 		saveToPhotoGallery: function(media, callbacks){
 			var file = media instanceof Titanium.Blob ? media.file : media;
 			var blob = file.read();
-					
+
 			function errorCB(e){
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
 			};
@@ -115,11 +115,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			
 			tizen.filesystem.resolve('images', successCB, errorCB, "rw");
 		},
-		
+
 		takeScreenshot: function(callback) {
 			if (!callback) return;
-			
-			var options = {allowTaint:true,taintTest:false};
+
+			var options = { allowTaint: true,taintTest: false };
 			options.onrendered = function(canvasObject) {
 				var blobData = canvasObject.toDataURL().substring(22); //data:image/png;base64,
 				var blob = new Blob({
@@ -127,12 +127,12 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 						length: blobData.length,
 						mimeType: "image/png"
 					});
-				callback({media:blob});
+				callback({ media: blob });
 			};
-			
+
 			h2c([document.body], options);
 		},
-		
+
 		isCameraSupported: function(){
 			try
 			{
@@ -143,34 +143,34 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 				return false;
 			}
 		},
-		
+
 		getIsCameraSupported: function(){
 			return this.isCameraSupported();
 		},
-		
+
 		showCamera: function() {
-				if (!this.isCameraSupported()) return;
-				
-				var service = new tizen.ApplicationService('http://tizen.org/appcontrol/operation/create_content',null,'image/jpeg');
-				var serviceReplyCB = { 
-						   // callee now sends a reply 
-						   onsuccess: function(reply) {
-							   console.log('onsuccess:'+reply.key + ';'+reply.value);
-						   },
-						   // Something went wrong 
-						   onfail: function() {
-							  console.log('launch service failed');
-						   } 
+			if (!this.isCameraSupported()) return;
+
+			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null),
+				serviceReplyCB = { 
+					// callee now sends a reply 
+					onsuccess: function(reply) {
+						console.log('onsuccess:' + reply.key + ';' + reply.value);
+					},
+					// Something went wrong 
+					onfailure: function() {
+						console.log('launch service failed');
+					} 
 				};
-				
-				function succeeded() {
-					console.log('launch service succeeded');
-				} 
-				function failed(e) { 
-					console.log('launch service failed. Reason : ' + e.name);
-				}
-				
-				tizen.application.launchService(service,'org.tizen.camera-app',succeeded, failed, serviceReplyCB); 
+
+			function succeeded() {
+				console.log('launch service succeeded');
+			} 
+			function failed(e) { 
+				console.log('launch service failed. Reason : ' + e.name);
+			}
+
+			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app', succeeded, failed, serviceReplyCB); 
 		}
 	});
 });
