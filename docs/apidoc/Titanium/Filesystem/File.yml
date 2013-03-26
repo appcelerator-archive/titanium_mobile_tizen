@@ -295,7 +295,7 @@ properties:
     summary: |
         `true` if the file is executable.
     description: |
-        On iOS and Mobile Web, this property exists but is always `false`.
+        On iOS, Mobile Web and Tizen, this property exists but is always `false`.
     type: Boolean
     platforms: [android, iphone, ipad, mobileweb, tizen]
     permission: read-only
@@ -303,7 +303,7 @@ properties:
     summary:
         Set to `true` if the file is hidden.
     description: |
-        On iOS and Mobile Web, this property exists but is always `false`.
+        On iOS, Mobile Web and Tizen, this property exists but is always `false`.
     type: Boolean
     platforms: [android, iphone, ipad, mobileweb, tizen]
   - name: name
@@ -326,7 +326,7 @@ properties:
     summary: |
         `true` if the file identified by this object is read-only.
     description: |
-        On Mobile Web, this property exists but is always `true` for files in the resources directory
+        On Mobile Web and Tizen, this property exists but is always `true` for files in the resources directory
         and `false` for application data and temporary files.
     type: Boolean
     permission: read-only
@@ -356,7 +356,7 @@ properties:
     summary: |
         `true` if the file identified by this object is a symbolic link.
     description: |
-        On Mobile Web, this property exists but is always `false`.
+        On Mobile Web and Tizen, this property exists but is always `false`.
     type: Boolean
     permission: read-only
   - name: writable

@@ -1118,7 +1118,7 @@ build.prototype = {
 
 	createConfigXml: function () {
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
-		if (!this.tiapp.url || 0 === this.tiapp.url) {
+		if (!this.tiapp.url || 0 === this.tiapp.url || 'http://' === this.tiapp.url) {
 			templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);
 		} else {
 			templt = templt.replace('%%WIDGET_ID%%', this.tiapp.url);

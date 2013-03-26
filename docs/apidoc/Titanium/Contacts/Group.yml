@@ -38,6 +38,7 @@ methods:
             [CONTACTS_SORT_FIRST_NAME](Titanium.Contacts.CONTACTS_SORT_FIRST_NAME), 
             or [CONTACTS_SORT_LAST_NAME](Titanium.Contacts.CONTACTS_SORT_LAST_NAME).
         type: Number
+    platforms: [iphone, ipad, android]    
 
 properties:
   - name: name

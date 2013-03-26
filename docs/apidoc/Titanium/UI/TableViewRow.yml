@@ -49,11 +49,11 @@ description: |
     
     On iOS, these values have no effect.
     
-    On Mobile Web, they are used to relatively position the row, treating the `TableView` as if it 
+    On Mobile Web and Tizen, they are used to relatively position the row, treating the `TableView` as if it 
     were a horizontal layout.
     
-    Also, note that the selected text color, `selectedColor`, can only be set on iOS and 
-    Mobile Web. On Android, the text color does not change when the row is selected.
+    Also, note that the selected text color, `selectedColor`, can only be set on iOS,
+    Mobile Web and Tizen. On Android, the text color does not change when the row is selected.
     
     #### Row Swipe Gestures (Android and iOS)
     
@@ -138,7 +138,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -158,7 +158,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -178,7 +178,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -198,7 +198,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad]
     since: {iphone: "3.0.1", ipad: "3.0.1"}
@@ -225,7 +225,7 @@ properties:
         For example, if some rows include images and some rows do not, you would have two class
         names, one for image rows and one for plain rows.
         
-        This property exists on Mobile Web, but is ignored.
+        This property exists on Mobile Web and Tizen, but is ignored.
     type: String
     
   - name: color
