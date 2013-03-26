@@ -168,7 +168,7 @@ events:
       - name: reason
         summary: Human-readable text describing the reason for the change.
         type: String
-        platforms: [android, mobileweb]
+        platforms: [android, mobileweb, tizen]
 properties:
   - name: INADDR_ANY
     summary: |

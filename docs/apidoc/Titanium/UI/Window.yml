@@ -272,12 +272,12 @@ properties:
         bad visual/redraw behavior after the modal is dismissed, due to how
         iOS manages modal transitions.
         
-        Mobile Web note: On Mobile Web, windows are always modal, blocking input to underlying 
+        Mobile Web and Tizen note: On Mobile Web and Tizen, windows are always modal, blocking input to underlying 
         windows. If the window does not occupy the full screen, setting `modal` to `true` provides 
         a visual cue by dimming any background windows. If the window occupies the full screen, 
         `modal` has no effect.
 
-        On Mobile Web and iOS, the modal property has no effect on whether the window is 
+        On Mobile Web, Tizen and iOS, the modal property has no effect on whether the window is 
         translucent or opaque.
     type: Boolean
     default: false
