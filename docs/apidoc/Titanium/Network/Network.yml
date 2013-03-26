@@ -69,17 +69,6 @@ methods:
             Dictionary object of properties defined in <Titanium.Network.BonjourService>.
         optional: true
         type: Dictionary<Titanium.Network.BonjourService>
-  - name: createHTTPClient
-    summary: Creates and returns a <Titanium.Network.HttpClient> object.
-    platforms: [iphone, ipad, mobileweb, tizen]
-    returns:
-        type: Titanium.Network.HTTPClient
-    parameters:
-      - name: parameters
-        summary: |
-            Dictionary object of properties defined in <Titanium.Network.HTTPClient>.
-        optional: true
-        type: Dictionary<Titanium.Network.HTTPClient>            
   - name: createTCPSocket
     deprecated:
         since: "1.7.0"
