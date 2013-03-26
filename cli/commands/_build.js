@@ -44,38 +44,38 @@ var ti = require('titanium-sdk'),
 	devId,
 	tizenConfigXmlSources, //here we keep content of <tizen> node from tiapp.xml and add it into config.xml directly
 	defaultPrivilegesList = 
-			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/download"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/power"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/setting"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>'+
-			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>'+
-			'<access origin="*" subdomains="true"/>';
+			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/download"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/power"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/setting"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+			'<access origin="*" subdomains="true"/>\n';
 
 // silence uglify's default warn mechanism
 UglifyJS.AST_Node.warn_function = function () {};
@@ -1108,7 +1108,7 @@ build.prototype = {
 		}
 
 		//<tizen> node absent in tiapp.xml, adding it.		
-		var tizenSectionStr = '<tizen appid="' + this.tiapp.tizen.appid+'">' + defaultPrivilegesList + '</tizen>',
+		var tizenSectionStr = '<tizen xmlns:tizen="http://ti.appcelerator.org" appid="' + this.tiapp.tizen.appid+'">\n' + defaultPrivilegesList + '\n</tizen>',
 			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
 			result;
 		parsedTiXml.appendChild(tizenSec),
