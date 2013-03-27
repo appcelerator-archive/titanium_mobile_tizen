@@ -41,7 +41,7 @@ description: |
     In addition to annotations, iOS supports adding routes to a map view, using
     [addRoute](Titanium.Map.View.addRoute).
     
-    #### Mobile Web and TizenPlatform Notes
+    #### Mobile Web and Tizen Platform Notes
     
     For Mobile Web and Tizen, the default map provider is Google. Google Maps does not require you to obtain an API key,
     however it is encouraged that you use an API key so that you can monitor your Maps API usage. You can sign
