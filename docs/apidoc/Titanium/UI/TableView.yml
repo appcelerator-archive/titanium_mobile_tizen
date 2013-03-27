@@ -49,6 +49,26 @@ description: |
     
     To mitigate this, a `ScrollView` may be used instead of a table view, as demonstrated in the 
     [ScrollView](Titanium.UI.ScrollView), "Scroll View as a Table View", example. 
+
+    #### Known Issues
+
+    There are known issues with the `sections` property and associated methods added in
+    Release 3.0:
+
+    *   On iOS, event listeners do not fire correctly when table view sections are added or
+        updated using the `sections` property or `appendSection`, `insertSectionBefore`,
+        `insertSectionAfter`, or `updateSection` methods. Adding sections using the `data` 
+        property is recommended until this issue is fixed.  
+        ([TIMOB-12616](https://jira.appcelerator.org/browse/TIMOB-12616))
+
+    *   On iOS, the first two arguments to the `updateSection` method are reversed.
+        ([TIMOB-12625](https://jira.appcelerator.org/browse/TIMOB-12625))
+
+    *   On Android, the `sections` property is a read-only property.
+        ([TIMOB-12620](https://jira.appcelerator.org/browse/TIMOB-12620))
+
+    *   On Mobile Web, click events fail to fire after calling the `updateSection` method.
+        ([TIMOB-12630](https://jira.appcelerator.org/browse/TIMOB-12630))
     
     #### Row Editing and Moving Modes (iOS only)
     
@@ -94,9 +114,9 @@ description: |
     * Inherited `moveable` property is always `true`. Explicit `moveable` property may be set.
 extends: Titanium.UI.View
 since: "0.8"
-excludes: {
-    properties: [backgroundSelectedColor, backgroundSelectedImage]
-}
+excludes:
+    events: [focus]
+    properties: [backgroundSelectedColor, backgroundSelectedImage, enabled]
 
 events:
   - name: click
@@ -119,7 +139,9 @@ events:
 
       - name: rowData
         summary: |
-            Properties of the row.  When the row is created implicitly using a JavaScript dictionary object,
+            Properties of the row.
+            
+            When the row is created implicitly using a JavaScript dictionary object,
             use this property rather than `row` to access any custom row properties.
             
             Here's an example of creating a row implicitly, which is not the recommended way.
@@ -407,7 +429,7 @@ events:
         
   - name: swipe
     summary: Fired when the device detects a swipe gesture (left or right) against the view.
-    since: { android: "2.1.0", iphone: "2.1.0", ipad: "2.1.0", mobileweb: "1.8.2" }
+    since: { android: "2.1.0", iphone: "2.1.0", ipad: "2.1.0", mobileweb: "1.8.2" } 
     properties:
       - name: direction
         summary: Direction of the swipe, either `left` or `right`.
@@ -584,7 +606,9 @@ methods:
         dictionary specifying the properties for a table section, in which case this `TableView` will 
         create `TableViewSection` objects as needed. 
         
-        On iOS, the row(s) can be inserted with animation by specifying a `properties` parameter.
+        On iOS, the section(s) can be inserted with animation by specifying a `properties` parameter.
+
+        Due to a known issue, TIMOB-12616, this method should not be used for adding sections on iOS.
     parameters:
       - name: section
         summary: Section or section to add to the table.
@@ -666,6 +690,8 @@ methods:
         create `TableViewSection` objects as needed. 
         
         On iOS, the section(s) may be inserted with animation by setting the `animation` parameter.
+
+        Due to a known issue, TIMOB-12616, this method should not be used for adding sections on iOS.
     parameters:
       - name: index
         summary: Index of the section to insert after.
@@ -712,6 +738,8 @@ methods:
         create `TableViewSection` objects as needed. 
         
         On iOS, the section(s) may be inserted with animation by setting the `animation` parameter.
+
+        Due to a known issue, TIMOB-12616, this method should not be used for adding sections on iOS.
     parameters:
       - name: index
         summary: Index of the section to insert before.
@@ -839,7 +867,7 @@ methods:
     since: "2.1.0"
 
   - name: updateRow
-    summary: Updates an existing row, optionally with animation
+    summary: Updates an existing row, optionally with animation.
     parameters:
       - name: index
         summary: Index of the row to update.
@@ -854,7 +882,17 @@ methods:
         type: TableViewAnimationProperties
 
   - name: updateSection
-    summary: Updates an existing section, optionally with animation
+    summary: Updates an existing section, optionally with animation.
+    description: |
+        Known issues:
+
+        *   On iOS, Mobile Web and Tizen, event listeners do not fire correctly after table view sections are 
+            updated using the `updateSection` methods. 
+            ([TIMOB-12616](https://jira.appcelerator.org/browse/TIMOB-12616),
+            [TIMOB-12630](https://jira.appcelerator.org/browse/TIMOB-12630))
+
+        *   On iOS, the first two arguments to the `updateSection` method are reversed.
+            ([TIMOB-12625](https://jira.appcelerator.org/browse/TIMOB-12625))
     parameters:
       - name: index
         summary: Index of the section to update.
@@ -1042,6 +1080,14 @@ properties:
     default: false
     platforms: [iphone, ipad]
     
+  - name: overScrollMode
+    summary: |
+      One of <Titanium.UI.Android.OVER_SCROLL_ALWAYS>, <Titanium.UI.Android.OVER_SCROLL_IF_CONTENT_SCROLLS>, or <Titanium.UI.Android.OVER_SCROLL_NEVER>. 
+    type: Number
+    default: Titanium.UI.Android.OVER_SCROLL_ALWAYS
+    platforms: [android]
+    since: "3.1.0"
+
   - name: rowHeight
     summary: Default row height for table view rows.
     type: Number
@@ -1076,8 +1122,16 @@ properties:
 
   - name: search
     summary: Search field to use for the table view.
-    type: Titanium.UI.SearchBar
+    type: [Titanium.UI.SearchBar, Titanium.UI.Android.SearchView]
     platforms: [android, iphone, ipad]
+    
+  - name: searchAsChild
+    summary: Determines whether the [SearchBar](Titanium.UI.SearchBar) or [SearchView](Titanium.UI.Android.SearchView) appears as part of the TableView.
+    description: Set to false if the search view will be displayed in the action bar.
+    type: Boolean
+    default: true
+    since: 3.0.2
+    platforms: [android]
     
   - name: searchHidden
     summary: Determines whether the search field is visible.
@@ -1095,8 +1149,13 @@ properties:
 
   - name: sections
     summary: Sections of this table.
+    description: |
+        In Release 3.0, this property is read-only on Android.
+
+        Due to a known issue, TIMOB-12616, the `sections` property should not be used
+        for adding sections on iOS.
     type: Array<Titanium.UI.TableViewSection>
-    since: 3.0.0
+    since: { android: 3.1.0, iphone: 3.0.0, ipad: 3.0.0, mobileweb: 3.0.0 }
     platforms: [android, iphone, ipad, mobileweb, tizen]
 
   - name: separatorColor
@@ -1168,9 +1227,7 @@ examples:
             sectionVeg.add(Ti.UI.createTableViewRow({ title: 'Potatoes' }));
             
             var table = Ti.UI.createTableView({
-              // Prior to Release 3.0, add sections using the data property:
-              // data: [sectionFruit, sectionVeg]
-              sections: [sectionFruit, sectionVeg]
+              data: [sectionFruit, sectionVeg]
             });
             
             win.add(table);
@@ -1181,8 +1238,10 @@ examples:
             sectionFish.add(Ti.UI.createTableViewRow({ title: 'Haddock' }));
             
             // Prior to Release 3.0, you can only add and remove sections by setting the data property:
-            // table.data = [ sectionFish, sectionFruit, sectionVeg ];
-            table.insertSectionBefore(0, sectionFish);
+            table.data = [ sectionFish, sectionFruit, sectionVeg ];
+            // Due to a known issue, TIMOB-12616, the section access methods and sections
+            // property should not be used on iOS.
+            // table.insertSectionBefore(0, sectionFish);
 
   - title: Table View with Composite Layout
     example: |
