@@ -295,3 +295,8 @@ properties:
     summary: Size of the buffer used for streaming, in bytes.
     type: Number
     platforms: [iphone, ipad]
+  - name: autoplay
+    summary: Indicates if an audio should automatically start playback.
+    type: Boolean
+    default: false
+    platforms: [tizen]

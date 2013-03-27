@@ -588,7 +588,7 @@ methods:
         summary: | 
             Function to be invoked upon completion. If non-null, this method will be performed 
             asynchronously. If null, it will be performed immediately.
-            On Tizen, this function is asynchronous only. The callback is mandatory and function always returns “undefined”.
+            On Tizen, this function is asynchronous only. The callback is mandatory and function always returns "undefined".
         type: Callback<Titanium.Blob>
         optional: true
         
