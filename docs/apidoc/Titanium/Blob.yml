@@ -110,7 +110,7 @@ methods:
         type: String
     summary: Returns a string representation of this blob.
     description: |
-        On Mobile Web, if the blob is binary, `toString` returns a base64 encoded data URI.
+        On Mobile Web and Tizen, if the blob is binary, `toString` returns a base64 encoded data URI.
 
   - name: append
     summary: Appends the data from another blob to this blob.
