@@ -1,6 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/Tizen/_/contactHelper'], function(Evented, lang, Person, Group, contactHelper) {
-
-	var addressbook = tizen.contact.getDefaultAddressBook();
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper'], function(Evented, lang, Person, Group, contactHelper) {
 
 	return lang.setObject('Ti.Contacts', Evented, {
 
@@ -77,7 +75,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 		},
 		showContacts: function(values){
 			var self = this,
-				win = Ti.UI.createWindow({backgroundColor: '#81BEF7'}),
+				win = Ti.UI.createWindow({ backgroundColor: '#81BEF7' }),
 				tableview,
 				data = [],
 				tableViewOptions,
@@ -98,7 +96,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 					for(var i=0, len = list.length; i<len; i++) {
 						fL = list[i]['title'].charAt(0);
 						if((iChars.indexOf(fL) === -1) && l != fL) {
-							list[i]['header'] = fL.toUpperCase();	
+							list[i]['header'] = fL.toUpperCase();
 						}
 						l = fL;
 					} 
@@ -150,7 +148,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 				console.log('Problems with getting the contacts, Error: ' + e.message);
 			}
 
-			this.getAllPeopleAsync(successCB, errorCB);
+			Ti.Contacts.Tizen.getAllPeople(successCB, errorCB);
 		}
 
 	});

@@ -1,4 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
 	
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 		

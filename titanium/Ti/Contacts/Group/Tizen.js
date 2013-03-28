@@ -3,7 +3,6 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 	return lang.setObject('Ti.Contacts.Group.Tizen', Evented, {
 
 		members: function(group, successCallback, errorCallback) {
-			// TODO Investigate how to filter groupIds field
 			var groupFilter = new tizen.AttributeFilter('groupIds', 'CONTAINS',  group.recordId), //create filter to get contacts with selected group
 				self = this,
 				id = group.recordId,

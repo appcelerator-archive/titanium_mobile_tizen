@@ -1,19 +1,16 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/contactHelper'], function(declare, Evented, contactHelper) {
-
-//	var addressbook = tizen.contact.getDefaultAddressBook();
+define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declare, Evented, contactHelper) {
 
 	return declare('Ti.Contacts.Person', Evented, {
 		constructor: function(args) {
 			if (!args.id) {
 				this._contact = contactHelper.createTizenContact(args);
-				var addressbook = tizen.contact.getDefaultAddressBook();
-				addressbook.add(this._contact);
+				tizen.contact.getDefaultAddressBook().add(this._contact);
 				this.constants.__values__.id = this._contact.id;
 			}
 		},
 
 		constants: {
-			id: {},
+			id: 0,
 			fullName: {
 				get: function() {
 					return this.firstName + ' ' + this.lastName;
@@ -24,8 +21,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Tizen/_/contactHelper'], function(de
 					return Ti.Contacts.CONTACT_KIND_PERSON;
 				}
 			},
-			modified: {},
-			prefix: {},
+			modified: '',
+			prefix: '',
 		},
 
 		properties: {
