@@ -85,7 +85,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 					right: 20,
 					height: '6%',
 					bottom: '2%'
-				});	
+				});
 				// add headers as first letter for contacts
 				function addHeaders(list) {
 					var fL,
@@ -109,7 +109,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 					return 1;
 				  return 0;
 				}
-			//success callback for getAllPeopleAsync
+			//success callback for getAllPeople
 			var successCB = function(persons){
 				for(var i=0, len = persons.length; i < len; i++) {
 					data.push({title: persons[i]['fullName'], hasChild:true, test: persons[i].id});	

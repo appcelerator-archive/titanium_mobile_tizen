@@ -3,9 +3,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 	return declare('Ti.Contacts.Person', Evented, {
 		constructor: function(args) {
 			if (!args.id) {
-				this._contact = contactHelper.createTizenContact(args);
-				tizen.contact.getDefaultAddressBook().add(this._contact);
-				this.constants.__values__.id = this._contact.id;
+				var contact = contactHelper.createTizenContact(args);
+				tizen.contact.getDefaultAddressBook().add(contact);
+				this.constants.__values__.id = contact.id;
 			}
 		},
 
