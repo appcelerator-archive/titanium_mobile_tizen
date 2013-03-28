@@ -19,9 +19,9 @@ description: |
     removed for performance and parity reasons. As they still remain in <Titanium.UI.ScrollView>, 
     the equivalent functionality may be obtained by adding a `ScrollView` to `ScrollableView`. See 
     the "Simple Scrollable View with 2 Zoomable Images" example for a demonstration.
-excludes: { 
+excludes:
     events: [ 'click', 'longclick', 'pinch', 'swipe', 'touchend', 'touchmove' ]
-}
+    properties: [ 'enabled' ]
 extends: Titanium.UI.View
 platforms: [android, iphone, ipad, mobileweb, tizen]
 since: "0.8"
@@ -277,7 +277,14 @@ properties:
     default: false
     platforms: [iphone, ipad]
 
-    
+  - name: overScrollMode
+    summary: |
+      One of <Titanium.UI.Android.OVER_SCROLL_ALWAYS>, <Titanium.UI.Android.OVER_SCROLL_IF_CONTENT_SCROLLS>, or <Titanium.UI.Android.OVER_SCROLL_NEVER>. 
+    type: Number
+    default: Titanium.UI.Android.OVER_SCROLL_ALWAYS
+    platforms: [android]
+    since: "3.1.0"
+
   - name: pagingControlColor
     summary: Color of the paging control, as a color name or hex triplet.
     description: |

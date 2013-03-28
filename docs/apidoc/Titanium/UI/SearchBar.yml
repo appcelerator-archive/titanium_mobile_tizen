@@ -44,7 +44,7 @@ description: |
             // standard click event handling here
     
 extends: Titanium.UI.View
-excludes: { methods: [ add ] }
+excludes: { methods: [ add, removeAllChildren ] }
 since: "0.8"
 platforms: [android, iphone, ipad]
 methods:
@@ -108,16 +108,14 @@ properties:
         [TEXT_AUTOCAPITALIZATION_SENTENCES](Titanium.UI.TEXT_AUTOCAPITALIZATION_SENTENCES), or 
         [TEXT_AUTOCAPITALIZATION_ALL](Titanium.UI.TEXT_AUTOCAPITALIZATION_ALL).
 
-        Default value for Tizen is [TEXT_AUTOCAPITALIZATION_SENTENCES](Titanium.UI.TEXT_AUTOCAPITALIZATION_SENTENCES)
-
     type: Number
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: No autocapitalization.
 
   - name: autocorrect
     summary: Determines whether the text in the search bar is autocorrected during typing.
     type: Boolean
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: false
 
   - name: barColor
@@ -141,12 +139,11 @@ properties:
         [hintText](Titanium.UI.SearchBar.hintText) property.
     description: Only one of `hintText` or `hinttextid` should be specified.
     type: String
-    platforms: [iphone, ipad, android]
 
   - name: keyboardType
     summary: Keyboard type constant to use when the field is focused.
     type: Number
-    platforms: [iphone, ipad, tizen]
+    platforms: [iphone, ipad]
     default: System default keyboard.
 
   - name: prompt

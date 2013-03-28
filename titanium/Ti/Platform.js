@@ -133,7 +133,6 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				architecture: deviceCapabilities.platformCoreCpuArch,
 				availableMemory: void 0,
 				batteryLevel: void 0,
-				batteryMonitoring: false,
 				batteryState: void 0,
 				isBrowser: true,
 				id: mid,

@@ -32,12 +32,21 @@ description: |
     See the [TableView](Titanium.UI.TableView) description and examples section for more information 
     about creating table rows.
     
-    #### Improved Table Performance (Android and iOS)
+    #### Improved Table Performance (Android)
     
-    When rows contain child views, improved performance may be obtained by giving rows with the same 
-    layout a [className](Titanium.UI.TableViewRow) of the same value. The content of the rows may 
-    be different without the need for a new class name, though. For example, if the text is the only 
-    difference between two rows, both row instances should have identical class names.
+    If you are experiencing performance issues on Android when using custom rows, you can
+    try setting the [className](Titanium.UI.TableViewRow.className) property. The class name serves as a 
+    cue for reusing the underlying views used to display the rows.
+
+    A given `className` value indicates a row with a particular set of child views.
+    All rows that share a class name must have the same set of children -- for example, the class 
+    name "myCustomRow" could identify a row containing two labels and an image view. 
+    
+    The properties of the child controls may be different. For example, each instance of 
+    "myCustomRow" could have a different image and different text on the labels.
+
+    Note that `className` is no longer used on iOS, and was never used on Mobile Web; on
+    these platforms, `className` is ignored.
     
     #### Platform Implementation Notes
     
@@ -49,11 +58,11 @@ description: |
     
     On iOS, these values have no effect.
     
-    On Mobile Web, they are used to relatively position the row, treating the `TableView` as if it 
+    On Mobile Web and Tizen, they are used to relatively position the row, treating the `TableView` as if it 
     were a horizontal layout.
     
-    Also, note that the selected text color, `selectedColor`, can only be set on iOS and 
-    Mobile Web. On Android, the text color does not change when the row is selected.
+    Also, note that the selected text color, `selectedColor`, can only be set on iOS,
+    Mobile Web and Tizen. On Android, the text color does not change when the row is selected.
     
     #### Row Swipe Gestures (Android and iOS)
     
@@ -68,9 +77,9 @@ description: |
 extends: Titanium.UI.View
 since: "0.9"
 excludes:
-    events: [dblclick, doubletap, longpress, pinch, singletap, touchmove, twofingertap]
+    events: [dblclick, doubletap, focus, longpress, pinch, singletap, touchmove, twofingertap]
     methods: [animate]
-    properties: []
+    properties: [enabled]
 
 events:
   - name: click
@@ -138,7 +147,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -158,7 +167,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -178,7 +187,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad, mobileweb, tizen]
     properties:
@@ -198,7 +207,7 @@ events:
         to scroll during a touch event, the appropriate row or table `touchcancel` event fire 
         before the `scroll` event begins.
         
-        On Mobile Web, a scroll may occur in the middle of a touch, in which case a `touchend` 
+        On Mobile Web and Tizen, a scroll may occur in the middle of a touch, in which case a `touchend` 
         will fire immediately following the scroll.
     platforms: [iphone, ipad]
     since: {iphone: "3.0.1", ipad: "3.0.1"}
@@ -225,8 +234,9 @@ properties:
         For example, if some rows include images and some rows do not, you would have two class
         names, one for image rows and one for plain rows.
         
-        This property exists on Mobile Web, but is ignored.
+        This property exists on iOS, Tizen and Mobile Web, but is ignored.
     type: String
+    platforms: [android]
     
   - name: color
     summary: Default text color of the row when not selected, as a color name or hex triplet.
@@ -356,7 +366,7 @@ properties:
   - name: accessibilityLabel
     summary: A succint label associated with the table row for the device's accessibility service.
     description: |
-        See <Ti.UI.View.accessibilityLabel> description.
+        See <Titanium.UI.View.accessibilityLabel> description.
     since: "3.0.0"
     platforms: [iphone, ipad]
     type: String
