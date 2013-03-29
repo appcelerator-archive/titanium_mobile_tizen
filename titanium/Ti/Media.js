@@ -1,8 +1,8 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c", "Ti/Media/Sound", "Ti/Media/AudioPlayer"], function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'], function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
 
-	return lang.setObject("Ti.Media", Evented, {
+	return lang.setObject('Ti.Media', Evented, {
 
 		constants: {
 			UNKNOWN_ERROR: 0,
@@ -37,11 +37,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			VIDEO_FINISH_REASON_PLAYBACK_ERROR: 1,
 			VIDEO_FINISH_REASON_USER_EXITED: 2,
 
-			MEDIA_TYPE_PHOTO: "public.image",
-			MEDIA_TYPE_VIDEO: "public.video",
+			MEDIA_TYPE_PHOTO: 'public.image',
+			MEDIA_TYPE_VIDEO: 'public.video',
 
 			canRecord: deviceCapabilities.microphone,
-			hasCamera: deviceCapabilities.cameraFront || deviceCapabilities.cameraBack
+			isCameraSupported: deviceCapabilities.cameraFront || deviceCapabilities.cameraBack
 		},
 
 		//beep: function() {},
@@ -59,11 +59,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 		},
 
 		createVideoPlayer: function(args) {
-			return new (require("Ti/Media/VideoPlayer"))(args);
+			return new (require('Ti/Media/VideoPlayer'))(args);
 		},
 
 		vibrate: function(pattern) {
-			"vibrate" in navigator && navigator.vibrate(require.is(pattern, "Array") ? pattern : [pattern | 0]);
+			'vibrate' in navigator && navigator.vibrate(require.is(pattern, 'Array') ? pattern : [pattern | 0]);
 		},
 
 		showMusicLibrary: function(args) {
@@ -71,7 +71,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 				serviceReplyCB = { 
 					// callee now sends a reply 
 					onsuccess: function(reply) {
-						console.log('onsuccess:'+reply.key + ';'+reply.value);
+						console.log('onsuccess:' + reply.key + ';' + reply.value);
 					},
 					// Something went wrong 
 					onfailure: function() {
@@ -96,24 +96,23 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			function errorCB(e){
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
 			};
-			
+
 			function successCB(dir) {
 				var writeToStream = function (fileStream) {
 					fileStream.writeBase64(blob._data);
 					fileStream.close();
 					callbacks && typeof callbacks.success === 'function' && callbacks.success();
 				};
-				
-				try{
+
+				try {
 					dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
-				}catch(e){
+				} catch(e) {
 					errorCB(e);
 				}
-				
-				
+
 			};
-			
-			tizen.filesystem.resolve('images', successCB, errorCB, "rw");
+
+			tizen.filesystem.resolve('images', successCB, errorCB, 'rw');
 		},
 
 		takeScreenshot: function(callback) {
@@ -125,7 +124,7 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 				var blob = new Blob({
 						data: blobData,
 						length: blobData.length,
-						mimeType: "image/png"
+						mimeType: 'image/png'
 					});
 				callback({ media: blob });
 			};
@@ -133,23 +132,8 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			h2c([document.body], options);
 		},
 
-		isCameraSupported: function(){
-			try
-			{
-				tizen.application.getAppInfo("org.tizen.camera-app");
-				return true;
-			}
-			catch(e) {
-				return false;
-			}
-		},
-
-		getIsCameraSupported: function(){
-			return this.isCameraSupported();
-		},
-
 		showCamera: function() {
-			if (!this.isCameraSupported()) return;
+			if (!this.isCameraSupported) return;
 
 			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null),
 				serviceReplyCB = { 
