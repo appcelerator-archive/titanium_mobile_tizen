@@ -24,15 +24,15 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 
 	// initialize values that should be initialized via fucntions with callbacks
 	function initPlatformData() {
-		//Get our application info.
-		//Workaround for simulator. It throws exception because id is undefined. On Emulator works fine.
+		//Get our application info.		
 		try {
 			Platform.constants.__values__.id = tizen.application.getAppInfo().id; //The unique ID for an installed application. 
 		} catch (e) {
+			//Emulator throws exception because id is undefined. On Emulator works fine.
 			Platform.constants.__values__.id = 'ID001'; //The unique ID for an installed application. 
 		}
 
-		if(deviceCapabilities.wifi) {
+		if (deviceCapabilities.wifi) {
 			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
 			// subscribing to WiFi property changes
 			tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
