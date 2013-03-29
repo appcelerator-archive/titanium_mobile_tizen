@@ -314,7 +314,7 @@ define(
 	Object.defineProperty(global, "Ti", { value: Ti, writable: false });
 	Object.defineProperty(global, "Titanium", { value: Ti, writable: false });
 
-	API.info("Appcelerator Titanium " + ver + " Tizen");
+	API.info('Appcelerator Titanium ' + ver + ' Tizen');
 
 	// make sure we have some vendor prefixes defined
 	cfg.vendorPrefixes || (cfg.vendorPrefixes = ["", "Moz", "Webkit", "O", "ms"]);
