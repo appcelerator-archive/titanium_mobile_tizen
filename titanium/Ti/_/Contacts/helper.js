@@ -276,7 +276,7 @@ define(['Ti/API'], function(API) {
 			}
 			contact.name = name;
 			contact.phoneNumbers = person.phone && createTizenPhoneNumber(person.phone);
-		//	contact.birthday = person.birthday ? new Date(person.birthday) : null;
+			contact.birthday = person.birthday ? new Date(person.birthday) : null;
 			organization = contact.organizations[0];
 			if (organization) {
 				organization.name = person.organization;
@@ -323,6 +323,7 @@ define(['Ti/API'], function(API) {
 			obj.department = (organization && organization.department) ? organization.department : '';
 			obj.jobTitle = (organization && organization.title) ? organization.title : '';
 			obj.id = tizenContact.id;
+			obj.modified = tizenContact.lastUpdated;
 			return obj;
 		}
 	}
