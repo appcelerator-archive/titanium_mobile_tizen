@@ -1,7 +1,17 @@
 define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/CalendarEventId', '_/Calendar/helper'], function(declare, Evented, CalendarEventId, helper) {
+
 	var calendarItem = declare(Evented, {
+
 		constructor: function(args) {
 			this._obj = args;
+		},
+
+		convertToString: function(format /*CalendarTextFormat*/) {
+			return this._obj.convertToString(format);
+		},
+
+		clone: function() {
+			return new (require('Calendar/CalendarEvent'))(this._obj.clone());
 		},
 
 		constants: {
@@ -139,18 +149,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/CalendarEventId', '_/Calenda
 					this._obj.attendees = value;
 				}
 			}
-		},
-
-		convertToString: function(format /*CalendarTextFormat*/) {
-			return this._obj.convertToString(format);
-		},
-
-		clone: function() {
-			return new (require('Calendar/CalendarEvent'))(this._obj.clone());
 		}
+
 	});
 
 	calendarItem.prototype.declaredClass = 'Tizen.Calendar.CalendarItem';
-
 	return calendarItem;
 });

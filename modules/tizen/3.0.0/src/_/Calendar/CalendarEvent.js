@@ -1,5 +1,7 @@
 define(['Ti/_/declare', '_/Calendar/CalendarItem', '_/Calendar/helper', '_/WebAPIError'], function(declare, CalendarItem, helper, WebAPIError) {
+
 	var calendarEvent = declare(CalendarItem, {
+
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEvent]') {
 				this._obj = args;
@@ -18,6 +20,14 @@ define(['Ti/_/declare', '_/Calendar/CalendarItem', '_/Calendar/helper', '_/WebAP
 					this._obj = new tizen.CalendarEvent(eventInitDict);
 				}
 			}
+		},
+
+		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			function wrappedErrorCallback(error) {
+				errorCallback(new WebAPIError(error));
+			}
+
+			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), successCallback, errorCallback && wrappedErrorCallback);
 		},
 
 		constants: {
@@ -54,18 +64,10 @@ define(['Ti/_/declare', '_/Calendar/CalendarItem', '_/Calendar/helper', '_/WebAP
 					this._obj.recurrenceRule = value;
 				}
 			}
-		},
-
-		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			function wrappedErrorCallback(error) {
-				errorCallback(new WebAPIError(error));
-			}
-		
-			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), successCallback, errorCallback && wrappedErrorCallback);
 		}
+
 	});
 
 	calendarEvent.prototype.declaredClass = 'Tizen.Calendar.CalendarEvent';
-
 	return calendarEvent;
 });

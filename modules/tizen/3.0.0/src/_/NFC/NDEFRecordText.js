@@ -1,7 +1,9 @@
 define(['Ti/_/declare', '_/NFC/NDEFRecord'], function(declare, NDEFRecord) {
+
 	var record = declare(NDEFRecord, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object NDEFRecordText]') {
+			if (args.toString() === '[object NDEFRecordText]') {
 				this._obj = args;
 			} else {
 				this._obj = new tizen.NDEFRecordText(args.text, args.languageCode, args.encoding);
@@ -27,8 +29,7 @@ define(['Ti/_/declare', '_/NFC/NDEFRecord'], function(declare, NDEFRecord) {
 		}
 
 	});
-    
-    record.prototype.declaredClass = 'Tizen.NFC.NDEFRecordText';
-    
-    return record;
+
+	record.prototype.declaredClass = 'Tizen.NFC.NDEFRecordText';
+	return record;
 });

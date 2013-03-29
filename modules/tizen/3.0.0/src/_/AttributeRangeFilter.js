@@ -1,7 +1,9 @@
 define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter) {
+
 	var filter = declare(AbstractFilter, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object AttributeRangeFilter]') {
+			if (args.toString() === '[object AttributeRangeFilter]') {
 				this._obj = args;
 			} else {
 				this._obj = new tizen.AttributeRangeFilter(args.attributeName, args.initialValue, args.endValue);
@@ -36,8 +38,7 @@ define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter) {
 		}
 
 	});
-    
-    filter.prototype.declaredClass = 'Tizen.AttributeRangeFilter';
-    
-    return filter;
+
+	filter.prototype.declaredClass = 'Tizen.AttributeRangeFilter';
+	return filter;
 });

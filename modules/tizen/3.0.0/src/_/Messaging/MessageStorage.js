@@ -1,11 +1,8 @@
 define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/Messaging/MessageConversation', '_/WebAPIError'],
 	function(declare, Message, MessageFolder, MessageConversation, WebAPIError) {
 
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
-
 		var messageStorage = declare(null, {
+
 			constructor: function(args) {
 				this._obj = args;
 			},
@@ -16,7 +13,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			findMessages: function(filter /*AbstractFilter*/, successCallback /*MessageArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
 				function messagesListSuceessCallBack(objects) {
-					var i = 0, objectsCount = objects.length, result = [];
+					var i = 0,
+						objectsCount = objects.length,
+						result = [];
 
 					for (; i < objectsCount; i++) {
 						result.push(new Message(objects[i]));
@@ -30,7 +29,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 			},
 
 			removeMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				var i = 0, tizenMessages = [], len = messages.length;
+				var i = 0,
+					tizenMessages = [],
+					len = messages.length;
 
 				for (; i < len; i++) {
 					tizenMessages.push(messages[i]._obj);
@@ -40,7 +41,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 			},
 
 			updateMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				var i = 0, tizenMessages = [], len = messages.length;
+				var i = 0,
+					tizenMessages = [],
+					len = messages.length;
 
 				for (; i < len; i++) {
 					tizenMessages.push(messages[i]._obj);
@@ -51,7 +54,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			findConversations: function(filter /*AbstractFilter*/, successCallback /*MessageConversationArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
 				function conversationsListSuceessCallBack(objects) {
-					var i = 0, objectsCount = objects.length, result = [];
+					var i = 0,
+						objectsCount = objects.length,
+						result = [];
 
 					for (; i < objectsCount; i++) {
 						result.push(new MessageConversation(objects[i]));
@@ -64,7 +69,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 			},
 
 			removeConversations: function(conversations /*MessageConversation*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				var i = 0, tizenConversations = [], len = conversations.length;
+				var i = 0,
+					tizenConversations = [],
+					len = conversations.length;
 
 				for (; i < len; i++) {
 					tizenConversations.push(conversations[i]._obj);
@@ -75,7 +82,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			findFolders: function(filter /*AbstractFilter*/, successCallback /*MessageFolderArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
 				function foldersListSuccessCallBack(objects) {
-					var i = 0, len = objects.length, result = [];
+					var i = 0,
+						len = objects.length,
+						result = [];
 
 					for (; i < len; i++) {
 						result.push(new MessageFolder(objects[i]));
@@ -89,7 +98,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			addMessagesChangeListener: function(messagesChangeCallback /*MessagesChangeCallback*/, filter /*AbstractFilter*/) {
 				function getWrappedItems(items) {
-					var i = 0, itemsCount = items.length, wrappedItems = [];
+					var i = 0,
+						itemsCount = items.length,
+						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
 						wrappedItems.push(new Message(items[i]));
@@ -117,7 +128,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			addConversationsChangeListener: function(conversationsChangeCallback /*MessageConversationsChangeCallback*/, filter /*AbstractFilter*/) {
 				function getWrappedItems(items) {
-					var i = 0, itemsCount = items.length, wrappedItems = [];
+					var i = 0,
+						itemsCount = items.length,
+						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
 						wrappedItems.push(new MessageConversation(items[i]));
@@ -145,7 +158,9 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 			addFoldersChangeListener: function(foldersChangeCallback /*MessageFoldersChangeCallback*/, filter /*AbstractFilter*/) {
 				function getWrappedItems(items) {
-					var i = 0, itemsCount = items.length, wrappedItems = [];
+					var i = 0,
+						itemsCount = items.length,
+						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
 						wrappedItems.push(new MessageFolder(items[i]));
@@ -174,9 +189,13 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 			removeChangeListener: function(watchId /*long*/) {
 				this._obj.removeChangeListener(watchId);
 			}
+
 		});
 
-		messageStorage.prototype.declareClass = 'Tizen.Messaging.MessageStorage';
+		function wrappedErrorCallback(error) {
+			errorCallback(new WebAPIError(error));
+		}
 
+		messageStorage.prototype.declareClass = 'Tizen.Messaging.MessageStorage';
 		return messageStorage;
 	});

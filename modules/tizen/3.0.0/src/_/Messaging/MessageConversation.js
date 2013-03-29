@@ -1,5 +1,7 @@
 define(['Ti/_/declare'], function(declare) {
+
 	var messageConversation = declare(null, {
+
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -74,6 +76,5 @@ define(['Ti/_/declare'], function(declare) {
 	});
 
 	messageConversation.prototype.declaredClass = 'Tizen.Messaging.MessageConversation';
-
 	return messageConversation;
 });

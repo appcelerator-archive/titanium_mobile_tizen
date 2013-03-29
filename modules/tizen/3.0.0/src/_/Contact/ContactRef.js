@@ -1,8 +1,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var contactRef = declare(Evented, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object ContactRef]') {
+			if (args.toString() === '[object ContactRef]') {
 				this._obj = args;
 			} else {
 				this._obj = new tizen.ContactRef(args.addressBookId, args.contactId);
@@ -30,6 +31,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	});
 
 	contactRef.prototype.declaredClass = 'Tizen.Contact.ContactRef';
-
 	return contactRef;
 });

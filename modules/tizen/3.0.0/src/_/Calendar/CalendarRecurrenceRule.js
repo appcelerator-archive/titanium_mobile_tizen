@@ -1,7 +1,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/helper'], function(declare, Evented, helper) {
+
 	var calendarRecurrenceRule = declare(Evented, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object CalendarRecurrenceRule]') {
+			if (args.toString() === '[object CalendarRecurrenceRule]') {
 				this._obj = args;
 			} else {
 				//The frequency is neccessary parameter
@@ -10,15 +12,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/helper'], function(declare, 
 					var initDict = args,
 						untilDate = args.ruleInitDict && args.ruleInitDict.untilDate,
 						exceptions = args.ruleInitDict && args.ruleInitDict.exceptions,
-						i=0,
+						i = 0,
 						len = exceptions && exceptions.length,
 						exceptionsTmp = [];
 
-
 					untilDate && (initDict.ruleInitDict.untilDate = helper.createTZDate(untilDate));
 
-					if(exceptions) {
-						for(; i<len; i++) {
+					if (exceptions) {
+						for (; i < len; i++) {
 							exceptionsTmp.push(helper.createTZDate(exceptions[i]));
 						}
 						initDict.ruleInitDict.exceptions = exceptionsTmp;
@@ -86,10 +87,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/helper'], function(declare, 
 				get: function() {
 					var res = [],
 						exceptions = this._obj.exceptions,
-						i=0,
+						i = 0,
 						len = exceptions.length;
 
-					for(; i<len; i++) {
+					for (; i < len; i++) {
 						res.push(helper.createDate(exceptions[i]));
 					}
 					return res;
@@ -97,10 +98,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/helper'], function(declare, 
 				set: function(value) {
 					var res = [],
 						exceptions = value,
-						i=0,
+						i = 0,
 						len = exceptions.length;
 
-					for(; i<len; i++) {
+					for (; i < len; i++) {
 						res.push(helper.createTZDate(exceptions[i]));
 					}
 					this._obj.exceptions = res;
@@ -110,6 +111,5 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Calendar/helper'], function(declare, 
 	});
 
 	calendarRecurrenceRule.prototype.declaredClass = 'Tizen.Calendar.CalendarRecurrenceRule';
-
 	return calendarRecurrenceRule;
 });

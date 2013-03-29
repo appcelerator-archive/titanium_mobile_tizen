@@ -1,5 +1,7 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
 	var messageBody = declare(Evented, {
+
 		constructor: function(args) {
 			this._obj = args;
 		},
@@ -43,9 +45,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				}
 			}
 		}
+
 	});
 
 	messageBody.prototype.declaredClass = 'Tizen.Messaging.MessageBody';
-
 	return messageBody;
 });

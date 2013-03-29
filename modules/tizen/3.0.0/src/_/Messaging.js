@@ -1,16 +1,10 @@
 define(['Ti/_/lang', '_/Messaging/MessageService', '_/Messaging/Message', '_/Messaging/MessageAttachment', 'Ti/_/Evented', '_/WebAPIError'],
-		function(lang, MessageService, Message, MessageAttachment, Evented, WebAPIError) {
+	function(lang, MessageService, Message, MessageAttachment, Evented, WebAPIError) {
 
-	return lang.mixProps(
-		require.mix({}, Evented),
-		{
-			constants: {
-				MESSAGE_SERVICE_TAG_MESSAGINGSMS: 'messaging.sms',
-				MESSAGE_SERVICE_TAG_MESSAGINGMMS: 'messaging.mms',
-				MESSAGE_SERVICE_TAG_MESSAGINGEMAIL: 'messaging.email'
-			},
+		return lang.mixProps(require.mix({}, Evented), {
 
 			getMessageServices: function(messageServiceType /*MessageServiceTag*/, successCallback /*MessageServiceArraySuccessCallback*/, errorCallback /*ErrorCallback*/, serviceId /*AccountServiceId*/) {
+
 				function servicesListSuccessCallBack(objects) {
 					var i = 0,
 						objectsCount = objects.length,
@@ -36,8 +30,13 @@ define(['Ti/_/lang', '_/Messaging/MessageService', '_/Messaging/Message', '_/Mes
 
 			createMessageAttachment: function(args) {
 				return new MessageAttachment(args);
+			},
+
+			constants: {
+				MESSAGE_SERVICE_TAG_MESSAGINGSMS: 'messaging.sms',
+				MESSAGE_SERVICE_TAG_MESSAGINGMMS: 'messaging.mms',
+				MESSAGE_SERVICE_TAG_MESSAGINGEMAIL: 'messaging.email'
 			}
-		},
-		true
-	);
-});
+
+		}, true);
+	});

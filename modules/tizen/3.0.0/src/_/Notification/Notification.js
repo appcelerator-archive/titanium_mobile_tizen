@@ -1,7 +1,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
 	var Notification = declare(Evented, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object Notification]') {
+			if (args.toString() === '[object Notification]') {
 				this._obj = args;
 			}
 		},
@@ -47,5 +49,4 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	Notification.prototype.declaredClass = 'Tizen.Notification.Notification';
 	return Notification;
-
 });

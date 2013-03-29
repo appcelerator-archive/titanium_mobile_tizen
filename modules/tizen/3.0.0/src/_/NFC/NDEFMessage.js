@@ -1,5 +1,6 @@
 define(['Ti/_/declare', 'Ti/_/Evented', '_/NFC/NDEFRecord', '_/NFC/NDEFRecordURI', '_/NFC/NDEFRecordText', '_/NFC/NDEFRecordMedia'],
 	function(declare, Evented, NDEFRecord, NDEFRecordURI, NDEFRecordText, NDEFRecordMedia) {
+
 		var msg = declare(Evented, {
 			constructor: function(args) {
 				if (args.toString() === '[object NDEFMessage]') {
@@ -15,6 +16,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/NFC/NDEFRecord', '_/NFC/NDEFRecordURI
 				}
 			},
 
+			toByte: function() {
+				return this._obj.toByte();
+			},
+
 			constants: {
 				recordCount: {
 					get: function() {
@@ -26,7 +31,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/NFC/NDEFRecord', '_/NFC/NDEFRecordURI
 			properties: {
 				records: {
 					get: function() {
-						var i = 0, len = this._obj.records.length, wrappedRecords = new Array(len), r;
+						var i = 0,
+							len = this._obj.records.length,
+							wrappedRecords = new Array(len),
+							r;
 
 						for (; i < len; i++) {
 							r = this._obj.records[i];
@@ -49,7 +57,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/NFC/NDEFRecord', '_/NFC/NDEFRecordURI
 						return wrappedRecords;
 					},
 					set: function(value) {
-						var i = 0, len = value.length, record;
+						var i = 0,
+							len = value.length,
+							record;
 
 						//set new length
 						this._obj.records.length = len;
@@ -60,14 +70,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/NFC/NDEFRecord', '_/NFC/NDEFRecordURI
 						}
 					}
 				}
-			},
-
-			toByte: function() {
-				return this._obj.toByte();
 			}
+
 		});
 
 		msg.prototype.declaredClass = 'Tizen.NFC.NDEFMessage';
-
 		return msg;
 	});

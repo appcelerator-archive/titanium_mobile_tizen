@@ -1,11 +1,13 @@
 define(['Ti/_/declare', '_/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
+
 	var downloadRequest = declare(Evented, {
+
 		constructor: function(args) {
 			if (args.toString() === '[object DownloadRequest]') {
 				this._obj = args;
 			} else {
 				if (args.hasOwnProperty('url')) {
-					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);	
+					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
 				} else {
 					Ti.API.error('Constructor with such parameters does not exist in DownloadRequest.');
 				}
@@ -97,6 +99,5 @@ define(['Ti/_/declare', '_/WebAPIError', 'Ti/_/Evented'], function(declare, WebA
 	});
 
 	downloadRequest.prototype.declaredClass = 'Tizen.Download.DownloadRequest';
-
 	return downloadRequest;
 });

@@ -1,9 +1,11 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
 	var messageAttachment = declare(Evented, {
+
 		constructor: function(args) {
 			if (args.toString() === '[object MessageAttachment]') {
 				this._obj = args;
-			} else {	
+			} else {
 				if (args.hasOwnProperty('filePath')) {
 					this._obj = new tizen.MessageAttachment(args.filePath, args.mimeType);
 				} else {
@@ -37,6 +39,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	});
 
 	messageAttachment.prototype.declaredClass = 'Tizen.Messaging.MessageAttachment';
-
 	return messageAttachment;
 });

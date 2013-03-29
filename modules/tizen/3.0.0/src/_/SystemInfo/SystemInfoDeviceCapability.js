@@ -1,8 +1,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var capability =  declare(Evented, {
+	var capability = declare(Evented, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object SystemInfoDeviceCapability]') {
+			if (args.toString() === '[object SystemInfoDeviceCapability]') {
 				this._obj = args;
 			}
 		},
@@ -143,6 +144,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	});
 
 	capability.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoDeviceCapability';
-
 	return capability;
 });

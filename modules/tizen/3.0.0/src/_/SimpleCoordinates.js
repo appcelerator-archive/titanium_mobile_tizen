@@ -1,7 +1,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-    var sc = declare(Evented, {
+
+	var sc = declare(Evented, {
+
 		constructor: function(args) {
-            if(args.toString() === '[object SimpleCoordinates]') {
+			if (args.toString() === '[object SimpleCoordinates]') {
 				this._obj = args;
 			} else {
 				this._obj = new tizen.SimpleCoordinates(args.latitude, args.longitude);
@@ -28,8 +30,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		}
 
 	});
-    
-    sc.prototype.declaredClass = 'Tizen.SimpleCoordinates';
-    
-    return sc;
+
+	sc.prototype.declaredClass = 'Tizen.SimpleCoordinates';
+	return sc;
 });

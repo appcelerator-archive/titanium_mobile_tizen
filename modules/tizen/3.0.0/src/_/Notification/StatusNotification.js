@@ -1,7 +1,9 @@
 define(['Ti/_/declare', '_/Notification/Notification'], function(declare, Notification) {
+
 	var StatusNotification = declare(Notification, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object StatusNotification]') {
+			if (args.toString() === '[object StatusNotification]') {
 				this._obj = args;
 			} else {
 				var notificationInitDict;
@@ -76,5 +78,4 @@ define(['Ti/_/declare', '_/Notification/Notification'], function(declare, Notifi
 
 	StatusNotification.prototype.declaredClass = 'Tizen.Notification.StatusNotification';
 	return StatusNotification;
-
 });

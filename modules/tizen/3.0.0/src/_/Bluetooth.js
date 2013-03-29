@@ -1,24 +1,25 @@
 define(['Ti/_/lang', 'Ti/_/Evented', '_/Bluetooth/BluetoothAdapter'], function(lang, Evented, BluetoothAdapter) {
+
 	return lang.mixProps(require.mix({}, Evented), {
-        
-        _wrap: function(object) {
+
+		_wrap: function(object) {
 			if (object.toString() === '[object BluetoothAdapter]') {
 				return this.createBluetoothAdapter(object);
 			}
 		},
-        
+
 		getDefaultAdapter: function() {
-            try {
-                return this._wrap(tizen.bluetooth.getDefaultAdapter());
-            } catch(e) {
-                Ti.API.error(e.message);
-            }
+			try {
+				return this._wrap(tizen.bluetooth.getDefaultAdapter());
+			} catch (e) {
+				Ti.API.error(e.message);
+			}
 		},
-		
-		createBluetoothAdapter: function(object) { 
+
+		createBluetoothAdapter: function(object) {
 			return new BluetoothAdapter(object);
 		},
-        
+
 		constants: {
 			BLUETOOTH_SECURITY_LEVEL_LOW: 'LOW',
 			BLUETOOTH_SECURITY_LEVEL_MEDIUM: 'MEDIUM',
@@ -27,7 +28,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/Bluetooth/BluetoothAdapter'], function(l
 			BLUETOOTH_SOCKET_TYPE_L2CAP: 'L2CAP',
 			BLUETOOTH_SOCKET_STATE_CLOSED: 'CLOSED',
 			BLUETOOTH_SOCKET_STATE_OPEN: 'OPEN',
-            // from BluetoothClassDeviceMajor of Tizen
+			// from BluetoothClassDeviceMajor of Tizen
 			BLUETOOTH_CLASS_DEVICE_MAJOR_MISC: 0x00,
 			BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER: 0x01,
 			BLUETOOTH_CLASS_DEVICE_MAJOR_PHONE: 0x02,
@@ -39,8 +40,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/Bluetooth/BluetoothAdapter'], function(l
 			BLUETOOTH_CLASS_DEVICE_MAJOR_TOY: 0x08,
 			BLUETOOTH_CLASS_DEVICE_MAJOR_HEALTH: 0x09,
 			BLUETOOTH_CLASS_DEVICE_MAJOR_UNCATEGORIZED: 0x1F,
-            // from BluetoothClassDeviceMinor of Tizen
-            BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED: 0x00,
+			// from BluetoothClassDeviceMinor of Tizen
+			BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED: 0x00,
 			BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP: 0x01,
 			BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_SERVER: 0x02,
 			BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_LAPTOP: 0x03,
@@ -112,8 +113,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/Bluetooth/BluetoothAdapter'], function(l
 			BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_MEDICATION_MONITOR: 0x0b,
 			BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_KNEE_PROSTHESIS: 0x0c,
 			BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_ANKLE_PROSTHESIS: 0x0d,
-            // from  BluetoothClassDeviceService of Tizen
-            BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY: 0x0001,
+			// from  BluetoothClassDeviceService of Tizen
+			BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY: 0x0001,
 			BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING: 0x0008,
 			BLUETOOTH_CLASS_DEVICE_SERVICE_NETWORKING: 0x0010,
 			BLUETOOTH_CLASS_DEVICE_SERVICE_RENDERING: 0x0020,
@@ -123,5 +124,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/Bluetooth/BluetoothAdapter'], function(l
 			BLUETOOTH_CLASS_DEVICE_SERVICE_TELEPHONY: 0x0200,
 			BLUETOOTH_CLASS_DEVICE_SERVICE_INFORMATION: 0x0400
 		}
+
 	}, true);
 });

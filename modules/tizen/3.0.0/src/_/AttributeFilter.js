@@ -1,7 +1,9 @@
 define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter) {
+
 	var filter = declare(AbstractFilter, {
+
 		constructor: function(args) {
-        	if(args.toString() === '[object AttributeFilter]') {
+			if (args.toString() === '[object AttributeFilter]') {
 				this._obj = args;
 			} else {
 				if (args.hasOwnProperty('attributeName')) {
@@ -40,8 +42,7 @@ define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter) {
 		}
 
 	});
-    
-    filter.prototype.declaredClass = 'Tizen.AttributeFilter';
-    
-    return filter;
+
+	filter.prototype.declaredClass = 'Tizen.AttributeFilter';
+	return filter;
 });

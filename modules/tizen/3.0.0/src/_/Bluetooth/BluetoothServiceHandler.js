@@ -1,14 +1,22 @@
 define(['Ti/_/declare', 'Ti/_/Evented', '_/Bluetooth/BluetoothSocket', ], function(declare, Evented, BluetoothSocket, WebAPIError) {
+
 	var handler = declare(Evented, {
+
 		constructor: function(args) {
 			var self = this;
-			if(args.toString() === '[object BluetoothServiceHandler]') {
+			if (args.toString() === '[object BluetoothServiceHandler]') {
 				self._obj = args;
 			}
-            
+
 			self._obj.onconnect = function(socket) {
 				self.fireEvent('remotedeviceconnected', new BluetoothSocket(socket));
-            };
+			};
+		},
+
+		unregister: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			return this._obj.unregister(successCallback, errorCallback && function(e) {
+				errorCallback(new WebAPIError(e));
+			});
 		},
 
 		constants: {
@@ -27,17 +35,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', '_/Bluetooth/BluetoothSocket', ], functi
 					return this._obj.isConnected;
 				}
 			}
-		},
-
-		unregister: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.unregister(successCallback,
-				errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
-				});
 		}
 	});
-    
-    handler.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothServiceHandler';
-    
-    return handler;
+
+	handler.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothServiceHandler';
+	return handler;
 });

@@ -1,12 +1,6 @@
-define(['Ti/_/lang', '_/Alarm/AlarmRelative', '_/Alarm/AlarmAbsolute','Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
-	var Alarm = lang.mixProps(require.mix({},Evented), {
+define(['Ti/_/lang', '_/Alarm/AlarmRelative', '_/Alarm/AlarmAbsolute', 'Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
 
-		constants: {
-			PERIOD_MINUTE: 60, //unsigned long long
-			PERIOD_HOUR: 3600, //unsigned long long
-			PERIOD_DAY: 86400, //unsigned long long
-			PERIOD_WEEK: 604800 //unsigned long long
-		},
+	var Alarm = lang.mixProps(require.mix({}, Evented), {
 
 		add: function(alarm /*Alarm*/, applicationId /*ApplicationId*/, appControl /*ApplicationControl*/) {
 			return tizen.alarm.add(alarm._obj, applicationId, appControl ? appControl._obj : appControl);
@@ -29,7 +23,8 @@ define(['Ti/_/lang', '_/Alarm/AlarmRelative', '_/Alarm/AlarmAbsolute','Ti/_/Even
 				i = 0,
 				objectsCount = objects.length,
 				result = [];
-			for(; i < objectsCount; i++) {
+
+			for (; i < objectsCount; i++) {
 				result.push(this._wrap(objects[i]));
 			}
 			return result;
@@ -37,6 +32,7 @@ define(['Ti/_/lang', '_/Alarm/AlarmRelative', '_/Alarm/AlarmAbsolute','Ti/_/Even
 
 		_wrap: function(object) {
 			var result;
+
 			if (object.toString() === '[object AlarmRelative]') {
 				result = this.createAlarmRelative(object);
 			}
@@ -46,14 +42,22 @@ define(['Ti/_/lang', '_/Alarm/AlarmRelative', '_/Alarm/AlarmAbsolute','Ti/_/Even
 			return result;
 		},
 
-		createAlarmRelative: function(args){
+		createAlarmRelative: function(args) {
 			return new AlarmRelative(args);
 		},
 
-		createAlarmAbsolute: function(args){
+		createAlarmAbsolute: function(args) {
 			return new AlarmAbsolute(args);
+		},
+
+		constants: {
+			PERIOD_MINUTE: 60, //unsigned long long
+			PERIOD_HOUR: 3600, //unsigned long long
+			PERIOD_DAY: 86400, //unsigned long long
+			PERIOD_WEEK: 604800 //unsigned long long
 		}
+
 	}, true);
-	
+
 	return Alarm;
 });

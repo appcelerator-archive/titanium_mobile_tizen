@@ -1,8 +1,9 @@
 define(['Ti/_/declare', '_/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
 
 	var celluralNetwork = declare(SystemInfoProperty, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object SystemInfoCellularNetwork]') {
+			if (args.toString() === '[object SystemInfoCellularNetwork]') {
 				this._obj = args;
 			}
 		},
@@ -58,6 +59,5 @@ define(['Ti/_/declare', '_/SystemInfo/SystemInfoProperty'], function(declare, Sy
 	});
 
 	celluralNetwork.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoCellularNetwork';
-
 	return celluralNetwork
 });

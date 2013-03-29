@@ -1,32 +1,10 @@
 define(['Ti/_/declare', '_/WebAPIError', '_/Messaging/MessageStorage', '_/Messaging/MessageBody', '_/Messaging/MessageAttachment'],
 	function(declare, WebAPIError, MessageStorage, MessageBody, MessageAttachment) {
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
 
 		var messageService = declare(null, {
 			constructor: function(args) {
 				this._obj = args;
 				this.constants.__values__.messageStorage = new MessageStorage(this._obj.messageStorage);
-			},
-
-			constants: {
-				id: {
-					get: function() {
-						return this._obj.id;
-					}
-				},
-				type: {
-					get: function() {
-						return this._obj.type;
-					}
-				},
-				name: {
-					get: function() {
-						return this._obj.name;
-					}
-				},
-				messageStorage: {}
 			},
 
 			sendMessage: function(message /*Message*/, successCallback /*MessageRecipientsCallback*/, errorCallback /*ErrorCallback*/) {
@@ -59,8 +37,32 @@ define(['Ti/_/declare', '_/WebAPIError', '_/Messaging/MessageStorage', '_/Messag
 
 			stopSync: function(opId /*long*/) {
 				this._obj.stopSync(opId);
+			},
+
+			constants: {
+				id: {
+					get: function() {
+						return this._obj.id;
+					}
+				},
+				type: {
+					get: function() {
+						return this._obj.type;
+					}
+				},
+				name: {
+					get: function() {
+						return this._obj.name;
+					}
+				},
+				messageStorage: {}
 			}
+
 		});
+
+		function wrappedErrorCallback(error) {
+			errorCallback(new WebAPIError(error));
+		}
 
 		messageService.prototype.declaredClass = 'Tizen.Messaging.MessageService';
 

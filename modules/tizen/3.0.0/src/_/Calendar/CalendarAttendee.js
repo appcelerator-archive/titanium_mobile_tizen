@@ -1,11 +1,13 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
 	var calendarAttendee = declare(Evented, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object CalendarAttendee]') {
+			if (args.toString() === '[object CalendarAttendee]') {
 				this._obj = args;
 			} else {
 				if (args.hasOwnProperty('uri')) {
-					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);	
+					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
 				} else {
 					Ti.API.error("Constructor with such parameters not found in CalendarAttendee.");
 				}
@@ -94,9 +96,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				}
 			}
 		}
+
 	});
 
 	calendarAttendee.prototype.declaredClass = 'Tizen.Calendar.CalendarAttendee';
-
 	return calendarAttendee;
 });

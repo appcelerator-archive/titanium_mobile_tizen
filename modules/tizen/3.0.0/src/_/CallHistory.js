@@ -1,7 +1,7 @@
 define(['Ti/_/lang', '_/CallHistory/CallHistoryEntry', '_/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
-	return lang.mixProps(
-		require.mix({}, Evented),
-		{
+
+	return lang.mixProps(require.mix({}, Evented), {
+
 			find: function(successCallback /*CallHistoryEntryArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
 				tizen.callhistory.find(function(histories) {
 					var result = [],
@@ -49,7 +49,7 @@ define(['Ti/_/lang', '_/CallHistory/CallHistoryEntry', '_/WebAPIError', 'Ti/_/Ev
 							i = 0,
 							entriesCount = entries.length;
 
-						for(; i < entriesCount; i++) {
+						for (; i < entriesCount; i++) {
 							result.push(new CallHistoryEntry(entries[i]));
 						}
 
@@ -74,7 +74,6 @@ define(['Ti/_/lang', '_/CallHistory/CallHistoryEntry', '_/WebAPIError', 'Ti/_/Ev
 			removeChangeListener: function(handle /*long*/) {
 				tizen.callhistory.removeChangeListener(handle);
 			}
-		},
-		true
-	);
+
+		}, true);
 });

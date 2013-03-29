@@ -1,13 +1,16 @@
-define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter){
+define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter) {
+
 	var filter = declare(AbstractFilter, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object CompositeFilter]') {
+			if (args.toString() === '[object CompositeFilter]') {
 				this._obj = args;
 			} else {
 				var i = 0,
 					filters = args.filters,
 					filtersCount = filters.length,
 					result = [];
+
 				for (; i < filtersCount; i++) {
 					result.push(filters[i]._obj);
 				}
@@ -36,8 +39,7 @@ define(['Ti/_/declare', '_/AbstractFilter'], function(declare, AbstractFilter){
 		}
 
 	});
-    
-    filter.prototype.declaredClass = 'Tizen.CompositeFilter';
-    
-    return filter;
+
+	filter.prototype.declaredClass = 'Tizen.CompositeFilter';
+	return filter;
 });

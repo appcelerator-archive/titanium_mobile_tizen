@@ -1,7 +1,31 @@
-define(['Ti/_/lang', 'Ti/_/Evented', '_/AttributeFilter', '_/AttributeRangeFilter', '_/CompositeFilter', '_/SortMode', '_/SimpleCoordinates', '_/Power', '_/Calendar', '_/Download', '_/Alarm', '_/CallHistory', '_/Notification', '_/Apps', '_/SystemSetting', '_/Bluetooth', '_/Messaging', '_/SystemInfo', '_/NFC'],
-	function (lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, NFC) {
+define(['Ti/_/lang', 'Ti/_/Evented', '_/AttributeFilter', '_/AttributeRangeFilter', '_/CompositeFilter', '_/SortMode',
+	'_/SimpleCoordinates', '_/Power', '_/Calendar', '_/Download', '_/Alarm', '_/CallHistory', '_/Notification', '_/Apps',
+	'_/SystemSetting', '_/Bluetooth', '_/Messaging', '_/SystemInfo', '_/NFC'],
+	function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power,
+			 Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, NFC) {
 
 		var Tizen = lang.mixProps(require.mix({}, Evented), {
+
+			createAttributeFilter: function(args) {
+				return new AttributeFilter(args);
+			},
+
+			createAttributeRangeFilter: function(args) {
+				return new AttributeRangeFilter(args);
+			},
+
+			createCompositeFilter: function(args) {
+				return new CompositeFilter(args);
+			},
+
+			createSortMode: function(args) {
+				return new SortMode(args);
+			},
+
+			createSimpleCoordinates: function(args) {
+				return new SimpleCoordinates(args);
+			},
+
 			constants: {
 				FILTER_MATCH_FLAG_EXACTLY: 'EXACTLY',
 				FILTER_MATCH_FLAG_FULLSTRING: 'FULLSTRING',
@@ -25,26 +49,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/AttributeFilter', '_/AttributeRangeFilte
 				Messaging: Messaging,
 				SystemInfo: SystemInfo,
 				NFC: NFC
-			},
-
-			createAttributeFilter: function (args) {
-				return new AttributeFilter(args);
-			},
-
-			createAttributeRangeFilter: function (args) {
-				return new AttributeRangeFilter(args);
-			},
-
-			createCompositeFilter: function (args) {
-				return new CompositeFilter(args);
-			},
-
-			createSortMode: function (args) {
-				return new SortMode(args);
-			},
-
-			createSimpleCoordinates: function (args) {
-				return new SimpleCoordinates(args);
 			}
 
 		}, true);

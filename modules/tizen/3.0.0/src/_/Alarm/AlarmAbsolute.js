@@ -1,19 +1,25 @@
-define(['Ti/_/declare', '_/Alarm/Alarm'], function(declare, Alarm){
+define(['Ti/_/declare', '_/Alarm/Alarm'], function(declare, Alarm) {
+
 	var AlarmAbsolute = declare(Alarm, {
+
 		constructor: function(args) {
-			if(args.toString() === '[object AlarmAbsolute]') {
+			if (args.toString() === '[object AlarmAbsolute]') {
 				this._obj = args;
 			} else {
-				if ('date' in args && 'period' in args){
+				if ('date' in args && 'period' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date, args.period);
-				} else if ('date' in args && 'daysOfTheWeek' in args){
+				} else if ('date' in args && 'daysOfTheWeek' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date, args.daysOfTheWeek);
-				} else if ('date' in args){
+				} else if ('date' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date);
 				} else {
 					Ti.API.error('Constructor with given parameters doesn\'t exists');
 				}
 			}
+		},
+
+		getNextScheduledDate: function() {
+			return this._obj.getNextScheduledDate();
 		},
 
 		constants: {
@@ -32,14 +38,10 @@ define(['Ti/_/declare', '_/Alarm/Alarm'], function(declare, Alarm){
 					return this._obj.daysOfTheWeek;
 				}
 			}
-		},
-
-		getNextScheduledDate: function() {
-			return this._obj.getNextScheduledDate();
 		}
+
 	});
 
 	AlarmAbsolute.prototype.declaredClass = 'Tizen.Alarm.AlarmAbsolute';
 	return AlarmAbsolute;
-
 });

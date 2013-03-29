@@ -1,18 +1,20 @@
-define(['Ti/API'], function (API) {
+define(['Ti/API'], function(API) {
+
 	return {
-		createTZDate:function (dateObj) {
+
+		createTZDate: function(dateObj) {
 			return new tizen.TZDate(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes());
 		},
 
-		createDate:function (tzDateObj) {
+		createDate: function(tzDateObj) {
 			return new Date(tzDateObj.getUTCFullYear(), tzDateObj.getUTCMonth(), tzDateObj.getUTCDate(), tzDateObj.getUTCHours(), tzDateObj.getUTCMinutes());
 		},
 
-		createTimeDuration:function (msecs) {
+		createTimeDuration: function(msecs) {
 			return new tizen.TimeDuration(msecs / 1000, 'SECS');
 		},
 
-		toMsec:function (tzTimeDuration) {
+		toMsec: function(tzTimeDuration) {
 			var res;
 
 			switch (tzTimeDuration.unit) {

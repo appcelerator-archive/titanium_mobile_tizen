@@ -1,5 +1,7 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+
 	var calendarEventId = declare(Evented, {
+
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarEventId]') {
 				this._obj = args;
@@ -33,6 +35,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	});
 
 	calendarEventId.prototype.declaredClass = 'Tizen.Calendar.CalendarEventId';
-
 	return calendarEventId;
 });

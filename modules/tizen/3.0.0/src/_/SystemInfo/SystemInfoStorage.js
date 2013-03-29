@@ -1,6 +1,7 @@
 define(['Ti/_/declare', '_/SystemInfo/SystemInfoProperty', '_/SystemInfo/SystemInfoStorageUnit'], function(declare, SystemInfoProperty, SystemInfoStorageUnit) {
 
 	var storage = declare(SystemInfoProperty, {
+
 		constructor: function(args) {
 			var i = 0,
 				units = args,
@@ -22,6 +23,5 @@ define(['Ti/_/declare', '_/SystemInfo/SystemInfoProperty', '_/SystemInfo/SystemI
 	});
 
 	storage.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoStorage';
-
 	return storage;
 });
