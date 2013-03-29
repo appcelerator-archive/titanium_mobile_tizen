@@ -1,4 +1,4 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c"], function(Evented, lang, photoGallery, Blob, h2c) {
+define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c", "Ti/Media/Sound", "Ti/Media/AudioPlayer"], function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
 
@@ -51,11 +51,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 		},
 
 		createAudioPlayer: function(args) {
-			return new (require("Ti/Media/AudioPlayer"))(args);
+			return new AudioPlayer(args);
 		},
 
 		createSound: function(args) {
-			return new (require("Ti/Media/Sound"))(args);
+			return new Sound(args);
 		},
 
 		createVideoPlayer: function(args) {
