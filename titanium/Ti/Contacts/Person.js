@@ -6,6 +6,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 				var contact = contactHelper.createTizenContact(args);
 				tizen.contact.getDefaultAddressBook().add(contact);
 				this.constants.__values__.id = contact.id;
+				this.constants.__values__.modified = contact.lastUpdated;
 			}
 		},
 
@@ -41,7 +42,6 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 			note: '',
 			organization: '',
 			phone: {},
-			suffix: '',
 			url: {}
 		}
 	});
