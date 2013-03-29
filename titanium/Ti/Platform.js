@@ -32,7 +32,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 			Platform.constants.__values__.id = 'ID001'; //The unique ID for an installed application. 
 		}
 
-		if(deviceCapabilities.wifi) {
+		if (deviceCapabilities.wifi) {
 			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
 			// subscribing to WiFi property changes
 			tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
