@@ -1,4 +1,6 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper'], function(Evented, lang, Person, Group, contactHelper) {
+define(
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper', 'Ti/API'],
+	function(Evented, lang, Person, Group, contactHelper, API) {
 
 	return lang.setObject('Ti.Contacts', Evented, {
 
@@ -150,7 +152,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 			}
 			//error callback for getAllPeopleAsync
 			var errorCB = function(e){
-				console.log('Problems with getting the contacts, Error: ' + e.message);
+				API.error('Problems with getting the contacts, Error: ' + e.message);
 			}
 
 			Ti.Contacts.Tizen.getAllPeople(successCB, errorCB);

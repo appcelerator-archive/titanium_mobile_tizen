@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/Blob'],
-	function(declare, Blob) {
+define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
+	function(declare, Blob, API) {
 		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
@@ -156,8 +156,8 @@ define(['Ti/_/declare', 'Ti/Blob'],
 				//launch default gallery application
                 tizen.application.launchAppControl(service, 
                     null,
-                    function() {console.log('launch appControl succeeded');}, 
-                    function(e) {console.log('launch appControl failed. Reason: ' + e.name);}, 
+                    function() {API.info('launch appControl succeeded');}, 
+                    function(e) {API.info('launch appControl failed. Reason: ' + e.name);},
                     serviceReplyCB
                 );
 			}

@@ -4,8 +4,8 @@
  *  MIT License
  * <http://html2canvas.hertzen.com>
  */
-define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented"],
-	function(dom, event, lang, Evented) {
+define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
+	function(dom, event, lang, Evented, API) {
 
 	"use strict";
 	
@@ -15,9 +15,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented"],
 		html2canvas;
 
 		function h2clog(a) {
-			if (_html2canvas.logging && window.console && window.console.log) {
-				window.console.log(a);
-			}
+			_html2canvas.logging && API.info(a);
 		}
 		
 		_html2canvas.Util = {};
