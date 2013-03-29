@@ -5,9 +5,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 		on = require.on;
 
 	return declare("Ti.Network.HTTPClient", Evented, {
-		//This variable shows that responseType of XMLHttpRequest is 'arraybuffer'
-		//This type is valid only for async mode
-		_isArrayBuffer: void 0,
 		
 		constructor: function() {
 			var xhr = this._xhr = new XMLHttpRequest;
@@ -44,8 +41,6 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						c.readyState = this.DONE;
 						
 						if (!this._aborted) {
-							//create file by name
-							this.file && (file = Filesystem.getFile(Filesystem.applicationDataDirectory, this.file));
 							
 							mimeType =  xhr.getResponseHeader("Content-Type");
 							
@@ -63,9 +58,9 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 									}
 									
 									c.responseText = binaryString.join('');
-									blobData = _.isBinaryMimeType(mimeType) ? window.btoa(c.responseText) : c.responseText;
+									blobData = _.isBinaryMimeType(mimeType) ? btoa(c.responseText) : c.responseText;
 									
-									if(mimeType.indexOf('text/xml') !== -1){
+									if (mimeType.indexOf('text/xml') !== -1) {
 										try {
 											c.responseXML = xmlParser.parseFromString(c.responseText.substring(c.responseText.indexOf('<')), "text/xml");	
 										} catch(e) {
@@ -79,9 +74,10 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 								//sync mode
 								c.responseXML = xhr.responseXML;
 								c.responseText = blobData = xhr.responseText;
-								//to do: encode binary data as in async mode!!!
-								//because responseType='arraybuffer' is not supported in sync mode (throws exception)
 							}
+							
+							//create file by name
+							this.file && (file = Filesystem.getFile(this.file));
 							
 							//responseData = Blob
 							c.responseData = new Blob({
@@ -151,15 +147,13 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				this._isArrayBuffer = wc || async === void 0 ? true : !!async
 			);
 			
-			//in async mode we are using 'responseType=arraybuffer'
-			if (this._isArrayBuffer) {
-				this._xhr.responseType = 'arraybuffer';
-			}
+			//in async mode we use 'responseType=arraybuffer'
+			this._isArrayBuffer && (this._xhr.responseType = 'arraybuffer');
 				
 			wc && (this._xhr.withCredentials = wc);
 		},
 
-		send: function(args){
+		send: function(args) {
 			try {
 				var timeout = this.timeout | 0;
 				this._aborted = this._completed = 0;
