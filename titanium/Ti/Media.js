@@ -1,8 +1,10 @@
-define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c"], function(Evented, lang, photoGallery, Blob, h2c) {
+define(
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'], 
+	function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer, API) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
 
-	return lang.setObject("Ti.Media", Evented, {
+	return lang.setObject('Ti.Media', Evented, {
 
 		constants: {
 			UNKNOWN_ERROR: 0,
@@ -37,83 +39,81 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			VIDEO_FINISH_REASON_PLAYBACK_ERROR: 1,
 			VIDEO_FINISH_REASON_USER_EXITED: 2,
 
-			MEDIA_TYPE_PHOTO: "public.image",
-			MEDIA_TYPE_VIDEO: "public.video",
+			MEDIA_TYPE_PHOTO: 'public.image',
+			MEDIA_TYPE_VIDEO: 'public.video',
 
 			canRecord: deviceCapabilities.microphone,
-			hasCamera: deviceCapabilities.cameraFront || deviceCapabilities.cameraBack
+			isCameraSupported: deviceCapabilities.cameraFront || deviceCapabilities.cameraBack
 		},
 
-		//beep: function() {},
-
-		openPhotoGallery: function(args){
+		openPhotoGallery: function(args) {
 			photoGallery.open(args);
 		},
 
 		createAudioPlayer: function(args) {
-			return new (require("Ti/Media/AudioPlayer"))(args);
+			return new AudioPlayer(args);
 		},
 
 		createSound: function(args) {
-			return new (require("Ti/Media/Sound"))(args);
+			return new Sound(args);
 		},
 
 		createVideoPlayer: function(args) {
-			return new (require("Ti/Media/VideoPlayer"))(args);
+			return new (require('Ti/Media/VideoPlayer'))(args);
 		},
 
 		vibrate: function(pattern) {
-			"vibrate" in navigator && navigator.vibrate(require.is(pattern, "Array") ? pattern : [pattern | 0]);
+			'vibrate' in navigator && navigator.vibrate(require.is(pattern, 'Array') ? pattern : [pattern | 0]);
 		},
 
 		showMusicLibrary: function(args) {
+			//Open default Tizet music applicatin with ApplicationControl
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null),
 				serviceReplyCB = { 
 					// callee now sends a reply 
 					onsuccess: function(reply) {
-						console.log('onsuccess:'+reply.key + ';'+reply.value);
+						API.info('onsuccess:' + reply.key + ';' + reply.value);
 					},
 					// Something went wrong 
 					onfailure: function() {
-						console.log('launch service failed');
+						API.warn('launch service failed');
 					} 
 				};
 
 			function succeeded() {
-				console.log('launch service succeeded');
+				API.info('launch service succeeded');
 			} 
 			function failed(e) { 
-				console.log('launch service failed. Reason : ' + e.name);
+				API.warn('launch service failed. Reason : ' + e.name);
 			}
 
 			tizen.application.launchAppControl(service, 'org.tizen.music-player', succeeded, failed, serviceReplyCB); 
 		},
 
-		saveToPhotoGallery: function(media, callbacks){
-			var file = media instanceof Titanium.Blob ? media.file : media;
-			var blob = file.read();
+		saveToPhotoGallery: function(media, callbacks) {
+			var file = media instanceof Titanium.Blob ? media.file : media,
+				blob = file.read();
 
-			function errorCB(e){
+			function errorCB(e) {
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
 			};
-			
+
 			function successCB(dir) {
 				var writeToStream = function (fileStream) {
 					fileStream.writeBase64(blob._data);
 					fileStream.close();
 					callbacks && typeof callbacks.success === 'function' && callbacks.success();
 				};
-				
-				try{
+
+				try {
 					dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
-				}catch(e){
+				} catch(e) {
 					errorCB(e);
 				}
-				
-				
+
 			};
-			
-			tizen.filesystem.resolve('images', successCB, errorCB, "rw");
+
+			tizen.filesystem.resolve('images', successCB, errorCB, 'rw');
 		},
 
 		takeScreenshot: function(callback) {
@@ -121,11 +121,11 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 
 			var options = { allowTaint: true,taintTest: false };
 			options.onrendered = function(canvasObject) {
-				var blobData = canvasObject.toDataURL().substring(22); //data:image/png;base64,
-				var blob = new Blob({
+				var blobData = canvasObject.toDataURL().substring(22), //data:image/png;base64,
+					blob = new Blob({
 						data: blobData,
 						length: blobData.length,
-						mimeType: "image/png"
+						mimeType: 'image/png'
 					});
 				callback({ media: blob });
 			};
@@ -133,41 +133,27 @@ define(["Ti/_/Evented", "Ti/_/lang", "Ti/Media/PhotoGallery", "Ti/Blob", "Ti/h2c
 			h2c([document.body], options);
 		},
 
-		isCameraSupported: function(){
-			try
-			{
-				tizen.application.getAppInfo("org.tizen.camera-app");
-				return true;
-			}
-			catch(e) {
-				return false;
-			}
-		},
-
-		getIsCameraSupported: function(){
-			return this.isCameraSupported();
-		},
-
 		showCamera: function() {
-			if (!this.isCameraSupported()) return;
+			if (!this.isCameraSupported) return;
 
 			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null),
 				serviceReplyCB = { 
 					// callee now sends a reply 
 					onsuccess: function(reply) {
-						console.log('onsuccess:' + reply.key + ';' + reply.value);
+						API.info('onsuccess:' + reply.key + ';' + reply.value);
 					},
 					// Something went wrong 
 					onfailure: function() {
-						console.log('launch service failed');
+						API.warn('launch service failed');
 					} 
 				};
 
 			function succeeded() {
-				console.log('launch service succeeded');
-			} 
+				API.info('launch service succeeded');
+			}
+
 			function failed(e) { 
-				console.log('launch service failed. Reason : ' + e.name);
+				API.warn('launch service failed. Reason : ' + e.name);
 			}
 
 			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app', succeeded, failed, serviceReplyCB); 

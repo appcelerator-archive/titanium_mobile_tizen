@@ -1,29 +1,104 @@
 define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/style", "Ti/_/lang", "Ti/Locale", "Ti/UI"],
 	function(declare, FontWidget, dom, css, style, lang, Locale, UI) {
+	
+	var setStyle = style.set,
+		unitize = dom.unitize,
+		tabStop = 2,
+		textPost = {
+			post: "_setText"
+		},
 
-	var serviceReply = {
-		onsuccess: function(){},
-		onfail:    function(){
-			Ti.API.error('Request failed');
-		}
-	};
+		serviceReply = {
+			onsuccess: function() {},
+			onfail:    function() {
+				Ti.API.error('Request failed');
+			}
+		},
 
-	var replaceAll = function(str, token, newToken) {
-		var i = -1;
-		if(typeof token === "string") {
-			while((i = (str.indexOf(token, i >= 0? i + newToken.length : 0))) !== -1 ) {
-				str = str.substring(0, i)
-					.concat(newToken)
-					.concat(str.substring(i + token.length));
+		replaceAll = function(str, token, newToken) {
+			var i = -1;
+			if(typeof token === "string") {
+				while((i = (str.indexOf(token, i >= 0? i + newToken.length : 0))) !== -1 ) {
+					str = str.substring(0, i)
+						.concat(newToken)
+						.concat(str.substring(i + token.length));
+					}
+			}
+			return str;
+		},
+
+		arrayRemoveDuplicates = function(var_array) {
+			var i = 0;
+			var_array.sort();
+			var_array[0] = var_array[0].trim().replace(/<|>/, '');
+			while(i < (var_array.length - 1)) {
+				var_array[i + 1] = var_array[i + 1].trim().replace(/<|>/, '');
+				if (var_array[i] == var_array[i + 1]) {
+					var_array.splice(i + 1, 1);
+				} else {
+					i++;
 				}
-		}
-		return str;
-	};
+			}
+		},
 
-	if(! window.autoLinkClick){
-		window.autoLinkClick = function (e, ap_service, ap_id, link, key, value){
+		linkifyFunctions = {
+			linkifyUrl : function(text_arg) {		
+				var i, l,
+				reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
+				replace_text =  '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>',
+				matches = text_arg.match(reg);
+				if (matches) {
+					arrayRemoveDuplicates(matches);
+					for(i=0, l = matches.length; i < l; i++) {
+						r_text = replaceAll(replace_text, '[$1]', matches[i]);
+						text_arg = replaceAll(text_arg, matches[i], r_text);
+					}
+				}
+				return text_arg;
+			},
+
+			linkifyEmail : function(text_arg) {
+				var i, l,
+					replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>',
+					reg = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
+					matches = text_arg.match(reg);
+				if (matches) {
+					arrayRemoveDuplicates(matches);
+					for(i = 0, l = matches.length; i < l; i++) {
+						r_text = replaceAll(replace_text, '[$1]', matches[i]);
+						text_arg = replaceAll(text_arg, matches[i], r_text);
+					}
+				}
+				return text_arg;
+			},
+
+			linkifyPhoneNumber : function(text_arg) {
+				var i, l,
+					reg_alone = /^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$/g,
+					reg = /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
+					matches,
+					replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>';
+					
+				if (reg_alone.test(text_arg)) {
+					text_arg = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/dial\', \'org.tizen.phone\', \'null\', \'tel\', \'[$1]\')">' + text_arg + '</a>';
+				} else {
+					matches = text_arg.match(reg);
+					if (matches) {
+						arrayRemoveDuplicates(matches);
+						for(i = 0, l = matches.length; i < l; i++) {
+							r_text = replaceAll(replace_text, '[$1]', matches[i]);
+							text_arg = replaceAll(text_arg, matches[i], r_text);
+						}
+					}
+				}
+				return text_arg;
+			}
+		};
+
+	if (!window.autoLinkClick) {
+		window.autoLinkClick = function (e, ap_service, ap_id, link, key, value) {
 			var service;
-			if(key && value){
+			if (key && value) {
 				service = new tizen.ApplicationControl(
 					ap_service,
 					link,
@@ -43,85 +118,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			);
 			e.stopPropagation();
 	  	}
-	}	
-
-	var setStyle = style.set,
-		unitize = dom.unitize,
-		tabStop = 2,
-
-		arrayRemoveDuplicates = function(var_array){
-			var_array.sort();
-			var i = 0;
-			var_array[0] = var_array[0].trim().replace(/<|>/, '');
-			while(i < (var_array.length - 1)){
-				var_array[i + 1] = var_array[i + 1].trim().replace(/<|>/, '');
-				if(var_array[i] == var_array[i + 1]){
-					var_array.splice(i + 1, 1);
-				} else {
-					i++;
-				}
-			}
-		},
-
-		linkifyFunctions = {
-			linkifyUrl : function(text_arg){		
-				var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
-				matches = text_arg.match(reg);
-				if(matches != null){
-					arrayRemoveDuplicates(matches);
-					var replace_text =  '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>';
-					var i = 0,
-						l = matches.length;
-					for(; i < l; i++){
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
-					}
-				}
-				return text_arg;
-			},
-
-			linkifyEmail : function(text_arg){
-				var reg = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
-				matches = text_arg.match(reg);
-				if(matches != null){
-					arrayRemoveDuplicates(matches);
-					var replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>';
-					var i = 0,
-						l = matches.length;
-					for(; i < l; i++){
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
-					}
-				}
-				return text_arg;
-			},
-
-			linkifyPhoneNumber : function(text_arg){
-				var reg_alone = /^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$/g;
-
-				if(reg_alone.test(text_arg)){
-					text_arg = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/dial\', \'org.tizen.phone\', \'null\', \'tel\', \'[$1]\')">' + text_arg + '</a>';
-				} else {
-					var reg = /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
-					matches = text_arg.match(reg);
-					if(matches != null){						
-						arrayRemoveDuplicates(matches);
-						var replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>';
-						var i = 0,
-							l = matches.length;
-						for(; i < l; i++){
-							r_text = replaceAll(replace_text, '[$1]', matches[i]);
-							text_arg = replaceAll(text_arg, matches[i], r_text);
-						}
-					}
-				}
-				return text_arg;
-			}
-		},
-		
-		textPost = {
-			post: "_setText"
-		};
+	}
 
 	return declare("Ti.UI.Label", FontWidget, {
 
@@ -151,10 +148,10 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 
 		_defaultHeight: UI.SIZE,
 
-		_linkifyText : function(textArg){
+		_linkifyText : function(textArg) {
 			
-			var	functions = [];
-			switch(this.autoLink){
+			var	i, l, functions = [];
+			switch(this.autoLink) {
 				case UI.LINKIFY_EMAIL_ADDRESSES:
 					functions.push('linkifyEmail');
 					break;
@@ -172,13 +169,9 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				default: 
 					return textArg;
 			}
-
-			var i = 0,
-				l = functions.length;
-			for(; i < l; i++){
+			for(i = 0, l = functions.length; i < l; i++) {
 				textArg = linkifyFunctions[functions[i]](textArg);
 			}
-
 			return textArg;
 		},
 

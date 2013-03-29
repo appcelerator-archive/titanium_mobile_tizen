@@ -34,17 +34,17 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 		// Lazy initialization of locale number and currency format storage.
 		function initNumberCurrencyFormat() {
-			!localeNumberCurrencyInfo && (localeNumberCurrencyInfo = require('Ti/_/Locale/NumberCurrencyFormatStorage'));
+			localeNumberCurrencyInfo || (localeNumberCurrencyInfo = require('Ti/_/Locale/NumberCurrencyFormatStorage'));
 		}
 
 		// Lazy initialization of Phone number formatter
 		function initPhoneFormatter() {
-			!phoneFormatter && (phoneFormatter = require('Ti/_/Locale/PhoneFormatter'));
+			phoneFormatter || (phoneFormatter = require('Ti/_/Locale/PhoneFormatter'));
 		}
 
 		// Lazy initialization of locale oriented formatters.
 		function initFormatterHelpers() {
-			!formatterHelpers && (formatterHelpers = require('Ti/_/Locale/FormatterHelpers'));
+			formatterHelpers || (formatterHelpers = require('Ti/_/Locale/FormatterHelpers'));
 		}
 
 		// Format a number into a locale specific decimal format. May use a number pattern.
@@ -57,13 +57,13 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 				localeCalendarInfo = require('Ti/_/Locale/Calendar/' + locale);
 				// If we did not loaded valid calendar with patterns - try load it from general
 				// Example: if no 'ru-RU.js' file we can try to load 'ru.js'
-				if (!localeCalendarInfo || !localeCalendarInfo.patterns) {
+				if (!(localeCalendarInfo && localeCalendarInfo.patterns)) {
 					localeCalendarInfo = require('Ti/_/Locale/Calendar/' + (locale.split('-')[0]));
 				}
 			}
 
 			// if we can't load target's locale calendar - use the default (en-US)
-			if (!localeCalendarInfo || !localeCalendarInfo.patterns) {
+			if (!(localeCalendarInfo && localeCalendarInfo.patterns)) {
 				API.warn('Loading default locale\'s calendar instead of ' + locale);
 				localeCalendarInfo = require('Ti/_/Locale/defaultCalendar');
 			}
@@ -84,7 +84,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			}
 
 			// If a locale was not specified in the parameters, use current.
-			!localeName && (localeName = locale);
+			localeName || (localeName = locale);
 
 			// If we are sure that parameter named 'localeName' should contain name of target locale,
 			// but it does not match rfc4647, we cannot continue.
@@ -99,7 +99,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			var numberInfo = localeNumberCurrencyInfo.getNumberInfoByLocale(localeName);
 			// If there is no pattern in the parameters, create a 'default pattern' based on locale's data,
 			// using group sizes.
-			!pattern && (pattern = formatterHelpers.generateFormatPattern(numberInfo, ('' + numberValue).length * 2));
+			pattern || (pattern = formatterHelpers.generateFormatPattern(numberInfo, ('' + numberValue).length * 2));
 
 			return formatterHelpers.formatDecimal(numberValue, pattern, numberInfo);
 		};

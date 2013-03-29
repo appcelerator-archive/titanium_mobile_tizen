@@ -1,4 +1,6 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
+define(
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person'], 
+	function(Evented, lang, contactHelper, Person, API) {
 	
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 		
@@ -9,7 +11,6 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person
 				var i = 0, 
 					contactsCount = contacts.length, 
 					persons = [];
-				console.log('Found ' + contactsCount + ' contacts');
 				for (; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
@@ -28,7 +29,6 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person
 				resultFilter, 
 				self = this;
 			//create case insensitive filter for first name, last name and middle name
-			console.log('Creating filters');
 			for (; i < namesCount; i++) {
 				firstNameFilter = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', names[i]);
 				middleNameFilter = new tizen.AttributeFilter('name.middleName', 'FULLSTRING', names[i]);
@@ -37,11 +37,9 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person
 			}
 			resultFilter = new tizen.CompositeFilter('INTERSECTION',  compositeFilters);
 			//find contacts with filter
-			console.log('Call find');
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
 				var contactsCount = contacts.length, 
 					persons = [];
-				console.log('Found ' + contactsCount + ' contact(s)');
 				for (i = 0; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}

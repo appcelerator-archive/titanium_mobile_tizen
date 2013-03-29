@@ -1,4 +1,6 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper'], function(Evented, lang, Person, Group, contactHelper) {
+define(
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper', 'Ti/API'],
+	function(Evented, lang, Person, Group, contactHelper, API) {
 
 	return lang.setObject('Ti.Contacts', Evented, {
 
@@ -86,14 +88,17 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 					height: '6%',
 					bottom: '2%'
 				});
+				values = values || {};
 				// add headers as first letter for contacts
 				function addHeaders(list) {
 					var fL,
 						l,
+						i = 0,
+						listLength = list.length,
 						//headers can be only letter, not number or special symbol
 						iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_0123456789";
 
-					for(var i=0, len = list.length; i<len; i++) {
+					for(; i < listLength; i++) {
 						fL = list[i]['title'].charAt(0);
 						if((iChars.indexOf(fL) === -1) && l != fL) {
 							list[i]['header'] = fL.toUpperCase();
@@ -111,8 +116,8 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 				}
 			//success callback for getAllPeople
 			var successCB = function(persons){
-				for(var i=0, len = persons.length; i < len; i++) {
-					data.push({title: persons[i]['fullName'], hasChild:true, test: persons[i].id});	
+				for(var i = 0, len = persons.length; i < len; i++) {
+					data.push({ title: persons[i]['fullName'], hasChild: true, test: persons[i].id });
 				}
 
 				data.sort(compare);
@@ -120,22 +125,24 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 
 				tableViewOptions = {
 					data:data,
-					headerTitle:'Contacts',
-					footerTitle:persons.length + " Contacts",
-					backgroundColor:'#FFF',
-					rowBackgroundColor:'white',
+					headerTitle: 'Contacts',
+					footerTitle:persons.length + ' Contacts',
+					backgroundColor: '#FFF',
+					rowBackgroundColor: 'white',
 					height: '90%',
-					top:0
+					top: 0
 				};
 				tableview = Titanium.UI.createTableView(tableViewOptions);
 
 				tableview.addEventListener('click', function(e) {
 					e.person = self.getPersonByID(e.rowData.test);
-					values.selectedPerson(e);
-					win.close();
+					if (values.selectedPerson) {
+						values.selectedPerson(e);
+						win.close();
+					}
 				});
 				closeBtn.addEventListener('click', function(e) {
-					values.cancel();
+					values.cancel && values.cancel();
 					win.close();
 				});
 
@@ -145,7 +152,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 			}
 			//error callback for getAllPeopleAsync
 			var errorCB = function(e){
-				console.log('Problems with getting the contacts, Error: ' + e.message);
+				API.error('Problems with getting the contacts, Error: ' + e.message);
 			}
 
 			Ti.Contacts.Tizen.getAllPeople(successCB, errorCB);
