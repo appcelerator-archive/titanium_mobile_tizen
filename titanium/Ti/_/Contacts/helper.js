@@ -150,7 +150,7 @@ define(['Ti/API'], function(API) {
 			if (j === typesCount) {
 				continue; // Skip email if it has unsupported type
 			}
-			
+
 			result.hasOwnProperty(type) ? result[type].push(currentEmail.email) : result[type] = [currentEmail.email];
 		}
 		return result;
