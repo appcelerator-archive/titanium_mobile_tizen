@@ -122,10 +122,10 @@ define(
 			editable: {
 				value: true,
 				set: function(status) {
-					if (this._field.disabled !== !status) {
+					if (this._field.disabled === !!status) {
 						this._field.disabled = !status;
 					}
-					
+
 					return status;
 				}
 			},
