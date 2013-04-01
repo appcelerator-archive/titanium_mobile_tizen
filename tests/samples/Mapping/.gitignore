@@ -1,9 +1,0 @@
-tmp
-.DS_Store
-build/*
-.settings
-build.log
-.fastdev.lock
-build.bat
-webrun.bat
-webuninstall.bat
