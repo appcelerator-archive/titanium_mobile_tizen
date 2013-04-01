@@ -5,9 +5,9 @@
 version: 3.0.0
 apiversion: 2
 description: tizen module
-author: 
-license: 
-copyright: 
+author: Yaroslav Pidstryhach
+license: Appcelerator Commercial License
+copyright: Copyright (c) 2011-2012 by Appcelerator,  Inc.
 
 
 # these should not be edited
