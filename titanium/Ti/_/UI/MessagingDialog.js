@@ -3,7 +3,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 		return declare('Ti._.UI.MessagingDialog', Evented, {
 
 			open: function () {
-				var self = this, 
+				var self = this,
 					appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/compose', null, null, null, createAllParameters()),
 					serviceCB = {
 						onsuccess: function () {
