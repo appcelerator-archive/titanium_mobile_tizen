@@ -1,5 +1,5 @@
-define(["Ti/_/declare", "Ti/_/UI/MessagingDialog"], function (declare, MessagingDialog) {
-	return declare("Ti.UI.SMSDialog", MessagingDialog, {
+define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog'], function (declare, MessagingDialog) {
+	return declare('Ti.UI.SMSDialog', MessagingDialog, {
 
 		constructor: function () {
 			this.type = 'SMS'
@@ -17,7 +17,7 @@ define(["Ti/_/declare", "Ti/_/UI/MessagingDialog"], function (declare, Messaging
 			// Tizen's common dialog.
 			_fields: {
 				toRecipients: 'to',
-				messageBody: "text",
+				messageBody: 'text',
 				type: 'type'
 			}
 		},
