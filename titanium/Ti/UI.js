@@ -434,6 +434,11 @@ define(
 
 		constants: {
 			currentWindow: void 0,
+			AUTOLINK_NONE: 0,
+			AUTOLINK_URLS: 1,
+			AUTOLINK_EMAIL_ADDRESSES: 2,
+			AUTOLINK_PHONE_NUMBERS: 4,
+			AUTOLINK_ALL: 7,
 			UNKNOWN: 0,
 			FACE_DOWN: 1,
 			FACE_UP: 2,
@@ -490,10 +495,6 @@ define(
 			UNIT_CM: 'cm',
 			UNIT_IN: 'in',
 			UNIT_DIP: 'dp', // We don't have DIPs, so we treat them as pixels
-			LINKIFY_ALL : 1,
-			LINKIFY_EMAIL_ADDRESSES : 2,
-			LINKIFY_WEB_URLS : 3,
-			LINKIFY_NONE : 0,
 
 			// Hidden constants
 			_LAYOUT_COMPOSITE: 'composite',
