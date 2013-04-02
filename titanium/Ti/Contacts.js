@@ -68,6 +68,7 @@ define(
 		},
 
 		save: function(persons) {
+			persons = persons || [];
 			var addressbook = tizen.contact.getDefaultAddressBook(), 
 				i = 0, 
 				personsCount = persons.length;
