@@ -82,7 +82,6 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			// NOTE: This property is new. It is proposed for inclusion.
 			autoplay: false
 		}
-		
 	});
 
 });

@@ -1,6 +1,17 @@
 ---
 name: Titanium.Map
 summary: The top level Map module.  The Map module is used for creating in-application native maps.
+description: |
+    #### Android Platform Notes
+
+    This module provides native map support using Google Maps API v1. As of March 3, 2013,
+    Google is no longer issuing Google Maps API v1 keys and this module can no longer be used to
+    support native maps on Android unless you have these keys.
+
+    For new Android applications, use the [Google Maps v2 add-on module](Modules.Map)
+    to add native maps support for your application. If you have an application that still uses the old keys,
+    you can either transition to the new module or continue using the built-in Titanium.Maps module.
+
 extends: Titanium.Module
 since: "0.8"
 platforms: [android, iphone, ipad, mobileweb, tizen]
@@ -159,17 +170,22 @@ examples:
     example: |
         Previous example as an Alloy view.
 
-        Define the `View` and `Annotation` properties in the TSS file.
-
-        mapexample.xml:
+        index.xml:
 
             <Alloy>
                 <Window id="win">
 
                     <!-- Note the ns attribute is used to change the default namespace. -->
-                    <View id="mapview" ns="Ti.Map" animate="true" regionFit="true" userLocation="true">
+                    <View id="mapview" ns="Ti.Map" onClick="doClick"
+                        animate="true" regionFit="true" userLocation="true"
+                        mapType="Ti.Map.STANDARD_TYPE" >
 
-                        <Annotation id="mountainView" latitude="37.390749" longitude="-122.081651" onClick="doClick" />
+                        <Annotation id="mountainView"
+                          latitude="37.390749" longitude="-122.081651"
+                          title="Appcelerator Headquarters" subtitle="Mountain View, CA"
+                          pincolor="Titanium.Map.ANNOTATION_RED"
+                          leftButton="/images/appcelerator_small.png"
+                          myid="1"/>
 
                         <!-- Place other child views here, such as an ImageView to add an overlay. -->
 
@@ -177,7 +193,7 @@ examples:
                 </Window>
             </Alloy>
 
-        mapexample.js:
+        index.js:
 
             function doClick(evt){
                 Ti.API.info("Annotation " + evt.title + " clicked, id: " + evt.annotation.myid);
@@ -189,4 +205,10 @@ examples:
                     Ti.API.info("Annotation " + evt.title + ", left button clicked.");
                 }
             };
-        
+
+            // These parameters can also be defined in the TSS file.
+            $.mapview.annotations = [$.mountainView];
+            $.mapview.region = {latitude:37.390749, longitude:-122.081651, latitudeDelta:0.01, longitudeDelta:0.01};
+
+            $.win.open
+

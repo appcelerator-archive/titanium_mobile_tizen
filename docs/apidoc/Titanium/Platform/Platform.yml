@@ -56,7 +56,7 @@ methods:
   - name: is24HourTimeFormat
     summary: Returns whether the system settings are configured to show times in 24-hour format.
     description: |
-        On Mobile Web, this function always returns false.
+        On Mobile Web and Tizen, this function always returns false.
     returns:
         type: Boolean
     platforms: [android, iphone, ipad, mobileweb, tizen]
@@ -93,7 +93,7 @@ properties:
     summary: System's processor architecture.
     type: String
     permission: read-only
-    platforms: [android, iphone, ipad]
+    platforms: [android, iphone, ipad, tizen]
     
   - name: availableMemory
     summary: System's unused memory, measured in megabytes on iOS and bytes on Android.
@@ -208,7 +208,7 @@ properties:
   - name: name
     summary: |
         Name of the platform. Returns `android` for the Android platform, `iPhone OS` for the iOS
-        platform (iPhone, iPad, or iPod Touch), `tizen` for Tizen platform and `mobileweb` for the Mobile Web platform.
+        platform (iPhone, iPad, or iPod Touch), `TIZEN` for Tizen platform and `mobileweb` for the Mobile Web platform.
     type: String
     permission: read-only
     

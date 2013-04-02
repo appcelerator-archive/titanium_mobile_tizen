@@ -12,8 +12,6 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 			this.backgroundColor = "#fff";
 		},
 
-		_preventDefaultTouchEvent: false,
-
 		destroy: function() {
 			App.removeEventListener(this.widgetId + ":unload");
 			this._destroy();
@@ -161,10 +159,10 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 		setBasicAuthentication: function(username, password) {
 			var url = this.url, 
 				protocolIndex = url.indexOf('//');
-			url = url.substring(0, protocolIndex + 2) + username + ":" + password + "@" + url.substring(protocolIndex + 2, url.length);
+			url = url.substring(0, protocolIndex + 2) + username + ':' + password + '@' + url.substring(protocolIndex + 2, url.length);
 			this.url = url;
 		},
-		
+
 		reload: function() {
 			var w = this._getWindow();
 			this.url && w ? (w.location.href = this.url) : this._createIFrame();

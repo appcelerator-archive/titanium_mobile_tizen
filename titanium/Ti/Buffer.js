@@ -84,6 +84,7 @@ define(["Ti/_/declare", "Ti/_/Evented", "Ti/Blob", "Ti/Codec"], function(declare
 					return this.value.length;
 				},
 				set: function(newValue, oldValue) {
+					// Prevent exception when oldValue is undefined
 					oldValue = oldValue || 0;
 					if (newValue < oldValue) {
 						this._resize(0, newValue);

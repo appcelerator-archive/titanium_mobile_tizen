@@ -3,6 +3,7 @@ name: Titanium.UI.Window
 summary: The Window is an empty drawing surface or container.
 extends: Titanium.UI.View
 since: "0.9"
+excludes: { methods:[removeAllChildren] }
 
 methods:
   - name: close
@@ -167,7 +168,13 @@ events:
 
   - name: blur
     summary: Fired when the window loses focus.
+    description: |
+        On Android, this event also fires before putting the activity in the background
+        (before the activity enters the pause state).
 
+        On iOS, this event does not fire before putting the application in the background.
+        The application needs to monitor the <Titanium.App.pause> event.
+        See <Titanium.App> for more information on the iOS application lifecycle.
   - name: close
     summary: Fired when the window is closed.
 
@@ -176,6 +183,14 @@ events:
     description: |
         The listener for this event must be defined before this window
         is opened.
+
+        On Android, this event also fires when the activity enters the foreground
+        (after the activity enters the resume state).
+
+        On iOS, this event does not fire after the application returns to the foreground
+        if it was previously backgrounded.
+        The application needs to monitor the <Titanium.App.resumed> event.
+        See <Titanium.App> for more information on the iOS application lifecycle.
   - name: open
     summary: Fired when the window is opened.
     description: |
@@ -272,12 +287,12 @@ properties:
         bad visual/redraw behavior after the modal is dismissed, due to how
         iOS manages modal transitions.
         
-        Mobile Web note: On Mobile Web, windows are always modal, blocking input to underlying 
+        Mobile Web and Tizen note: On Mobile Web and Tizen, windows are always modal, blocking input to underlying 
         windows. If the window does not occupy the full screen, setting `modal` to `true` provides 
         a visual cue by dimming any background windows. If the window occupies the full screen, 
         `modal` has no effect.
 
-        On Mobile Web and iOS, the modal property has no effect on whether the window is 
+        On Mobile Web, Tizen and iOS, the modal property has no effect on whether the window is 
         translucent or opaque.
     type: Boolean
     default: false

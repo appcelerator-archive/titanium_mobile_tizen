@@ -94,7 +94,7 @@ properties:
   - name: department
     summary: Department of the person. Single value.
     type: String
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     
   - name: email
     summary: Email addresses for the person. Multi-value. Read-only on Android.
@@ -115,7 +115,7 @@ properties:
   - name: firstPhonetic
     summary: Phonetic first name of the person.  Single value.
     type: String
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     
   - name: fullName
     summary: Localized full name of the person. Single value. Read-only on Android.
@@ -172,7 +172,7 @@ properties:
   - name: lastPhonetic
     summary: Phonetic last name of the person. Single value.
     type: String
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     
   - name: middleName
     summary: Middle name of the person. Single value.
@@ -189,7 +189,7 @@ properties:
     description: Date format is "_yyyy_-_MM_-_dd_**T**_HH_**:**_mm_**:**_ss_**.**_SSS_**+0000**"
     type: String
     permission: read-only
-    platforms: [iphone, ipad]
+    platforms: [iphone, ipad, tizen]
     
   - name: nickname
     summary: Nickname of the person. Single value.
@@ -214,7 +214,7 @@ properties:
         * Keys: any of `home`, `work`, `other`, `mobile`, `pager`, `workFax`, `homeFax`, `main`, 
         and/or `iPhone`.
         * Values: array of `string` type.
-        On Tizen only the following keys are supported: `work`, `home`, `mobile`, `pager`
+        On Tizen only the following keys are supported: `work`, `home`, `mobile`, `pager`, `workFax`
     type: Dictionary
     
   - name: prefix
@@ -222,8 +222,8 @@ properties:
     type: String
     permission: read-only
     description: |
-        On iPhone and iPad is read-only, but on Tizen it is writable.
-    platforms: [iphone, ipad]
+        On iPhone, iPad and Tizen is read-only.
+    platforms: [iphone, ipad, tizen]
     
   - name: recordId
     summary: Record identifier of the person. Single value.
@@ -242,9 +242,10 @@ properties:
     platforms: [android, iphone, ipad]
     
   - name: suffix
-    summary: Suffix for the person. Single value. Read-only on Android.
+    summary: Suffix for the person. Single value.
     type: String
-    platforms: [android, iphone, ipad]
+    permission: read-only
+    platforms: [iphone, ipad, tizen]
 
   - name: url
     summary: URLs of webpages associated with the person. Multi-value.
@@ -253,5 +254,7 @@ properties:
         
         * Keys: any of `homepage`, `home`, `work`, and/or `other`.
         * Values: array of `string` type.
+        
+        Tizen supports only `homepage`
     type: Dictionary
     platforms: [android, iphone, ipad, tizen]

@@ -1,9 +1,0 @@
-tmp
-.sdb.devicemap
-build/*
-build.log
-.fastdev.lock
-.DS_Store
-._*
-.settings
-build.bat

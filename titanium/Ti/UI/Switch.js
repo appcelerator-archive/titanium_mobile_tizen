@@ -51,7 +51,6 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/css", "Ti/_/style", "Ti/UI"]
 			var switchLabel = this._label = UI.createLabel({
 				width: UI.INHERIT,
 				height: UI.INHERIT,
-				// verticalAlign: UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
 				textAlign: UI.TEXT_ALIGNMENT_LEFT
 			})
 			mainContainer._add(switchLabel);

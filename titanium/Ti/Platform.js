@@ -22,27 +22,36 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		}
 	};
 
-	// initialize values that should be initialized via fucntions with callbacks
 	function initPlatformData() {
-		//Get our application info.
-		//Workaround for simulator. It throws exception because id is undefined. On Emulator works fine.
+		// tizen.systeminfo.getPropertyValue provides access to various Tizen platform info. 
+		// However, this function is asynchronous.
+		// Since we must implement the corresponding synchronous Titanium API, we will cache 
+		// the data and synchronously return the cached copy to the Titanium programmer. The cache
+		// will be kept up to date.
+
+		// Get our application info.		
 		try {
-			Platform.constants.__values__.id = tizen.application.getAppInfo().id; //The unique ID for an installed application. 
+			// The unique ID for an installed application. Will not change while the app is running.
+			Platform.constants.__values__.id = tizen.application.getAppInfo().id;
 		} catch (e) {
-			Platform.constants.__values__.id = 'ID001'; //The unique ID for an installed application. 
+			// The web simulator throws an exception, because id is undefined.
+			// Initialize to something sane.
+			Platform.constants.__values__.id = 'ID001';
 		}
 
-		if(deviceCapabilities.wifi) {
+		if (deviceCapabilities.wifi) {
+			// Initialize the WiFi info.
 			tizen.systeminfo.getPropertyValue('WIFI_NETWORK', onSuccessWifiNetworkCallback, onErrorCallback);
-			// subscribing to WiFi property changes
+			// Subscribe to WiFi property changes.
 			tizen.systeminfo.addPropertyValueChangeListener('WIFI_NETWORK', onSuccessWifiNetworkCallback);
 		}
 
-		// Get model property
+		// Get model property. Will not change as the app is running.
 		tizen.systeminfo.getPropertyValue('BUILD', onSuccessModelCallback, onErrorCallback);
 
-		// Get battery info 
+		// Initialize battery info.
 		tizen.systeminfo.getPropertyValue('BATTERY', onSuccessBatteryCallback, onErrorCallback);
+		// Sunscribe to battery info changes.
 		tizen.systeminfo.addPropertyValueChangeListener('BATTERY', onSuccessBatteryCallback);
 	};
 
@@ -50,7 +59,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		Ti.API.error('An error occurred ' + error.message);
 	};
 
-	// Callback to update WiFi's IP address
+	// Tizen listener for WiFi IP address.
 	function onSuccessWifiNetworkCallback(wifiNetwork) {
 		//receive SystemInfoWifiNetwork 
 		if (wifiNetwork.status === 'ON') {
@@ -61,7 +70,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		Ti.API.info('Platform.address is set to ' + Platform.address);
 	}
 
-	// Callback to set Model
+	// Tizen listener for Model.
 	function onSuccessModelCallback(build) {
 		Platform.constants.__values__.model = build.model;
 	}
@@ -133,7 +142,6 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				architecture: deviceCapabilities.platformCoreCpuArch,
 				availableMemory: void 0,
 				batteryLevel: void 0,
-				batteryMonitoring: false,
 				batteryState: void 0,
 				isBrowser: true,
 				id: mid,

@@ -1,6 +1,6 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/Tizen/_/contactHelper'], function(Evented, lang, Person, Group, contactHelper) {
-
-	var addressbook = tizen.contact.getDefaultAddressBook();
+define(
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper', 'Ti/API'],
+	function(Evented, lang, Person, Group, contactHelper, API) {
 
 	return lang.setObject('Ti.Contacts', Evented, {
 
@@ -68,6 +68,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 		},
 
 		save: function(persons) {
+			persons = persons || [];
 			var addressbook = tizen.contact.getDefaultAddressBook(), 
 				i = 0, 
 				personsCount = persons.length;
@@ -75,9 +76,15 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 				addressbook.update(contactHelper.updateTizenContact(persons[i]));
 			}
 		},
-		showContacts: function(values){
+		
+		showContacts: function(values) {
+			// Display a picker that allows a person to be selected.
+
+			// However, a TableView is used instead of a Picker, so that the contact
+			// information is presented in convenient tabular form.
+		
 			var self = this,
-				win = Ti.UI.createWindow({backgroundColor: '#81BEF7'}),
+				win = Ti.UI.createWindow({ backgroundColor: '#81BEF7' }),
 				tableview,
 				data = [],
 				tableViewOptions,
@@ -87,34 +94,45 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 					right: 20,
 					height: '6%',
 					bottom: '2%'
-				});	
-				// add headers as first letter for contacts
-				function addHeaders(list) {
-					var fL,
-						l,
-						//headers can be only letter, not number or special symbol
-						iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_0123456789";
+				});
+			values = values || {};
+				
+			// Configure TableView headers to highlight the first letter of the contacts being displayed.
+			function addHeaders(list) {
+				var fL,
+					l,
+					i = 0,
+					listLength = list.length,
 
-					for(var i=0, len = list.length; i<len; i++) {
-						fL = list[i]['title'].charAt(0);
-						if((iChars.indexOf(fL) === -1) && l != fL) {
-							list[i]['header'] = fL.toUpperCase();	
-						}
-						l = fL;
-					} 
-				}
-				//sorting function by title
-				function compare(a,b) {
-				  if (a.title < b.title)
-					 return -1;
-				  if (a.title > b.title)
-					return 1;
-				  return 0;
-				}
-			//success callback for getAllPeopleAsync
-			var successCB = function(persons){
-				for(var i=0, len = persons.length; i < len; i++) {
-					data.push({title: persons[i]['fullName'], hasChild:true, test: persons[i].id});	
+					// Headers can only display letters, not numbers or special symbols.
+					iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_0123456789";
+
+				// Iterate the list items. When we detect a change in the first letter with respect
+				// to the previous row, we declare a header for this row.
+				for(; i < listLength; i++) {
+					fL = list[i]['title'].charAt(0);
+					if((iChars.indexOf(fL) === -1) && l != fL) {
+						list[i]['header'] = fL.toUpperCase();  // this row now contains a header
+					}
+					l = fL;
+				} 
+			}
+			
+			// Sorting by title.
+			function compare(a,b) {
+			  if (a.title < b.title)
+				 return -1;
+			  if (a.title > b.title)
+				return 1;
+			  return 0;
+			}
+				
+			// Success callback for getAllPeople.
+			var successCB = function(persons) {
+				// Formulate the data for the TableView in the format that it understands.
+			
+				for(var i = 0, len = persons.length; i < len; i++) {
+					data.push({ title: persons[i]['fullName'], hasChild: true, test: persons[i].id });
 				}
 
 				data.sort(compare);
@@ -122,22 +140,26 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 
 				tableViewOptions = {
 					data:data,
-					headerTitle:'Contacts',
-					footerTitle:persons.length + " Contacts",
-					backgroundColor:'#FFF',
-					rowBackgroundColor:'white',
+					headerTitle: 'Contacts',
+					footerTitle:persons.length + ' Contacts',
+					backgroundColor: '#FFF',
+					rowBackgroundColor: 'white',
 					height: '90%',
-					top:0
+					top: 0
 				};
+
+				// Create the TableView which will be our picker.
 				tableview = Titanium.UI.createTableView(tableViewOptions);
 
 				tableview.addEventListener('click', function(e) {
 					e.person = self.getPersonByID(e.rowData.test);
-					values.selectedPerson(e);
-					win.close();
+					if (values.selectedPerson) {
+						values.selectedPerson(e);
+						win.close();
+					}
 				});
 				closeBtn.addEventListener('click', function(e) {
-					values.cancel();
+					values.cancel && values.cancel();
 					win.close();
 				});
 
@@ -145,12 +167,13 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 
 				win.add(closeBtn);
 				win.open();
 			}
-			//error callback for getAllPeopleAsync
+			
+			// error callback for getAllPeopleAsync
 			var errorCB = function(e){
-				console.log('Problems with getting the contacts, Error: ' + e.message);
+				API.error('Problems with getting the contacts, Error: ' + e.message);
 			}
 
-			this.getAllPeopleAsync(successCB, errorCB);
+			Ti.Contacts.Tizen.getAllPeople(successCB, errorCB);
 		}
 
 	});

@@ -107,10 +107,7 @@ methods:
         If the `showControls` option is `false`, you must control the camera explicitly, using
         the [takePicture](Titanium.Media.takePicture) and [hideCamera](Titanium.Media.hideCamera) 
         methods.
-
-        #### Tizen Platform Notes
-        Due to Tizen bug https://bugs.tizen.org/jira/browse/TIVI-254, camera shows but immediately closes.
-    platforms: [iphone, ipad, android, Tizen]
+    platforms: [iphone, ipad, android, tizen]
     parameters:
       - name: options
         summary: A dictionary of camera options as described in <CameraOptionsType>.
@@ -152,7 +149,7 @@ methods:
   - name: vibrate
     summary: Makes the device vibrate.
     description: |
-        On Android and Mobile Web, a `pattern` argument can be provided to specify a
+        On Android, Mobile Web and Tizen, a `pattern` argument can be provided to specify a
         vibration pattern.
 
         The `pattern` is an array of Number values.  Each number in the array is 
@@ -165,7 +162,7 @@ methods:
         Would cause the vibration to start immediately (delay = 0), and perform three
         long vibrations (500 ms) separated by short pauses (100ms).
         
-        On Mobile Web, calling `vibrate` without a `pattern` will stop the vibration.
+        On Mobile Web and Tizen, calling `vibrate` without a `pattern` will stop the vibration.
     parameters: 
       - name: pattern
         summary: Array of values identifying a vibrate pattern (only used on Android).
@@ -864,10 +861,10 @@ properties:
     type: Callback<MusicLibraryResponseType>
   - name:  error 
     summary: Function to call upon receiving an error. 
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: cancel
     summary: Function to call if the user presses the cancel button.
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: autohide
     summary: Specifies that the library should be hidden automatically after media selection is completed.
     type: Boolean
@@ -981,10 +978,10 @@ properties:
     type: Callback<CameraMediaItemType>
   - name: error 
     summary: Function to call upon receiving an error.
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: cancel 
     summary: Function to call if the user presses the cancel button.
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: autohide 
     summary: Specifies if the camera should be hidden automatically after the media capture is completed.
     type: Boolean
@@ -1074,10 +1071,10 @@ properties:
     type: Callback<CameraMediaItemType>
   - name: error 
     summary: Function to call upon receiving an error.
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: cancel 
     summary: Function to call if the user presses the cancel button.
-    type: Callback<Object>
+    type: Callback<FailureResponse>
   - name: autohide 
     summary: Specifies if the photo gallery should be hidden automatically after the media
         selection is completed.
@@ -1113,6 +1110,7 @@ properties:
 ---
 name: CameraMediaItemType
 summary: A media object from the camera or photo gallery.
+extends: SuccessResponse
 properties:
   - name: media
     summary: The media object, as a [Blob](Titanium.Blob).
@@ -1123,6 +1121,21 @@ properties:
   - name: cropRect
     summary: Simple object defining the user's selected crop rectangle, or `null` if the user has not edited the photo.
     type: CropRectType
+  - name: success
+    summary: Indicates if the operation succeeded. Returns `true`.
+    description: Returns `true`.
+    type: Boolean
+    since: "3.1.0"
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined.
+    type: String
+    since: "3.1.0"
+  - name: code
+    summary: Error code. Returns 0.
+    description: Error code will be 0.
+    type: Number
+    since: "3.1.0"
 
 # Arguably we might need a global Rect pseudotype. For now, define locally
 ---
@@ -1162,19 +1175,32 @@ properties:
 name: PreviewImageError
 summary: The parameter passed to the `error` callback of <PreviewImageOptions>.
 platforms: [android]
+extends: FailureResponse
 properties:
   - name: message
     summary: Description of the error.
     type: String
     accessors: false
+    deprecated:
+        since: "3.1.0"
   - name: code
     summary: Error code, if applicable. See <Titanium.Media> constants such as [DEVICE_BUSY](Titanium.Media.DEVICE_BUSY).
     type: Number
     accessors: false
+  - name: success
+    summary: Indicates if the operation succeeded. Returns `false`.
+    description: Returns `false`.
+    type: Boolean
+    since: "3.1.0"
+  - name: error
+    summary: Error message, if any returned.
+    description: May be undefined.
+    type: String
+    since: "3.1.0"
 ---
 name: ScreenshotResult
 summary: The parameter passed to the <Titanium.Media.takeScreenshot> callback.
-platforms: [iphone, ipad, android]
+platforms: [iphone, ipad, android, tizen]
 properties:
   - name: media
     summary: The screenshot image.

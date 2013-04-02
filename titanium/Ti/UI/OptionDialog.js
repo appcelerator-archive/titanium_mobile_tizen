@@ -23,10 +23,10 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 					opacity: 0
 				}),
 				customContainer = UI.createView({
-					width: "100%",
+					width: '100%',
 					height: UI.SIZE,
 					bottom: 5,
-					backgroundColor: "white",
+					backgroundColor: 'white',
 					layout: UI._LAYOUT_CONSTRAINING_VERTICAL,
 				});
 
@@ -102,13 +102,17 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 		},
 
 		hide: function(){
-					this._optionsWindow.close();
-					this._optionsWindow = void 0;
-					this.fireEvent("click", {
-						index: this.cancel,
-						cancel: this.cancel,
-						destructive: this.destructive
-					});
+			if (!this._optionsWindow) {
+				return;
+			}
+
+			this._optionsWindow.close();
+			this._optionsWindow = void 0;
+			this.fireEvent('click', {
+				index: this.cancel,
+				cancel: this.cancel,
+				destructive: this.destructive
+			});
 		},
 
 		properties: {
