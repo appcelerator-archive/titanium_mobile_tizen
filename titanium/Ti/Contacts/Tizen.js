@@ -8,7 +8,7 @@ define(
 			var self = this;
 
 			// Finds and returns all Tizen contacts.
-			tizen.contact.getDefaultAddressBook().find(function(contacts){
+			tizen.contact.getDefaultAddressBook().find(function(contacts) {
 				var i = 0, 
 					contactsCount = contacts.length, 
 					persons = [];
@@ -40,7 +40,7 @@ define(
 			resultFilter = new tizen.CompositeFilter('INTERSECTION',  compositeFilters);
 
 			// Find contacts with filter.
-			tizen.contact.getDefaultAddressBook().find(function(contacts){
+			tizen.contact.getDefaultAddressBook().find(function(contacts) {
 				var contactsCount = contacts.length, 
 					persons = [];
 				for (i = 0; i < contactsCount; i++) {

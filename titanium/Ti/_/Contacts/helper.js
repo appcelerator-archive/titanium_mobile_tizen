@@ -153,7 +153,7 @@ define(function () {
 			type = i.toUpperCase();
 
 			if (types.indexOf(type) === -1) {
-				continue;
+				continue; // No supported email types found
 			}
 
 			currentEmail = email[i];
@@ -170,7 +170,7 @@ define(function () {
 	
 	function createTitaniumEmail(emails) {
 		var result = {},
-			types = ['home', 'work'],
+			types = ['home', 'work'], // email types supported by Tizen that have a Titanium equivalent
 			i = 0,
 			emailsCount = emails.length,
 			currentEmail, type, typesCount, j, emailTypes;
@@ -223,7 +223,8 @@ define(function () {
 
 		for (; i < anniversariesCount; i++) {
 			type = anniversaries[i].label ? anniversaries[i].label.toLowerCase() : '';
-			// if type is supported we add it
+
+			// If the type is supported, we add it
 			if (types.indexOf(type) > -1) {
 				result.hasOwnProperty(type) 
 						? result[type].push(anniversaries[i].date)
@@ -238,7 +239,7 @@ define(function () {
 	
 	function createTizenWebSite(url) {
 		var result = [],
-			types = ['HOMEPAGE', 'BLOG'], // website types supported by Tizen
+			types = ['HOMEPAGE', 'BLOG'], // website types supported by Tizen that have Titanium equivalents
 			i, j, type, currentWebSite, webSitesCount;
 
 		for (i in url) {
