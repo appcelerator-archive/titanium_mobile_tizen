@@ -124,9 +124,9 @@ define(function () {
 			phoneTypes = currentPhone.types;
 			typesCount = phoneTypes.length;
 
-			// Check phone type
+			// Check if the phone type has a Titanium equivalent.
 			for (j = 0; j < typesCount; j++) {
-				// CELL and FAX have another name in Titanium, so we need to rename them.
+				// CELL and FAX have different name in Titanium, so we need to rename them.
 				type = phoneTypes[j] === 'CELL' ? 'mobile' : (phoneTypes[j] === 'FAX' ? 'workFax' : phoneTypes[j].toLowerCase());
 				if (types.indexOf(type) > -1) {
 					break;
@@ -142,41 +142,41 @@ define(function () {
 		return result;
 	}
 
-	// Create and return a Tizen native email addres object from a Titanium email object
+	// Create and return an array of Tizen native email addresses from a Titanium email object.
 	
 	function createTizenEmail(email) {
 		var result = [],
-			types = ['WORK', 'HOME'], // email types supported by Tizen
-			i, j, type, currentEmails, emailsCount;
+			types = ['WORK', 'HOME'], // email types supported by Tizen that have a Titanium equivalent
+			i, j, type, currentEmail, emailsCount;
 			
-		for (i in  email) {
+		for (i in email) {
 			type = i.toUpperCase();
 
 			if (types.indexOf(type) === -1) {
 				continue;
 			}
 
-			currentEmails = email[i];
+			currentEmail = email[i];
 			emailsCount = currentEmails.length;
 
 			for (j = 0; j < emailsCount; j++) {
-				result.push(new tizen.ContactEmailAddress(currentEmails[j], [type]));
+				result.push(new tizen.ContactEmailAddress(currentEmail[j], [type]));
 			}
 		}
 		return result;
 	}
 
-	// Create and return a Titanium email address from a native Tizen object
+	// Create and return a Titanium email address from an array of native Tizen email objects.
 	
-	function createTitaniumEmail(email) {
+	function createTitaniumEmail(emails) {
 		var result = {},
 			types = ['home', 'work'],
 			i = 0,
-			emailsCount = email.length,
+			emailsCount = emails.length,
 			currentEmail, type, typesCount, j, emailTypes;
 			
 		for (; i < emailsCount; i++) {
-			currentEmail = email[i];
+			currentEmail = emails[i];
 			emailTypes = currentEmail.types;
 			typesCount = emailTypes.length;
 
