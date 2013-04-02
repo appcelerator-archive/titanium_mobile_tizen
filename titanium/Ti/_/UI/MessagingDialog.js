@@ -25,10 +25,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 					return new tizen.ApplicationControlData(name, valueArray);
 				};
 
-				// Take the user-supplied parameters ('messageBody', 'toRecipients', etc) and convert them to the form
-				// required by Tizen's email application (i.e. array of tizen.ApplicationControlData).
-				// ApplicationControl requires an array, even if there is only one parameter.
 				function createAllParameters() {
+					// Take the user-supplied parameters ('messageBody', 'toRecipients', etc) and convert them to the form
+					// required by Tizen's email application (i.e. array of tizen.ApplicationControlData).
+					// ApplicationControl requires an array, even if there is only one parameter.
+
 					var params = [],
 						i;
 
@@ -38,7 +39,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 					return params;
 				};
 
-				//Launching the native Tizen's message aplication
+				// Launching the native Tizen's message editing aplication
 				tizen.application.launchAppControl(appControl, self._id, function () {
 						Ti.API.info('Launch appControl succeeded')
 					}, function (e) {

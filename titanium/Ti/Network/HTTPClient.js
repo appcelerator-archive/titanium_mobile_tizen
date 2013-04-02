@@ -26,7 +26,9 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				var c = this.constants,
 					file,
 					mimeType,
-					blobData = "",
+					// blobData contains the server response (plain text, or base64-encoded binary data, depending
+					// on the mime type of the response)
+					blobData = "", 
 					onload = this.onload,
 					xmlParser = new DOMParser();
 
@@ -40,15 +42,15 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						this._completed = 1;
 						c.readyState = this.DONE;
 						
-						if (!this._aborted) {
+						if (!this._aborted) {							
+							mimeType = xhr.getResponseHeader("Content-Type") || "text/plain";
 							
-							mimeType =  xhr.getResponseHeader("Content-Type");
-							
-							if (this._isArrayBuffer) {
-								//parse arraybuffer`s response in async mode
+							if (this._isAsync) {
 								c.responseXML  = c.responseText = "";
 								if (xhr.response) {
-									//prepare Base64-encoded string required by Blob
+									// Convert the ArrayBuffer of the response to a regular uint8 array,
+									// and then convert the array to a string.
+									// (You cannot access the items of ArrayBuffer directly.)
 									var uInt8Array = new Uint8Array(xhr.response),
 										i = uInt8Array.length,
 										binaryString = new Array(i);
@@ -58,8 +60,12 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 									}
 									
 									c.responseText = binaryString.join('');
+
+									// If the mime type indicates binary data, initialize the blob with base64-encoded
+									// of the data; otherwise, simply copy the data.
 									blobData = _.isBinaryMimeType(mimeType) ? btoa(c.responseText) : c.responseText;
 									
+									// If this is xml, parse it, in order to initialize responseXML.
 									if (mimeType.indexOf('text/xml') !== -1) {
 										try {
 											c.responseXML = xmlParser.parseFromString(c.responseText.substring(c.responseText.indexOf('<')), "text/xml");	
@@ -71,24 +77,23 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 									}
 								} 
 							} else {
-								//sync mode
+								// sync mode
 								c.responseXML = xhr.responseXML;
 								c.responseText = blobData = xhr.responseText;
 							}
 							
-							//create file by name
+							// Create file by name.
 							this.file && (file = Filesystem.getFile(this.file));
 							
-							//responseData = Blob
 							c.responseData = new Blob({
 								data: blobData,
 								length: blobData.length,
-								mimeType: mimeType || "text/plain",
+								mimeType: mimeType,
 								file: file || null,
 								nativePath: (file && file.nativePath) || null,
 							});
 								
-							//write Blob to file
+							// Write Blob to file.
 							file && file.writable && file.write(c.responseData);
 														
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));
@@ -144,11 +149,15 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 			this._xhr.open(
 				c.connectionType = method,
 				c.location = _.getAbsolutePath(httpURLFormatter ? httpURLFormatter(url) : url),
-				this._isArrayBuffer = wc || async === void 0 ? true : !!async
+
+				// We will use the asynchronous mode of HTTP request if credentials are used, or if the asynchronous
+				// mode was requested by the caller. (If the synchronicity was not specified by the
+				// caller, async is assumed by default.)
+				this._isAsync = (wc || async === void 0) ? true : !!async
 			);
 			
-			//in async mode we use 'responseType=arraybuffer'
-			this._isArrayBuffer && (this._xhr.responseType = 'arraybuffer');
+			// In the async mode, we use 'responseType=arraybuffer'.
+			this._isAsync && (this._xhr.responseType = 'arraybuffer');
 				
 			wc && (this._xhr.withCredentials = wc);
 		},
