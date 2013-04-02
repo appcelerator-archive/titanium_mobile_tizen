@@ -1,5 +1,5 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'], 
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'],
 	function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer, API) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
