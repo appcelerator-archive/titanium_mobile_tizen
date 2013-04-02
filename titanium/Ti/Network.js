@@ -31,8 +31,20 @@ define(['Ti/_/Evented', 'Ti/_/lang'], function(Evented, lang) {
 
 		});
 
-	function initNetworkType() {
+	function initNetworkInfo() {
+		// 'NETWORK' is a Tizen identifier that provides access to various network-related
+		// information (via tizen.systeminfo.getPropertyValue). However, this function is
+		// asynchronous - Tizen does not offer synchronous requests for this data. Since we 
+		// must implement the corresponding synchronous Titanium API, we will cache the data
+		// and synchronously return the cached copy to the Titanium programmer. The cache
+		// will be kept up to date.
+
+		// Initialize the locally cached values of 'NETWORK' for the first time:
 		tizen.systeminfo.getPropertyValue('NETWORK', onSuccessNetworkCallback, onErrorCallback);
+
+		// Initialize Tizen listeners for changes of the 'NETWORK' values, so that we are always
+		// in sync with the system. Every time the system value changes, onSuccessNetworkCallback 
+		// will execute, and the locally cached values will update. 
 		tizen.systeminfo.addPropertyValueChangeListener('NETWORK', onSuccessNetworkCallback);
 	}
 
@@ -71,7 +83,7 @@ define(['Ti/_/Evented', 'Ti/_/lang'], function(Evented, lang) {
 		});
 	}
 
-	initNetworkType();
+	initNetworkInfo();
 
 	return Network;
 
