@@ -6,7 +6,8 @@ define(
 		
 		getAllPeople: function(successCallback, errorCallback) {
 			var self = this;
-			//finds and return all tizen contacts
+
+			// Finds and returns all Tizen contacts.
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
 				var i = 0, 
 					contactsCount = contacts.length, 
@@ -19,7 +20,7 @@ define(
 		},	
 
 		getPeopleWithName: function(name, successCallback, errorCallback) {
-			var names = name.trim().replace(/[ ]{2,}/g, ' ').split(' '), //trims input string and replaces spaces between words to one space 
+			var names = name.trim().replace(/[ ]{2,}/g, ' ').split(' '), // Trims input string and collapses spaces between words to single space.
 				firstNameFilter, 
 				lastNameFilter, 
 				middleNameFilter, 
@@ -28,7 +29,8 @@ define(
 				compositeFilters = [], 
 				resultFilter, 
 				self = this;
-			//create case insensitive filter for first name, last name and middle name
+				
+			// Create case insensitive filter for first name, last name and middle name.
 			for (; i < namesCount; i++) {
 				firstNameFilter = new tizen.AttributeFilter('name.firstName', 'FULLSTRING', names[i]);
 				middleNameFilter = new tizen.AttributeFilter('name.middleName', 'FULLSTRING', names[i]);
@@ -36,7 +38,8 @@ define(
 				compositeFilters.push(new tizen.CompositeFilter('UNION', [firstNameFilter, middleNameFilter, lastNameFilter]));
 			}
 			resultFilter = new tizen.CompositeFilter('INTERSECTION',  compositeFilters);
-			//find contacts with filter
+
+			// Find contacts with filter.
 			tizen.contact.getDefaultAddressBook().find(function(contacts){
 				var contactsCount = contacts.length, 
 					persons = [];
