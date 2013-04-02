@@ -1,4 +1,4 @@
-define(['Ti/_/lang', 'Ti/_/Evented', '_/WebAPIError'], function(lang, WebAPIError, Evented) {
+define(['Ti/_/lang', 'Ti/_/Evented', '_/WebAPIError'], function(lang, Evented, WebAPIError) {
 
 	return lang.mixProps(require.mix({}, Evented), {
 
@@ -22,7 +22,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', '_/WebAPIError'], function(lang, WebAPIErro
 			SYSTEM_SETTING_TYPE_HOME_SCREEN: 'HOME_SCREEN',
 			SYSTEM_SETTING_TYPE_LOCK_SCREEN: 'LOCK_SCREEN',
 			SYSTEM_SETTING_TYPE_INCOMING_CALL: 'INCOMING_CALL',
-			SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL: 'NOTIFICATION_EMAIL',
+			SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL: 'NOTIFICATION_EMAIL'
 		}
 
 	}, true);

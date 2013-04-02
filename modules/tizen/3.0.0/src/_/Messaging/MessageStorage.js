@@ -21,7 +21,7 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 						result.push(new Message(objects[i]));
 					}
 
-					successCallback.call(this, result);
+					successCallback(result);
 				}
 
 
@@ -62,7 +62,7 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 						result.push(new MessageConversation(objects[i]));
 					}
 
-					successCallback.call(this, result);
+					successCallback(result);
 				}
 
 				this._obj.findConversations(filter._obj, conversationsListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
@@ -90,7 +90,7 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 						result.push(new MessageFolder(objects[i]));
 					}
 
-					successCallback.call(this, result);
+					successCallback(result);
 				}
 
 				this._obj.findFolders(filter._obj, foldersListSuccessCallBack, errorCallback && wrappedErrorCallback);
@@ -111,15 +111,15 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 				var wrappedMessagesChangeCallback = {
 					messagesupdated: function(items) {
-						messagesChangeCallback.messagesChangeCallback.messagesupdated.call(this, getWrappedItems(items));
+						messagesChangeCallback.messagesChangeCallback.messagesupdated(getWrappedItems(items));
 					},
 
 					messagesadded: function(items) {
-						messagesChangeCallback.messagesadded.call(this, getWrappedItems(items));
+						messagesChangeCallback.messagesadded(getWrappedItems(items));
 					},
 
 					messagesremoved: function(items) {
-						messagesChangeCallback.messagesremoved.call(this, getWrappedItems(items));
+						messagesChangeCallback.messagesremoved(getWrappedItems(items));
 					}
 				};
 
@@ -141,15 +141,15 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 				var wrappedConversationsChangeCallback = {
 					conversationsupdated: function(items) {
-						conversationsChangeCallback.conversationsupdated.call(this, getWrappedItems(items));
+						conversationsChangeCallback.conversationsupdated(getWrappedItems(items));
 					},
 
 					conversationsadded: function(items) {
-						conversationsChangeCallback.conversationsadded.call(this, getWrappedItems(items));
+						conversationsChangeCallback.conversationsadded(getWrappedItems(items));
 					},
 
 					conversationsremoved: function(items) {
-						conversationsChangeCallback.conversationsremoved.call(this, getWrappedItems(items));
+						conversationsChangeCallback.conversationsremoved(getWrappedItems(items));
 					}
 				};
 
@@ -171,15 +171,15 @@ define(['Ti/_/declare', '_/Messaging/Message', '_/Messaging/MessageFolder', '_/M
 
 				var wrappedFoldersChangeCallback = {
 					foldersupdated: function(items) {
-						foldersChangeCallback.foldersupdated.call(this, getWrappedItems(items));
+						foldersChangeCallback.foldersupdated(getWrappedItems(items));
 					},
 
 					foldersadded: function(items) {
-						foldersChangeCallback.foldersadded.call(this, getWrappedItems(items));
+						foldersChangeCallback.foldersadded(getWrappedItems(items));
 					},
 
 					foldersremoved: function(items) {
-						foldersChangeCallback.foldersremoved.call(this, getWrappedItems(items));
+						foldersChangeCallback.foldersremoved(getWrappedItems(items));
 					}
 				};
 

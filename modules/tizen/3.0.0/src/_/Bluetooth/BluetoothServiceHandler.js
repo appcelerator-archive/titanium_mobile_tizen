@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented', '_/Bluetooth/BluetoothSocket', ], function(declare, Evented, BluetoothSocket, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', '_/Bluetooth/BluetoothSocket', '_/WebAPIError'], function(declare, Evented, BluetoothSocket, WebAPIError) {
 
 	var handler = declare(Evented, {
 
