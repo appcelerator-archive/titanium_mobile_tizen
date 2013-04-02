@@ -14,7 +14,7 @@ define(['Ti/_/lang', '_/Messaging/MessageService', '_/Messaging/Message', '_/Mes
 						result.push(new MessageService(objects[i]));
 					}
 
-					successCallback.call(this, result);
+					successCallback(result);
 				}
 
 				function wrappedErrorCallback(error) {
