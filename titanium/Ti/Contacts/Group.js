@@ -14,15 +14,16 @@ define(['Ti/_/declare'], function(declare) {
 		},
 
 		add: function(person) {
-			var contact;
+			var contact; // The "person" as the native Tizen type.
 
-			// Create person if it is new contact
+			// If the person is new, create it first.
 			if (!person.id) {
 				person = Ti.Contacts.createPerson(person);
 			}
 
 			contact = this._addressbook.get(person.id);
-			// Adding contact to group
+			
+			// Add the contact to the Tizen group.
 			contact.groupIds.push(this.recordId);
 			this._addressbook.update(contact);
 		},
@@ -44,11 +45,11 @@ define(['Ti/_/declare'], function(declare) {
 		},
 
 		constants: {
-			recordId: ''
+			recordId: void 0
 		},
 
 		properties: {
-			name: ''
+			name: void 0
 		}
 	});
 });
