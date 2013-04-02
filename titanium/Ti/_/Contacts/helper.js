@@ -1,4 +1,4 @@
-define(['Ti/API'], function(API) {
+define(function () {
 
 	// Create and return address object in Tizen format from Titanium address
 	function createTizenAddress(address) {
@@ -70,6 +70,7 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return phone number in Tizen format
 	function createTizenPhoneNumber(phone) {
 		var result = [],
 			types = ['WORK', 'HOME', 'CELL', 'PAGER', 'FAX'], // phone number types, supported by Tizen
@@ -89,9 +90,10 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return phone number in Titanium format from Tizen
 	function createTitaniumPhoneNumber(phone) {
 		var result = {},
-			types = ['home', 'work', 'mobile', 'pager', 'workFax'],
+			types = ['home', 'work', 'mobile', 'pager', 'workFax'], // phone types supported by Titanium
 			i = 0,
 			phonesCount = phone.length,
 			currentPhone, type, typesCount, j, phoneTypes;
@@ -99,7 +101,9 @@ define(['Ti/API'], function(API) {
 			currentPhone = phone[i];
 			phoneTypes = currentPhone.types;
 			typesCount = phoneTypes.length;
+			// Check phone type
 			for (j = 0; j < typesCount; j++) {
+				// CELL and FAX have another name in Titanium, so we need to rename them
 				type = phoneTypes[j] === 'CELL' ? 'mobile' : (phoneTypes[j] === 'FAX' ? 'workFax' : phoneTypes[j].toLowerCase());
 				if (types.indexOf(type) > -1) {
 					break;
@@ -113,6 +117,7 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return email address in Tizen format from Titanium one
 	function createTizenEmail(email) {
 		var result = [],
 			types = ['WORK', 'HOME'], // email types supported by Tizen
@@ -131,6 +136,7 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return email address in Titanium format from Tizen
 	function createTitaniumEmail(email) {
 		var result = {},
 			types = ['home', 'work'],
@@ -169,14 +175,16 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return Ti.Person.date from Tizen anniversary
 	function createTitaniumAnniversary(anniversaries) {
 		var result = {},
 			anniversariesCount = anniversaries.length,
 			i = 0,
-			types = ['anniversary', 'other'],
+			types = ['anniversary', 'other'], // anniversary types supported by Titanium
 			type;
 		for (; i < anniversariesCount; i++) {
 			type = anniversaries[i].label ? anniversaries[i].label.toLowerCase() : '';
+			// if type is supported we add it
 			if (types.indexOf(type) > -1) {
 				result.hasOwnProperty(type) 
 						? result[type].push(anniversaries[i].date)
@@ -186,12 +194,14 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return Tizen website from Titanium
 	function createTizenWebSite(url) {
 		var result = [],
-			types = ['HOMEPAGE', 'BLOG'],
+			types = ['HOMEPAGE', 'BLOG'], // website types supported by Tizen
 			i, j, type, currentWebSite, webSitesCount;
 		for (i in url) {
 			type = i.toUpperCase();
+			// Skip website if it has unsupported type
 			if (types.indexOf(type) === -1) {
 				continue;
 			}
@@ -204,11 +214,12 @@ define(['Ti/API'], function(API) {
 		return result;
 	}
 
+	// Create and return Titanium websoite from Tizen
 	function createTitaniumWebSite(urls) {
 		var result = {},
 			urlsCount = urls.length,
 			i = 0,
-			types = ['homepage'],
+			types = ['homepage'], // type(s) supported by Titanium
 			type;
 		for (; i < urlsCount; i++) {
 			type = urls[i].type ? urls[i].type.toLowerCase() : '';
@@ -220,6 +231,7 @@ define(['Ti/API'], function(API) {
 	}
 
 	return {
+		// Create Tizen contact from Ti.Contacts.Person object
 		createTizenContact: function(args) {
 			var c =  new tizen.Contact({
 				name: new tizen.ContactName({
@@ -229,8 +241,7 @@ define(['Ti/API'], function(API) {
 					nicknames: args.nickname && [args.nickname],
 					phoneticFirstName: args.firstPhonetic,
 					phoneticLastName: args.lastPhonetic,
-					prefix: args.prefix,
-					suffix: args.suffix
+					prefix: args.prefix
 				}),
 				addresses: args.address && createTizenAddress(args.address),
 				phoneNumbers: args.phone && createTizenPhoneNumber(args.phone),
@@ -248,6 +259,7 @@ define(['Ti/API'], function(API) {
 			return c;
 		},
 
+		// Update existing Tizen contact from Ti.Contacts.Person
 		updateTizenContact: function(person) {
 			var contact = tizen.contact.getDefaultAddressBook().get(person.id),
 				name;
@@ -296,6 +308,7 @@ define(['Ti/API'], function(API) {
 			return contact;
 		},
 
+		// Create and return Titanium contact from existing Tizen contact
 		createTitaniumContact: function(tizenContact) {
 			var name, organization,
 				obj = {
