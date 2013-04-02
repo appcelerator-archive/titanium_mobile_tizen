@@ -58,7 +58,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			}
 			
 			this._nextCmd = 0;
-			this.autoplay = false;
+			this.constants.__values__.autoplay = false;
 		},
 		
 		stateDescription: function(stateId) {
@@ -78,10 +78,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			playing: false,
 			idle: false,
 			state: this.STATE_STOPPED,
-			progress: 0
-		},
-		
-		properties: {
+			progress: 0,
 			// NOTE: This property is new. It is proposed for inclusion.
 			autoplay: false
 		}

@@ -39,26 +39,6 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/UI', 'Ti/_/ready'], function(Evented, l
 		getWindowOrientation();
 	});
 
-	function deviceOrientation(evt) {
-		var orient = null,
-			beta = Math.abs(evt.beta || evt.y|0 * 90),
-			gamma = Math.abs(evt.gamma || evt.x|0 * 90);
-
-		beta < 5 && gamma > 170 && (orient = UI.FACE_DOWN);
-		beta < 5 && gamma < 5 && (orient = UI.FACE_UP);
-		beta > 50 && 0 > beta && lastOrient != orient && (orient = UI.UPSIDE_PORTRAIT);
-
-		if (orient !== null && lastOrient !== orient) {
-			api.fireEvent('orientationchange', {
-				orientation: lastOrient = orient,
-				source: evt.source
-			});
-		}
-	}
-
-	on(win, 'MozOrientation', deviceOrientation);
-	on(win, 'deviceorientation', deviceOrientation);
-
 	on(win, 'devicemotion', function(evt) {
 		var e = evt.acceleration || evt.accelerationIncludingGravity,
 			x, y, z,
@@ -87,7 +67,24 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/UI', 'Ti/_/ready'], function(Evented, l
 		}
 	});
 
-	tizen.systeminfo.addPropertyValueChangeListener('DEVICE_ORIENTATION', getWindowOrientation);
+	tizen.systeminfo.addPropertyValueChangeListener('DEVICE_ORIENTATION', function (e) {
+		var orient = null,
+			status = e.status;
+		if (status === 'PORTRAIT_PRIMARY') {
+			orient = UI.PORTRAIT;
+		} else if (status === 'PORTRAIT_SECONDARY') {
+			orient = UI.UPSIDE_PORTRAIT;
+		} else if (status === 'LANDSCAPE_PRIMARY') {
+			orient = UI.LANDSCAPE_LEFT;
+		} else {
+			orient = UI.LANDSCAPE_RIGHT;
+		}
+		if (orient !== lastOrient) {
+			api.fireEvent('orientationchange', {
+				orientation: lastOrient = orient
+			});
+		}
+	});
 
 	return api;
 
