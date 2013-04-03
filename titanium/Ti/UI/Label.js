@@ -8,18 +8,6 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			post: "_setText"
 		};
 
-		function replaceAll(str, token, newToken) {
-			var i = -1;
-			if(typeof token === 'string') {
-				while((i = (str.indexOf(token, i >= 0 ? i + newToken.length : 0))) !== -1 ) {
-					str = str.substring(0, i)
-						.concat(newToken)
-						.concat(str.substring(i + token.length));
-					}
-			}
-			return str;
-		}
-
 		function arrayRemoveDuplicates(var_array) {
 			var i = 0;
 			var_array.sort();
@@ -45,8 +33,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					arrayRemoveDuplicates(matches);
 					l = matches.length;
 					for(; i < l; i++) {
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
+						r_text = replace_text.split('[$1]').join(matches[i]);
+						text_arg = text_arg.split(matches[i]).join(r_text);
 					}
 				}
 				return text_arg;
@@ -62,8 +50,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					arrayRemoveDuplicates(matches);
 					l = matches.length;
 					for(; i < l; i++) {
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
+						r_text = replace_text.split('[$1]').join(matches[i]);
+						text_arg = text_arg.split(matches[i]).join(r_text);
 					}
 				}
 				return text_arg;
@@ -85,8 +73,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 						arrayRemoveDuplicates(matches);
 						l = matches.length;
 						for(; i < l; i++) {
-							r_text = replaceAll(replace_text, '[$1]', matches[i]);
-							text_arg = replaceAll(text_arg, matches[i], r_text);
+							r_text = replace_text.split('[$1]').join(matches[i]);
+							text_arg = text_arg.split(matches[i]).join(r_text);
 						}
 					}
 				}
