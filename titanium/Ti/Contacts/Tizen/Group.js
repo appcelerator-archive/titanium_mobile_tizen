@@ -1,6 +1,6 @@
 define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
 
-	function findContactsSuccessCallback (contacts, successCallback) {
+	function findContactsSuccessCallback (contacts, group, successCallback) {
 		var contactsCount = contacts.length, 
 			i = 0, 
 			groupsCount, j, groupIds,
@@ -32,7 +32,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 
 			// Tell Tizen to perform the search.
 			addressbook.find(function(contacts) {
-				findContactsSuccessCallback(contacts, successCallback);
+				findContactsSuccessCallback(contacts, group, successCallback);
 			}, errorCallback);
 		},
 
@@ -46,7 +46,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 
 			// Tell Tizen to perform the search.
 			addressbook.find(function(contacts) {
-				findContactsSuccessCallback(contacts, successCallback);
+				findContactsSuccessCallback(contacts, group, successCallback);
 			}, errorCallback, null, sortMode);
 		}
 
