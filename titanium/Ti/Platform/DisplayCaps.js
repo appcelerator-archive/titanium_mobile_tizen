@@ -1,6 +1,12 @@
 define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 
 	function initDisplayCaps() {
+		// tizen.systeminfo.getPropertyValue provides access to various Tizen platform info. 
+		// However, this function is asynchronous.
+		// Since we must implement the corresponding synchronous Titanium API, we will cache 
+		// the data and synchronously return the cached copy to the Titanium programmer. The cache
+		// will be kept up to date.
+
 		tizen.systeminfo.getPropertyValue('DISPLAY', onSuccessDisplayCallback, onErrorCallback);
 		tizen.systeminfo.addPropertyValueChangeListener('DISPLAY', onSuccessDisplayCallback);
 	};
