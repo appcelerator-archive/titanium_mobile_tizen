@@ -15,17 +15,15 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 							top: unitizedBorderRadius,
 							right: unitizedBorderRadius,
 							bottom: unitizedBorderRadius,
-							position: "relative"
+							position: "absolute"
 						}
 					}, this.domNode),
 					currentValue,
 					self = this;
-				function startInputView(){
-					this.focus();
-				}	
+
 				function handleChange() {
-					if (currentValue !== this.value) {
-						currentValue = this.value;
+					if (currentValue !== input.value) {
+						currentValue = input.value;
 						self.fireEvent("change", {
 							value: input.valueAsDate
 						});
@@ -33,8 +31,8 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 				}
 
 				self._handles = [
-					on(input, "touchend", startInputView),
-					on(input, "blur", handleChange)
+					on(input, "ontouchstart" in window ? "touchend" : "click", handleChange),
+					on(input, "change", handleChange)
 				];
 			},
 
@@ -89,8 +87,8 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 				inputRuler.type = type;
 			} catch(e) {}
 			inputSizes[type] = {
-				width: inputRuler.clientWidth + 2.5 * borderRadius,
-				height: inputRuler.clientHeight + 2.5 * borderRadius
+				width: inputRuler.clientWidth + 2 * borderRadius,
+				height: inputRuler.clientHeight + 2 * borderRadius
 			};
 		});
 
