@@ -67,9 +67,13 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/UI', 'Ti/_/ready'], function(Evented, l
 		}
 	});
 
+	// This implements firing of Titanium 'orientationchange' events in response to Tizen's
+	// 'DEVICE_ORIENTATION' events.
+
 	tizen.systeminfo.addPropertyValueChangeListener('DEVICE_ORIENTATION', function (e) {
 		var orient = null,
 			status = e.status;
+
 		if (status === 'PORTRAIT_PRIMARY') {
 			orient = UI.PORTRAIT;
 		} else if (status === 'PORTRAIT_SECONDARY') {
@@ -79,6 +83,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/UI', 'Ti/_/ready'], function(Evented, l
 		} else {
 			orient = UI.LANDSCAPE_RIGHT;
 		}
+
 		if (orient !== lastOrient) {
 			api.fireEvent('orientationchange', {
 				orientation: lastOrient = orient
