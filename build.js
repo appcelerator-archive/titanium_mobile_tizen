@@ -3,8 +3,6 @@
 // simple hack to enable debugger output
 process.env.DEBUG = process.env.DEBUG || 'BUILD:info';
 
-
-
 var fs = require('fs'),
 	path = require('path'),
 	async = require('async'),
@@ -28,7 +26,7 @@ repoPath = args[0];
 titaniumTizenSdk = path.join(repoPath, 'tizen');
 branchName = args[1] || 'master';
 
-//validate path to repo
+//Validating path to repo
 if (!fs.existsSync(repoPath)) {
 	info('Error: param 1 should point existng zip archive. Current value: ' + args[0]);
 	process.exit(1);
@@ -43,6 +41,10 @@ function(next) {
 	});
 
 }, function(next) {
+	//List of excluded directories and files. 
+	// It is mobileweb modules/files not needed on Tizen:
+	//  1. MobileWeb specific Facebook support implemetation cannot work on Tizen
+	//  2. iOS specific startup images just waste spece on Tizen
 	var exclude = [
 			path.join(titaniumTizenSdk, 'titanium/Ti/Facebook'),
 			path.join(titaniumTizenSdk, 'titanium/Ti/Facebook.js'),
@@ -58,6 +60,8 @@ function(next) {
 		'support/mobileweb/minify',
 		'support/mobileweb/resources'
 	]
+	// Tizne specific files that overrides original MobileWeb files.
+	// Only signapp.jar is unique for Tizen and implements wgt signing.
 	overrideFiles = [
 			{src : 'titanium/Ti/*', dst : 'titanium/Ti/'},
 			{src : 'cli/commands/*', dst : 'cli/commands/'},
@@ -70,19 +74,21 @@ function(next) {
 		]
 
 	info('Clean up, deleting ' + titaniumTizenSdk);
-	rm('-rf', titaniumTizenSdk);//cleanup
+	rm('-rf', titaniumTizenSdk);
 
+	//MobileWeb is basement for Tizne 
 	cp('-fR', path.join(repoPath, 'mobileweb','*'), titaniumTizenSdk);
 
+	//Script works before Titanium SDK build process creates ready to use mobileweb directory so have to copy support files
 	supportFiles.forEach( function (pth) {
 		info('copy ' + path.join(repoPath, pth) + ' into ' + titaniumTizenSdk);
 		cp('-fR', path.join(repoPath, pth), titaniumTizenSdk);
 	});
 	
 	createDirs.forEach( function (dirpath) {
-		//fs.mkdirSync(path.join(titaniumTizenSdk, dirpath));
 		mkdir(path.join(titaniumTizenSdk, dirpath));
 	});
+
 	rm('-rf', exclude);
 	overrideFiles.forEach( function (patch) {
 		info('copy ' + path.join(__dirname, patch.src) + ' into ' + path.join(titaniumTizenSdk, patch.dst));
@@ -92,6 +98,7 @@ function(next) {
 
 }, function(next) {
 	try{
+		//Generating with dependencyAnalyzer tool
 		info('Loading dependencyAnalyzer.js');
 		var depCheck = require('./dependencyAnalyzer/dependencyAnalyzer');
 		depCheck(repoPath + '/');
@@ -100,8 +107,9 @@ function(next) {
 	}	
 	next(null, 'ok');
 }, function(next) {
+	//Packaging Titanium module and plece it into titanium_mobile/support/module/packaged
 	var packer = require('child_process'),
-		packagesModules = path.join(repoPath, 'support','module','packaged'),		
+		packagesModules = path.join(repoPath, 'support','module','packaged'),
 		random = Math.random ().toString ().substring (2),
 		workingDir = path.join(tempdir(), random),
 		cmdzip = 'zip -q -r  "' + path.join(packagesModules,'tizen-tizen-3.0.0.zip') + '" *';
@@ -122,11 +130,6 @@ function(next) {
 		cwd: workingDir
 	}, function(err, stdout, stderr) {
 		info(stdout);
-		if (err != null) {
-			//info(stderr);
-		} else {
-			info('compressing ok');
-		}
 		//remove temporary directory
 		rm('-rf', workingDir);
 		next(null, 'ok');
@@ -135,7 +138,7 @@ function(next) {
 	if (err) {
 		info(err);
 	}
-	info('Finished.');
+	info('Preparing Tizen for Titanium SDK finished.');
 });	
 
 function gitCheckout(workingDir, branch, finish) {
