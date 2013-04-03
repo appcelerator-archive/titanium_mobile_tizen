@@ -22,6 +22,10 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			}
 		}
 
+		function replaceAll(str, token, newToken) {
+			return str.split(token).join(newToken);
+		}
+
 		var linkifyFunctions = {
 			linkifyUrl : function(text_arg) {
 				var i = 0,
@@ -33,8 +37,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					arrayRemoveDuplicates(matches);
 					l = matches.length;
 					for(; i < l; i++) {
-						r_text = replace_text.split('[$1]').join(matches[i]);
-						text_arg = text_arg.split(matches[i]).join(r_text);
+						r_text = replaceAll(replace_text, '[$1]', matches[i]);
+						text_arg = replaceAll(text_arg, matches[i], r_text);
 					}
 				}
 				return text_arg;
@@ -50,8 +54,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					arrayRemoveDuplicates(matches);
 					l = matches.length;
 					for(; i < l; i++) {
-						r_text = replace_text.split('[$1]').join(matches[i]);
-						text_arg = text_arg.split(matches[i]).join(r_text);
+						r_text = replaceAll(replace_text, '[$1]', matches[i]);
+						text_arg = replaceAll(text_arg, matches[i], r_text);
 					}
 				}
 				return text_arg;
@@ -73,8 +77,8 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 						arrayRemoveDuplicates(matches);
 						l = matches.length;
 						for(; i < l; i++) {
-							r_text = replace_text.split('[$1]').join(matches[i]);
-							text_arg = text_arg.split(matches[i]).join(r_text);
+							r_text = replaceAll(replace_text, '[$1]', matches[i]);
+							text_arg = replaceAll(text_arg, matches[i], r_text);
 						}
 					}
 				}
