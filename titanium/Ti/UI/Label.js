@@ -6,7 +6,29 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 		tabStop = 2,
 		textPost = {
 			post: "_setText"
+		},
+		linkifyArguments = {
+			// Regular expression to detect URLs, and replacement pattern that makes them clickable.
+			linkifyUrl: {
+				reg: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>'
+			},
+
+			// Regular expression to detect email addresses, and replacement pattern that makes them clickable.
+			linkifyEmail: {
+				reg: /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>'
+			},
+
+			// Regular expression to detect phone numbers, and replacement pattern that makes them clickable.
+			linkifyPhoneNumber: {
+				reg: /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)|(^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>',
+			}
 		};
+
+		// "arrayRemoveDuplicates" takes an array and removes duplicate (identical) entries from the array.
+		// A side effect is that array becomes sorted.
 
 		function arrayRemoveDuplicates(var_array) {
 			var i = 0;
@@ -26,67 +48,42 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			return str.split(token).join(newToken);
 		}
 
-		var linkifyFunctions = {
-			linkifyUrl : function(text_arg) {
-				var i = 0,
-					reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
-					replace_text =  '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>',
-					matches = text_arg.match(reg),
-					l, r_text;
-				if (matches) {
-					arrayRemoveDuplicates(matches);
-					l = matches.length;
-					for(; i < l; i++) {
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
-					}
-				}
-				return text_arg;
-			},
+		// "linkifyFunction" transforms the text of a label by automatically inserting HTML code to create clickable links, 
+		// where appropriate.
+		//
+		// The general algorithm is find all matches using a regular expression (where a match is an URL,
+		// an email address, etc), and replace the matching strings with HTML code that makes the matching text clickable.
+		// 
+		// When an array of matches is produced, duplicate entries are filtered out. Reason: consider the title
+		// "Hello http://google.com world http://google.com". Each of the matches ("http://google.com") will be 
+		// replaced by the linkified version of the entry. If we allow duplicates, each of the matches will be 
+		// replaced twice, which will produce invalid "nested" links.
+		//
+		// - text_arg is the string to be transformed. 
+		// - linkify_arg contains the regexp and the substitution pattern for this operation.
 
-			linkifyEmail : function(text_arg) {
-				var i = 0,
-					replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>',
-					reg = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
-					matches = text_arg.match(reg),
-					l, r_text;
-				if (matches) {
-					arrayRemoveDuplicates(matches);
-					l = matches.length;
-					for(; i < l; i++) {
-						r_text = replaceAll(replace_text, '[$1]', matches[i]);
-						text_arg = replaceAll(text_arg, matches[i], r_text);
-					}
-				}
-				return text_arg;
-			},
+		function linkifyFunction(text_arg, linkify_arg){
+			var i = 0,
+				matches = text_arg.match(linkify_arg.reg),	// array of matches
+				l, r_text;
 
-			linkifyPhoneNumber : function(text_arg) {
-				var i = 0,
-					reg_alone = /^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$/g,
-					reg = /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
-					matches,
-					replace_text = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>',
-					l, r_text;
+			if (matches) {
+				arrayRemoveDuplicates(matches);
+				l = matches.length;
 
-				if (reg_alone.test(text_arg)) {
-					text_arg = '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/dial\', \'org.tizen.phone\', \'null\', \'tel\', \'[$1]\')">' + text_arg + '</a>';
-				} else {
-					matches = text_arg.match(reg);
-					if (matches) {
-						arrayRemoveDuplicates(matches);
-						l = matches.length;
-						for(; i < l; i++) {
-							r_text = replaceAll(replace_text, '[$1]', matches[i]);
-							text_arg = replaceAll(text_arg, matches[i], r_text);
-						}
-					}
+				for(; i < l; i++) {
+					// Generate replacement text from replacement pattern
+					r_text = replaceAll(linkify_arg.replace_text, '[$1]', matches[i]);
+
+					// Replace all occurrences of the current match with the replacement text
+					text_arg = replaceAll(text_arg, matches[i], r_text);
 				}
-				return text_arg;
 			}
+			return text_arg;
 		};
 
 	if (!window.autoLinkClick) {
+		// Install link click handler in the HTML document.
 		window.autoLinkClick = function (e, ap_service, ap_id, link, key, value) {
 			var service;
 			if (key && value) {
@@ -100,6 +97,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			} else {
 				service = new tizen.ApplicationControl(ap_service, link);
 			}
+
 			tizen.application.launchAppControl(
 				service,
 				null,
@@ -142,18 +140,24 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 		_linkifyText : function(textArg) {
 			var	i = 0,
 				j = 0,
-				functions = ['linkifyUrl', 'linkifyEmail', 'linkifyPhoneNumber'],
-				l = functions.length,
+				args = ['linkifyUrl', 'linkifyEmail', 'linkifyPhoneNumber'],
+				l = args.length,
 				autoLink = this.autoLink;
+
 			if (autoLink) {
+				// "autoLink" is a bit mask. The loop below removes entries from the "args" array
+				// if there is no corresponding bit in "autoLink".
 				for (; i < l; i++) {
-					(autoLink & 1) === 0 ? functions.splice(j, 1) : j++;
+					(autoLink & 1) === 0 ? args.splice(j, 1) : j++;
 					autoLink >>= 1;
 				}
-				for(i = 0, l = functions.length; i < l; i++) {
-					textArg = linkifyFunctions[functions[i]](textArg);
+
+				// Apply the desired linkification functions to "textArg".
+				for(i = 0, l = args.length; i < l; i++) {
+					textArg = linkifyFunction(textArg, linkifyArguments[args[i]]);
 				}
 			}
+
 			return textArg;
 		},
 
@@ -197,7 +201,9 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 		},
 
 		_setText: function() {
+			// Make links clickable
 			this._textContainerDomNode.innerHTML = this._linkifyText(this._getText());
+			
 			this._hasSizeDimensions() && this._triggerLayout();
 		},
 

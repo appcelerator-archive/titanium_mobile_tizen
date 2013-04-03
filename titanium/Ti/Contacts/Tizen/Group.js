@@ -1,5 +1,14 @@
 define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
 
+	// This function is supplied as a success callback to Tizen's contact searching functions.
+	// It takes an array of native Tizen's contact objects, converts them to Titanium contacts, and returns
+	// to the user via callback.
+	//
+	// Parameters:
+	//
+	// - "contacts" is an array of Tizen native contact objects that were found;
+	// - "successCallback" is the callback from client code, to be called when the result is ready.
+
 	function findContactsSuccessCallback (contacts, successCallback) {
 		var contactsCount = contacts.length, 
 			i = 0, 
@@ -9,6 +18,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 		for (; i < contactsCount; i++) {
 			groupIds = contacts[i].groupIds
 			groupsCount = groupIds.length;
+			
 			// Tizen's contact object contains group ids in array, but it doesn't support the indexOf method.
 			// So we need a loop to find the value.
 			for (j = 0; j < groupsCount; j++) {
