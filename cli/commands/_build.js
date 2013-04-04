@@ -374,27 +374,16 @@ function build(logger, config, cli, finished) {
 				async.series([
 					function (next) {
 						this.minifyJavaScript();
-						next(null, 'ok');
-					}.bind(this), function (next) {
 						this.createFilesystemRegistry();
-						next(null, 'ok');
-
-					}.bind(this), function (next) {
 						this.createIndexHtml();
-						next(null, 'ok');
-
-					}.bind(this), function (next) {
 						this.createConfigXml();
-						next(null, 'ok');
-
-					}.bind(this), function (next) {
 						// Before signing and zipping, let's remove apple-specific files. Doind it before zipping allow us to keep
 						// file copying logic the same for mobileweb and Tizen. As a result, it's much easy synchronize there files.
 						this.logger.info(__('delete %s', this.buildDir + '/mobileweb/apple_startup_images'));
 						wrench.rmdirSyncRecursive( this.buildDir + '/mobileweb/apple_startup_images', true);
 						this.signTizenApp(logger, function () {
 							next(null, 'ok');
-						});						
+						});					
 					}.bind(this), function (next) {
 						if (process.platform === 'win32') {
 							// Pack the source files into a .wgt file on Windows, using 7zip. When finished, proceed to the
