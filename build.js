@@ -125,12 +125,15 @@ async.series(
 		// remove tizen-tizen-3.0.0.zip if it exists
 		rm('-rf', path.join(packagesModules,'tizen-tizen-3.0.0.zip'));
 		
-		// create temporary dir and its structire
+		//create temporary dir and its structire
 		fs.mkdirSync(workingDir);
 		fs.mkdirSync(path.join(workingDir, 'modules'));
 		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen'));
+		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen','tizen'));
+		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen','tizen','3.0.0'));
 		
-		cp('-R', path.join(__dirname, 'modules') + '/*',  path.join(workingDir, 'modules', 'tizen'));
+		cp('-R', path.join(__dirname, 'modules', 'tizen') + '/*',  path.join(workingDir, 'modules', 'tizen', 'tizen','3.0.0'));
+
 
 		// Create archive with the Tizen wrapper module
 		info('zip cmd: ' + cmdzip);
