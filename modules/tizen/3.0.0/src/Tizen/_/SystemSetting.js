@@ -1,3 +1,5 @@
+// Wraps Tizen module "SystemSetting".
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Evented, WebAPIError) {
 
 	return lang.mixProps(require.mix({}, Evented), {

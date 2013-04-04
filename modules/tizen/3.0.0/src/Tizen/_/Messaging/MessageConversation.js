@@ -1,8 +1,11 @@
+// Wraps Tizen interface "MessageConverstation" that resides in Tizen module "Messaging".
+
 define(['Ti/_/declare'], function(declare) {
 
 	var messageConversation = declare(null, {
 
 		constructor: function(args) {
+			// args is a native Tizen object; simply wrap it (take ownership of it)
 			this._obj = args;
 		},
 
@@ -75,6 +78,8 @@ define(['Ti/_/declare'], function(declare) {
 		}
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	messageConversation.prototype.declaredClass = 'Tizen.Messaging.MessageConversation';
 	return messageConversation;
 });

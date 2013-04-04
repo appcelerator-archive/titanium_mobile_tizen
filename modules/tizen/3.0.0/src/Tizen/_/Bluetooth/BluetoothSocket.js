@@ -1,3 +1,5 @@
+// Wraps Tizen interface "BluetoothSocket" that resides in Tizen module "Bluetooth".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare, Evented, WebAPIError) {
 
 	var socket = declare(Evented, {
@@ -5,6 +7,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare
 		constructor: function(args) {
 			var self = this;
 			if (args.toString() === '[object BluetoothSocket]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				self._obj = args;
 			}
 
@@ -58,6 +61,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	socket.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothSocket';
 	return socket;
 });

@@ -1,12 +1,23 @@
+// Wraps Tizen interface "CalendarRecurrence" that resides in Tizen module "Calendar".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(declare, Evented, helper) {
 
 	var calendarRecurrenceRule = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarRecurrenceRule]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
-				//The frequency is neccessary parameter
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
+				// There are several Tizen constructors for this object.
+				// Deduce the correct parameters to the corresponding Tizen constructor, based on the types of
+				// the members of args, and invoke the constructor.
+				//
+				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
+				// any parameter at all, so the count of the parameters must also be correct.
+
+				// The frequency is a required parameter.
 				if (args.hasOwnProperty('frequency')) {
 
 					var initDict = args,
@@ -110,6 +121,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 		}
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	calendarRecurrenceRule.prototype.declaredClass = 'Tizen.Calendar.CalendarRecurrenceRule';
 	return calendarRecurrenceRule;
 });

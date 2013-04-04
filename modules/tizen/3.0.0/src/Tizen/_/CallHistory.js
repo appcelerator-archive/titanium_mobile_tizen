@@ -1,3 +1,5 @@
+// Wraps Tizen module "CallHistory".
+
 define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
 
 	return lang.mixProps(require.mix({}, Evented), {

@@ -1,3 +1,5 @@
+// Wraps Tizen module "Calendar".
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarInstance', 'Tizen/_/Calendar/CalendarTask', 'Tizen/_/Calendar/CalendarEvent',
 	'Tizen/_/Calendar/CalendarAttendee', 'Tizen/_/Calendar/CalendarRecurrenceRule', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/CalendarAlarm', 'Tizen/_/WebAPIError'],
 	function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, WebAPIError) {

@@ -1,3 +1,5 @@
+// Wraps Tizen module "Notification".
+
 define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
 
 	return lang.mixProps(require.mix({}, Evented), {
@@ -35,9 +37,15 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 		},
 
 		_wrap: function(object) {
+			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
+
 			var result;
 			if (object.toString() === '[object StatusNotification]') {
 				result = this.createStatusNotification(object);
+			}
+			else
+			{
+				Ti.API.error("Incorrect object type");
 			}
 			return result;
 		},

@@ -1,9 +1,12 @@
+// Wraps Tizen interface "SystemInfoDeviceCapability" that resides in Tizen module "SystemInfo".
+
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var capability = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object SystemInfoDeviceCapability]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}
 		},
@@ -143,6 +146,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	capability.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoDeviceCapability';
 	return capability;
 });

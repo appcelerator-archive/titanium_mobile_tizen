@@ -1,9 +1,12 @@
+// Wraps Tizen interface "Notification" that resides in Tizen module "Notification".
+
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var Notification = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object Notification]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}
 		},
@@ -47,6 +50,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	Notification.prototype.declaredClass = 'Tizen.Notification.Notification';
 	return Notification;
 });

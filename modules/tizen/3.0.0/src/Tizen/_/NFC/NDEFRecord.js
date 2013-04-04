@@ -1,8 +1,11 @@
+// Wraps Tizen interface "NDEFRecord" that resides in Tizen module "NFC".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, Blob) {
 
 	var record = declare(Evented, {
 		constructor: function(args) {
 			if (args.toString() === '[object NDEFRecord]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
 				if ('raw_data' in args) {
@@ -10,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 				} else if ('tnf' in args && 'type' in args && 'payload' in args && 'id' in args) {
 					this._obj = new tizen.NDEFRecord(args.tnf, args.type, args.payload, args.id);
 				} else {
-					Ti.API.error('Constructor NDEFRecord with given parameters doesn\'t exists');
+					Ti.API.error('Constructor NDEFRecord with given parameters doesn\'t exist');
 				}
 			}
 		},
@@ -58,6 +61,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 		return binaryString.join('');
 	};
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	record.prototype.declaredClass = 'Tizen.NFC.NDEFRecord';
 	return record;
 });

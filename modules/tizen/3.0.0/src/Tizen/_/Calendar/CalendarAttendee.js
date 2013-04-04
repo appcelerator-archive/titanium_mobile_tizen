@@ -1,11 +1,15 @@
+// Wraps Tizen interface "CalendarAttendee" that resides in Tizen module "Calendar".
+
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var calendarAttendee = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarAttendee]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				if (args.hasOwnProperty('uri')) {
 					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
 				} else {
@@ -99,6 +103,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	calendarAttendee.prototype.declaredClass = 'Tizen.Calendar.CalendarAttendee';
 	return calendarAttendee;
 });

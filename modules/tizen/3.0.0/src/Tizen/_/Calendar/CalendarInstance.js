@@ -1,9 +1,12 @@
+// Wraps Tizen interface "CalendarInstance" that resides in Tizen module "Calendar".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/WebAPIError'],
 	function(declare, Evented, CalendarEvent, CalendarItem, WebAPIError) {
 
 		var calendarInstance = declare(Evented, {
 
 			constructor: function(args) {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			},
 
@@ -153,6 +156,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			errorCallback(new WebAPIError(error));
 		}
 
+		// Initialize declaredClass, so that toString() works properly on such objects.
+		// Correct operation of toString() is required for proper wrapping and automated testing.
 		calendarInstance.prototype.declaredClass = 'Tizen.Calendar.CalendarInstance';
 		return calendarInstance;
 	});

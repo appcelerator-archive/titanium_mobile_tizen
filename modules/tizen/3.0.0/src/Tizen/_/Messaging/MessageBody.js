@@ -1,8 +1,11 @@
+// Wraps Tizen interface "MessageBody" that resides in Tizen module "Messaging".
+
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var messageBody = declare(Evented, {
 
 		constructor: function(args) {
+			// args is a native Tizen object; simply wrap it (take ownership of it)
 			this._obj = args;
 		},
 
@@ -48,6 +51,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	messageBody.prototype.declaredClass = 'Tizen.Messaging.MessageBody';
 	return messageBody;
 });

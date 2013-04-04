@@ -1,3 +1,5 @@
+// Wraps Tizen's module "Alarm".
+
 define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute', 'Ti/_/Evented'], function(lang, AlarmRelative, AlarmAbsolute, Evented) {
 
 	var Alarm = lang.mixProps(require.mix({}, Evented), {
@@ -31,14 +33,21 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 		},
 
 		_wrap: function(object) {
+			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
+			
 			var result;
 
 			if (object.toString() === '[object AlarmRelative]') {
 				result = this.createAlarmRelative(object);
 			}
-			if (object.toString() === '[object AlarmAbsolute]') {
+			else if (object.toString() === '[object AlarmAbsolute]') {
 				result = this.createAlarmAbsolute(object);
 			}
+			else
+			{
+				Ti.API.error("Incorrect object type");
+			}
+			
 			return result;
 		},
 

@@ -1,11 +1,15 @@
+// Wraps Tizen interface "DownloadRequest" that resides in Tizen module "Download".
+
 define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare, WebAPIError, Evented) {
 
 	var downloadRequest = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object DownloadRequest]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				if (args.hasOwnProperty('url')) {
 					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
 				} else {
@@ -98,6 +102,8 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 		}
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	downloadRequest.prototype.declaredClass = 'Tizen.Download.DownloadRequest';
 	return downloadRequest;
 });

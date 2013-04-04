@@ -1,3 +1,5 @@
+// Wraps Tizen module "Download".
+
 define(['Ti/_/lang', 'Tizen/_/Download/DownloadRequest', 'Ti/_/Evented'], function(lang, DownloadRequest, Evented) {
 
 	return lang.mixProps(require.mix({}, Evented), {

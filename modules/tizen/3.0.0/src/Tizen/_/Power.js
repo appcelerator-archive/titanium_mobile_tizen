@@ -1,3 +1,5 @@
+// Wraps Tizen module "Power".
+
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
 	var Power = lang.mixProps(require.mix({}, Evented), {

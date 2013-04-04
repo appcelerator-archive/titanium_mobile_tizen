@@ -1,3 +1,5 @@
+// Wraps Tizen module "SystemInfo".
+
 define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/SystemInfoStorage',
 	'Tizen/_/SystemInfo/SystemInfoDeviceCapability', 'Tizen/_/SystemInfo/SystemInfoCellularNetwork', 'Tizen/_/SystemInfo/SystemInfoSIM',
 	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Tizen/_/WebAPIError', 'Ti/_/Evented'],
@@ -29,8 +31,13 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 			},
 
 			_wrap: function(object) {
+				// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
 				if (object.toString() === '[object devicecapabilitiesinfo]') {
 					return new SystemInfoDeviceCapability(object);
+				}
+				else
+				{
+					Ti.API.error("Incorrect object type");
 				}
 			},
 

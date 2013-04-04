@@ -1,9 +1,12 @@
+// Wraps Tizen interface "MessageStorage" that resides in Tizen module "Messaging".
+
 define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageFolder', 'Tizen/_/Messaging/MessageConversation', 'Tizen/_/WebAPIError'],
 	function(declare, Message, MessageFolder, MessageConversation, WebAPIError) {
 
 		var messageStorage = declare(null, {
 
 			constructor: function(args) {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			},
 

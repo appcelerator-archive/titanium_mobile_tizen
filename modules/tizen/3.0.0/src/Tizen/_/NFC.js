@@ -1,3 +1,5 @@
+// Wraps Tizen module "NFC".
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/NDEFRecordText', 'Tizen/_/NFC/NDEFRecordURI', 'Tizen/_/NFC/NDEFRecordMedia', 'Tizen/_/NFC/NFCAdapter'],
     function(lang, Evented, NDEFMessage, NDEFRecord, NDEFRecordText, NDEFRecordURI, NDEFRecordMedia, NFCAdapter) {
 
@@ -12,9 +14,14 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDE
             },
 
             _wrap: function(object) {
+				// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
                 if (object.toString() === '[object NFCAdapter]') {
                     return this.createNFCAdapter(object);
                 }
+				else
+				{
+					Ti.API.error("Incorrect object type");
+				}
             },
 
             createNFCAdapter: function(args) {

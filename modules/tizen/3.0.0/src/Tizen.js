@@ -1,3 +1,5 @@
+// Wraps Tizen module called "Tizen".
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/AttributeRangeFilter', 'Tizen/_/CompositeFilter', 'Tizen/_/SortMode',
 	'Tizen/_/SimpleCoordinates', 'Tizen/_/Power', 'Tizen/_/Calendar', 'Tizen/_/Download', 'Tizen/_/Alarm', 'Tizen/_/CallHistory', 'Tizen/_/Notification', 'Tizen/_/Apps',
 	'Tizen/_/SystemSetting', 'Tizen/_/Bluetooth', 'Tizen/_/Messaging', 'Tizen/_/SystemInfo', 'Tizen/_/NFC'],

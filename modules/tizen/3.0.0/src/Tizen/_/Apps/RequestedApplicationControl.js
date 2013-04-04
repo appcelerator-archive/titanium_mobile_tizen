@@ -1,8 +1,12 @@
+// Wraps Tizen interface "RequestedApplicationControl" that resides in Tizen module "Application".
+// Module "Application" is renamed as Apps in this wrapper.
+
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var requestedApplicationControl = declare(Evented, {
 
 		constructor: function(args) {
+			// args is a native Tizen object; simply wrap it (take ownership of it)
 			this._obj = args;
 			this.constants.__values__.appControl = {
 				key: this._obj.appControl.key,
@@ -24,6 +28,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	requestedApplicationControl.prototype.declaredClass = 'Tizen.Apps.RequestedApplicationControl';
 	return requestedApplicationControl;
 });

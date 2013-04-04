@@ -1,11 +1,22 @@
+// Wraps Tizen interface "CalendarTask" that resides in Tizen module "Calendar".
+
 define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helper'], function(declare, CalendarItem, helper) {
 
 	var calendarTask = declare(CalendarItem, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object CalendarTask]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
+				// There are several Tizen constructors for this object.
+				// Deduce the correct parameters to the corresponding Tizen constructor, based on the types of
+				// the members of args, and invoke the constructor.
+				//
+				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
+				// any parameter at all, so the count of the parameters must also be correct.
+
 				if (args.hasOwnProperty('stringRepresentation') && args.hasOwnProperty('format')) {
 					this._obj = new tizen.CalendarTask(args.stringRepresentation, args.format);
 				} else {
@@ -55,6 +66,8 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 		}
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	calendarTask.prototype.declaredClass = 'Tizen.Calendar.CalendarTask';
 	return calendarTask;
 });

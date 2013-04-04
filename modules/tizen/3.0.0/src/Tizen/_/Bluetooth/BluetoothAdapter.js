@@ -1,3 +1,5 @@
+// Wraps Tizen interface "BluetoothAdapter" that resides in Tizen module "Bluetooth".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler', 'Tizen/_/WebAPIError'],
 	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, WebAPIError) {
 
@@ -5,6 +7,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			constructor: function(args) {
 				if (args.toString() === '[object BluetoothAdapter]') {
+					// args is a native Tizen object; simply wrap it (take ownership of it)
 					this._obj = args;
 				}
 			},
@@ -135,6 +138,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 		});
 
+		// Initialize declaredClass, so that toString() works properly on such objects.
+		// Correct operation of toString() is required for proper wrapping and automated testing.
 		adapter.prototype.declaredClass = 'Tizen.Bluetooth.BluetoothAdapter';
 		return adapter;
 	});

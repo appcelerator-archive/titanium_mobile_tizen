@@ -1,11 +1,15 @@
+// Wraps Tizen interface "AttributeFilter" that resides in Tizen module "Tizen".
+
 define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFilter) {
 
 	var filter = declare(AbstractFilter, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object AttributeFilter]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				if (args.hasOwnProperty('attributeName')) {
 					this._obj = new tizen.AttributeFilter(args.attributeName, args.matchFlag, args.matchValue);
 				} else {
@@ -43,6 +47,8 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	filter.prototype.declaredClass = 'Tizen.AttributeFilter';
 	return filter;
 });

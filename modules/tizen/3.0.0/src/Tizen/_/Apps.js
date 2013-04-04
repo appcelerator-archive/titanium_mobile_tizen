@@ -1,3 +1,6 @@
+// Wraps Tizen module "Application".
+// Module "Application" is renamed as "Apps" in this wrapper.
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/ApplicationInformation', 'Tizen/_/Apps/ApplicationContext', 'Tizen/_/Apps/Application'],
 	function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application) {
 

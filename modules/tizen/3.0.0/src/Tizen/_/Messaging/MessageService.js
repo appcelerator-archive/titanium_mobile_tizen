@@ -1,9 +1,13 @@
+// Wraps Tizen interface "MessageService" that resides in Tizen module "Messaging".
+
 define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage', 'Tizen/_/Messaging/MessageBody', 'Tizen/_/Messaging/MessageAttachment'],
 	function(declare, WebAPIError, MessageStorage, MessageBody, MessageAttachment) {
 
 		var messageService = declare(null, {
 			constructor: function(args) {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
+				// Automatically initialize messageStorage.
 				this.constants.__values__.messageStorage = new MessageStorage(this._obj.messageStorage);
 			},
 
@@ -64,6 +68,8 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 			errorCallback(new WebAPIError(error));
 		}
 
+		// Initialize declaredClass, so that toString() works properly on such objects.
+		// Correct operation of toString() is required for proper wrapping and automated testing.
 		messageService.prototype.declaredClass = 'Tizen.Messaging.MessageService';
 
 		return messageService;

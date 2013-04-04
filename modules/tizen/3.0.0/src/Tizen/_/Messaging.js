@@ -1,3 +1,5 @@
+// Wraps Tizen module "Messaging".
+
 define(['Ti/_/lang', 'Tizen/_/Messaging/MessageService', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageAttachment', 'Ti/_/Evented', 'Tizen/_/WebAPIError'],
 	function(lang, MessageService, Message, MessageAttachment, Evented, WebAPIError) {
 

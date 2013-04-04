@@ -1,10 +1,18 @@
+// Wraps Tizen module "Bluetooth".
+
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], function(lang, Evented, BluetoothAdapter) {
 
 	return lang.mixProps(require.mix({}, Evented), {
 
 		_wrap: function(object) {
+			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
+
 			if (object.toString() === '[object BluetoothAdapter]') {
 				return this.createBluetoothAdapter(object);
+			}
+			else
+			{
+				Ti.API.error("Incorrect object type");
 			}
 		},
 

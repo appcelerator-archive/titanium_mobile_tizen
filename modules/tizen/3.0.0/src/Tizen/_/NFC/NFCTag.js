@@ -1,9 +1,12 @@
+// Wraps Tizen interface "NFCTag" that resides in Tizen module "NFC".
+
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
 
 	var tag = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object NFCTag]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}
 		},
@@ -62,6 +65,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebA
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	tag.prototype.declaredClass = 'Tizen.NFC.NFCTag';
 	return tag;
 });

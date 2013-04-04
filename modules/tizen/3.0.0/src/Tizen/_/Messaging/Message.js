@@ -1,11 +1,15 @@
+// Wraps Tizen interface "Message" that resides in Tizen module "Messaging".
+
 define(['Ti/_/declare', 'Tizen/_/Messaging/MessageBody', 'Ti/_/Evented'], function(declare, MessageBody, Evented) {
 
 	var message = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString && args.toString() === '[object Message]') {
+				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
+				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				this._obj = new tizen.Message(args.type, args.messageInitDict);
 			}
 			this.body = new MessageBody(this._obj.body);
@@ -134,6 +138,8 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/MessageBody', 'Ti/_/Evented'], functi
 		}
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	message.prototype.declaredClass = 'Tizen.Messaging.Message';
 	return message;
 });
