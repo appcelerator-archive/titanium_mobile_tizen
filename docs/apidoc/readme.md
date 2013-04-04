@@ -1,0 +1,1 @@
+This documentation is obsolete. Refer to: https://github.com/appcelerator/titanium_mobile/pull/4046 
