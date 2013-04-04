@@ -1087,7 +1087,7 @@ build.prototype = {
 	},
 
 	// If the <tizen> node is not present in tiapp.xml, generate and add it.
-	addTizenToTiAppXml: function (tizenAppId) {		
+	addTizenToTiAppXml: function () {
 		this.logger.info(__('Processing tizen section of tiapp.xml'));
 		var XMLSerializer = xmldom.XMLSerializer,
 			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
@@ -1237,6 +1237,9 @@ build.prototype = {
 
 	// Pack the source files into a .wgt file on Windows, using 7zip. Using 7zip from node-appc which is guaranteed to be present.
 	// The output file is tizenapp.wgt in the build directory.
+	// Parameters:	
+	// - logger: the logger object
+	// - callback: the function to call upon completion
 	wgtPackaging7z: function (logger, callback) {
 		logger.info(__('Packaging application into wgt'));
 		// Create the tasks to unzip each entry in the zip file
@@ -1278,6 +1281,9 @@ build.prototype = {
 	},
 
 	// Pack the source files into a .wgt file on Linux/MacOS, using the standard zip utility.
+	// Parameters:	
+	// - logger: the logger object
+	// - callback: the function to call upon completion
 	wgtPackagingLinux : function (logger, callback) {
 		logger.info(__('Packaging application into wgt'));
 		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
@@ -1540,6 +1546,8 @@ function renderTemplate(template, props) {
 }
 
 // Generate a random alphanumeric string of the requested length.
+// Parameters:	
+// - length: result string length
 function randomString(length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(''),
     	str = '';
