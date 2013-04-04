@@ -11,19 +11,19 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			// Regular expression to detect URLs, and replacement pattern that makes them clickable.
 			linkifyUrl: {
 				reg: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/ig,
-				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', \'org.tizen.browser\', \'[$1]\')">[$1]</a>'
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/view\', null, \'[$1]\')">[$1]</a>'
 			},
 
 			// Regular expression to detect email addresses, and replacement pattern that makes them clickable.
 			linkifyEmail: {
 				reg: /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
-				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>'
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/send\', \'org.tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>'
 			},
 
 			// Regular expression to detect phone numbers, and replacement pattern that makes them clickable.
 			linkifyPhoneNumber: {
 				reg: /(^(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|(([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,}([ ]|<))|((([ ]|>)(\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)|(^((\(?\+?[0-9]*\)?)?(\(?[0-9\-]\)?([ ][0-9\-\(\)])?){7,})$)/g,
-				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\',\'null\', \'tel\', \'[$1]\')">[$1]</a>',
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/call\', \'org.tizen.phone\', null, \'tel\', \'[$1]\')">[$1]</a>'
 			}
 		};
 
@@ -100,7 +100,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 
 			tizen.application.launchAppControl(
 				service,
-				null,
+				ap_id,
 				function() {}, 
 				function(e) {Ti.API.error('launch appControl failed. Reason: ' + e.name)},  
 				null
