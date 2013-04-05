@@ -83,8 +83,8 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 					serviceReplyCB = {
 						// callee now sends a reply
 						onsuccess: pickToItemCB,
-						// Something went wrong 
-						onfailure: args.error ? args.error : function() { Titanium.API.error('Something wrong with launching service - Photo Gallery'); } 
+						//Something went wrong
+						onfailure:function() {Titanium.API.error('Something went wrong')}
 					};
 
 				function readFromStream(fileStream) {
@@ -163,8 +163,8 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 				//launch default gallery application
 				tizen.application.launchAppControl(service, 
 					null,
-					function() { API.info('launch appControl succeeded'); }, 
-					function(e) { API.info('launch appControl failed. Reason: ' + e.name); },
+					function() { API.info('launch appControl succeeded'); },
+					args.error ? args.error : function(e) { Titanium.API.error('Something wrong with launching service - Photo Gallery. '+ e.name); },
 					serviceReplyCB
 				);
 			}
