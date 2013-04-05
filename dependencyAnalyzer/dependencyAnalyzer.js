@@ -55,11 +55,14 @@ module.exports = function(sdkPath) {
 			}
 		}
 	}
+	
 	var resultDep = JSON.stringify(dependencyMap, null, '\t');
-	if(process.platform === 'win32'){
-		//quick and dirty workarround, it generates lots \\ in code and it cause error in Titanium applications
+	if(process.platform === 'win32') {
+		// This script was designed for Unix-like systems initially and assumes forward slash as a separator. 
+		// On Windows, it gets backslashes in paths, and escapes them several times over. So, here the separators
+		// are replaced to the regular forward slashes. This fix allows us to build SDK on Win32.
 		resultDep = resultDep.replace(/\\\\/gi, '/');
-
 	}
+	
 	fs.writeFileSync(path.join(sourceDir, 'dependencies.json'), resultDep);
 };

@@ -4,7 +4,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 
 			open: function () {
 				var self = this,
-					appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/compose', null, null, null, createAllParameters()),
+					appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/send', null, null, null, createAllParameters()),
 					serviceCB = {
 						onsuccess: function () {
 							self.fireEvent('complete', {

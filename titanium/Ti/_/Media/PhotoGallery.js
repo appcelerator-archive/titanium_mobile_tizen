@@ -1,7 +1,6 @@
 define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 	function(declare, Blob, API) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*'),
-			photoExt = ['jpg', 'gif', 'png', 'svg'],
+		var photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
 				'jpg': 'image/jpeg',
@@ -124,6 +123,7 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 				};
 
 				function pickToItemCB(data) {
+					var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*');
 					if (!data) {
 						Titanium.API.error('Error: ApplicationControlData is empty');
 					}
