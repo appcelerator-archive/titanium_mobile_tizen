@@ -9,7 +9,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 		var SystemInfo = lang.mixProps(require.mix({}, Evented), {
 
 			getCapabilities: function() {
-				return this._wrap(tizen.systeminfo.getCapabilities());
+				return wrap(tizen.systeminfo.getCapabilities());
 			},
 
 			getPropertyValue: function(property /*SystemInfoPropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, errorCallback /*ErrorCallback*/) {
@@ -28,17 +28,6 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 
 			removePropertyValueChangeListener: function(listenerId /*unsigned long*/) {
 				return tizen.systeminfo.removePropertyValueChangeListener(listenerId);
-			},
-
-			_wrap: function(object) {
-				// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
-				if (object.toString() === '[object devicecapabilitiesinfo]') {
-					return new SystemInfoDeviceCapability(object);
-				}
-				else
-				{
-					Ti.API.error("Incorrect object type");
-				}
 			},
 
 			constants: {
@@ -63,6 +52,9 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 			}
 			if (object.toString() === '[object siminfo]') {
 				return new SystemInfoSIM(object);
+			}
+			if (object.toString() === '[object devicecapabilitiesinfo]') {
+				return new SystemInfoDeviceCapability(object);
 			}
 		}
 
