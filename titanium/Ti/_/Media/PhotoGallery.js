@@ -1,6 +1,7 @@
 define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 	function(declare, Blob, API) {
-		var photoExt = ['jpg', 'gif', 'png', 'svg'],
+		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
+			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
 				'jpg': 'image/jpeg',
@@ -123,12 +124,19 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 				};
 
 				function pickToItemCB(data) {
-					var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*');
+					var i= 0,
+						len = data.length;
+
 					if (!data) {
 						Titanium.API.error('Error: ApplicationControlData is empty');
 					}
 
-					path = data[0].value.toString();
+					for(; i < len; i++) {
+						if(data[i].key == "http://tizen.org/appcontrol/data/selected") {
+							path =  data[i].value[0];
+						}
+					}
+
 					if (virtualRoot.fileType(virtualRoot.fileExt(path)) === PHOTO) {
 						// Resolve to directory
 						tizen.filesystem.resolve(
