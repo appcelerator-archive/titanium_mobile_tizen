@@ -9,7 +9,7 @@ define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 
 		tizen.systeminfo.getPropertyValue('DISPLAY', onSuccessDisplayCallback, onErrorCallback);
 		tizen.systeminfo.addPropertyValueChangeListener('DISPLAY', onSuccessDisplayCallback);
-	};
+	}
 
 	function onSuccessDisplayCallback(display) {
 		dc.constants.__values__.xdpi = display.dotsPerInchWidth;
@@ -17,11 +17,11 @@ define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 		dc.constants.__values__.dpi = Math.max(display.dotsPerInchHeight, display.dotsPerInchWidth);
 		dc.constants.__values__.platformWidth = display.resolutionWidth;
 		dc.constants.__values__.platformHeight = display.resolutionHeight;
-	};
+	}
 
 	function onErrorCallback(e) {
 		Ti.API.error('An error occurred: ' + e.message);
-	};
+	}
 
 	var ua = navigator.userAgent.toLowerCase(),
 		dc = lang.setObject('Ti.Platform.DisplayCaps', Evented, {

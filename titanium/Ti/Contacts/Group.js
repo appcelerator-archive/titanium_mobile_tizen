@@ -22,7 +22,7 @@ define(['Ti/_/declare'], function(declare) {
 			}
 
 			contact = this._addressbook.get(person.id);
-			
+
 			// Add the contact to the Tizen group.
 			contact.groupIds.push(this.recordId);
 			this._addressbook.update(contact);

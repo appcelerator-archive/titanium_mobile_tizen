@@ -25,7 +25,7 @@ define(
 		},
 
 		getAllGroups: function() {
-			var addressbook = tizen.contact.getDefaultAddressBook(), 
+			var addressbook = tizen.contact.getDefaultAddressBook(),
 				groups = addressbook.getGroups(),
 				result = [],
 				i = 0,
@@ -34,7 +34,7 @@ define(
 				result.push(new Group({
 					name: groups[i].name,
 					id: groups[i].id
-				}))
+				}));
 			}
 			return result;
 		},
@@ -43,7 +43,7 @@ define(
 			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getAllPeople instead.');
 		},
 
-		getGroupByID: function(id) { 
+		getGroupByID: function(id) {
 			var group = tizen.contact.getDefaultAddressBook().getGroup(id);
 			return new Group({
 				name: group.name,
@@ -69,20 +69,20 @@ define(
 
 		save: function(persons) {
 			persons = persons || [];
-			var addressbook = tizen.contact.getDefaultAddressBook(), 
-				i = 0, 
+			var addressbook = tizen.contact.getDefaultAddressBook(),
+				i = 0,
 				personsCount = persons.length;
 			for (; i < personsCount; i++) {
 				addressbook.update(contactHelper.updateTizenContact(persons[i]));
 			}
 		},
-		
+
 		showContacts: function(values) {
 			// Display a picker that allows a person to be selected.
 
 			// However, a TableView is used instead of a Picker, so that the contact
 			// information is presented in convenient tabular form.
-		
+
 			var self = this,
 				win = Ti.UI.createWindow({ backgroundColor: '#81BEF7' }),
 				tableview,
@@ -90,13 +90,12 @@ define(
 				tableViewOptions,
 				closeBtn = Ti.UI.createButton({
 					title: 'Close',
-					bottom: 20,
 					right: 20,
 					height: '6%',
 					bottom: '2%'
 				});
 			values = values || {};
-				
+
 			// Configure TableView headers to highlight the first letter of the contacts being displayed.
 			function addHeaders(list) {
 				var fL,
@@ -115,22 +114,21 @@ define(
 						list[i]['header'] = fL.toUpperCase();  // this row now contains a header
 					}
 					l = fL;
-				} 
+				}
 			}
-			
+
 			// Sorting by title.
 			function compare(a,b) {
-			  if (a.title < b.title)
-				 return -1;
-			  if (a.title > b.title)
-				return 1;
-			  return 0;
+				if (a.title < b.title)
+					return -1;
+				if (a.title > b.title)
+					return 1;
+				return 0;
 			}
-				
+
 			// Success callback for getAllPeople.
 			var successCB = function(persons) {
 				// Formulate the data for the TableView in the format that it understands.
-			
 				for(var i = 0, len = persons.length; i < len; i++) {
 					data.push({ title: persons[i]['fullName'], hasChild: true, test: persons[i].id });
 				}
@@ -166,14 +164,11 @@ define(
 				win.add(tableview);
 				win.add(closeBtn);
 				win.open();
-			}
-			
-			// error callback for getAllPeopleAsync
-			var errorCB = function(e){
-				API.error('Problems with getting the contacts, Error: ' + e.message);
-			}
+			};
 
-			Ti.Contacts.Tizen.getAllPeople(successCB, errorCB);
+			Ti.Contacts.Tizen.getAllPeople(successCB, function(e){
+				API.error('Problems with getting the contacts, Error: ' + e.message);
+			});
 		}
 
 	});

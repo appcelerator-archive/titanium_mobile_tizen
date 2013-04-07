@@ -80,7 +80,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/UI/Element", "Ti/_/lang", "Ti/_/string
 		toImage: function(blobCB) {
 			var  el = this.domNode,
 				options = { allowTaint: true, taintTest: false };
-			
+
 			options.onrendered = function(canvasObject) {
 				// Remove the prefix ("data:image/png;base64"). The rest is the data, encoded as base64.
 				// Set it to the blob.
@@ -91,7 +91,7 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/UI/Element", "Ti/_/lang", "Ti/_/string
 						mimeType: 'image/png'
 					});
 				blobCB(blob);
-			}
+			};
 
 			// Take the screenshot of the element using the h2c library.
 			h2c([el], options);

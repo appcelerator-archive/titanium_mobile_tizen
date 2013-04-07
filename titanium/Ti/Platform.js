@@ -20,7 +20,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 			doc.cookie = midName + '=' + encodeURIComponent(mid) + '; expires=' + (new Date(Date.now() + 63072e7)).toUTCString();
 			localStorage.setItem(midName, mid);
 		}
-	};
+	}
 
 	function initPlatformData() {
 		// tizen.systeminfo.getPropertyValue provides access to various Tizen platform info. 
@@ -53,11 +53,11 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		tizen.systeminfo.getPropertyValue('BATTERY', onSuccessBatteryCallback, onErrorCallback);
 		// Sunscribe to battery info changes.
 		tizen.systeminfo.addPropertyValueChangeListener('BATTERY', onSuccessBatteryCallback);
-	};
+	}
 
 	function onErrorCallback(error) {
 		Ti.API.error('An error occurred ' + error.message);
-	};
+	}
 
 	// Tizen listener for WiFi IP address.
 	function onSuccessWifiNetworkCallback(wifiNetwork) {
@@ -78,9 +78,9 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 	function onSuccessBatteryCallback(battery) {
 		Platform.constants.__values__.batteryMonitoring = true;
 		Platform.constants.__values__.batteryLevel = battery.level * 100;
-		Platform.constants.__values__.batteryState = battery.isCharging 
-			? Platform.BATTERY_STATE_CHARGING 
-			: (battery.level === 1 ? Platform.BATTERY_STATE_FULL : Platform.BATTERY_STATE_UNPLUGGED); 
+		Platform.constants.__values__.batteryState = battery.isCharging
+			? Platform.BATTERY_STATE_CHARGING
+			: (battery.level === 1 ? Platform.BATTERY_STATE_FULL : Platform.BATTERY_STATE_UNPLUGGED);
 	}
 
 	on(window, 'beforeunload', saveMid);
@@ -103,7 +103,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 			openURL: function(url){
 				if (/^([tel|sms|mailto])/.test(url)) {
 					hiddenIFrame.contentWindow.location.href = url;
-				} else { 
+				} else {
 					var win = UI.createWindow({
 							layout: UI._LAYOUT_CONSTRAINING_VERTICAL,
 							backgroundColor: '#888'

@@ -45,5 +45,4 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 			url: {}
 		}
 	});
-	
 });

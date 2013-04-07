@@ -5,7 +5,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 		on = require.on;
 
 	return declare("Ti.Network.HTTPClient", Evented, {
-		
+
 		constructor: function() {
 			var xhr = this._xhr = new XMLHttpRequest;
 
@@ -28,7 +28,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 					mimeType,
 					// blobData contains the server response (plain text, or base64-encoded binary data, depending
 					// on the mime type of the response)
-					blobData = "", 
+					blobData = "",
 					onload = this.onload,
 					xmlParser = new DOMParser();
 
@@ -41,10 +41,10 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 						clearTimeout(this._timeoutTimer);
 						this._completed = 1;
 						c.readyState = this.DONE;
-						
-						if (!this._aborted) {							
+
+						if (!this._aborted) {
 							mimeType = xhr.getResponseHeader("Content-Type") || "text/plain";
-							
+
 							if (this._isAsync) {
 								c.responseXML  = c.responseText = "";
 								if (xhr.response) {
@@ -54,37 +54,37 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 									var uInt8Array = new Uint8Array(xhr.response),
 										i = uInt8Array.length,
 										binaryString = new Array(i);
-										
+
 									while (i--)	{
 										binaryString[i] = String.fromCharCode(uInt8Array[i]);
 									}
-									
+
 									c.responseText = binaryString.join('');
 
 									// If the mime type indicates binary data, initialize the blob with base64-encoded
 									// of the data; otherwise, simply copy the data.
 									blobData = _.isBinaryMimeType(mimeType) ? btoa(c.responseText) : c.responseText;
-									
+
 									// If this is xml, parse it, in order to initialize responseXML.
 									if (mimeType.indexOf('text/xml') !== -1) {
 										try {
-											c.responseXML = xmlParser.parseFromString(c.responseText.substring(c.responseText.indexOf('<')), "text/xml");	
+											c.responseXML = xmlParser.parseFromString(c.responseText.substring(c.responseText.indexOf('<')), "text/xml");
 										} catch(e) {
-											c.responseXML = null;	
+											c.responseXML = null;
 										}
 									} else {
-										c.responseXML = null;	
+										c.responseXML = null;
 									}
-								} 
+								}
 							} else {
 								// sync mode
 								c.responseXML = xhr.responseXML;
 								c.responseText = blobData = xhr.responseText;
 							}
-							
+
 							// Create file by name.
 							this.file && (file = Filesystem.getFile(this.file));
-							
+
 							c.responseData = new Blob({
 								data: blobData,
 								length: blobData.length,
@@ -92,10 +92,10 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 								file: file || null,
 								nativePath: (file && file.nativePath) || null,
 							});
-								
+
 							// Write Blob to file.
 							file && file.writable && file.write(c.responseData);
-														
+
 							has("ti-instrumentation") && (instrumentation.stopTest(this._requestInstrumentationTest, this.location));
 							xhr.status >= 400 && (onload = this._onError);
 							is(onload, "Function") && onload.call(this);
@@ -132,11 +132,11 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 			this.constants.readyState = this.UNSENT;
 			this._fireStateChange();
 		},
-		
+
 		_fireStateChange: function() {
 			is(this.onreadystatechange, "Function") && this.onreadystatechange.call(this);
 		},
-		
+
 		getResponseHeader: function(name) {
 			return this._xhr.readyState > 1 ? this._xhr.getResponseHeader(name) : null;
 		},
@@ -155,10 +155,10 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 				// caller, async is assumed by default.)
 				this._isAsync = (wc || async === void 0) ? true : !!async
 			);
-			
+
 			// In the async mode, we use 'responseType=arraybuffer'.
 			this._isAsync && (this._xhr.responseType = 'arraybuffer');
-				
+
 			wc && (this._xhr.withCredentials = wc);
 		},
 
@@ -204,7 +204,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/has", "Ti/_/lang", "Ti/_/Evented", "Ti/Fil
 			OPENED: 1,
 
 			UNSENT: 1,
-			
+
 			allResponseHeaders: function() {
 				return this._xhr.getAllResponseHeaders() || "";
 			},

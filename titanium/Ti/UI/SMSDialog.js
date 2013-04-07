@@ -2,7 +2,7 @@ define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog'], function (declare, Messaging
 	return declare('Ti.UI.SMSDialog', MessagingDialog, {
 
 		constructor: function () {
-			this.type = 'SMS'
+			this.type = 'SMS';
 		},
 
 		addAttachment: function () {

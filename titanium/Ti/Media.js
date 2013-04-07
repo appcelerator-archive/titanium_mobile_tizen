@@ -69,7 +69,7 @@ define(
 		showMusicLibrary: function(args) {
 			//Open default Tizet music applicatin with ApplicationControl
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null),
-				serviceReplyCB = { 
+				serviceReplyCB = {
 					// callee now sends a reply 
 					onsuccess: function(reply) {
 						API.info('onsuccess:' + reply.key + ';' + reply.value);
@@ -77,17 +77,17 @@ define(
 					// Something went wrong 
 					onfailure: function() {
 						API.warn('launch service failed');
-					} 
+					}
 				};
 
 			function succeeded() {
 				API.info('launch service succeeded');
-			} 
-			function failed(e) { 
+			}
+			function failed(e) {
 				API.warn('launch service failed. Reason : ' + e.name);
 			}
 
-			tizen.application.launchAppControl(service, 'org.tizen.music-player', succeeded, failed, serviceReplyCB); 
+			tizen.application.launchAppControl(service, 'org.tizen.music-player', succeeded, failed, serviceReplyCB);
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
@@ -96,7 +96,7 @@ define(
 
 			function errorCB(e) {
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
-			};
+			}
 
 			function successCB(dir) {
 				var writeToStream = function (fileStream) {
@@ -111,7 +111,7 @@ define(
 					errorCB(e);
 				}
 
-			};
+			}
 
 			tizen.filesystem.resolve('images', successCB, errorCB, 'rw');
 		},
@@ -137,7 +137,7 @@ define(
 			if (!this.isCameraSupported) return;
 
 			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null),
-				serviceReplyCB = { 
+				serviceReplyCB = {
 					// callee now sends a reply 
 					onsuccess: function(reply) {
 						API.info('onsuccess:' + reply.key + ';' + reply.value);
@@ -145,18 +145,19 @@ define(
 					// Something went wrong 
 					onfailure: function() {
 						API.warn('launch service failed');
-					} 
+					}
 				};
 
-			function succeeded() {
-				API.info('launch service succeeded');
-			}
-
-			function failed(e) { 
-				API.warn('launch service failed. Reason : ' + e.name);
-			}
-
-			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app', succeeded, failed, serviceReplyCB); 
+			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app',
+				function(){
+					// On succeeded
+					API.info('launch service succeeded');
+				},
+				function(e) {
+					//On Failed
+					API.warn('launch service failed. Reason : ' + e.name);
+				},
+				serviceReplyCB);
 		}
 	});
 });

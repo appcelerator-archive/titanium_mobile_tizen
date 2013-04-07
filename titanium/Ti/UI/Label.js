@@ -1,6 +1,6 @@
 define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/style", "Ti/_/lang", "Ti/Locale", "Ti/UI"],
 	function(declare, FontWidget, dom, css, style, lang, Locale, UI) {
-	
+
 	var setStyle = style.set,
 		unitize = dom.unitize,
 		tabStop = 2,
@@ -80,7 +80,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				}
 			}
 			return text_arg;
-		};
+		}
 
 	if (!window.autoLinkClick) {
 		// Install link click handler in the HTML document.
@@ -93,7 +93,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					null,
 					null,
 					[new tizen.ApplicationControlData(key, [value])]
-				)
+				);
 			} else {
 				service = new tizen.ApplicationControl(ap_service, link);
 			}
@@ -101,12 +101,12 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			tizen.application.launchAppControl(
 				service,
 				ap_id,
-				function() {}, 
-				function(e) {Ti.API.error('launch appControl failed. Reason: ' + e.name)},  
+				function() {},
+				function(e) {Ti.API.error('launch appControl failed. Reason: ' + e.name);},
 				null
 			);
 			e.stopPropagation();
-	  	}
+		};
 	}
 
 	return declare("Ti.UI.Label", FontWidget, {
@@ -117,7 +117,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				height: UI.SIZE,
 				center: {y: "50%"}
 			}));
-			
+
 			var self = this,
 				textContainerDomNode = this._textContainerDomNode = this._textContainer.domNode;
 			self._textContainer._getContentSize = function(width, height) {
@@ -128,7 +128,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 					height: measuredSize.height
 				};
 			};
-			
+
 			this._addStyleableDomNode(textContainerDomNode);
 			this.wordWrap = true;
 		},
@@ -203,7 +203,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 		_setText: function() {
 			// Make links clickable
 			this._textContainerDomNode.innerHTML = this._linkifyText(this._getText());
-			
+
 			this._hasSizeDimensions() && this._triggerLayout();
 		},
 
@@ -212,7 +212,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			setStyle(
 				this._textContainerDomNode,
 				"textShadow",
-				this.shadowOffset || shadowColor
+				this.shadowOffset || shadowColor 
 					? (this.shadowOffset ? unitize(this.shadowOffset.x) + " " + unitize(this.shadowOffset.y) : "0px 0px") + " 0.1em " + lang.val(shadowColor,"black")
 					: ""
 			);
