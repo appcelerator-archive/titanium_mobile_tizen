@@ -1,5 +1,5 @@
-define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/style", "Ti/_/lang", "Ti/Locale", "Ti/UI"],
-	function(declare, FontWidget, dom, css, style, lang, Locale, UI) {
+define(['Ti/_/declare', 'Ti/_/UI/FontWidget', 'Ti/_/dom', 'Ti/_/css', 'Ti/_/style', 'Ti/_/lang', 'Ti/Locale', 'Ti/UI', 'Ti/API'],
+	function(declare, FontWidget, dom, css, style, lang, Locale, UI, API) {
 
 	var setStyle = style.set,
 		unitize = dom.unitize,
@@ -102,7 +102,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 				service,
 				ap_id,
 				function() {},
-				function(e) {Ti.API.error('launch appControl failed. Reason: ' + e.name);},
+				function(e) { API.error('launch appControl failed. Reason: ' + e.name);},
 				null
 			);
 			e.stopPropagation();
@@ -212,7 +212,7 @@ define(["Ti/_/declare", "Ti/_/UI/FontWidget", "Ti/_/dom", "Ti/_/css", "Ti/_/styl
 			setStyle(
 				this._textContainerDomNode,
 				"textShadow",
-				this.shadowOffset || shadowColor 
+				this.shadowOffset || shadowColor
 					? (this.shadowOffset ? unitize(this.shadowOffset.x) + " " + unitize(this.shadowOffset.y) : "0px 0px") + " 0.1em " + lang.val(shadowColor,"black")
 					: ""
 			);

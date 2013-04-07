@@ -1,33 +1,6 @@
 define(function () {
 
-	// Creates and returns an address object as a native Tizen type, from a Titanium address.
-	// Input parameter: Ti.Contacts.Person.address dictionary.
-	// Returns an array of Tizen ContactAddress objects
 
-	function createTizenAddresses(address) {
-		var result = [],
-			types = ['WORK', 'HOME'],
-			i, j, type, currentAddress, addressesCount;
-		for (i in address) {
-			type = i.toUpperCase();
-			if (types.indexOf(type) === -1) {
-				continue;
-			}
-			addressesCount = address[i].length;
-			for (j = 0; j < addressesCount; j++) {
-				currentAddress = address[i][j];
-				result.push(new tizen.ContactAddress({
-					country: currentAddress.Country,
-					region: currentAddress.State,
-					city: currentAddress.City,
-					streetAddress: currentAddress.Street,
-					postalCode: currentAddress.ZIP,
-					types: [type]
-				}));
-			}
-		}
-		return result;
-	}
 
 	// Creates and returns address object as a Titanium type, from a Tizen address.
 	// The "address" parameter contains a native Tizen ContactAddress object.
@@ -62,10 +35,10 @@ define(function () {
 				continue;
 			}
 
-			// If "result" already contains an address of this type append to the existing 
+			// If "result" already contains an address of this type append to the existing
 			// array. Otherwise, create the array and add to it.
-			result.hasOwnProperty(type) 
-					? result[type].push({
+			result.hasOwnProperty(type) ?
+					result[type].push({
 						CountryCode: '',
 						Street: currentAddress.streetAddress || '',
 						City: currentAddress.city || '',
@@ -73,8 +46,8 @@ define(function () {
 						State: currentAddress.region || '',
 						Country: currentAddress.country || '',
 						ZIP: currentAddress.postalCode || ''
-					})
-					: result[type] = [{
+					}) :
+					result[type] = [{
 						CountryCode: '',
 						Street: currentAddress.streetAddress || '',
 						City: currentAddress.city || '',
@@ -85,36 +58,6 @@ define(function () {
 					}];
 		}
 
-		return result;
-	}
-
-	// Creates and returns a phone number as an array of native Tizen objects, from a 
-	// Titanium.Contacts.Person.phone dictionary.
-	// Input parameter: Ti.Contacts.Person.phone dictionary.
-	// Returns array of Tizen ContactPhoneNumber objects.
-
-	function createTizenPhoneNumbers(phone) {
-		var result = [],
-			types = ['WORK', 'HOME', 'CELL', 'PAGER', 'FAX'], // Phone number types, supported by Tizen.
-			titaniumTypes = ['work', 'home', 'mobile', 'pager', 'workFax'], // Phone types supported by Titanium.
-			i, j, type, currentPhones, phonesCount, index;
-
-		for (i in phone) {
-			index = titaniumTypes.indexOf(i);
-
-			// Check if the number type is supported by Tizen. If not, skip it.
-			if (index === -1) {
-				continue;
-			}
-
-			type = types[index];
-			currentPhones = phone[i];
-			phonesCount = currentPhones.length;
-
-			for (j = 0; j < phonesCount; j++) {
-				result.push(new tizen.ContactPhoneNumber(currentPhones[j], [type]));
-			}
-		}
 		return result;
 	}
 
@@ -137,8 +80,7 @@ define(function () {
 
 			// Check if the phone type has a Titanium equivalent.
 			for (j = 0; j < typesCount; j++) {
-				index = tizenTypes.indexOf(phoneTypes[j])
-
+				index = tizenTypes.indexOf(phoneTypes[j]);
 				if (index > -1) {
 					break;
 				}
@@ -150,32 +92,6 @@ define(function () {
 
 			type = types[index];
 			result.hasOwnProperty(type) ? result[type].push(currentPhone.number) : result[type] = [currentPhone.number];
-		}
-		return result;
-	}
-
-	// Creates and returns an array of Tizen native email addresses from a Titanium email object.
-	// Input parameter: Ti.Contacts.Person.email dictionary.
-	// Returns array of Tizen ContactEmailAddress objects.
-
-	function createTizenEmails(email) {
-		var result = [],
-			types = ['WORK', 'HOME'], // email types supported by Tizen that have a Titanium equivalent.
-			i, j, type, currentEmail, emailsCount;
-			
-		for (i in email) {
-			type = i.toUpperCase();
-
-			if (types.indexOf(type) === -1) {
-				continue; // No supported email types found
-			}
-
-			currentEmail = email[i];
-			emailsCount = currentEmail.length;
-
-			for (j = 0; j < emailsCount; j++) {
-				result.push(new tizen.ContactEmailAddress(currentEmail[j], [type]));
-			}
 		}
 		return result;
 	}
@@ -212,25 +128,6 @@ define(function () {
 		return result;
 	}
 
-	// Creates and returns array of Tizen ContactAnniversary objects from Ti.Contacts.Person.date object.
-	// Input parameter: Ti.Contacts.Person.date dictionary.
-	// Returns array of Tizen ContactAnniversary objects.
-
-	function createTizenAnniversaries(date) {
-		var result = [],
-			i, j, anniversariesCount, currentAnniversary;
-
-		for (i in date) {
-			currentAnniversaries = date[i];
-			anniversariesCount = currentAnniversaries.length;
-			for (j = 0; j < anniversariesCount; j++) {
-				result.push(new tizen.ContactAnniversary(new Date(currentAnniversaries[j]), i));
-			}
-		}
-
-		return result;
-	}
-
 	// Creates and returns Ti.Person.date object from Tizen ContactAnniversary.
 	// Tizen supports any label for each anniversary. All Tizen's anniversaries labels that has another value than 'anniversary' will be changed to 'other'.
 	// Input parameter: array of Tizen ContactAnniversary objects.
@@ -250,36 +147,7 @@ define(function () {
 			if (types.indexOf(type) > -1) {
 				type = 'other';
 			}
-			result.hasOwnProperty(type) 
-					? result[type].push(anniversaries[i].date)
-					: result[type] = [anniversaries[i].date];
-		}
-
-		return result;
-	}
-
-	// Creates and returns Tizen website from Titanium.
-	// Input parameter: Ti.Contacts.Person.url dictionary.
-	// Returns array of Tizen ContactWebSite objects.
-
-	function createTizenWebSites(url) {
-		var result = [],
-			types = ['HOMEPAGE', 'BLOG'], // website types supported by Tizen that have Titanium equivalents
-			i, j, type, currentWebSite, webSitesCount;
-
-		for (i in url) {
-			type = i.toUpperCase();
-
-			// Skip website if it has unsupported type.
-			if (types.indexOf(type) === -1) {
-				continue;
-			}
-
-			currentWebSite = url[i];
-			webSitesCount = currentWebSite.length;
-			for (j = 0; j < webSitesCount; j++) {
-				result.push(new tizen.ContactWebSite(currentWebSite[j], type));
-			}
+			result.hasOwnProperty(type) ? result[type].push(anniversaries[i].date) : result[type] = [anniversaries[i].date];
 		}
 
 		return result;
@@ -299,7 +167,7 @@ define(function () {
 		for (; i < urlsCount; i++) {
 			type = urls[i].type ? urls[i].type.toLowerCase() : '';
 			if (types.indexOf(type) > -1) {
-				result.hasOwnProperty(type) ? reult[type].push(urls[i].url) : result[type] = [urls[i].url];
+				result.hasOwnProperty(type) ? result[type].push(urls[i].url) : result[type] = [urls[i].url];
 			}
 		}
 
@@ -307,6 +175,136 @@ define(function () {
 	}
 
 	return {
+		// Creates and returns an address object as a native Tizen type, from a Titanium address.
+		// Input parameter: Ti.Contacts.Person.address dictionary.
+		// Returns an array of Tizen ContactAddress objects
+
+		createTizenAddresses: function(address) {
+			var result = [],
+				types = ['WORK', 'HOME'],
+				i, j, type, currentAddress, addressesCount;
+			for (i in address) {
+				type = i.toUpperCase();
+				if (types.indexOf(type) === -1) {
+					continue;
+				}
+				addressesCount = address[i].length;
+				for (j = 0; j < addressesCount; j++) {
+					currentAddress = address[i][j];
+					result.push(new tizen.ContactAddress({
+						country: currentAddress.Country,
+						region: currentAddress.State,
+						city: currentAddress.City,
+						streetAddress: currentAddress.Street,
+						postalCode: currentAddress.ZIP,
+						types: [type]
+					}));
+				}
+			}
+			return result;
+		},
+
+		// Creates and returns a phone number as an array of native Tizen objects, from a 
+		// Titanium.Contacts.Person.phone dictionary.
+		// Input parameter: Ti.Contacts.Person.phone dictionary.
+		// Returns array of Tizen ContactPhoneNumber objects.
+
+		createTizenPhoneNumbers: function(phone) {
+			var result = [],
+				types = ['WORK', 'HOME', 'CELL', 'PAGER', 'FAX'], // Phone number types, supported by Tizen.
+				titaniumTypes = ['work', 'home', 'mobile', 'pager', 'workFax'], // Phone types supported by Titanium.
+				i, j, type, currentPhones, phonesCount, index;
+
+			for (i in phone) {
+				index = titaniumTypes.indexOf(i);
+
+				// Check if the number type is supported by Tizen. If not, skip it.
+				if (index === -1) {
+					continue;
+				}
+
+				type = types[index];
+				currentPhones = phone[i];
+				phonesCount = currentPhones.length;
+
+				for (j = 0; j < phonesCount; j++) {
+					result.push(new tizen.ContactPhoneNumber(currentPhones[j], [type]));
+				}
+			}
+			return result;
+		},
+
+		// Creates and returns an array of Tizen native email addresses from a Titanium email object.
+		// Input parameter: Ti.Contacts.Person.email dictionary.
+		// Returns array of Tizen ContactEmailAddress objects.
+
+		createTizenEmails: function(email) {
+			var result = [],
+				types = ['WORK', 'HOME'], // email types supported by Tizen that have a Titanium equivalent.
+				i, j, type, currentEmail, emailsCount;
+
+			for (i in email) {
+				type = i.toUpperCase();
+
+				if (types.indexOf(type) === -1) {
+					continue; // No supported email types found
+				}
+
+				currentEmail = email[i];
+				emailsCount = currentEmail.length;
+
+				for (j = 0; j < emailsCount; j++) {
+					result.push(new tizen.ContactEmailAddress(currentEmail[j], [type]));
+				}
+			}
+			return result;
+		},
+
+		// Creates and returns array of Tizen ContactAnniversary objects from Ti.Contacts.Person.date object.
+		// Input parameter: Ti.Contacts.Person.date dictionary.
+		// Returns array of Tizen ContactAnniversary objects.
+
+		createTizenAnniversaries: function(date) {
+			var result = [],
+				i, j, anniversariesCount, currentAnniversaries;
+
+			for (i in date) {
+				currentAnniversaries = date[i];
+				anniversariesCount = currentAnniversaries.length;
+				for (j = 0; j < anniversariesCount; j++) {
+					result.push(new tizen.ContactAnniversary(new Date(currentAnniversaries[j]), i));
+				}
+			}
+
+			return result;
+		},
+
+		// Creates and returns Tizen website from Titanium.
+		// Input parameter: Ti.Contacts.Person.url dictionary.
+		// Returns array of Tizen ContactWebSite objects.
+
+		createTizenWebSites: function(url) {
+			var result = [],
+				types = ['HOMEPAGE', 'BLOG'], // website types supported by Tizen that have Titanium equivalents
+				i, j, type, currentWebSite, webSitesCount;
+
+			for (i in url) {
+				type = i.toUpperCase();
+
+				// Skip website if it has unsupported type.
+				if (types.indexOf(type) === -1) {
+					continue;
+				}
+
+				currentWebSite = url[i];
+				webSitesCount = currentWebSite.length;
+				for (j = 0; j < webSitesCount; j++) {
+					result.push(new tizen.ContactWebSite(currentWebSite[j], type));
+				}
+			}
+
+			return result;
+		},
 
 		// Create Tizen contact from Ti.Contacts.Person object
 		// Input parameter: Ti.Contacts.Person object.
@@ -323,76 +321,19 @@ define(function () {
 					phoneticLastName: args.lastPhonetic,
 					prefix: args.prefix
 				}),
-				addresses: args.address && createTizenAddresses(args.address),
-				phoneNumbers: args.phone && createTizenPhoneNumbers(args.phone),
-				emails: args.email && createTizenEmails(args.email),
+				addresses: args.address && this.createTizenAddresses(args.address),
+				phoneNumbers: args.phone && this.createTizenPhoneNumbers(args.phone),
+				emails: args.email && this.createTizenEmails(args.email),
 				birthday: args.birthday,
-				anniversaries: args.date && createTizenAnniversaries(args.date),
+				anniversaries: args.date && this.createTizenAnniversaries(args.date),
 				organizations: [new tizen.ContactOrganization({
 					name: args.organization,
 					department: args.department,
 					title: args.jobTitle
 				})],
 				notes: args.note && [args.note],
-				urls: args.url && createTizenWebSites(args.url)
+				urls: args.url && this.createTizenWebSites(args.url)
 			});
-		},
-
-		// Update existing Tizen contact from Ti.Contacts.Person
-		// Input parameter: Ti.Contacts.Person object.
-		// Returns Tizen Contact object.
-
-		updateTizenContact: function(person) {
-			var contact = tizen.contact.getDefaultAddressBook().get(person.id),
-				name;
-
-			contact.addresses = person.address && createTizenAddresses(person.address);
-			contact.emails = person.email && createTizenEmails(person.email);
-			name = contact.name;
-
-			if (name) {
-				name.prefix = person.prefix ||'';
-				name.firstName = person.firstName || '';
-				name.middleName = person.middleName || '';
-				name.lastName = person.lastName || '';
-				name.nicknames = (person.nickname) ? [person.nickname] : [];
-				name.phoneticFirstName = person.firstPhonetic || null;
-				name.phoneticLastName = person.lastPhonetic || null;
-			} else {
-				name = new tizen.ContactName({
-					prefix: person.prefix || '',
-					firstName: person.firstName || '',
-					middleName: person.middleName || '',
-					lastName: person.lastName || '',
-					nicknames: (person.nickname) ? [person.nickname] : [],
-					phoneticFirstName: person.firstPhonetic || null,
-					phoneticLastName: person.lastPhonetic || null
-				});
-			}
-
-			contact.name = name;
-			contact.phoneNumbers = person.phone && createTizenPhoneNumbers(person.phone);
-			contact.birthday = person.birthday ? new Date(person.birthday) : null;
-
-			organization = contact.organizations[0];
-			if (organization) {
-				organization.name = person.organization;
-				organization.department = person.department;
-				organization.title = person.jobTitle;
-			} else {
-				organization = new tizen.ContactOrganization({
-					name: person.organization || null,
-					department: null,
-					title:  null
-				});
-			}
-			contact.organizations = [organization];
-
-			contact.anniversaries = person.date && createTizenAnniversaries(person.date);
-			contact.notes = [person.note] || void 0;
-			contact.urls = person.url && createTizenWebSites(person.url);
-
-			return contact;
 		},
 
 		// Create and return Titanium contact from existing Tizen contact
@@ -408,7 +349,7 @@ define(function () {
 					date: tizenContact.anniversaries.length > 0 ? createTitaniumAnniversary(tizenContact.anniversaries) : {},
 					url: tizenContact.urls.length > 0 ? createTitaniumWebSite(tizenContact.urls) : {},
 					id: tizenContact.id
-				}
+				};
 
 			if (tizenContact.name) {
 				name = tizenContact.name;
@@ -429,6 +370,5 @@ define(function () {
 
 			return obj;
 		}
-	}
-
+	};
 });

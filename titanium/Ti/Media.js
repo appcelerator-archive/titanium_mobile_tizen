@@ -68,8 +68,12 @@ define(
 
 		showMusicLibrary: function(args) {
 			//Open default Tizet music applicatin with ApplicationControl
-			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null),
-				serviceReplyCB = {
+			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null);
+
+			tizen.application.launchAppControl(service, 'org.tizen.music-player',
+				function() {API.info('launch service succeeded');},
+				function(e) { API.warn('launch service failed. Reason : ' + e.name);},
+				{
 					// callee now sends a reply 
 					onsuccess: function(reply) {
 						API.info('onsuccess:' + reply.key + ';' + reply.value);
@@ -78,42 +82,33 @@ define(
 					onfailure: function() {
 						API.warn('launch service failed');
 					}
-				};
-
-			function succeeded() {
-				API.info('launch service succeeded');
-			}
-			function failed(e) {
-				API.warn('launch service failed. Reason : ' + e.name);
-			}
-
-			tizen.application.launchAppControl(service, 'org.tizen.music-player', succeeded, failed, serviceReplyCB);
+				});
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
-			var file = media instanceof Titanium.Blob ? media.file : media,
+			var file = media instanceof Blob ? media.file : media,
 				blob = file.read();
 
 			function errorCB(e) {
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
 			}
 
-			function successCB(dir) {
-				var writeToStream = function (fileStream) {
-					fileStream.writeBase64(blob._data);
-					fileStream.close();
-					callbacks && typeof callbacks.success === 'function' && callbacks.success();
-				};
+			tizen.filesystem.resolve('images',
+				function(dir) {
+					var writeToStream = function (fileStream) {
+						fileStream.writeBase64(blob._data);
+						fileStream.close();
+						callbacks && typeof callbacks.success === 'function' && callbacks.success();
+					};
 
-				try {
-					dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
-				} catch(e) {
-					errorCB(e);
-				}
-
-			}
-
-			tizen.filesystem.resolve('images', successCB, errorCB, 'rw');
+					try {
+						dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
+					} catch(e) {
+						errorCB(e);
+					}
+				},
+				errorCB, 'rw'
+			);
 		},
 
 		takeScreenshot: function(callback) {
@@ -136,17 +131,7 @@ define(
 		showCamera: function() {
 			if (!this.isCameraSupported) return;
 
-			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null),
-				serviceReplyCB = {
-					// callee now sends a reply 
-					onsuccess: function(reply) {
-						API.info('onsuccess:' + reply.key + ';' + reply.value);
-					},
-					// Something went wrong 
-					onfailure: function() {
-						API.warn('launch service failed');
-					}
-				};
+			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null);
 
 			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app',
 				function(){
@@ -157,7 +142,17 @@ define(
 					//On Failed
 					API.warn('launch service failed. Reason : ' + e.name);
 				},
-				serviceReplyCB);
+				{
+					// callee now sends a reply 
+					onsuccess: function(reply) {
+						API.info('onsuccess:' + reply.key + ';' + reply.value);
+					},
+					// Something went wrong 
+					onfailure: function() {
+						API.warn('launch service failed');
+					}
+				}
+			);
 		}
 	});
 });

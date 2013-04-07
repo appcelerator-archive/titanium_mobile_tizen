@@ -8,7 +8,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 	function(dom, event, lang, Evented, API) {
 
 	"use strict";
-	
+
 	var _html2canvas = {},
 		previousElement,
 		computedCSS,
@@ -17,7 +17,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 		function h2clog(a) {
 			_html2canvas.logging && API.info(a);
 		}
-		
+
 		_html2canvas.Util = {};
 
 		_html2canvas.Util.backgroundImage = function (src) {
@@ -694,7 +694,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 		};
 
 		})();
-		
+
 		/*
 		 *  New function for traversing elements
 		 */
@@ -1129,9 +1129,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 				return bounds;
 
 			}
-			
 
-			
 			function elementIndex( el ) {
 				var i = -1,
 				count = 1,
@@ -1147,7 +1145,6 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 				} else {
 					return -1;
 				}
-			   
 			}
 
 			function renderListItem(element, stack, elBounds) {
@@ -1585,8 +1582,6 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 								bounds.top
 								);*/
 
-
-							   
 								bgw = bounds.width - bgp.left;
 								bgh = bounds.height - bgp.top;
 								bgsx = bgp.left;
@@ -1922,7 +1917,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 						}
 
 					}
-				} 
+				}
 			}
 
 			stack = renderElement(element, null);
@@ -2120,12 +2115,6 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			}
 
 			function getImages (el) {
-
-
-
-				// if (!this.ignoreRe.test(el.nodeName)){
-				//
-				
 				var contents = _html2canvas.Util.Children(el),
 				i,
 				background_image,
@@ -2145,8 +2134,6 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 				}
 				catch( e ) {}
 
-
-				// }
 				try {
 					elNodeType = el.nodeType;
 				} catch (ex) {
@@ -2469,8 +2456,6 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			return options._renderer._create( parseQueue, options, document, queue, _html2canvas );
 
 		};
-		
-		
 
 		html2canvas = function( elements, opts ) {
 
@@ -2542,7 +2527,7 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 			window.setTimeout( function(){
 				_html2canvas.Preload( options );
 			}, 0 );
-			
+
 			return {
 				render: function( queue, opts ) {
 					return _html2canvas.Renderer( queue, _html2canvas.Util.Extend(opts, options) );
@@ -2760,12 +2745,12 @@ define(["Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/Evented", "Ti/API"],
 							canvas = null;
 							return newCanvas;
 						}
-					} 
+					}
 					return canvas;
 				}
 			};
 			return methods;
 		};
-		
+
 	return html2canvas;
 });

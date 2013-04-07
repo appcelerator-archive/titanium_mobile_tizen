@@ -441,7 +441,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/lang', 'Ti/App/Propertie
 
 		onload();
 	};
-	
+
 	// Added http: because we need to load this page from http or https protocol and do not from file: 
 	// (on Tizen, "file:" will the be default protocol). 
 	require(['http://maps.googleapis.com/maps/api/js?key=' + Properties.getString('ti.map.apikey', '') + '&sensor=true&callback=TiMapViewInit'], 0, onload);

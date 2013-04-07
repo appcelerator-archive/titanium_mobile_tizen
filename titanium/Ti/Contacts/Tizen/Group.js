@@ -1,4 +1,4 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person'], function(Evented, lang, contactHelper, Person) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person', 'Ti/Contacts'], function(Evented, lang, contactHelper, Person, Contacts) {
 
 	// This function is supplied as a success callback to Tizen's contact searching functions.
 	// It takes an array of native Tizen's contact objects, converts them to Titanium contacts, and returns
@@ -42,7 +42,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 		},
 
 		sortedMembers: function(sortBy, group, successCallback, errorCallback) {
-			var sortField = (sortBy === Ti.Contacts.CONTACTS_SORT_FIRST_NAME) ? 'name.firstName' : 'name.lastName',
+			var sortField = (sortBy === Contacts.CONTACTS_SORT_FIRST_NAME) ? 'name.firstName' : 'name.lastName',
 				// Create a SortMode object to define the desired contact sorting mode:
 				sortMode = new tizen.SortMode(sortField, 'ASC'),
 				addressbook = tizen.contact.getDefaultAddressBook();

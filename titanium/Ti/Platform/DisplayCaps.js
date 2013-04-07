@@ -1,4 +1,4 @@
-define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
+define(['Ti/_', 'Ti/API', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Platform'], function(_, API, Evented, lang, Platform) {
 
 	function initDisplayCaps() {
 		// tizen.systeminfo.getPropertyValue provides access to various Tizen platform info. 
@@ -7,7 +7,11 @@ define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 		// the data and synchronously return the cached copy to the Titanium programmer. The cache
 		// will be kept up to date.
 
-		tizen.systeminfo.getPropertyValue('DISPLAY', onSuccessDisplayCallback, onErrorCallback);
+		tizen.systeminfo.getPropertyValue('DISPLAY',
+			onSuccessDisplayCallback,
+			function(e){
+				API.error('An error occurred: ' + e.message);
+			});
 		tizen.systeminfo.addPropertyValueChangeListener('DISPLAY', onSuccessDisplayCallback);
 	}
 
@@ -17,10 +21,6 @@ define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 		dc.constants.__values__.dpi = Math.max(display.dotsPerInchHeight, display.dotsPerInchWidth);
 		dc.constants.__values__.platformWidth = display.resolutionWidth;
 		dc.constants.__values__.platformHeight = display.resolutionHeight;
-	}
-
-	function onErrorCallback(e) {
-		Ti.API.error('An error occurred: ' + e.message);
 	}
 
 	var ua = navigator.userAgent.toLowerCase(),
@@ -50,6 +50,6 @@ define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang'], function(_, Evented, lang) {
 
 	initDisplayCaps();
 
-	return Ti.Platform.displayCaps = dc;
+	return Platform.displayCaps = dc;
 
 });

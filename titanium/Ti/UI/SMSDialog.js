@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog'], function (declare, MessagingDialog) {
+define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog', 'Ti/API'], function (declare, MessagingDialog, API) {
 	return declare('Ti.UI.SMSDialog', MessagingDialog, {
 
 		constructor: function () {
@@ -6,7 +6,7 @@ define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog'], function (declare, Messaging
 		},
 
 		addAttachment: function () {
-			Ti.API.error('SMS cannot contain attachments');
+			API.error('SMS cannot contain attachments');
 		},
 
 		constants: {
