@@ -1,6 +1,10 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
-	function(Evented, lang, Person, Group, contactHelper, API, UI, ContactsTizen) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
+	function(Evented, lang, contactHelper, API, UI, ContactsTizen) {
+
+	var Group = require('Ti/Contacts/Group'),
+		Person = require('Ti/Contacts/Person');
+
 
 	// Update existing Tizen contact from Ti.Contacts.Person
 	// Input parameter: Ti.Contacts.Person object.

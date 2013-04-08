@@ -1,7 +1,5 @@
 define(function () {
 
-
-
 	// Creates and returns address object as a Titanium type, from a Tizen address.
 	// The "address" parameter contains a native Tizen ContactAddress object.
 	// Input parameter: array of Tizen ContactAddress objects.

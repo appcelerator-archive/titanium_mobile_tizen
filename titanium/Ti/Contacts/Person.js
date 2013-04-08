@@ -1,5 +1,5 @@
 define(
-	['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper', 'Ti/Contacts'], 
+	['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper', 'Ti/Contacts'],
 	function(declare, Evented, contactHelper, Contacts) {
 
 	return declare('Ti.Contacts.Person', Evented, {
