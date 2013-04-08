@@ -1,6 +1,9 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person'],
-	function(Evented, lang, contactHelper, Person) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper'],
+	function(Evented, lang, contactHelper) {
+
+	// This is temporary workaround. See Ti.Contacts for more details.
+	//var Person = require('Ti/Contacts/Person');
 
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 
@@ -11,7 +14,7 @@ define(
 					contactsCount = contacts.length,
 					persons = [];
 				for (; i < contactsCount; i++) {
-					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
+					persons.push(new (require('Ti/Contacts/Person'))(contactHelper.createTitaniumContact(contacts[i])));
 				}
 				successCallback(persons);
 			}, errorCallback);
@@ -41,7 +44,7 @@ define(
 				var contactsCount = contacts.length,
 					persons = [];
 				for (i = 0; i < contactsCount; i++) {
-					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
+					persons.push(new (require('Ti/Contacts/Person'))(contactHelper.createTitaniumContact(contacts[i])));
 				}
 				successCallback(persons);
 			}, errorCallback, resultFilter);
