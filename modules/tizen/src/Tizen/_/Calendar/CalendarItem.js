@@ -14,7 +14,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 		},
 
 		clone: function() {
-			return new (require('Calendar/CalendarEvent'))(this._obj.clone());
+			return new (require('Tizen/_/Calendar/CalendarEvent'))(this._obj.clone());
 		},
 
 		constants: {
