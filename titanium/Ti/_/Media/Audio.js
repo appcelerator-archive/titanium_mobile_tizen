@@ -24,7 +24,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 		_currentState: STOPPED,
 
 		_pause: function() {
-			this._currentState === STOPPING ? this._stop() : this._changeState(PAUSED, 'paused');
+			this._currentState === STOPPING ? this._stop() : this._changeState(PAUSED);
 		},
 
 		_timeupdate: function() {
@@ -34,7 +34,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 		_init: function() {
 			this._beforeInit && this._beforeInit();
 			this._initialized = 1;
-			this._changeState(INITIALIZED, 'initialized');
+			this._changeState(INITIALIZED);
 			this._afterInit && this._afterInit();
 		},
 
@@ -53,28 +53,18 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 			// These events are handled here and do not propagate outside.
 			self._handles = [
 				on(audio, 'playing', self, function() {
-					self._changeState(PLAYING, 'playing');
+					self._changeState(PLAYING);
 				}),
 				on(audio, 'play', self, function() {
-					self._changeState(STARTING, 'starting');
+					self._changeState(STARTING);
 				}),
 				on(audio, 'pause', self, '_pause'),
-				on(audio, 'ended', self, function() {
-					self._ended && self._ended();
-				}),
-				on(audio, 'abort', self, function() {
-					self._abort && self._abort();
-				}),
+				on(audio, 'ended', self, '_ended'),
+				on(audio, 'abort', self, '_abort'),
 				on(audio, 'timeupdate', self, '_timeupdate'),
-				on(audio, 'error', self, function() {
-					self._error && self._error();
-				}),
-				on(audio, 'loadedmetadata', self, function() {
-					self._loadedmetadata && self._loadedmetadata();
-				}),
-				on(audio, 'durationchange', self, function() {
-					self._durationChange && self._durationChange();
-				}),
+				on(audio, 'error', self, '_error'),
+				self._durationChange && on(audio, 'loadedmetadata', self, '_durationChange'),
+				self._durationChange && on(audio, 'durationchange', self, '_durationChange'),
 				on(audio, 'canplay', self, '_init')
 			];
 
@@ -126,13 +116,13 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 			this.start();
 		},
 
-		_stop: function(description) {
+		_stop: function() {
 			var a = this._audio;
 
 			a.currentTime = 0;
-			this._changeState(STOPPED, description || 'stopped');
+			this._changeState(STOPPED);
 
-			// Some versions of Webkit has a bug: if <audio>'s current time is non-zero and we try to 
+			// Some versions of Webkit have a bug: if <audio>'s current time is non-zero and we try to 
 			// stop it by setting time to 0 and pausing, it won't work: music is paused, but time is 
 			// not reset. This is a work around.
 			a.currentTime === 0 || a.load();
@@ -148,17 +138,17 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 			if (this._currentState === PAUSED) {
 				this._stop();
 			} else {
-				this._changeState(STOPPING, 'stopping');
+				this._changeState(STOPPING);
 				this._audio.pause();
 			}
 		},
 
 		isPaused: function() {
-				return this.paused;
+			return this.paused;
 		},
 
 		isPlaying: function() {
-				return this.playing;
+			return this.playing;
 		},
 
 		constants: {
@@ -178,9 +168,9 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 				}
 			},
 
-			// The property 'volume' mirrors (cache) the according property of the <audio> tag
+			// The property 'volume' mirrors (caches) the according property of the <audio> tag
 			// Reason: if the <audio> tag is not initialized, direct referencing of the tag's properties
-			// leads to exception. To prevent this situation, we mirror the property 'volume' and use this
+			// leads to an exception. To prevent this situation, we mirror the property 'volume' and use this
 			// if the tag's property cannot be accessed at the moment.
 
 			volume: {
