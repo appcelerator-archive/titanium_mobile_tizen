@@ -1,4 +1,4 @@
-define(['Ti/_/declare'], function(declare) {
+define(['Ti/_/declare', 'Ti/Contacts'], function(declare, Contacts) {
 
 	return declare('Ti.Contacts.Group', null, {
 
@@ -18,11 +18,11 @@ define(['Ti/_/declare'], function(declare) {
 
 			// If the person is new, create it first.
 			if (!person.id) {
-				person = Ti.Contacts.createPerson(person);
+				person = Contacts.createPerson(person);
 			}
 
 			contact = this._addressbook.get(person.id);
-			
+
 			// Add the contact to the Tizen group.
 			contact.groupIds.push(this.recordId);
 			this._addressbook.update(contact);

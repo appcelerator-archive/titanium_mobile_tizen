@@ -49,7 +49,7 @@ define(['Ti/_/Evented', 'Ti/_/lang'], function(Evented, lang) {
 	}
 
 	function onErrorCallback(e) {
-		Ti.API.error('An error occured: ' + e.message);
+		console.log('An error occured: %s', e.message);
 	}
 
 	function onSuccessNetworkCallback(network) {
@@ -73,12 +73,12 @@ define(['Ti/_/Evented', 'Ti/_/lang'], function(Evented, lang) {
 		}
 
 		Network.constants.__values__.networkType = type;
-		Network.constants.__values__.networkTypeName = typeName;
+		Network.constants.__values__.networkTypeName = networkType;
 		Network.constants.__values__.online = online;
 
 		Network.fireEvent('change', {
 			networkType: type,
-			networkTypeName: typeName,
+			networkTypeName: networkType,
 			online: online
 		});
 	}

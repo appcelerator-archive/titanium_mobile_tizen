@@ -73,14 +73,14 @@ function(next) {
 	var os = (ls(workingDir + '/' + 'mobilesdk' ))[0],
 		sdkVersion = (ls(workingDir + '/' + 'mobilesdk/' + os + '/'))[0];
 
-	info('os:' + os);	
+	info('os:' + os);
 	info('sdkVersion:' + sdkVersion);
 	// create output file path and remove if it already exists
 	resultPath = (args[1] || path.dirname(args[0])) + '/tizen-' + sdkVersion + '-' + os + '.zip';
 	info('outFile:' + resultPath);
 	if (fs.existsSync(resultPath)) {
 		fs.unlinkSync(resultPath);
-	}	
+	}
 	sdkRoot = path.join(workingDir, 'mobilesdk', os, sdkVersion);
 	next(null, 'ok');
 }, function(next) {	

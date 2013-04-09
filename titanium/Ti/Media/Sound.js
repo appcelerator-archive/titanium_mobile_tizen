@@ -1,12 +1,12 @@
 define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
-	
+
 	var messageMap = [void 0, 'Aborted', 'Decode error', 'Network error', 'Unsupported format'],
 		ENDED = 9,
 		ABORT = 10,
 		ERROR = 11;
-	
+
 	return declare('Ti.Media.Sound', Audio, {
-		
+
 		_changeState: function(newState, description) {
 			Audio.prototype._changeState.apply(this, arguments);
 			var evt = {};
@@ -17,69 +17,68 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 					evt.success = true;
 					this.looping || this.fireEvent('complete', evt);  // external (interface) event
 					break;
-				case ERROR: 
-					evt.type = 'error';	
+				case ERROR:
+					evt.type = 'error';
 					evt.message = description;
 					this.fireEvent('error', evt);  // external (interface) event
 					break;
 			}
 		},
-		
+
 		_durationChange: function() {
             //convert to msec
 			var d = this._audio.duration * 1000;
-            
 			// Blackberry OS 7 gives the initial duration as Infinity
 			// So we leave duration at zero until the duration of <audio> is finite.
 			d === Infinity || (this.constants.__values__.duration = Math.floor(d));
 		},
-		
+
 		_loadedmetadata: function() {
 			this._durationChange();
 		},
-		
+
 		_error: function() {
 			this._changeState(ERROR, 'error: ' + (messageMap[this._audio.error.code] || 'Unknown error'));
 		},
-		
+
 		_ended: function() {
 			this._changeState(ENDED, 'ended');
 		},
-		
+
 		_abort: function() {
 			this._changeState(ABORT, 'abort');
 		},
-		
+
 		_beforeInit: function() {
 			this._audio.volume = this.volume;
 			this._audio.loop = this.looping;
 			this._audio.currentTime = this.time / 1000;
 		},
-		
+
 		_afterInit: function() {
 			// _nextCmd: this variable records the command that was requested before the <audio> tag 
 			// was initialized. It will be executed when the tag becomes initialized.
 			this._nextCmd && this._nextCmd();
 			this._nextCmd = 0;
 		},
-		
+
 		release: function() {
 			this.constants.__values__.duration = 0;
 			Audio.prototype.release.apply(this, arguments);
 		},
-		
+
 		reset: function() {
 			this.time = 0;
 		},
-		
+
 		isLooping: function() {
 			return this.looping;
 		},
-		
+
 		constants: {
 			duration: 0
 		},
-		
+
 		properties: {
 			// The following 2 properties mirror (cache) the according properties of the <audio> tag:
 			// time, looping.
@@ -98,7 +97,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 					return value;
 				}
 			},
-			
+
 			looping: {
 				value: false,
 				set: function(value) {
@@ -108,5 +107,4 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			}
 		}
 	});
-
 });

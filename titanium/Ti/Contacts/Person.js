@@ -1,4 +1,6 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declare, Evented, contactHelper) {
+define(
+	['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper', 'Ti/Contacts'],
+	function(declare, Evented, contactHelper, Contacts) {
 
 	return declare('Ti.Contacts.Person', Evented, {
 		constructor: function(args) {
@@ -19,7 +21,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 			},
 			kind: {
 				get: function() {
-					return Ti.Contacts.CONTACT_KIND_PERSON;
+					return Contacts.CONTACT_KIND_PERSON;
 				}
 			},
 			modified: '',
@@ -45,5 +47,4 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/_/Contacts/helper'], function(declar
 			url: {}
 		}
 	});
-	
 });

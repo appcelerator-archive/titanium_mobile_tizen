@@ -53,7 +53,6 @@ define(["Ti/_/declare", "Ti/_/Evented", "Ti/Blob", "Ti/Codec"], function(declare
 		release: function() {
 			this.length = 0;
 		},
-		
 
 		toBlob: function() {
 			return new Blob({ data: this.value });

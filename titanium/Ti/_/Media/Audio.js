@@ -60,7 +60,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 				}),
 				on(audio, 'pause', self, '_pause'),
 				on(audio, 'ended', self, function() {
-					self._ended && self._ended(); 
+					self._ended && self._ended();
 				}),
 				on(audio, 'abort', self, function() {
 					self._abort && self._abort();
@@ -137,7 +137,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 			// not reset. This is a work around.
 			a.currentTime === 0 || a.load();
 		},
-        
+
 		stop: function() {
 			this._nextCmd = 0;
 
@@ -154,7 +154,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 		},
 
 		isPaused: function() {
-				return this.paused; 
+				return this.paused;
 		},
 
 		isPlaying: function() {
@@ -198,7 +198,7 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 					if (value !== oldValue) {
 						value ? this.pause() : this.start();
 					}
-					
+
 					return oldValue;
 				}
 			}

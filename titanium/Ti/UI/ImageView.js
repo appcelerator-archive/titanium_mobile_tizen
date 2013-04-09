@@ -1,4 +1,4 @@
-define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget", "Ti/UI", "Ti/Filesystem"], 
+define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget", "Ti/UI", "Ti/Filesystem"],
 	function(declare, event, lang, style, Widget, UI, Filesystem) {
 
 	var setStyle = style.set,
@@ -18,7 +18,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget
 				return {
 					width: this.domNode.width,
 					height: this.domNode.height
-				}
+				};
 			},
 
 			_preLayout: function(boundingWidth, boundingHeight, isParentWidthSize, isParentHeightSize) {
@@ -197,7 +197,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget
 		},
 
 		constants: {
-			animating: false, 
+			animating: false,
 			paused: false
 		},
 
@@ -229,12 +229,12 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/_/lang", "Ti/_/style", "Ti/_/UI/Widget
 					if (this._children.length === 0) {
 						this._images = void 0;
 						this._add(this._createImage(
-							value, 
+							value,
 							function() {
 								this.fireEvent('load', {
 									state: 'image'
 								});
-							}, 
+							},
 							function(e) {
 								this.fireEvent('error', e);
 							}

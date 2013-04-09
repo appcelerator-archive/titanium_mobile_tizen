@@ -3,11 +3,11 @@
 // simple hack to enable debugger output
 process.env.DEBUG = process.env.DEBUG || 'BUILD:info';
 
+require('shelljs/global');
+
 var fs = require('fs'),
 	path = require('path'),
 	async = require('async'),
-	wrench = require('wrench'),
-	shell = require('shelljs/global'),
 	debug = require('debug'),
 	args = process.argv.slice(2),
 	branchName, repoPath, titaniumTizenSdk;
@@ -60,8 +60,8 @@ async.series(
 			'support/mobileweb/imageResizer',
 			'support/mobileweb/minify',
 			'support/mobileweb/resources'
-		]
-		
+		],
+
 		// Files that override original MobileWeb files on Tizen.
 		// (signapp.jar is unique for Tizen and implements wgt signing.)
 		overrideFiles = [
@@ -73,7 +73,7 @@ async.series(
 				{src : 'dependencyAnalyzer/*', dst : 'dependencyAnalyzer/'},
 				{src : 'themes/*', dst : 'themes/'},
 				{src : 'utils/signapp.jar', dst : 'utils/'},
-			]
+			];
 
 		info('Clean up, deleting ' + titaniumTizenSdk);
 		rm('-rf', titaniumTizenSdk);
@@ -87,7 +87,7 @@ async.series(
 			info('copy ' + path.join(repoPath, pth) + ' into ' + titaniumTizenSdk);
 			cp('-fR', path.join(repoPath, pth), titaniumTizenSdk);
 		});
-		
+
 		createDirs.forEach( function (dirpath) {
 			mkdir(path.join(titaniumTizenSdk, dirpath));
 		});
@@ -100,7 +100,7 @@ async.series(
 			info('copy ' + path.join(__dirname, patch.src) + ' into ' + path.join(titaniumTizenSdk, patch.dst));
 			cp('-fR', path.join(__dirname, patch.src), path.join(titaniumTizenSdk, patch.dst));
 		});
-		
+
 		next(null, 'ok');
 
 	}, function(next) {
@@ -111,9 +111,9 @@ async.series(
 			depCheck(repoPath + '/');
 		} catch(e) {
 			info('dependencyAnalyzer failed: ' + e);
-		}	
+		}
 		next(null, 'ok');
-		
+
 	}, function(next) {
 		// Package the Tizen wrapper module and place it into titanium_mobile/support/module/packaged
 		var packer = require('child_process'),
@@ -124,16 +124,15 @@ async.series(
 
 		// remove tizen-tizen-3.0.0.zip if it exists
 		rm('-rf', path.join(packagesModules,'tizen-tizen-3.0.0.zip'));
-		
+
 		//create temporary dir and its structire
 		fs.mkdirSync(workingDir);
 		fs.mkdirSync(path.join(workingDir, 'modules'));
 		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen'));
 		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen','tizen'));
 		fs.mkdirSync(path.join(workingDir, 'modules', 'tizen','tizen','3.0.0'));
-		
-		cp('-R', path.join(__dirname, 'modules', 'tizen') + '/*',  path.join(workingDir, 'modules', 'tizen', 'tizen','3.0.0'));
 
+		cp('-R', path.join(__dirname, 'modules', 'tizen') + '/*',  path.join(workingDir, 'modules', 'tizen', 'tizen','3.0.0'));
 
 		// Create archive with the Tizen wrapper module
 		info('zip cmd: ' + cmdzip);
@@ -145,15 +144,15 @@ async.series(
 			// remove the temporary directory
 			rm('-rf', workingDir);
 			next(null, 'ok');
-		});		
+		});
 	}
-	
+
 ], function(err) {
 	if (err) {
 		info(err);
 	}
 	info('Preparing Tizen for Titanium SDK finished.');
-});	
+});
 
 function gitCheckout(workingDir, branch, finish) {
 	var executor = require('child_process'),
@@ -167,7 +166,7 @@ function gitCheckout(workingDir, branch, finish) {
 		if (stdout) {
 			info(stdout);
 		}
-		if (err != null) {
+		if (err) {
 			info(stderr);
 		} else {
 			info('git ok');
