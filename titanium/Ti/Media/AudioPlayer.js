@@ -25,17 +25,17 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			// The error event is missing in Titanium API.
 			// So we will fire 'change' event with state='STATE_STOPPED' 
 			// and description about error
-			this._changeState(this.STATE_STOPPED, 'error: ' + (messageMap[this._audio.error.code] || 'Unknown error'));
+			this._changeState(this.STATE_STOPPED);
 		},
 
 		_ended: function() {
 			// stopped with description='ended'
-			this._stop('ended');
+			this._stop();
 		},
 
 		_abort: function() {
 			// stopped with description='abort'
-			this._changeState(this.STATE_STOPPED, 'abort');
+			this._changeState(this.STATE_STOPPED);
 		},
 
 		_timeupdate: function() {
