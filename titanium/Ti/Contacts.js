@@ -2,14 +2,6 @@ define(
 	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
 	function(Evented, lang, contactHelper, API, UI, ContactsTizen) {
 
-	// require returns path to file (string) if it is called here. If require is called inside an object it returns correct result.
-	// It is workaround for now. We need to discuss it. It seems like there is some loop reference or something like this, because after removing Ti/Contacts
-	// dependency from Ti/Contacts/Person.js require returns correct result.
-
-	//var Group = require('Ti/Contacts/Group'),
-	//	Person = require('Ti/Contacts/Person');
-
-
 	// Update existing Tizen contact from Ti.Contacts.Person
 	// Input parameter: Ti.Contacts.Person object.
 	// Returns Tizen Contact object.
@@ -95,9 +87,10 @@ define(
 				groups = addressbook.getGroups(),
 				result = [],
 				i = 0,
-				groupsCount = groups.length;
+				groupsCount = groups.length,
+				Person = require('Ti/Contacts/Group');
 			for (; i < groupsCount; i++) {
-				result.push(new (require('Ti/Contacts/Group'))({
+				result.push(new Person({
 					name: groups[i].name,
 					id: groups[i].id
 				}));
