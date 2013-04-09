@@ -1,6 +1,6 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Contacts/Person', 'Ti/Contacts/Group', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
-	function(Evented, lang, Person, Group, contactHelper, API, UI, ContactsTizen) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
+	function(Evented, lang, contactHelper, API, UI, ContactsTizen) {
 
 	// Update existing Tizen contact from Ti.Contacts.Person
 	// Input parameter: Ti.Contacts.Person object.
@@ -75,11 +75,11 @@ define(
 		},
 
 		createGroup: function(args) {
-			return new Group(args);
+			return new (require('Ti/Contacts/Group'))(args);
 		},
 
 		createPerson: function(person) {
-			return new Person(person);
+			return new (require('Ti/Contacts/Person'))(person);
 		},
 
 		getAllGroups: function() {
@@ -87,9 +87,10 @@ define(
 				groups = addressbook.getGroups(),
 				result = [],
 				i = 0,
-				groupsCount = groups.length;
+				groupsCount = groups.length,
+				Person = require('Ti/Contacts/Group');
 			for (; i < groupsCount; i++) {
-				result.push(new Group({
+				result.push(new Person({
 					name: groups[i].name,
 					id: groups[i].id
 				}));
@@ -103,7 +104,7 @@ define(
 
 		getGroupByID: function(id) {
 			var group = tizen.contact.getDefaultAddressBook().getGroup(id);
-			return new Group({
+			return new (require('Ti/Contacts/Group'))({
 				name: group.name,
 				id: group.id
 			});
@@ -114,7 +115,7 @@ define(
 
 		getPersonByID: function(id) {
 			var contact = tizen.contact.getDefaultAddressBook().get(id);
-			return new Person(contactHelper.createTitaniumContact(contact));
+			return new (require('Ti/Contacts/Person'))(contactHelper.createTitaniumContact(contact));
 		},
 
 		removeGroup: function(group) {

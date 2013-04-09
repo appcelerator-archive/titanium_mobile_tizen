@@ -1,6 +1,6 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts/Person'],
-	function(Evented, lang, contactHelper, Person) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper'],
+	function(Evented, lang, contactHelper) {
 
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 
@@ -9,7 +9,8 @@ define(
 			tizen.contact.getDefaultAddressBook().find(function(contacts) {
 				var i = 0,
 					contactsCount = contacts.length,
-					persons = [];
+					persons = [],
+					Person = require('Ti/Contacts/Person');
 				for (; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
@@ -39,7 +40,8 @@ define(
 			// Find contacts with filter.
 			tizen.contact.getDefaultAddressBook().find(function(contacts) {
 				var contactsCount = contacts.length,
-					persons = [];
+					persons = [],
+					Person = require('Ti/Contacts/Person');
 				for (i = 0; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
