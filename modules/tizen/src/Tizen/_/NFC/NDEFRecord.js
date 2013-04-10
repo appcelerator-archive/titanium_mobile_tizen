@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 				} else if ('tnf' in args && 'type' in args && 'payload' in args && 'id' in args) {
 					this._obj = new tizen.NDEFRecord(args.tnf, args.type, args.payload, args.id);
 				} else {
-					Ti.API.error('Constructor NDEFRecord with given parameters doesn\'t exist');
+					console.error('Constructor NDEFRecord with given parameters doesn\'t exist');
 				}
 			}
 		},

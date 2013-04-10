@@ -30,7 +30,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 					this._obj = new tizen.CalendarAlarm(absoluteDate, args.method, args.description);
 
 				} else {
-					Ti.API.error('Constructor with such parameters does not exist in CalendarAlarm.');
+					console.error('Constructor with such parameters does not exist in CalendarAlarm.');
 				}
 			}
 		},

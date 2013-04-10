@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 				if (args.hasOwnProperty('attributeName')) {
 					this._obj = new tizen.AttributeFilter(args.attributeName, args.matchFlag, args.matchValue);
 				} else {
-					Ti.API.error('AttributeFilter\'s constructor with such parameters not found.');
+					console.error('AttributeFilter\'s constructor with such parameters not found.');
 				}
 			}
 		},
