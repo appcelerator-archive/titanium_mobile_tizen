@@ -34,10 +34,27 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 			},
 			filters: {
 				get: function() {
-					return this._obj.filters;
+					var i = 0,
+						tizenFilters = this._obj.filters,
+						len = tizenFilters.length,
+						filters = [];
+
+					for (; i < len; i++) {
+						filters.push(new AbstractFilter(tizenFilters[i]));
+					}
+
+					return filters;
 				},
-				set: function(value) {
-					this._obj.filters = value;
+				set: function(values) {
+					var i = 0,
+						len = values.length,
+						filters = [];
+
+					for (; i < len; i++) {
+						filters.push(values[i]._obj);
+					}
+
+					this._obj.filters = filters;
 				}
 			}
 		}
