@@ -1,52 +1,51 @@
 // Wraps Tizen module "NFC".
 
-define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/NDEFRecordText', 'Tizen/_/NFC/NDEFRecordURI', 'Tizen/_/NFC/NDEFRecordMedia', 'Tizen/_/NFC/NFCAdapter'],
-    function(lang, Evented, NDEFMessage, NDEFRecord, NDEFRecordText, NDEFRecordURI, NDEFRecordMedia, NFCAdapter) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/NDEFRecordText',
+	'Tizen/_/NFC/NDEFRecordURI', 'Tizen/_/NFC/NDEFRecordMedia', 'Tizen/_/NFC/NFCAdapter'],
+	function(lang, Evented, NDEFMessage, NDEFRecord, NDEFRecordText, NDEFRecordURI, NDEFRecordMedia, NFCAdapter) {
 
-        return lang.mixProps(require.mix({}, Evented), {
+		return lang.mixProps(require.mix({}, Evented), {
 
-            getDefaultAdapter: function() {
-                try {
-                    return this._wrap(tizen.nfc.getDefaultAdapter());
-                } catch(e) {
-                    Ti.API.error(e.message);
-                }
-            },
+			getDefaultAdapter: function() {
+				try {
+					return this._wrap(tizen.nfc.getDefaultAdapter());
+				} catch (e) {
+					Ti.API.error(e.message);
+				}
+			},
 
-            _wrap: function(object) {
+			_wrap: function(object) {
 				// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
-                if (object.toString() === '[object NFCAdapter]') {
-                    return this.createNFCAdapter(object);
-                }
-				else
-				{
+				if (object.toString() === '[object NFCAdapter]') {
+					return this.createNFCAdapter(object);
+				} else {
 					Ti.API.error("Incorrect object type");
 				}
-            },
+			},
 
-            createNFCAdapter: function(args) {
-                return new NFCAdapter(args);
-            },
+			createNFCAdapter: function(args) {
+				return new NFCAdapter(args);
+			},
 
-            createNDEFMessage: function(args) {
-                return new NDEFMessage(args);
-            },
+			createNDEFMessage: function(args) {
+				return new NDEFMessage(args);
+			},
 
-            createNDEFRecord: function(args) {
-                return new NDEFRecord(args);
-            },
+			createNDEFRecord: function(args) {
+				return new NDEFRecord(args);
+			},
 
-            createNDEFRecordText: function(args) {
-                return new NDEFRecordText(args);
-            },
+			createNDEFRecordText: function(args) {
+				return new NDEFRecordText(args);
+			},
 
-            createNDEFRecordURI: function(args) {
-                return new NDEFRecordURI(args);
-            },
+			createNDEFRecordURI: function(args) {
+				return new NDEFRecordURI(args);
+			},
 
-            createNDEFRecordMedia: function(args) {
-                return new NDEFRecordMedia(args);
-            },
+			createNDEFRecordMedia: function(args) {
+				return new NDEFRecordMedia(args);
+			},
 
 			constants: {
 				NFC_RECORD_TNF_EMPTY: 0,
@@ -76,5 +75,5 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDE
 				NFC_TAG_TYPE_UNKNOWN_TARGET: 'UNKNOWN_TARGET'
 			}
 
-        }, true);
-    });
+		}, true);
+	});
