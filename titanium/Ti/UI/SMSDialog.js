@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog', 'Ti/API'], function (declare, MessagingDialog, API) {
+define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog'], function (declare, MessagingDialog) {
 	return declare('Ti.UI.SMSDialog', MessagingDialog, {
 
 		constructor: function () {
@@ -6,7 +6,7 @@ define(['Ti/_/declare', 'Ti/_/UI/MessagingDialog', 'Ti/API'], function (declare,
 		},
 
 		addAttachment: function () {
-			API.error('SMS cannot contain attachments');
+			console.error('SMS cannot contain attachments');
 		},
 		// The id of Tizen application service that will provide the email dialog
 		_id: 'org.tizen.message',

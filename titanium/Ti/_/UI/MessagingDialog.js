@@ -1,4 +1,4 @@
-define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/API'], function (declare, Evented, API) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 
 		return declare('Ti._.UI.MessagingDialog', Evented, {
 
@@ -41,9 +41,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/API'], function (declare, Evented, A
 
 				// Launching the native Tizen's message editing aplication
 				tizen.application.launchAppControl(appControl, self._id, function () {
-						API.info('Launch appControl succeeded')
+						console.log('Launch appControl succeeded')
 					}, function (e) {
-						API.info('Launch appControl failed. Reason: ' + e.name)
+						console.log('Launch appControl failed. Reason: ' + e.name)
 					}, serviceCB);
 			},
 
@@ -53,7 +53,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/API'], function (declare, Evented, A
 				if (blob.nativePath) {
 					this.attachment.push(blob.nativePath);
 				} else {
-					API.info('Tizen currently only supports attaching a blob with the path to physical file presents on the Tizen device.');
+					console.log('Tizen currently only supports attaching a blob with the path to physical file presents on the Tizen device.');
 				}
 			},
 

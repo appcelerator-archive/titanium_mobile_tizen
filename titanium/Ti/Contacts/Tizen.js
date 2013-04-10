@@ -2,9 +2,17 @@ define(
 	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper'],
 	function(Evented, lang, contactHelper) {
 
+	function errorCallback(e, callback) {
+		callback({
+			code: -1,
+			message: e.type + ': ' + e.message,
+			success: false
+		});
+	}
+
 	return lang.setObject('Ti.Contacts.Tizen',  Evented, {
 
-		getAllPeople: function(successCallback, errorCallback) {
+		getAllPeople: function(callback) {
 			// Finds and returns all Tizen contacts.
 			tizen.contact.getDefaultAddressBook().find(function(contacts) {
 				var i = 0,
@@ -14,11 +22,17 @@ define(
 				for (; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
-				successCallback(persons);
-			}, errorCallback);
+				callback({
+					code: 0,
+					success: true,
+					data: persons
+				});
+			}, function (e) {
+				errorCallback(e, callback);
+			});
 		},
 
-		getPeopleWithName: function(name, successCallback, errorCallback) {
+		getPeopleWithName: function(name, callback) {
 			var names = name.trim().replace(/[ ]{2,}/g, ' ').split(' '), // Trims input string and collapses spaces between words to single space.
 				firstNameFilter,
 				lastNameFilter,
@@ -26,6 +40,10 @@ define(
 				i = 0,
 				namesCount = names.length,
 				compositeFilters = [],
+				response = {
+					code: 0,
+					success: true
+				},
 				resultFilter;
 
 			// Create case insensitive filter for first name, last name and middle name.
@@ -45,8 +63,14 @@ define(
 				for (i = 0; i < contactsCount; i++) {
 					persons.push(new Person(contactHelper.createTitaniumContact(contacts[i])));
 				}
-				successCallback(persons);
-			}, errorCallback, resultFilter);
+				callback({
+					code: 0,
+					success: true,
+					data: persons
+				});
+			}, function (e) {
+				errorCallback(e, callback);
+			}, resultFilter);
 		}
 	});
 });

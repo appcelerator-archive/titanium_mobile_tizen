@@ -1,62 +1,6 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
-	function(Evented, lang, contactHelper, API, UI, ContactsTizen) {
-
-	// Update existing Tizen contact from Ti.Contacts.Person
-	// Input parameter: Ti.Contacts.Person object.
-	// Returns Tizen Contact object.
-	function updateTizenContact(person) {
-		var contact = tizen.contact.getDefaultAddressBook().get(person.id),
-			name, organization;
-
-		contact.addresses = person.address && contactHelper.createTizenAddresses(person.address);
-		contact.emails = person.email && contactHelper.createTizenEmails(person.email);
-		name = contact.name;
-
-		if (name) {
-			name.prefix = person.prefix ||'';
-			name.firstName = person.firstName || '';
-			name.middleName = person.middleName || '';
-			name.lastName = person.lastName || '';
-			name.nicknames = (person.nickname) ? [person.nickname] : [];
-			name.phoneticFirstName = person.firstPhonetic || null;
-			name.phoneticLastName = person.lastPhonetic || null;
-		} else {
-			name = new tizen.ContactName({
-				prefix: person.prefix || '',
-				firstName: person.firstName || '',
-				middleName: person.middleName || '',
-				lastName: person.lastName || '',
-				nicknames: (person.nickname) ? [person.nickname] : [],
-				phoneticFirstName: person.firstPhonetic || null,
-				phoneticLastName: person.lastPhonetic || null
-			});
-		}
-
-		contact.name = name;
-		contact.phoneNumbers = person.phone && contactHelper.createTizenPhoneNumbers(person.phone);
-		contact.birthday = person.birthday ? new Date(person.birthday) : null;
-
-		organization = contact.organizations[0];
-		if (organization) {
-			organization.name = person.organization;
-			organization.department = person.department;
-			organization.title = person.jobTitle;
-		} else {
-			organization = new tizen.ContactOrganization({
-				name: person.organization || null,
-				department: null,
-				title:  null
-			});
-		}
-		contact.organizations = [organization];
-
-		contact.anniversaries = person.date && contactHelper.createTizenAnniversaries(person.date);
-		contact.notes = [person.note] || void 0;
-		contact.urls = person.url && contactHelper.createTizenWebSites(person.url);
-
-		return contact;
-	}
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/UI', 'Ti/Contacts/Tizen'],
+	function(Evented, lang, contactHelper, UI, ContactsTizen) {
 
 	return lang.setObject('Ti.Contacts', Evented, {
 
@@ -98,19 +42,12 @@ define(
 			return result;
 		},
 
-		getAllPeople: function() {
-			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getAllPeople instead.');
-		},
-
 		getGroupByID: function(id) {
 			var group = tizen.contact.getDefaultAddressBook().getGroup(id);
 			return new (require('Ti/Contacts/Group'))({
 				name: group.name,
 				id: group.id
 			});
-		},
-		getPeopleWithName: function(name) {
-			throw new Error('This function is not supported here. Use Ti.Contacts.Tizen.getPeopleWithName instead.');
 		},
 
 		getPersonByID: function(id) {
@@ -130,9 +67,63 @@ define(
 			persons = persons || [];
 			var addressbook = tizen.contact.getDefaultAddressBook(),
 				i = 0,
-				personsCount = persons.length;
+				personsCount = persons.length,
+				contact, name, organization, person;
+
 			for (; i < personsCount; i++) {
-				addressbook.update(updateTizenContact(persons[i]));
+				person = persons[i];
+				// Get Tizen contact from Ti.Contacts.Person.
+				contact = tizen.contact.getDefaultAddressBook().get(person.id);
+
+				// Update existing Tizen contact from Ti.Contacts.Person.
+				contact.addresses = person.address && contactHelper.createTizenAddresses(person.address);
+				contact.emails = person.email && contactHelper.createTizenEmails(person.email);
+				name = contact.name;
+
+				if (name) {
+					name.prefix = person.prefix ||'';
+					name.firstName = person.firstName || '';
+					name.middleName = person.middleName || '';
+					name.lastName = person.lastName || '';
+					name.nicknames = (person.nickname) ? [person.nickname] : [];
+					name.phoneticFirstName = person.firstPhonetic || null;
+					name.phoneticLastName = person.lastPhonetic || null;
+				} else {
+					name = new tizen.ContactName({
+						prefix: person.prefix || '',
+						firstName: person.firstName || '',
+						middleName: person.middleName || '',
+						lastName: person.lastName || '',
+						nicknames: (person.nickname) ? [person.nickname] : [],
+						phoneticFirstName: person.firstPhonetic || null,
+						phoneticLastName: person.lastPhonetic || null
+					});
+				}
+
+				contact.name = name;
+				contact.phoneNumbers = person.phone && contactHelper.createTizenPhoneNumbers(person.phone);
+				contact.birthday = person.birthday ? new Date(person.birthday) : null;
+
+				organization = contact.organizations[0];
+				if (organization) {
+					organization.name = person.organization;
+					organization.department = person.department;
+					organization.title = person.jobTitle;
+				} else {
+					organization = new tizen.ContactOrganization({
+						name: person.organization || null,
+						department: null,
+						title:  null
+					});
+				}
+				contact.organizations = [organization];
+
+				contact.anniversaries = person.date && contactHelper.createTizenAnniversaries(person.date);
+				contact.notes = [person.note] || void 0;
+				contact.urls = person.url && contactHelper.createTizenWebSites(person.url);
+
+				// Save changes in the addressbook.
+				addressbook.update(contact);
 			}
 		},
 
@@ -223,7 +214,7 @@ define(
 				win.open();
 			},
 			function(e){ //Error callback
-				API.error('Problems with getting the contacts, Error: ' + e.message);
+				console.error('Problems with getting the contacts, Error: ' + e.message);
 			});
 		}
 	});

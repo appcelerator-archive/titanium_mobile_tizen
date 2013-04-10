@@ -1,5 +1,13 @@
 define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person', 'Ti/Contacts'], function(Evented, lang, contactHelper, Person, Contacts) {
 
+	function errorCallback(e, callback) {
+		callback({
+			code: -1,
+			message: e.type + ': ' + e.message,
+			success: false
+		});
+	}
+
 	// This function is supplied as a success callback to Tizen's contact searching functions.
 	// It takes an array of native Tizen's contact objects, converts them to Titanium contacts, and returns
 	// to the user via callback.
@@ -9,7 +17,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 	// - "contacts" is an array of Tizen native contact objects that were found;
 	// - "successCallback" is the callback from client code, to be called when the result is ready.
 
-	function findContactsSuccessCallback (contacts, group, successCallback) {
+	function findContactsSuccessCallback (contacts, group, callback) {
 		var contactsCount = contacts.length,
 			groupsCount, j, groupIds,
 			i = 0, persons = [];
@@ -27,18 +35,24 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 				}
 			}
 		}
-		successCallback(persons);
+		callback({
+			code: 0,
+			success: true,
+			data: persons
+		});
 	}
 
 	return lang.setObject('Ti.Contacts.Tizen.Group', Evented, {
 
-		members: function(group, successCallback, errorCallback) {
+		members: function(group, callback) {
 			var addressbook = tizen.contact.getDefaultAddressBook();
 
 			// Tell Tizen to perform the search.
 			addressbook.find(function(contacts) {
-				findContactsSuccessCallback(contacts, group, successCallback);
-			}, errorCallback);
+				findContactsSuccessCallback(contacts, group, callback);
+			}, function (e) {
+				errorCallback(e, callback);
+			});
 		},
 
 		sortedMembers: function(sortBy, group, successCallback, errorCallback) {
@@ -50,7 +64,9 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 			// Tell Tizen to perform the search.
 			addressbook.find(function(contacts) {
 				findContactsSuccessCallback(contacts, group, successCallback);
-			}, errorCallback, null, sortMode);
+			}, function (e) {
+				errorCallback(e, callback);
+			}, null, sortMode);
 		}
 
 	});

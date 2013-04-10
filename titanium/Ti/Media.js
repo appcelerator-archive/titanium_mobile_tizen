@@ -1,6 +1,6 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'],
-	function(Evented, lang, Blob, h2c, Sound, AudioPlayer, API) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'],
+	function(Evented, lang, Blob, h2c, Sound, AudioPlayer) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
 
@@ -74,19 +74,19 @@ define(
 
 			tizen.application.launchAppControl(service, 'org.tizen.music-player',
 				function() {
-					API.info('launch service succeeded');
+					console.log('launch service succeeded');
 				},
 				function(e) {
-					API.warn('launch service failed. Reason : ' + e.name);
+					console.warn('launch service failed. Reason : ' + e.name);
 				},
 				{
 					// callee now sends a reply
 					onsuccess: function(reply) {
-						API.info('onsuccess:' + reply.key + ';' + reply.value);
+						console.log('onsuccess:' + reply.key + ';' + reply.value);
 					},
 					// Something went wrong
 					onfailure: function() {
-						API.warn('launch service failed');
+						console.log('launch service failed');
 					}
 				});
 		},
@@ -147,20 +147,20 @@ define(
 			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app',
 				function(){
 					// On succeeded
-					API.info('launch service succeeded');
+					console.log('launch service succeeded');
 				},
 				function(e) {
 					//On Failed
-					API.warn('launch service failed. Reason : ' + e.name);
+					console.warn('launch service failed. Reason : ' + e.name);
 				},
 				{
 					// callee now sends a reply 
 					onsuccess: function(reply) {
-						API.info('onsuccess:' + reply.key + ';' + reply.value);
+						console.log('onsuccess:' + reply.key + ';' + reply.value);
 					},
 					// Something went wrong 
 					onfailure: function() {
-						API.warn('launch service failed');
+						console.warn('launch service failed');
 					}
 				}
 			);

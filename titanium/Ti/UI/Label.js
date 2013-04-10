@@ -1,5 +1,5 @@
-define(['Ti/_/declare', 'Ti/_/UI/FontWidget', 'Ti/_/dom', 'Ti/_/css', 'Ti/_/style', 'Ti/_/lang', 'Ti/Locale', 'Ti/UI', 'Ti/API'],
-	function(declare, FontWidget, dom, css, style, lang, Locale, UI, API) {
+define(['Ti/_/declare', 'Ti/_/UI/FontWidget', 'Ti/_/dom', 'Ti/_/css', 'Ti/_/style', 'Ti/_/lang', 'Ti/Locale', 'Ti/UI'],
+	function(declare, FontWidget, dom, css, style, lang, Locale, UI) {
 
 	var setStyle = style.set,
 		unitize = dom.unitize,
@@ -102,7 +102,7 @@ define(['Ti/_/declare', 'Ti/_/UI/FontWidget', 'Ti/_/dom', 'Ti/_/css', 'Ti/_/styl
 				service,
 				ap_id,
 				function() {},
-				function(e) { API.error('launch appControl failed. Reason: ' + e.name);},
+				function(e) { console.error('launch appControl failed. Reason: ' + e.name);},
 				null
 			);
 			e.stopPropagation();
