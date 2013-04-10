@@ -21,13 +21,6 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 					backgroundColor: "white",
 					layout: UI._LAYOUT_CONSTRAINING_VERTICAL,
 					opacity: 0
-				}),
-				customContainer = UI.createView({
-					width: '100%',
-					height: UI.SIZE,
-					bottom: 5,
-					backgroundColor: 'white',
-					layout: UI._LAYOUT_CONSTRAINING_VERTICAL,
 				});
 
 			optionsWindow._add(dimmingView);
@@ -43,11 +36,6 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 				height: UI.SIZE,
 				textAlign: UI.TEXT_ALIGNMENT_CENTER
 			}));
-
-			optionsDialog._add(customContainer);
-
-			//add custom content to option dialog
-			this.tizenView && customContainer._add(this.tizenView);
 
 			// Create buttons
 			require.is(this.options, "Array") && this.options.forEach(function(opt, i, arr) {
@@ -120,8 +108,7 @@ define(["Ti/_/declare", "Ti/_/lang", "Ti/_/Evented", "Ti/Locale", "Ti/UI", "Ti/_
 			destructive: -1,
 			options: void 0,
 			title: void 0,
-			titleid: void 0,
-			tizenView: void 0
+			titleid: void 0
 		}
 
 	});
