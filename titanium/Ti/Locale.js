@@ -1,5 +1,5 @@
-define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
-	function (require, lang, Evented, API) {
+define(['require', 'Ti/_/lang', 'Ti/_/Evented'],
+	function (require, lang, Evented) {
 
 		var locale = lang.val(navigator.language, navigator.browserLanguage).replace(/^([^\-\_]+)[\-\_](.+)?$/, function (o, l, c) {
 				return l.toLowerCase() + (c && '-' + c.toUpperCase());
@@ -64,7 +64,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 
 			// if we can't load target's locale calendar - use the default (en-US)
 			if (!(localeCalendarInfo && localeCalendarInfo.patterns)) {
-				API.warn('Loading default locale\'s calendar instead of ' + locale);
+				console.warn('Loading default locale\'s calendar instead of ' + locale);
 				localeCalendarInfo = require('Ti/_/Locale/defaultCalendar');
 			}
 		}
@@ -122,7 +122,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			initCurrentCalendarData();
 
 			if (!localeCalendarInfo) {
-				API.warn('Calendar info for locale \'' + locale + '\' is not loaded. Formatting date with default JS functions.');
+				console.warn('Calendar info for locale \'' + locale + '\' is not loaded. Formatting date with default JS functions.');
 				return [('0' + dt.getDate()).slice(-2), ('0' + (dt.getMonth() + 1)).slice(-2), dt.getFullYear()].join('/');
 			} else {
 				return formatterHelpers.formatDate(dt, expandFormat(localeCalendarInfo, (fmt == 'long') ? 'D' : 'd'), localeCalendarInfo);
@@ -136,7 +136,7 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			initCurrentCalendarData();
 
 			if (!localeCalendarInfo) {
-				API.warn('Calendar info for locale \'' + locale + '\' is not loaded. Formatting time with default JS functions.');
+				console.warn('Calendar info for locale \'' + locale + '\' is not loaded. Formatting time with default JS functions.');
 				return [('0' + dt.getHours()).slice(-2), ('0' + dt.getMinutes()).slice(-2), ('0' + dt.getSeconds()).slice(-2)].join(':');
 			} else {
 				return formatterHelpers.formatDate(dt, expandFormat(localeCalendarInfo, (fmt == 'long') ? 'T' : 't'), localeCalendarInfo);

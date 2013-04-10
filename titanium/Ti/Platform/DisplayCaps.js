@@ -1,4 +1,4 @@
-define(['Ti/_', 'Ti/API', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Platform'], function(_, API, Evented, lang, Platform) {
+define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Platform'], function(_, Evented, lang, Platform) {
 
 	function initDisplayCaps() {
 		// tizen.systeminfo.getPropertyValue provides access to various Tizen platform info. 
@@ -10,7 +10,7 @@ define(['Ti/_', 'Ti/API', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Platform'], function(
 		tizen.systeminfo.getPropertyValue('DISPLAY',
 			onSuccessDisplayCallback,
 			function(e){
-				API.error('An error occurred: ' + e.message);
+				console.error('An error occurred: ' + e.message);
 			});
 		tizen.systeminfo.addPropertyValueChangeListener('DISPLAY', onSuccessDisplayCallback);
 	}

@@ -1,6 +1,6 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/API', 'Ti/UI', 'Ti/Contacts/Tizen'],
-	function(Evented, lang, contactHelper, API, UI, ContactsTizen) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/UI', 'Ti/Contacts/Tizen'],
+	function(Evented, lang, contactHelper, UI, ContactsTizen) {
 
 	// Update existing Tizen contact from Ti.Contacts.Person
 	// Input parameter: Ti.Contacts.Person object.
@@ -223,7 +223,7 @@ define(
 				win.open();
 			},
 			function(e){ //Error callback
-				API.error('Problems with getting the contacts, Error: ' + e.message);
+				console.error('Problems with getting the contacts, Error: ' + e.message);
 			});
 		}
 	});

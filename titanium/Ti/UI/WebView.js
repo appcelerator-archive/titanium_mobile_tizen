@@ -1,5 +1,5 @@
-define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/text!Ti/_/UI/WebViewBridge.js", "Ti/App", "Ti/API", "Ti/UI"],
-	function(declare, Widget, dom, event, lang, bridge, App, API, UI) {
+define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang", "Ti/_/text!Ti/_/UI/WebViewBridge.js", "Ti/App", "Ti/UI"],
+	function(declare, Widget, dom, event, lang, bridge, App, UI) {
 
 	var on = require.on;
 
@@ -72,7 +72,7 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 							this.evalJS(bridge.replace("WEBVIEW_ID", this.widgetId + ":unload"));
 							(html = this.properties.__values__.html) && this._setContent(html);
 						} else {
-							API.warn("Unable to inject WebView bridge into cross-domain URL, ignore browser security message");
+							console.warn("Unable to inject WebView bridge into cross-domain URL, ignore browser security message");
 						}
 
 						this._loading();

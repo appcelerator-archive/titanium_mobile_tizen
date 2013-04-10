@@ -361,12 +361,12 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/lang', 'Ti/App/Propertie
 								});
 							}
 						} else if ('code' in e) {
-							Ti.API.warn('Geolocation error: ' + (code === Geolocation.ERROR_DENIED ? 'permission denied' : code === Geolocation.ERROR_TIMEOUT ? 'timeout' : code === Geolocation.ERROR_LOCATION_UNKNOWN ? 'position unavailable' : 'unknown'));
+							console.warn('Geolocation error: ' + (code === Geolocation.ERROR_DENIED ? 'permission denied' : code === Geolocation.ERROR_TIMEOUT ? 'timeout' : code === Geolocation.ERROR_LOCATION_UNKNOWN ? 'position unavailable' : 'unknown'));
 						}
 					}));
 
 					if (!Geolocation.locationServicesEnabled) {
-						Ti.API.warn('Geolocation services unavailable');
+						console.warn('Geolocation services unavailable');
 						this.properties.__values__.userLocation = false;
 					} else if (!userLocation || this._locationMarker) {
 						this._locationMarker.setVisible(userLocation);
