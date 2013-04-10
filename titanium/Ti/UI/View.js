@@ -75,21 +75,6 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/UI/Element", "Ti/_/lang", "Ti/_/string
 				},
 				value: true
 			}
-		},
-
-		toImage: function(blobCB){
-			var  el = this.domNode,
-				options = { allowTaint: true, taintTest: false };
-			options.onrendered = function(canvasObject) {
-				var blobData = canvasObject.toDataURL().substring(22), //data:image/png;base64,
-					blob = new Blob({
-						data: blobData,
-						length: blobData.length,
-						mimeType: 'image/png'
-					});
-				blobCB(blob);
-			}
-			h2c([el], options);
 		}
 	});
 
