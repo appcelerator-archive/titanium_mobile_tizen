@@ -18,8 +18,8 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 				for (; i < filtersCount; i++) {
 					result.push(filters[i]._obj);
 				}
-				args.filters = result;
-				this._obj = new tizen.CompositeFilter(args.type, args.filters);
+
+				this._obj = new tizen.CompositeFilter(args.type, result);
 			}
 		},
 
