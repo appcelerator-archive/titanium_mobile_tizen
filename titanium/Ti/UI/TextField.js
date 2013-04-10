@@ -36,7 +36,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			this._disconnectBlurEvent();
 			TextBox.prototype.destroy.apply(this, arguments);
 		},
-		
+
 		_showingHint: 1,
 
 		_setInternalText: function(value) {
@@ -47,7 +47,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
 			}
 			TextBox.prototype._setInternalText.call(this, showingHint ? this.hintText : value);
 		},
-		
+
 		_getInternalText: function() {
 			return this._showingHint ? "" : TextBox.prototype._getInternalText.call(this);
 		},
@@ -55,7 +55,7 @@ define(["Ti/_/declare", "Ti/_/UI/TextBox", "Ti/_/css", "Ti/_/dom", "Ti/_/lang", 
         _defaultWidth: UI.SIZE,
 
         _defaultHeight: UI.SIZE,
-		
+
 		_getContentSize: function(width, height) {
 			return {
 				width: this._measureText(this.value, this._field, width).width + 6,

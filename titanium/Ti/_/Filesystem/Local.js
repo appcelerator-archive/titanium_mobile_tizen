@@ -262,7 +262,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 					}
 					if (dest.isFile()) {
 						if (!isFile) {
-							Ti.API.error("Destination is not a directory");
+							API.error("Destination is not a directory");
 							return false;
 						}
 						return dest.write(this.read());
@@ -303,7 +303,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 				while (i < len) {
 					if (re.test(key = ls.key(i++))) {
 						if (!recursive) {
-							Ti.API.error('Directory "' + path + '" not empty');
+							API.error('Directory "' + path + '" not empty');
 							return false;
 						}
 						ls.removeItem(key);
@@ -435,7 +435,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 				path = match[1] ? match[2] : match[4];
 
 				if (!path) {
-					Ti.API.error('Can\'t rename root "' + prefix + '"');
+					API.error('Can\'t rename root "' + prefix + '"');
 					return false;
 				}
 

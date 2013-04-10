@@ -128,16 +128,16 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 					row: e.row,
 					rowIndex: e.rowIndex
 				};
+
 				if (this.type === UI.PICKER_TYPE_PLAIN) {
-					var selectedValue = []
+					var selectedValue = [];
 					for(var i in this._columns) {
 						var selectedRow = this._columns[i].selectedRow;
 						selectedRow && selectedValue.push(selectedRow.title);
 					}
 					eventInfo.selectedValue = selectedValue;
-				} else {
-					
 				}
+
 				this.fireEvent("change", eventInfo);
 			});
 
@@ -145,7 +145,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 			this._add(column);
 			this._publish(column);
 		},
-		
+
 		_updateColumnHeights: function() {
 			var tallestColumnHeight = 0,
 				i;
@@ -160,7 +160,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 		_defaultWidth: UI.SIZE,
 
 		_defaultHeight: UI.SIZE,
-		
+
 		add: function(value) {
 			if (is(value,"Array")) {
 				for (var i in value) {
@@ -185,12 +185,12 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 			var column = this._columns[columnIndex];
 			return column && column.selectedRow;
 		},
-		
+
 		setSelectedRow: function(columnIndex, rowIndex) {
 			var column = this._columns[columnIndex];
 			column && (column.selectedRow = column.rows[rowIndex]);
 		},
-		
+
 		properties: {
 			columns: {
 				get: function() {
@@ -230,25 +230,23 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 			type: {
 				set: function(value, oldValue) {
 					var self = this;
+					function createInput(inputType) {
+						var dateTimeInput = self._dateTimeInput = new DateTimeInput({
+							type: inputType,
+							width: UI.INHERIT,
+							height: UI.INHERIT
+						});
+						dateTimeInput.addEventListener("change", function(e) {
+							self.properties.__values__.value = e.value;
+							self.fireEvent("change",e);
+						});
+						dateTimeInput.min = self.min;
+						dateTimeInput.max = self.max;
+						self._add(dateTimeInput);
+					}
 					if (value !== oldValue) {
 						this.columns = void 0;
 						this._dateTimeInput = null;
-
-						function createInput(inputType) {
-							var dateTimeInput = self._dateTimeInput = new DateTimeInput({
-								type: inputType,
-								width: UI.INHERIT,
-								height: UI.INHERIT
-							});
-							dateTimeInput.addEventListener("change", function(e) {
-								self.properties.__values__.value = e.value;
-								self.fireEvent("change",e);
-							});
-							dateTimeInput.min = self.min;
-							dateTimeInput.max = self.max;
-							self._add(dateTimeInput);
-						}
-
 						switch(value) {
 							case UI.PICKER_TYPE_DATE:
 								createInput("Date");
@@ -256,7 +254,7 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 							case UI.PICKER_TYPE_TIME:
 								createInput("Time");
 								break;
-							case UI.PICKER_TYPE_DATE_AND_TIME: 
+							case UI.PICKER_TYPE_DATE_AND_TIME:
 								createInput("DateTime");
 								break;
 						}

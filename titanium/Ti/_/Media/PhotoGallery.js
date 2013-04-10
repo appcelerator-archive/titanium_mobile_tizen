@@ -1,6 +1,6 @@
-define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
-	function(declare, Blob, API) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', '/opt/media', 'image/*'),
+define(['Ti/_/declare', 'Ti/Blob', 'Ti/API', 'Ti/Media'],
+	function(declare, Blob, API, Media) {
+		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -14,7 +14,7 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 			UNKNOWN = 3,
 			virtualRoot = {
 				prefix: '/opt/usr/media/',
-				removablePrefix: '/opt/usr/storage/sdcard/', 
+				removablePrefix: '/opt/usr/storage/sdcard/',
 				removable: 'removable1',
 				tizenRoots: ['images', 'videos', 'downloads', 'documents', 'removable1'],
 
@@ -53,7 +53,7 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 					if (this.tizenRoots.indexOf(d) !== -1) {
 						return d;
 					} else {
-						Titanium.API.error('Can`t resolve root directory: ' + d);
+						API.error('Can`t resolve root directory: ' + d);
 					}
 				},
 
@@ -70,9 +70,8 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 						type = PHOTO;
 					} else if (videoExt.indexOf(fileExt) !== -1) {
 						type = VIDEO;
-					} 
-
-					return type; 
+					}
+					return type;
 				}
 			};
 
@@ -83,8 +82,8 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 					serviceReplyCB = {
 						// callee now sends a reply
 						onsuccess: pickToItemCB,
-						// Something went wrong 
-						onfailure: args.error ? args.error : function() { Titanium.API.error('Something wrong with launching service - Photo Gallery'); } 
+						//Something went wrong
+						onfailure:function() {Titanium.API.error('Something went wrong')}
 					};
 
 				function readFromStream(fileStream) {
@@ -95,13 +94,13 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 							mimeType: imgMimeType[virtualRoot.fileExt(path)] || 'text/plain',
 							// we cannot return a Titanium.Filesystem.File here, because the file is not in the HTML5
 							// local storage and therefore not accessible to Titanium Filesystem
-							file: null,     
+							file: null,
 							nativePath: path || null
 						}),
 						event = {
 							cropRect: null,
 							media: blob,
-							mediaType: Ti.Media.MEDIA_TYPE_PHOTO
+							mediaType: Media.MEDIA_TYPE_PHOTO
 						};
 
 					fileStream.close();
@@ -124,19 +123,27 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 				};
 
 				function pickToItemCB(data) {
+					var i= 0,
+						len = data.length;
+
 					if (!data) {
 						Titanium.API.error('Error: ApplicationControlData is empty');
 					}
 
-					path = data[0].value.toString();
+					for(; i < len; i++) {
+						if(data[i].key == "http://tizen.org/appcontrol/data/selected") {
+							path =  data[i].value[0];
+						}
+					}
+
 					if (virtualRoot.fileType(virtualRoot.fileExt(path)) === PHOTO) {
 						// Resolve to directory
 						tizen.filesystem.resolve(
-							virtualRoot.getRoot(path), 
-							resolveFileCB, 
+							virtualRoot.getRoot(path),
+							resolveFileCB,
 							function(e) {
 								Titanium.API.error('Error' + e.message);
-							}, 
+							},
 							'rw'
 						);
 
@@ -144,7 +151,7 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 						var event = {
 								cropRect: null,
 								media: path, // For video files we return only 'path'
-								mediaType: Ti.Media.MEDIA_TYPE_VIDEO
+								mediaType: Media.MEDIA_TYPE_VIDEO
 							}
 						args.success && args.success(event);
 					} else {
@@ -153,10 +160,10 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/API'],
 				};
 
 				//launch default gallery application
-				tizen.application.launchAppControl(service, 
+				tizen.application.launchAppControl(service,
 					null,
-					function() { API.info('launch appControl succeeded'); }, 
-					function(e) { API.info('launch appControl failed. Reason: ' + e.name); },
+					function() { API.info('launch appControl succeeded'); },
+					args.error ? args.error : function(e) { Titanium.API.error('Something wrong with launching service - Photo Gallery. '+ e.name); },
 					serviceReplyCB
 				);
 			}

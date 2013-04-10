@@ -6,7 +6,7 @@ define(function() {
 	// a convenient high-level structure used later for parsing or generating text.
 
 	// Data format:
-	
+
 	// First array - Number localization data
 	// [0] negative pattern (pattern for negative numbers)
 	// [1] group sizes (as all value are simple digits - joined as string like

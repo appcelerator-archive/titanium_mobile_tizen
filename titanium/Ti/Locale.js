@@ -68,6 +68,10 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 				localeCalendarInfo = require('Ti/_/Locale/defaultCalendar');
 			}
 		}
+		// Expands a format name (for example, 'd' or 'D') into the full pattern string.
+		function expandFormat(cal, format) {
+			return cal.patterns[format];
+		};
 
 		String.formatDecimal = function(numberValue, localeName, pattern) {
 			// Checks the locale name according to basic rfc4647 validation rules, with advanced validation of the first sub-tag.
@@ -109,11 +113,6 @@ define(['require', 'Ti/_/lang', 'Ti/_/Evented', 'Ti/API'],
 			initNumberCurrencyFormat();
 			initFormatterHelpers();
 			return formatterHelpers.formatCurrency(amt, localeNumberCurrencyInfo.getCurrencyInfoByLocale(locale)) || amt;
-		};
-
-		// Expands a format name (for example, 'd' or 'D') into the full pattern string.
-		expandFormat = function(cal, format) {
-			return cal.patterns[format];
 		};
 
 		// format a date into a locale specific date format. Optionally pass a second argument (string) as either 'short' (default), 'medium' or 'long' for controlling the date format.

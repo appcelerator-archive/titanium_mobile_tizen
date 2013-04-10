@@ -157,7 +157,7 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 		},
 
 		setBasicAuthentication: function(username, password) {
-			var url = this.url, 
+			var url = this.url,
 				protocolIndex = url.indexOf('//');
 			url = url.substring(0, protocolIndex + 2) + username + ':' + password + '@' + url.substring(protocolIndex + 2, url.length);
 			this.url = url;
@@ -178,7 +178,7 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 		_defaultWidth: UI.FILL,
 
 		_defaultHeight: UI.FILL,
-		
+
 		_getContentSize: function() {
 			return {
 				width: this._iframe ? this._iframe.clientWidth : 0,
@@ -233,7 +233,7 @@ define(["Ti/_/declare", "Ti/_/UI/Widget", "Ti/_/dom", "Ti/_/event", "Ti/_/lang",
 				value: true
 			},
 
-			url: { 
+			url: {
 				post: function(value) {
 					var values = this.properties.__values__;
 					values.data = void 0;
