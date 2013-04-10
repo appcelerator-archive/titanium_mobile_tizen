@@ -65,7 +65,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				} else if (id.toString() == '[object TizenCalendarCalendarEventId]') {
 					obj = id._obj;
 				} else {
-					Ti.API.error('Remove event error: unexpected type of CalendarItemId.');
+					console.error('Remove event error: unexpected type of CalendarItemId.');
 				}
 
 				this._obj.remove(obj);

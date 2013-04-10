@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 					this._obj = new tizen.CalendarRecurrenceRule(initDict.frequency, initDict.ruleInitDict);
 
 				} else {
-					Ti.API.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
+					console.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
 				}
 			}
 		},
