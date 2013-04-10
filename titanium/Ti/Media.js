@@ -1,8 +1,9 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'],
-	function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer, API) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/API'],
+	function(Evented, lang, Blob, h2c, Sound, AudioPlayer, API) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
+
 
 	return lang.setObject('Ti.Media', Evented, {
 
@@ -47,6 +48,7 @@ define(
 		},
 
 		openPhotoGallery: function(args) {
+			var photoGallery = require('Ti/_/Media/PhotoGallery');
 			photoGallery.open(args);
 		},
 
