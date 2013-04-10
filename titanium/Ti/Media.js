@@ -73,14 +73,18 @@ define(
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null);
 
 			tizen.application.launchAppControl(service, 'org.tizen.music-player',
-				function() {API.info('launch service succeeded');},
-				function(e) { API.warn('launch service failed. Reason : ' + e.name);},
+				function() {
+					API.info('launch service succeeded');
+				},
+				function(e) {
+					API.warn('launch service failed. Reason : ' + e.name);
+				},
 				{
-					// callee now sends a reply 
+					// callee now sends a reply
 					onsuccess: function(reply) {
 						API.info('onsuccess:' + reply.key + ';' + reply.value);
 					},
-					// Something went wrong 
+					// Something went wrong
 					onfailure: function() {
 						API.warn('launch service failed');
 					}
@@ -116,7 +120,10 @@ define(
 		takeScreenshot: function(callback) {
 			if (!callback) return;
 
-			var options = { allowTaint: true,taintTest: false };
+			var options = {
+				allowTaint: true,
+				taintTest: false
+			};
 			options.onrendered = function(canvasObject) {
 				var blobData = canvasObject.toDataURL().substring(22), //data:image/png;base64,
 					blob = new Blob({
@@ -124,7 +131,9 @@ define(
 						length: blobData.length,
 						mimeType: 'image/png'
 					});
-				callback({ media: blob });
+				callback({
+					media: blob
+				});
 			};
 
 			h2c([document.body], options);
