@@ -1,8 +1,9 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Media/PhotoGallery', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'],
-	function(Evented, lang, photoGallery, Blob, h2c, Sound, AudioPlayer) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'],
+	function(Evented, lang, Blob, h2c, Sound, AudioPlayer) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
+
 
 	return lang.setObject('Ti.Media', Evented, {
 
@@ -47,6 +48,7 @@ define(
 		},
 
 		openPhotoGallery: function(args) {
+			var photoGallery = require('Ti/_/Media/PhotoGallery');
 			photoGallery.open(args);
 		},
 
@@ -71,14 +73,18 @@ define(
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null);
 
 			tizen.application.launchAppControl(service, 'org.tizen.music-player',
-				function() {console.log('launch service succeeded');},
-				function(e) { console.log('launch service failed. Reason : ' + e.name);},
+				function() {
+					console.log('launch service succeeded');
+				},
+				function(e) {
+					console.warn('launch service failed. Reason : ' + e.name);
+				},
 				{
-					// callee now sends a reply 
+					// callee now sends a reply
 					onsuccess: function(reply) {
 						console.log('onsuccess:' + reply.key + ';' + reply.value);
 					},
-					// Something went wrong 
+					// Something went wrong
 					onfailure: function() {
 						console.log('launch service failed');
 					}
@@ -114,7 +120,10 @@ define(
 		takeScreenshot: function(callback) {
 			if (!callback) return;
 
-			var options = { allowTaint: true,taintTest: false };
+			var options = {
+				allowTaint: true,
+				taintTest: false
+			};
 			options.onrendered = function(canvasObject) {
 				var blobData = canvasObject.toDataURL().substring(22), //data:image/png;base64,
 					blob = new Blob({
@@ -122,7 +131,9 @@ define(
 						length: blobData.length,
 						mimeType: 'image/png'
 					});
-				callback({ media: blob });
+				callback({
+					media: blob
+				});
 			};
 
 			h2c([document.body], options);

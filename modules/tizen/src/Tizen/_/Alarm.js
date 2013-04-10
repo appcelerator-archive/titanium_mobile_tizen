@@ -45,7 +45,7 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 			}
 			else
 			{
-				Ti.API.error("Incorrect object type");
+				console.error("Incorrect object type");
 			}
 			
 			return result;

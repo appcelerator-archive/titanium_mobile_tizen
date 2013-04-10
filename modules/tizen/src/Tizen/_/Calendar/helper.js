@@ -3,7 +3,7 @@
 // built-in JavaScript types. The reason for this is that the wrapper accepts
 // built-in time-related types, whereas Tizen accepts its own time-related types.
 
-define(['Ti/API'], function(API) {
+define(function() {
 
 	return {
 
@@ -34,7 +34,7 @@ define(['Ti/API'], function(API) {
 					res = tzTimeDuration.length;
 					break;
 				default:
-					Ti.API.error('Something happened with get method for duration');
+					console.error('Something happened with get method for duration');
 			}
 
 			return res;

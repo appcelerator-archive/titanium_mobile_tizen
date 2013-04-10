@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				if (args.hasOwnProperty('url')) {
 					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
 				} else {
-					Ti.API.error('Constructor with such parameters does not exist in DownloadRequest.');
+					console.error('Constructor with such parameters does not exist in DownloadRequest.');
 				}
 			}
 		},

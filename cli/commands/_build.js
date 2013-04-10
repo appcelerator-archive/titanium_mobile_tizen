@@ -277,9 +277,6 @@ function build(logger, config, cli, finished) {
 		}
 	});
 
-	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
-	this.tiapp.analytics = false;
-
 	// initialize device id (with the value obtained from the command line)
 	if (this.debugDevice) {
 		devId = this.debugDevice;
@@ -1358,7 +1355,7 @@ build.prototype = {
 			// Find the path to Tizen SDK using the registry.
 			// 1. read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders;
 			//    the key "Local AppData" has the path of the file that contains the path of the SDK
-            //    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
+			//    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
 			// 2. read the file to obtain the path to the SDK
 
 			var keyvalue = null;

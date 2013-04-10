@@ -12,7 +12,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 			}
 			else
 			{
-				Ti.API.error("Incorrect object type");
+				console.error("Incorrect object type");
 			}
 		},
 
@@ -20,7 +20,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 			try {
 				return this._wrap(tizen.bluetooth.getDefaultAdapter());
 			} catch (e) {
-				Ti.API.error(e.message);
+				console.error(e.message);
 			}
 		},
 

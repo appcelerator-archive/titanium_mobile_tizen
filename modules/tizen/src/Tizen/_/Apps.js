@@ -127,7 +127,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						_obj: new tizen.ApplicationControlData(args.key, args.value)
 					}
 				} else {
-					Ti.API.error('Constructor with such parameters not found for ApplicationControlData.');
+					console.error('Constructor with such parameters not found for ApplicationControlData.');
 				}
 			},
 
@@ -142,7 +142,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						_obj: new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data)
 					};
 				} else {
-					Ti.API.error('Constructor with such parameters not found for ApplicationControl.');
+					console.error('Constructor with such parameters not found for ApplicationControl.');
 				}
 			}
 		}, true);
