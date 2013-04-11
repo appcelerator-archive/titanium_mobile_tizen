@@ -2,21 +2,36 @@
 
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Evented, WebAPIError) {
 
+	function errorCallback (e, callback) {
+		callback({
+			code: -1,
+			error: e.type + ': ' + e.message,
+			success: false
+		});
+	}
+
 	return lang.mixProps(require.mix({}, Evented), {
 
-		setProperty: function(type /*SystemSettingType*/, value /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+		setProperty: function(type /*SystemSettingType*/, value /*DOMString*/, callback) {
 			return tizen.systemsetting.setProperty(type, value, function() {
-				successCallback();
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+				callback({
+					code: 0,
+					success: true
+				});
+			}, function(e) {
+				errorCallback(e, callback);
 			});
 		},
 
-		getProperty: function(type /*SystemSettingType*/, successCallback /*SystemSettingSuccessCallback*/, errorCallback /*ErrorCallback*/) {
+		getProperty: function(type /*SystemSettingType*/, callback) {
 			return tizen.systemsetting.getProperty(type, function(value) {
-				successCallback(value);
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+				callback({
+					code: 0,
+					success: true,
+					data: value
+				});
+			}, function(e) {
+				errorCallback(e, callback);
 			});
 		},
 

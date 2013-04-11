@@ -12,11 +12,19 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 				return wrap(tizen.systeminfo.getCapabilities());
 			},
 
-			getPropertyValue: function(property /*SystemInfoPropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			getPropertyValue: function(property /*SystemInfoPropertyId*/, callback) {
 				tizen.systeminfo.getPropertyValue(property, function(object) {
-					successCallback(wrap(object));
-				}, errorCallback && function(error) {
-					errorCallback(new WebAPIError(error));
+					callback({
+						code: 0,
+						success: true,
+						data: wrap(object)
+					});
+				}, function(e) {
+					callback({
+						code: -1,
+						error: e.type + ': ' + e.message,
+						success: false
+					});
 				});
 			},
 
