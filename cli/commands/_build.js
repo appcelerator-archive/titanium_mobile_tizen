@@ -86,6 +86,12 @@ exports.config = function (logger, config, cli) {
 	return function (finished) {
 		cli.createHook('build.mobileweb.config', function (callback) {
 			callback({
+				flags: {
+					'debug': {
+						default: false,
+						desc: __('debug Tizen application')
+					},
+				},				
 				options: {
 					'deploy-type': {
 						abbr: 'D',
@@ -94,23 +100,23 @@ exports.config = function (logger, config, cli) {
 						hint: __('type'),
 						values: ['production', 'development']
 					},
-					'dev-id': {
-						abbr: 'I',
-						desc: __('id for Tizen device or emulator where install a widget'),
+					'device': {
+						abbr: 'E',
+						desc: __('the id for the Tizen device or emulator'),
 						hint: __('device id')
 					},
-					'run-dev-id': {
-						abbr: 'R',
-						desc: __('run widget on this device'),
-						hint: __('device id')
-					},			
-					'debug-dev-id': {
-						abbr: 'B',
-						desc: __('debug widget on this device'),
-						hint: __('device id')
-					},
-					'cert': {
-						abbr: 'C',
+					// 'run-dev-id': {
+					// 	abbr: 'R',
+					// 	desc: __('run widget on this device'),
+					// 	hint: __('device id')
+					// },			
+					// 'debug-dev-id': {
+					// 	abbr: 'B',
+					// 	desc: __('debug widget on this device'),
+					// 	hint: __('device id')
+					// },
+					'keystore': {
+						abbr: 'K',
 						desc: __('the location of the certificate file'),
 						hint: 'path',
 						prompt: {
@@ -143,7 +149,6 @@ exports.config = function (logger, config, cli) {
 					'password': {
 						abbr: 'P',
 						desc: __('the password for the keystore'),
-						hint: 'alias',
 						password: true,
 						prompt: {
 							label: __('Keystore password'),
@@ -156,17 +161,16 @@ exports.config = function (logger, config, cli) {
 							}
 						}
 					},
-					'keypass': {
+					'key-password': {
 						abbr: 'K',
 						desc: __('the password for the key'),
-						hint: 'alias',
 						password: true,
 						prompt: {
-							label: __('Keystore password'),
+							label: __('Key password'),
 							error: __('Invalid key password'),
 							validator: function (password) {
 								if (!password) {
-									throw new appc.exception(__('Invalid keys password'));
+									throw new appc.exception(__('Invalid key password'));
 								}
 								return true;
 							}
@@ -261,14 +265,14 @@ function build(logger, config, cli, finished) {
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
-	this.targetDevice = cli.argv['dev-id'];	
-	this.debugDevice = cli.argv['debug-dev-id'];
-	this.runDevice = cli.argv['run-dev-id'];
-	this.tizenCert = cli.argv['cert'];
+	this.targetDevice = void 0;//cli.argv['dev-id'];	
+	this.debugDevice = void 0;//cli.argv['debug-dev-id'];
+	this.runDevice = cli.argv['device'];
+	this.tizenCert = cli.argv['keystore'];
 	this.storeType = 'pkcs12';
 	this.alias = cli.argv['alias'];
 	this.storePasword = cli.argv['password'];
-	this.keypass = cli.argv['keypass'];
+	this.keypass = cli.argv['key-password'];
 
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
