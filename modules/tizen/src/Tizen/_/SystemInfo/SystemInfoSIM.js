@@ -1,11 +1,11 @@
 // Wraps Tizen interface "SystemInfoSIM" that resides in Tizen module "SystemInfo".
 
-define(['Ti/_/declare', 'Tizen/_/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var sim = declare(SystemInfoProperty, {
+	var sim = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object SystemInfoSIM]') {
+			if (args.toString() === '[object siminfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

@@ -1,9 +1,9 @@
 // Wraps Tizen module "SystemInfo".
 
-define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/SystemInfoStorage',
+define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/SystemInfoStorage',
 	'Tizen/_/SystemInfo/SystemInfoDeviceCapability', 'Tizen/_/SystemInfo/SystemInfoCellularNetwork', 'Tizen/_/SystemInfo/SystemInfoSIM',
 	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Tizen/_/WebAPIError', 'Ti/_/Evented'],
-	function(lang, SystemInfoProperty, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability, SystemInfoCellularNetwork,
+	function(lang, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability, SystemInfoCellularNetwork,
 			 SystemInfoSIM, SystemInfoStorageUnit, WebAPIError, Evented) {
 
 		var SystemInfo = lang.mixProps(require.mix({}, Evented), {
@@ -30,7 +30,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInf
 
 			addPropertyValueChangeListener: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, options /*SystemInfoOptions*/) {
 				return tizen.systeminfo.addPropertyValueChangeListener(property, function(object) {
-					successCallback(new SystemInfoProperty(object))
+					successCallback(wrap(object))
 				}, options);
 			},
 
