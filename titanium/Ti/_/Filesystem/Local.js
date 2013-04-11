@@ -55,7 +55,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/Blob"],
 		xhr.open("GET", '.' + path, false);
 		xhr.send(null);
 		// TIP: added (xhr.status === 0) only FOR Tizen as valid response status code for LOCAL resources.
-		return ((xhr.status === 200) || (xhr.status === 0)) ? { data: xhr.responseText, mimeType: xhr.getResponseHeader("Content-Type") } : null;
+		return ((xhr.status < 400)) ? { data: xhr.responseText, mimeType: xhr.getResponseHeader("Content-Type") } : null;
 	}
 
 	function registry(path) {
