@@ -562,7 +562,7 @@
 					xhr.open("GET", _t.url, false);
 					xhr.send(null);
 
-					if (xhr.status === 200 || xhr.status === 0) {
+					if (xhr.status < 400) {
 						onload(xhr.responseText);
 					} else {
 						onfail(xhr.status);
