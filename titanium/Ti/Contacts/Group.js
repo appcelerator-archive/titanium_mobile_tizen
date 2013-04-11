@@ -28,20 +28,12 @@ define(['Ti/_/declare', 'Ti/Contacts'], function(declare, Contacts) {
 			this._addressbook.update(contact);
 		},
 
-		members: function () {
-			throw new Error('This method is not supported by Tizen. Use Ti.Contacts.Tizen.Group.members instead.');
-		},
-
 		remove: function(person) {
 			var contact = this._addressbook.get(person.id),
 				groupIds = contact.groupIds;
 			groupIds.splice(groupIds.indexOf(this.recordId), 1);
 			contact.groupIds = groupIds;
 			this._addressbook.update(contact);
-		},
-
-		sortedMembers: function () {
-			throw new Error('This method is not supported by Tizen. Use Ti.Contacts.Tizen.Group.sortedMembers instead.');
 		},
 
 		constants: {

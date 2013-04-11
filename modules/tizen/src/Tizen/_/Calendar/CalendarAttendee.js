@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				if (args.hasOwnProperty('uri')) {
 					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
 				} else {
-					Ti.API.error("Constructor with such parameters not found in CalendarAttendee.");
+					console.error("Constructor with such parameters not found in CalendarAttendee.");
 				}
 			}
 		},

@@ -1,5 +1,5 @@
-define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/dom', 'Ti/UI', 'Ti/API'],
-	function(_, browser, Evented, lang, Locale, dom, UI, API) {
+define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/dom', 'Ti/UI'],
+	function(_, browser, Evented, lang, Locale, dom, UI) {
 
 	var doc = document,
 		midName = 'ti:mid',
@@ -23,7 +23,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 	}
 
 	function onErrorCallback(error) {
-		API.error('An error occurred ' + error.message);
+		console.error('An error occurred ' + error.message);
 	}
 
 	// Tizen listener for WiFi IP address.
@@ -34,7 +34,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 		} else {
 			Platform.constants.__values__.address = void 0;
 		}
-		API.info('Platform.address is set to ' + Platform.address);
+		console.log('Platform.address is set to ' + Platform.address);
 	}
 
 	// Tizen listener for Model.

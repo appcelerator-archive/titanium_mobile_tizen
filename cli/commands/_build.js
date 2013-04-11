@@ -44,38 +44,9 @@ var ti = require('titanium-sdk'),
 	devId,								// stores the target device/emulator ID
 	tizenConfigXmlSources, 				// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
 	// Defines the default list of privileges for a Tizen application. If a privilege is not declared, the corresponding Tizen feature will be
-	// unavailable. Every possible privilege is added by default; the programmer should then decide which ones are needed, and which ones should 
-	// be removed.
+	// unavailable. By default adds minimal required set of privileges
 	defaultPrivilegesList = 
-			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/download"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/power"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/setting"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
 			'<access origin="*" subdomains="true"/>\n';
@@ -305,9 +276,6 @@ function build(logger, config, cli, finished) {
 			theme: 'default'
 		}
 	});
-
-	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
-	this.tiapp.analytics = false;
 
 	// initialize device id (with the value obtained from the command line)
 	if (this.debugDevice) {
@@ -1387,7 +1355,7 @@ build.prototype = {
 			// Find the path to Tizen SDK using the registry.
 			// 1. read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders;
 			//    the key "Local AppData" has the path of the file that contains the path of the SDK
-            //    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
+			//    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
 			// 2. read the file to obtain the path to the SDK
 
 			var keyvalue = null;

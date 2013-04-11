@@ -1,5 +1,5 @@
-define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob"],
-	function(_, declare, encoding, lang, API, Blob) {
+define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/Blob"],
+	function(_, declare, encoding, lang, Blob) {
 
 	var reg,
 		regDate = Date.now(),
@@ -55,7 +55,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 		xhr.open("GET", '.' + path, false);
 		xhr.send(null);
 		// TIP: added (xhr.status === 0) only FOR Tizen as valid response status code for LOCAL resources.
-		return ((xhr.status === 200) || (xhr.status === 0)) ? { data: xhr.responseText, mimeType: xhr.getResponseHeader("Content-Type") } : null;
+		return ((xhr.status < 400)) ? { data: xhr.responseText, mimeType: xhr.getResponseHeader("Content-Type") } : null;
 	}
 
 	function registry(path) {
@@ -97,7 +97,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 
 		if (parent && parent.readonly) {
 			// parent directory is readonly, so we can't create a directory here
-			API.error('Unable to create "' + path + '" because parent is readonly');
+			console.log('Unable to create "' + path + '" because parent is readonly');
 			return false;
 		}
 
@@ -262,7 +262,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 					}
 					if (dest.isFile()) {
 						if (!isFile) {
-							API.error("Destination is not a directory");
+							console.log("Destination is not a directory");
 							return false;
 						}
 						return dest.write(this.read());
@@ -303,7 +303,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 				while (i < len) {
 					if (re.test(key = ls.key(i++))) {
 						if (!recursive) {
-							API.error('Directory "' + path + '" not empty');
+							console.log('Directory "' + path + '" not empty');
 							return false;
 						}
 						ls.removeItem(key);
@@ -435,7 +435,7 @@ define(["Ti/_", "Ti/_/declare", "Ti/_/encoding", "Ti/_/lang", "Ti/API", "Ti/Blob
 				path = match[1] ? match[2] : match[4];
 
 				if (!path) {
-					API.error('Can\'t rename root "' + prefix + '"');
+					console.error('Can\'t rename root "' + prefix + '"');
 					return false;
 				}
 

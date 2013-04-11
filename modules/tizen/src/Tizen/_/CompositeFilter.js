@@ -1,8 +1,9 @@
 // Wraps Tizen interface "CompositeFilter" that resides in Tizen module "Tizen".
 
-define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFilter) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/AttributeRangeFilter'],
+	function(declare, Evented, AttributeFilter, AttributeRangeFilter) {
 
-	var filter = declare(AbstractFilter, {
+	var filter = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object CompositeFilter]') {
@@ -18,8 +19,8 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 				for (; i < filtersCount; i++) {
 					result.push(filters[i]._obj);
 				}
-				args.filters = result;
-				this._obj = new tizen.CompositeFilter(args.type, args.filters);
+
+				this._obj = new tizen.CompositeFilter(args.type, result);
 			}
 		},
 
@@ -34,10 +35,33 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 			},
 			filters: {
 				get: function() {
-					return this._obj.filters;
+					var i = 0,
+						tizenFilters = this._obj.filters,
+						len = tizenFilters.length,
+						filters = [];
+
+					for (; i < len; i++) {
+						if(tizenFilters[i].toString() === '[object AttributeFilter]') {
+							filters.push(new AttributeFilter(tizenFilters[i]));
+						} else if(tizenFilters[i].toString() === '[object CompositeFilter]') {
+							filters.push(new filter(tizenFilters[i]));
+						} else if(tizenFilters[i].toString() === '[object AttributeRangeFilter]') {
+							filters.push(AttributeRangeFilter(tizenFilters[i]));
+						}
+					}
+
+					return filters;
 				},
-				set: function(value) {
-					this._obj.filters = value;
+				set: function(values) {
+					var i = 0,
+						len = values.length,
+						filters = [];
+
+					for (; i < len; i++) {
+						filters.push(values[i]._obj);
+					}
+
+					this._obj.filters = filters;
 				}
 			}
 		}

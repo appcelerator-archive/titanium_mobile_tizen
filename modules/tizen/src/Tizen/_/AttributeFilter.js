@@ -1,8 +1,8 @@
 // Wraps Tizen interface "AttributeFilter" that resides in Tizen module "Tizen".
 
-define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFilter) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var filter = declare(AbstractFilter, {
+	var filter = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object AttributeFilter]') {
@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFil
 				if (args.hasOwnProperty('attributeName')) {
 					this._obj = new tizen.AttributeFilter(args.attributeName, args.matchFlag, args.matchValue);
 				} else {
-					Ti.API.error('AttributeFilter\'s constructor with such parameters not found.');
+					console.error('AttributeFilter\'s constructor with such parameters not found.');
 				}
 			}
 		},

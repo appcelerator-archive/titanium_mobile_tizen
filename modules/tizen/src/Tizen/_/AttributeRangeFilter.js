@@ -1,8 +1,8 @@
 // Wraps Tizen interface "AttributeRangeFilter" that resides in Tizen module "Tizen".
 
-define(['Ti/_/declare', 'Tizen/_/AbstractFilter'], function(declare, AbstractFilter) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var filter = declare(AbstractFilter, {
+	var filter = declare(Evented, {
 
 		constructor: function(args) {
 			if (args.toString() === '[object AttributeRangeFilter]') {

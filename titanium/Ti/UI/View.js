@@ -75,26 +75,6 @@ define(["Ti/_/declare", "Ti/_/dom", "Ti/_/UI/Element", "Ti/_/lang", "Ti/_/string
 				},
 				value: true
 			}
-		},
-
-		toImage: function(blobCB) {
-			var  el = this.domNode,
-				options = { allowTaint: true, taintTest: false };
-
-			options.onrendered = function(canvasObject) {
-				// Remove the prefix ("data:image/png;base64"). The rest is the data, encoded as base64.
-				// Set it to the blob.
-				var blobData = canvasObject.toDataURL().substring(22),
-					blob = new Blob({
-						data: blobData,
-						length: blobData.length,
-						mimeType: 'image/png'
-					});
-				blobCB(blob);
-			};
-
-			// Take the screenshot of the element using the h2c library.
-			h2c([el], options);
 		}
 	});
 
