@@ -49,6 +49,34 @@ var ti = require('titanium-sdk'),
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/alarm"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.launch"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/download"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.send"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.admin"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.common"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.tag"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/power"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/setting"/> -->\n'+
 			'<access origin="*" subdomains="true"/>\n';
 
 // silence uglify's default warn mechanism
