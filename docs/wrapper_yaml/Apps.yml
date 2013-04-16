@@ -13,37 +13,33 @@ methods:
     examples:
       - example: |
             var tizen = require('tizen');
-            var app = tizen.Application.getCurrentApplication();
+            var app = tizen.Apps.getCurrentApplication();
             console.log("Current application's app id is " + app.appInfo.id);
 
   - name: launch
-    summary: Launches an application with the given application ID. 
+    summary: Launches an application with the given application ID.
     description: |
-        The ErrorCallback() is launched with these error types:
-        NotFoundError - If the application is not found with given ID.
-        InvalidValuesError - If any of the input parameters contain an invalid value.
-        UnknownError - If any other error occurs.
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: id
         summary: A unique string representing application ID.
         type: String
 
-      - name: successCallback
-        summary: The method to call when the invocation ends successfully.
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
-            function onsuccess() {
-                console.log("The application has launched successfully");
+            function launchCallback(response) {
+                if (response.success) {
+                    console.log('The application has launched successfully');
+                } else {
+                    console.error('An error occured: ' + response.error);
+                }
             }
             var tizen = require('tizen');
-            tizen.Application.launch("org.tizen.calculator", onsuccess);
+            tizen.Apps.launch("org.tizen.calculator", launchCallback);
 
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
@@ -51,10 +47,8 @@ methods:
         An application can launch other applications with the application control, and get back the results from the launched applications.
         The application control consists of an operation, URI, and MIME type, and describes the request to be performed by the newly launched application. The application control is passed to the launchAppControl() method to launch an application. The system tries to find the proper application to perform the requested application control, then launches the selected application.
         The application control request is passed to the newly launched application and it can be accessed by getRequestedAppControl() method. The passed application control contains the reason the application was launched and information about what the application is doing. The launched application can send a result to the caller application with the replyResult() method of RequestedApplicationControl interface.
-        The ErrorCallback() is launched with these error types:
-            NotFoundError - If system cannot find the application that matches the specified application control.
-            InvalidValuesError - If any of the input parameters contain an invalid value.
-            UnknownError: If any other error occurs.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: appControl
         summary: The data structure describing application control details.
@@ -64,23 +58,15 @@ methods:
         summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
         type: String
 
-      - name: successCallback
-        summary: The method to call when the invocation ends successfully.
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: The method executes when an error occurs. Accepts error object as parameter.
-        type: Callback<Tizen.WebAPIError>
-        optional: true    
+      - name: callback
+        summary: The method to call when the invocation ends successfully or fails.
+        type: Callback<ErrorResponse>
+        optional: true  
 
       - name: replyCallback
         summary: |
-            The method to invoke when the application gets back results from the launched application. 
-            Pass a dictionary with the following supported keys: `onsuccess` a function that accepts as parameter array of ApplicationControlData, 
-            and will be called when the callee application calls RequestedApplicationControl.replyResult(), 
-            and `onfailure` a function that will be called when the callee application calls RequestedApplicationControl.replyFailure().
-        type: ApplicationControlDataArrayReplyCallback
+            The method to invoke when the application gets back results from the launched application.
+        type: Callback<LaunchAppControlReplyResponse>
         optional: true
     examples:
       - example: |
@@ -89,98 +75,85 @@ methods:
                                                                 uri: null,
                                                                 mime: "image/jpeg",
                                                                 category: null});
-            var appControlReplyCallback = {
-                // callee sent a reply
-                onsuccess: function(data) {
-                    for(var i=0; i < data.length; i++) {
-                        console.log("#"+i+" key:"+data[i].key);
-                        for(var j=0; j < data[i].value.length; j++) {
-                            console.log("   value#"+j+":"+data[i].value[j]);
-                        }
-                    }
-                },
-                // Something went wrong
-                onfailure: function() {
-                    console.log('The launch application control failed');
+            function callback (response) {
+                if (response.success) {
+                    console.log('Launch application control succeed.');
+                } else {
+                    console.error('Launch application control failed. Reason: ' + response.error);
                 }
             }
-            tizen.Application.launchAppControl(appControl, null,
-                                                  function() {console.log("launch application control succeed");},
-                                                  function(e) {console.log("launch application control failed. reason: " + e.message);},
-                                                  appControlReplyCallback );
+            function replyCallback (response) {
+                if (response.success) {
+                    var data = response.data,
+                        i = 0,
+                        itemsCount = data.length,
+                        j, valuesCount, values;
+                    for (; i < itemsCount; i++) {
+                        console.log('#' + i + ' key:' + data[i].key);
+                        for (j = 0, values = data[i].value, valuesCount = values.length; j++) {
+                            console.log('    value#' + j + ':' + values[j]);
+                        }
+                    }
+                } else {
+                    console.error('The launch application control failed.');
+                }
+            }
+            tizen.Application.launchAppControl(appControl, null, callback, replyCallback);
 
   - name: findAppControl
     summary: Finds application information can be launched with the given application control.  
     description: |
         An application can get a list of other applications can be launched with the application control.
-        The ErrorCallback() is launched with these error types:
-            NotFoundError - If system cannot find the application that corresponds to the specified application control.
-            InvalidValuesError - If any of the input parameters contain an invalid value.
-            UnknownError - If any other error occurs.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters: 
       - name: appControl
         summary: A data structure describing application control details.
         type: ApplicationControl
 
-      - name: successCallback
-        summary: The method to call that returns a list of application information. 
-        type: Callback<Array<Tizen.Apps.ApplicationInformation>, ApplicationControl>
-
-      - name: errorCallback
-        summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.. 
+        type: Callback<FindAppControlResponse>
     examples:
       - example: |
             var tizen = require('tizen');
-            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
-                                                                uri: null,
-                                                                mime: "image/jpeg",
-                                                                category: null});
-            function successCB(appInfos, appControl) {
-                // em>appControl/em> is same object with the value passed as first parameter to em>findAppControl()/em>
-                var appControlReplyCallback = {
-                    // callee sent a reply
-                    onsuccess: function(data) {
-                        for(var i=0; i < data.length; i++) {
-                            console.log("#"+i+" key:"+data[i].key);
-                            for(var j=0; j < data[i].value.length; j++) {
-                                console.log("   value#"+j+":"+data[i].value[j]);
-                            }
-                        }
-                    },
-                    // Something went wrong
-                    onfailure: function() {
-                        console.log('The launch application control failed');
-                    }
+            var appControl = tizen.Application.createApplicationControl({
+                operation: 'http://tizen.org/appcontrol/operation/create_content',
+                uri: null,
+                mime: 'image/jpeg',
+                category: null
+            });
+            function onFind (response) {
+                if (response.success) {
+                    console.log('Found ' + response.appInfo.length + ' applications'); 
+                } else {
+                    console.error('An error occured: ' + response.error);
                 }
-                var appId = appInfos[0].id; // select first app's id
-                tizen.Application.launchAppControl(appControl, appId,
-                                                      function() {console.log("launch application control succeed"); },
-                                                      function(e) {console.log("launch application control failed. reason: " + e.message); },
-                                                      appControlReplyCallback );
             }
-            tizen.Application.findAppControl(appControl, successCB); 
+            tizen.Application.findAppControl(appControl, onFind); 
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
     description: |
-        The errorCallback() is launched with this error type:
-            UnknownError - If an unknownn error occurs.
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
-      - name: successCallback
+      - name: callback
         summary: The method to call when the invocation ends successfully.  
-        type: Callback<Array<Tizen.Apps.ApplicationContext>>
+        type: Callback<AppsContextResponse>
 
-      - name: errorCallback
-        summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
     examples:
       - example: |
-            function onRunningAppsContext(contexts) {
-                for (var i = 0; i < contexts.length; i++)
-                addToTaskManager(contexts[i]);
+            function onRunningAppsContext(response) {
+                if (response.success) {
+                    var i = 0,
+                        contexts = response.contexts,
+                        contextsCount = contexts.length;
+                    for (; i < contextsCount; i++) {
+                        addToTaskManager(contexts[i]);
+                    }
+                } else {
+                    console.error('An error occured: ' + response.error);
+                }  
             }
             var tizen = require('tizen');
             tizen.Application.getAppsContext(onRunningAppsContext);
@@ -190,6 +163,8 @@ methods:
         Gets the application context for the specified application context ID. 
         If the ID is set to null or is not set at all, the method returns the application context of the current application. 
         The list of running applications and their application IDs is obtained with getAppsContext().
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns: 
       - type: Tizen.Apps.ApplicationContext
         summary: A data structure that lists running application details.
@@ -201,23 +176,25 @@ methods:
   - name: getAppsInfo
     summary: Gets the list of installed application's information on a device. The information contained on each application corresponds to the application state at the moment when the list was generated. 
     description: |
-        The errorCallback() is launched with this error type:
-        UnknownError - If an unknown error occurs.
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
-      - name: successCallback
+      - name: callback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Tizen.Apps.ApplicationInformation>>
-
-      - name: errorCallback
-        summary: The method to call when an error occurs. Accepts error object as parameter.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+        type: Callback<AppsInfoResponse>
     examples:
       - example: |       
-            function onListInstalledApps(applications) {
-                for (var i = 0; i < applications.length; i++)
-                    addToApplicationGrid(applications[i]);
+            function onListInstalledApps(response) {
+                if (response.success) {
+                    var applications = response.applications,
+                        i = 0,
+                        applicationsCount = applications.length;
+                    for (; i < applicationsCount; i++) {
+                        addToApplicationGrid(applications[i]);
+                    }
+                } else {
+                    console.error('An error occured: ' + response.error);
                 }
+            }
             var tizen = require('tizen');
             tizen.Application.getAppsInfo(onListInstalledApps);
  
@@ -226,6 +203,8 @@ methods:
     description: |
         If the ID is set to null or not set at all, it returns application information for the current application. 
         The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Tizen.Apps.ApplicationInformation
         summary: The application metadata
@@ -247,6 +226,8 @@ methods:
         When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
         The <ApplicationInformationEventCallback> must be invoked every time a new application is installed, removed, or updated.
         The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Number
         summary: ID of the listener that can be used to remove the listener later. 
@@ -275,6 +256,8 @@ methods:
 
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters: 
       - name: watchId
         summary: An ID that identifies the listener.
@@ -287,7 +270,7 @@ methods:
 # Pseudo-type
 ---
 name: ApplicationControlDataUnit
-summary: Contains information required to initialize a <ApplicationControlData>.
+summary: Contains information required to initialize a <Tizen.Apps.ApplicationControlData>.
 platforms: [tizen]
 properties:
   - name: key
@@ -318,28 +301,9 @@ properties:
     summary: (optional) An attribute to store the category of the application to be launched.
     optional: true
   - name: data  
-    type: <ApplicationControlData>
+    type: <Tizen.Apps.ApplicationControlData>
     summary: (optional) An array of attributes to store the data needed for an application control.
     optional: true
-
----
-name: ApplicationControlDataArrayReplyCallback
-summary: This call back interface specifies success callbacks that are invoked as a reply from the requseted application control within the application control requestor. 
-description: |
-    This callback interface specifies two methods:
-        onsuccess() - Invoked by the callee application calls RequestedApplicationControl.replyResult().
-        onfailure() - Invoked if the callee application calls RequestedApplicationControl.replyFailure().
-methods:
-  - name: onsuccess
-    summary: Called when the callee application calls RequestedApplicationControl.replyResult().  
-    parameters:
-      - name: data 
-        summary: An array of ApplicationControlData objects 
-        type: Array<ApplicationControlData>
-        optional: true
-
-  - name: onfailure 
-    summary: Called when the callee application calls RequestedApplicationControl.replyFailure(). 
 
 ---
 name: ApplicationInformationEventCallback
@@ -409,3 +373,137 @@ properties:
   - name: value
     summary: An attribute to store the value associated with a key. 
     type: Array<String>
+
+---
+name: LaunchAppControlReplyResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [launchAppControl](Tizen.Apps.launchAppControl) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: data
+    summary: List of ApplicationControlData objects.
+    description: Will be undefined if `success` is `false`.
+    type: Array<ApplicationControlData>
+    
+---
+name: FindAppControlResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [findAppControl](Tizen.Apps.findAppControl) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: appInfo
+    summary: List of installed applications.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Apps.ApplicationInformation>
+    
+  - name: appControl
+    summary: The application control that was passed on findAppControl.
+    description: Will be undefined if `success` is `false`.
+    type: ApplicationControl
+    optional: true
+
+---
+name: AppsContextResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [getAppsContexts](Tizen.Apps.getAppsContext) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: contexts
+    summary: List of running applications.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Apps.ApplicationContext>
+    
+---
+name: AppsInfoResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [getAppsInfo](Tizen.Apps.getAppsInfo) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: applications
+    summary: List of running applications.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Apps.ApplicationInformation>
