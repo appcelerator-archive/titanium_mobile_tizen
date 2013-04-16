@@ -22,7 +22,8 @@ methods:
         - TypeMismatchError: If any input parameter is not compatible with the expected type for that parameter.
         - InvalidValuesError: If any of the input parameters contain an invalid value.
         - UnknownError: In any other error case.
-    
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/setting
     parameters:
       - name: type
         summary: The setting type.
