@@ -688,7 +688,7 @@ properties:
             
     type: STRING
 
-  - name: RSVP 
+  - name: rsvp 
     summary: An attribute to store the attendee's participation status reply (RSVP).
     type: Boolean
 
