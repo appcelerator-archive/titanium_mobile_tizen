@@ -45,6 +45,8 @@ methods:
         An application can launch other applications with the application control, and get back the results from the launched applications.
         The application control consists of an operation, URI, and MIME type, and describes the request to be performed by the newly launched application. The application control is passed to the launchAppControl() method to launch an application. The system tries to find the proper application to perform the requested application control, then launches the selected application.
         The application control request is passed to the newly launched application and it can be accessed by getRequestedAppControl() method. The passed application control contains the reason the application was launched and information about what the application is doing. The launched application can send a result to the caller application with the replyResult() method of RequestedApplicationControl interface.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: appControl
         summary: The data structure describing application control details.
@@ -100,6 +102,8 @@ methods:
     summary: Finds application information can be launched with the given application control.  
     description: |
         An application can get a list of other applications can be launched with the application control.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters: 
       - name: appControl
         summary: A data structure describing application control details.
@@ -128,6 +132,8 @@ methods:
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: callback
         summary: The method to call when the invocation ends successfully.  
@@ -191,6 +197,8 @@ methods:
     description: |
         If the ID is set to null or not set at all, it returns application information for the current application. 
         The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Tizen.Apps.ApplicationInformation
         summary: The application metadata
@@ -212,6 +220,8 @@ methods:
         When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
         The <ApplicationInformationEventCallback> must be invoked every time a new application is installed, removed, or updated.
         The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Number
         summary: ID of the listener that can be used to remove the listener later. 
@@ -240,6 +250,8 @@ methods:
 
   - name: removeAppInfoEventListener
     summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters: 
       - name: watchId
         summary: An ID that identifies the listener.

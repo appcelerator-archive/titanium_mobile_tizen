@@ -49,6 +49,34 @@ var ti = require('titanium-sdk'),
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/alarm"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.launch"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/download"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.send"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.admin"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.common"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.tag"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.write"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/power"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/setting"/> -->\n'+
 			'<access origin="*" subdomains="true"/>\n';
 
 // silence uglify's default warn mechanism
@@ -58,6 +86,12 @@ exports.config = function (logger, config, cli) {
 	return function (finished) {
 		cli.createHook('build.mobileweb.config', function (callback) {
 			callback({
+				flags: {
+					'debug': {
+						default: false,
+						desc: __('debug Tizen application')
+					},
+				},				
 				options: {
 					'deploy-type': {
 						abbr: 'D',
@@ -66,23 +100,23 @@ exports.config = function (logger, config, cli) {
 						hint: __('type'),
 						values: ['production', 'development']
 					},
-					'dev-id': {
-						abbr: 'I',
-						desc: __('id for Tizen device or emulator where install a widget'),
+					'device': {
+						abbr: 'E',
+						desc: __('the id for the Tizen device or emulator'),
 						hint: __('device id')
 					},
-					'run-dev-id': {
-						abbr: 'R',
-						desc: __('run widget on this device'),
-						hint: __('device id')
-					},			
-					'debug-dev-id': {
-						abbr: 'B',
-						desc: __('debug widget on this device'),
-						hint: __('device id')
-					},
-					'cert': {
-						abbr: 'C',
+					// 'run-dev-id': {
+					// 	abbr: 'R',
+					// 	desc: __('run widget on this device'),
+					// 	hint: __('device id')
+					// },			
+					// 'debug-dev-id': {
+					// 	abbr: 'B',
+					// 	desc: __('debug widget on this device'),
+					// 	hint: __('device id')
+					// },
+					'keystore': {
+						abbr: 'K',
 						desc: __('the location of the certificate file'),
 						hint: 'path',
 						prompt: {
@@ -115,7 +149,6 @@ exports.config = function (logger, config, cli) {
 					'password': {
 						abbr: 'P',
 						desc: __('the password for the keystore'),
-						hint: 'alias',
 						password: true,
 						prompt: {
 							label: __('Keystore password'),
@@ -128,17 +161,16 @@ exports.config = function (logger, config, cli) {
 							}
 						}
 					},
-					'keypass': {
+					'key-password': {
 						abbr: 'K',
 						desc: __('the password for the key'),
-						hint: 'alias',
 						password: true,
 						prompt: {
-							label: __('Keystore password'),
+							label: __('Key password'),
 							error: __('Invalid key password'),
 							validator: function (password) {
 								if (!password) {
-									throw new appc.exception(__('Invalid keys password'));
+									throw new appc.exception(__('Invalid key password'));
 								}
 								return true;
 							}
@@ -233,14 +265,14 @@ function build(logger, config, cli, finished) {
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
-	this.targetDevice = cli.argv['dev-id'];	
-	this.debugDevice = cli.argv['debug-dev-id'];
-	this.runDevice = cli.argv['run-dev-id'];
-	this.tizenCert = cli.argv['cert'];
+	this.targetDevice = void 0;//cli.argv['dev-id'];	
+	this.debugDevice = void 0;//cli.argv['debug-dev-id'];
+	this.runDevice = cli.argv['device'];
+	this.tizenCert = cli.argv['keystore'];
 	this.storeType = 'pkcs12';
 	this.alias = cli.argv['alias'];
 	this.storePasword = cli.argv['password'];
-	this.keypass = cli.argv['keypass'];
+	this.keypass = cli.argv['key-password'];
 
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
@@ -276,6 +308,9 @@ function build(logger, config, cli, finished) {
 			theme: 'default'
 		}
 	});
+
+	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
+	this.tiapp.analytics = false;
 
 	// initialize device id (with the value obtained from the command line)
 	if (this.debugDevice) {

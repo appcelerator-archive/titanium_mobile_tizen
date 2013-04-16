@@ -1,11 +1,11 @@
 // Wraps Tizen interface "SystemInfoProperty" that resides in Tizen module "SystemInfo".
 
-define(['Ti/_/declare', 'Tizen/_/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var celluralNetwork = declare(SystemInfoProperty, {
+	var celluralNetwork = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object SystemInfoCellularNetwork]') {
+			if (args.toString() === '[object cellularnetworkinfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

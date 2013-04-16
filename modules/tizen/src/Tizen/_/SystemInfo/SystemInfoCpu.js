@@ -1,11 +1,11 @@
 // Wraps Tizen interface "SystemInfoCPU" that resides in Tizen module "SystemInfo".
 
-define(['Ti/_/declare', 'Tizen/_/SystemInfo/SystemInfoProperty'], function(declare, SystemInfoProperty) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var cpu = declare(SystemInfoProperty, {
+	var cpu = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object SystemInfoCpu]') {
+			if (args.toString() === '[object cpuinfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

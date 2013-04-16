@@ -16,6 +16,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contain an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: message
         summary:  Draft message that should be added to the storage. 
@@ -58,6 +60,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -112,6 +116,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contain an invalid value
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: messages
         summary: Array of messages to be deleted. 
@@ -156,7 +162,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
-
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: messages
         summary: Array that should be updated. 
@@ -200,6 +207,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -255,6 +264,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: conversations
         summary: Array of conversations to be deleted.
@@ -302,6 +313,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
@@ -338,6 +351,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: subscription identifier. 
@@ -374,6 +389,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: Subscription identifier. 
@@ -393,6 +410,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: Subscription identifier. 
@@ -433,6 +452,8 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         If the subscriptionId argument is valid and corresponds to a subscription already in place, the subscription process MUST stop immediately and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId argument does not correspond to a valid subscription, the method will return without any further action.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: watchId
         summary:  Identifier of the subscription returned by addMessagesChangeListener, addConversationsChangeListener or addFoldersChangeListener methods. 

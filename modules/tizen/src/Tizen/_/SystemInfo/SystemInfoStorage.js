@@ -1,8 +1,8 @@
 // Wraps Tizen interface "SystemInfoStorage" that resides in Tizen module "SystemInfo".
 
-define(['Ti/_/declare', 'Tizen/_/SystemInfo/SystemInfoProperty', 'Tizen/_/SystemInfo/SystemInfoStorageUnit'], function(declare, SystemInfoProperty, SystemInfoStorageUnit) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/SystemInfo/SystemInfoStorageUnit'], function(declare, Evented, SystemInfoStorageUnit) {
 
-	var storage = declare(SystemInfoProperty, {
+	var storage = declare(Evented, {
 
 		constructor: function(args) {
 			// Automatically initialize system info storage units.

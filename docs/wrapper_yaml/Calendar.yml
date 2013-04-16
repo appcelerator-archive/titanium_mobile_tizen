@@ -8,7 +8,7 @@ description: |
     
     This API provides functionality to read, create, delete, and update items in specific calendars. Calendars can be obtained using the getCalendars() method, which returns an array of Calendar objects.
             
-    The `Calendar` module is a thin wrapper on the Tizen `Calendar` class.	
+    The `Calendar` module is a thin wrapper on the Tizen `Calendar` class.
     
     See also:
   
