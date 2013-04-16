@@ -2,6 +2,14 @@
 
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/WebAPIError'], function(declare, Evented, BluetoothSocket, WebAPIError) {
 
+	function onError (e, callback) {
+		callback({
+			code: e.code,
+			success: false,
+			error: e.type + ': ' + e.message
+		});
+	}
+
 	var handler = declare(Evented, {
 
 		constructor: function(args) {
@@ -16,10 +24,17 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Ti
 			};
 		},
 
-		unregister: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.unregister(successCallback, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
-			});
+		unregister: function(callback) {
+			return this._obj.unregister(callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				},
+				callback && function(e) {
+					onError(e, callback);
+				}
+			);
 		},
 
 		constants: {

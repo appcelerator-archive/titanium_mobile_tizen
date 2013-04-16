@@ -3,6 +3,14 @@
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/Bluetooth/BluetoothClass', 'Tizen/_/WebAPIError'],
 	function(declare, Evented, BluetoothSocket, BluetoothClass, WebAPIError) {
 
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
+
 		var device = declare(Evented, {
 
 			constructor: function(args) {
@@ -12,11 +20,15 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Ti
 				}
 			},
 
-			connectToServiceByUUID: function(uuid /*BluetoothUUID*/, successCallback /*BluetoothSocketSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.connectToServiceByUUID(uuid, function(socket) {
-					successCallback(new BluetoothSocket(socket));
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			connectToServiceByUUID: function(uuid /*BluetoothUUID*/, callback) {
+				return this._obj.connectToServiceByUUID(uuid, callback && function(socket) {
+					callback({
+						code: 0,
+						success: true,
+						socket: new BluetoothSocket(socket)
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
