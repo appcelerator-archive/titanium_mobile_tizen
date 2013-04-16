@@ -19,9 +19,7 @@ var ti = require('titanium-sdk'),
 	fs = require('fs'),
 	path = require('path'),
 	wrench = require('wrench'),
-	xmldom = require('xmldom'),			// for DOM parsing
 	runner = require('child_process'),	// for executing child processes (archiving, etc)
-	DOMParser = xmldom.DOMParser,
 	jsExtRegExp = /\.js$/,
 	HTML_HEADER = [
 		'<!--',
@@ -41,43 +39,7 @@ var ti = require('titanium-sdk'),
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
 	},
-	targets = ['emulator', 'device', 'distribute'],
-	tizenConfigXmlSources,	// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
-	// Defines the default list of privileges for a Tizen application. If a privilege is not declared, the corresponding Tizen feature will be
-	// unavailable. By default adds minimal required set of privileges
-	defaultPrivilegesList =
-			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/alarm"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.launch"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/download"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.send"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.admin"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.common"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.tag"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/power"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/setting"/> -->\n'+
-			'<access origin="*" subdomains="true"/>\n';
+	targets = ['emulator', 'device', 'distribute'];
 
 // silence uglify's default warn mechanism
 UglifyJS.AST_Node.warn_function = function () {};
@@ -310,14 +272,17 @@ function build(logger, config, cli, finished) {
 	this.tiapp.analytics = false;
 
 	logger.info(__('Target device Id:  "%s" ', this.runDevice));
-
-	// Generate a random Tizen application ID.
-	this.tiapp.tizen = {
-		appid : randomString(10)
-	};
-
-	// If the <tizen> node is not present in tiapp.xml, generate and add it
-	this.addTizenToTiAppXml();
+	
+	// Generate a random Tizen application ID.	
+	if(!this.tiapp.tizen){
+		this.tiapp.tizen = {
+			appid : randomString(10),
+			configXml : '<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
+				'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
+				'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+				'<access origin="*" subdomains="true"/>\n'
+		};
+	}
 
 	// tiapp.xml is ready now, continue
 	this.validateTheme();
@@ -1021,54 +986,6 @@ build.prototype = {
 		}));
 	},
 
-	// If the <tizen> node is not present in tiapp.xml, generate and add it.
-	addTizenToTiAppXml: function () {
-		this.logger.info(__('Processing tizen section of tiapp.xml'));
-		var XMLSerializer = xmldom.XMLSerializer,
-			xmlpath = path.join(this.projectDir, 'tiapp.xml'),
-			doc = new DOMParser().parseFromString(fs.readFileSync(xmlpath).toString(), 'text/xml'),
-			parsedTiXml = doc.documentElement,
-			tizenTagFound = false, // whether the Tizen section is found in tiapp.xml
-			node = parsedTiXml.firstChild,
-			existingId,				// application ID, if already present in tiapp.xml
-			confNode;
-
-		while (node) {
-			if (node.nodeType == 1 && node.tagName == 'tizen') {
-				// <tizen> section exists
-				tizenTagFound = true;
-				existingId =  node.getAttribute('appid');
-				this.logger.info(__('<tizen> node. tizen app id: %s', existingId));
-				if (existingId) {
-					this.tiapp.tizen.appid = existingId;
-				}
-				confNode = node.firstChild;
-				
-				// Read content of <tizen> node, to add it into prj/build/tizen/config.xml later.
-				while (confNode) {
-					if (tizenConfigXmlSources) {
-						tizenConfigXmlSources = confNode.toString() + tizenConfigXmlSources;
-					} else {
-						tizenConfigXmlSources = confNode.toString();
-					}
-					confNode = confNode.nextSibling;
-				}
-			}
-			node = node.nextSibling;
-		}
-		if (tizenTagFound) {
-			this.logger.info(__('tiapp.xml does not contains <tizen> node. Using default values'));
-			return;
-		}
-
-		// <tizen> node absent in tiapp.xml, adding it.		
-		var tizenSectionStr = '<tizen xmlns:tizen="http://ti.appcelerator.org" appid="' + this.tiapp.tizen.appid+'">\n' + defaultPrivilegesList + '\n</tizen>',
-			tizenSec = new DOMParser().parseFromString(tizenSectionStr, 'text/xml'),
-			result;
-		parsedTiXml.appendChild(tizenSec),
-		result = new XMLSerializer().serializeToString(doc);
-		fs.writeFileSync(xmlpath, result, 'utf8');
-	},
 
 	// Create the config.xml file (from template) which will go into the wgt.
 	createConfigXml: function () {
@@ -1082,9 +999,8 @@ build.prototype = {
 		}
 
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
-		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
-		
+		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);		
+		templt = templt.replace('%%FEATURES_LIST%%', this.tiapp.tizen.configXml);
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
@@ -1169,151 +1085,6 @@ build.prototype = {
 			this.moduleMap[mid] = deps;
 		}
 	},
-
-	// // Execute a Tizen CLI command (refer to https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/ide_sdk_tools/command_line_interface.htm)
-	// // Parameters:
-	// // - command: the CLI command (e.g. "web-run")
-	// // - params: the parameters of the CLI command (e.g. "--device=eumlator-26100")
-	// // - logger: the logger object
-	// // - callback: the function to call upon completion
-	// executeTizenCLICommand : function (command, params, logger, callback) {
-	// 	var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', process.platform === 'win32' ? command + '.bat' : command) + ' ' +params;
-	// 	logger.info(__('Executing: %s', pathToCmd));
-	// 	runner.exec(
-	// 			pathToCmd,
-	// 			function (err, stdout, stderr) {
-	// 				logger.info(stdout);
-	// 				if (err != null) {
-	// 					logger.info(__('CLI command failed with error output:'));
-	// 					logger.info(stderr);
-	// 				}
-	// 				callback();
-	// 		});
-	// },
-
-	// // Force uninstalling a widget from Tizen.
-	// // Parameters:
-	// // - logger: the logger object
-	// // - callback: the function to call upon completion
-	// uninstallWidgetForce: function (logger, callback) {
-	// 	if (this.runDevice) {
-	// 		this.executeTizenCLICommand(
-	// 			'web-uninstall',
-	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
-	// 			logger,
-	// 			callback);
-	// 	} else {
-	// 		callback();
-	// 	}
-	// },
-
-	// // Install the created widget on Tizen.
-	// // Parameters:
-	// // - logger: the logger object
-	// // - callback: the function to call upon completion
-	// installOnDevice : function (logger, callback) {
-	// 	if (this.runDevice && this.runDevice != 'none') {
-	// 		this.executeTizenCLICommand(
-	// 			'web-install',
-	// 			'-t 10 ' + ' --widget="' + path.join(this.buildDir, 'tizenapp.wgt') + '"' + ' --device=' + this.runDevice,
-	// 			logger,
-	// 			callback);
-	// 	} else {
-	// 		callback();
-	// 	}		
-	// },
-
-	// // Run the created widget on Tizen.
-	// // Parameters:
-	// // - logger: the logger object
-	// // - callback: the function to call upon completion
-	// runOnDevice : function (logger, callback) {		
-	// 	if (this.runDevice && this.runDevice != 'none') {
-	// 		this.executeTizenCLICommand(
-	// 			'web-run',
-	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
-	// 			logger,
-	// 			callback);
-	// 	} else {
-	// 		callback();
-	// 	}		
-	// },
-
-	// // Debug the created widget on Tizen.
-	// // Parameters:
-	// // - logger: the logger object
-	// // - callback: the function to call upon completion
-	// debugOnDevice : function (logger, callback) {
-	// 	if (this.debugFlag) {
-	// 		this.executeTizenCLICommand(
-	// 			'web-debug',
-	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
-	// 			logger,
-	// 			callback);
-	// 	} else {
-	// 		callback();
-	// 	}
-	// },
-
-	// // Find the Tizen SDK installation on this computer and store it in "tizenSdkDir".
-	// // Parameters:
-	// // - logger: the logger object
-	// // - next: the function to call upon completion
-	// detectTizenSDK: function (logger, next) {
-	// 	var self = this;
-	// 	if (process.platform === 'win32') {
-	// 		// Find the path to Tizen SDK using the registry.
-	// 		// 1. read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders;
-	// 		//    the key "Local AppData" has the path of the file that contains the path of the SDK
-	// 		//    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
-	// 		// 2. read the file to obtain the path to the SDK
-
-	// 		var keyvalue = null;
-	// 		runner.exec(
-	// 			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
-	// 			function (err, stdout, stderr) {
-	// 				if (stdout !== null && (typeof stdout != 'undefined')) {
-	// 					var arr = stdout.split(' ');
-	// 					keyvalue = arr[arr.length-1]; // the last parameter is the path
-	// 					keyvalue = keyvalue.slice(0, -4);
-	// 					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-	// 					logger.info(__('Reading Tizen SDK location from: ' + keyvalue));
-	// 					fs.readFile(keyvalue, 'utf8', function (err,data) {
-	// 						if (err) {
-	// 							logger.info(err);
-	// 							return;
-	// 						}
-	// 						var arr = data.split('=');
-	// 						self.tizenSdkDir =  arr[1];
-	// 						logger.info('Tizen SDK found at: ' + self.tizenSdkDir);
-	// 						next(null, 'ok');
-	// 					});
-	// 				} else {
-	// 					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
-	// 				}
-	// 			});
-	// 	} else {
-	// 		// Tizen SDK on Linux is installed in /home/tizen-sdk by default.
-	// 		self.tizenSdkDir = path.join(process.env.HOME, 'tizen-sdk');			
-	// 		if (afs.exists(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'))) {
-	// 			fs.readFile(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'),
-	// 				'utf8',
-	// 				function (err,data) {
-	// 					if (err) {
-	// 						logger.info(err);
-	// 						next('Failed to find Installed Tizen SDK for Linux', 'failed');
-	// 						return;
-	// 					}
-	// 					var arr = data.split('=');
-	// 					self.tizenSdkDir =  arr[1];
-	// 					logger.info(__('Tizen SDK found at: %s', self.tizenSdkDir));
-	// 					next(null, 'ok');
-	// 				});
-	// 		} else {
-	// 			next('Failed to find Installed Tizen SDK for Linux', 'failed');
-	// 		}
-	// 	}
-	// },
 
 	// Sign the created widget using the developer certificate. The certificate can be configured using command-line
 	// arguments.
@@ -1400,17 +1171,17 @@ function renderTemplate(template, props) {
 	});
 }
 
-// Generate a random alphanumeric string of the requested length.
+// Generate a random alphanumeric string of the requested length. It is Tizne application id generator
 // Parameters:	
 // - length: result string length
 function randomString(length) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(''),
-    	str = '';
-    if (! length) {
-        length = Math.floor(Math.random() * chars.length);
-    }
-    for (var i = 0; i < length; i++) {
-        str += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return str;
+	var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(''),
+		str = '';
+	if (! length) {
+		length = Math.floor(Math.random() * chars.length);
+	}
+	for (var i = 0; i < length; i++) {
+		str += chars[Math.floor(Math.random() * chars.length)];
+	}
+	return str;
 }
