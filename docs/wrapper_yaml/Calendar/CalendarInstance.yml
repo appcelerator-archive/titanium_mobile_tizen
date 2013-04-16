@@ -19,6 +19,8 @@ createable: false
 methods:
   - name: get
     summary: Gets the calendar item with the specified identifier.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The matching CalendarItem object
         type: Tizen.Calendar.CalendarItem       
@@ -45,6 +47,8 @@ methods:
         To update an existing item, call the update() method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
         call CalendarItem.clone() method first and pass the clone to the add() method.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: item
         summary:  The calendar item to be added.
@@ -70,10 +74,12 @@ methods:
         The errorCallback() is launched with these error types:
             - InvalidValuesError - if any of the input parameters contain an invalid value, the item has any invalid value or the calendar has some restrictions that cause the attempted insertion of the calendar items to fail (for example, limitations in the size of text attributes)
             - UnknownError - if any other error occurs.
-            
+        
         If you wish to update an existing item, call the update() method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
         call CalendarItem.clone() method first and pass the clone to the add() method.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: items
         summary:  The list of calendar items to add.
@@ -112,6 +118,8 @@ methods:
     description: |
         In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
         as well. If you don't want that, the updateAllInstances flag should be set to false.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: item
         summary: The Item object to update.
@@ -151,6 +159,8 @@ methods:
     description: |
         In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
         as well. If you don't want that, the updateAllInstances flag should be set to false.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: items
         summary: The list of calendar item objects to update.
@@ -202,6 +212,8 @@ methods:
     summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
     description: |
         For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) is set to null, this method will remove the event identified by uid, and all of its possible detached instances.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: id
         summary:  The identifier (ID attribute) of the item object to delete.
@@ -233,9 +245,11 @@ methods:
                 - NotFoundError - if an identifier in the ids parameter does not correspond to the ID attribute of an item in the calendar.
                 - InvalidValuesError - if any of the input parameters contain an invalid value.
                 - UnknownError - if any other error occurs.
-                
+        
         For (recurring) events: In the case of calendar events, if the recurrence id, rid, is set to null, 
         this method will remove the event identified by uid, as well as all its possible detached instances.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: ids
         summary: The identifiers (id attribute) of the items to delete
@@ -284,6 +298,8 @@ methods:
         Filter specific remarks:
             - For event filtering based on start/end dates, items that recur during the given time interval will be found, even if the parent item itself is outside the interval.
             - For event filtering based on the identifier, the identifier type should be CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both the parent event and all its detached instances.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
       - name: successCallback
         summary: The method to call when the invocation ends successfully.
@@ -331,6 +347,8 @@ methods:
     description: |
         When executed, the implementation must immediately return a subscription identifier that identifies the watch operation. 
         After returning the identifier, the watcher methods are invoked asynchronously.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The identifier used to clear the watch subscription.
         type: Number
@@ -364,6 +382,8 @@ methods:
         the watch process must immediately stop and no further callbacks must be invoked. 
         If the watchId argument is not valid or does not correspond to a valid subscription, 
         the method should return without any further action.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
       - name: watchId 
         summary:  Subscription Identifier.
