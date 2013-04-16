@@ -11,7 +11,16 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				if (args.hasOwnProperty('uri')) {
-					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
+					// In Tizen module, the name of the RSVP property does not match its name in Tizen Device API
+					// (different case), so we have to map it by hand. In order to not change the argument, we clone it first.
+					
+					var i,
+						attendeeInitDict = {};
+					for (i in args.attendeeInitDict) {
+						if (! args.attendeeInitDict.hasOwnProperty(i)) continue;
+						(i === 'rsvp') ? attendeeInitDict.RSVP = args.attendeeInitDict.rsvp : attendeeInitDict[i] = args.attendeeInitDict[i];
+					}
+					this._obj = new tizen.CalendarAttendee(args.uri, attendeeInitDict);
 				} else {
 					console.error("Constructor with such parameters not found in CalendarAttendee.");
 				}
@@ -51,7 +60,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					this._obj.status = value;
 				}
 			},
-			RSVP: {
+			rsvp: {
 				get: function() {
 					return this._obj.RSVP;
 				},

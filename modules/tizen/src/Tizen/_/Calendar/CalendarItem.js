@@ -1,6 +1,6 @@
 // Wraps Tizen interface "CalendarItem" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/helper'], function(declare, Evented, CalendarEventId, helper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/CalendarAttendee', 'Tizen/_/Calendar/helper'], function(declare, Evented, CalendarEventId, Attendee, helper) {
 
 	var calendarItem = declare(Evented, {
 
@@ -146,10 +146,23 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 			},
 			attendees: {
 				get: function() {
-					return this._obj.attendees;
+					var i = 0,
+						attendees = this._obj.attendees,
+						l = attendees.length,
+						result = [];
+					for (; i < l; i++) {
+						result.push(new Attendee(attendees[i]));
+					}
+					return result;
 				},
 				set: function(value) {
-					this._obj.attendees = value;
+					var i = 0,
+						l = value.length,
+						result = [];
+					for (; i < l; i++) {
+						result.push(value[i]._obj);
+					}
+					this._obj.attendees = result;
 				}
 			}
 		}

@@ -16,12 +16,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/SystemInfo/SystemInfoStorageUni
 				result.push(new SystemInfoStorageUnit(units[i]));
 			}
 
-			this._obj = args;
-			this.constants.__values__.units = result;
+			this._units = result;
 		},
 
-		constants: {
-			units: {}
+		getUnits: function() {
+			return this._units;
 		}
 
 	});

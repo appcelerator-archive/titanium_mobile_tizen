@@ -40,7 +40,8 @@ methods:
         The errorCallback is launched with these error types:
             - InvalidValuesError - if the event given in argument is not a recurring event.
             - UnknownError - if any other error occurs.
-    
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
       - name: startDate
         summary:  The start date/ time of an event(inclusive).

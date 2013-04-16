@@ -9,6 +9,8 @@ methods:
     summary: Starts a download operation with the specified URL information.
     description: |
         Returns an identifier for each download operation.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/download
     returns:
         type: Number
     parameters:

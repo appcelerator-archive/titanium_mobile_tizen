@@ -18,6 +18,8 @@ methods:
 
   - name: launch
     summary: Launches an application with the given application ID.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: id
         summary: A unique string representing application ID.
@@ -132,6 +134,8 @@ methods:
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: callback
         summary: The method to call when the invocation ends successfully.  
@@ -159,6 +163,8 @@ methods:
         Gets the application context for the specified application context ID. 
         If the ID is set to null or is not set at all, the method returns the application context of the current application. 
         The list of running applications and their application IDs is obtained with getAppsContext().
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns: 
       - type: Tizen.Apps.ApplicationContext
         summary: A data structure that lists running application details.
@@ -169,6 +175,8 @@ methods:
 
   - name: getAppsInfo
     summary: Gets the list of installed application's information on a device. The information contained on each application corresponds to the application state at the moment when the list was generated. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: callback
         summary: The method to call when the invocation ends successfully.

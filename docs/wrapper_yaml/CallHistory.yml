@@ -11,6 +11,8 @@ platforms: [tizen]
 methods:
   - name: find
     summary: Finds and returns call history items.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     parameters:
       - name: successCallback
         summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
@@ -91,6 +93,8 @@ methods:
             tizen.CallHistory.find(onSuccess, onError, ifilter, sortMode);
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
@@ -114,6 +118,8 @@ methods:
             tizen.CallHistory.find(onSuccess, onError);
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
       - name: entries
         summary: A list of call history entries to delete. 
@@ -144,6 +150,8 @@ methods:
             tizen.CallHistory.find(onSuccess, onError);
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
       - name: successCallback
         summary: A generic success handler.
@@ -155,6 +163,8 @@ methods:
         type: Callback<Tizen.WebAPIError>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     parameters: 
       - name: observer
         summary: A callback for handling the list of new or changed or CallHistoryEntry objects in the call history. 
