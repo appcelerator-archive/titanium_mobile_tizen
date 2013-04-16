@@ -32,6 +32,8 @@ methods:
         The errorCallback is launched with these error types:
             InvalidValuesError - if any of the input parameters contain an invalid value.
             UnknownError - if any other error occurs.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
       - name: type
         summary:  |
@@ -97,6 +99,8 @@ methods:
 
   - name: getDefaultCalendar
     summary: Gets the default calendar, which is used for new items.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The default Calendar object.
         type: Tizen.Calendar.CalendarInstance       
@@ -144,6 +148,8 @@ methods:
           
   - name: getCalendar
     summary: Gets the calendar with the specified identifier and type.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The matching Calendar object.
         type: Tizen.Calendar.CalendarInstance       
@@ -682,7 +688,7 @@ properties:
             
     type: STRING
 
-  - name: RSVP 
+  - name: rsvp 
     summary: An attribute to store the attendee's participation status reply (RSVP).
     type: Boolean
 

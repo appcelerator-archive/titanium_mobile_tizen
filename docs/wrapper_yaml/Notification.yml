@@ -20,6 +20,8 @@ platforms: [tizen]
 methods:
   - name: postNotification
     summary: Post the notification to display.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
     parameters:
       - name: notification
         summary: A notification to post.
@@ -53,6 +55,8 @@ methods:
 
   - name: update
     summary: Updates a previously posted notification.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
     parameters:
       - name: notification
         summary: A notification to update.
@@ -70,6 +74,8 @@ methods:
         
   - name: remove
     summary: Removes a previously posted notification.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
     parameters:
       - name: id
         summary: A previously posted notification ID.
@@ -86,6 +92,8 @@ methods:
         
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
     examples:
       - example: |
           var tizen = require("tizen");
@@ -97,6 +105,8 @@ methods:
     
   - name: getNotification
     summary: Gets a previously posted notification by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
         type: Tizen.Notification
     parameters:
@@ -117,6 +127,8 @@ methods:
     
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
         type: Tizen.Notification.Notification[]
     examples:

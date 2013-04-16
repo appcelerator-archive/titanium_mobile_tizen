@@ -11,14 +11,12 @@ platforms: [tizen]
 methods:
   - name: find
     summary: Finds and returns call history items.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     parameters:
-      - name: successCallback
+      - name: callback
         summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
-        type: Callback<CallHistoryEntry>
-      - name: errorCallback
-        summary: The method to call when an error occurs.
-        optional: true
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<CallHistoryFindResponse>
       - name: filter
         summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
         description: |
@@ -43,15 +41,16 @@ methods:
             var tizen = require("tizen");
         
             // Defines success callback
-            function onSuccess(results) {
-                console.log(results.length + " call history item(s) found!");
-                for (var i=0; i<results.length; i++) {
-                    console.log(i + ". " + results[i].toString()); // process the CallHistoryEntry
+            function onFind(response) {
+                if (response.success) {
+                    var results = response.entries;
+                    console.log(results.length + " call history item(s) found!");
+                    for (var i=0; i<results.length; i++) {
+                        console.log(i + ". " + results[i].toString()); // process the CallHistoryEntry
+                    }
+                } else {
+                    console.error('An error occured: ' + response.error);
                 }
-            }
-            // Defines error callback
-            function onError(error) {
-                console.log("Query failed" + error.name);
             }
         
             // Defines filter: list CS calls, most recent first
@@ -64,7 +63,7 @@ methods:
                                                     order: tizen.SORT_MODE_ORDER_DESC});
             
             // Makes the query and wire up the callbacks
-            tizen.CallHistory.find(onSuccess, onError, filter, sortMode);
+            tizen.CallHistory.find(onFind, filter, sortMode);
         
             var numberfilter = tizen.createAttributeFilter({attributeName: "remoteParties.remoteParty",
                                                                matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
@@ -88,9 +87,11 @@ methods:
             var ifilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
                                                           filters: [numberFilter, dateFilter, tfilter]});
             // Makes the query and wire up the callbacks; reuse sortMode
-            tizen.CallHistory.find(onSuccess, onError, ifilter, sortMode);
+            tizen.CallHistory.find(onFind, ifilter, sortMode);
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
@@ -100,61 +101,58 @@ methods:
             var tizen = require("tizen");
         
             // Defines success callback
-            function onSuccess(results) {
-                if (results.length > 0)
-                    tizen.CallHistory.remove(results[0]);
+            function onFind(results) {
+                if (response.success) {
+                    var results = success.entries;
+                    if (results.length > 0) {
+                        tizen.CallHistory.remove(results[0]);
+                    }
+                } else {
+                    console.error('An error occured: ' + response.error);
+                }
             }
-        
-            // Defines error callback
-            function onError(error) {
-                console.log("Query failed" + error.name);
-            }
-        
             // Makes the query and wires up the callbacks
-            tizen.CallHistory.find(onSuccess, onError);
+            tizen.CallHistory.find(onFind);
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
       - name: entries
         summary: A list of call history entries to delete. 
         type: Array<CallHistoryEntry>
-      - name: successCallback
+      - name: callback
         summary: A generic success handler.
         optional: true
-        type: Callback<Object>
-      - name: errorCallback
-        summary:  An error handler.
-        optional: true
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<ErrorResponse>
     examples:
       - example: |
             var tizen = require("tizen");
         
             // Defines success callback
-            function onSuccess(results) {
-                tizen.CallHistory.removeBatch(results);
-            }
-        
-            // Defines error callback
-            function onError(error) {
-                console.log("Query failed" + error.name);
+            function onFind(response) {
+                if (response.success) {
+                    tizen.CallHistory.removeBatch(results);
+                } else {
+                    console.error('An error occured: ' + response.error);
+                }
             }
         
             // Makes the query and wires up the callbacks
-            tizen.CallHistory.find(onSuccess, onError);
+            tizen.CallHistory.find(onFind);
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
-      - name: successCallback
+      - name: callback
         summary: A generic success handler.
         optional: true
-        type: Callback<Object>
-      - name: errorCallback
-        summary:  An error handler.
-        optional: true
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<ErrorResponse>
   - name: addChangeListener
     summary: Adds a listener to register for callback to observe call history changes. 
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     parameters: 
       - name: observer
         summary: A callback for handling the list of new or changed or CallHistoryEntry objects in the call history. 
@@ -279,3 +277,33 @@ properties:
     summary: An attribute to store the identifier of the person that the raw contact belongs to. If the contact cannot be resolved, the value is null. See Contact API for more information. 
     type: String
 
+---
+name: CallHistoryFindResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [find](Tizen.CallHistory.find) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: entries
+    summary: An array of CallHistoryEntry objects, representing the result set of the query over the call history.
+    description: Will be undefined if `success` is `false`.
+    type: Array<CallHistoryEntry>

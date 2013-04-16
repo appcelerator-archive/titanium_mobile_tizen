@@ -3,7 +3,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 	function errorCallback(e, callback) {
 		callback({
 			code: -1,
-			message: e.type + ': ' + e.message,
+			error: e.type + ': ' + e.message,
 			success: false
 		});
 	}

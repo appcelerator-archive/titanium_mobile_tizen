@@ -7,9 +7,7 @@ description: |
     See also:
   
     *   [Tizen Power API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fpower.html)
-    
     *   [Tizen  Power Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fpower.htm)
-    
 
 extends: Titanium.Module
 platforms: [tizen]
@@ -17,6 +15,8 @@ platforms: [tizen]
 methods:
   - name: request
     summary: Requests the minimum-state for a power resource.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/power
     parameters:
       - name: resource
         summary: |
@@ -63,6 +63,8 @@ methods:
 
   - name: turnScreenOn
     summary: Turns on the screen.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/power
     examples:
       - example: |
             // Turn on the screen.
@@ -71,6 +73,8 @@ methods:
 
   - name: turnScreenOff
     summary: Turns off the screen.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/power
     examples:
       - example: |
             // Turn off the screen.
@@ -122,6 +126,8 @@ properties:
 
   - name: screenBrightness
     summary: An attribute to store the screen brightness level for an application, from 0 to 1.
+    description: |
+        To use this property, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/power
     type: Number
 
 events:

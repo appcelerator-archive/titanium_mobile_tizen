@@ -5,7 +5,7 @@ define(
 	function errorCallback(e, callback) {
 		callback({
 			code: -1,
-			message: e.type + ': ' + e.message,
+			error: e.type + ': ' + e.message,
 			success: false
 		});
 	}
