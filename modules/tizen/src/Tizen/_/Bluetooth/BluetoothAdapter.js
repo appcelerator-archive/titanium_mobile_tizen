@@ -29,7 +29,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				});
 			},
 
-			discoverDevices: function() {
+			startDiscovery: function() {
 				var self = this;
 				return self._obj.discoverDevices(// BluetoothDiscoverDevicesSuccessCallback
 					{
