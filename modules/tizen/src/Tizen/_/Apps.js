@@ -4,19 +4,34 @@
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/ApplicationInformation', 'Tizen/_/Apps/ApplicationContext', 'Tizen/_/Apps/Application'],
 	function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application) {
 
+		function onError (e, callback) {
+			callback({
+				success: false,
+				error: e.type + ': ' + e.message,
+				code: e.code
+			});
+		}
+
 		return lang.mixProps(require.mix({}, Evented), {
 
 			getCurrentApplication: function() {
 				return new Application(tizen.application.getCurrentApplication());
 			},
 
-			launch: function(id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				tizen.application.launch(id, successCallback, errorCallback && wrappedErrorCallback);
+			launch: function(id /*ApplicationId*/, callback) {
+				tizen.application.launch(id, callback && function () {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			launchAppControl: function(appControl /*Object*/, id /*ApplicationId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, replyCallback /*Object*/) {
+			launchAppControl: function(appControl /*Object*/, id /*ApplicationId*/, callback, replyCallback) {
 				var wrappedReplyCallback = {
-					onsuccess: replyCallback && replyCallback.onsuccess && function(data) {
+					onsuccess: replyCallback && function(data) {
 						var i = 0,
 							len = data.length,
 							wrappedItems = [];
@@ -36,75 +51,94 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 							wrappedItems.push(controlDataObj);
 						}
 
-						replyCallback.onsuccess(wrappedItems);
+						replyCallback({
+							code: 0,
+							success: true,
+							data: wrappedItems
+						});
 					},
-					onfailure: replyCallback && replyCallback.onfailure && function() {
-						replyCallback.onfailure();
+					onfailure: replyCallback && function() {
+						replyCallback({
+							code: -1,
+							success: false
+						});
 					}
 				}
 
-				tizen.application.launchAppControl(appControl._obj, id, successCallback, errorCallback && wrappedErrorCallback, replyCallback && wrappedReplyCallback);
+				tizen.application.launchAppControl(appControl._obj, id, callback && function () {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				}, replyCallback && wrappedReplyCallback);
 			},
 
-			findAppControl: function(appControl /*Object*/, successCallback /*FindAppControlSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function wrappedSuccessCallback(informationArray, appControl) {
-					var wrappedInformationArray = [],
-						wrappedAppControl,
+			findAppControl: function(appControl /*Object*/, callback) {
+				var self = this;
+				tizen.application.findAppControl(appControl._obj, callback && function (appInfo, appControl) {
+					var resultAppInfo = [],
 						i = 0,
-						infoLen = informationArray.length;
-
-					for (; i < infoLen; i++) {
-						wrappedInformationArray.push(new ApplicationInformation(informationArray[i]));
+						appInfoCount = appInfo.length;
+					for (; i < appInfoCount; i++) {
+						resultAppInfo.push(new ApplicationInformation(appInfo[i]));
 					}
-
-					wrappedAppControl = {
-						operation: appControl.operation,
-						uri: appControl.uri,
-						mime: appControl.mime,
-						category: appControl.category,
-						data: appControl.data
-					};
-
-					successCallback(wrappedInformationArray, wrappedAppControl);
-				}
-
-				tizen.application.findAppControl(appControl._obj, successCallback && wrappedSuccessCallback, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						appInfo: resultAppInfo,
+						appControl: self.createApplicationControl({
+							operation: appControl.operation,
+							uri: appControl.uri,
+							mime: appControl.mime,
+							category: appControl.category,
+							data: appControl.data
+						})
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			getAppsContext: function(successCallback /*ApplicationContextArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function applicationsContextListSuccessCallback(items) {
+			getAppsContext: function(callback) {
+				tizen.application.getAppsContext(callback && function (contexts) {
 					var i = 0,
-						itemsCount = items.length,
-						wrappedItems = [];
-
-					for (var i = 0; i < itemsCount; i++) {
-						wrappedItems.push(new ApplicationContext(items[i]));
+						contextsCount = contexts.length,
+						result = [];
+					for (; i < contextsCount; i++) {
+						result.push(new ApplicationContext(contexts[i]));
 					}
-
-					successCallback(wrappedItems);
-				}
-
-				tizen.application.getAppsContext(successCallback && applicationsContextListSuccessCallback, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						contexts: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
 			getAppContext: function(contextId /*ApplicationContextId*/) {
-				return new new ApplicationContext(tizen.application.getAppContext(contextId));
+				return new ApplicationContext(tizen.application.getAppContext(contextId));
 			},
 
-			getAppsInfo: function(successCallback /*ApplicationInformationArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function applicationsInformationSuccessCallback(items) {
+			getAppsInfo: function(callback) {
+				tizen.application.getAppsInfo(callback && function (applications) {
 					var i = 0,
-						itemsCount = items.length,
-						wrappedItems = [];
-
-					for (var i = 0; i < itemsCount; i++) {
-						wrappedItems.push(new ApplicationInformation(items[i]));
+						appsCount = applications.length,
+						result = [];
+					for (; i < appsCount; i++) {
+						result.push(new ApplicationInformation(applications[i]));
 					}
-
-					successCallback(wrappedItems);
-				}
-
-				tizen.application.getAppsInfo(applicationsInformationSuccessCallback, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						applications: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
 			getAppInfo: function(id /*ApplicationId*/) {
@@ -134,9 +168,9 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 			createApplicationControl: function(args) {
 				if (args.hasOwnProperty('operation')) {
 					return {
-						opration: args.operation,
+						operation: args.operation,
 						uri: args.uri,
-						MIME: args.mime,
+						mime: args.mime,
 						category: args.category,
 						data: args.data,
 						_obj: new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data)
