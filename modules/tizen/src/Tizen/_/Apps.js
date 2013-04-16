@@ -63,7 +63,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 							success: false
 						});
 					}
-				}
+				};
 
 				tizen.application.launchAppControl(appControl._obj, id, callback && function () {
 					callback({
@@ -159,7 +159,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						key: args.key,
 						value: args.value,
 						_obj: new tizen.ApplicationControlData(args.key, args.value)
-					}
+					};
 				} else {
 					console.error('Constructor with such parameters not found for ApplicationControlData.');
 				}
@@ -180,9 +180,5 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 				}
 			}
 		}, true);
-
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
 
 	});
