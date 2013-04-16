@@ -64,7 +64,7 @@ methods:
       - name: replyCallback
         summary: |
             The method to invoke when the application gets back results from the launched application.
-        type: Callback<launchAppControlReplyResponse>
+        type: Callback<LaunchAppControlReplyResponse>
         optional: true
     examples:
       - example: |
@@ -111,7 +111,7 @@ methods:
 
       - name: callback
         summary: Function to invoke on success or failure.. 
-        type: Callback<findAppControlResponse>
+        type: Callback<FindAppControlResponse>
     examples:
       - example: |
             var tizen = require('tizen');
@@ -132,12 +132,10 @@ methods:
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: callback
         summary: The method to call when the invocation ends successfully.  
-        type: Callback<appsContextResponse>
+        type: Callback<AppsContextResponse>
 
     examples:
       - example: |
@@ -174,7 +172,7 @@ methods:
     parameters:
       - name: callback
         summary: The method to call when the invocation ends successfully.
-        type: Callback<appsInfoResponse>
+        type: Callback<AppsInfoResponse>
     examples:
       - example: |       
             function onListInstalledApps(response) {
@@ -369,7 +367,7 @@ properties:
     type: Array<String>
 
 ---
-name: launchAppControlReplyResponse
+name: LaunchAppControlReplyResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -401,7 +399,7 @@ properties:
     type: Array<ApplicationControlData>
     
 ---
-name: findAppControlResponse
+name: FindAppControlResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -439,7 +437,7 @@ properties:
     optional: true
 
 ---
-name: appsContextResponse
+name: AppsContextResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -471,7 +469,7 @@ properties:
     type: Array<Tizen.Apps.ApplicationContext>
     
 ---
-name: appsInfoResponse
+name: AppsInfoResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
