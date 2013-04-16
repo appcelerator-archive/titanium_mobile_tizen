@@ -23,6 +23,7 @@ methods:
             NotFoundError - If the application is not found with given ID.
             InvalidValuesError - If any of the input parameters contain an invalid value.
             UnknownError - If any other error occurs.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: id
@@ -56,6 +57,7 @@ methods:
             NotFoundError - If system cannot find the application that matches the specified application control.
             InvalidValuesError - If any of the input parameters contain an invalid value.
             UnknownError: If any other error occurs.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.launch
     parameters:
       - name: appControl
@@ -119,6 +121,7 @@ methods:
             NotFoundError - If system cannot find the application that corresponds to the specified application control.
             InvalidValuesError - If any of the input parameters contain an invalid value.
             UnknownError - If any other error occurs.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters: 
       - name: appControl
@@ -170,6 +173,7 @@ methods:
     description: |
         The errorCallback() is launched with this error type:
             UnknownError - If an unknownn error occurs.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: successCallback
@@ -207,6 +211,7 @@ methods:
     description: |
         The errorCallback() is launched with this error type:
             UnknownError - If an unknown error occurs.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     parameters:
       - name: successCallback
@@ -231,6 +236,7 @@ methods:
     description: |
         If the ID is set to null or not set at all, it returns application information for the current application. 
         The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Tizen.Apps.ApplicationInformation
@@ -253,6 +259,7 @@ methods:
         When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
         The <ApplicationInformationEventCallback> must be invoked every time a new application is installed, removed, or updated.
         The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
       - type: Number

@@ -2,7 +2,7 @@
 name: Tizen.Power
 summary: This Module provides  support for requesting power management related resource states.
 description: |
-    The `Power` module is a thin wrapper on the Tizen `Power` class.	
+    The `Power` module is a thin wrapper on the Tizen `Power` class.
     
     See also:
   

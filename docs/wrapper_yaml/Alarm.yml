@@ -8,8 +8,7 @@ methods:
   - name: add
     summary: Adds an alarm to the storage.
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:
-        http://tizen.org/privilege/alarm
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
     parameters:
 
       - name: alarm

@@ -173,6 +173,8 @@ methods:
     summary: Returns the default NFC adapter on the device.
     description: |
         NFC adapter interface provides access to control the NFC adapter. 
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
         type: Tizen.NFC.NFCAdapter
     examples:

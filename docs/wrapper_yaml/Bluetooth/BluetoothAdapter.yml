@@ -20,6 +20,7 @@ methods:
             InvalidValuesError: If any of the input parameters contain an invalid value.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
     parameters: 
       - name: name
@@ -64,6 +65,7 @@ methods:
         The ErrorCallback is launched with these error names:
             ServiceNotAvailableError: If a Bluetooth device is busy.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
 
     parameters: 
@@ -126,6 +128,7 @@ methods:
         If a device goes out of proximity then event 'devicedisappeared' is invoked with the address of the device. 
         Note that if no device is found, event 'devicefound' will never be called.
         The discovery process can be cancelled anytime, by calling stopDiscovery() on the BluetoothAdapter.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     examples:
@@ -176,6 +179,7 @@ methods:
         The ErrorCallback is launched with these error types:
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
@@ -256,6 +260,7 @@ methods:
             InvalidValuesError: If any of the input parameters contain an invalid value.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
@@ -295,6 +300,7 @@ methods:
             NotFoundError: If there is no device with the given address.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
@@ -335,6 +341,7 @@ methods:
             NotFoundError: If there is no device with the given address.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
@@ -373,6 +380,7 @@ methods:
             NotFoundError: If there is no device with the given address.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
@@ -420,6 +428,7 @@ methods:
             InvalidValuesError: If any of the input parameters contain an invalid value.
             ServiceNotAvailableError: If a Bluetooth device is turned off.
             UnknownError: In any other error case.
+        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
     parameters: 

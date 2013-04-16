@@ -56,6 +56,8 @@ properties:
 methods:
   - name: writeNDEF
     summary: Writes NDEF data to the NFC tag.
+   description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
     parameters:
       - name: ndefMessage
         summary: NDEF message to write to NFC tag.
@@ -73,6 +75,9 @@ methods:
 
   - name: readNDEF
     summary: Reads NDEF data from the NFC tag.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
+
     parameters:
       - name: successCallback 
         summary: Invoked in case of successfully reading the NDEF Data.
@@ -89,7 +94,8 @@ methods:
         Transceive function is the only way to access the raw format card (not formatted). 
         Each tag type requires its own command to access tags. This API provides low level access
         of tag operation. (Note that you must know each tag technology.)
-
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
     parameters:
       - name: data 
         summary: Raw data to transceive with the NFC tag.
