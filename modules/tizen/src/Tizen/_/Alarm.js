@@ -34,7 +34,7 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 
 		_wrap: function(object) {
 			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
-			
+
 			var result;
 
 			if (object.toString() === '[object AlarmRelative]') {
@@ -42,12 +42,10 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 			}
 			else if (object.toString() === '[object AlarmAbsolute]') {
 				result = this.createAlarmAbsolute(object);
+			} else {
+				console.error('Incorrect object type');
 			}
-			else
-			{
-				console.error("Incorrect object type");
-			}
-			
+
 			return result;
 		},
 
