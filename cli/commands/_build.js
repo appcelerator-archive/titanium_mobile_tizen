@@ -13,7 +13,7 @@ var ti = require('titanium-sdk'),
 	cleanCSS = require('clean-css'),
 	afs = appc.fs,
 	xml = appc.xml,
-	async = require('async'),			// for JavaScript asynchronous operations (async.series)
+	series = appc.async.series,
 	parallel = appc.async.parallel,
 	UglifyJS = require('uglify-js'),
 	fs = require('fs'),
@@ -41,11 +41,11 @@ var ti = require('titanium-sdk'),
 		'.jpg': 'image/jpg',
 		'.jpeg': 'image/jpg'
 	},
-	devId,								// stores the target device/emulator ID
-	tizenConfigXmlSources, 				// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
+	targets = ['emulator', 'device', 'distribute'],
+	tizenConfigXmlSources,	// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
 	// Defines the default list of privileges for a Tizen application. If a privilege is not declared, the corresponding Tizen feature will be
 	// unavailable. By default adds minimal required set of privileges
-	defaultPrivilegesList = 
+	defaultPrivilegesList =
 			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
 			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
@@ -91,7 +91,7 @@ exports.config = function (logger, config, cli) {
 						default: false,
 						desc: __('debug Tizen application')
 					},
-				},				
+				},
 				options: {
 					'deploy-type': {
 						abbr: 'D',
@@ -105,16 +105,6 @@ exports.config = function (logger, config, cli) {
 						desc: __('the id for the Tizen device or emulator'),
 						hint: __('device id')
 					},
-					// 'run-dev-id': {
-					// 	abbr: 'R',
-					// 	desc: __('run widget on this device'),
-					// 	hint: __('device id')
-					// },			
-					// 'debug-dev-id': {
-					// 	abbr: 'B',
-					// 	desc: __('debug widget on this device'),
-					// 	hint: __('device id')
-					// },
 					'keystore': {
 						abbr: 'K',
 						desc: __('the location of the certificate file'),
@@ -175,6 +165,13 @@ exports.config = function (logger, config, cli) {
 								return true;
 							}
 						}
+					},
+					'target': {
+						abbr: 'T',
+						default: 'emulator',
+						desc: __('the target to build for'),
+						required: true,
+						values: targets
 					}
 				}
 			});
@@ -264,9 +261,9 @@ function build(logger, config, cli, finished) {
 	this.appNames = {};
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
-	this.tizenSdkDir = 'c:/tizen-sdk';
-	this.targetDevice = void 0;//cli.argv['dev-id'];	
-	this.debugDevice = void 0;//cli.argv['debug-dev-id'];
+	this.tizenSdkDir = void 0; //'c:/tizen-sdk' or '~/tizen-sdk', depends on OS
+
+	this.debugFlag = cli.argv['debug'];
 	this.runDevice = cli.argv['device'];
 	this.tizenCert = cli.argv['keystore'];
 	this.storeType = 'pkcs12';
@@ -312,15 +309,7 @@ function build(logger, config, cli, finished) {
 	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
 	this.tiapp.analytics = false;
 
-	// initialize device id (with the value obtained from the command line)
-	if (this.debugDevice) {
-		devId = this.debugDevice;
-	} else if (this.runDevice) {
-		devId = this.runDevice;
-	} else if (this.targetDevice) {
-		devId = this.targetDevice;
-	}
-	logger.info(__('Target device Id:  "%s" ', devId));
+	logger.info(__('Target device Id:  "%s" ', this.runDevice));
 
 	// Generate a random Tizen application ID.
 	this.tiapp.tizen = {
@@ -335,7 +324,7 @@ function build(logger, config, cli, finished) {
 
 	var mwBuildSettings = this.tiapp.mobileweb.build[this.deployType];
 	this.minifyJS = mwBuildSettings && mwBuildSettings.js ? !!mwBuildSettings.js.minify : this.deployType == 'production';
-	
+
 	cli.fireHook('build.pre.compile', this, function (e) {
 		// Make sure we have an app.js. This used to be validated in validate(), but since plugins like
 		// Alloy generate an app.js, it may not have existed during validate(), but should exist now
@@ -373,8 +362,8 @@ function build(logger, config, cli, finished) {
 					});
 				}
 			], function () {
-				// async.series is used to structure callback-dependent code.
-				async.series([
+				// node-app.async.series is used to structure callback-dependent code.
+				series(this, [
 					function (next) {
 						this.minifyJavaScript();
 						this.createFilesystemRegistry();
@@ -386,66 +375,20 @@ function build(logger, config, cli, finished) {
 						wrench.rmdirSyncRecursive( this.buildDir + '/mobileweb/apple_startup_images', true);
 						this.signTizenApp(logger, function () {
 							next(null, 'ok');
-						});					
-					}.bind(this), function (next) {
-						if (process.platform === 'win32') {
-							// Pack the source files into a .wgt file on Windows, using 7zip. When finished, proceed to the
-							// next step of the async series.
-							this.wgtPackaging7z(logger, function () {
+						});
+					}, function (next) {
+						appc.zip.zipDirContent(
+							this.buildDir, 
+							path.join(this.buildDir, 'tizenapp.wgt'), 
+							function () {
 								next(null, 'ok');
 							});
-						} else {
-							// Pack the source files into a .wgt file on Linux/MacOS, using the standard zip utility.
-							// When finished, proceed to the next step of the async series.
-							this.wgtPackagingLinux(logger, function () {
-								next(null, 'ok');
-							});
-						}
-					}.bind(this), function (next) {
-							// Find Tizen SDK location. Tizen CLI depends on it.
-							this.detectTizenSDK(logger, next);
-					}.bind(this),function (next) {
-						if (devId) {
-							// Need to uninstall the old version of the widget before installing a new version of it.
-							// If the widget is not installed, will do nothing.
-							this.uninstallWidgetForce(logger, function () {
-									next(null, 'ok');
-								});
-						} else {
-							next(null, 'ok');
-						}
-					}.bind(this), function (next) {
-						if (devId && devId != 'none') {
-							// Install the widget on the device/emulator.
-							this.installOnDevice(logger, function () {
-									next(null, 'ok');
-								});
-						} else {
-							next(null, 'ok');
-						}
-					}.bind(this),function (next) {
-						// Run the widget on the device/emulator.
-						if (this.runDevice && this.runDevice != 'none') {
-							this.runOnDevice(logger, function () {
-									next(null, 'ok');
-								});
-						} else {							
-							next(null, 'ok');
-						}
-					}.bind(this),function (next) {
-						// Initiate a debugging session on the device/emulator.
-						// Runs the web debug utility using Tizen CLI.
-						if (this.debugDevice && this.debugDevice != 'none') {
-							this.debugOnDevice(logger, function () {
-									next(null, 'ok');
-								});
-						} else {							
-							next(null, 'ok');
-						}
-					}.bind(this)
+					}
 					], function (err) {
-						if (err) 
-							console.log('Failed:' + err)						
+						logger.info('Build finished');
+						if (err) {
+							console.log('Failed:' + err);
+						}
 						finished && finished.call(this);
 				});
 			});
@@ -1227,230 +1170,150 @@ build.prototype = {
 		}
 	},
 
-	// Pack the source files into a .wgt file on Windows, using 7zip. Using 7zip from node-appc which is guaranteed to be present.
-	// The output file is tizenapp.wgt in the build directory.
-	// Parameters:	
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	wgtPackaging7z: function (logger, callback) {
-		logger.info(__('Packaging application into wgt'));
-		// Create the tasks to unzip each entry in the zip file
-		var child,
-			stdout = '',
-			stderr = '';
+	// // Execute a Tizen CLI command (refer to https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/ide_sdk_tools/command_line_interface.htm)
+	// // Parameters:
+	// // - command: the CLI command (e.g. "web-run")
+	// // - params: the parameters of the CLI command (e.g. "--device=eumlator-26100")
+	// // - logger: the logger object
+	// // - callback: the function to call upon completion
+	// executeTizenCLICommand : function (command, params, logger, callback) {
+	// 	var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', process.platform === 'win32' ? command + '.bat' : command) + ' ' +params;
+	// 	logger.info(__('Executing: %s', pathToCmd));
+	// 	runner.exec(
+	// 			pathToCmd,
+	// 			function (err, stdout, stderr) {
+	// 				logger.info(stdout);
+	// 				if (err != null) {
+	// 					logger.info(__('CLI command failed with error output:'));
+	// 					logger.info(stderr);
+	// 				}
+	// 				callback();
+	// 		});
+	// },
 
-		child = runner.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
-		child.stdout.on('data', function (data) {
-			stdout += data.toString();
-		});
-		child.on('exit', function (code, signal) {
-			if (callback) {
-				if (code) {
-					// if we're on windows, the error message is actually in stdout, so scan for it
-					if (process.platform === 'win32') {
-						var foundError = false,
-							err = [];
-						
-						stdout.split('\n').forEach(function (line) {
-							if (/^Error\:/.test(line)) {
-								foundError = true;
-							}
-							if (foundError) {
-								line && err.push(line.trim());
-							}
-						});
+	// // Force uninstalling a widget from Tizen.
+	// // Parameters:
+	// // - logger: the logger object
+	// // - callback: the function to call upon completion
+	// uninstallWidgetForce: function (logger, callback) {
+	// 	if (this.runDevice) {
+	// 		this.executeTizenCLICommand(
+	// 			'web-uninstall',
+	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
+	// 			logger,
+	// 			callback);
+	// 	} else {
+	// 		callback();
+	// 	}
+	// },
 
-						if (err.length) {
-							stderr = err.join('\n') + stderr;
-						}
-					}
-					callback();
-				} else {
-					callback();
-				}
-			}
-		});
-	},
+	// // Install the created widget on Tizen.
+	// // Parameters:
+	// // - logger: the logger object
+	// // - callback: the function to call upon completion
+	// installOnDevice : function (logger, callback) {
+	// 	if (this.runDevice && this.runDevice != 'none') {
+	// 		this.executeTizenCLICommand(
+	// 			'web-install',
+	// 			'-t 10 ' + ' --widget="' + path.join(this.buildDir, 'tizenapp.wgt') + '"' + ' --device=' + this.runDevice,
+	// 			logger,
+	// 			callback);
+	// 	} else {
+	// 		callback();
+	// 	}		
+	// },
 
-	// Pack the source files into a .wgt file on Linux/MacOS, using the standard zip utility.
-	// Parameters:	
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	wgtPackagingLinux : function (logger, callback) {
-		logger.info(__('Packaging application into wgt'));
-		var cmdzip = 'zip -r "' + path.join(this.buildDir, 'tizenapp.wgt') + '" *';
-		console.log(__('zip cmd: %s', cmdzip));
-		runner.exec(
-			cmdzip,
-			{ cwd: this.buildDir },
-			function (err, stdout, stderr) {
-				logger.info(stdout);
-				if (err != null) {
-					logger.info(stderr);
-				} else {
-					logger.info('compressing ok');
-				}
-				callback();
-			}
-		);
-	},
+	// // Run the created widget on Tizen.
+	// // Parameters:
+	// // - logger: the logger object
+	// // - callback: the function to call upon completion
+	// runOnDevice : function (logger, callback) {		
+	// 	if (this.runDevice && this.runDevice != 'none') {
+	// 		this.executeTizenCLICommand(
+	// 			'web-run',
+	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
+	// 			logger,
+	// 			callback);
+	// 	} else {
+	// 		callback();
+	// 	}		
+	// },
 
-	// Execute a Tizen CLI command (refer to https://developer.tizen.org/help/topic/org.tizen.web.appprogramming/html/ide_sdk_tools/command_line_interface.htm)
-	// Parameters:
-	// - command: the CLI command (e.g. "web-run")
-	// - params: the parameters of the CLI command (e.g. "--device=eumlator-26100")
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	executeTizenCLICommand : function (command, params, logger, callback) {
-		var pathToCmd = path.join(this.tizenSdkDir, 'tools', 'ide', 'bin', process.platform === 'win32' ? command + '.bat' : command) + ' ' +params;
-		logger.info(__('Executing: %s', pathToCmd));
-		runner.exec(
-				pathToCmd,
-				function (err, stdout, stderr) {
-					logger.info(stdout);
-					if (err != null) {
-						logger.info(__('CLI command failed with error output:'));
-						logger.info(stderr);
-					}
-					callback();
-			});
-	},
+	// // Debug the created widget on Tizen.
+	// // Parameters:
+	// // - logger: the logger object
+	// // - callback: the function to call upon completion
+	// debugOnDevice : function (logger, callback) {
+	// 	if (this.debugFlag) {
+	// 		this.executeTizenCLICommand(
+	// 			'web-debug',
+	// 			'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
+	// 			logger,
+	// 			callback);
+	// 	} else {
+	// 		callback();
+	// 	}
+	// },
 
-	// Force uninstalling a widget from Tizen.
-	// Parameters:
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	uninstallWidgetForce: function (logger, callback) {
-		if (devId) {
-			this.executeTizenCLICommand(
-				'web-uninstall',
-				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + devId,
-				logger,
-				callback);
-		} else {
-			callback();
-		}
-	},
+	// // Find the Tizen SDK installation on this computer and store it in "tizenSdkDir".
+	// // Parameters:
+	// // - logger: the logger object
+	// // - next: the function to call upon completion
+	// detectTizenSDK: function (logger, next) {
+	// 	var self = this;
+	// 	if (process.platform === 'win32') {
+	// 		// Find the path to Tizen SDK using the registry.
+	// 		// 1. read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders;
+	// 		//    the key "Local AppData" has the path of the file that contains the path of the SDK
+	// 		//    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
+	// 		// 2. read the file to obtain the path to the SDK
 
-	// Install the created widget on Tizen.
-	// Parameters:
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	installOnDevice : function (logger, callback) {
-		if (devId && devId != 'none') {
-			this.executeTizenCLICommand(
-				'web-install',
-				'-t 10 ' + ' --widget="' + path.join(this.buildDir, 'tizenapp.wgt') + '"' + ' --device=' + devId,
-				logger,
-				callback);
-		} else {
-			callback();
-		}		
-	},
-
-	// Run the created widget on Tizen.
-	// Parameters:
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	runOnDevice : function (logger, callback) {		
-		if (this.runDevice && this.runDevice != 'none') {
-			this.executeTizenCLICommand(
-				'web-run',
-				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
-				logger,
-				callback);
-		} else {
-			callback();
-		}		
-	},
-
-	// Debug the created widget on Tizen.
-	// Parameters:
-	// - logger: the logger object
-	// - callback: the function to call upon completion
-	debugOnDevice : function (logger, callback) {
-		if (this.debugDevice && this.debugDevice != 'none') {			
-			this.executeTizenCLICommand(
-				'web-debug',
-				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.debugDevice,
-				logger,
-				callback);
-		} else {
-			callback();
-		}
-	},
-
-	// Find the Tizen SDK installation on this computer and store it in "tizenSdkDir".
-	// Parameters:
-	// - logger: the logger object
-	// - next: the function to call upon completion
-	detectTizenSDK: function (logger, next) {
-		var self = this;
-		if (process.platform === 'win32') {
-			// Find the path to Tizen SDK using the registry.
-			// 1. read key HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders;
-			//    the key "Local AppData" has the path of the file that contains the path of the SDK
-			//    (e.g. "C:\Users\aod\AppData\Local\tizen-sdk-data\tizensdkpath)
-			// 2. read the file to obtain the path to the SDK
-
-			var keyvalue = null;
-			runner.exec(
-				'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
-				function (err, stdout, stderr) {
-					if (stdout !== null && (typeof stdout != 'undefined')) {
-						var arr = stdout.split(' ');
-						keyvalue = arr[arr.length-1]; // the last parameter is the path
-						keyvalue = keyvalue.slice(0, -4);
-						keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
-						logger.info(__('Reading Tizen SDK location from: ' + keyvalue));
-						fs.readFile(keyvalue, 'utf8', function (err,data) {
-							if (err) {
-								logger.info(err);
-								return;
-							}
-							var arr = data.split('=');
-							self.tizenSdkDir =  arr[1];
-							logger.info('Tizen SDK found at: ' + self.tizenSdkDir);
-							next(null, 'ok');
-						});
-					} else {
-						logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
-					}
-				});
-		} else {
-			// Tizen SDK on Linux is installed in /home/tizen-sdk by default.
-			self.tizenSdkDir = path.join(process.env.HOME, 'tizen-sdk');			
-			if (afs.exists(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'))) {
-				fs.readFile(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'),
-					'utf8',
-					function (err,data) {
-						if (err) {
-							logger.info(err);
-							next('Failed to find Installed Tizen SDK for Linux', 'failed');
-							return;
-						}
-						var arr = data.split('=');
-						self.tizenSdkDir =  arr[1];
-						logger.info(__('Tizen SDK found at: %s', self.tizenSdkDir));
-						next(null, 'ok');
-					});
-			} else {
-				next('Failed to find Installed Tizen SDK for Linux', 'failed');
-			}
-		}
-	},
-
-	// Find the path to 7zip packer utility. Using 7zip from node-appc which is guaranteed to be present.
-	// Parameters:
-	// - logger: the logger object
-	find7za: function (logger) {
-		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
-		if (fs.existsSync(zippath)) {
-			return zippath;
-		} else {
-			logger.error('7za.exe not found. Expected path: ' + path.normalize(zippath));
-		}
-	},
+	// 		var keyvalue = null;
+	// 		runner.exec(
+	// 			'reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders" -v "Local AppData"', 
+	// 			function (err, stdout, stderr) {
+	// 				if (stdout !== null && (typeof stdout != 'undefined')) {
+	// 					var arr = stdout.split(' ');
+	// 					keyvalue = arr[arr.length-1]; // the last parameter is the path
+	// 					keyvalue = keyvalue.slice(0, -4);
+	// 					keyvalue = keyvalue + '\\tizen-sdk-data\\tizensdkpath';
+	// 					logger.info(__('Reading Tizen SDK location from: ' + keyvalue));
+	// 					fs.readFile(keyvalue, 'utf8', function (err,data) {
+	// 						if (err) {
+	// 							logger.info(err);
+	// 							return;
+	// 						}
+	// 						var arr = data.split('=');
+	// 						self.tizenSdkDir =  arr[1];
+	// 						logger.info('Tizen SDK found at: ' + self.tizenSdkDir);
+	// 						next(null, 'ok');
+	// 					});
+	// 				} else {
+	// 					logger.error('Error while looking for installed Tizen SDK. Cannot read values from windows registry');
+	// 				}
+	// 			});
+	// 	} else {
+	// 		// Tizen SDK on Linux is installed in /home/tizen-sdk by default.
+	// 		self.tizenSdkDir = path.join(process.env.HOME, 'tizen-sdk');			
+	// 		if (afs.exists(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'))) {
+	// 			fs.readFile(path.join(process.env.HOME, 'tizen-sdk-data', 'tizensdkpath'),
+	// 				'utf8',
+	// 				function (err,data) {
+	// 					if (err) {
+	// 						logger.info(err);
+	// 						next('Failed to find Installed Tizen SDK for Linux', 'failed');
+	// 						return;
+	// 					}
+	// 					var arr = data.split('=');
+	// 					self.tizenSdkDir =  arr[1];
+	// 					logger.info(__('Tizen SDK found at: %s', self.tizenSdkDir));
+	// 					next(null, 'ok');
+	// 				});
+	// 		} else {
+	// 			next('Failed to find Installed Tizen SDK for Linux', 'failed');
+	// 		}
+	// 	}
+	// },
 
 	// Sign the created widget using the developer certificate. The certificate can be configured using command-line
 	// arguments.
