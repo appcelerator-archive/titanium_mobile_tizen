@@ -12,7 +12,7 @@ examples:
     example:    |
         var tizen = require("tizen");
         var attendee = tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',
-                                           attendeeInitDict: {role: tizen.Calendar.ATTENDEE_ROLE_CHAIR, RSVP: true}});
+                                           attendeeInitDict: {role: tizen.Calendar.ATTENDEE_ROLE_CHAIR, rsvp: true}});
         event.attendees = [attendee];
  
 properties:
@@ -56,7 +56,7 @@ properties:
         The default value is ATTENDEE_STATUS_PENDING.
     type: STRING
 
-  - name: RSVP 
+  - name: rsvp 
     summary: |
         An attribute to store the attendee's participation status reply (RSVP). (See RFC 5545, Section 3.2.17.)
         

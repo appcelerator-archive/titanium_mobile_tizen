@@ -6,9 +6,10 @@ extends: Tizen.SystemInfo.SystemInfoProperty
 platforms: [tizen]
 createable: false
 
-properties:
+methods:
             
-  - name: units
-    summary: The array of storage units connected to this device.
-    type: Array<Tizen.SystemInfo.SystemInfoStorageUnit>
+  - name: getUnits
+    summary: This method returns the array of storage units connected to this device.
+    returns:
+        type: Array<Tizen.SystemInfo.SystemInfoStorageUnit>
     permission: read-only
