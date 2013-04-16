@@ -227,10 +227,10 @@ function build(logger, config, cli, finished) {
 
 	this.debugFlag = cli.argv['debug'];
 	this.runDevice = cli.argv['device'];
-	this.tizenCert = cli.argv['keystore'];
+	this.keystore = cli.argv['keystore'];
 	this.storeType = 'pkcs12';
 	this.alias = cli.argv['alias'];
-	this.storePasword = cli.argv['password'];
+	this.storePassword = cli.argv['password'];
 	this.keypass = cli.argv['key-password'];
 
 	var pkgJson = this.readTiPackageJson();
@@ -268,21 +268,21 @@ function build(logger, config, cli, finished) {
 		}
 	});
 
-	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
+	// Analytics on Tizen is disabled, it is workaround for https://bugs.tizen.org/jira/browse/TDIST-192
 	this.tiapp.analytics = false;
 
 	logger.info(__('Target device Id:  "%s" ', this.runDevice));
 	
 	// Generate a random Tizen application ID.	
-	if(!this.tiapp.tizen){
-		this.tiapp.tizen = {
+	
+	this.tiapp.tizen || (this.tiapp.tizen = {
 			appid : randomString(10),
 			configXml : '<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
 				'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
 				'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
 				'<access origin="*" subdomains="true"/>\n'
-		};
-	}
+		});
+	
 
 	// tiapp.xml is ready now, continue
 	this.validateTheme();
@@ -334,11 +334,13 @@ function build(logger, config, cli, finished) {
 						this.createFilesystemRegistry();
 						this.createIndexHtml();
 						this.createConfigXml();
-						// Before signing and zipping, let's remove apple-specific files. Doind it before zipping allow us to keep
+						// Before signing and zipping, let's remove apple-specific files. Doing it before zipping allow us to keep
 						// file copying logic the same for mobileweb and Tizen. As a result, it's much easy synchronize there files.
-						this.logger.info(__('delete %s', this.buildDir + '/mobileweb/apple_startup_images'));
+						this.logger.info(__('Removing %s', this.buildDir + '/mobileweb/apple_startup_images'));
 						wrench.rmdirSyncRecursive( this.buildDir + '/mobileweb/apple_startup_images', true);
-						this.signTizenApp(logger, function () {
+						next(null, 'ok');
+					}, function (next) {
+						this.signTizenApp(function () {
 							next(null, 'ok');
 						});
 					}, function (next) {
@@ -990,14 +992,8 @@ build.prototype = {
 	// Create the config.xml file (from template) which will go into the wgt.
 	createConfigXml: function () {
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
-		
-		// Use the URL as the Tizen widget ID, if it's available.
-		if (!this.tiapp.url || 0 === this.tiapp.url || 'http://' === this.tiapp.url) {
-			templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);
-		} else {
-			templt = templt.replace('%%WIDGET_ID%%', this.tiapp.url);
-		}
 
+		templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);		
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);		
 		templt = templt.replace('%%FEATURES_LIST%%', this.tiapp.tizen.configXml);
@@ -1089,23 +1085,23 @@ build.prototype = {
 	// Sign the created widget using the developer certificate. The certificate can be configured using command-line
 	// arguments.
 	// Parameters:
-	// - logger: the logger object
 	// - callback: the function to call upon completion
-	signTizenApp: function (logger, callback) {
+	signTizenApp: function (callback) {
 		// Sign Tizen application with our custom signer utility. 
 		// The stock signer utility web-sign is not used, because it depends on the file ".project" created in Tizen IDE
 		// (and Tizen IDE is not used in Titanium workflow).
 
-		var cmdSign = 'java -jar "' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + '" -sig_proj ' +this.buildDir;
-		logger.info(__('Signing application in  "%s" ', this.buildDir));
-		if (this.tizenCert) {
+		var cmdSign = 'java -jar "' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + '" -sig_proj ' + this.buildDir,
+			self = this;
+		self.logger.info(__('Signing application in  "%s" ', this.buildDir));
+		if (this.keystore) {
 			// use user's certificate to sign application
-			cmdSign = cmdSign + ' -cert ' + this.tizenCert;
+			cmdSign = cmdSign + ' -cert ' + this.keystore;
 			if (this.storeType) {
 				cmdSign = cmdSign + ' -storetype ' + this.storeType;
 			}
-			if (this.storePasword) {
-				cmdSign = cmdSign + ' -storepass ' + this.storePasword;
+			if (this.storePassword) {
+				cmdSign = cmdSign + ' -storepass ' + this.storePassword;
 			}
 			if (this.alias) {
 				cmdSign = cmdSign + ' -alias ' + this.alias;
@@ -1114,14 +1110,14 @@ build.prototype = {
 				cmdSign = cmdSign + ' -keypass ' + this.keypass;
 			}
 		}
-		logger.info(__('Signer commandline:  "%s" ', cmdSign));
+		self.logger.info(__('Signer commandline:  "%s" ', cmdSign));
 
 		runner.exec(
 			cmdSign,
 			function (err, stdout, stderr) {				
 				if (err != null) {
-					logger.error('Signing failed ');
-					logger.error(stderr);
+					self.logger.error('Signing failed ');
+					self.logger.error(stderr);
 				}
 				callback();
 			});
