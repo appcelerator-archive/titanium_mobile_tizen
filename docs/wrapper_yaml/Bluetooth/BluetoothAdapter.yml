@@ -118,7 +118,7 @@ methods:
                 }
             }
 
-  - name: discoverDevices
+  - name: startDiscovery
     summary: Searches for nearby Bluetooth devices.  
     description: |
         That is, devices within proximity to the local device. This method initiates the device discovery process. 
@@ -138,7 +138,7 @@ methods:
             
             function startDiscovery() {
                 // starts searching for nearby devices
-                adapter.discoverDevices();
+                adapter.startDiscovery();
             }
             
             adapter.addEventListener('discoverystarted', function() {
@@ -211,7 +211,7 @@ methods:
             
             function startDiscovery() {
                 // starts searching for nearby devices
-                adapter.discoverDevices();
+                adapter.startDiscovery();
             }
             
             adapter.addEventListener('discoverystarted', function() {
