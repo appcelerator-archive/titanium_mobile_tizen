@@ -14,13 +14,7 @@ methods:
   - name: sendMessage
     summary: Attempts to send the specified message. 
     description: |
-        For messaging technologies in which the message is sent individually to every recipient, (such as SMS) individual notification MUST be supported as follows:
-        For every individual recipient in the destination list, if the message cannot be sent to that recipient, the onerror method of the errorCallback argument MUST be invoked with the corresponding error type as input parameter. These error types may be passed, depending on the the error conditions:
-            NetworkError: If the network connection is not accessible.
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
         The error message contains the name of the recipient who failed to receive the sent message.
-        When the operation is fully completed (that is, the implementation has the result of the send operation for all recipients), the onsuccess(DOMString[] recipients) method of the successCallback will be invoked with an array of recipients who received the sent message, as input parameter.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.send
     parameters: 
@@ -28,37 +22,41 @@ methods:
         summary: The message to be sent. 
         type: Tizen.Messaging.Message
 
-      - name: successCallback
-        summary: To be invoked if the message is successfully sent
-        type: Callback<Array<Strings>>
-        optional: true
-
-      - name: errorCallback
-        summary: To be invoked if the sending request fails.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<SendMessageResponse>
         optional: true
     examples: 
       - example: |
             var tizen = require("tizen");
         
             // Define the success callback
-            function messageSent(recipients) {
-                for (var i=0; i<recipients.length; i++) {
-                    console.log("The SMS has been sent to " + recipients[i]);
+            function messageSent(response) {
+                if (response.success) {
+                    var i = 0,
+                        recipients = response.recipients,
+                        recipientsCount = recipients.length;
+                    for (; i < recipientsCount; i++) {
+                        console.log("The SMS has been sent to " + recipients[i]);
+                    }
+                } else {
+                    console.error('The SMS could not be sent ' + response.error);
                 }
             }
-            // Define the error callback.
-            function messageFailed(error) {
-                console.log("The SMS could not be sent " + error.message);
-            }
+        
             // Define the success callback.
-            function serviceListCB(services) {
-                if (services.length > 0) {
-                    // SMS sending example
-                    var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
-                                                             messageInitDict: {plainBody: 'I will arrive in 10 minutes.', to: ["+34666666666", "+34888888888"]}});
-                    // Send request
-                    services[0].sendMessage(msg, messageSent, messageFailed);
+            function serviceListCB(response) {
+                if (response.success) {
+                    var services = response.services;
+                    if (services.length > 0) {
+                        // SMS sending example
+                        var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
+                                                                 messageInitDict: {plainBody: 'I will arrive in 10 minutes.', to: ["+34666666666", "+34888888888"]}});
+                        // Send request
+                        services[0].sendMessage(msg, messageSent);
+                    }
+                } else {
+                    console.error('An error occured: ' + response.error);
                 }
             }
             tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
@@ -66,44 +64,47 @@ methods:
   - name: loadMessageBody
     summary: Attempts to load the body for the specified message. 
     description: |
-        It is the back end's responsibility to detect which mime parts of the message are related to the message body and should be loaded. If the message body is already loaded, the onsuccess method of the successCallback will be invoked immediately.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
+        It is the back end's responsibility to detect which mime parts of the message are related to the message body and should be loaded. If the message body is loaded,  the callback will be invoked immediately.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: message
         summary: Message with the body to be loaded. 
-        type: Tizen.Messaging.Message
+        type: Tizen.Messaging.MessageBody
 
-      - name: successCallback
-        summary: Function to be invoked if the message body is successfully loaded. 
-        type: Callback<Tizen.Messaging.Message> 
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<LoadMessageBodyResponse> 
 
-      - name: errorCallback
-        summary:  Function to be invoked if the loading request fails
-        type: Callback<Tizen.WebAPIError>
-        optional: true
     examples: 
       - example: |
-            var tizen = require("tizen");
+            var tizen = require('tizen');
             
             var service; // Assume messaging service is initialized
-            // Define the success body loaded callback.
-            function successCallback(message) {
-                console.log ("body for message: " + message.subject + "from: " + message.from + "loaded.");
+            // Define body loaded callback.
+            function onBodyLoaded(response) {
+                if (response.success) {
+                    var message = response.message;
+                    console.log('Body for message: ' + message.subject + 'from: ' + message.from + ' loaded.');
+                } else {
+                    console.error('An error occured while loading message body: ' + response.error);
+                }
             }
-            // Define error callback.
-            function errorCallback(error) {
-                console.log("Cannot load message body" + error.message);
-            }
-            function messageQueryCallback(messages) {
-                for (var i = 0; i < messages.length; i++) {
-                    var message = messages[i];
-                    if (!message.body.loaded) {
-                        service.loadMessageBody(message, successCallback, errorCallback);
+            
+            function messageQueryCallback(response) {
+                if (response.success) {
+                    var messages = response.messages,
+                        messagesCount = messages.length,
+                        i = 0,
+                        message;
+                    for (; i < messagesCount; i++) {
+                        var message = messages[i];
+                        if (!message.body.loaded) {
+                            service.loadMessageBody(message, onBodyLoaded);
+                        }
                     }
+                } else {
+                    console.error('An error occured while finding messages: ' + response.error);
                 }
             }
             service.messageStorage.findMessages(tizen.createAttributeFilter({attributeName: 'type',
@@ -112,10 +113,7 @@ methods:
   - name: loadMessageAttachment
     summary: Attempts to load the specified message attachment. 
     description: |
-        This method is used only for EMAIL services. If the message attachment is already loaded, the onsuccess method of the successCallback will be invoked immediately.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
+        This method is used only for EMAIL services. If the message attachment is already loaded, the callback will be invoked immediately.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
@@ -123,14 +121,9 @@ methods:
         summary: Message attachment to be loaded. 
         type: Tizen.Messaging.MessageAttachment
 
-      - name: successCallback
-        summary: Function to be invoked if the message attachment is successfully loaded. 
-        type: Callback<Tizen.Messaging.MessageAttachment> 
-
-      - name: errorCallback
-        summary: Function to be invoked if the loading request fails. 
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<LoadMessageAttachementResponse> 
     examples:
       - example: |
             var tizen = require("tizen");
@@ -160,24 +153,15 @@ methods:
     summary: Synchronizes the service content with an external mail server. 
     description: |
         This method is used only for EMAIL services. This method performs the same actions as syncFolder for every folder with Synchronizable flag set within the current Messaging service.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            AbortError: If the operation is stopped.
-            UnknownError: In any other error case.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     returns: 
       - type: Number
         summary: Identifier which can be used to stop this service operation. 
     parameters: 
-      - name: successCallback
+      - name: allback
         summary:  To be invoked if all the actions are completed successfully
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: To be invoked if the request fails. 
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<ErrorResponse>
         optional: true
 
       - name: limit
@@ -207,11 +191,7 @@ methods:
         Messages are retrieved from a given folder, even if synchronizable flag for this folder is not set. The backend is to decide which data is retrieved for every message. It can be:
             message header details
             whole message body
-        The limit of latest messages for the given folder MUST be retrieved and put into MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            AbortError: If the operation is stopped.
-            UnknownError: In any other error case.
+        The limit of latest messages for the given folder MUST be retrieved and put into Tizen.Messaging.MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     returns: 
@@ -222,14 +202,9 @@ methods:
         summary: Folder to be synchronized. 
         type: Tizen.Messaging.MessageFolder
 
-      - name: successCallback
+      - name: callback
         summary: Function to be invoked if all actions are completed successfully. 
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: Function to be invoked if the request fails.
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<ErrorResponse>
         optional: true
 
       - name: limit
@@ -287,3 +262,100 @@ properties:
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
     type: Tizen.Messaging.MessageStorage
     permission: read-only
+
+# Pseudo-types
+---
+name: SendMessageResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [sendMessage](Tizen.Messaging.MessageService.sendMessage) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: recipients
+    summary: Recipients of the message.
+    description: Will be undefined if `success` is `false`.
+    type: Array<String>
+
+---
+name: LoadMessageBodyResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [loadMessageBody](Tizen.Messaging.MessageService.loadMessageBody) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: message
+    summary: Message containing the loaded body.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Messaging.MessageBody
+
+---
+name: LoadMessageAttachementResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [loadMessageAttachment](Tizen.Messaging.MessageService.loadMessageAttachment) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: attachment
+    summary: Loaded attachment.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Messaging.MessageAttachment

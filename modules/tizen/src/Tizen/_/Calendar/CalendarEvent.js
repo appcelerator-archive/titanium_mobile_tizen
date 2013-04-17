@@ -1,6 +1,14 @@
 // Wraps Tizen interface "CalendarEvent" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helper', 'Tizen/_/WebAPIError'], function(declare, CalendarItem, helper, WebAPIError) {
+define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helper'], function(declare, CalendarItem, helper) {
+
+	function onError (e, callback) {
+		callback({
+			code: e.code,
+			success: false,
+			error: e.type + ': ' + e.message
+		});
+	}
 
 	var calendarEvent = declare(CalendarItem, {
 
@@ -33,12 +41,15 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 			}
 		},
 
-		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			function wrappedErrorCallback(error) {
-				errorCallback(new WebAPIError(error));
-			}
-
-			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), successCallback, errorCallback && wrappedErrorCallback);
+		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, callback) {
+			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function() {
+				callback({
+					code: 0,
+					success: true
+				});
+			}, callback && function(e) {
+					onError(e, callback);
+				});
 		},
 
 		constants: {

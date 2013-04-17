@@ -2,6 +2,14 @@
 
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
 
+	function onError (e, callback) {
+		callback({
+			success: false,
+			error: e.type + ': ' + e.message,
+			code: e.code
+		});
+	}
+
 	var tag = declare(Evented, {
 
 		constructor: function(args) {
@@ -11,27 +19,38 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebA
 			}
 		},
 
-		readNDEF: function(readCallback, errorCallback) {
-			return this._obj.readNDEF(function(ndefMessage) {
-					readCallback(new NDEFMessage(ndefMessage));
-				}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+		readNDEF: function(callback) {
+			return this._obj.readNDEF(callback && function(ndefMessage) {
+				callback({
+					success: true,
+					code: 0,
+					ndefMessage: new NDEFMessage(ndefMessage)
+				});
+			}, callback && function(e) {
+				onError(e, callback);
 			});
 		},
 
-		writeNDEF: function(ndefMessage, successCallback, errorCallback) {
-			return this._obj.writeNDEF(ndefMessage._obj, successCallback && function() {
-				successCallback();
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+		writeNDEF: function(ndefMessage, callback) {
+			return this._obj.writeNDEF(ndefMessage._obj, callback && function() {
+				callback({
+					success: true,
+					code: 0
+				});
+			}, callback && function(e) {
+				onError(e, callback);
 			});
 		},
 
-		transceive: function(data, byteArrayCallback, errorCallback) {
-			return this._obj.transceive(data._obj, function(arr) {
-					byteArrayCallback(arr);
-				}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+		transceive: function(data, callback) {
+			return this._obj.transceive(data._obj, callback && function(arr) {
+				callback({
+					success: true,
+					code: 0,
+					data: arr
+				});
+			}, callback && function(e) {
+				onError(e, callback);
 			})
 		},
 
