@@ -13,9 +13,6 @@ methods:
     summary: Adds a draft message to MessageStorage. 
     description: |
         Added messages would be stored in the Drafts folder.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contain an invalid value.
-            UnknownError: In any other error case.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
@@ -23,14 +20,9 @@ methods:
         summary:  Draft message that should be added to the storage. 
         type: Tizen.Messaging.Message
 
-      - name: successCallback
-        summary: Function called when draft messages successfully added.
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary: To be invoked if the sending request fails.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
         optional: true
     examples:
       - example: |
@@ -57,24 +49,15 @@ methods:
   - name: findMessages
     summary: Queries messages from MessageStorage. 
     description: |
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
-        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
         type: Tizen.AbstractFilter 
 
-      - name: successCallback
-        summary: Function called when the invocation ends successfully. 
-        type: Callback<Array<Tizen.Messaging.Message>>
-
-      - name: errorCallback
-        summary: Function called when an error occurs.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<FindMessageResponse>
 
       - name: sort
         summary: Sorting mode for the query. 
@@ -123,14 +106,9 @@ methods:
         summary: Array of messages to be deleted. 
         type: Array<Tizen.Messaging.Message>
 
-      - name: successCallback
-        summary: Function called when messages are successfully deleted.
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary: Function called when an error occurs.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
         optional: true
 
     examples:
@@ -158,10 +136,7 @@ methods:
   - name: updateMessages
     summary: Updates messages in MessageStorage. 
     description: |
-        The backend MUST check whether the required updates can be applied and invoke the errorCallback function, if they cannot. Depending on the backend synchronization settings, the local changes in MessageStorage might be rewritten as a result of invoking the sync() or syncFolder() methods of the related message service.
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
+        The backend MUST check whether the required updates can be applied and invoke the callback function with error message, if they cannot. Depending on the backend synchronization settings, the local changes in Tizen.Messaging.MessageStorage might be rewritten as a result of invoking the [sync](Tizen.Messaging.MessageService.sync) or [syncFolder](Tizen.Messaging.MessageService.syncFolder) methods of the related message service.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
@@ -169,14 +144,9 @@ methods:
         summary: Array that should be updated. 
         type: Array<Tizen.Messaging.Message>
 
-      - name: successCallback
-        summary: Function called when messages are successfully updated. 
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary: Function called when an error occurs.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
         optional: true
     examples:
       - example: |
@@ -203,25 +173,16 @@ methods:
 
   - name: findConversations
     summary: Queries conversations from MessageStorage. 
-    description: |
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
-        
+    description: | 
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
         type: Tizen.AbstractFilter 
 
-      - name: successCallback
-        summary:  Function called when the invocation ends successfully. 
-        type: Callback<Array<Tizen.Messaging.MessageConversation>>
-
-      - name: errorCallback
-        summary: Function called when an error occurs.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary:  Function to invoke on success or failure.
+        type: Callback<FindConversationsResponse>
 
       - name: sort
         summary: Sorting rules for the query.
@@ -271,14 +232,9 @@ methods:
         summary: Array of conversations to be deleted.
         type: Array<Tizen.Messaging.MessageConversation>
 
-      - name: successCallback
-        summary: Function called when conversations are successfully deleted.
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: Function called when an error occurs
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
@@ -309,25 +265,16 @@ methods:
 
   - name: findFolders
     summary: Queries folders from MessageStorage. 
-    description: |
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contains an invalid value.
-            UnknownError: In any other error case.
-        
+    description: |        
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
         type: Tizen.AbstractFilter
 
-      - name: successCallback
-        summary: Function called when the invocation ends successfully. 
-        type: Callback<Array<Tizen.Messaging.MessageFolder>>
-
-      - name: errorCallback
-        summary: Function called when an error occurs. 
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<FindFoldersResponse>
     examples:
       - example: |
             var service; // Assume messaging service is initialized
@@ -558,3 +505,99 @@ methods:
       - name: removedConversations 
         summary: Array of removed folders. 
         type: Array<Tizen.Messaging.MessageConversation>
+
+---
+name: FindMessageResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [findMessages](Tizen.Messaging.MessageStorage.findMessages) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: messages
+    summary: Array of messages that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Messaging.Message>
+
+---
+name: FindConversationsResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [findConversations](Tizen.Messaging.MessageStorage.findConversations) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: conversations
+    summary: Array of conversations that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Messaging.MessageConversation>
+    
+---
+name: FindFoldersResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [findFolders](Tizen.Messaging.MessageStorage.findFolders) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    since: "3.1.0"
+    
+  - name: folders
+    summary: Array of folders that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Messaging.MessageFolder>
