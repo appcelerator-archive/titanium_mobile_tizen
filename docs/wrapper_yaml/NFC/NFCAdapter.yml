@@ -22,14 +22,9 @@ methods:
         summary: The state of NFC adapter.
         type: Boolean
 
-      - name: successCallback 
-        summary: Function called when NFC adapter is enabled or disabled successfully.
-        type: Callback
-        
-      - name: errorCallback 
-        summary: Function called when an error has occurred. 
-        optional: true
-        type: Callback<Tizen.WebAPIError>
+      - name: callback 
+        summary: Function called when NFC adapter is enabled or disabled successfully or when an error has occurred.
+        type: Callback<ErrorResponse>
   
   - name: setTagListener
     summary: Registers a callback function to invoke when an NFC tag is detected.
