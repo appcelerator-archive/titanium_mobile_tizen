@@ -1,29 +1,38 @@
 // Wraps Tizen module "Calendar".
 
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarInstance', 'Tizen/_/Calendar/CalendarTask', 'Tizen/_/Calendar/CalendarEvent',
-	'Tizen/_/Calendar/CalendarAttendee', 'Tizen/_/Calendar/CalendarRecurrenceRule', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/CalendarAlarm', 'Tizen/_/WebAPIError'],
-	function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm, WebAPIError) {
+	'Tizen/_/Calendar/CalendarAttendee', 'Tizen/_/Calendar/CalendarRecurrenceRule', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/CalendarAlarm'],
+	function(lang, Evented, CalendarInstance, CalendarTask, CalendarEvent, CalendarAttendee, CalendarRecurrenceRule, CalendarEventId, CalendarAlarm) {
+
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
 
 		return lang.mixProps(require.mix({}, Evented), {
 
-			getCalendars: function(type /*CalendarType*/, successCallback /*CalendarArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function calendarsListSuccessCallBack(calendars) {
-					var i = 0,
-						len = calendars.length,
-						calendarsArr = [];
+			getCalendars: function(type /*CalendarType*/, callback) {
+				tizen.calendar.getCalendars(type,
+					callback && function(calendars){
+						var i = 0,
+							len = calendars.length,
+							calendarsArr = [];
 
-					for (; i < len; i++) {
-						calendarsArr.push(new CalendarInstance(calendars[i]));
+						for (; i < len; i++) {
+							calendarsArr.push(new CalendarInstance(calendars[i]));
+						}
+						callback({
+							code: 0,
+							success: true,
+							calendars: calendarsArr
+						});
+					}, callback && function(e) {
+						onError(e, callback);
 					}
-
-					successCallback(calendarsArr);
-				}
-
-				function wrappedErrorCallback(error) {
-					errorCallback(new WebAPIError(error));
-				}
-
-				tizen.calendar.getCalendars(type, calendarsListSuccessCallBack, errorCallback && wrappedErrorCallback);
+				);
 			},
 
 			getDefaultCalendar: function(type /*CalendarType*/) {
