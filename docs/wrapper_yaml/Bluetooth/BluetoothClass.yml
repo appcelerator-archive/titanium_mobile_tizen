@@ -32,13 +32,17 @@ methods:
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
             
-            adapter.getDevice("12:34:56:78:9A:BC", function(device) {
-                if (device.deviceClass.hasService(tizen.Bluetooth.BluetoothClassDeviceService.POSITIONING)) {
-                    console.log("Device supports Positioning service");
+            adapter.getDevice("12:34:56:78:9A:BC",
+                function(response) {
+                    if(response.success) {
+                        if (response.device.deviceClass.hasService(tizen.Bluetooth.BluetoothClassDeviceService.POSITIONING)) {
+                            console.log("Device supports Positioning service");
+                        }
+                    } else {
+                        console.log("Couldn't get device for given address: " + response.error);
+                    }
                 }
-            }, function(e) {
-                console.log("Couldn't get device for given address: " + e.message);
-            });
+            );
  
 properties:
   - name: major

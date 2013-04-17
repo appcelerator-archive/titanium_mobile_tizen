@@ -17,11 +17,7 @@ methods:
     summary: Creates a socket connection to the specified service UUID.
     description: |
         This method attempts to open a connection to the service identified by uuid on this remote device. This performs an SDP(Service Discovery Protocol) lookup on the local device for the given uuid and determines which channel to use.
-        If opening a connection is successful, then a BluetoothSocket object with open state is sent using successCallback, through which data can be exchanged by both devices.
-        The ErrorCallback is launched with these error types:
-            NotFoundError: If there is no service with the given uuid
-            InvalidValuesError: If any of the input parameters contain an invalid value.
-            UnknownError: In any other error case
+        If opening a connection is successful, then a BluetoothSocket object with open state is sent using callback, through which data can be exchanged by both devices.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
@@ -30,82 +26,99 @@ methods:
         summary: 128 bit unique identifier, which represents the service record on the device.
         type: String
 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Tizen.Bluetooth.BluetoothSocket> 
-
-      - name: errorCallback
-        summary: Method to be invoked in case of failure to open a socket.
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ConnectToServiceByUUIDResponse>
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1:
             
-            var clientSocket = null;
-
-            // Method to be called when user wants to send a message to a remote device
-            
-            function sendMessage(msg) {
-            
-                // Validate socket state, if everything is ok.
-                if (clientSocket != null && clientSocket.state == tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
-                    //Send
-                    clientSocket.writeData(msg);
-                }
-            }
-
-            // Method to be invoked when a socket is open
-            
-            function onSocketConnected(socket) {
-            
-                clientSocket = socket;
-                console.log("Opening a socket successfully!!!");
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter();
+                var clientSocket = null;
                 
-                socket.onmessage = function () {
-                    var data = socket.readData();
-                    var recvmsg = "";
-                    for (var i=0; i< data.length; i++)
-                    {
-                        recvmsg += String.fromCharCode(data[i]);
+                // Method to be called when user wants to send a message to a remote device
+                
+                function sendMessage(msg) {
+                        
+                    // Validate socket state, if everything is ok.
+                    if (clientSocket != null && clientSocket.state == tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN) {
+                        //Send
+                        clientSocket.writeData(msg);
                     }
-                    console.log("server msg >> " + recvmsg);
-                };
-
-                socket.onerror = function (e) {
-                    console.log("Socket Error: " + e.message);
-                };
-
-                socket.onclose = function() {
-                    console.log("socket disconnected.");
-                };
-            }
-
-            function onDeviceReady(device) {
-            
-                // validate service uuid
-                if (device.uuids.indexOf("5BCE9431-6C75-32AB-AFE0-2EC108A30860") != -1) {
+                }
+                        
+                // Method to be invoked when a socket is open
                 
-                    // open socket
-                    device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860", onSocketConnected, function(e) {
-                        console.log ("Error connecting to service. Reason: " + e.message);
+                function onSocketConnected(socket) {
+                
+                    clientSocket = socket;
+                    console.log("Opening a socket successfully!!!");
+                    
+                    socket.addEventListener('socketmessagereceived', function() {
+                        var data = socket.readData();
+                        var recvmsg = "";
+                        for (var i=0; i< data.length; i++)
+                        {
+                            recvmsg += String.fromCharCode(data[i]);
+                        }
+                        console.log("server msg >> " + recvmsg);
+                    };
+                    
+                    socket.addEventListener('socketerror', function(e) {
+                        console.log("Socket Error: " + e.message);
+                    };
+                    
+                    socket.addEventListener('socketclosed', function() {
+                        console.log("socket disconnected.");
+                    };
+                }
+                
+                function onDeviceReady(device) {
+                    
+                    // validate service uuid
+                    if (device.uuids.indexOf("5BCE9431-6C75-32AB-AFE0-2EC108A30860") != -1) {
+                        
+                        // open socket
+                        device.connectToServiceByUUID("5BCE9431-6C75-32AB-AFE0-2EC108A30860",
+                            function(response){
+                                if(response.success) {
+                                    onSocketConnected(response.socket);
+                                } else {
+                                    console.log("Error connecting to service. Reason: " + response.error);
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        console.log ("Char service is not supported by this device");
+                    }
+                }
+                
+                function onSetPowered() {
+                    
+                    // get the BluetoothDevice object
+                    adapter.getDevice("35:F4:59:D1:7A:03",
+                        function(response){
+                            if(response.success) {
+                                onDeviceReady(response.device);
+                            } else {
+                                console.log("Error: " + response.error);
+                            }
+                        }
+                    );
+                
+                }
+                
+                adapter.setPowered(true,
+                    function(response){
+                        if(response.success) {
+                            onSetPowered();
+                        } else {
+                            console.log ("Could not turn on Bluetooth adapter. reason: " + response.error);
+                        }
                     });
-                }
-                else {
-                    console.log ("Char service is not supported by this device");
-                }
-            }
 
-            function onSetPowered() {
-                
-                // get the BluetoothDevice object
-                adapter.getDevice("35:F4:59:D1:7A:03", onDeviceReady, function(e) { console.log("Error: " + e.message()); });
-                
-            }
-
-            adapter.setPowered(true, onSetPowered, function(e) {console.log ("Could not turn on Bluetooth adapter. reason: " + e.message); });
- 
 properties:
   - name: name
     summary: The readable name of the device.
@@ -141,4 +154,37 @@ properties:
     summary: The list of 128 bit service UUIDs available on this device. 
     type: Array<String>
     permission: read-only
+
+---
+name: ConnectToServiceByUUIDResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [connectToServiceByUUID](Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: socket
+    summary: Socket connected to the specified service on the remote device.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Bluetooth.BluetoothSocket
+
+
 
