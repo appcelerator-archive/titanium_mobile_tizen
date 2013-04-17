@@ -11,11 +11,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 			} 
 		},
 
-		setPowered: function(state, successCallback, errorCallback) {
-			return this._obj.setPowered(state, successCallback && function() {
-				successCallback();
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+		setPowered: function(state, callback) {
+			return this._obj.setPowered(state, callback && function() {
+				callback({
+					success: true,
+					code: 0
+				});
+			}, callback && function(e) {
+				callback({
+					success: false,
+					error: e.type + ': ' + e.message,
+					code: e.code
+				});
 			});
 		},
 

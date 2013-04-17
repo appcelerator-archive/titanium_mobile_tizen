@@ -3,6 +3,14 @@
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/WebAPIError'],
 	function(declare, Evented, CalendarEvent, CalendarItem, WebAPIError) {
 
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
+
 		var calendarInstance = declare(Evented, {
 
 			constructor: function(args) {
@@ -18,7 +26,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				this._obj.add(item._obj);
 			},
 
-			addBatch: function(items /*CalendarItem*/, successCallback /*CalendarItemArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			addBatch: function(items /*CalendarItem*/, callback) {
 				var i = 0,
 					itemsCount = items.length,
 					unwrappedItems = [];
@@ -27,25 +35,29 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					unwrappedItems.push(items[i]._obj);
 				}
 
-				function calendarItemsSuccessCallback(objects) {
-					var objectsCount = objects.length,
+				this._obj.addBatch(unwrappedItems, callback && function(items){
+					var objectsCount = items.length,
 						wrappedItems = [];
 
 					for (i = 0; i < objectsCount; i++) {
-						wrappedItems.push(new CalendarItem(objects[i]));
+						wrappedItems.push(new CalendarItem(items[i]));
 					}
 
-					successCallback(wrappedItems);
-				}
-
-				this._obj.addBatch(unwrappedItems, successCallback && calendarItemsSuccessCallback, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						items: wrappedItems
+					});
+				}, callback && function(e) {
+						onError(e, callback);
+					});
 			},
 
 			update: function(item /*CalendarItem*/, updateAllInstances /*boolean*/) {
 				this._obj.update(item._obj, updateAllInstances);
 			},
 
-			updateBatch: function(items /*CalendarItem*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/, updateAllInstances /*boolean*/) {
+			updateBatch: function(items /*CalendarItem*/, callback, updateAllInstances /*boolean*/) {
 				var i = 0,
 					itemsCount = items.length,
 					unwrapedItems = [];
@@ -54,7 +66,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					unwrapedItems.push(items[i]._obj);
 				}
 
-				this._obj.updateBatch(unwrapedItems, successCallback, errorCallback && wrappedErrorCallback, updateAllInstances);
+				this._obj.updateBatch(unwrapedItems,
+					callback && function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					callback && function(e) {
+						onError(e, callback);
+					},
+					updateAllInstances
+				);
 			},
 
 			remove: function(id /*CalendarItemId*/) {
@@ -71,7 +94,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				this._obj.remove(obj);
 			},
 
-			removeBatch: function(ids /*CalendarItemId*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			removeBatch: function(ids /*CalendarItemId*/, callback) {
 				var i = 0,
 					idsCount = ids.length,
 					unwrapedIds = [];
@@ -80,27 +103,39 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					unwrapedIds.push(ids[i]._obj);
 				}
 
-				this._obj.removeBatch(unwrapedIds, successCallback, errorCallback && wrappedErrorCallback);
+				this._obj.removeBatch(unwrapedIds, callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function(e) {
+					onError(e, callback);
+				});
 			},
 
-			find: function(successCallback /*CalendarItemArraySuccessCallback*/, errorCallback /*ErrorCallback*/, filter /*AbstractFilter*/, sortMode /*SortMode*/) {
-				function calendarItemsListSuccesscallback(items) {
-					var i = 0,
-						len = items.length,
-						calendarItems = [];
-
-					for (; i < len; i++) {
-						calendarItems.push(new CalendarItem(items[i]));
-					}
-
-					successCallback(calendarItems);
-				}
-
+			find: function(callback, filter /*AbstractFilter*/, sortMode /*SortMode*/) {
 				this._obj.find(
-				calendarItemsListSuccesscallback,
-				errorCallback && wrappedErrorCallback,
-				(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
-				(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode);
+					callback && function(items) {
+						var i = 0,
+							len = items.length,
+							calendarItems = [];
+
+						for (; i < len; i++) {
+							calendarItems.push(new CalendarItem(items[i]));
+						}
+
+						callback({
+							code: 0,
+							success: true,
+							items: calendarItems
+						});
+					},
+					callback && function(e) {
+						onError(e, callback);
+					},
+					(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
+					(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
+				);
 			},
 
 			addChangeListener: function(successCallback /*CalendarChangeCallback*/) {

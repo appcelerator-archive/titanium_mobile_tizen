@@ -16,10 +16,6 @@ methods:
     summary: Sets the local Bluetooth adapter name.
     description: |
         Sends a request to Bluetooth hardware to change the name of the local Bluetooth adapter to name.
-        The ErrorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contain an invalid value.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
     parameters: 
@@ -27,44 +23,40 @@ methods:
         summary: Name to set.
         type: String
 
-      - name: successCallback
-        summary: Method invoked when the asynchronous call completes successfully
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary: Method invoked when an error occurs.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1:
             
-            function changeName(newName) {
-            
-                if(adapter.name != newName) {
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter();
                 
-                    // initiate change name
-                    adapter.setName(newName, function() {
-                        Ti.API.info("Adapter name changed to " + adapter.name);
-                    },
+                function changeName(newName) {
+                
+                    if(adapter.name != newName) {
                     
-                    function(e) {
-                        Ti.API.info("Failed to change name: " + e.message);
-                    });
+                        // initiate change name
+                        adapter.setName(newName,
+                            function(response) {
+                                if(response.success) {
+                                    Ti.API.info("Adapter name changed to " + adapter.name);
+                                } else {
+                                    Ti.API.info("Failed to change name: " + reponse.error);
+                                }
+                            }
+                        );
+                    }
                 }
-            }
-            
-            changeName("myDevice");
+                
+                changeName("myDevice");
  
   - name: setPowered
     summary: Turns Bluetooth adapter on or off. 
     description: |
         Sends a request to Bluetooth hardware to change the state to a given state. For most Bluetooth actions, the Bluetooth adapter must be powered on.
-        The ErrorCallback is launched with these error names:
-            ServiceNotAvailableError: If a Bluetooth device is busy.
-            UnknownError: In any other error case.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
 
@@ -73,52 +65,53 @@ methods:
         summary: "State to set: true to power on Bluetooth, false to power it off." 
         type: Boolean
 
-      - name: successCallback
-        summary: Method to be invoked on successful Bluetooth activation/deactivation.
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary: Method to be called in case Bluetooth activation/deactivation failed.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1:
             
-            function powerOn() {
-                // if not powered on
-                if(!adapter.powered) {
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter();
                 
-                    // initiate power on
-                    adapter.setPowered(true, function() {
-                        Ti.API.info("Bluetooth powered on success.");
-                    },
+                function powerOn() {
+                    // if not powered on
+                    if(!adapter.powered) {
                     
-                    function(e) {
-                        Ti.API.info("Failed to power on Bluetooth: " + e.message);
-                    });
+                        // initiate power on
+                        adapter.setPowered(true,
+                            function(response) {
+                                if(response.success) {
+                                    Ti.API.info("Bluetooth powered on success.");
+                                } else {
+                                    Ti.API.info("Failed to power on Bluetooth: " + response.error);
+                                }
+                            }
+                        );
+                    }
                 }
-            }
-            
-            function powerOff() {
-            
-                // if powered on
-                if(adapter.powered) {
                 
-                    // initiate power off
-                    adapter.setPowered(false, function() {
-                        Ti.API.info("Bluetooth powered off successfully.");
-                    },
+                function powerOff() {
+                
+                    // if powered on
+                    if(adapter.powered) {
                     
-                    function(e) {
-                        Ti.API.info("Failed to power off Bluetooth: " + e.message);
-                    });
+                        // initiate power off
+                        adapter.setPowered(false,
+                            function(response) {
+                                if(response.success) {
+                                    Ti.API.info("Bluetooth powered off successfully.");
+                                } else {
+                                    Ti.API.info("Failed to power on Bluetooth: " + response.error);
+                                }
+                            }
+                        );
+                    }
                 }
-            }
 
-  - name: discoverDevices
+  - name: startDiscovery
     summary: Searches for nearby Bluetooth devices.  
     description: |
         That is, devices within proximity to the local device. This method initiates the device discovery process. 
@@ -138,7 +131,7 @@ methods:
             
             function startDiscovery() {
                 // starts searching for nearby devices
-                adapter.discoverDevices();
+                adapter.startDiscovery();
             }
             
             adapter.addEventListener('discoverystarted', function() {
@@ -167,10 +160,18 @@ methods:
             }
             
             function onSetPoweredError(e) {
-                Ti.API.info("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
+                Ti.API.info("Could not turn on device, reason: " + e);
             }
             
-            adapter.setPowered(true, startDiscovery, onSetPoweredError);
+            adapter.setPowered(true,
+                function(response) {
+                    if(response.success) {
+                        startDiscovery();
+                    } else {
+                        onSetPoweredError(response.error);
+                    }
+                }
+            );
 
   - name: stopDiscovery
     summary: Stops the device discovery process session, if active.   
@@ -183,71 +184,78 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary: Method to be invoked when an error occurs. 
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen"),
-                adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1:
             
-            // Call this whenever use selects one of the device
-            function cancelDiscovery() {
-            
-                adapter.stopDiscovery(function() {
-                    Ti.API.info("Stop discovery success.");
-                },
-                function (e) {
-                    Ti.API.info("Error while stopDiscovery:" + e.message);
-                });
+                var tizen = require("tizen"),
+                    adapter = tizen.Bluetooth.getDefaultAdapter();
                 
-            }
-            
-            function startDiscovery() {
-                // starts searching for nearby devices
-                adapter.discoverDevices();
-            }
-            
-            adapter.addEventListener('discoverystarted', function() {
-                Ti.API.info ("Device discovery started...") ;
-            }
-            
-            adapter.addEventListener('devicefound', function(device) {
-                Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
+                // Call this whenever use selects one of the device
+                function cancelDiscovery() {
                 
-                // Show device to user, if this is the one he is looking for
-                // for example, add this to list view.
-                cancelDiscovery();
-            }
-            
-            adapter.addEventListener('devicedisappeared', function(address) {
-                Ti.API.info("Device disappeared: " + address);
-                // Remove from list, as it is no longer valid.
-            }
-            
-            adapter.addEventListener('discoveryfinished', function(devices) {
-                Ti.API.info("Found Devices");
-                for (var i=0; i<devices.length; i++) {
-                    Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                    adapter.stopDiscovery(
+                        function(response) {
+                            if(response.success) {
+                                Ti.API.info("Stop discovery success.");
+                            } else {
+                                Ti.API.info("Error while stopDiscovery:" + response.error);
+                            }
+                        }
+                    );
                 }
-                Ti.API.info("Total: " + devices.length);
-            }
-            
-            adapter.addEventListener('discoveryerror', function(e) {
-                Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
-            }
-            
-            function onSetPoweredError(e) {
-                Ti.API.info("Could not turn on device, reason: " + e.message + "(" + e.name + ")");
-            }
-            
-            adapter.setPowered(true, startDiscovery, onSetPoweredError);
+                
+                function startDiscovery() {
+                    // starts searching for nearby devices
+                    adapter.startDiscovery();
+                }
+                
+                adapter.addEventListener('discoverystarted', function() {
+                    Ti.API.info ("Device discovery started...") ;
+                }
+                
+                adapter.addEventListener('devicefound', function(device) {
+                    Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
+                    
+                    // Show device to user, if this is the one he is looking for
+                    // for example, add this to list view.
+                    cancelDiscovery();
+                }
+                
+                adapter.addEventListener('devicedisappeared', function(address) {
+                    Ti.API.info("Device disappeared: " + address);
+                    // Remove from list, as it is no longer valid.
+                }
+                
+                adapter.addEventListener('discoveryfinished', function(devices) {
+                    Ti.API.info("Found Devices");
+                    for (var i=0; i<devices.length; i++) {
+                        Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                    }
+                    Ti.API.info("Total: " + devices.length);
+                }
+                
+                adapter.addEventListener('discoveryerror', function(e) {
+                    Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
+                }
+                
+                function onSetPoweredError(e) {
+                    Ti.API.info("Could not turn on device, reason: " + e);
+                }
+                
+                adapter.setPowered(true,
+                    function(response){
+                        if(response.success) {
+                            startDiscovery()
+                        } else {
+                            onSetPoweredError(response.error)
+                        }
+                    }
+                );
 
   - name: getKnownDevices
     summary: Gets all the devices that have information stored in the local Bluetooth adapter.    
@@ -255,23 +263,14 @@ methods:
         A known device is one of the following:
             a bonded device
             a device found in last inquiry process
-        On success, it returns the list of currently known devices through BluetoothDeviceArraySuccessCallback.
-        The ErrorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contain an invalid value.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
+        On success, it returns the list of currently known devices.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
     parameters: 
-      - name: successCallback
-        summary: Method invoked at retrieval of a list of Bluetooth devices that were bonded to the local Bluetooth adapter.  
-        type: Callback<Object>
-
-      - name: errorCallback
-        summary: Method invoked in case of failure to get bonded devices. 
-        type: Callback<Tizen.WebAPIError>
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<getKnownDevicesResponse>
     examples:
       - example: |
             var tizen = require("tizen");
@@ -284,22 +283,32 @@ methods:
                 Ti.API.info("Total: " + devices.length);
             }
             function onError(e) {
-                Ti.API.info ("Error: " + e.message);
+                Ti.API.info ("Error: " + e);
             }
             function onBluetoothsetPowered() {
-                adapter.getKnownDevices(onGotDevices, onError);
+                adapter.getKnownDevices(
+                    function(response){
+                        if(response.success) {
+                            onGotDevices(response.devices);
+                        } else {
+                            onError(response.error);
+                        }
+                    }
+                );
             }
             // turn on Bluetooth
-            adapter.setPowered(true, onBluetoothsetPowered);
+            adapter.setPowered(true,
+                function(response){
+                    if(response.success) {
+                        onBluetoothsetPowered();
+                    }
+                }
+            );
 
   - name: getDevice
     summary: Gets the BluetoothDevice object for a given device hardware address. 
     description: |
-        This method returns device information stored in the local Bluetooth adapter for the specified device address through BluetoothDeviceSuccessCallback.onsuccess(). A valid hardware address must be passed, such as "35:F4:59:D1:7A:03".
-        The ErrorCallback is launched with these error types:
-            NotFoundError: If there is no device with the given address.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
+        This method returns device information stored in the local Bluetooth adapter for the specified device. A valid hardware address must be passed, such as "35:F4:59:D1:7A:03".
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
@@ -308,14 +317,9 @@ methods:
         summary: Address of a remote Bluetooth device to get.  
         type: String
 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully. 
-        type: Callback<Tizen.Bluetooth.BluetoothDevice> 
-        optional: true
-
-      - name: errorCallback
-        summary:  Method to be invoked when an error occurs.
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<getDeviceResponse>
         optional: true
     examples:
       - example: |
@@ -326,21 +330,25 @@ methods:
                 Ti.API.info("Is Bonded: " + device.isBonded ? "Yes" : "No");
             }
             function onError(e) {
-                Ti.API.info ("Could not get device info:" + e.message);
+                Ti.API.info ("Could not get device info:" + e);
             }
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
-            adapter.getDevice("35:F4:59:D1:7A:03", gotDeviceInfo, onError);
+            adapter.getDevice("35:F4:59:D1:7A:03",
+                function(response){
+                    if(response.success) {
+                        gotDeviceInfo(response.device);
+                    } else {
+                        onError(response.error)
+                    }
+                }
+            );
 
   - name: createBonding
     summary: Initiates the bonding process with a remote device.  
     description: |
         To communicate with any remote Bluetooth device, it must be bonded (that is, the device should be authenticated). Only bonded devices can connect to services and exchange data with each other. This method initiates the bonding process with peer device, using the given MAC address.
-        If the bonding process is successful, the device information is sent through successCallback.
-        The ErrorCallback is launched with these error types:
-            NotFoundError: If there is no device with the given address.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
+        If the bonding process is successful, the device information is sent through callback.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
@@ -349,14 +357,9 @@ methods:
         summary: The MAC address of remote Bluetooth address to bond with.   
         type: String
 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully.  
-        type: Callback<Tizen.Bluetooth.BluetoothDevice> 
-        optional: true
-
-      - name: errorCallback
-        summary:  Method to be invoked when an error occurs
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<createBondingResponse>
         optional: true
     examples:
       - example: |
@@ -366,20 +369,24 @@ methods:
                 Ti.API.info("Device Service UUIDs:" + device.uuids.join("\n"));
             }
             function onError(e) {
-                Ti.API.info ("Could not create bonding, reason:" + e.message);
+                Ti.API.info ("Could not create bonding, reason:" + e);
             }
             var tizen = require("tizen");
             var adapter = tizen.Bluetooth.getDefaultAdapter();
-            adapter.createBonding("35:F4:59:D1:7A:03", onBondingSuccess, onError);
+            adapter.createBonding("35:F4:59:D1:7A:03",
+                function(response){
+                    if(response.success) {
+                        onBondingSuccess(response.device);
+                    } else {
+                        onError(response.error)
+                    }
+                }
+            );
 
   - name: destroyBonding
     summary: Destroys bonding with a remote device.   
     description: |
         This method initiates the process to remove the given address from the bonded devices list.
-        The ErrorCallback is launched with these error types:
-            NotFoundError: If there is no device with the given address.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
 
@@ -388,14 +395,9 @@ methods:
         summary: Address of the bonded device.   
         type: String
 
-      - name: successCallback
-        summary: Method to be invoked when the asynchronous call completes successfully.  
-        type: Callback<Object> 
-        optional: true
-
-      - name: errorCallback
-        summary:  Method to be invoked when an error occurs
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
@@ -404,30 +406,34 @@ methods:
             function gotDevice(device) {
                 if (device.isBonded) {
                     // initiate destroying bonding
-                    adapter.destroyBonding(device.address, function() { 
-                       Ti.API.info("Unbound success with:" + device.address);
-                    },
-                    function(e) { 
-                       Ti.API.info("Unbounding failed with " + device.address + ", reason: " + e.message); 
-                    });
+                    adapter.destroyBonding(device.address,
+                        function(response) {
+                            if(response.success) {
+                                Ti.API.info("Unbound success with:" + device.address);
+                            } else {
+                                Ti.API.info("Unbounding failed with " + device.address + ", reason: " + response.error);
+                            }
+                        }
+                    );
                 }
             }
             var deviceAddress = "35:F4:59:D1:7A:03";
-            adapter.getDevice(deviceAddress, gotDevice, function(e) { 
-                    Ti.API.info("Failed to get device info for " + deviceAddress + ", reason: " + e.message); 
-            });
+            adapter.getDevice(deviceAddress,
+                function(response){
+                    if(response.success){
+                        gotDevice(response.device);
+                    } else {
+                        Ti.API.info("Failed to get device info for " + e);
+                    }
+                }
+            );
  
   - name: registerRFCOMMServiceByUUID
     summary: Registers a service for other devices to consume.    
     description: |
-        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
+        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a Tizen.Bluetooth.BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
         Clients should do service discovery on this device with a specified uuid to determine the right channel.
-        If any client(remote device) connects to this service, then BluetoothServiceHandler.onconnect() is invoked with BluetoothSocket object.
-        BluetoothServiceHandler.unregister() can be used to unregister the service record from the device service database and stop listening for client connections.
-        The ErrorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contain an invalid value.
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
+        [unregister](Tizen.Bluetooth.BluetoothServiceHandler.unregister) can be used to unregister the service record from the device service database and stop listening for client connections.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
@@ -440,80 +446,83 @@ methods:
         summary: Name of the service.    
         type: String
 
-      - name: successCallback
-        summary: Method to be called on successful service registration.   
-        type: Callback<Tizen.Bluetooth.BluetoothServiceHandler> 
-        optional: true
-
-      - name: errorCallback
-        summary: Method to be invoked when an error occurs
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<registerRFCOMMServiceByUUIDResponse>
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1:
             
-            // Holds currently registered service record
-            
-            var chatServiceHandler = null;
-            
-            // Holds currently open socket
-            
-            var serviceSocket = null;
-            
-            function chatServiceSuccessCb(recordHandler) {
-            
-                Ti.API.info("Chat service registration succeeds!");
-                chatServiceHandler = recordHandler;
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter();
                 
-                recordHandler.addEventListener('remotedeviceconnected', function(socket) {
-                    Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
-                    serviceSocket = socket;
+                // Holds currently registered service record
+                
+                var chatServiceHandler = null;
+                
+                // Holds currently open socket
+                
+                var serviceSocket = null;
+                
+                function chatServiceSuccessCb(recordHandler) {
+                
+                    Ti.API.info("Chat service registration succeeds!");
+                    chatServiceHandler = recordHandler;
                     
-                    // Message received from remote device
-                    socket.addEventListener('socketmessagereceived', function() {
-                        var data = socket.readData();
+                    recordHandler.addEventListener('remotedeviceconnected', function(socket) {
+                        Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
+                        serviceSocket = socket;
                         
-                        // handle message code goes here
-                        //....
-                    };
-                    
-                    socket.addEventListener('socketerror', function(e) {
-                        Ti.API.info('Error: ' + e.message);
-                    };
-                    
-                    socket.addEventListener('socketclosed', function() {
-                        Ti.API.info('The socket is closed.');
-                        serviceSocket = null;
-                    };
-                }
-            };
-            
-            function publishChatService() {
-            
-                var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
-                
-                adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
-                
-                    // Error handler
-                    function(e) {
-                        Ti.API.error( "Could not register service record, Error: " + e.message);
+                        // Message received from remote device
+                        socket.addEventListener('socketmessagereceived', function() {
+                            var data = socket.readData();
+                            
+                            // handle message code goes here
+                            //....
+                        };
+                        
+                        socket.addEventListener('socketerror', function(e) {
+                            Ti.API.info('Error: ' + e.message);
+                        };
+                        
+                        socket.addEventListener('socketclosed', function() {
+                            Ti.API.info('The socket is closed.');
+                            serviceSocket = null;
+                        };
                     }
-                );
-            }
-            
-            function unregisterChatService() {
-            
-                if (chatServiceHandler != null) {
-                    chatServiceHandler.unregister(function() {
-                        Ti.API.info("Chat service is unregistered");
-                        chatServiceHandler = null;
-                    }, function(e) {
-                        Ti.API.info("Failed to unregister service: " + e.message);
-                    });
+                };
+                
+                function publishChatService() {
+                
+                    var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
+                    
+                    adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service",
+                        function(response){
+                            if(response.success) {
+                                chatServiceSuccessCb(response.handler);
+                            } else {
+                                Ti.API.error( "Could not register service record, Error: " + response.error);
+                            }
+                        }
+                    );
                 }
-            }
+                
+                function unregisterChatService() {
+                
+                    if (chatServiceHandler != null) {
+                        chatServiceHandler.unregister(
+                            function(response) {
+                                if(response.success) {
+                                    Ti.API.info("Chat service is unregistered");
+                                    chatServiceHandler = null;
+                                } else {
+                                    Ti.API.info("Failed to unregister service: " + response.error);
+                                }
+                            }
+                        );
+                    }
+                }
  
 events:
   - name: discoverystarted
@@ -566,4 +575,128 @@ properties:
     summary: Holds the current visibility of the device.    
     type: Boolean
     permission: read-only
+
+---
+name: getKnownDevicesResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [getKnownDevices](Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: devices
+    summary:  List of devices known to local Bluetooth adapter. Each element is a Tizen.Bluetooth.BluetoothDevice.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Bluetooth.BluetoothDevice>
+
+---
+name: getDeviceResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [getDevice](Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: device
+    summary:  Tizen.Bluetooth.BluetoothDevice object.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Bluetooth.BluetoothDevice
+
+---
+name: createBondingResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [createBonding](Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: device
+    summary:  Tizen.Bluetooth.BluetoothDevice object.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Bluetooth.BluetoothDevice
+
+---
+name: registerRFCOMMServiceByUUIDResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [registerRFCOMMServiceByUUID](Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: handler
+    summary: Bluetooth service handler.
+    description: Will be undefined if `success` is `false`.
+    type: Tizen.Bluetooth.BluetoothServiceHandler
 

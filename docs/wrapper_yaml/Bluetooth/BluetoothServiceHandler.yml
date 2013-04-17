@@ -9,81 +9,79 @@ methods:
     summary: Unregisters a service record from service database. 
     description: |
         This method unregisters a service record from the Bluetooth services record database and stops listening for new connections to this service.
-        The ErrorCallback is launched with these error types:
-            UnknownError: In any error case
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
     parameters: 
-      - name: successCallback
-        summary:  Method to be invoked when the record is removed successfully from the service records database.
-        type: Callback<Object>
-        optional: true
-
-      - name: errorCallback
-        summary:   Method to be invoked in case of failure (to unregister).
-        type: Callback<Tizen.WebAPIError>
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
+            Example 1: 
             
-            var chatServiceHandler = null;
-            
-            function chatServiceSuccessCb(handler) {
-            
-                Ti.API.info("Chat service registration was successful!");
+                var tizen = require("tizen");
+                var adapter = tizen.Bluetooth.getDefaultAdapter();
                 
-                chatServiceHandler = handler;
+                var chatServiceHandler = null;
                 
-                handler.addEventListener('remotedeviceconnected', function(socket) {
-                    Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
-                    serviceSocket = socket;
+                function chatServiceSuccessCb(handler) {
+                
+                    Ti.API.info("Chat service registration was successful!");
                     
-                    // Message received from remote device
-                    socket.addEventListener('socketmessagereceived', function() {
-                        var data = socket.readData();
+                    chatServiceHandler = handler;
+                    
+                    handler.addEventListener('remotedeviceconnected', function(socket) {
+                        Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
+                        serviceSocket = socket;
                         
-                        // handle message code goes here
-                        //....
-                    };
-                    
-                    socket.addEventListener('socketerror', function(e) {
-                        Ti.API.info('Error: ' + e.message);
-                    };
-                    
-                    socket.addEventListener('socketclosed', function() {
-                        Ti.API.info('The socket is closed.');
-                        serviceSocket = null;
-                    };
+                        // Message received from remote device
+                        socket.addEventListener('socketmessagereceived', function() {
+                            var data = socket.readData();
+                            
+                            // handle message code goes here
+                            //....
+                        };
+                        
+                        socket.addEventListener('socketerror', function(e) {
+                            Ti.API.info('Error: ' + e.message);
+                        };
+                        
+                        socket.addEventListener('socketclosed', function() {
+                            Ti.API.info('The socket is closed.');
+                            serviceSocket = null;
+                        };
+                    }
                 }
-            }
-            
-            function publishChatService() {
-                var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
                 
-                adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service", chatServiceSuccessCb,
-                
-                    // Error handler
-                    function(e) {
-                        Ti.API.info( "Could not register service record, Error: " + e.message);
-                    });
-            }
-            
-            function unRegisterChatService() {
-                if (chatServiceHandler != null) {
-                
-                    chatServiceHandler.unregister(function() {
-                        chatServiceHandler = null;
-                        Ti.API.info("Chat service is unregistered.");
-                    },
+                function publishChatService() {
+                    var CHAT_SERVICE_UUID = "5BCE9431-6C75-32AB-AFE0-2EC108A30860";
                     
-                    function(e) {
-                        Ti.API.info("Error: " + e.message);
-                    });
+                    adapter.registerRFCOMMServiceByUUID(CHAT_SERVICE_UUID, "Chat service",
+                        function(response){
+                            if(response.success) {
+                                chatServiceSuccessCb(response.hendler);
+                            } else {
+                                Ti.API.info( "Could not register service record, Error: " + response.error);
+                            }
+                        }
+                    );
                 }
-            }
+                
+                function unRegisterChatService() {
+                    if (chatServiceHandler != null) {
+                    
+                        chatServiceHandler.unregister(function(response) {
+                            if(response.success) {
+                                chatServiceHandler = null;
+                                Ti.API.info("Chat service is unregistered.");
+                            } else {
+                                Ti.API.info("Error: " + response.error);
+                            }
+                        });
+                    }
+                }
 
 events:
   - name: remotedeviceconnected

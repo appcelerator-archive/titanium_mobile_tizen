@@ -19,9 +19,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebA
 			}
 		},
 
-		setReceiveNDEFListener: function(readCallback) {
-			return this._obj.setReceiveNDEFListener(function(ndefMessage) {
-				readCallback(new NDEFMessage(ndefMessage));
+		setReceiveNDEFListener: function(callback) {
+			return this._obj.setReceiveNDEFListener(callback && function(ndefMessage) {
+				callback({
+					success: true,
+					code: 0,
+					ndefMessage: new NDEFMessage(ndefMessage)
+				});
 			});
 		},
 
@@ -29,11 +33,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebA
 			return this._obj.unsetReceiveNDEFListener();
 		},
 
-		sendNDEF: function(ndefMessage, successCallback, errorCallback) {
-			return this._obj.sendNDEF(ndefMessage._obj, successCallback && function() {
-				successCallback();
+		sendNDEF: function(ndefMessage, callback) {
+			return this._obj.sendNDEF(ndefMessage._obj, callback && function() {
+				callback({
+					success: true,
+					code: 0
+				});
 			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
+				callback({
+					success: false,
+					error: e.type + ': ' + e.message,
+					code: e.code
+				});
 			});
 		}
 
