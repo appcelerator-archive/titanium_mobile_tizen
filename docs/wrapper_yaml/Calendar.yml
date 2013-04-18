@@ -24,7 +24,7 @@ methods:
   - name: getCalendars
     summary: Gets an array of Calendar objects.
     description: |
-        If the operation completes successfully, the callback() must be invoked with all the calendars found and available. 
+        If the operation completes successfully, the callback() will be invoked with all the calendars found and available. 
         The first calendar in the list is always the default calendar.
         
         If no Calendar object is available, the callback() is invoked with an empty array.
@@ -37,10 +37,10 @@ methods:
         type: String
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<getCalendarsResponse>
+        type: Callback<GetCalendarsResponse>
     examples:
       - example: |
-            Exampel 1:
+            Example 1:
             
                 var calendar,
                     tizen = require("tizen");
@@ -849,7 +849,7 @@ properties:
     optional: true
 
 ---
-name: getCalendarsResponse
+name: GetCalendarsResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
