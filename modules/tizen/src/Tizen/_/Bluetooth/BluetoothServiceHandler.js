@@ -1,6 +1,6 @@
 // Wraps Tizen interface "BluetoothServiceHandler" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/WebAPIError'], function(declare, Evented, BluetoothSocket, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], function(declare, Evented, BluetoothSocket) {
 
 	function onError (e, callback) {
 		callback({
