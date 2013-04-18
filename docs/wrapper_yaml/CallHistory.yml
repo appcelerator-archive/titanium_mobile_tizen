@@ -149,76 +149,22 @@ methods:
         summary: A generic success handler.
         optional: true
         type: Callback<ErrorResponse>
-  - name: addChangeListener
-    summary: Adds a listener to register for callback to observe call history changes. 
-    description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
-    parameters: 
-      - name: observer
-        summary: A callback for handling the list of new or changed or CallHistoryEntry objects in the call history. 
-        type: Callback<CallHistoryChangeCallback>
-    returns:
-        type: Number
-    summary: Removes a listener to unregisters a previously registered listener. 
-    parameters: 
-      - name: handle
-        summary: The previously obtained listener handle. 
-        type: Number
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            var onListenerCB = {
-            
-                onadded: function(newItems) {
-                    console.log("New Item added");
-                    for (var i in newItems) {
-                        console.log("Item " + i + " startTime: " + newItems[i].startTime);
-                    }
-                },
-                
-                onchanged: function(changedItems) {
-                    console.log("Items changed");
-                    for (var i in changedItems) {
-                        console.log("Item " + i + " direction: " + changedItems[i].direction);
-                    }
-                }
-                
-            };
-            
-            try {
-            
-                // Registers a call history callback
-                var handle = tizen.CallHistory.addChangeListener(onListenerCB);
-        
-                // Unregisters a previously registered listener
-                tizen.CallHistory.removeChangeListener(handle);
-                
-            } catch (error) {
-            
-                consloe.log("Exception - code: " + error.name + " message: " + error.message);
-                
-            }
 
-# Pseudo-type
----
-name: CallHistoryChangeCallback
-summary: This is a callback interface of a CallHistory operations. For example code, see CallHistory interface.
-platforms: [tizen]
-methods:
-  - name: onadded
-    summary: Called when a new call history item is added. 
-    parameters: 
-      - name: newItems
+events:
+
+  - name: itemsadded
+    summary: Fired when a new call history item is added.
+    properties:
+      - name: items
         summary: An array of CallHistoryEntry objects, representing the new items added to call history.
         type: Array<CallHistoryEntry>
-  - name: onchanged
-    summary: Called when the call history items have been changed. 
-    parameters: 
-      - name: changedItems
+  - name: itemschanged
+    summary: Fires when the call history items have been changed.
+    properties:
+      - name: items
         summary: An array of CallHistoryEntry objects, representing the changed items in call history.
         type: Array<CallHistoryEntry>
-
+# Pseudo-type
 ---
 name: CallHistoryEntry
 summary: This interface represents the subset of properties of calls, which become a call record in the call history after the call ends.

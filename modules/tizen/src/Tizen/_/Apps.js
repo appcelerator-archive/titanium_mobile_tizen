@@ -4,6 +4,8 @@
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/ApplicationInformation', 'Tizen/_/Apps/ApplicationContext', 'Tizen/_/Apps/Application'],
 	function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application) {
 
+		var listening;
+
 		function onError (e, callback) {
 			callback({
 				success: false,
@@ -145,12 +147,29 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 				return new ApplicationInformation(tizen.application.getAppInfo(id));
 			},
 
-			addAppInfoEventListener: function(eventCallback /*ApplicationInformationEventCallback*/) {
-				tizen.application.addAppInfoEventListener(eventCallback);
-			},
+			addEventListener: function () {
+				var self = this;
+				Evented.addEventListener.apply(this, arguments);
 
-			removeAppInfoEventListener: function(watchId /*long*/) {
-				tizen.application.removeAppInfoEventListener(watchId);
+				if (! listening) {
+					tizen.application.addAppInfoEventListener({
+						oninstalled: function (application) {
+							self.fireEvent('oninstalled', {
+								appInfo: new ApplicationInformation(application)
+							});
+						},
+						onupdated: function (application) {
+							self.fireEvent('onupdated', {
+								appInfo: new ApplicationInformation(application)
+							});
+						},
+						onuninstalled: function (applicationId) {
+							self.fireEvent('onuninstalled', {
+								appId: applicationId
+							});
+						}
+					});
+				}
 			},
 
 			createApplicationControlData: function(args) {

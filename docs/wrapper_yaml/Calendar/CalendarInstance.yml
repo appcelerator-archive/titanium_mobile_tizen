@@ -82,7 +82,7 @@ methods:
         type: Array<Tizen.Calendar.CalendarItem>
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<addBatchResponse>
+        type: Callback<AddBatchResponse>
         optional: true
     examples:
       - example: |    
@@ -530,7 +530,7 @@ properties:
         Array<String> - The list of identifiers for the items that were removed.
 
 ---
-name: addBatchResponse
+name: AddBatchResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from

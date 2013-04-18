@@ -54,7 +54,7 @@ methods:
         
         For example, 'Europe/Berlin', 'America/Argentina/Buenos_Aires'.
     returns:
-        type: String[]
+        type: Array<String>
     examples:
       - example: |
             var tizen = require("tizen");
