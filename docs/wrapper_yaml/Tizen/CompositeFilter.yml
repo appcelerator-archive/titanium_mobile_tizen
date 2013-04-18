@@ -17,7 +17,7 @@ properties:
 
   - name:  filters
     summary: The list of filters in the composite filter. 
-    type: "Tizen.AbstractFilter[]"
+    type: Array<Tizen.AbstractFilter>
     default: FILTER_MUCH_FLAG_EXACTLY
 
 examples:

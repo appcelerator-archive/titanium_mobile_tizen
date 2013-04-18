@@ -130,7 +130,7 @@ methods:
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
-        type: Tizen.Notification.Notification[]
+        type: Array<Tizen.Notification.Notification>
     examples:
       - example: |
           var tizen = require("tizen");
