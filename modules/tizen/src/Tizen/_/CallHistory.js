@@ -1,6 +1,6 @@
 // Wraps Tizen module "CallHistory".
 
-define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
+define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Ti/_/Evented'], function(lang, CallHistoryEntry, Evented) {
 
 	function onError (e, callback) {
 		callback({
@@ -69,10 +69,10 @@ define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIErro
 				});
 			},
 
-			addEventListener: function (event) {
+			addEventListener: function () {
 				var self = this;
 
-				Evented.prototype.addEventListener.apply(this, arguments);
+				Evented.addEventListener.apply(this, arguments);
 
 				if (!listening) {
 					listening = true;
