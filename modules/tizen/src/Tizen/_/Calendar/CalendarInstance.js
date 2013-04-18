@@ -1,7 +1,7 @@
 // Wraps Tizen interface "CalendarInstance" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/WebAPIError'],
-	function(declare, Evented, CalendarEvent, CalendarItem, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem'],
+	function(declare, Evented, CalendarEvent, CalendarItem) {
 
 		function onError (e, callback) {
 			callback({
@@ -67,7 +67,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				}
 
 				this._obj.updateBatch(unwrapedItems,
-					callback && function() {
+					callback && function(){
 						callback({
 							code: 0,
 							success: true
@@ -186,10 +186,6 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			}
 
 		});
-
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
 
 		// Initialize declaredClass, so that toString() works properly on such objects.
 		// Correct operation of toString() is required for proper wrapping and automated testing.

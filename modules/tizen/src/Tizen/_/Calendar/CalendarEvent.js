@@ -42,10 +42,18 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 		},
 
 		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, callback) {
-			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function() {
+			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function(events){
+				var i = 0,
+					eventsCount = events.length,
+					eventsItems = [];
+
+				for (; i < eventsCount; i++) {
+					eventsItems.push(new calendarEvent(events[i]));
+				}
 				callback({
 					code: 0,
-					success: true
+					success: true,
+					events: eventsItems
 				});
 			}, callback && function(e) {
 					onError(e, callback);
