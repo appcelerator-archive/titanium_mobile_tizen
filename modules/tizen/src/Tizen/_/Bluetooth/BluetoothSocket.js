@@ -1,6 +1,6 @@
 // Wraps Tizen interface "BluetoothSocket" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare, Evented, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var socket = declare(Evented, {
 
@@ -20,7 +20,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare
 			};
 
 			self._obj.onerror = function(e) {
-				self.fireEvent('socketerror', new WebAPIError(e));
+				self.fireEvent('socketerror', {
+						code: e.code,
+						error: e.type + ': ' + e.message
+					}
+				);
 			};
 		},
 

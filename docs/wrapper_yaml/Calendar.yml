@@ -24,14 +24,10 @@ methods:
   - name: getCalendars
     summary: Gets an array of Calendar objects.
     description: |
-        If the operation completes successfully, the successCallback() must be invoked with all the calendars found and available. 
+        If the operation completes successfully, the callback() must be invoked with all the calendars found and available. 
         The first calendar in the list is always the default calendar.
         
-        If no Calendar object is available, the successCallback() is invoked with an empty array.
-        
-        The errorCallback is launched with these error types:
-            InvalidValuesError - if any of the input parameters contain an invalid value.
-            UnknownError - if any other error occurs.
+        If no Calendar object is available, the callback() is invoked with an empty array.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
@@ -39,63 +35,76 @@ methods:
         summary:  |
             The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
         type: String
-      - name: successCallback
-        summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Array<Tizen.Calendar.CalendarInstance>>
-      - name: errorCallback
-        summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<Tizen.WebAPIError>        
-        optional: true
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<getCalendarsResponse>
     examples:
-      - example: |    
-            var calendar,
-                tizen = require("tizen");
+      - example: |
+            Exampel 1:
             
-            function eventFoundCallback(events) {
-            
-                // The event has been successfully found
-                // Changes the summary
-                events[0].summary = 'HTML6 Webinar'; 
-                calendar.update(events[0]);
-                Titanium.API.info('First event was updated!');
-            }
-            
-            // Defines the error callback for all the asynchronous calls
-            
-            function errorCallback(response) {
-            
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
-            }
-            
-            // Defines the success callback for retrieving the list of calendars
-            
-            function calendarListCallback(calendars) {
-            
-                if(calendars.length > 0) {
-                    calendar = calendars[0];
-                    Titanium.API.info('The calendar id is ' + calendar.id + ' and name ' + calendar.name);
-                    
-                    var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
-                                                     summary:'HTML5 Webinar', 
-                                                     startDate: new Date(2011, 3, 30, 10, 0), 
-                                                     duration: 3600000,
-                                                     location:'Huesca'});
-                    calendar.add(ev);
-                    
-                    // The event has been successfully added
-                    // Checks if the added event can be retrieved from the calendar
-                    // If the calendar was empty, only the item added through add() should be returned
-                    
-                    var filter = tizen.createAttributeFilter({attributeName: 'summary',
-                                                                 matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                                 matchValue: 'HTML5'});
-                    calendar.find(eventFoundCallback, errorCallback, filter);
+                var calendar,
+                    tizen = require("tizen");
+                
+                function eventFoundCallback(events) {
+                
+                    // The event has been successfully found
+                    // Changes the summary
+                    events[0].summary = 'HTML6 Webinar'; 
+                    calendar.update(events[0]);
+                    Titanium.API.info('First event was updated!');
                 }
-            }
-            
-            // Gets a list of available calendars
-            
-            tizen.Calendar.getCalendars(tizen.Calendar.CALENDAR_TYPE_EVENT, calendarListCallback, errorCallback);    
+                
+                // Defines the error callback for all the asynchronous calls
+                
+                function errorCallback(response) {
+                
+                    Titanium.API.info( 'The following error occurred: ' +  response);
+                }
+                
+                // Defines the success callback for retrieving the list of calendars
+                
+                function calendarListCallback(calendars) {
+                
+                    if(calendars.length > 0) {
+                        calendar = calendars[0];
+                        Titanium.API.info('The calendar id is ' + calendar.id + ' and name ' + calendar.name);
+                        
+                        var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
+                                                         summary:'HTML5 Webinar', 
+                                                         startDate: new Date(2011, 3, 30, 10, 0), 
+                                                         duration: 3600000,
+                                                         location:'Huesca'});
+                        calendar.add(ev);
+                        
+                        // The event has been successfully added
+                        // Checks if the added event can be retrieved from the calendar
+                        // If the calendar was empty, only the item added through add() should be returned
+                        
+                        var filter = tizen.createAttributeFilter({attributeName: 'summary',
+                                                                     matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
+                                                                     matchValue: 'HTML5'});
+                        calendar.find(function(response){
+                                if(response.success) {
+                                    eventFoundCallback(response.items)
+                                } else {
+                                    errorCallback(response.error)
+                                }
+                            }, 
+                            filter
+                        );
+                    }
+                }
+                
+                // Gets a list of available calendars
+                
+                tizen.Calendar.getCalendars(tizen.Calendar.CALENDAR_TYPE_EVENT, 
+                    function(response){
+                        if(response.success) {
+                            calendarListCallback(response.calendars)
+                        } else {
+                            errorCallback(response.error)
+                        }
+                    });
 
   - name: getDefaultCalendar
     summary: Gets the default calendar, which is used for new items.
@@ -110,13 +119,13 @@ methods:
             The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT or Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
     examples:
-      - example: |    
+      - example: |
             var myCalendar,
                 tizen = require("tizen");
         
             // Defines the error callback for all the asynchronous calls
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             
             function eventFoundCallback(events) {
@@ -144,7 +153,13 @@ methods:
             var filter = tizen.createAttributeFilter({attributeName: 'summary',
                                                          matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                          matchValue: 'HTML5'});
-            myCalendar.find(eventFoundCallback, errorCallback, filter);
+            myCalendar.find(function(){
+                if(response.success) {
+                    eventFoundCallback(response.items);
+                } else {
+                    errorCallback(response.error);
+                }
+            }, filter);
           
   - name: getCalendar
     summary: Gets the calendar with the specified identifier and type.
@@ -832,3 +847,34 @@ properties:
     type: String
     summary: (optional) An attribute to store the description of an alarm.
     optional: true
+
+---
+name: getCalendarsResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [getCalendars](Tizen.Calendar.getCalendars) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: items
+    summary:  The array of Calendar objects.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Calendar.CalendarItem>
