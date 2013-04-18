@@ -1,6 +1,6 @@
 // Wraps Tizen interface "NFCTag" that resides in Tizen module "NFC".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(declare, Evented, NDEFMessage) {
 
 	function onError (e, callback) {
 		callback({

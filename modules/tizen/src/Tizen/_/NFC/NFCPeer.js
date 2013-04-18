@@ -1,6 +1,6 @@
 // Wraps Tizen interface "NFCPeer" that resides in Tizen module "NFC".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(declare, Evented, NDEFMessage) {
 
 	var peer = declare(Evented, {
 
