@@ -1,6 +1,6 @@
 // Wraps Tizen interface "NFCAdapter" that resides in Tizen module "NFC".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPeer', 'Tizen/_/WebAPIError'], function(declare, Evented, NFCTag, NFCPeer, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPeer'], function(declare, Evented, NFCTag, NFCPeer) {
 
 	var adapter = declare(Evented, {
 
