@@ -433,7 +433,32 @@ methods:
             
             // Cancels the watch operation
             calendar.removeChangeListener(watcherId);
- 
+
+events:
+
+  - name: itemsadded
+    description: 
+    summary: Called when items are added to the calendar.
+    properties:
+      - name: items
+        summary: The list of items that were added.
+        type: Array<Tizen.Calendar.CalendarItem>
+
+  - name: itemsupdated
+    description: 
+    summary: Called when items are updated in the calendar.
+    properties:
+      - name: items
+        summary: The list of items that were updated.
+
+  - name: itemsremoved
+    description: 
+    summary: Called when item are removed from the calendar.
+    properties:
+      - name: ids
+        summary: The list of identifiers for the items that were removed.
+        type: String
+
 properties:
 
   - name: id 
