@@ -25,7 +25,12 @@ methods:
     examples:
       - example: |
             var tizen = require("tizen");
-        
+            
+            // Defines the error callback.
+            function errorCallback(response) {
+                Titanium.API.info( 'The following error occurred: ' + response);
+            }
+            
             // Defines the event search success callback.
             function eventSearchSuccessCallback(events) {
                 // Converts the first event to iCalendar 2.0 format (default)
@@ -39,7 +44,14 @@ methods:
             var filter = tizen.createAttributeFilter({attributeName: 'summary',
                                                                matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                                matchValue: 'Tizen'});
-            myCalendar.find(eventSearchSuccessCallback, errorCallback, filter);    
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            }, 
+            filter);
         
   - name: clone
     summary: |

@@ -69,11 +69,7 @@ methods:
     summary: Adds an array of items to the calendar asynchronously.
     description: |
         If all the items are successfully added to the calendar, the success callback will be invoked, passing the list of CalendarItem objects that were added,
-        with their identifier set (id attribute). 
-        
-        The errorCallback() is launched with these error types:
-            - InvalidValuesError - if any of the input parameters contain an invalid value, the item has any invalid value or the calendar has some restrictions that cause the attempted insertion of the calendar items to fail (for example, limitations in the size of text attributes)
-            - UnknownError - if any other error occurs.
+        with their identifier set (id attribute).
         
         If you wish to update an existing item, call the update() method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
@@ -84,19 +80,15 @@ methods:
       - name: items
         summary:  The list of calendar items to add.
         type: Array<Tizen.Calendar.CalendarItem>
-      - name: successCallback
-        summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Tizen.Calendar.CalendarItem>>
-        optional: true
-      - name: errorCallback
-        summary:  The method to invoke when the request fails.
-        type: Callback<Tizen.WebAPIError>        
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<addBatchResponse>
         optional: true
     examples:
       - example: |    
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             
             function addEventsSuccess(events) {
@@ -111,7 +103,14 @@ methods:
                                             startDate: new Date(2011, 3, 30, 10, 0), 
                                             duration: 3600000,
                                             location:'Huesca'});
-            calendar.addBatch([ev], addEventsSuccess, errorCallback);    
+            calendar.addBatch([ev], 
+                function(response){
+                    if(response.success) {
+                        addEventsSuccess(response.events);
+                    } else {
+                        errorCallback(response.error)
+                    }
+                });
 
   - name: update
     summary: Updates an existing item in the calendar synchronously with the one specified in the argument.
@@ -123,7 +122,7 @@ methods:
     parameters:
       - name: item
         summary: The Item object to update.
-        type: Tizen.Calendar.CalendarItem      
+        type: Tizen.Calendar.CalendarItem
       - name: updateAllInstances
         summary:  |
             The flag indicating whether all the event instances should be updated as well or not (default value is true). 
@@ -137,7 +136,7 @@ methods:
             
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             
             // Defines the event success callback.
@@ -152,7 +151,13 @@ methods:
             myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events in a Calendar
-            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            });
         
   - name: updateBatch
     summary: Updates an array of existing items in the calendar asynchronously with the specified values in the argument.
@@ -165,13 +170,9 @@ methods:
       - name: items
         summary: The list of calendar item objects to update.
         type: Array<Tizen.Calendar.CalendarItem>
-      - name: successCallback
-        summary: The method to invoke when the updateEvents() request succeeds.
-        type: Callback<Object>
-        optional: true
-      - name: errorCallback
-        summary:  The method to invoke when the updateEvents() request fails.
-        type: Callback<Tizen.WebAPIError>        
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
       - name: updateAllInstances
         summary:  |
@@ -186,7 +187,7 @@ methods:
                 
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             
             // Defines the success callback
@@ -199,14 +200,27 @@ methods:
                 events[0].description = 'New Description 1';
                 events[1].description = 'New Description 2';
                 // Update the first two existing events.
-                myCalendar.updateBatch(events.slice(0,2), updateEventsSuccess, errorCallback);
+                myCalendar.updateBatch(events.slice(0,2),
+                    function(response){
+                        if(response.success){
+                            updateEventsSuccess();
+                        } else {
+                            errorCallback(response.error);
+                        }
+                    });
             }
             
             // Gets the default calendar
             myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
             // Finds all events in Calendar
-            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            });
 
   - name: remove
     summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
@@ -225,7 +239,7 @@ methods:
                 
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             // Defines the event success callback.
             function eventSearchSuccessCallback(events) {
@@ -236,16 +250,17 @@ methods:
             // Gets default calendar
             myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             // Finds all events in Calendar
-            myCalendar.find(eventSearchSuccessCallback, errorCallback);    
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            });
 
   - name: removeBatch
     summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
     description: |
-        The errorCallback is launched with these error types:
-                - NotFoundError - if an identifier in the ids parameter does not correspond to the ID attribute of an item in the calendar.
-                - InvalidValuesError - if any of the input parameters contain an invalid value.
-                - UnknownError - if any other error occurs.
-        
         For (recurring) events: In the case of calendar events, if the recurrence id, rid, is set to null, 
         this method will remove the event identified by uid, as well as all its possible detached instances.
         
@@ -254,13 +269,9 @@ methods:
       - name: ids
         summary: The identifiers (id attribute) of the items to delete
         type: Array<CalendarEventId>
-      - name: successCallback
-        summary: The method to invoke when the removeBatch() request succeeds.
-        type: Callback<Object>
-        optional: true
-      - name: errorCallback
-        summary:  The method to invoke when the removeBatch() request fails.
-        type: Callback<Tizen.WebAPIError>        
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
         optional: true
     examples:
       - example: |    
@@ -269,7 +280,7 @@ methods:
                 
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             // Defines the removeBatch callback
             function removeBatchCallback() {
@@ -278,22 +289,29 @@ methods:
             // Defines the event search success callback.
             function eventSearchSuccessCallback(events) {
                 // Deletes the first two existing events.
-                myCalendar.removeBatch([events[0].id, events[1].id], 
-                                       removeBatchCallback, 
-                                       errorCallback);
+                myCalendar.removeBatch([events[0].id, events[1].id],
+                    function(response){
+                        if(response.success) {
+                            removeBatchCallback();
+                        } else {
+                            errorCallback(response.error);
+                        }
+                    });
             }
             // Gets default calendar
             myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             // Retrieves all events in Calendar
-            myCalendar.find(eventSearchSuccessCallback, errorCallback);        
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            });
   - name: find
     summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
     description: |
-        If the filter is passed and contains valid values, only those values in the calendar that match the filter criteria as specified in the AbstractFilter interface will be returned in the successCallback(). If no filter is passed, or the filter contains any invalid value which is null or undefined, then the implementation must return the full list of items in the successCallback(). If no items are available in the calendar (it is empty) or no item matches the filter criteria, the successCallback() will be invoked with an empty array.
-        
-        The errorCallback is launched with these error types:
-            - InvalidValuesError - if any of the input parameters contain an invalid value.
-            - UnknownError - if any other error occurs.
+        If the filter is passed and contains valid values, only those values in the calendar that match the filter criteria as specified in the AbstractFilter interface will be returned in the callback(). If no filter is passed, or the filter contains any invalid value which is null or undefined, then the implementation must return the full list of items in the callback(). If no items are available in the calendar (it is empty) or no item matches the filter criteria, the callback() will be invoked with an empty array.
         
         Filter specific remarks:
             - For event filtering based on start/end dates, items that recur during the given time interval will be found, even if the parent item itself is outside the interval.
@@ -301,14 +319,10 @@ methods:
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
-      - name: successCallback
-        summary: The method to call when the invocation ends successfully.
-        type: Callback<Array<Tizen.Calendar.CalendarItem>>
-      - name: errorCallback
-        summary: The method to call when an error occurs
-        type: Callback<Tizen.WebAPIError>        
-        optional: true   
-      - name: filter 
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<findResponse>
+      - name: filter
         summary: The supplied data used to filter the results of the find() method. 
         type: Tizen.AbstractFilter
         optional: true  
@@ -320,7 +334,7 @@ methods:
       - example: |    
             // Defines the error callback.
             function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response.name);
+                Titanium.API.info( 'The following error occurred: ' +  response);
             }
             
             // Defines the event search success callback.
@@ -340,7 +354,15 @@ methods:
             var sortingMode = tizen.createSortMode({attributeName: 'summary',
                                                              order: tizen.SORT_MODE_ORDER_ASC});
             
-            calendar.find(eventSearchSuccessCallback, errorCallback, filter, sortingMode);        
+            myCalendar.find(function(response){
+                if(response.success) {
+                    eventSearchSuccessCallback(response.items)
+                } else {
+                    errorCallback(response.error)
+                }
+            }, 
+            filter, 
+            sortingMode);
 
   - name: addChangeListener
     summary: Adds a listener to receive notifications about calendar changes.
@@ -481,4 +503,65 @@ properties:
     summary: |
         Called when item are removed from the calendar.
         Array<String> - The list of identifiers for the items that were removed.
-        
+
+---
+name: addBatchResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [addBatch](Tizen.Calendar.CalendarInstance.addBatch) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: items
+    summary:  The array of CalendarItem objects.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Calendar.CalendarItem>
+
+---
+name: findResponse
+platforms: [tizen]
+summary: |
+    Simple object returned in the callback from
+    [find](Tizen.Calendar.CalendarInstance.find) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: items
+    summary: The array of CalendarItem objects. 
+    description: Will be undefined if `success` is `false`.
+    type: Array<Tizen.Calendar.CalendarItem>
