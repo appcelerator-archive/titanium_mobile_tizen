@@ -1,7 +1,7 @@
 // Wraps Tizen interface "CalendarInstance" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem'],
-	function(declare, Evented, CalendarEvent, CalendarItem) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/CalendarTask', 'Tizen/_/Calendar/CalendarEventId'],
+	function(declare, Evented, CalendarEvent, CalendarItem, CalendarTask, CalendarEventId) {
 
 		function onError (e, callback) {
 			callback({
@@ -10,6 +10,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				error: e.type + ': ' + e.message
 			});
 		}
+
+		var listening;
 
 		var calendarInstance = declare(Evented, {
 
@@ -138,38 +140,62 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 				);
 			},
 
-			addChangeListener: function(successCallback /*CalendarChangeCallback*/) {
-				function getWrappedItems(items) {
+			addEventListener: function () {
+				var self = this;
+				function wrapItems (items) {
 					var i = 0,
 						itemsCount = items.length,
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						wrappedItems.push(new CalendarItem(items[i]));
+						if(items[i].toString() === '[object CalendarEvent]') {
+							wrappedItems.push(new CalendarEvent(items[i]));
+						} else {
+							wrappedItems.push(new CalendarTask(items[i]));
+						}
 					}
 
 					return wrappedItems;
 				}
 
-				var wrappedCallback = {
-					onitemsadded: function(items) {
-						successCallback.onitemsadded(getWrappedItems(items));
-					},
+				function wrapIds (ids) {
+					var i = 0,
+						itemsCount = ids.length,
+						wrappedIds = [];
 
-					onitemsupdated: function(items) {
-						successCallback.onitemsupdated(getWrappedItems(items));
-					},
-
-					onitemsremoved: function(items) {
-						successCallback.onitemsremoved(getWrappedItems(items));
+					for (; i < itemsCount; i++) {
+						if(typeof ids[i] === 'object'){
+							wrappedIds.push(new CalendarEventId(ids[i]));
+						} else {
+							wrappedIds.push(ids[i]);
+						}
 					}
-				};
 
-				return this._obj.addChangeListener(wrappedCallback);
-			},
+					return wrappedIds;
+				}
 
-			removeChangeListener: function(watchId /*long*/) {
-				this._obj.removeChangeListener(watchId);
+				Evented.addEventListener.apply(this, arguments);
+
+				if (! listening) {
+					listening = true;
+					this._obj.addChangeListener({
+						onitemsadded: function (items) {
+							self.fireEvent('itemsadded', {
+								items: wrapItems(items)
+							});
+						},
+						onitemsupdated: function(items){
+							self.fireEvent('itemsupdated', {
+								items: wrapItems(items)
+							});
+						},
+						onitemsremoved: function(ids){
+							self.fireEvent('itemsremoved', {
+								ids: wrapIds(ids)
+							});
+						}
+					});
+				}
 			},
 
 			constants: {
