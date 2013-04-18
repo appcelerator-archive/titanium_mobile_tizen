@@ -71,12 +71,9 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 			},
 
 			syncFolder: function(folder /*MessageFolder*/, callback, limit /*unsigned long*/) {
-				console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 				return this._obj.syncFolder(folder._obj, callback && function () {
-					console.log('SyncFolder in module');
 					onSuccess(callback);
 				}, callback && function (e) {
-					console.log('Error in module syncFolder');
 					onError(e, callback);
 				}, limit);
 			},
