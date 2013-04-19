@@ -148,7 +148,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedMessagesChangeCallback = {
+				return this._obj.addMessagesChangeListener(messagesChangeCallback && {
 					messagesupdated: function(items) {
 						messagesChangeCallback.messagesChangeCallback.messagesupdated(getWrappedItems(items));
 					},
@@ -160,9 +160,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					messagesremoved: function(items) {
 						messagesChangeCallback.messagesremoved(getWrappedItems(items));
 					}
-				};
-
-				return this._obj.addMessagesChangeListener(messagesChangeCallback && wrappedMessagesChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			addConversationsChangeListener: function(conversationsChangeCallback /*MessageConversationsChangeCallback*/, filter /*AbstractFilter*/) {
@@ -178,7 +176,8 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedConversationsChangeCallback = {
+				this._obj.addConversationsChangeListener(conversationsChangeCallback && 
+				{
 					conversationsupdated: function(items) {
 						conversationsChangeCallback.conversationsupdated(getWrappedItems(items));
 					},
@@ -190,9 +189,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					conversationsremoved: function(items) {
 						conversationsChangeCallback.conversationsremoved(getWrappedItems(items));
 					}
-				};
-
-				this._obj.addConversationsChangeListener(conversationsChangeCallback && wrappedConversationsChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			addFoldersChangeListener: function(foldersChangeCallback /*MessageFoldersChangeCallback*/, filter /*AbstractFilter*/) {
@@ -208,7 +205,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedFoldersChangeCallback = {
+				this._obj.addFoldersChangeListener(foldersChangeCallback && {
 					foldersupdated: function(items) {
 						foldersChangeCallback.foldersupdated(getWrappedItems(items));
 					},
@@ -220,9 +217,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					foldersremoved: function(items) {
 						foldersChangeCallback.foldersremoved(getWrappedItems(items));
 					}
-				};
-
-				this._obj.addFoldersChangeListener(wrappedFoldersChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			removeChangeListener: function(watchId /*long*/) {
