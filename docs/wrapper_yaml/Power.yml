@@ -131,7 +131,7 @@ properties:
     type: Number
 
 events:
-  - name: screenStateChanged
+  - name: screenstateshanged
     summary: Called on screen state change.
     properties:
       - name: previousState
