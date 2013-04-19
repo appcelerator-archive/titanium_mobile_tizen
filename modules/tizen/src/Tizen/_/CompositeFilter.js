@@ -6,7 +6,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attr
 	var filter = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object CompositeFilter]') {
+			if (args instanceof tizen.CompositeFilter) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
@@ -41,11 +41,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attr
 						filters = [];
 
 					for (; i < len; i++) {
-						if(tizenFilters[i].toString() === '[object AttributeFilter]') {
+						if(tizenFilters[i] instanceof tizen.AttributeFilter) {
 							filters.push(new AttributeFilter(tizenFilters[i]));
-						} else if(tizenFilters[i].toString() === '[object CompositeFilter]') {
+						} else if(tizenFilters[i] instanceof tizen.CompositeFilter) {
 							filters.push(new filter(tizenFilters[i]));
-						} else if(tizenFilters[i].toString() === '[object AttributeRangeFilter]') {
+						} else if(tizenFilters[i] instanceof tizen.AttributeRangeFilter) {
 							filters.push(AttributeRangeFilter(tizenFilters[i]));
 						}
 					}

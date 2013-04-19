@@ -4,7 +4,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var btClass = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object BluetoothClass]') {
+			if (args instanceof tizen.BluetoothClass) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

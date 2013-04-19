@@ -49,19 +49,19 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 		}, true);
 
 		function wrap(object) {
-			if (object.toString() === '[object cpuinfo]') {
+			if (object instanceof tizen.cpuinfo) {
 				return new SystemInfoCpu(object);
 			}
-			if (object.toString() === '[object storageinfo]') {
+			if (object instanceof tizen.storageinfo) {
 				return new SystemInfoStorage(object);
 			}
-			if (object.toString() === '[object cellularnetworkinfo]') {
+			if (object instanceof tizen.cellularnetworkinfo) {
 				return new SystemInfoCellularNetwork(object);
 			}
-			if (object.toString() === '[object siminfo]') {
+			if (object instanceof tizen.siminfo) {
 				return new SystemInfoSIM(object);
 			}
-			if (object.toString() === '[object devicecapabilitiesinfo]') {
+			if (object instanceof tizen.devicecapabilitiesinfo) {
 				return new SystemInfoDeviceCapability(object);
 			}
 		}
