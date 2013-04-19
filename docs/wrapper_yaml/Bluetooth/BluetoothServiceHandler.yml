@@ -1,7 +1,7 @@
 ---
 name: Tizen.Bluetooth.BluetoothServiceHandler
 summary: The Bluetooth service interface. 
-extends: Titanium.Module
+extends: Titanium.Proxy
 methods:
 
   - name: unregister

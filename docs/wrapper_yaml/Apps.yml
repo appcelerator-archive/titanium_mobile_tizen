@@ -222,29 +222,29 @@ methods:
 events:
   - name: installed
     summary: Fired when an application is installed.
+    description: | 
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     properties:
       - name: appInfo
         summary: The application information of the installed application.
-        description: |
-           To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: updated
     summary: Fired when an application is updated.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read    
     properties:
       - name: appInfo
         summary: The application information of the updated application.
-        description: |
-            To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: uninstalled
     summary: Fired when an application is uninstalled.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read    
     properties:
       - name: appId
         summary: The ID of the uninstalled application.
-        description: |
-            To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: String
 # Pseudo-type
 ---

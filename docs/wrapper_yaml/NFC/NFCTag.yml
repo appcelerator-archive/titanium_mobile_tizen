@@ -1,7 +1,7 @@
 name: Tizen.NFC.NFCTag
 summary: |
   Accesses to the NFC tag.
-extends: Titanium.Module
+extends: Titanium.Proxy
 
 properties:
 

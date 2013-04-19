@@ -2,7 +2,7 @@
 name: Tizen.Bluetooth.BluetoothSocket
 summary: The interface to represent the Bluetooth socket.   
 description: The socket object is created by BluetoothDevice.connectToServiceByUUID() or BluetoothAdapter.registerRFCOMMServiceByUUID().
-extends: Titanium.Module
+extends: Titanium.Proxy
 methods:
 
   - name: writeData

@@ -1,7 +1,7 @@
 name: Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
-extends: Titanium.Module
+extends: Titanium.Proxy
 
 properties:
 
@@ -12,67 +12,7 @@ properties:
     permission: read-only
 
 methods:
-  - name: setReceiveNDEFListener
-    summary: Registers a callback function to be invoked when an NDEF message is received from the connected NFC peer-to-peer target.
-    description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
-    parameters:
-      - name: successCallback 
-        summary: Invoked in case of successful receiving the message.
-        type: Callback<NDEFMessageReadResponse>
-    examples:
-      - example: |
-            Example 1:
-            
-                var tizen = require("tizen");
-                var adapter = tizen.NFC.getDefaultAdapter();
 
-                // Receives NFCPeer
-                
-                var onSuccessCB = {
-
-                    onattach : function(nfcPeer) {
-                    
-                        console.log("NFC Target is detected");
-                        nfcPeer.setReceiveNDEFListener(function(response) {
-                            console.log("Receive message");
-                        });
-                    },
-                    ondetach : function() {
-                        console.log("NFC Target is detached");
-                    }
-                };
-
-                adapter.setPeerListener(onSuccessCB);
- 
-  - name: unsetReceiveNDEFListener
-    summary: Unregisters the listener for receiving NDEF messages from the NFC peer-to-peer target connected.
-    description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/nfc.p2p
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.NFC.getDefaultAdapter();
-            
-            var onSuccessCB = {
-            
-                onattach : function(nfcPeer) {
-
-                    console.log("NFC Target is detected");
-                    nfcPeer.setReceiveNDEFListener(
-                        function(response){
-                            console.log("Receive message");
-                            nfcPeer.unsetReceiveNDEFListener();
-                        });
-                    },
-                    ondetach : function() {
-                        console.log("NFC Target is detached");
-                    }
-                };
-            }
-
-            adapter.setPeerListener(onSuccessCB);
- 
   - name: sendNDEF
     summary: Registers a callback function to be invoked when an NDEF message is received from the connected NFC peer-to-peer target.
     description: |
@@ -86,6 +26,12 @@ methods:
         summary: Invoked in case of successfully sending data to NFC peer-to-peer target or in case of any error during sending.
         type: Callback<ErrorResponse>
 
+events:
+
+  - name: ndefmessagereceived
+    summary: Fired when data has been read successfully from the NFC tag or target.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.p2p
 # Pseudo-type
 ---
 name: NDEFMessageReadResponse

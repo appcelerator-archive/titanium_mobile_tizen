@@ -12,7 +12,7 @@ description: |
     To start device discovery, subscribe to one of the device discovery events defined in this interface. It will
     start automaticaly. Note that you should stop discovery using the [stopDiscovery](Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
     method as soon as you no longer need the discovery process.
-extends: Titanium.Module
+extends: Titanium.Proxy
 methods:
 
   - name: setName

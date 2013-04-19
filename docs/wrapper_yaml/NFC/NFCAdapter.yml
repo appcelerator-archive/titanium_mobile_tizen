@@ -1,7 +1,7 @@
 name: Tizen.NFC.NFCAdapter
 summary: |
   NFC adapter interface that provides access to control the adapter.
-extends: Titanium.Module
+extends: Titanium.Proxy
 
 properties:
 
@@ -73,31 +73,6 @@ methods:
             };
             adapter.setTagListener(onSuccessCB);
 
-  - name: setPeerListener
-    summary: Registers a callback function to be invoked when NFC peer-to-peer target is detected.
-    description: |
-        If the registration completes successfully, the detectCallback MUST be invoked when NFC peer-to-peer target is detacted.
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.p2p
-    parameters:
-      - name: detectCallback 
-        summary: Invoked in case of successful detection of the NFC peer-to-peer target.
-        type: NFCPeerDetectCallback
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.NFC.getDefaultAdapter();
-            
-            var onSuccessCB = {
-                onattach: function(nfcPeer) {
-                    console.log("NFC Target is detected");
-                },
-                ondetach: function() {
-                    console.log("NFC Target is detached");
-                }
-            };
-            adapter.setPeerListener(onSuccessCB);
-
   - name: unsetTagListener
     summary: Unregisters the listener for detecting an NFC tag.
     description: |
@@ -125,33 +100,6 @@ methods:
             // registers to be notified when NFC tag is detected.
             adapter.setTagListener(onSuccessCB)
 
-  - name: unsetPeerListener
-    summary: Unregisters the listener for detecting an NFC peer-to-peer target.
-    description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.p2p
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.NFC.getDefaultAdapter();
-
-            // Receives NFCPeer
-            var onSuccessCB = {
-                onattach: function(nfcPeer) {
-                    console.log("NFC Target is detected");
-                },
-                ondetach: function() {
-                    console.log("NFC Target is detached");
-                }
-            };
-
-            // Unregister the listener
-            function unsetListen() {
-                adapter.unsetPeerListener();
-            }
-
-            // registers to be notified when NFC peer-to-peer target is detected.
-            adapter.setPeerListener(onSuccessCB)
-
   - name: getCachedMessage
     summary: Gets NDEF message cached when the tag was detected.
     description: |
@@ -168,6 +116,22 @@ methods:
             var tizen = require("tizen");
             var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
 
+events:
+
+  - name: peerattached
+    summary: Fired when an NFC peer-to-peer target is detected.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/nfc.p2p
+    properties:
+      - name: nfcPeer
+        summary: The attached NFC peer-to-peer target.
+        type: Tizen.NFC.NFCPeer
+
+  - name: peerdetached
+    summary: Fired when the NFC peer-to-peer target connected is detached.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/nfc.p2p
+        
 ---
 name: NFCTagDetectCallback
 methods:
@@ -180,17 +144,3 @@ methods:
 
   - name: ondetach
     summary: The method invoked when the connected tag is detached.
-
-
----
-name: NFCPeerDetectCallback 
-methods:
-  - name: onattach
-    summary: The method invoked when the NFC peer-to-peer target is attached.
-    parameters:
-      - name: nfcPeer
-        summary: The attached NFC peer-to-peer target.
-        type: Tizen.NFC.NFCPeer
-
-  - name: ondetach
-    summary: The method invoked when the NFC peer-to-peer target connected is detached.
