@@ -58,7 +58,7 @@ methods:
                 }
                 
                 function onSocketError(e) {
-                   Ti.API.info ("Error connecting to service. Reason: " + e);
+                   Ti.API.info ("Error connecting to service. Reason: " + e.error);
                 }
                 
                 function onDeviceReady(device) {
@@ -127,7 +127,7 @@ methods:
                     };
                     
                     socket.addEventListener('socketerror', function(e) {
-                        Ti.API.info('Error: ' + e.message);
+                        Ti.API.info('Error: ' + e.error);
                     };
                     
                     socket.addEventListener('socketclosed', function() {
@@ -196,8 +196,12 @@ events:
     summary: The callback to be invoked when an error occurs.
     properties:
       - name: error
-        type: Tizen.WebAPIError     
-          
+        summary: If `success` is false, a string describing the error.
+        type: String
+
+      - name: code
+        summary: If `success` is false, the error code if available.
+
 properties:
   - name: uuid
     summary: Service UUID to which this socket is connected. 

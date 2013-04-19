@@ -32,7 +32,9 @@ methods:
                     
                     chatServiceHandler = handler;
                     
-                    handler.addEventListener('remotedeviceconnected', function(socket) {
+                    handler.addEventListener('remotedeviceconnected', function(e) {
+                        var socket = e.socket;
+                        
                         Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
                         serviceSocket = socket;
                         
@@ -87,6 +89,14 @@ events:
   - name: remotedeviceconnected
     summary: The callback to be invoked when a remote device connected to this service.
     properties:
+      - name: source
+        summary: Source object that fired the event.
+        type: Tizen.Bluetooth.BluetoothServiceHandler
+        
+      - name: type
+        summary: Name of the event fired.
+        type: String
+
       - name: socket
         type: Tizen.Bluetooth.BluetoothSocket
             
