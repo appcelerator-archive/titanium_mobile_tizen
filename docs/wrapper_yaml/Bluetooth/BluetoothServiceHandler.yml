@@ -89,14 +89,6 @@ events:
   - name: remotedeviceconnected
     summary: The callback to be invoked when a remote device connected to this service.
     properties:
-      - name: source
-        summary: Source object that fired the event.
-        type: Tizen.Bluetooth.BluetoothServiceHandler
-        
-      - name: type
-        summary: Name of the event fired.
-        type: String
-
       - name: socket
         type: Tizen.Bluetooth.BluetoothSocket
             
