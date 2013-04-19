@@ -40,7 +40,7 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
 
 			var result;
-			if (object.toString() === '[object StatusNotification]') {
+			if (object instanceof tizen.StatusNotification) {
 				result = this.createStatusNotification(object);
 			}
 			else

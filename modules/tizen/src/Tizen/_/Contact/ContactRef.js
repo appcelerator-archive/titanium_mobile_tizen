@@ -7,7 +7,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var contactRef = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object ContactRef]') {
+			if (args instanceof tizen.ContactRef) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

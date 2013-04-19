@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 	var downloadRequest = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object DownloadRequest]') {
+			if (args instanceof tizen.DownloadRequest) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

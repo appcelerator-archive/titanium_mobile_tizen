@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/MessageBody', 'Ti/_/Evented'], functi
 	var message = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString && args.toString() === '[object Message]') {
+			if (args.toString && args instanceof tizen.Message) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

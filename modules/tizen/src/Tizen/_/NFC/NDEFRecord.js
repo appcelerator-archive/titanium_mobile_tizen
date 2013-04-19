@@ -4,7 +4,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 
 	var record = declare(Evented, {
 		constructor: function(args) {
-			if (args.toString() === '[object NDEFRecord]') {
+			if (args instanceof tizen.NDEFRecord) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

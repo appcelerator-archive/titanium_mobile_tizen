@@ -87,7 +87,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 
 				if (typeof(id) !== 'object' && typeof(id) === 'string') {
 					obj = id;
-				} else if (id.toString() == '[object TizenCalendarCalendarEventId]') {
+				} else if (id instanceof tizen.TizenCalendarCalendarEventId) {
 					obj = id._obj;
 				} else {
 					console.error('Remove event error: unexpected type of CalendarItemId.');
@@ -135,8 +135,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					callback && function(e) {
 						onError(e, callback);
 					},
-					(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
-					(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
+					(filter && (filter instanceof tizen.TizenAttributeFilter)) ? filter._obj : filter,
+					(sortMode && (sortMode instanceof tizen.TizenSortMode)) ? sortMode._obj : sortMode
 				);
 			},
 
@@ -148,10 +148,12 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						if(items[i].toString() === '[object CalendarEvent]') {
+						if(items[i] instanceof tizen.CalendarEvent) {
 							wrappedItems.push(new CalendarEvent(items[i]));
-						} else {
+						} else if(items[i].toString() === '[object CalendarTask]') {
 							wrappedItems.push(new CalendarTask(items[i]));
+						} else {
+							console.error('Cannot wrap Tizen's item: ' + items[i]);
 						}
 					}
 
@@ -166,8 +168,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					for (; i < itemsCount; i++) {
 						if(typeof ids[i] === 'object') {
 							wrappedIds.push(new CalendarEventId(ids[i]));
-						} else {
+						} else if(typeof ids[i] === 'string') {
 							wrappedIds.push(ids[i]);
+						} else {
+							console.error('Cannot wrap Tizen's item: ' + ids[i]);
 						}
 					}
 
