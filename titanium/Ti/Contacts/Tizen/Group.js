@@ -38,7 +38,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 		callback({
 			code: 0,
 			success: true,
-			data: persons
+			persons: persons
 		});
 	}
 
