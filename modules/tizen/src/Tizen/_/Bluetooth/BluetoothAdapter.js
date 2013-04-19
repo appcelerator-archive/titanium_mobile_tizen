@@ -44,6 +44,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				});
 			},
 
+			// Device discovery will automatically start when user subscribes to one of the
+			// device discovery events.
 			addEventListener: function () {
 				var self = this;
 				Evented.addEventListener.apply(this, arguments);
@@ -86,6 +88,19 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			stopDiscovery: function(callback) {
+				if(listening) {
+					// stopDiscovery automatically removes all Titanium event subscriptions.
+					// Otherwise, after stopping discovery and reinitiating it with addEventListener again,
+					// events that were subscribed to previously will start arriving, which generally is not
+					// intended.
+
+					Evented.removeEventListener('discoverystarted');
+					Evented.removeEventListener('devicefound');
+					Evented.removeEventListener('devicedisappeared');
+					Evented.removeEventListener('discoveryfinished');
+					listening = false;
+				}
+				
 				return this._obj.stopDiscovery(callback && function() {
 					callback({
 						code: 0,
