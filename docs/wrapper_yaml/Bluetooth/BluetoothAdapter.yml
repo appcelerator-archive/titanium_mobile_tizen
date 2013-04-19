@@ -468,6 +468,8 @@ methods:
  
 events:
   - name: discoverystarted
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
     summary: Event to be fired at the beginning of the device discovery process for finding the nearby Bluetooth device.
     
   - name: devicedisappeared
@@ -487,6 +489,8 @@ events:
         
   - name: devicefound
     summary: Event to be fired when a new device is discovered in the process of inquiry/discovery.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
     properties:
       - name: source
         summary: Source object that fired the event.
@@ -502,6 +506,8 @@ events:
 
   - name: discoveryfinished
     summary: Event to be fired when the device discovery process has finished.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
     properties:
       - name: source
         summary: Source object that fired the event.
@@ -517,6 +523,8 @@ events:
     
   - name: discoveryerror
     summary: Event to be fired when a Bluetooth device is turned off or any other error case.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
     properties:
       - name: error
         summary: A string describing the error.

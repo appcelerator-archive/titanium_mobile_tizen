@@ -154,12 +154,16 @@ events:
 
   - name: itemsadded
     summary: Fired when a new call history item is added.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     properties:
       - name: items
         summary: An array of CallHistoryEntry objects, representing the new items added to call history.
         type: Array<CallHistoryEntry>
   - name: itemschanged
     summary: Fires when the call history items have been changed.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     properties:
       - name: items
         summary: An array of CallHistoryEntry objects, representing the changed items in call history.
