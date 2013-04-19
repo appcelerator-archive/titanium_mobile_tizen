@@ -44,6 +44,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				});
 			},
 
+			// Device discovery will automatically start when user subscribes to one of the
+			// device discovery events.
 			addEventListener: function () {
 				var self = this;
 				Evented.addEventListener.apply(this, arguments);
@@ -76,7 +78,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 								devices: arr
 							});
 						}
-					}, function (e){
+					}, function (e) {
 						self.fireEvent('discoveryerror', {
 							code: e.code,
 							error: e.type + ': ' + e.message
@@ -86,6 +88,20 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			stopDiscovery: function(callback) {
+				if(listening) {
+					// stopDiscovery automatically removes all Titanium event subscriptions.
+					// Otherwise, after stopping discovery and reinitiating it with addEventListener again,
+					// events that were subscribed to previously will start arriving, which generally is not
+					// intended.
+
+					Evented.removeEventListener('discoverystarted');
+					Evented.removeEventListener('devicefound');
+					Evented.removeEventListener('devicedisappeared');
+					Evented.removeEventListener('discoveryfinished');
+
+					listening = false;
+				}
+				
 				return this._obj.stopDiscovery(callback && function() {
 					callback({
 						code: 0,
@@ -98,9 +114,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			getKnownDevices: function(callback) {
 				return this._obj.getKnownDevices(callback && function(devices) {
-						var i = 0,
-							len = devices.length,
-							arr = [];
+					var i = 0,
+						len = devices.length,
+						arr = [];
 
 						for (; i < len; i++) {
 							arr.push(new BluetoothDevice(devices[i]));
@@ -118,11 +134,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			getDevice: function(address /*BluetoothAddress*/, callback) {
 				return this._obj.getDevice(address, callback && function(device) {
-						callback({
-							code: 0,
-							success: true,
-							device: new BluetoothDevice(device)
-						});
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
 				}, callback && function(e) {
 						onError(e, callback);
 				});
@@ -130,12 +146,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			createBonding: function(address /*BluetoothAddress*/, callback) {
 				return this._obj.createBonding(address, callback && function(device) {
-						console.log(device + '<<-------------');
-						callback({
-							code: 0,
-							success: true,
-							device: new BluetoothDevice(device)
-						});
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
 				}, callback && function(e) {
 					onError(e, callback);
 				});

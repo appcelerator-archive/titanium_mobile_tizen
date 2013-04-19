@@ -37,7 +37,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					unwrappedItems.push(items[i]._obj);
 				}
 
-				this._obj.addBatch(unwrappedItems, callback && function(items){
+				this._obj.addBatch(unwrappedItems, callback && function(items) {
 					var objectsCount = items.length,
 						wrappedItems = [];
 
@@ -62,14 +62,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			updateBatch: function(items /*CalendarItem*/, callback, updateAllInstances /*boolean*/) {
 				var i = 0,
 					itemsCount = items.length,
-					unwrapedItems = [];
+					unwrappeDItems = [];
 
 				for (; i < itemsCount; i++) {
-					unwrapedItems.push(items[i]._obj);
+					unwrappeDItems.push(items[i]._obj);
 				}
 
-				this._obj.updateBatch(unwrapedItems,
-					callback && function(){
+				this._obj.updateBatch(unwrappeDItems,
+					callback && function() {
 						callback({
 							code: 0,
 							success: true
@@ -99,13 +99,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			removeBatch: function(ids /*CalendarItemId*/, callback) {
 				var i = 0,
 					idsCount = ids.length,
-					unwrapedIds = [];
+					unwrappedIds = [];
 
 				for (; i < idsCount; i++) {
-					unwrapedIds.push(ids[i]._obj);
+					unwrappedIds.push(ids[i]._obj);
 				}
 
-				this._obj.removeBatch(unwrapedIds, callback && function() {
+				this._obj.removeBatch(unwrappedIds, callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -164,7 +164,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 						wrappedIds = [];
 
 					for (; i < itemsCount; i++) {
-						if(typeof ids[i] === 'object'){
+						if(typeof ids[i] === 'object') {
 							wrappedIds.push(new CalendarEventId(ids[i]));
 						} else {
 							wrappedIds.push(ids[i]);
@@ -184,12 +184,12 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 								items: wrapItems(items)
 							});
 						},
-						onitemsupdated: function(items){
+						onitemsupdated: function(items) {
 							self.fireEvent('itemsupdated', {
 								items: wrapItems(items)
 							});
 						},
-						onitemsremoved: function(ids){
+						onitemsremoved: function(ids) {
 							self.fireEvent('itemsremoved', {
 								ids: wrapIds(ids)
 							});

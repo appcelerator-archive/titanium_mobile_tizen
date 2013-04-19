@@ -16,7 +16,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarInstance', 'Tizen
 
 			getCalendars: function(type /*CalendarType*/, callback) {
 				tizen.calendar.getCalendars(type,
-					callback && function(calendars){
+					callback && function(calendars) {
 						var i = 0,
 							len = calendars.length,
 							calendarsArr = [];

@@ -152,6 +152,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 				Evented.addEventListener.apply(this, arguments);
 
 				if (! listening) {
+					listening = true;
 					tizen.application.addAppInfoEventListener({
 						oninstalled: function (application) {
 							self.fireEvent('oninstalled', {

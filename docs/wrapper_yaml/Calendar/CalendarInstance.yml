@@ -320,7 +320,7 @@ methods:
     parameters:
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<findResponse>
+        type: Callback<FindResponse>
       - name: filter
         summary: The supplied data used to filter the results of the find() method. 
         type: Tizen.AbstractFilter
@@ -469,7 +469,7 @@ properties:
     type: Array<Tizen.Calendar.CalendarItem>
 
 ---
-name: findResponse
+name: FindResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
