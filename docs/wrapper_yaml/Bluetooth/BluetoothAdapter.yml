@@ -515,11 +515,11 @@ events:
     summary: The method to be invoked when a Bluetooth device is turned off or any other error case.
     properties:
       - name: error
-        summary: If `success` is false, a string describing the error.
+        summary: A string describing the error.
         type: String
 
       - name: code
-        summary: If `success` is false, the error code if available.
+        summary: The error code if available.
     
 properties:
   - name: name
