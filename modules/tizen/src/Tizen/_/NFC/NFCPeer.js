@@ -36,7 +36,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 			},
 
 			sendNDEF: function(ndefMessage, callback) {
-				return this._obj.sendNDEF(ndefMessage._obj, callback && function() {
+				this._obj.sendNDEF(ndefMessage._obj, callback && function() {
 					callback({
 						success: true,
 						code: 0

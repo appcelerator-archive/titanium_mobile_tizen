@@ -45,7 +45,7 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 			}
 			else
 			{
-				console.error("Incorrect object type");
+				console.error('Incorrect object type');
 			}
 			return result;
 		},

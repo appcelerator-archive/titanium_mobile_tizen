@@ -5,11 +5,11 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 	var Power = lang.mixProps(require.mix({}, Evented), {
 
 		request: function(resource /*PowerResource*/, state /*PowerState*/) {
-			return tizen.power.request(resource, state);
+			tizen.power.request(resource, state);
 		},
 
 		release: function(resource /*PowerResource*/) {
-			return tizen.power.release(resource);
+			tizen.power.release(resource);
 		},
 
 		isScreenOn: function() {
@@ -17,11 +17,11 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		},
 
 		turnScreenOn: function() {
-			return tizen.power.turnScreenOn();
+			 tizen.power.turnScreenOn();
 		},
 
 		turnScreenOff: function() {
-			return tizen.power.turnScreenOff();
+			 tizen.power.turnScreenOff();
 		},
 
 		constants: {
