@@ -19,7 +19,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDE
 				if (object.toString() === '[object NFCAdapter]') {
 					return this.createNFCAdapter(object);
 				} else {
-					console.error("Incorrect object type");
+					console.error('Incorrect object type');
 				}
 			},
 
