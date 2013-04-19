@@ -57,7 +57,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 				});
 			}, callback && function(e) {
 					onError(e, callback);
-				});
+			});
 		},
 
 		constants: {
