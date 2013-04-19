@@ -2,7 +2,6 @@ name: Tizen.NFC.NFCTag
 summary: |
   Accesses to the NFC tag.
 extends: Titanium.Proxy
-platforms: [tizen]
 
 properties:
 
@@ -99,7 +98,6 @@ methods:
 # Pseudo-type
 ---
 name: NDEFReadResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [readNDEF](Tizen.NFC.NFCTag.readNDEF) method.
@@ -130,7 +128,6 @@ properties:
 
 ---
 name: TransceiveResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [transceive](Tizen.NFC.NFCTag.transceive) method.

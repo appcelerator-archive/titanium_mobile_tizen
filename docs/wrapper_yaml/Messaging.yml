@@ -162,7 +162,6 @@ properties:
 
 ---
 name: MessagingMessageServiceResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getMessageServices](Tizen.Messaging.getMessageServices) method.

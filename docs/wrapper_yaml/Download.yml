@@ -3,6 +3,7 @@ name: Tizen.Download
 summary: |
     The Download module provides methods to asynchronously download the contents of a URL to a storage.
 extends: Titanium.Module
+platforms: [tizen]
 
 methods:
   - name: getDownloadRequest

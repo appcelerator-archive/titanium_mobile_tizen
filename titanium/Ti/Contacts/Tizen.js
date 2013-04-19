@@ -25,7 +25,7 @@ define(
 				callback({
 					code: 0,
 					success: true,
-					data: persons
+					persons: persons
 				});
 			}, function (e) {
 				errorCallback(e, callback);
@@ -66,7 +66,7 @@ define(
 				callback({
 					code: 0,
 					success: true,
-					data: persons
+					persons: persons
 				});
 			}, function (e) {
 				errorCallback(e, callback);

@@ -2,7 +2,6 @@
 name: Tizen.Download.DownloadRequest
 summary: Defines the download request object.
 extends: Titanium.Proxy
-platforms: [tizen]
 
 methods:
   - name: send

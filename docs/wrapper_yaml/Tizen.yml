@@ -207,12 +207,10 @@ properties:
 ---
 name: AbstractFilter
 summary: Common interface used by different types of object filters.
-platforms: [tizen]
 
 ---
 name: AttributeFilterUnit
 summary: Represents a filter based on an object attribute.
-platforms: [tizen]
 properties:
   - name: attributeName
     type: String
@@ -232,7 +230,6 @@ properties:
 ---
 name: AttributeRangeFilterUnit
 summary: Represents a filter based on an object attribute which has values that are within a particular range.
-platforms: [tizen]
 properties:
   - name: attributeName
     type: String
@@ -251,7 +248,6 @@ properties:
 ---
 name: CompositeFilterUnit
 summary: Represents a set of filters.
-platforms: [tizen]
 properties:
   - name: type
     type: String
@@ -265,7 +261,6 @@ properties:
 ---
 name: SortModeUnit
 summary: Common interface used for sorting of queried data.
-platforms: [tizen]
 properties:
   - name: attributeName
     type: String
@@ -279,7 +274,6 @@ properties:
 ---
 name: SimpleCoordinatesUnit
 summary:  Represents a point (latitude and longitude) in map coordinate system.
-platforms: [tizen]
 properties:
   - name: latitude
     type: Number

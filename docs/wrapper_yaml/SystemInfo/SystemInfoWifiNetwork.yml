@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoWifiNetwork
 summary: This property reflects the information of the Wi-Fi network in this system.
     
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

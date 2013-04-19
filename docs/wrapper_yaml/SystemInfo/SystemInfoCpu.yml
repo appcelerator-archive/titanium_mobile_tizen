@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoCpu
 summary: This property reflects the state of the CPUs available to this system.
     
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

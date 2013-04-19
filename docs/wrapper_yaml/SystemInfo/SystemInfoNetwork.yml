@@ -2,7 +2,6 @@
 name: Tizen.SystemInfo.SystemInfoNetwork
 summary: This property reflects the information of the data network in this system.
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

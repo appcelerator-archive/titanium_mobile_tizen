@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoDeviceCapability
 summary: SystemInfoDeviceCapability object.
 
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

@@ -7,7 +7,6 @@ description: |
     If the Messaging service does not represent email or an email protocol supporting the concept of folders on a server, this service have one folder which is the standard INBOX folder.
 
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
 
 properties:
