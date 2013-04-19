@@ -2,7 +2,7 @@
 
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler'],
 	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler) {
-	
+
 		function onError (e, callback) {
 			callback({
 				code: e.code,

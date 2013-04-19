@@ -1,6 +1,6 @@
 // Wraps Tizen module "SystemSetting".
 
-define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Evented, WebAPIError) {
+define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
 	function errorCallback (e, callback) {
 		callback({

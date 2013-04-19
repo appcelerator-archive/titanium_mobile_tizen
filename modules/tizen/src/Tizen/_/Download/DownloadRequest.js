@@ -25,10 +25,10 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				onprogress: function(id, receivedSize, totalSize) {
 					downloadCallback.onDataStream(self, receivedSize, totalSize);
 				},
-				onpaused: function(id) {
+				onpaused: function() {
 					downloadCallback.onPause(self);
 				},
-				oncanceled: function(id) {
+				oncanceled: function() {
 					downloadCallback.onCancel(self);
 				},
 				oncompleted: function(id, fullPath) {
@@ -37,7 +37,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				onfailed: function(id, error) {
 					downloadCallback.onError(self, new WebAPIError(error));
 				}
-			}
+			};
 		},
 
 		send: function(downloadCallback /*DownloadCallback*/) {
