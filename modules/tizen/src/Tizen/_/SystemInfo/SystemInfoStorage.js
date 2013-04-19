@@ -6,7 +6,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/SystemInfo/SystemInfoStorageUni
 
 		constructor: function(args) {
 			// Automatically initialize system info storage units.
-			
+
 			var i = 0,
 				units = args,
 				unitsCount = units.length,
