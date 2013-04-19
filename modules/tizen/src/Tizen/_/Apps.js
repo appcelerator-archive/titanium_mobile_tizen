@@ -155,17 +155,17 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 					listening = true;
 					tizen.application.addAppInfoEventListener({
 						oninstalled: function (application) {
-							self.fireEvent('oninstalled', {
+							self.fireEvent('installed', {
 								appInfo: new ApplicationInformation(application)
 							});
 						},
 						onupdated: function (application) {
-							self.fireEvent('onupdated', {
+							self.fireEvent('updated', {
 								appInfo: new ApplicationInformation(application)
 							});
 						},
 						onuninstalled: function (applicationId) {
-							self.fireEvent('onuninstalled', {
+							self.fireEvent('uninstalled', {
 								appId: applicationId
 							});
 						}
