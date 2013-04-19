@@ -10,7 +10,6 @@ description: |
     *   Adding items to a specific calendar using add() / addBatch() methods.
     *   Updating existing items using update() / updateBatch() methods.
     *   Deleting existing items using remove() / removeBatch() methods.
-    *   Tracking calendar changes using addChangeListener() / removeChangeListener() methods.
 
 extends: Titanium.Proxy
 platforms: [tizen]
@@ -364,76 +363,6 @@ methods:
             filter, 
             sortingMode);
 
-  - name: addChangeListener
-    summary: Adds a listener to receive notifications about calendar changes.
-    description: |
-        When executed, the implementation must immediately return a subscription identifier that identifies the watch operation. 
-        After returning the identifier, the watcher methods are invoked asynchronously.
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
-    returns:
-        summary: The identifier used to clear the watch subscription.
-        type: Number
-    parameters:
-      - name: successCallback
-        summary: The methods to invoke on receiving calendar change notifications.
-        type: CalendarChangeCallback
-    examples:
-      - example: |    
-            var watcherId = 0; // watcher identifier
-            var calendar; // This example assumes calendar is initialized
-            
-            var watcher = {
-                onitemsadded: function(items) {
-                Titanium.API.info(items.length + ' items were added');
-                },
-                onitemsupdated: function(items) {
-                Titanium.API.info(items.length + ' items were updated');
-                },
-                onitemsremoved: function(ids) {
-                Titanium.API.info(ids.length + ' items were removed');
-                }
-            };
-            // Registers to be notified when the calendar changes
-            watcherId = calendar.addChangeListener(watcher);
-             
-  - name: removeChangeListener
-    summary: Unsubscribes from receiving notification for a calendar item changes.
-    description: |
-        If the watchId argument is valid and corresponds to a subscription already in place, 
-        the watch process must immediately stop and no further callbacks must be invoked. 
-        If the watchId argument is not valid or does not correspond to a valid subscription, 
-        the method should return without any further action.
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
-    parameters:
-      - name: watchId 
-        summary:  Subscription Identifier.
-        type: CalendarChangeCallback
-    examples:
-      - example: |    
-            var watcherId = 0; // watcher identifier
-            var calendar; // This example assumes calendar is initialized
-        
-            // Receives calendar changes
-            var watcher = {
-                onitemsadded: function(items) {
-                Titanium.API.info(items.length + ' items were added');
-                },
-                onitemsupdated: function(items) {
-                  Titanium.API.info(evitemsents.length + ' items were updated');
-                },
-                onitemsremoved: function(ids) {
-                  Titanium.API.info(ids.length + ' items were removed');
-                }
-            };
-            
-            // Registers to be notified when the calendar changes
-            watcherId = calendar.addChangeListener(watcher);
-            
-            // Cancels the watch operation
-            calendar.removeChangeListener(watcherId);
-
 events:
 
   - name: itemsadded
@@ -450,6 +379,7 @@ events:
     properties:
       - name: items
         summary: The list of items that were updated.
+        type: Array<Tizen.Calendar.CalendarItem>
 
   - name: itemsremoved
     description: 
@@ -457,7 +387,7 @@ events:
     properties:
       - name: ids
         summary: The list of identifiers for the items that were removed.
-        type: String
+        type: Array<CalendarItemId>
 
 properties:
 
@@ -506,28 +436,6 @@ properties:
 ---
 name: CalendarItemId 
 summary: A calendar item identifier, which can either be a <CalendarEventId> or a CalendarTaskId = String
-# Pseudo-type
----
-name: CalendarChangeCallback
-summary: An object containing the various options for fetching the properties requested.
-properties:
-  - name: onitemsadded
-    type: Callback<Array<Tizen.Calendar.CalendarItem>>
-    summary: |
-        Called when items are added to the calendar.
-        Array<CalendarItem> -  The list of items that were added.
-    
-  - name: onitemsupdated
-    type: Callback<Array<Tizen.Calendar.CalendarItem>>
-    summary: |
-        Called when items are updated in the calendar.
-        Array<CalendarItem> - The list of items that were updated.
-    
-  - name: onitemsremoved
-    type: Callback<Array<String>>
-    summary: |
-        Called when item are removed from the calendar.
-        Array<String> - The list of identifiers for the items that were removed.
 
 ---
 name: AddBatchResponse
