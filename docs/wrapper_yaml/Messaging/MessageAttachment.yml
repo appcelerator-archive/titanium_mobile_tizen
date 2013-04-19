@@ -31,6 +31,7 @@ properties:
   - name: filePath
     summary: | 
         The location path to the loaded attachment file.
+    description: |
         It holds the location path to the loaded attachment file, appropriate for the File System API, NULL if the attachment is not loaded from the remote server.
     type: <Tizen.Messaging.MessageAttachment>
     permission: read-only
