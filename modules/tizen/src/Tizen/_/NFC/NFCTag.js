@@ -51,7 +51,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 				});
 			}, callback && function(e) {
 				onError(e, callback);
-			})
+			});
 		},
 
 		constants: {

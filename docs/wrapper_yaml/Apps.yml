@@ -219,54 +219,31 @@ methods:
             var appContext = tizen.Application.getAppContext(null);
             console.log("Application context retrieved for app " + appContext.id);
  
-  - name: addAppInfoEventListener
-    summary: Adds a listener for receiving any notification for changes in the list of the installed applications on a device. 
-    description: |
-        It install a callback that is triggered every time a change occurs on the list of installed applications on a device. This change may be occured by a new installation, uninstallation, or update of an application.
-        When executed, the implementation must immediately return a listener ID that identifies the listener. After returning the ID, the change detection operation is started asynchronously.
-        The <ApplicationInformationEventCallback> must be invoked every time a new application is installed, removed, or updated.
-        The change detection must continue until the removeAppInfoEventListener() method is called with the corresponding listener identifier.
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
-    returns:
-      - type: Number
-        summary: ID of the listener that can be used to remove the listener later. 
-    parameters: 
-      - name: eventCallback
-        summary: |
-            Pass a dictionary with the following supported keys: `oninstalled` a function that accepts parameter of type <Tizen.Apps.ApplicationInformation>,  
-            called when the application is installed, `onupdated` a function that accepts parameter of type <Tizen.Apps.ApplicationInformation>, and will be 
-            called when when an application is installed, and `onuninstalled` , a function that accepts a applictionId and will be called when the application will be uninstalled.
-        type: Object
-    examples:
-      - example: |
-            var appEventCallback = {
-                oninstalled: function(application) {
-                    console.log('The application ' + application.name + ' is installed');
-                },
-                onupdated: function(application) {
-                    console.log('The application ' + application.name + ' is updated');
-                },
-                onuninstalled: function(appid) {
-                    console.log('The application ' + appid + ' is uninstalled');
-                }
-            };
-            var tizen = require('tizen');
-            var watchId = tizen.Application.addAppInfoEventListener(appEventCallback);
+events:
+ 
+  - name: oninstalled
+    summary: Fired when an application is installed.
+    description:
+    properties:
+      - name: appInfo
+        summary: The application information of the installed application.
+        type: Tizen.Apps.ApplicationInformation
 
-  - name: removeAppInfoEventListener
-    summary: Removes the listener to stop receiving notifications for changes on the list of installed applications on a device.  
-    description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
-    parameters: 
-      - name: watchId
-        summary: An ID that identifies the listener.
-        type: Number
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            tizen.Application.removeAppInfoEventListener(watchId);
+  - name: onupdated
+    summary: Fired when an application is updated.
+    description:
+    properties:
+      - name: appInfo
+        summary: The application information of the updated application.
+        type: Tizen.Apps.ApplicationInformation
 
+  - name: onuninstalled
+    summary: Fired when an application is uninstalled.
+    description:
+    properties:
+      - name: appId
+        summary: The ID of the uninstalled application.
+        type: String
 # Pseudo-type
 ---
 name: ApplicationControlDataUnit
@@ -304,32 +281,6 @@ properties:
     type: <Tizen.Apps.ApplicationControlData>
     summary: (optional) An array of attributes to store the data needed for an application control.
     optional: true
-
----
-name: ApplicationInformationEventCallback
-summary: The callback interface to specify for subscribing for notification of changes in the list of installed applications on a device. 
-description: This callback interface specifies methods that will be invoked when an application is installed, updated, or uninstalled.  
-methods: 
-  - name: oninstalled
-    summary: Called when an application is installed. 
-    parameters:
-      - name: info 
-        summary: The application information of the installed application. 
-        type: Callback<Tizen.Apps.ApplicationInformation>
-
-  - name: onupdated 
-    summary: Called when an application is updated. 
-    parameters:
-      - name: info 
-        summary: The application information of the updated application. 
-        type: Callback<Tizen.Apps.ApplicationInformation>
-
-  - name: onuninstalled
-    summary: Called when an application is uninstalled. 
-    parameters:
-      - name: id
-        summary: The ID of the uninstalled application.  
-        type: String
 
 ---
 name: ApplicationControl

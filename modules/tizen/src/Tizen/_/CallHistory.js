@@ -1,6 +1,6 @@
 // Wraps Tizen module "CallHistory".
 
-define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(lang, CallHistoryEntry, WebAPIError, Evented) {
+define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Ti/_/Evented'], function(lang, CallHistoryEntry, Evented) {
 
 	function onError (e, callback) {
 		callback({
@@ -16,6 +16,8 @@ define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIErro
 			success: true
 		});
 	}
+
+	var listening;
 
 	return lang.mixProps(require.mix({}, Evented), {
 
@@ -67,37 +69,43 @@ define(['Ti/_/lang', 'Tizen/_/CallHistory/CallHistoryEntry', 'Tizen/_/WebAPIErro
 				});
 			},
 
-			addChangeListener: function(observer /*CallHistoryChangeCallback*/) {
-				var object = {
-					onadded: function(entries) {
-						var result = [],
-							i = 0,
-							entriesCount = entries.length;
+			addEventListener: function () {
+				var self = this;
 
-						for (; i < entriesCount; i++) {
-							result.push(new CallHistoryEntry(entries[i]));
+				Evented.addEventListener.apply(this, arguments);
+
+				if (!listening) {
+					listening = true;
+
+					tizen.callhistory.addChangeListener({
+						onadded: function (entries) {
+							var i = 0,
+								entriesCount = entries.length,
+								result = [];
+
+							for (; i < entriesCount; i++) {
+								result.push(new CallHistoryEntry(entries[i]));
+							}
+
+							self.fireEvent('itemsadded', {
+								items: result
+							});
+						},
+						onchanged: function (entries) {
+							var result = [],
+								i = 0,
+								entriesCount = entries.length;
+
+							for (; i < entriesCount; i++) {
+								result.push(new CallHistoryEntry(entries[i]));
+							}
+
+							self.fireEvent('itemschanged', {
+								items: result
+							});
 						}
-
-						observer.onadded(result);
-					},
-					onchange: function(entries) {
-						var result = [],
-							i = 0,
-							entriesCount = entries.length;
-
-						for (; i < entriesCount; i++) {
-							result.push(new CallHistoryEntry(entries[i]));
-						}
-
-						observer.onchange(result);
-					}
-				};
-
-				return tizen.callhistory.addChangeListener(object);
-			},
-
-			removeChangeListener: function(handle /*long*/) {
-				tizen.callhistory.removeChangeListener(handle);
+					});
+				}
 			}
 
 		}, true);

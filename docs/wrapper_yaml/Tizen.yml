@@ -258,7 +258,7 @@ properties:
     summary: | 
         The composite filter type: COMPOSITE_FILTER_TYPE_UNION, COMPOSITE_FILTER_TYPE_INTERSECTION.
   - name: filters
-    type: AbstractFilter[]
+    type: Array<AbstractFilter>
     summary: (optional) The list of filters in the composite filter.
     optional: true
     

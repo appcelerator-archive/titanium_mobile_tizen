@@ -51,7 +51,7 @@ methods:
         
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<expandRecurrenceResponse>
+        type: Callback<ExpandRecurrenceResponse>
     examples:
       - example: |    
             // Defines the error callback.
@@ -129,7 +129,7 @@ properties:
             event.recurrenceRule = rule;
 
 ---
-name: expandRecurrenceResponse
+name: ExpandRecurrenceResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
