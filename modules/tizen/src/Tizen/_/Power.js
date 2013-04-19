@@ -2,66 +2,67 @@
 
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
-	var listening,
-		Power = lang.mixProps(require.mix({}, Evented), {
+	var listening;
 
-			request: function(resource /*PowerResource*/, state /*PowerState*/) {
-				tizen.power.request(resource, state);
-			},
+	return lang.mixProps(require.mix({}, Evented), {
 
-			release: function(resource /*PowerResource*/) {
-				tizen.power.release(resource);
-			},
+		request: function(resource /*PowerResource*/, state /*PowerState*/) {
+			tizen.power.request(resource, state);
+		},
 
-			isScreenOn: function() {
-				return tizen.power.isScreenOn();
-			},
+		release: function(resource /*PowerResource*/) {
+			tizen.power.release(resource);
+		},
 
-			turnScreenOn: function() {
-				 tizen.power.turnScreenOn();
-			},
+		isScreenOn: function() {
+			return tizen.power.isScreenOn();
+		},
 
-			turnScreenOff: function() {
-				 tizen.power.turnScreenOff();
-			},
+		turnScreenOn: function() {
+			 tizen.power.turnScreenOn();
+		},
 
-			addEventListener: function () {
-				var self = this;
-				Evented.addEventListener.apply(this, arguments);
+		turnScreenOff: function() {
+			 tizen.power.turnScreenOff();
+		},
 
-				if (! listening) {
-					listening = true;
+		addEventListener: function () {
+			var self = this;
+			Evented.addEventListener.apply(this, arguments);
 
-					tizen.power.setScreenStateChangeListener(function (prevState, changedState) {
-						self.fireEvent('screenstatechanged', {
-							previousState: prevState,
-							changedState: changedState
-						});
+			if (! listening) {
+				listening = true;
+
+				tizen.power.setScreenStateChangeListener(function (prevState, changedState) {
+					self.fireEvent('screenstatechanged', {
+						previousState: prevState,
+						changedState: changedState
 					});
-				}
-			},
+				});
+			}
+		},
 
-			constants: {
-				POWER_RESOURCE_SCREEN: 'SCREEN',
-				POWER_RESOURCE_CPU: 'CPU',
-				POWER_SCREEN_STATE_SCREEN_OFF: 'SCREEN_OFF',
-				POWER_SCREEN_STATE_SCREEN_DIM: 'SCREEN_DIM',
-				POWER_SCREEN_STATE_SCREEN_NORMAL: 'SCREEN_NORMAL',
-				POWER_SCREEN_STATE_SCREEN_BRIGHT: 'SCREEN_BRIGHT',
-				POWER_CPU_STATE_CPU_AWAKE: 'CPU_AWAKE'
-			},
+		constants: {
+			POWER_RESOURCE_SCREEN: 'SCREEN',
+			POWER_RESOURCE_CPU: 'CPU',
+			POWER_SCREEN_STATE_SCREEN_OFF: 'SCREEN_OFF',
+			POWER_SCREEN_STATE_SCREEN_DIM: 'SCREEN_DIM',
+			POWER_SCREEN_STATE_SCREEN_NORMAL: 'SCREEN_NORMAL',
+			POWER_SCREEN_STATE_SCREEN_BRIGHT: 'SCREEN_BRIGHT',
+			POWER_CPU_STATE_CPU_AWAKE: 'CPU_AWAKE'
+		},
 
-			properties: {
-				screenBrightness: {
-					get: function() {
-						return tizen.power.getScreenBrightness();
-					},
-					set: function(value) {
-						return tizen.power.setScreenBrightness(value);
-					}
+		properties: {
+			screenBrightness: {
+				get: function() {
+					return tizen.power.getScreenBrightness();
+				},
+				set: function(value) {
+					return tizen.power.setScreenBrightness(value);
 				}
 			}
+		}
 
-		}, true);
+	}, true);
 
 });
