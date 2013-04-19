@@ -6,8 +6,6 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 		peer = declare(Evented, {
 
 			constructor: function(args) {
-				// There is no such type as tizen.NFCPeer in Tizen.
-				// That's why we should leave toString here.
 				if (args.toString() === '[object NFCPeer]') {
 					// args is a native Tizen object; simply wrap it (take ownership of it)
 					this._obj = args;

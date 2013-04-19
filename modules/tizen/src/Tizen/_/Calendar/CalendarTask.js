@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 	var calendarTask = declare(CalendarItem, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.CalendarTask) {
+			if (args.toString() === '[object CalendarTask]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

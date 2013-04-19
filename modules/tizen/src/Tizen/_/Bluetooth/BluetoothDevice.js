@@ -14,7 +14,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Ti
 		var device = declare(Evented, {
 
 			constructor: function(args) {
-				if (args instanceof tizen.BluetoothDevice) {
+				if (args.toString() === '[object BluetoothDevice]') {
 					// args is a native Tizen object; simply wrap it (take ownership of it)
 					this._obj = args;
 				}

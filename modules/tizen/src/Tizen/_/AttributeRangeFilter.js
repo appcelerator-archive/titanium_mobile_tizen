@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var filter = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.AttributeRangeFilter) {
+			if (args.toString() === '[object AttributeRangeFilter]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

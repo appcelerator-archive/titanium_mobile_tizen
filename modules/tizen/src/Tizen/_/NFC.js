@@ -16,12 +16,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDE
 
 			_wrap: function(object) {
 				// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
-				// There is no such type as tizen.NFCAdapter in Tizen.
-				// That's why we should leave toString here.
 				if (object.toString() === '[object NFCAdapter]') {
 					return this.createNFCAdapter(object);
 				} else {
-					console.error('Incorrect object type');
+					console.error("Incorrect object type");
 				}
 			},
 

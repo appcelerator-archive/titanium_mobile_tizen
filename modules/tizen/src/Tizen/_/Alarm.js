@@ -37,10 +37,10 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 
 			var result;
 
-			if (object instanceof tizen.AlarmRelative) {
+			if (object.toString() === '[object AlarmRelative]') {
 				result = this.createAlarmRelative(object);
 			}
-			else if (object instanceof tizen.AlarmAbsolute) {
+			else if (object.toString() === '[object AlarmAbsolute]') {
 				result = this.createAlarmAbsolute(object);
 			} else {
 				console.error('Incorrect object type');

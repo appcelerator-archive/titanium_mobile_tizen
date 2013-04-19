@@ -5,7 +5,6 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var sim = declare(Evented, {
 
 		constructor: function(args) {
-			// tizen.siminfo is absent in Tizen. We can't use instanceof.
 			if (args.toString() === '[object siminfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;

@@ -6,9 +6,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		socket = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.BluetoothSocket) {
+			var self = this;
+			if (args.toString() === '[object BluetoothSocket]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+				self._obj = args;
 			}
 		},
 

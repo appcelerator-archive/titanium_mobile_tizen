@@ -7,12 +7,12 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 		_wrap: function(object) {
 			// Wrap the object (create a Titanium wrapped object out of a native Tizen object).
 
-			if (object instanceof tizen.BluetoothAdapter) {
+			if (object.toString() === '[object BluetoothAdapter]') {
 				return this.createBluetoothAdapter(object);
 			}
 			else
 			{
-				console.error('Incorrect object type');
+				console.error("Incorrect object type");
 			}
 		},
 
