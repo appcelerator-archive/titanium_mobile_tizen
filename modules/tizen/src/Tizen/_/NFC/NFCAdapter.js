@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 			},
 
 			setPowered: function(state, callback) {
-				return this._obj.setPowered(state, callback && function() {
+				this._obj.setPowered(state, callback && function() {
 					callback({
 						success: true,
 						code: 0
@@ -25,6 +25,21 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 						code: e.code
 					});
 				});
+			},
+
+			setTagListener: function(detectCallback, tagFilter) {
+				this._obj.setTagListener({
+					onattach: function(nfcTag) {
+						detectCallback.onattach(new NFCTag(nfcTag));
+					},
+					ondetach: function() {
+						detectCallback.ondetach();
+					}
+				}, tagFilter);
+			},
+
+			unsetTagListener: function() {
+				this._obj.unsetTagListener();
 			},
 
 			addEventListener: function () {

@@ -320,7 +320,7 @@ methods:
     parameters:
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<findResponse>
+        type: Callback<FindResponse>
       - name: filter
         summary: The supplied data used to filter the results of the find() method. 
         type: Tizen.AbstractFilter
@@ -366,24 +366,27 @@ methods:
 events:
 
   - name: itemsadded
-    description: 
     summary: Called when items are added to the calendar.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     properties:
       - name: items
         summary: The list of items that were added.
         type: Array<Tizen.Calendar.CalendarItem>
 
   - name: itemsupdated
-    description: 
     summary: Called when items are updated in the calendar.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     properties:
       - name: items
         summary: The list of items that were updated.
         type: Array<Tizen.Calendar.CalendarItem>
 
   - name: itemsremoved
-    description: 
     summary: Called when item are removed from the calendar.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     properties:
       - name: ids
         summary: The list of identifiers for the items that were removed.
@@ -469,7 +472,7 @@ properties:
     type: Array<Tizen.Calendar.CalendarItem>
 
 ---
-name: findResponse
+name: FindResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from

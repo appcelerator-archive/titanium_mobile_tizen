@@ -11,7 +11,7 @@ description: |
         Zero or more Major Service Classes(bits 13-23) - Represents the services supported by the device.
 
     The major and minor classes are intended to define a general family of devices with which any particular implementation wishes to be associated. No assumptions should be made about specific functionality or characteristics of any application, based solely on the assignment of a major or minor device class.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 methods:
 
@@ -48,6 +48,7 @@ properties:
   - name: major
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
+    description: | 
         The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
     type: Number
     permission: read-only
@@ -55,6 +56,7 @@ properties:
   - name: minor
     summary: |
       The minor device class. The value is one of the constants defined for this type. 
+    description: |
       The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
     type: String
     permission: read-only

@@ -42,7 +42,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 		},
 
 		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, callback) {
-			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function(events){
+			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function(events) {
 				var i = 0,
 					eventsCount = events.length,
 					eventsItems = [];
@@ -57,7 +57,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 				});
 			}, callback && function(e) {
 					onError(e, callback);
-				});
+			});
 		},
 
 		constants: {

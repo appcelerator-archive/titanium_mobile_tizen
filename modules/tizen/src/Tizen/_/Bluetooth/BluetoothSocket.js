@@ -2,7 +2,8 @@
 
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var socket = declare(Evented, {
+	var listening,
+		socket = declare(Evented, {
 
 		constructor: function(args) {
 			var self = this;
@@ -10,22 +11,30 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				self._obj = args;
 			}
+		},
 
-			self._obj.onmessage = function() {
-				self.fireEvent('socketmessagereceived');
-			};
+		addEventListener: function () {
+			var self = this;
+			Evented.addEventListener.apply(this, arguments);
 
-			self._obj.onclose = function() {
-				self.fireEvent('socketclosed');
-			};
+			if (! listening) {
+				listening = true;
 
-			self._obj.onerror = function(e) {
-				self.fireEvent('socketerror', {
+				this._obj.onmessage = function() {
+					self.fireEvent('socketmessagereceived');
+				};
+
+				this._obj.onclose = function() {
+					self.fireEvent('socketclosed');
+				};
+
+				self._obj.onerror = function(e) {
+					self.fireEvent('socketerror', {
 						code: e.code,
 						error: e.type + ': ' + e.message
-					}
-				);
-			};
+					});
+				};
+			}
 		},
 
 		writeData: function(data) {

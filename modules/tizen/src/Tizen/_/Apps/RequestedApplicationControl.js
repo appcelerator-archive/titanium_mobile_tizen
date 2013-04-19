@@ -14,7 +14,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			};
 		},
 
-		replyResult: function(data /*ApplicationControlData*/) {
+		replyResult: function() {
 			this._obj.replyResult(new tizen.ApplicationControlData(this.constants.__values__.appControl.key, this.constants.__values__.appControl.value));
 		},
 

@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 				//
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
-				
+
 				if ('date' in args && 'period' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date, args.period);
 				} else if ('date' in args && 'daysOfTheWeek' in args) {

@@ -10,51 +10,62 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], fu
 		});
 	}
 
-	var handler = declare(Evented, {
+	var listening,
+		handler = declare(Evented, {
 
-		constructor: function(args) {
-			var self = this;
-			if (args.toString() === '[object BluetoothServiceHandler]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				self._obj = args;
-			}
+			constructor: function(args) {
+				var self = this;
+				if (args.toString() === '[object BluetoothServiceHandler]') {
+					// args is a native Tizen object; simply wrap it (take ownership of it)
+					self._obj = args;
+				}
+			},
 
-			self._obj.onconnect = function(socket) {
-				self.fireEvent('remotedeviceconnected', new BluetoothSocket(socket));
-			};
-		},
+			addEventListener: function () {
+				var self = this;
+				Evented.addEventListener.apply(this, arguments);
 
-		unregister: function(callback) {
-			return this._obj.unregister(callback && function() {
-					callback({
-						code: 0,
-						success: true
-					});
+				if (! listening) {
+					listening = true;
+						this._obj.onconnect = function(socket) {
+						self.fireEvent('remotedeviceconnected', {
+							socket: new BluetoothSocket(socket)
+						});
+					};
+				}
+			},
+
+			unregister: function(callback) {
+				return this._obj.unregister(callback && function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					callback && function(e) {
+						onError(e, callback);
+					}
+				);
+			},
+
+			constants: {
+				uuid: {
+					get: function() {
+						return this._obj.uuid;
+					}
 				},
-				callback && function(e) {
-					onError(e, callback);
-				}
-			);
-		},
-
-		constants: {
-			uuid: {
-				get: function() {
-					return this._obj.uuid;
-				}
-			},
-			name: {
-				get: function() {
-					return this._obj.name;
-				}
-			},
-			isConnected: {
-				get: function() {
-					return this._obj.isConnected;
+				name: {
+					get: function() {
+						return this._obj.name;
+					}
+				},
+				isConnected: {
+					get: function() {
+						return this._obj.isConnected;
+					}
 				}
 			}
-		}
-	});
+		});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

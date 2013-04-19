@@ -1,7 +1,7 @@
 ---
 name: Tizen.Bluetooth.BluetoothServiceHandler
 summary: The Bluetooth service interface. 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 methods:
 
@@ -32,7 +32,9 @@ methods:
                     
                     chatServiceHandler = handler;
                     
-                    handler.addEventListener('remotedeviceconnected', function(socket) {
+                    handler.addEventListener('remotedeviceconnected', function(e) {
+                        var socket = e.socket;
+                        
                         Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
                         serviceSocket = socket;
                         

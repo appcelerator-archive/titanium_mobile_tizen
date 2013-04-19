@@ -13,11 +13,13 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				if (args.hasOwnProperty('uri')) {
 					// In Tizen module, the name of the RSVP property does not match its name in Tizen Device API
 					// (different case), so we have to map it by hand. In order to not change the argument, we clone it first.
-					
+
 					var i,
 						attendeeInitDict = {};
 					for (i in args.attendeeInitDict) {
-						if (! args.attendeeInitDict.hasOwnProperty(i)) continue;
+						if (! args.attendeeInitDict.hasOwnProperty(i)) {
+							continue;
+						}
 						(i === 'rsvp') ? attendeeInitDict.RSVP = args.attendeeInitDict.rsvp : attendeeInitDict[i] = args.attendeeInitDict[i];
 					}
 					this._obj = new tizen.CalendarAttendee(args.uri, attendeeInitDict);

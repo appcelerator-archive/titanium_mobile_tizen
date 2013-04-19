@@ -1,7 +1,7 @@
 name: Tizen.NFC.NFCAdapter
 summary: |
   NFC adapter interface that provides access to control the adapter.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 
 properties:
@@ -39,8 +39,8 @@ methods:
         type: NFCTagDetectCallback
 
       - name: tagFilter 
-        summary: | 
-            Filter to be used when specific NFC tag is detected.
+        summary: Filter to be used when specific NFC tag is detected.
+        description: |
             Valid values are:
                 <Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
                 <Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
