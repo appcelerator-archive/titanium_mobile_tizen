@@ -64,5 +64,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.
 	celluralNetwork.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoCellularNetwork';
-	return celluralNetwork
+	return celluralNetwork;
 });

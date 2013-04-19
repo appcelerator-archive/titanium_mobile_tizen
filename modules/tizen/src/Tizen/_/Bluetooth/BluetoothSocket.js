@@ -19,7 +19,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 			if (! listening) {
 				listening = true;
-				
+
 				this._obj.onmessage = function() {
 					self.fireEvent('socketmessagereceived');
 				};

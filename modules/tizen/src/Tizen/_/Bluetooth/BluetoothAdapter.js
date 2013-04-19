@@ -2,7 +2,7 @@
 
 define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler'],
 	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler) {
-	
+
 		function onError (e, callback) {
 			callback({
 				code: e.code,
@@ -44,6 +44,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				});
 			},
 
+			// Device discovery will automatically start when user subscribes to one of the
+			// device discovery events.
 			addEventListener: function () {
 				var self = this;
 				Evented.addEventListener.apply(this, arguments);
@@ -76,7 +78,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 								devices: arr
 							});
 						}
-					}, function (e){
+					}, function (e) {
 						self.fireEvent('discoveryerror', {
 							code: e.code,
 							error: e.type + ': ' + e.message
@@ -86,6 +88,19 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			stopDiscovery: function(callback) {
+				if(listening) {
+					// stopDiscovery automatically removes all Titanium event subscriptions.
+					// Otherwise, after stopping discovery and reinitiating it with addEventListener again,
+					// events that were subscribed to previously will start arriving, which generally is not
+					// intended.
+
+					Evented.removeEventListener('discoverystarted');
+					Evented.removeEventListener('devicefound');
+					Evented.removeEventListener('devicedisappeared');
+					Evented.removeEventListener('discoveryfinished');
+					listening = false;
+				}
+				
 				return this._obj.stopDiscovery(callback && function() {
 					callback({
 						code: 0,
@@ -130,12 +145,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			createBonding: function(address /*BluetoothAddress*/, callback) {
 				return this._obj.createBonding(address, callback && function(device) {
-						console.log(device + '<<-------------');
-						callback({
-							code: 0,
-							success: true,
-							device: new BluetoothDevice(device)
-						});
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
 				}, callback && function(e) {
 					onError(e, callback);
 				});
