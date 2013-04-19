@@ -5,7 +5,6 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var capability = declare(Evented, {
 
 		constructor: function(args) {
-			// tizen.devicecapabilitiesinfo in absent in Tizen. We cannot use instanceof
 			if (args.toString() === '[object devicecapabilitiesinfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;

@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 	var calendarAlarm = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.CalendarAlarm) {
+			if (args.toString() === '[object CalendarAlarm]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

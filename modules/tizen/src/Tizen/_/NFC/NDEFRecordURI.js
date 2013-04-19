@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/NFC/NDEFRecord'], function(declare, NDEFRecord)
 	var record = declare(NDEFRecord, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.NDEFRecordURI) {
+			if (args.toString() === '[object NDEFRecordURI]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

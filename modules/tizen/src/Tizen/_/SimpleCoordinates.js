@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var sc = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.SimpleCoordinates) {
+			if (args.toString() === '[object SimpleCoordinates]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

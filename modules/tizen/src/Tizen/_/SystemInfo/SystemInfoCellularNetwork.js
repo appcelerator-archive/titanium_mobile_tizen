@@ -5,7 +5,6 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var celluralNetwork = declare(Evented, {
 
 		constructor: function(args) {
-			// tizen.cellularnetworkinfo is absent in Tizen. That's why we use toString instead of instanceof.
 			if (args.toString() === '[object cellularnetworkinfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;

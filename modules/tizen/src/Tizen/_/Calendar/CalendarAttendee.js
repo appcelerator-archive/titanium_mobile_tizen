@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var calendarAttendee = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.CalendarAttendee) {
+			if (args.toString() === '[object CalendarAttendee]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
@@ -24,7 +24,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					}
 					this._obj = new tizen.CalendarAttendee(args.uri, attendeeInitDict);
 				} else {
-					console.error('Constructor with such parameters not found in CalendarAttendee.');
+					console.error("Constructor with such parameters not found in CalendarAttendee.");
 				}
 			}
 		},

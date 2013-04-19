@@ -13,9 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 	var tag = declare(Evented, {
 
 		constructor: function(args) {
-			// There is no such type as tizen.NFCTag in Tizen.
-			// That's why we should leave toString here.
-			if (args.toString() === '[object NFCAdapter]') {
+			if (args.toString() === '[object NFCTag]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/N
 
 		var msg = declare(Evented, {
 			constructor: function(args) {
-				if (args instanceof tizen.NDEFMessage) {
+				if (args.toString() === '[object NDEFMessage]') {
 					// args is a native Tizen object; simply wrap it (take ownership of it)
 					this._obj = args;
 				} else {
