@@ -2,7 +2,6 @@
 name: Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
 extends: Tizen.Calendar.CalendarItem
-platforms: [tizen]
 
 examples:
       - example: |
@@ -130,7 +129,6 @@ properties:
 
 ---
 name: ExpandRecurrenceResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [expandRecurrence](Tizen.Calendar.CalendarEvent.expandRecurrence) method.

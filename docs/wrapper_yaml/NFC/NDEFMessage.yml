@@ -2,7 +2,6 @@ name: Tizen.NFC.NDEFMessage
 summary: |
   The NDEFMessage interface.
 extends: Titanium.Proxy
-platforms: [tizen]
 
 properties:
 

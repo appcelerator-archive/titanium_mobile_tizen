@@ -5,15 +5,15 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 	var Alarm = lang.mixProps(require.mix({}, Evented), {
 
 		add: function(alarm /*Alarm*/, applicationId /*ApplicationId*/, appControl /*ApplicationControl*/) {
-			return tizen.alarm.add(alarm._obj, applicationId, appControl ? appControl._obj : appControl);
+			tizen.alarm.add(alarm._obj, applicationId, appControl ? appControl._obj : appControl);
 		},
 
 		remove: function(id /*AlarmId*/) {
-			return tizen.alarm.remove(id);
+			tizen.alarm.remove(id);
 		},
 
 		removeAll: function() {
-			return tizen.alarm.removeAll();
+			tizen.alarm.removeAll();
 		},
 
 		getAlarm: function(id /*AlarmId*/) {

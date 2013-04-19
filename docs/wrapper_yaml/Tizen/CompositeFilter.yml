@@ -6,7 +6,6 @@ description: |
     The union - used to filter objects that match any of the filters it includes.
     The intersection - used to filter objects that match all filters it includes.
 
-platforms: [tizen]
 extends: Tizen.AbstractFilter
 
 properties:

@@ -7,7 +7,6 @@ description: |
     The interface allows you to fetch the message body for a given message using loadMessageBody() method.
 
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
 
 methods:
@@ -269,7 +268,6 @@ properties:
 # Pseudo-types
 ---
 name: SendMessageResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [sendMessage](Tizen.Messaging.MessageService.sendMessage) method.
@@ -300,7 +298,6 @@ properties:
 
 ---
 name: LoadMessageBodyResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [loadMessageBody](Tizen.Messaging.MessageService.loadMessageBody) method.
@@ -331,7 +328,6 @@ properties:
 
 ---
 name: LoadMessageAttachementResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [loadMessageAttachment](Tizen.Messaging.MessageService.loadMessageAttachment) method.

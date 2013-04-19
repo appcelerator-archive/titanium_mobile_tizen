@@ -23,7 +23,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 
 			setName: function(name /*DOMString*/, callback) {
-				return this._obj.setName(name, callback && function() {
+				this._obj.setName(name, callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -34,7 +34,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			setPowered: function(state /*boolean*/, callback) {
-				return this._obj.setPowered(state, callback && function() {
+				this._obj.setPowered(state, callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -101,8 +101,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 					listening = false;
 				}
-				
-				return this._obj.stopDiscovery(callback && function() {
+
+				this._obj.stopDiscovery(callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -113,7 +113,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			getKnownDevices: function(callback) {
-				return this._obj.getKnownDevices(callback && function(devices) {
+				this._obj.getKnownDevices(callback && function(devices) {
 					var i = 0,
 						len = devices.length,
 						arr = [];
@@ -133,7 +133,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			getDevice: function(address /*BluetoothAddress*/, callback) {
-				return this._obj.getDevice(address, callback && function(device) {
+				this._obj.getDevice(address, callback && function(device) {
 					callback({
 						code: 0,
 						success: true,
@@ -145,7 +145,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			createBonding: function(address /*BluetoothAddress*/, callback) {
-				return this._obj.createBonding(address, callback && function(device) {
+				this._obj.createBonding(address, callback && function(device) {
 					callback({
 						code: 0,
 						success: true,
@@ -157,7 +157,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			destroyBonding: function(address /*BluetoothAddress*/, callback) {
-				return this._obj.destroyBonding(address, callback && function() {
+				this._obj.destroyBonding(address, callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -168,7 +168,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, callback) {
-				return this._obj.registerRFCOMMServiceByUUID(uuid, name, callback && function(handler) {
+				this._obj.registerRFCOMMServiceByUUID(uuid, name, callback && function(handler) {
 					callback({
 						code: 0,
 						success: true,

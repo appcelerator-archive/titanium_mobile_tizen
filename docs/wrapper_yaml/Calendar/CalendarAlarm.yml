@@ -2,7 +2,6 @@
 name: Tizen.Calendar.CalendarAlarm
 summary:  An interface that contains information related to an event alarm or reminder.
 extends: Titanium.Proxy
-platforms: [tizen]
 
 examples: 
   - title: Code example

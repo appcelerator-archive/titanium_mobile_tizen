@@ -5,7 +5,6 @@ description: |
     If a period is provided, the alarm keeps triggering for the given interval. 
     If the daysOfTheWeek array is not empty, the alarm triggers every week, for the given days, at the time defined by date attribute. 
 extends: Tizen.Alarm.Alarm
-platforms: [tizen]
 examples:
   - example: |
         var tizen = require("tizen");

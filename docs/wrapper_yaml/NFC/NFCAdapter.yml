@@ -2,7 +2,6 @@ name: Tizen.NFC.NFCAdapter
 summary: |
   NFC adapter interface that provides access to control the adapter.
 extends: Titanium.Proxy
-platforms: [tizen]
 
 properties:
 

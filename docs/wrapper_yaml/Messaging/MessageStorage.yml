@@ -5,7 +5,6 @@ description: |
     This interface allows a web application to query, update, and delete messages, and subscribe to MessageStorage changes. In addition to simple message queries, the MessageStorage interface provides functionality to find conversations and folders.
     The conversation object represents a group of messages combined by the set of message fields. Email conversations are grouped by subject, while chat messages are grouped by sender and recipient fields.
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
 
 methods:
@@ -508,7 +507,6 @@ methods:
 
 ---
 name: FindMessageResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [findMessages](Tizen.Messaging.MessageStorage.findMessages) method.
@@ -539,7 +537,6 @@ properties:
 
 ---
 name: FindConversationsResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [findConversations](Tizen.Messaging.MessageStorage.findConversations) method.
@@ -570,7 +567,6 @@ properties:
     
 ---
 name: FindFoldersResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [findFolders](Tizen.Messaging.MessageStorage.findFolders) method.

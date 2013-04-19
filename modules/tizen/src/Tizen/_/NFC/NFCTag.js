@@ -20,7 +20,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 		},
 
 		readNDEF: function(callback) {
-			return this._obj.readNDEF(callback && function(ndefMessage) {
+			this._obj.readNDEF(callback && function(ndefMessage) {
 				callback({
 					success: true,
 					code: 0,
@@ -32,7 +32,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 		},
 
 		writeNDEF: function(ndefMessage, callback) {
-			return this._obj.writeNDEF(ndefMessage._obj, callback && function() {
+			this._obj.writeNDEF(ndefMessage._obj, callback && function() {
 				callback({
 					success: true,
 					code: 0
@@ -43,7 +43,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 		},
 
 		transceive: function(data, callback) {
-			return this._obj.transceive(data._obj, callback && function(arr) {
+			this._obj.transceive(data._obj, callback && function(arr) {
 				callback({
 					success: true,
 					code: 0,

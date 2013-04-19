@@ -12,7 +12,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 			}
 			else
 			{
-				console.error("Incorrect object type");
+				console.error('Incorrect object type');
 			}
 		},
 

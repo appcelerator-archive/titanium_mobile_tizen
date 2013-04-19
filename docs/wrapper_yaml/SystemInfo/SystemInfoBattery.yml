@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoBattery
 summary: This property reflects the general state of the system's battery.
     
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

@@ -13,7 +13,6 @@ description: |
     start automaticaly. Note that you should stop discovery using the [stopDiscovery](Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
     method as soon as you no longer need the discovery process.
 extends: Titanium.Proxy
-platforms: [tizen]
 methods:
 
   - name: setName
@@ -532,7 +531,6 @@ properties:
 
 ---
 name: GetKnownDevicesResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getKnownDevices](Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
@@ -563,7 +561,6 @@ properties:
 
 ---
 name: GetDeviceResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getDevice](Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
@@ -594,7 +591,6 @@ properties:
 
 ---
 name: CreateBondingResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [createBonding](Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
@@ -625,7 +621,6 @@ properties:
 
 ---
 name: RegisterRFCOMMServiceByUUIDResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [registerRFCOMMServiceByUUID](Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.

@@ -2,7 +2,6 @@
 name: Tizen.Apps.ApplicationContext
 summary: This interface defines the information available about a running application. 
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
 properties:
   - name: id

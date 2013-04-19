@@ -5,7 +5,6 @@ description: |
     It represents the query statement for the specified value of the matchValue by the rule of matchFlag.
     If no matchValue is defined, the filter will match all objects that have the attribute defined (same as the <Tizen.FILTER_MUCH_FLAG_EXISTS> filter works), 
     otherwise, it will only match objects which have an attribute that matches the given value.
-platforms: [tizen]
 extends: Tizen.AbstractFilter
 
 properties:

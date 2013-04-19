@@ -21,7 +21,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Ti
 			},
 
 			connectToServiceByUUID: function(uuid /*BluetoothUUID*/, callback) {
-				return this._obj.connectToServiceByUUID(uuid, callback && function(socket) {
+				this._obj.connectToServiceByUUID(uuid, callback && function(socket) {
 					callback({
 						code: 0,
 						success: true,

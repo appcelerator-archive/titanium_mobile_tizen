@@ -36,7 +36,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], fu
 			},
 
 			unregister: function(callback) {
-				return this._obj.unregister(callback && function() {
+				this._obj.unregister(callback && function() {
 						callback({
 							code: 0,
 							success: true

@@ -5,7 +5,6 @@ description: |
     This alarm triggers after a duration mentioned in delay attribute from the moment the alarm is added. 
     If the interval attribute is set to true, the alarm is triggered repeatedly for the specified time. 
 extends: Tizen.Alarm.Alarm
-platforms: [tizen]
 examples:
   - example: |
         var tizen = require("tizen");

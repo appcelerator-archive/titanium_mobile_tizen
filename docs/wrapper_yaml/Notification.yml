@@ -206,7 +206,6 @@ properties:
 ---
 name: StatusNotificationInit
 summary: Contains additional information required to initialize a StatusNotification.
-platforms: [tizen]
 properties:
   - name: content
     type: String
@@ -239,7 +238,6 @@ properties:
 ---
 name: StatusNotificationUnit
 summary: Contains information required to initialize a StatusNotification.
-platforms: [tizen]
 properties:
   - name: statusType
     type: String
