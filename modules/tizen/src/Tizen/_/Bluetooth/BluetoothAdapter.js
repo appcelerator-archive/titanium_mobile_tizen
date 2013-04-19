@@ -98,6 +98,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 					Evented.removeEventListener('devicefound');
 					Evented.removeEventListener('devicedisappeared');
 					Evented.removeEventListener('discoveryfinished');
+
 					listening = false;
 				}
 				
@@ -113,9 +114,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			getKnownDevices: function(callback) {
 				return this._obj.getKnownDevices(callback && function(devices) {
-						var i = 0,
-							len = devices.length,
-							arr = [];
+					var i = 0,
+						len = devices.length,
+						arr = [];
 
 						for (; i < len; i++) {
 							arr.push(new BluetoothDevice(devices[i]));
@@ -133,11 +134,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			getDevice: function(address /*BluetoothAddress*/, callback) {
 				return this._obj.getDevice(address, callback && function(device) {
-						callback({
-							code: 0,
-							success: true,
-							device: new BluetoothDevice(device)
-						});
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
 				}, callback && function(e) {
 						onError(e, callback);
 				});
