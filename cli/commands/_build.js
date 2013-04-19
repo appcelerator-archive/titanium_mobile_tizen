@@ -309,9 +309,6 @@ function build(logger, config, cli, finished) {
 		}
 	});
 
-	// Analytics on Tizen is disabled, it is workarround for https://bugs.tizen.org/jira/browse/TDIST-192
-	this.tiapp.analytics = false;
-
 	// initialize device id (with the value obtained from the command line)
 	if (this.debugDevice) {
 		devId = this.debugDevice;

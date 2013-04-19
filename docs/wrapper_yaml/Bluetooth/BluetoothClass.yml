@@ -11,7 +11,7 @@ description: |
         Zero or more Major Service Classes(bits 13-23) - Represents the services supported by the device.
 
     The major and minor classes are intended to define a general family of devices with which any particular implementation wishes to be associated. No assumptions should be made about specific functionality or characteristics of any application, based solely on the assignment of a major or minor device class.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 methods:
 

@@ -1,7 +1,7 @@
 name: Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 
 properties:

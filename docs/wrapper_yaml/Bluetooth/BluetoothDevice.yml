@@ -8,7 +8,7 @@ description: |
         BluetoothAdapter.getKnownDevices()
         BluetoothAdapter.createBonding()
 
-extends: Titanium.Module
+extends: Titanium.Proxy
 platforms: [tizen]
 methods:
 
