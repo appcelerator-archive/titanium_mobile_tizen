@@ -18,10 +18,20 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], fu
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				self._obj = args;
 			}
+		},
 
-			self._obj.onconnect = function(socket) {
-				self.fireEvent('remotedeviceconnected', new BluetoothSocket(socket));
-			};
+		addEventListener: function () {
+			var self = this;
+			Evented.addEventListener.apply(this, arguments);
+
+			if (! listening) {
+				listening = true;
+					this._obj.onconnect = function(socket) {
+					self.fireEvent('remotedeviceconnected', {
+						socket: new BluetoothSocket(socket)
+					});
+				};
+			}
 		},
 
 		unregister: function(callback) {
