@@ -111,68 +111,6 @@ methods:
                     }
                 }
 
-  - name: startDiscovery
-    summary: Searches for nearby Bluetooth devices.  
-    description: |
-        That is, devices within proximity to the local device. This method initiates the device discovery process. 
-        When the discovery process has started successfully, event 'discoverystarted' is invoked. 
-        If any device is found in the process, then the device information is sent with 'devicefound'. 
-        At the end of the discovery process, event 'discoveryfinished' is invoked. 
-        If a device goes out of proximity then event 'devicedisappeared' is invoked with the address of the device. 
-        Note that if no device is found, event 'devicefound' will never be called.
-        The discovery process can be cancelled anytime, by calling stopDiscovery() on the BluetoothAdapter.
-        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
-
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.Bluetooth.getDefaultAdapter();
-            
-            function startDiscovery() {
-                // starts searching for nearby devices
-                adapter.startDiscovery();
-            }
-            
-            adapter.addEventListener('discoverystarted', function() {
-                Ti.API.info ("Device discovery started...") ;
-            }
-            
-            adapter.addEventListener('devicefound', function(device) {
-                Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
-            }
-            
-            adapter.addEventListener('devicedisappeared', function(address) {
-                Ti.API.info("Device disappeared: " + address);
-                // Remove from list, as it is no longer valid.
-            }
-            
-            adapter.addEventListener('discoveryfinished', function(devices) {
-                Ti.API.info("Found Devices");
-                for (var i=0; i<devices.length; i++) {
-                    Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
-                }
-                Ti.API.info("Total: " + devices.length);
-            }
-            
-            adapter.addEventListener('discoveryerror', function(e) {
-                Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
-            }
-            
-            function onSetPoweredError(e) {
-                Ti.API.info("Could not turn on device, reason: " + e);
-            }
-            
-            adapter.setPowered(true,
-                function(response) {
-                    if(response.success) {
-                        startDiscovery();
-                    } else {
-                        onSetPoweredError(response.error);
-                    }
-                }
-            );
-
   - name: stopDiscovery
     summary: Stops the device discovery process session, if active.   
     description: |
@@ -208,39 +146,37 @@ methods:
                         }
                     );
                 }
-                
+
                 function startDiscovery() {
-                    // starts searching for nearby devices
-                    adapter.startDiscovery();
-                }
-                
-                adapter.addEventListener('discoverystarted', function() {
-                    Ti.API.info ("Device discovery started...") ;
-                }
-                
-                adapter.addEventListener('devicefound', function(device) {
-                    Ti.API.info("Found device - name: " + device.name + ", Address: "+ device.address);
-                    
-                    // Show device to user, if this is the one he is looking for
-                    // for example, add this to list view.
-                    cancelDiscovery();
-                }
-                
-                adapter.addEventListener('devicedisappeared', function(address) {
-                    Ti.API.info("Device disappeared: " + address);
-                    // Remove from list, as it is no longer valid.
-                }
-                
-                adapter.addEventListener('discoveryfinished', function(devices) {
-                    Ti.API.info("Found Devices");
-                    for (var i=0; i<devices.length; i++) {
-                        Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                    adapter.addEventListener('discoverystarted', function() {
+                        Ti.API.info ("Device discovery started...") ;
                     }
-                    Ti.API.info("Total: " + devices.length);
-                }
-                
-                adapter.addEventListener('discoveryerror', function(e) {
-                    Ti.API.error("Failed to search devices: " + e.message + "(" + e.name + ")");
+                    
+                    adapter.addEventListener('devicefound', function(e) {
+                        Ti.API.info("Found device - name: " + e.device.name + ", Address: "+ e.device.address);
+                        
+                        // Show device to user, if this is the one he is looking for
+                        // for example, add this to list view.
+                        cancelDiscovery();
+                    }
+                    
+                    adapter.addEventListener('devicedisappeared', function(e) {
+                        Ti.API.info("Device disappeared: " + e.address);
+                        // Remove from list, as it is no longer valid.
+                    }
+                    
+                    adapter.addEventListener('discoveryfinished', function(e) {
+                        var devices = e.devices;
+                        Ti.API.info("Found Devices");
+                        for (var i=0; i<devices.length; i++) {
+                            Ti.API.info("Name: " + devices[i].name + ", Address: " + devices[i].address);
+                        }
+                        Ti.API.info("Total: " + devices.length);
+                    }
+                    
+                    adapter.addEventListener('discoveryerror', function(e) {
+                        Ti.API.error("Failed to search devices: " + e.error");
+                    }
                 }
                 
                 function onSetPoweredError(e) {
@@ -249,7 +185,7 @@ methods:
                 
                 adapter.setPowered(true,
                     function(response){
-                        if(response.success) {
+                        if(! response.success) {
                             startDiscovery()
                         } else {
                             onSetPoweredError(response.error)
@@ -470,7 +406,9 @@ methods:
                     Ti.API.info("Chat service registration succeeds!");
                     chatServiceHandler = recordHandler;
                     
-                    recordHandler.addEventListener('remotedeviceconnected', function(socket) {
+                    recordHandler.addEventListener('remotedeviceconnected', function(e) {
+                        var socket = e.socket;
+                        
                         Ti.API.info("Client connected: " + socket.peer.name + "," + socket.peer.address);
                         serviceSocket = socket;
                         
@@ -531,6 +469,14 @@ events:
   - name: devicedisappeared
     summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible.
     properties:
+      - name: source
+        summary: Source object that fired the event.
+        type: Tizen.Bluetooth.BluetoothServiceHandler
+        
+      - name: type
+        summary: Name of the event fired.
+        type: String
+
       - name: address
         summary: Address of the device that is no longer in range or visible.
         type: String
@@ -538,6 +484,14 @@ events:
   - name: devicefound
     summary: The method to be invoked when a new device is discovered in the process of inquiry/discovery.
     properties:
+      - name: source
+        summary: Source object that fired the event.
+        type: Tizen.Bluetooth.BluetoothServiceHandler
+        
+      - name: type
+        summary: Name of the event fired.
+        type: String
+
       - name: device
         summary: Found device.
         type: Tizen.Bluetooth.BluetoothDevice
@@ -545,6 +499,14 @@ events:
   - name: discoveryfinished
     summary: The method to be invoked when the device discovery process has finished.
     properties:
+      - name: source
+        summary: Source object that fired the event.
+        type: Tizen.Bluetooth.BluetoothServiceHandler
+        
+      - name: type
+        summary: Name of the event fired.
+        type: String
+
       - name: foundDevices
         summary: Array of devices found in this discovery session.
         type: Array<Tizen.Bluetooth.BluetoothDevice>
@@ -553,7 +515,11 @@ events:
     summary: The method to be invoked when a Bluetooth device is turned off or any other error case.
     properties:
       - name: error
-        type: Tizen.WebAPIError
+        summary: If `success` is false, a string describing the error.
+        type: String
+
+      - name: code
+        summary: If `success` is false, the error code if available.
     
 properties:
   - name: name

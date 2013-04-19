@@ -6,7 +6,6 @@ description: |
     A BluetoothDevice object can be retrieved using one of the following APIs:
         BluetoothAdapter.getDevice()
         BluetoothAdapter.getKnownDevices()
-        BluetoothAdapter.startDiscovery()
         BluetoothAdapter.createBonding()
 
 extends: Titanium.Module
