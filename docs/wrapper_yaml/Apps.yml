@@ -227,7 +227,7 @@ events:
       - name: appInfo
         summary: The application information of the installed application.
         description: |
-	        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
+            To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: updated
@@ -236,7 +236,7 @@ events:
       - name: appInfo
         summary: The application information of the updated application.
         description: |
-	        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
+            To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: uninstalled
