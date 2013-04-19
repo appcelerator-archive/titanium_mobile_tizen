@@ -5,7 +5,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var cpu = declare(Evented, {
 
 		constructor: function(args) {
-			if (args instanceof tizen.cpuinfo) {
+			// tizen.cpuinfo is absent in Tizen, so we should use toString instead of instanceof
+			if (args.toString() === '[object cpuinfo]') {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

@@ -13,7 +13,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 			},
 
 			getPropertyValue: function(property /*SystemInfoPropertyId*/, callback) {
-				tizen.systeminfo.getPropertyValue(property, callback && function(object) {
+				tizen.systeminfo.getPropertyValue(property, function(object) {
 					callback({
 						code: 0,
 						success: true,
@@ -48,20 +48,21 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 
 		}, true);
 
+		// Appropriate types are absent in Tizen, so we leave toString.
 		function wrap(object) {
-			if (object instanceof tizen.cpuinfo) {
+			if (object.toString() === '[object cpuinfo]') {
 				return new SystemInfoCpu(object);
 			}
-			if (object instanceof tizen.storageinfo) {
+			if (object.toString() === '[object storageinfo]') {
 				return new SystemInfoStorage(object);
 			}
-			if (object instanceof tizen.cellularnetworkinfo) {
+			if (object.toString() === '[object cellularnetworkinfo]') {
 				return new SystemInfoCellularNetwork(object);
 			}
-			if (object instanceof tizen.siminfo) {
+			if (object.toString() === '[object siminfo]') {
 				return new SystemInfoSIM(object);
 			}
-			if (object instanceof tizen.devicecapabilitiesinfo) {
+			if (object.toString() === '[object devicecapabilitiesinfo]') {
 				return new SystemInfoDeviceCapability(object);
 			}
 		}
