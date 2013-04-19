@@ -76,7 +76,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 								devices: arr
 							});
 						}
-					}, function (e){
+					}, function (e) {
 						self.fireEvent('discoveryerror', {
 							code: e.code,
 							error: e.type + ': ' + e.message
@@ -130,12 +130,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 			createBonding: function(address /*BluetoothAddress*/, callback) {
 				return this._obj.createBonding(address, callback && function(device) {
-						console.log(device + '<<-------------');
-						callback({
-							code: 0,
-							success: true,
-							device: new BluetoothDevice(device)
-						});
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
 				}, callback && function(e) {
 					onError(e, callback);
 				});

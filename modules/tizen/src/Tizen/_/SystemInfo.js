@@ -13,7 +13,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 			},
 
 			getPropertyValue: function(property /*SystemInfoPropertyId*/, callback) {
-				tizen.systeminfo.getPropertyValue(property, function(object) {
+				tizen.systeminfo.getPropertyValue(property, callback && function(object) {
 					callback({
 						code: 0,
 						success: true,
