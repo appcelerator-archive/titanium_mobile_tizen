@@ -46,7 +46,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 		close: function() {
-			return this._obj.close();
+			this._obj.close();
 		},
 
 		constants: {
