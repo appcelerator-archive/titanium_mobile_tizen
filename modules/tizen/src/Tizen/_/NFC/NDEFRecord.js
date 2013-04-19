@@ -59,7 +59,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 			binaryString[i] = String.fromCharCode(byteArray[i]);
 		}
 		return binaryString.join('');
-	};
+	}
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

@@ -69,8 +69,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/N
 					},
 					set: function(value) {
 						var i = 0,
-							len = value.length,
-							record;
+							len = value.length;
 
 						//set new length
 						this._obj.records.length = len;
