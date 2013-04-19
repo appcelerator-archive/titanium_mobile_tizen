@@ -50,18 +50,6 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 				if (! listening) {
 					listening = true;
 
-					// Add Tag event listeners.
-					this._obj.setTagListener({
-						onattach: function (nfcTag) {
-							self.fireEvent('tagattached', {
-								nfcTag: new NFCTag(nfcTag)
-							});
-						},
-						ondetach: function () {
-							self.fireEvent('tagdetached');
-						}
-					});
-
 					// Add Peer event listeners.
 					this._obj.setPeerListener({
 						onattach: function (nfcPeer) {
