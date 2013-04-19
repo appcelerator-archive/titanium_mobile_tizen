@@ -2,7 +2,6 @@
 name: Tizen.AttributeRangeFilter
 summary: AttributeRangeFilter represents a filter based on an object attribute which has values that are within a particular range.  
 description: "Range filters, where only one boundary is set, are available." 
-platforms: [tizen]
 extends: Tizen.AbstractFilter
 
 properties:

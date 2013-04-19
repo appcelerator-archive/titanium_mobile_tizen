@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoStorage
 summary: This property exposes the data storage devices connected to this system.
 
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 methods:

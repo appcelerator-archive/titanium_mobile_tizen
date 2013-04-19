@@ -9,7 +9,6 @@ description: |
         BluetoothAdapter.createBonding()
 
 extends: Titanium.Module
-platforms: [tizen]
 methods:
 
   - name: connectToServiceByUUID
@@ -156,7 +155,6 @@ properties:
 
 ---
 name: ConnectToServiceByUUIDResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [connectToServiceByUUID](Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) method.

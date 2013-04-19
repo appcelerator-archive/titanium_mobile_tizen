@@ -2,7 +2,7 @@
 name: Tizen.Messaging.MessageAttachment
 summary: Defines the content and attributes of a message attachment. 
 extends: Titanium.Proxy
-platforms: [tizen]
+
 properties:
   - name: id
     summary: |

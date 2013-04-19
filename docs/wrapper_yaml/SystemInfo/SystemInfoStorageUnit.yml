@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoStorageUnit
 summary: This property exposes a single storage device connected to this system.
 
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

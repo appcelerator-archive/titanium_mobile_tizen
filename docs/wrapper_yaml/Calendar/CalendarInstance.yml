@@ -12,7 +12,6 @@ description: |
     *   Deleting existing items using remove() / removeBatch() methods.
 
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
  
 methods:
@@ -442,7 +441,6 @@ summary: A calendar item identifier, which can either be a <CalendarEventId> or 
 
 ---
 name: AddBatchResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [addBatch](Tizen.Calendar.CalendarInstance.addBatch) method.
@@ -473,7 +471,6 @@ properties:
 
 ---
 name: FindResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [find](Tizen.Calendar.CalendarInstance.find) method.

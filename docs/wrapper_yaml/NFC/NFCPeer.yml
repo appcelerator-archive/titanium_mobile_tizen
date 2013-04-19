@@ -2,7 +2,6 @@ name: Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
 extends: Titanium.Module
-platforms: [tizen]
 
 properties:
 
@@ -90,7 +89,6 @@ methods:
 # Pseudo-type
 ---
 name: NDEFMessageReadResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [setReceiveNDEFListener](Tizen.NFC.NFCPeer.setReceiveNDEFListener) method.

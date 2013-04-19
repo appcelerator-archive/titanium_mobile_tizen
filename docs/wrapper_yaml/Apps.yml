@@ -220,14 +220,13 @@ methods:
             console.log("Application context retrieved for app " + appContext.id);
  
 events:
- 
   - name: installed
     summary: Fired when an application is installed.
     properties:
       - name: appInfo
         summary: The application information of the installed application.
         description: |
-	        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
+           To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: updated
@@ -236,7 +235,7 @@ events:
       - name: appInfo
         summary: The application information of the updated application.
         description: |
-	        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
+            To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
         type: Tizen.Apps.ApplicationInformation
 
   - name: uninstalled
@@ -251,7 +250,6 @@ events:
 ---
 name: ApplicationControlDataUnit
 summary: Contains information required to initialize a <Tizen.Apps.ApplicationControlData>.
-platforms: [tizen]
 properties:
   - name: key
     type: String
@@ -263,7 +261,6 @@ properties:
 ---
 name: ApplicationControlUnit
 summary: Contains information required to initialize an <ApplicationControl>.
-platforms: [tizen]
 properties:
   - name: operation
     type: String
@@ -291,7 +288,6 @@ summary: "This interface consists of an operation, URI, MIME type, and data."
 description: |
     It describes an action to be performed by other applications and is passed to launch other applications. 
     If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application. 
-platforms: [tizen]
 createable: false
 properties:
   - name: operation
@@ -317,7 +313,6 @@ properties:
 ---
 name: ApplicationControlData
 summary: "This object defines a key/value pair used to pass data between applications through the <ApplicationControl> interface. "
-platforms: [tizen]
 createable: false
 properties:
   - name: key
@@ -330,7 +325,6 @@ properties:
 
 ---
 name: LaunchAppControlReplyResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [launchAppControl](Tizen.Apps.launchAppControl) method.
@@ -361,7 +355,6 @@ properties:
     
 ---
 name: FindAppControlResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [findAppControl](Tizen.Apps.findAppControl) method.
@@ -398,7 +391,6 @@ properties:
 
 ---
 name: AppsContextResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getAppsContexts](Tizen.Apps.getAppsContext) method.
@@ -429,7 +421,6 @@ properties:
     
 ---
 name: AppsInfoResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getAppsInfo](Tizen.Apps.getAppsInfo) method.

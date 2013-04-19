@@ -8,7 +8,6 @@ description: |
     displayed in the notification tray.
     
 extends: Tizen.Notification.Notification
-platforms: [tizen]
 
 properties:
 

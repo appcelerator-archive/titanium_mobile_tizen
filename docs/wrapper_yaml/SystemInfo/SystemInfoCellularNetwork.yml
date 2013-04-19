@@ -3,7 +3,6 @@ name: Tizen.SystemInfo.SystemInfoCellularNetwork
 summary: This property reflects the information of the Cellular network in this system.
     
 extends: Tizen.SystemInfo.SystemInfoProperty
-platforms: [tizen]
 createable: false
 
 properties:

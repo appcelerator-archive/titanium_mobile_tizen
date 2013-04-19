@@ -5,7 +5,6 @@ summary:  |
     These attributes are shared by both events and tasks.
 
 extends: Titanium.Proxy
-platforms: [tizen]
 createable: false
 
 methods:

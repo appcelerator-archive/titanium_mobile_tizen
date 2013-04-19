@@ -2,7 +2,6 @@ name: Tizen.NFC.NDEFRecord
 summary: |
   The NDEFRecord interface.
 extends: Titanium.Module
-platforms: [tizen]
 
 properties:
 

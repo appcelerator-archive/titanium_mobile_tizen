@@ -491,7 +491,6 @@ summary: |
     These attributes are shared by both calendar events and tasks.
     
     See CalendarItem interface for more information about the members.
-platforms: [tizen]
 properties:
     
   - name: description 
@@ -588,7 +587,6 @@ summary: |
     
     See CalendarTask interface for more information about the members.
 extends: CalendarItemInit
-platforms: [tizen]
 properties:
   - name: dueDate 
     type: Date
@@ -614,7 +612,6 @@ summary: |
     See CalendarEvent interface for more information about the members.
     
 extends: CalendarItemInit
-platforms: [tizen]
 properties:
    
   - name: endDate 
@@ -634,7 +631,6 @@ properties:
 ---
 name: RepresentationInit
 summary: A dictionary that is used for creating both calendar tasks and events.
-platforms: [tizen]
 properties:
         
   - name: stringRepresentation
@@ -655,7 +651,6 @@ summary: |
     The properties of a CalendarAttendee, to pass to its creator.
     
     See CalendarAttendee interface for more information about the members.
-platforms: [tizen]
 properties:
 
   - name: uri 
@@ -670,7 +665,6 @@ properties:
 ---
 name: AttendeeInitDict
 summary: The properties of a CalendarAttendee, to pass to its constructor.
-platforms: [tizen]
 properties: 
 
   - name: name
@@ -743,7 +737,6 @@ summary: |
     The properties of a CalendarRecurrenceRule to pass to its creator.
     
     For more information about the members, see CalendarRecurrenceRule interface.
-platforms: [tizen]
 properties: 
   - name: frequency
     summary: |
@@ -764,7 +757,6 @@ properties:
 ---
 name: CalendarRecurrenceRuleInitDict
 summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
-platforms: [tizen]
 properties:
  
   - name: interval
@@ -803,7 +795,6 @@ properties:
 ---
 name: CalendarAlarmInitWithDate
 summary: 
-platforms: [tizen]
 properties:
 
   - name: absoluteDate 
@@ -827,7 +818,6 @@ properties:
 ---
 name: CalendarAlarmInitWithDuration
 summary: 
-platforms: [tizen]
 properties:
    
   - name: before 
@@ -850,7 +840,6 @@ properties:
 
 ---
 name: GetCalendarsResponse
-platforms: [tizen]
 summary: |
     Simple object returned in the callback from
     [getCalendars](Tizen.Calendar.getCalendars) method.
