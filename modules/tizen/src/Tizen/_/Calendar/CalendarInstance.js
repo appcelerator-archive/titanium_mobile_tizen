@@ -150,8 +150,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					for (; i < itemsCount; i++) {
 						if(items[i] instanceof tizen.CalendarEvent) {
 							wrappedItems.push(new CalendarEvent(items[i]));
-						} else {
+						} else if(items[i].toString() === '[object CalendarTask]') {
 							wrappedItems.push(new CalendarTask(items[i]));
+						} else {
+							console.error('Cannot wrap item: ' + items[i]);
 						}
 					}
 
@@ -166,8 +168,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					for (; i < itemsCount; i++) {
 						if(typeof ids[i] === 'object') {
 							wrappedIds.push(new CalendarEventId(ids[i]));
-						} else {
+						} else if(typeof ids[i] === 'string') {
 							wrappedIds.push(ids[i]);
+						} else {
+							console.error('Cannot wrap id: ' + ids[i]);
 						}
 					}
 

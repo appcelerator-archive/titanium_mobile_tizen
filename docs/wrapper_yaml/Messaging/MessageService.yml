@@ -251,7 +251,9 @@ methods:
 properties:
   - name: type
     summary: | 
-        The tag supported by this messaging service. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        The tag supported by this messaging service. 
+    description: |
+        Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
         <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
@@ -259,6 +261,7 @@ properties:
   - name: messageStorage
     summary: | 
         The interface for accessing MessageStorage for this Messaging service.
+    description: |
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
     type: Tizen.Messaging.MessageStorage
     permission: read-only

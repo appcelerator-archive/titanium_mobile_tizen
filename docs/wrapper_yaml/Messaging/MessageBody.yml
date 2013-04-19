@@ -32,5 +32,6 @@ properties:
   - name: inlineAttachments
     summary: | 
         The list of the inline attachments.
+    description: |
         This array is empty, if the message does not have inline attachment or the message body is not loaded and attachments info is inaccessible (in this case the "loaded" attribute has to be checked).
     type: Tizen.Messaging.MessageAttachment
