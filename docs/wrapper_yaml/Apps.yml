@@ -223,7 +223,6 @@ events:
  
   - name: oninstalled
     summary: Fired when an application is installed.
-    description:
     properties:
       - name: appInfo
         summary: The application information of the installed application.
@@ -231,7 +230,6 @@ events:
 
   - name: onupdated
     summary: Fired when an application is updated.
-    description:
     properties:
       - name: appInfo
         summary: The application information of the updated application.
@@ -239,7 +237,6 @@ events:
 
   - name: onuninstalled
     summary: Fired when an application is uninstalled.
-    description:
     properties:
       - name: appId
         summary: The ID of the uninstalled application.
