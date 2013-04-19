@@ -366,27 +366,27 @@ methods:
 events:
 
   - name: itemsadded
+    summary: Called when items are added to the calendar.
     description: |
         To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
-    summary: Called when items are added to the calendar.
     properties:
       - name: items
         summary: The list of items that were added.
         type: Array<Tizen.Calendar.CalendarItem>
 
   - name: itemsupdated
+    summary: Called when items are updated in the calendar.
     description: |
         To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
-    summary: Called when items are updated in the calendar.
     properties:
       - name: items
         summary: The list of items that were updated.
         type: Array<Tizen.Calendar.CalendarItem>
 
   - name: itemsremoved
+    summary: Called when item are removed from the calendar.
     description: |
         To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
-    summary: Called when item are removed from the calendar.
     properties:
       - name: ids
         summary: The list of identifiers for the items that were removed.
