@@ -153,7 +153,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 						} else if(items[i].toString() === '[object CalendarTask]') {
 							wrappedItems.push(new CalendarTask(items[i]));
 						} else {
-							console.error('Cannot wrap Tizen's item: ' + items[i]);
+							console.error('Cannot wrap item: ' + items[i]);
 						}
 					}
 
@@ -171,7 +171,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 						} else if(typeof ids[i] === 'string') {
 							wrappedIds.push(ids[i]);
 						} else {
-							console.error('Cannot wrap Tizen's item: ' + ids[i]);
+							console.error('Cannot wrap id: ' + ids[i]);
 						}
 					}
 
