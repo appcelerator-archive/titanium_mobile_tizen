@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 	var AlarmRelative = declare(Alarm, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object AlarmRelative]') {
+			if (args instanceof tizen.AlarmRelative) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var celluralNetwork = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object cellularnetworkinfo]') {
+			if (args instanceof tizen.cellularnetworkinfo) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

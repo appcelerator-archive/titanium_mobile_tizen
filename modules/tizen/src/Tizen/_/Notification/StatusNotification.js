@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Tizen/_/Notification/Notification'], function(declare, 
 	var StatusNotification = declare(Notification, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object StatusNotification]') {
+			if (args instanceof tizen.StatusNotification) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

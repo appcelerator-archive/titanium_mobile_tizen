@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 	var calendarRecurrenceRule = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object CalendarRecurrenceRule]') {
+			if (args instanceof tizen.CalendarRecurrenceRule) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {

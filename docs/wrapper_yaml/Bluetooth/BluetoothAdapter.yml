@@ -3,11 +3,15 @@ name: Tizen.Bluetooth.BluetoothAdapter
 summary: The Bluetooth adapter interface that provides access to control the device's Bluetooth adapter.  
 description: |
     This interface offers methods to control local Bluetooth behavior, such as:
-
-    Turn on/off Bluetooth radio
-    Scan for remote devices
-    Access known devices
-    Register a service in the device service database
+    
+        - Turn on/off Bluetooth radio;
+        - Scan for remote devices;
+        - Access known devices;
+        - Register a service in the device service database.
+    
+    To start device discovery, subscribe to one of the device discovery events defined in this interface. It will
+    start automaticaly. Note that you should stop discovery using the [stopDiscovery](Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
+    method as soon as you no longer need the discovery process.
 extends: Titanium.Module
 platforms: [tizen]
 methods:
@@ -112,7 +116,7 @@ methods:
                 }
 
   - name: stopDiscovery
-    summary: Stops the device discovery process session, if active.   
+    summary: Stops the device discovery process session, if active. Automatically unsubscribes from all "discovery" events.
     description: |
         Device discovery is a heavyweight procedure, hence we recommend stopping discovery as soon as required device is found. This method cancels an active discovery session.
         The ErrorCallback is launched with these error types:
@@ -206,7 +210,7 @@ methods:
     parameters: 
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<getKnownDevicesResponse>
+        type: Callback<GetKnownDevicesResponse>
     examples:
       - example: |
             var tizen = require("tizen");
@@ -255,7 +259,7 @@ methods:
 
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<getDeviceResponse>
+        type: Callback<GetDeviceResponse>
         optional: true
     examples:
       - example: |
@@ -295,7 +299,7 @@ methods:
 
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<createBondingResponse>
+        type: Callback<CreateBondingResponse>
         optional: true
     examples:
       - example: |
@@ -384,7 +388,7 @@ methods:
 
       - name: callback
         summary: Function to invoke on success or failure.
-        type: Callback<registerRFCOMMServiceByUUIDResponse>
+        type: Callback<RegisterRFCOMMServiceByUUIDResponse>
         optional: true
     examples:
       - example: |
@@ -464,10 +468,10 @@ methods:
  
 events:
   - name: discoverystarted
-    summary: The method to be invoked at the beginning of the device discovery process for finding the nearby Bluetooth device.
+    summary: Event to be fired at the beginning of the device discovery process for finding the nearby Bluetooth device.
     
   - name: devicedisappeared
-    summary: The method to be invoked when a device is lost from proximity. After that, this device is no longer visible.
+    summary: Event to be fired when a device is lost from proximity. After that, this device is no longer visible.
     properties:
       - name: source
         summary: Source object that fired the event.
@@ -482,7 +486,7 @@ events:
         type: String
         
   - name: devicefound
-    summary: The method to be invoked when a new device is discovered in the process of inquiry/discovery.
+    summary: Event to be fired when a new device is discovered in the process of inquiry/discovery.
     properties:
       - name: source
         summary: Source object that fired the event.
@@ -497,7 +501,7 @@ events:
         type: Tizen.Bluetooth.BluetoothDevice
 
   - name: discoveryfinished
-    summary: The method to be invoked when the device discovery process has finished.
+    summary: Event to be fired when the device discovery process has finished.
     properties:
       - name: source
         summary: Source object that fired the event.
@@ -512,14 +516,14 @@ events:
         type: Array<Tizen.Bluetooth.BluetoothDevice>
     
   - name: discoveryerror
-    summary: The method to be invoked when a Bluetooth device is turned off or any other error case.
+    summary: Event to be fired when a Bluetooth device is turned off or any other error case.
     properties:
       - name: error
-        summary: If `success` is false, a string describing the error.
+        summary: A string describing the error.
         type: String
 
       - name: code
-        summary: If `success` is false, the error code if available.
+        summary: The error code.
     
 properties:
   - name: name
@@ -543,7 +547,7 @@ properties:
     permission: read-only
 
 ---
-name: getKnownDevicesResponse
+name: GetKnownDevicesResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -574,7 +578,7 @@ properties:
     type: Array<Tizen.Bluetooth.BluetoothDevice>
 
 ---
-name: getDeviceResponse
+name: GetDeviceResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -605,7 +609,7 @@ properties:
     type: Tizen.Bluetooth.BluetoothDevice
 
 ---
-name: createBondingResponse
+name: CreateBondingResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
@@ -636,7 +640,7 @@ properties:
     type: Tizen.Bluetooth.BluetoothDevice
 
 ---
-name: registerRFCOMMServiceByUUIDResponse
+name: RegisterRFCOMMServiceByUUIDResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from

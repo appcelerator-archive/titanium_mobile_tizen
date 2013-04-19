@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var Notification = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object Notification]') {
+			if (args instanceof tizen.notification) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			}

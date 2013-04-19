@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 	var calendarEvent = declare(CalendarItem, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object CalendarEvent]') {
+			if (args instanceof tizen.CalendarEvent) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
@@ -57,7 +57,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 				});
 			}, callback && function(e) {
 					onError(e, callback);
-				});
+			});
 		},
 
 		constants: {

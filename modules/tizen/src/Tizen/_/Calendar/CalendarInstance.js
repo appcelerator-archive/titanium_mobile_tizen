@@ -62,13 +62,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			updateBatch: function(items /*CalendarItem*/, callback, updateAllInstances /*boolean*/) {
 				var i = 0,
 					itemsCount = items.length,
-					unwrapedItems = [];
+					unwrappeDItems = [];
 
 				for (; i < itemsCount; i++) {
-					unwrapedItems.push(items[i]._obj);
+					unwrappeDItems.push(items[i]._obj);
 				}
 
-				this._obj.updateBatch(unwrapedItems,
+				this._obj.updateBatch(unwrappeDItems,
 					callback && function() {
 						callback({
 							code: 0,
@@ -87,7 +87,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 
 				if (typeof(id) !== 'object' && typeof(id) === 'string') {
 					obj = id;
-				} else if (id.toString() == '[object TizenCalendarCalendarEventId]') {
+				} else if (id instanceof tizen.TizenCalendarCalendarEventId) {
 					obj = id._obj;
 				} else {
 					console.error('Remove event error: unexpected type of CalendarItemId.');
@@ -99,13 +99,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			removeBatch: function(ids /*CalendarItemId*/, callback) {
 				var i = 0,
 					idsCount = ids.length,
-					unwrapedIds = [];
+					unwrappedIds = [];
 
 				for (; i < idsCount; i++) {
-					unwrapedIds.push(ids[i]._obj);
+					unwrappedIds.push(ids[i]._obj);
 				}
 
-				this._obj.removeBatch(unwrapedIds, callback && function() {
+				this._obj.removeBatch(unwrappedIds, callback && function() {
 					callback({
 						code: 0,
 						success: true
@@ -135,8 +135,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					callback && function(e) {
 						onError(e, callback);
 					},
-					(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
-					(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
+					(filter && (filter instanceof tizen.TizenAttributeFilter)) ? filter._obj : filter,
+					(sortMode && (sortMode instanceof tizen.TizenSortMode)) ? sortMode._obj : sortMode
 				);
 			},
 
@@ -148,7 +148,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						if(items[i].toString() === '[object CalendarEvent]') {
+						if(items[i] instanceof tizen.CalendarEvent) {
 							wrappedItems.push(new CalendarEvent(items[i]));
 						} else if(items[i].toString() === '[object CalendarTask]') {
 							wrappedItems.push(new CalendarTask(items[i]));

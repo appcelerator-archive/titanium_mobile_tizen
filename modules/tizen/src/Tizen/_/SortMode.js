@@ -5,7 +5,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var sm = declare(Evented, {
 
 		constructor: function(args) {
-			if (args.toString() === '[object SortMode]') {
+			if (args instanceof tizen.SortMode) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = args;
 			} else {
