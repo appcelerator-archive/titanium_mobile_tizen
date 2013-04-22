@@ -2,15 +2,6 @@
 name: Modules.Tizen.Calendar.CalendarAlarm
 summary:  An interface that contains information related to an event alarm or reminder.
 extends: Titanium.Proxy
-
-examples: 
-  - title: Code example
-    example:    |
-        var tizen = require("tizen");
-        // Creates a sound alarm 30 minutes before the event's start time
-        var alarm = tizen.Calendar.createCalendarAlarm({before: 3600000,
-                                                        method: tizen.Calendar.ALARM_METHOD_SOUND});
- 
 properties:
   - name: absoluteDate 
     type: Date

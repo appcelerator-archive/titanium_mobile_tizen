@@ -5,15 +5,6 @@ summary:  |
     
     By default, each of the attributes of this interface are undefined.
 extends: Titanium.Proxy
-
-examples: 
-  - title: Code example
-    example:    |
-        var tizen = require("tizen");
-        var attendee = tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',
-                                           attendeeInitDict: {role: tizen.Calendar.ATTENDEE_ROLE_CHAIR, rsvp: true}});
-        event.attendees = [attendee];
- 
 properties:
 
   - name: uri 
