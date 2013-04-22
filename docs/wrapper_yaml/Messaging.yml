@@ -1,5 +1,5 @@
 ---
-name: Tizen.Messaging
+name: Modules.Tizen.Messaging
 summary: This specification defines interfaces to manage Message, retrieve messaging services.
 description: There is a object that allows access to the messaging API. Fetches all existing messaging services by type or a messaging service of a given type for concrete account. 
 extends: Titanium.Module
@@ -15,8 +15,8 @@ methods:
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-            <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+            Type of the services to be retrieved. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
       - name: callback
@@ -36,9 +36,9 @@ methods:
             tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB);
 
   - name: createMessage
-    summary: Returns the <Tizen.Messaging.Message> object.
+    summary: Returns the <Modules.Tizen.Messaging.Message> object.
     returns:
-      - type: Tizen.Messaging.Message
+      - type: Modules.Tizen.Messaging.Message
     parameters: 
 
       - name: initDict
@@ -68,9 +68,9 @@ methods:
             tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB);
 
   - name: createMessageAttachment
-    summary: Returns the <Tizen.Messaging.MessageAttachment> object.
+    summary: Returns the <Modules.Tizen.Messaging.MessageAttachment> object.
     returns:
-      - type: Tizen.Messaging.MessageAttachment
+      - type: Modules.Tizen.Messaging.MessageAttachment
     parameters:
 
       - name: initDict
@@ -96,11 +96,11 @@ properties:
 # Pseudo-type    
 ---
 name: MessageInit
-summary: An object containing the various options for inititalized <Tizen.Messaging.Message> object. It passing into constructor <Tizen.Message.createMessage>.
+summary: An object containing the various options for inititalized <Modules.Tizen.Messaging.Message> object. It passing into constructor <Modules.Tizen.Message.createMessage>.
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of message. The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options
@@ -164,7 +164,7 @@ properties:
 name: MessagingMessageServiceResponse
 summary: |
     Simple object returned in the callback from
-    [getMessageServices](Tizen.Messaging.getMessageServices) method.
+    [getMessageServices](Modules.Tizen.Messaging.getMessageServices) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -188,4 +188,4 @@ properties:
   - name: services
     summary: Array of available MessageService objects on the device.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Messaging.MessageService>
+    type: Array<Modules.Tizen.Messaging.MessageService>

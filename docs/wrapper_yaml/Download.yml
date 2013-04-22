@@ -1,5 +1,5 @@
 ---
-name: Tizen.Download
+name: Modules.Tizen.Download
 summary: |
     The Download module provides methods to asynchronously download the contents of a URL to a storage.
 extends: Titanium.Module
@@ -11,7 +11,7 @@ methods:
     description: |
         Returns the download request information of the given id.
     returns:
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
     parameters:
       - name: downloadId
         summary: The ID to get the download request information.
@@ -24,13 +24,13 @@ methods:
             var downloadRequest = tizen.Download.getDownloadRequest(downloadId);
 
   - name: createDownloadRequest
-    summary: Creates <Tizen.Download.DownloadRequest> object.
+    summary: Creates <Modules.Tizen.Download.DownloadRequest> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.Download.DownloadRequest>.
+        summary: Initial parameters for <Modules.Tizen.Download.DownloadRequest>.
         type: Dictionary<createDownloadRequestParameters>
     returns:
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
     examples:
       - example: |
             var tizen = require("tizen");
@@ -71,7 +71,7 @@ properties:
 
 ---
 name: createDownloadRequestParameters
-summary: Parameters for the <Tizen.Download.createDownloadRequest>.
+summary: Parameters for the <Modules.Tizen.Download.createDownloadRequest>.
 properties:
   - name: url
     summary: The URL of the object to download.

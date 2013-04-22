@@ -1,5 +1,5 @@
 ---
-name: Tizen.CallHistory
+name: Modules.Tizen.CallHistory
 summary: The top level CallHistory module.  
 description: |
     This API provides interfaces and methods for retrieving information from the call history.
@@ -23,11 +23,11 @@ methods:
             AbstractFilter is a common interface used by different types of object filters. 
             Never use this base interface directly, instead use AbstractFilter subtypes, such as AttributeFilter, AttributeRangeFilter, and CompositeFilter. 
         optional: true
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
       - name: sortMode
         summary: The sorting order preference of the result set.
         optional: true
-        type: Tizen.SortMode
+        type: Modules.Tizen.SortMode
       - name: limit
         summary: The maximum limits the query result is set to as specified by the parameter (It is the same meaning as SQL LIMIT). If 0, there is no limit set.
         optional: true
@@ -231,7 +231,7 @@ name: CallHistoryFindResponse
 platforms: [tizen]
 summary: |
     Simple object returned in the callback from
-    [find](Tizen.CallHistory.find) method.
+    [find](Modules.Tizen.CallHistory.find) method.
 extends: ErrorResponse
 properties:
   - name: success

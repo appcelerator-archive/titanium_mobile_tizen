@@ -1,5 +1,5 @@
 ---
-name: Tizen.Bluetooth.BluetoothAdapter
+name: Modules.Tizen.Bluetooth.BluetoothAdapter
 summary: The Bluetooth adapter interface that provides access to control the device's Bluetooth adapter.  
 description: |
     This interface offers methods to control local Bluetooth behavior, such as:
@@ -10,7 +10,7 @@ description: |
         - Register a service in the device service database.
     
     To start device discovery, subscribe to one of the device discovery events defined in this interface. It will
-    start automaticaly. Note that you should stop discovery using the [stopDiscovery](Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
+    start automaticaly. Note that you should stop discovery using the [stopDiscovery](Modules.Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
     method as soon as you no longer need the discovery process.
 extends: Titanium.Proxy
 methods:
@@ -370,9 +370,9 @@ methods:
   - name: registerRFCOMMServiceByUUID
     summary: Registers a service for other devices to consume.    
     description: |
-        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a Tizen.Bluetooth.BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
+        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a Modules.Tizen.Bluetooth.BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
         Clients should do service discovery on this device with a specified uuid to determine the right channel.
-        [unregister](Tizen.Bluetooth.BluetoothServiceHandler.unregister) can be used to unregister the service record from the device service database and stop listening for client connections.
+        [unregister](Modules.Tizen.Bluetooth.BluetoothServiceHandler.unregister) can be used to unregister the service record from the device service database and stop listening for client connections.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
@@ -485,7 +485,7 @@ events:
     properties:
       - name: device
         summary: Found device.
-        type: Tizen.Bluetooth.BluetoothDevice
+        type: Modules.Tizen.Bluetooth.BluetoothDevice
 
   - name: discoveryfinished
     summary: Event to be fired when the device discovery process has finished.
@@ -494,7 +494,7 @@ events:
     properties:
       - name: foundDevices
         summary: Array of devices found in this discovery session.
-        type: Array<Tizen.Bluetooth.BluetoothDevice>
+        type: Array<Modules.Tizen.Bluetooth.BluetoothDevice>
     
   - name: discoveryerror
     summary: Event to be fired when a Bluetooth device is turned off or any other error case.
@@ -533,7 +533,7 @@ properties:
 name: GetKnownDevicesResponse
 summary: |
     Simple object returned in the callback from
-    [getKnownDevices](Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
+    [getKnownDevices](Modules.Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -555,15 +555,15 @@ properties:
     type: Number
 
   - name: devices
-    summary:  List of devices known to local Bluetooth adapter. Each element is a Tizen.Bluetooth.BluetoothDevice.
+    summary:  List of devices known to local Bluetooth adapter. Each element is a Modules.Tizen.Bluetooth.BluetoothDevice.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Bluetooth.BluetoothDevice>
+    type: Array<Modules.Tizen.Bluetooth.BluetoothDevice>
 
 ---
 name: GetDeviceResponse
 summary: |
     Simple object returned in the callback from
-    [getDevice](Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
+    [getDevice](Modules.Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -585,15 +585,15 @@ properties:
     type: Number
 
   - name: device
-    summary:  Tizen.Bluetooth.BluetoothDevice object.
+    summary:  Modules.Tizen.Bluetooth.BluetoothDevice object.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Bluetooth.BluetoothDevice
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
 
 ---
 name: CreateBondingResponse
 summary: |
     Simple object returned in the callback from
-    [createBonding](Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
+    [createBonding](Modules.Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -615,15 +615,15 @@ properties:
     type: Number
 
   - name: device
-    summary:  Tizen.Bluetooth.BluetoothDevice object.
+    summary:  Modules.Tizen.Bluetooth.BluetoothDevice object.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Bluetooth.BluetoothDevice
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
 
 ---
 name: RegisterRFCOMMServiceByUUIDResponse
 summary: |
     Simple object returned in the callback from
-    [registerRFCOMMServiceByUUID](Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.
+    [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -647,5 +647,5 @@ properties:
   - name: handler
     summary: Bluetooth service handler.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Bluetooth.BluetoothServiceHandler
+    type: Modules.Tizen.Bluetooth.BluetoothServiceHandler
 

@@ -1,5 +1,5 @@
 ---
-name: Tizen.Bluetooth.BluetoothDevice
+name: Modules.Tizen.Bluetooth.BluetoothDevice
 summary: The interface which represents a remote Bluetooth device.   
 description: |
     This interface holds information about a remote device available on a local Bluetooth device, such as device name, address, bonding status, etc.
@@ -130,7 +130,7 @@ properties:
 
   - name: deviceClass
     summary: The device class, which represents the type of the device and the services it provides.  
-    type: Tizen.Bluetooth.BluetoothClass
+    type: Modules.Tizen.Bluetooth.BluetoothClass
     permission: read-only
 
   - name: isBonded
@@ -157,7 +157,7 @@ properties:
 name: ConnectToServiceByUUIDResponse
 summary: |
     Simple object returned in the callback from
-    [connectToServiceByUUID](Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) method.
+    [connectToServiceByUUID](Modules.Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -181,7 +181,7 @@ properties:
   - name: socket
     summary: Socket connected to the specified service on the remote device.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Bluetooth.BluetoothSocket
+    type: Modules.Tizen.Bluetooth.BluetoothSocket
 
 
 

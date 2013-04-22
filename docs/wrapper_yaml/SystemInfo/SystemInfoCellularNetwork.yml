@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoCellularNetwork
+name: Modules.Tizen.SystemInfo.SystemInfoCellularNetwork
 summary: This property reflects the information of the Cellular network in this system.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

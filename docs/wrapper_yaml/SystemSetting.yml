@@ -1,13 +1,13 @@
 ---
-name: Tizen.SystemSetting
+name: Modules.Tizen.SystemSetting
 summary: This Module provides interfaces and methods providing web applications with access to various values of the system.
 description: |
     This API provides interface and method through features such as:
     
-        <Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN>
-        <Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN>
-        <Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL>
-        <Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL>
+        <Modules.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN>
+        <Modules.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_LOCK_SCREEN>
+        <Modules.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_INCOMING_CALL>
+        <Modules.Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL>
         
     The `SystemSetting` module is a thin wrapper on the Tizen `SystemSetting` class.
 extends: Titanium.Module

@@ -1,5 +1,5 @@
 ---
-name: Tizen.Alarm
+name: Modules.Tizen.Alarm
 summary: This API provides the functionality for setting and unsetting of alarms.
     
 extends: Titanium.Module
@@ -13,7 +13,7 @@ methods:
 
       - name: alarm
         summary: An alarm to add.
-        type: Tizen.Alarm.Alarm
+        type: Modules.Tizen.Alarm.Alarm
 
       - name: applicationId
         summary: The ID of the application to execute when the alarm is triggered. 
@@ -21,7 +21,7 @@ methods:
 
       - name: appControl
         summary: The data structure describing application control details.
-        type: Tizen.Application.ApplicationControl
+        type: Modules.Tizen.Application.ApplicationControl
         optional: true
     examples:
       - example: |
@@ -64,7 +64,7 @@ methods:
   - name: getAlarm
     summary: Returns an alarm as per the specified identifier.
     returns: 
-      - type: Tizen.Alarm.Alarm
+      - type: Modules.Tizen.Alarm.Alarm
         summary: Alarm An alarm object with the specified ID. 
     parameters:
 
@@ -83,7 +83,7 @@ methods:
         This method returns all alarms in an application storage. 
         Alarms that have already been triggered are removed automatically from the storage. 
     returns: 
-      - type: Array<Tizen.Alarm.Alarm>
+      - type: Array<Modules.Tizen.Alarm.Alarm>
         summary: All Alarm objects.
     examples:
       - example: |
@@ -92,9 +92,9 @@ methods:
             Titanium.API.info(alarms.length + " alarms present in the storage.");
 
   - name: createAlarmRelative
-    summary: Creates and returns an instance of <Tizen.Alarm.AlarmRelative>.
+    summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmRelative>.
     returns: 
-        type: Tizen.Alarm.AlarmRelative
+        type: Modules.Tizen.Alarm.AlarmRelative
     parameters:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
@@ -110,9 +110,9 @@ methods:
             tizen.Alarm.add(alarm2, "org.tizen.clock");
  
   - name: createAlarmAbsolute
-    summary: Creates and returns an instance of <Tizen.Alarm.AlarmAbsolute>.
+    summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
     returns: 
-        type: Tizen.Alarm.AlarmAbsolute
+        type: Modules.Tizen.Alarm.AlarmAbsolute
     parameters:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
@@ -181,13 +181,13 @@ properties:
     summary: |
         (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
         Valid days of the week constants:
-        <Tizen.Calendar.BY_DAY_VALUE_MO>
-        <Tizen.Calendar.BY_DAY_VALUE_TU>
-        <Tizen.Calendar.BY_DAY_VALUE_WE>
-        <Tizen.Calendar.BY_DAY_VALUE_TH>
-        <Tizen.Calendar.BY_DAY_VALUE_FR>
-        <Tizen.Calendar.BY_DAY_VALUE_SA>
-        <Tizen.Calendar.BY_DAY_VALUE_SU>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_WE>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_TH>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_FR>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_SA>
+        <Modules.Tizen.Calendar.BY_DAY_VALUE_SU>
     type: Array<String>
     optional: true
 

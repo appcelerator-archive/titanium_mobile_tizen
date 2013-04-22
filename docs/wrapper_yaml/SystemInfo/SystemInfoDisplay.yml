@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoDisplay
+name: Modules.Tizen.SystemInfo.SystemInfoDisplay
 summary: This property reflects the information of the Display.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

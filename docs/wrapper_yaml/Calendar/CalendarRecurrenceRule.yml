@@ -1,5 +1,5 @@
 ---
-name: Tizen.Calendar.CalendarRecurrenceRule
+name: Modules.Tizen.Calendar.CalendarRecurrenceRule
 summary:  This interface implements the CalendarRecurrenceRule object, which contains information about the recurrence of an event. (See RFC 5545, Section 3.3.10.)
 extends: Titanium.Proxy
 
@@ -32,11 +32,11 @@ properties:
         This attribute is linked to the frequency attribute and for a interval of n, 
         the event will recur every n of recurrence attribute.
         
-        For example, if the interval attribute is set to 2 and frequency attribute is set to <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, 
+        For example, if the interval attribute is set to 2 and frequency attribute is set to <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, 
         then the event will recur every 2 weeks.
         
-        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY>, 
-        every week if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, every month if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY> or every year if frequency is <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
+        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency attribute is <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_DAILY>, 
+        every week if frequency is <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, every month if frequency is <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY> or every year if frequency is <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         
         This property corresponds to INTERVAL in RFC 5545.
         
@@ -62,7 +62,7 @@ properties:
     type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY>, and <Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
+        This property value is valid only for recurrence rules with a frequency type of <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_WEEKLY>, <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_MONTHLY>, and <Modules.Tizen.Calendar.RECURRENTCE_RULE_FREQUENCY_YEARLY>.
         This property corresponds to BYDAY in RFC 5545.
         
         By default, this attribute is set to an empty array.

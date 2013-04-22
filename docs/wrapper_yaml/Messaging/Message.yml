@@ -1,5 +1,5 @@
 ---
-name: Tizen.Messaging.Message
+name: Modules.Tizen.Messaging.Message
 summary: Defines the content and attributes of a message. 
 description: |
     This interface allows a web application to define the set of properties linked to a message.
@@ -41,8 +41,8 @@ properties:
 
   - name: type
     summary: |
-        The type of the given message. Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of the given message. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -73,7 +73,7 @@ properties:
 
   - name: body
     summary: The body of a message. 
-    type: Tizen.Messaging.MessageBody
+    type: Modules.Tizen.Messaging.MessageBody
 
   - name: isRead
     summary: The flag for read state. This property is true, if the message has been read. False, if not. 
@@ -118,7 +118,7 @@ properties:
     summary: |
         The list of the message attachments.
         This array is empty if the message does not have attachments or the message body is not loaded and the attachment info is inaccessible (in this case, the "hasAttachment" attribute has to be checked).
-    type: Array<Tizen.Messaging.MessageAttachment>
+    type: Array<Modules.Tizen.Messaging.MessageAttachment>
 
 examples:
   - example: |

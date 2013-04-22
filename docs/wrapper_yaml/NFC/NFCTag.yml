@@ -1,4 +1,4 @@
-name: Tizen.NFC.NFCTag
+name: Modules.Tizen.NFC.NFCTag
 summary: |
   Accesses to the NFC tag.
 extends: Titanium.Proxy
@@ -9,22 +9,22 @@ properties:
     type: String
     summary: |
         The type of the NFC tag. Valid values are:
-        <Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
-        <Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
-        <Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
-        <Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
-        <Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
-        <Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
-        <Tizen.NFC.NFC_TAG_TYPE_FELICA>
-        <Tizen.NFC.NFC_TAG_TYPE_JEWEL>
-        <Tizen.NFC.NFC_TAG_TYPE_ISO15693>
-        <Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+        <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
     permission: read-only
 
   - name: isSupportedNDEF
@@ -60,7 +60,7 @@ methods:
     parameters:
       - name: ndefMessage
         summary: NDEF message to write to NFC tag.
-        type: Tizen.NFC.NDEFMessage
+        type: Modules.Tizen.NFC.NDEFMessage
 
       - name: callback  
         summary: Invoked in case of successfully writing the NDEF Data or in case of any error during writing the NDEF Data.
@@ -100,7 +100,7 @@ methods:
 name: NDEFReadResponse
 summary: |
     Simple object returned in the callback from
-    [readNDEF](Tizen.NFC.NFCTag.readNDEF) method.
+    [readNDEF](Modules.Tizen.NFC.NFCTag.readNDEF) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -124,13 +124,13 @@ properties:
   - name: ndefMessage
     summary: NDEF message that is read from the NFC tag or target.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.NFC.NDEFMessage
+    type: Modules.Tizen.NFC.NDEFMessage
 
 ---
 name: TransceiveResponse
 summary: |
     Simple object returned in the callback from
-    [transceive](Tizen.NFC.NFCTag.transceive) method.
+    [transceive](Modules.Tizen.NFC.NFCTag.transceive) method.
 extends: ErrorResponse
 properties:
   - name: success

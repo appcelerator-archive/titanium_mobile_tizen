@@ -1,5 +1,5 @@
 ---
-name: Tizen.Calendar.CalendarInstance
+name: Modules.Tizen.Calendar.CalendarInstance
 summary:  |
     This interface that has methods to manage events or tasks in a calendar. 
     A Calendar object contains a set of events or tasks, depending on the calendar type.
@@ -21,7 +21,7 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The matching CalendarItem object
-        type: Tizen.Calendar.CalendarItem       
+        type: Modules.Tizen.Calendar.CalendarItem       
     parameters:
       - name: id
         summary:  The Calendar item identifier.
@@ -50,7 +50,7 @@ methods:
     parameters:
       - name: item
         summary:  The calendar item to be added.
-        type: Tizen.Calendar.CalendarItem
+        type: Modules.Tizen.Calendar.CalendarItem
     examples:
       - example: |
             var tizen = require("tizen");
@@ -77,7 +77,7 @@ methods:
     parameters:
       - name: items
         summary:  The list of calendar items to add.
-        type: Array<Tizen.Calendar.CalendarItem>
+        type: Array<Modules.Tizen.Calendar.CalendarItem>
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<AddBatchResponse>
@@ -120,7 +120,7 @@ methods:
     parameters:
       - name: item
         summary: The Item object to update.
-        type: Tizen.Calendar.CalendarItem
+        type: Modules.Tizen.Calendar.CalendarItem
       - name: updateAllInstances
         summary:  |
             The flag indicating whether all the event instances should be updated as well or not (default value is true). 
@@ -167,7 +167,7 @@ methods:
     parameters:
       - name: items
         summary: The list of calendar item objects to update.
-        type: Array<Tizen.Calendar.CalendarItem>
+        type: Array<Modules.Tizen.Calendar.CalendarItem>
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
@@ -322,11 +322,11 @@ methods:
         type: Callback<FindResponse>
       - name: filter
         summary: The supplied data used to filter the results of the find() method. 
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
         optional: true  
       - name: sortMode
         summary:  The sort order in which the items return. 
-        type: Tizen.SortMode
+        type: Modules.Tizen.SortMode
         optional: true
     examples:
       - example: |    
@@ -344,7 +344,7 @@ methods:
             // Gets default calendar
             calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
-            // Finds all events the calendar that contain in the summary the string Tizen.
+            // Finds all events the calendar that contain in the summary the string Modules.Tizen.
             var filter = tizen.createAttributeFilter({attributeName: 'summary',
                                                                matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                                matchValue: 'Tizen'});
@@ -371,7 +371,7 @@ events:
     properties:
       - name: items
         summary: The list of items that were added.
-        type: Array<Tizen.Calendar.CalendarItem>
+        type: Array<Modules.Tizen.Calendar.CalendarItem>
 
   - name: itemsupdated
     summary: Called when items are updated in the calendar.
@@ -380,7 +380,7 @@ events:
     properties:
       - name: items
         summary: The list of items that were updated.
-        type: Array<Tizen.Calendar.CalendarItem>
+        type: Array<Modules.Tizen.Calendar.CalendarItem>
 
   - name: itemsremoved
     summary: Called when item are removed from the calendar.
@@ -405,7 +405,7 @@ properties:
     examples:
       - example: |    
             // Gets the default calendar and show its name
-            calendar = Tizen.Calendar.getDefaultCalendar(Tizen.Calendar.CALENDAR_TYPE_EVENT);
+            calendar = Modules.Tizen.Calendar.getDefaultCalendar(Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT);
             Titanium.API.info('The calendar name is ' + calendar.name);
 # Pseudo-type 
 ---
@@ -443,7 +443,7 @@ summary: A calendar item identifier, which can either be a <CalendarEventId> or 
 name: AddBatchResponse
 summary: |
     Simple object returned in the callback from
-    [addBatch](Tizen.Calendar.CalendarInstance.addBatch) method.
+    [addBatch](Modules.Tizen.Calendar.CalendarInstance.addBatch) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -467,13 +467,13 @@ properties:
   - name: items
     summary:  The array of CalendarItem objects.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Calendar.CalendarItem>
+    type: Array<Modules.Tizen.Calendar.CalendarItem>
 
 ---
 name: FindResponse
 summary: |
     Simple object returned in the callback from
-    [find](Tizen.Calendar.CalendarInstance.find) method.
+    [find](Modules.Tizen.Calendar.CalendarInstance.find) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -497,4 +497,4 @@ properties:
   - name: items
     summary: The array of CalendarItem objects. 
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Calendar.CalendarItem>
+    type: Array<Modules.Tizen.Calendar.CalendarItem>

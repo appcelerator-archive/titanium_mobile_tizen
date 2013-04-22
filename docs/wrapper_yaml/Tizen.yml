@@ -1,5 +1,5 @@
 ---
-name: Tizen
+name: Modules.Tizen
 summary: The mine module of Tizen Web Device API
 description: "This is the Tizen root interface."
 extends: Titanium.Module
@@ -7,9 +7,9 @@ platforms: [tizen]
 methods:
 
   - name: createAttributeFilter
-    summary: Creates and returns an instance of <Tizen.AttributeFilter>.
+    summary: Creates and returns an instance of <Modules.Tizen.AttributeFilter>.
     returns: 
-        type: Tizen.AttributeFilter
+        type: Modules.Tizen.AttributeFilter
     parameters: 
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
@@ -35,9 +35,9 @@ methods:
             tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
   - name: createAttributeRangeFilter
-    summary: Creates and returns an instance of <Tizen.AttributeRangeFilter>.
+    summary: Creates and returns an instance of <Modules.Tizen.AttributeRangeFilter>.
     returns: 
-        type: Tizen.AttributeRangeFilter
+        type: Modules.Tizen.AttributeRangeFilter
     parameters: 
 
       - name: Options
@@ -68,9 +68,9 @@ methods:
             tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
 
   - name: createCompositeFilter
-    summary: Creates and returns an instance of <Tizen.CompositeFilter>.
+    summary: Creates and returns an instance of <Modules.Tizen.CompositeFilter>.
     returns: 
-        type: Tizen.CompositeFilter
+        type: Modules.Tizen.CompositeFilter
     parameters: 
 
       - name: Options
@@ -109,9 +109,9 @@ methods:
             tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
             
   - name: createSortMode
-    summary: Creates and returns an instance of <Tizen.SortMode>.
+    summary: Creates and returns an instance of <Modules.Tizen.SortMode>.
     returns: 
-        type: Tizen.SortMode
+        type: Modules.Tizen.SortMode
     parameters: 
 
       - name: Options
@@ -143,9 +143,9 @@ methods:
             tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
  
   - name: createSimpleCoordinates
-    summary: Creates and returns an instance of <Tizen.SimpleCoordinates>.
+    summary: Creates and returns an instance of <Modules.Tizen.SimpleCoordinates>.
     returns: 
-        type: Tizen.SimpleCoordinates
+        type: Modules.Tizen.SimpleCoordinates
     parameters: 
 
       - name: Options
@@ -224,7 +224,7 @@ properties:
     optional: ture
   - name: matchValue
     type: any
-    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Tizen.FILTER_MUCH_FLAG_EXISTS>. By default, this attribute is set to null.
+    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MUCH_FLAG_EXISTS>. By default, this attribute is set to null.
     optional: true
 
 ---

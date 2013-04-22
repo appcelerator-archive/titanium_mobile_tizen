@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoDeviceCapability
+name: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
 summary: SystemInfoDeviceCapability object.
 
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

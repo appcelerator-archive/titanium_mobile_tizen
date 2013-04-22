@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoCpu
+name: Modules.Tizen.SystemInfo.SystemInfoCpu
 summary: This property reflects the state of the CPUs available to this system.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

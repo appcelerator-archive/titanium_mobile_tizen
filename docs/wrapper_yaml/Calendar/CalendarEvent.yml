@@ -1,7 +1,7 @@
 ---
-name: Tizen.Calendar.CalendarEvent
+name: Modules.Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
-extends: Tizen.Calendar.CalendarItem
+extends: Modules.Tizen.Calendar.CalendarItem
 
 examples:
       - example: |
@@ -131,7 +131,7 @@ properties:
 name: ExpandRecurrenceResponse
 summary: |
     Simple object returned in the callback from
-    [expandRecurrence](Tizen.Calendar.CalendarEvent.expandRecurrence) method.
+    [expandRecurrence](Modules.Tizen.Calendar.CalendarEvent.expandRecurrence) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -155,4 +155,4 @@ properties:
   - name: events
     summary:  The array of CalendarEvent objects.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Calendar.CalendarEvent>
+    type: Array<Modules.Tizen.Calendar.CalendarEvent>

@@ -1,4 +1,4 @@
-name: Tizen.NFC.NDEFMessage
+name: Modules.Tizen.NFC.NDEFMessage
 summary: |
   The NDEFMessage interface.
 extends: Titanium.Proxy
@@ -12,7 +12,7 @@ properties:
     permission: read-only
 
   - name: records
-    type: Array<Tizen.NFC.NDEFRecord>
+    type: Array<Modules.Tizen.NFC.NDEFRecord>
     summary: |
         The array of NDEFRecord objects in the NDEFMessage.
 

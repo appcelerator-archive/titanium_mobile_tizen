@@ -1,5 +1,5 @@
 ---
-name: Tizen.Bluetooth.BluetoothSocket
+name: Modules.Tizen.Bluetooth.BluetoothSocket
 summary: The interface to represent the Bluetooth socket.   
 description: The socket object is created by BluetoothDevice.connectToServiceByUUID() or BluetoothAdapter.registerRFCOMMServiceByUUID().
 extends: Titanium.Proxy
@@ -180,7 +180,7 @@ methods:
   - name: close
     summary: Closes the socket.  
     description: |
-        Calling this method closes the socket. BluetoothSocket.state changes to <Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on success. 
+        Calling this method closes the socket. BluetoothSocket.state changes to <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on success. 
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
@@ -209,11 +209,11 @@ properties:
 
   - name: state
     summary: |
-        The current socket state.  The value is one of the constants defined for this type. The supported state types are: <Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and <Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN>.
+        The current socket state.  The value is one of the constants defined for this type. The supported state types are: <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN>.
     type: String
     permission: read-only
 
   - name: peer
     summary: The peer device to which this socket is connected. 
-    type: Tizen.Bluetooth.BluetoothDevice
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
     permission: read-only

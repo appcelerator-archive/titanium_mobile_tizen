@@ -1,4 +1,4 @@
-name: Tizen.NFC.NFCAdapter
+name: Modules.Tizen.NFC.NFCAdapter
 summary: |
   NFC adapter interface that provides access to control the adapter.
 extends: Titanium.Proxy
@@ -41,22 +41,22 @@ methods:
         summary: Filter to be used when specific NFC tag is detected.
         description: |
             Valid values are:
-                <Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
-                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
-                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
-                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
-                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
-                <Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
-                <Tizen.NFC.NFC_TAG_TYPE_FELICA>
-                <Tizen.NFC.NFC_TAG_TYPE_JEWEL>
-                <Tizen.NFC.NFC_TAG_TYPE_ISO15693>
-                <Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+                <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
         type: Array<String>
     examples:
       - example: |
@@ -109,7 +109,7 @@ methods:
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
-        type: Tizen.NFC.NDEFMessage
+        type: Modules.Tizen.NFC.NDEFMessage
     examples:
       - example: |
             // gets the cached message
@@ -125,7 +125,7 @@ events:
     properties:
       - name: nfcPeer
         summary: The attached NFC peer-to-peer target.
-        type: Tizen.NFC.NFCPeer
+        type: Modules.Tizen.NFC.NFCPeer
 
   - name: peerdetached
     summary: Fired when the NFC peer-to-peer target connected is detached.
@@ -140,7 +140,7 @@ methods:
     parameters:
       - name: nfcTag
         summary: The attached NFC tag.
-        type: Tizen.NFC.NFCTag
+        type: Modules.Tizen.NFC.NFCTag
 
   - name: ondetach
     summary: The method invoked when the connected tag is detached.

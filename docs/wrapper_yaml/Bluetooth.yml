@@ -1,5 +1,5 @@
 ---
-name: Tizen.Bluetooth
+name: Modules.Tizen.Bluetooth
 summary: This specification defines interfaces and methods to manage Bluetooth. 
 description: For more information on the Bluetooth features, see [Bluetooth Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fcommunication_guide%2Fbluetooth.htm). 
     
@@ -9,7 +9,7 @@ methods:
   - name: getDefaultAdapter
     summary: Returns the default local Bluetooth adapter.
     returns: 
-      - type: Tizen.Bluetooth.BluetoothAdapter
+      - type: Modules.Tizen.Bluetooth.BluetoothAdapter
         summary: The local BluetoothAdapter object.
         description: |
             To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
@@ -27,21 +27,21 @@ properties:
   - name: deviceMajor
     summary: |
         Accessor to major device class identifiers of Bluetooth class of device (CoD).
-        The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and ohter.
+        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and ohter.
     type: Number
     permission: read-only
 
   - name: deviceMinor
     summary: |
         Accessor to minor device class identifiers of Bluetooth class of device (CoD). 
-        The supported minor types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and ohter.
+        The supported minor types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and ohter.
     type: Number
     permission: read-only
 
   - name: deviceService
     summary: |
         Accessor to major service class identifiers of Bluetooth class of device (CoD). 
-        The supported types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>, and ohter. 
+        The supported types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>, and ohter. 
     type: Number
     permission: read-only
 

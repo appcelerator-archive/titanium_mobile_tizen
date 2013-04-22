@@ -1,5 +1,5 @@
 ---
-name: Tizen.Apps.ApplicationInformation
+name: Modules.Tizen.Apps.ApplicationInformation
 summary: This interface defines the metadata information available to an installed application. 
 extends: Titanium.Proxy
 createable: false

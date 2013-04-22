@@ -1,5 +1,5 @@
 ---
-name: Tizen.Messaging.MessageStorage
+name: Modules.Tizen.Messaging.MessageStorage
 summary: MessageStorage management capabilities. 
 description: |
     This interface allows a web application to query, update, and delete messages, and subscribe to MessageStorage changes. In addition to simple message queries, the MessageStorage interface provides functionality to find conversations and folders.
@@ -17,7 +17,7 @@ methods:
     parameters: 
       - name: message
         summary:  Draft message that should be added to the storage. 
-        type: Tizen.Messaging.Message
+        type: Modules.Tizen.Messaging.Message
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -52,7 +52,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
-        type: Tizen.AbstractFilter 
+        type: Modules.Tizen.AbstractFilter 
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -60,7 +60,7 @@ methods:
 
       - name: sort
         summary: Sorting mode for the query. 
-        type: Tizen.SortMode
+        type: Modules.Tizen.SortMode
         optional: true
 
       - name: limit
@@ -103,7 +103,7 @@ methods:
     parameters: 
       - name: messages
         summary: Array of messages to be deleted. 
-        type: Array<Tizen.Messaging.Message>
+        type: Array<Modules.Tizen.Messaging.Message>
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -135,13 +135,13 @@ methods:
   - name: updateMessages
     summary: Updates messages in MessageStorage. 
     description: |
-        The backend MUST check whether the required updates can be applied and invoke the callback function with error message, if they cannot. Depending on the backend synchronization settings, the local changes in Tizen.Messaging.MessageStorage might be rewritten as a result of invoking the [sync](Tizen.Messaging.MessageService.sync) or [syncFolder](Tizen.Messaging.MessageService.syncFolder) methods of the related message service.
+        The backend MUST check whether the required updates can be applied and invoke the callback function with error message, if they cannot. Depending on the backend synchronization settings, the local changes in Modules.Tizen.Messaging.MessageStorage might be rewritten as a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related message service.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: messages
         summary: Array that should be updated. 
-        type: Array<Tizen.Messaging.Message>
+        type: Array<Modules.Tizen.Messaging.Message>
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -177,7 +177,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
-        type: Tizen.AbstractFilter 
+        type: Modules.Tizen.AbstractFilter 
 
       - name: callback
         summary:  Function to invoke on success or failure.
@@ -185,7 +185,7 @@ methods:
 
       - name: sort
         summary: Sorting rules for the query.
-        type: Tizen.SortMode
+        type: Modules.Tizen.SortMode
         optional: true
 
       - name: limit
@@ -229,7 +229,7 @@ methods:
     parameters: 
       - name: conversations
         summary: Array of conversations to be deleted.
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -269,7 +269,7 @@ methods:
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -309,7 +309,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
         optional: true
     examples:
       - example: |
@@ -347,7 +347,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
         optional: true
 
   - name: addFoldersChangeListener
@@ -368,7 +368,7 @@ methods:
 
       - name: filter
         summary: Criteria to be used when filtering.
-        type: Tizen.AbstractFilter
+        type: Modules.Tizen.AbstractFilter
         optional: true
     examples:
       - example: |
@@ -436,21 +436,21 @@ methods:
     parameters:
       - name: addedMessages 
         summary: Array of added messages.
-        type: Array<Tizen.Messaging.Message>
+        type: Array<Modules.Tizen.Messaging.Message>
 
   - name: messagesupdated 
     summary: Method invoked when messages are updated in MessageStorage. 
     parameters:
       - name: updatedMessages 
         summary: Array of updated messages. 
-        type: Array<Tizen.Messaging.Message>
+        type: Array<Modules.Tizen.Messaging.Message>
 
   - name: removedMessages
     summary: Method invoked when messages are removed from MessageStorage. 
     parameters:
       - name: removedMessages 
         summary: Array of updated messages. 
-        type: Array<Tizen.Messaging.Message>
+        type: Array<Modules.Tizen.Messaging.Message>
 
 ---
 name: MessageConversationsChangeCallback
@@ -462,21 +462,21 @@ methods:
     parameters:
       - name: addedConversations 
         summary: Array of added conversations. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
   - name: conversationsupdated 
     summary: Method invoked when conversations are updated in MessageStorage. 
     parameters:
       - name: updatedConversations 
         summary: Array of updated messages. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
   - name: conversationsremoved
     summary: Method invoked when conversations are removed from MessageStorage. 
     parameters:
       - name: removedConversations 
         summary: Array of updated messages. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
 ---
 name: MessageFoldersChangeCallback
@@ -489,27 +489,27 @@ methods:
     parameters:
       - name: addedFolders 
         summary: Array of added folders. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
   - name: foldersupdated
     summary: Method invoked when folders are updated in MessageStorage. 
     parameters:
       - name: updatedFolders 
         summary: Array of updated folders. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
   - name: removedFolders
     summary: Method invoked when folders are removed from MessageStorage. 
     parameters:
       - name: removedConversations 
         summary: Array of removed folders. 
-        type: Array<Tizen.Messaging.MessageConversation>
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
 
 ---
 name: FindMessageResponse
 summary: |
     Simple object returned in the callback from
-    [findMessages](Tizen.Messaging.MessageStorage.findMessages) method.
+    [findMessages](Modules.Tizen.Messaging.MessageStorage.findMessages) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -533,13 +533,13 @@ properties:
   - name: messages
     summary: Array of messages that satisfy the query.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Messaging.Message>
+    type: Array<Modules.Tizen.Messaging.Message>
 
 ---
 name: FindConversationsResponse
 summary: |
     Simple object returned in the callback from
-    [findConversations](Tizen.Messaging.MessageStorage.findConversations) method.
+    [findConversations](Modules.Tizen.Messaging.MessageStorage.findConversations) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -563,13 +563,13 @@ properties:
   - name: conversations
     summary: Array of conversations that satisfy the query.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Messaging.MessageConversation>
+    type: Array<Modules.Tizen.Messaging.MessageConversation>
     
 ---
 name: FindFoldersResponse
 summary: |
     Simple object returned in the callback from
-    [findFolders](Tizen.Messaging.MessageStorage.findFolders) method.
+    [findFolders](Modules.Tizen.Messaging.MessageStorage.findFolders) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -593,4 +593,4 @@ properties:
   - name: folders
     summary: Array of folders that satisfy the query.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Messaging.MessageFolder>
+    type: Array<Modules.Tizen.Messaging.MessageFolder>

@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoWifiNetwork
+name: Modules.Tizen.SystemInfo.SystemInfoWifiNetwork
 summary: This property reflects the information of the Wi-Fi network in this system.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

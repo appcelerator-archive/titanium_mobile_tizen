@@ -1,9 +1,9 @@
 ---
-name: Tizen.Notification
+name: Modules.Tizen.Notification
 summary: Module for managing notifications created based on application events.
 description: |
     This module provides a way to notify user events that occur in applications to users.
-    which are represented by the <Tizen.Notification> object.
+    which are represented by the <Modules.Tizen.Notification> object.
     
     The `Notification` module is a thin wrapper on the Tizen `NotificationManager`
     class.
@@ -25,7 +25,7 @@ methods:
     parameters:
       - name: notification
         summary: A notification to post.
-        type: Tizen.Notification
+        type: Modules.Tizen.Notification
     examples:
       - example: |
           try {
@@ -60,7 +60,7 @@ methods:
     parameters:
       - name: notification
         summary: A notification to update.
-        type: Tizen.Notification
+        type: Modules.Tizen.Notification
     examples:
       - example: |
           var tizen = require("tizen");
@@ -108,7 +108,7 @@ methods:
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
-        type: Tizen.Notification
+        type: Modules.Tizen.Notification
     parameters:
       - name: id
         summary: A previously posted notification ID.
@@ -130,7 +130,7 @@ methods:
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
-        type: Array<Tizen.Notification.Notification>
+        type: Array<Modules.Tizen.Notification.Notification>
     examples:
       - example: |
           var tizen = require("tizen");
@@ -155,9 +155,9 @@ methods:
           }
 
   - name: createStatusNotification
-    summary: Creates and returns an instance of <Tizen.Notification.StatusNotification>.
+    summary: Creates and returns an instance of <Modules.Tizen.Notification.StatusNotification>.
     returns:
-        type: Tizen.Notification.StatusNotification
+        type: Modules.Tizen.Notification.StatusNotification
     parameters:
       - name: Options
         summary: The dictionary representing information about the new notification.
@@ -224,7 +224,7 @@ properties:
     summary: Holds whether to use vibration when the notification is shown.
 
   - name: appControl
-    type: Tizen.Aplication.ApplicationControl
+    type: Modules.Tizen.Aplication.ApplicationControl
     summary: Holds the application control to launch when the notification is selected from the notification tray.
 
   - name: appId
@@ -242,7 +242,7 @@ properties:
   - name: statusType
     type: String
     summary: |
-        Notification type (supported values: <Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, <Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, <Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>)
+        Notification type (supported values: <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>)
 
   - name: title
     type: String

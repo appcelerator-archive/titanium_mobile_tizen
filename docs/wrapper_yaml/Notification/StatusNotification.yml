@@ -1,5 +1,5 @@
 ---
-name: Tizen.Notification.StatusNotification
+name: Modules.Tizen.Notification.StatusNotification
 summary: The interface which represents status notification.
 description: |
     All notification must have the title attribute.
@@ -7,7 +7,7 @@ description: |
     This interface offers additional attributes to represent notification 
     displayed in the notification tray.
     
-extends: Tizen.Notification.Notification
+extends: Modules.Tizen.Notification.Notification
 
 properties:
 
@@ -15,7 +15,7 @@ properties:
    summary: The status notification type.
    type: String
    permission: read-only
-   default: Tizen.Notification.NOTIFICATION_TYPE_STATUS
+   default: Modules.Tizen.Notification.NOTIFICATION_TYPE_STATUS
  
  - name: iconPath
    summary: The path to the icon to display in the notification.
@@ -31,7 +31,7 @@ properties:
 
  - name: appControl 
    summary: Holds the application control to launch when the notification is selected from the notification tray.
-   type: Tizen.ApplicationControl 
+   type: Modules.Tizen.ApplicationControl 
    
  - name: appId  
    summary: Holds the application id to launch when the notification is selected from the notification tray.
@@ -68,7 +68,7 @@ properties:
    summary: The current progress value of notification.
    description: |
         If progressValue is set, the progressbar will be displayed in notification. 
-        If not, the progressbar will not be shown. This attribute is only available for StatusNotifcation Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS type.
+        If not, the progressbar will not be shown. This attribute is only available for StatusNotifcation Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS type.
         
         Application should keep the progress value for its job because the saved value 
         in the notification status tray would be different from exact progress value.

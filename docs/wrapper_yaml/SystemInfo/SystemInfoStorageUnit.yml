@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoStorageUnit
+name: Modules.Tizen.SystemInfo.SystemInfoStorageUnit
 summary: This property exposes a single storage device connected to this system.
 
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

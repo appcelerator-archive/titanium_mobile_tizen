@@ -1,5 +1,5 @@
 ---
-name: Tizen.Apps
+name: Modules.Tizen.Apps
 summary: This API provides a way to launch other applications and access application management.
     
 extends: Titanium.Module
@@ -8,7 +8,7 @@ methods:
   - name: getCurrentApplication
     summary: Gets the Application object defining the current application.
     returns: 
-      - type: Tizen.Apps.Application
+      - type: Modules.Tizen.Apps.Application
         summary: Application The data structure that defines current application.
     examples:
       - example: |
@@ -166,7 +166,7 @@ methods:
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns: 
-      - type: Tizen.Apps.ApplicationContext
+      - type: Modules.Tizen.Apps.ApplicationContext
         summary: A data structure that lists running application details.
     parameters: 
       - name: contextId
@@ -206,7 +206,7 @@ methods:
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/application.read
     returns:
-      - type: Tizen.Apps.ApplicationInformation
+      - type: Modules.Tizen.Apps.ApplicationInformation
         summary: The application metadata
     parameters: 
       - name: id
@@ -227,7 +227,7 @@ events:
     properties:
       - name: appInfo
         summary: The application information of the installed application.
-        type: Tizen.Apps.ApplicationInformation
+        type: Modules.Tizen.Apps.ApplicationInformation
 
   - name: updated
     summary: Fired when an application is updated.
@@ -236,7 +236,7 @@ events:
     properties:
       - name: appInfo
         summary: The application information of the updated application.
-        type: Tizen.Apps.ApplicationInformation
+        type: Modules.Tizen.Apps.ApplicationInformation
 
   - name: uninstalled
     summary: Fired when an application is uninstalled.
@@ -249,7 +249,7 @@ events:
 # Pseudo-type
 ---
 name: ApplicationControlDataUnit
-summary: Contains information required to initialize a <Tizen.Apps.ApplicationControlData>.
+summary: Contains information required to initialize a <Modules.Tizen.Apps.ApplicationControlData>.
 properties:
   - name: key
     type: String
@@ -278,7 +278,7 @@ properties:
     summary: (optional) An attribute to store the category of the application to be launched.
     optional: true
   - name: data  
-    type: <Tizen.Apps.ApplicationControlData>
+    type: <Modules.Tizen.Apps.ApplicationControlData>
     summary: (optional) An array of attributes to store the data needed for an application control.
     optional: true
 
@@ -327,7 +327,7 @@ properties:
 name: LaunchAppControlReplyResponse
 summary: |
     Simple object returned in the callback from
-    [launchAppControl](Tizen.Apps.launchAppControl) method.
+    [launchAppControl](Modules.Tizen.Apps.launchAppControl) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -357,7 +357,7 @@ properties:
 name: FindAppControlResponse
 summary: |
     Simple object returned in the callback from
-    [findAppControl](Tizen.Apps.findAppControl) method.
+    [findAppControl](Modules.Tizen.Apps.findAppControl) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -381,7 +381,7 @@ properties:
   - name: appInfo
     summary: List of installed applications.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Apps.ApplicationInformation>
+    type: Array<Modules.Tizen.Apps.ApplicationInformation>
     
   - name: appControl
     summary: The application control that was passed on findAppControl.
@@ -393,7 +393,7 @@ properties:
 name: AppsContextResponse
 summary: |
     Simple object returned in the callback from
-    [getAppsContexts](Tizen.Apps.getAppsContext) method.
+    [getAppsContexts](Modules.Tizen.Apps.getAppsContext) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -417,13 +417,13 @@ properties:
   - name: contexts
     summary: List of running applications.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Apps.ApplicationContext>
+    type: Array<Modules.Tizen.Apps.ApplicationContext>
     
 ---
 name: AppsInfoResponse
 summary: |
     Simple object returned in the callback from
-    [getAppsInfo](Tizen.Apps.getAppsInfo) method.
+    [getAppsInfo](Modules.Tizen.Apps.getAppsInfo) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -447,4 +447,4 @@ properties:
   - name: applications
     summary: List of running applications.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Apps.ApplicationInformation>
+    type: Array<Modules.Tizen.Apps.ApplicationInformation>

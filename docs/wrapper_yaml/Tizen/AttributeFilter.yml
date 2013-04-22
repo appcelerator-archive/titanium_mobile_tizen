@@ -1,11 +1,11 @@
 ---
-name: Tizen.AttributeFilter
+name: Modules.Tizen.AttributeFilter
 summary: AttributeFilter represents a filter based on an object attribute. 
 description: |
     It represents the query statement for the specified value of the matchValue by the rule of matchFlag.
-    If no matchValue is defined, the filter will match all objects that have the attribute defined (same as the <Tizen.FILTER_MUCH_FLAG_EXISTS> filter works), 
+    If no matchValue is defined, the filter will match all objects that have the attribute defined (same as the <Modules.Tizen.FILTER_MUCH_FLAG_EXISTS> filter works), 
     otherwise, it will only match objects which have an attribute that matches the given value.
-extends: Tizen.AbstractFilter
+extends: Modules.Tizen.AbstractFilter
 
 properties:
   - name: attributeName
@@ -18,14 +18,14 @@ properties:
 
   - name: matchFlag
     summary: The match flag used for attribute-based filtering. 
-    description: "By default, this attribute is set to <Tizen.FILTER_MUCH_FLAG_EXACTLY>." 
+    description: "By default, this attribute is set to <Modules.Tizen.FILTER_MUCH_FLAG_EXACTLY>." 
     type: String
-    default: Tizen.FILTER_MUCH_FLAG_EXACTLY
+    default: Modules.Tizen.FILTER_MUCH_FLAG_EXACTLY
 
   - name: matchValue
     summary: The value used for matching. 
     description: |
         The filter will match if the attribute value matches the given matchValue.
-        This value is not used if the matchFlag is set to <Tizen.FILTER_MUCH_FLAG_EXISTS>. By default, this attribute is set to null.
+        This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MUCH_FLAG_EXISTS>. By default, this attribute is set to null.
     type: Object
     default: null

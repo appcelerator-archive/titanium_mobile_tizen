@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoBattery
+name: Modules.Tizen.SystemInfo.SystemInfoBattery
 summary: This property reflects the general state of the system's battery.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

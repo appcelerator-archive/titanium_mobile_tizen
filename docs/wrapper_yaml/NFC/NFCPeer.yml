@@ -1,4 +1,4 @@
-name: Tizen.NFC.NFCPeer
+name: Modules.Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
 extends: Titanium.Proxy
@@ -20,7 +20,7 @@ methods:
     parameters:
       - name: ndefMessage  
         summary: NDEF message to send to NFC peer-to-peer target.
-        type: Tizen.NFC.NDEFMessage
+        type: Modules.Tizen.NFC.NDEFMessage
 
       - name: callback  
         summary: Invoked in case of successfully sending data to NFC peer-to-peer target or in case of any error during sending.
@@ -37,7 +37,7 @@ events:
 name: NDEFMessageReadResponse
 summary: |
     Simple object returned in the callback from
-    [setReceiveNDEFListener](Tizen.NFC.NFCPeer.setReceiveNDEFListener) method.
+    [setReceiveNDEFListener](Modules.Tizen.NFC.NFCPeer.setReceiveNDEFListener) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -61,4 +61,4 @@ properties:
   - name: ndefMessage
     summary: NDEF message that is read from the NFC tag or target.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.NFC.NDEFMessage
+    type: Modules.Tizen.NFC.NDEFMessage

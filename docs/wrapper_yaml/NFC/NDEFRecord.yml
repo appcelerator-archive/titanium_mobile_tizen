@@ -1,4 +1,4 @@
-name: Tizen.NFC.NDEFRecord
+name: Modules.Tizen.NFC.NDEFRecord
 summary: |
   The NDEFRecord interface.
 extends: Titanium.Proxy
@@ -11,13 +11,13 @@ properties:
         The value of the record type (TNF value).
     description: |
         At least the following values MUST be supported:
-        <Tizen.NFC.NFC_RECORD_TNF_EMPTY>
-        <Tizen.NFC.NFC_RECORD_TNF_WELL_KNOWN>
-        <Tizen.NFC.NFC_RECORD_TNF_MIME_MEDIA>
-        <Tizen.NFC.NFC_RECORD_TNF_URI>
-        <Tizen.NFC.NFC_RECORD_TNF_EXTERNAL_RTD>
-        <Tizen.NFC.NFC_RECORD_TNF_UNKNOWN>
-        <Tizen.NFC.NFC_RECORD_TNF_UNCHANGED>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_EMPTY>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_WELL_KNOWN>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_MIME_MEDIA>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_URI>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_EXTERNAL_RTD>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_UNKNOWN>
+        <Modules.Tizen.NFC.NFC_RECORD_TNF_UNCHANGED>
     permission: read-only
 
   - name: type

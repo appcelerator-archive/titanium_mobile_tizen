@@ -1,7 +1,7 @@
 ---
-name: Tizen.Calendar.CalendarTask
+name: Modules.Tizen.Calendar.CalendarTask
 summary:  An interface that implements the CalendarTask object.
-extends: Tizen.Calendar.CalendarItem
+extends: Modules.Tizen.Calendar.CalendarItem
 
 examples: 
   - title: Code example

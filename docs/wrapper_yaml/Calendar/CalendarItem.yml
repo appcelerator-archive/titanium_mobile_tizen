@@ -1,5 +1,5 @@
 ---
-name: Tizen.Calendar.CalendarItem
+name: Modules.Tizen.Calendar.CalendarItem
 summary:  |
     This is a parent interface that is used to create Calendar events and tasks. 
     These attributes are shared by both events and tasks.
@@ -39,7 +39,7 @@ methods:
             // Gets the default calendar
             var myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
             
-            // Finds all events in the first calendar that contain in the summary the string Tizen.
+            // Finds all events in the first calendar that contain in the summary the string Modules.Tizen.
             var filter = tizen.createAttributeFilter({attributeName: 'summary',
                                                                matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
                                                                matchValue: 'Tizen'});
@@ -63,7 +63,7 @@ methods:
     parameters:
       - name: item
         summary: The new clone of the CalendarItem object.
-        type: Tizen.Calendar.CalendarItem
+        type: Modules.Tizen.Calendar.CalendarItem
     examples:
       - example: |    
             // Gets default calendar.
@@ -166,10 +166,10 @@ properties:
     
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place. (See RFC 5545 - Section 3.8.1.6).
-    type: Tizen.SimpleCoordinates
+    type: Modules.Tizen.SimpleCoordinates
     examples:
       - example: |    
-            event.geolocation = Tizen.createSimpleCoordinates(60.175, 24.934);
+            event.geolocation = Modules.Tizen.createSimpleCoordinates(60.175, 24.934);
 
   - name: organizer
     summary: |
@@ -202,12 +202,12 @@ properties:
   - name: priority
     summary: |
         An attribute to indicate the priority level of an item and may be used to relatively prioritize multiple items during a given period of time. (See RFC 5545 - Section 3.8.1.9).
-        The default value for this attribute is Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW priority.
+        The default value for this attribute is Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW priority.
         If the native item database supports another priority schema (such as a range from 1 to 9), the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
-            - 1-4 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH,
-            - 5 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
-            - 6-9 to Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
+            - 1-4 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH,
+            - 5 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
+            - 6-9 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
     type: STRING
     examples:
       - example: |
@@ -216,7 +216,7 @@ properties:
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Tizen.Calendar.CalendarAlarm>
+    type: Array<Modules.Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             var tizen = require("tizen");
@@ -243,7 +243,7 @@ properties:
     summary: |
         An attribute array that lists the people attending an event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is set to an empty array.
-    type: Array<Tizen.Calendar.CalendarAttendee>
+    type: Array<Modules.Tizen.Calendar.CalendarAttendee>
     examples:
       - example: |
             var tizen = require("tizen");      

@@ -1,5 +1,5 @@
 ---
-name: Tizen.Messaging.MessageBody
+name: Modules.Tizen.Messaging.MessageBody
 summary: Describes a message body. 
 description: Message body is comprised of a plain text part, an HTML part, and inline attachments. 
 extends: Titanium.Proxy
@@ -34,4 +34,4 @@ properties:
         The list of the inline attachments.
     description: |
         This array is empty, if the message does not have inline attachment or the message body is not loaded and attachments info is inaccessible (in this case the "loaded" attribute has to be checked).
-    type: Tizen.Messaging.MessageAttachment
+    type: Modules.Tizen.Messaging.MessageAttachment

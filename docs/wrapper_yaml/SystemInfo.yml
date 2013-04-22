@@ -1,5 +1,5 @@
 ---
-name: Tizen.SystemInfo
+name: Modules.Tizen.SystemInfo
 summary: This Module provides  interfaces and methods providing web applications with access to various properties of the system.
 description: |
     This API also provides interfaces and methods for users to get hardware devices status, to get the value of selected properties, and to set up asynchronous notifications of changes for selected values. The following provides an overview of the tree data structure:
@@ -32,7 +32,7 @@ methods:
         
         To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
     returns:
-        type: Tizen.SystemInfo.SystemInfoDeviceCapability
+        type: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
     examples:
       - example: |
             var tizen = require("tizen");
@@ -61,10 +61,10 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Tizen.SystemInfo.SystemInfoProperty>
+        type: Callback<Modules.Tizen.SystemInfo.SystemInfoProperty>
       - name: errorCallback
         summary: Function called when an error occurred while retrieving the properties.
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<Modules.Tizen.WebAPIError>
         optional: true
     examples:
       - example: |
@@ -86,7 +86,7 @@ methods:
         When called, it immediately returns and then asynchronously starts a watch process defined as this set of steps:
         1. Acquire the system's current values for the property requested. If successful, it invokes the associated successCallback, 
            passing the resulting property value. The type of the passed object is indicated by the property's value type in the definitions below. For example,
-           if you are passing <Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY> for SystemInfoPropertyId, you'll get SystemInfoBattery object.
+           if you are passing <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY> for SystemInfoPropertyId, you'll get SystemInfoBattery object.
         2. Register the successCallback to receive system events that the status of the requested properties may have changed.
         3. When a system event is successfully received invoke the associated successCallback with an object containing the property values.
         4. Repeat step 3 until removePropertyValueChangeListener function is called.
@@ -101,7 +101,7 @@ methods:
         type: String
       - name: successCallback
         summary: Function called when the properties have been successfully retrieved.
-        type: Callback<Tizen.SystemInfo.SystemInfoProperty>
+        type: Callback<Modules.Tizen.SystemInfo.SystemInfoProperty>
       - name: options
         summary:  An object containing the various options for fetching the properties requested.
         type: Dictionary<SystemInfoOptions>

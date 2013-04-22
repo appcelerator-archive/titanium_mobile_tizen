@@ -1,10 +1,10 @@
 ---
-name: Tizen.Alarm.AlarmRelative
+name: Modules.Tizen.Alarm.AlarmRelative
 summary: This interface provides the relative alarm, which occurs at a fixed interval in future.
 description: |
     This alarm triggers after a duration mentioned in delay attribute from the moment the alarm is added. 
     If the interval attribute is set to true, the alarm is triggered repeatedly for the specified time. 
-extends: Tizen.Alarm.Alarm
+extends: Modules.Tizen.Alarm.Alarm
 examples:
   - example: |
         var tizen = require("tizen");

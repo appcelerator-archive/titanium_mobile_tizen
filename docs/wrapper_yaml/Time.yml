@@ -1,5 +1,5 @@
 ---
-name: Tizen.Time
+name: Modules.Tizen.Time
 summary: The Module provides information regarding date / time and time zones.
 description: |
     The JavaScript Date object does not have full timezone support.
@@ -30,7 +30,7 @@ methods:
   - name: getCurrentDateTime
     summary: Returns the current date / time.
     returns:
-        type: Tizen.Time.TZDate
+        type: Modules.Tizen.Time.TZDate
     examples:
       - example: |
             var tizen = require("tizen");
@@ -117,18 +117,18 @@ methods:
             }
     
   - name: createTZDate
-    summary: Returns the <Tizen.Time.TZDate>.
+    summary: Returns the <Modules.Tizen.Time.TZDate>.
     returns:
-        type: Tizen.Time.TZDate
+        type: Modules.Tizen.Time.TZDate
     parameters:
       - name: tzDateParameters
         summary: The TZDate object represents information regarding a given date.
         type: [Dictionary<TZDateUnit1>, Dictionary<TZDateUnit2>]
     
   - name: createTimeDuration
-    summary: Returns the <Tizen.Time.TimeDuration>.
+    summary: Returns the <Modules.Tizen.Time.TimeDuration>.
     returns:
-        type: Tizen.Time.TimeDuration
+        type: Modules.Tizen.Time.TimeDuration
     parameters:
       - name: timeDurationParameters
         summary: The TimeDuration object that contains the length and its associated time unit.
@@ -173,7 +173,7 @@ properties:
   - name: unit
     type: String
     summary: |
-        (optional) Time property value: <Tizen.Time.TIME_DURATION_UNIT_MSECS>, <Tizen.Time.TIME_DURATION_UNIT_SECS>, <Tizen.Time.TIME_DURATION_UNIT_MINS>, <Tizen.Time.TIME_DURATION_UNIT_HOURS>, <Tizen.Time.TIME_DURATION_UNIT_DAYS>
+        (optional) Time property value: <Modules.Tizen.Time.TIME_DURATION_UNIT_MSECS>, <Modules.Tizen.Time.TIME_DURATION_UNIT_SECS>, <Modules.Tizen.Time.TIME_DURATION_UNIT_MINS>, <Modules.Tizen.Time.TIME_DURATION_UNIT_HOURS>, <Modules.Tizen.Time.TIME_DURATION_UNIT_DAYS>
     optional: true
 ---
 

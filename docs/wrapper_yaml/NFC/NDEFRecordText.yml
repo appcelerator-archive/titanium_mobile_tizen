@@ -1,7 +1,7 @@
-name: Tizen.NFC.NDEFRecordText
+name: Modules.Tizen.NFC.NDEFRecordText
 summary: |
   The NDEFRecord that has the text type payload.
-extends: Tizen.NFC.NDEFRecord
+extends: Modules.Tizen.NFC.NDEFRecord
 
 properties:
 
@@ -20,5 +20,5 @@ properties:
   - name: encoding
     type: String
     summary: |
-        The encoding type. Possible values are: <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
+        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
     permission: read-only

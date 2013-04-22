@@ -1,5 +1,5 @@
 ---
-name: Tizen.Bluetooth.BluetoothClass
+name: Modules.Tizen.Bluetooth.BluetoothClass
 summary: Interface to represent Bluetooth Class of Device/Service(CoD). 
 description: |
     Bluetooth device class describes the characteristics and capabilities of a device.
@@ -48,7 +48,7 @@ properties:
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
     description: | 
-        The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
+        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
     type: Number
     permission: read-only
 
@@ -56,13 +56,13 @@ properties:
     summary: |
       The minor device class. The value is one of the constants defined for this type. 
     description: |
-      The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
+      The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
     type: String
     permission: read-only
 
   - name:  services
     summary: |
         The services provided by this device.The value is one of the constants defined for this type. 
-        The supported major types are: <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
+        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
     type: Array<Number>
     permission: read-only

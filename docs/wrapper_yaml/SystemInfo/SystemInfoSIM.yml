@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoSim
+name: Modules.Tizen.SystemInfo.SystemInfoSim
 summary: This property reflects the information of the SIM card information.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

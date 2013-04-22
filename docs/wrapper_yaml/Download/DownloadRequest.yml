@@ -1,5 +1,5 @@
 ---
-name: Tizen.Download.DownloadRequest
+name: Modules.Tizen.Download.DownloadRequest
 summary: Defines the download request object.
 extends: Titanium.Proxy
 
@@ -136,7 +136,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
       - name: receivedSize
         summary: The size of data received in bytes.
         type: Number
@@ -148,20 +148,20 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
   - name: onCancel
     summary: Called when download is canceled by the cancel() method.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
   - name: onLoad
     summary: Called when the download operation is completed with the final full path.
         If the same file name already exists in the destination, it is changed according to the platform policy and delivered in this callback.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
       - name: fullPath
         summary: The final full path for the downloaded file.
         type: String
@@ -170,7 +170,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Tizen.Download.DownloadRequest>
+        type: <Modules.Tizen.Download.DownloadRequest>
       - name: error
         summary: The reason for the download failure.
-        type: Callback<Tizen.WebAPIError>
+        type: Callback<Modules.Tizen.WebAPIError>

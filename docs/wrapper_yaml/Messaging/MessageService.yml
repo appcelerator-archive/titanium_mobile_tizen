@@ -1,5 +1,5 @@
 ---
-name: Tizen.Messaging.MessageService
+name: Modules.Tizen.Messaging.MessageService
 summary: Message creating, sending, and fetching capabilities. 
 description: |
     This interface allows a web application to manipulate and send messages.
@@ -19,7 +19,7 @@ methods:
     parameters: 
       - name: message
         summary: The message to be sent. 
-        type: Tizen.Messaging.Message
+        type: Modules.Tizen.Messaging.Message
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -69,7 +69,7 @@ methods:
     parameters: 
       - name: message
         summary: Message with the body to be loaded. 
-        type: Tizen.Messaging.MessageBody
+        type: Modules.Tizen.Messaging.MessageBody
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -118,7 +118,7 @@ methods:
     parameters: 
       - name: attachment
         summary: Message attachment to be loaded. 
-        type: Tizen.Messaging.MessageAttachment
+        type: Modules.Tizen.Messaging.MessageAttachment
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -190,7 +190,7 @@ methods:
         Messages are retrieved from a given folder, even if synchronizable flag for this folder is not set. The backend is to decide which data is retrieved for every message. It can be:
             message header details
             whole message body
-        The limit of latest messages for the given folder MUST be retrieved and put into Tizen.Messaging.MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
+        The limit of latest messages for the given folder MUST be retrieved and put into Modules.Tizen.Messaging.MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     returns: 
@@ -199,7 +199,7 @@ methods:
     parameters: 
       - name: folder
         summary: Folder to be synchronized. 
-        type: Tizen.Messaging.MessageFolder
+        type: Modules.Tizen.Messaging.MessageFolder
 
       - name: callback
         summary: Function to be invoked if all actions are completed successfully. 
@@ -252,8 +252,8 @@ properties:
     summary: | 
         The tag supported by this messaging service. 
     description: |
-        Can be one of this constants: <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -262,7 +262,7 @@ properties:
         The interface for accessing MessageStorage for this Messaging service.
     description: |
         If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
-    type: Tizen.Messaging.MessageStorage
+    type: Modules.Tizen.Messaging.MessageStorage
     permission: read-only
 
 # Pseudo-types
@@ -270,7 +270,7 @@ properties:
 name: SendMessageResponse
 summary: |
     Simple object returned in the callback from
-    [sendMessage](Tizen.Messaging.MessageService.sendMessage) method.
+    [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -300,7 +300,7 @@ properties:
 name: LoadMessageBodyResponse
 summary: |
     Simple object returned in the callback from
-    [loadMessageBody](Tizen.Messaging.MessageService.loadMessageBody) method.
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -324,13 +324,13 @@ properties:
   - name: message
     summary: Message containing the loaded body.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Messaging.MessageBody
+    type: Modules.Tizen.Messaging.MessageBody
 
 ---
 name: LoadMessageAttachementResponse
 summary: |
     Simple object returned in the callback from
-    [loadMessageAttachment](Tizen.Messaging.MessageService.loadMessageAttachment) method.
+    [loadMessageAttachment](Modules.Tizen.Messaging.MessageService.loadMessageAttachment) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -354,4 +354,4 @@ properties:
   - name: attachment
     summary: Loaded attachment.
     description: Will be undefined if `success` is `false`.
-    type: Tizen.Messaging.MessageAttachment
+    type: Modules.Tizen.Messaging.MessageAttachment

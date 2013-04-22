@@ -1,8 +1,8 @@
 ---
-name: Tizen.SystemInfo.SystemInfoBuild
+name: Modules.Tizen.SystemInfo.SystemInfoBuild
 summary: This property reflects the information of the current device.
     
-extends: Tizen.SystemInfo.SystemInfoProperty
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
 createable: false
 
 properties:

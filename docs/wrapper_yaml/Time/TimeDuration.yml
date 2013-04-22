@@ -1,5 +1,5 @@
 ---
-name: Tizen.Time.TimeDuration
+name: Modules.Tizen.Time.TimeDuration
 summary: The TimeDuration object that contains the length and its associated time unit.
 extends: Titanium.Proxy
 
@@ -21,11 +21,11 @@ methods:
         The returned TimeDuration is the biggest possible unit without losing the precision.
     returns:
         summary: New TimeDuration object corresponding to the result of this - other.
-        type: Tizen.Time.TimeDuration
+        type: Modules.Tizen.Time.TimeDuration
     parameters:    
       - name: other
-        summary:  Other <Tizen.Time.TimeDuration> object to compare to.
-        type: Tizen.Time.TimeDuration
+        summary:  Other <Modules.Tizen.Time.TimeDuration> object to compare to.
+        type: Modules.Tizen.Time.TimeDuration
     examples:
       - example: |
              // Compute event1.duration - event2.duration
@@ -47,7 +47,7 @@ methods:
     parameters:
       - name: other
         summary:  TimeDuration object to compare to.
-        type: Tizen.Time.TimeDuration
+        type: Modules.Tizen.Time.TimeDuration
     examples:
       - example: |
             var tizen = require("tizen");
@@ -65,7 +65,7 @@ methods:
     parameters:
       - name: other
         summary: Other TimeDuration object to compare to.
-        type: Tizen.Time.TimeDuration
+        type: Modules.Tizen.Time.TimeDuration
     examples:
       - example: |
              var tizen = require("tizen");
@@ -83,7 +83,7 @@ methods:
     parameters:
       - name: other
         summary:  Other TimeDuration object to compare to.
-        type: Tizen.Time.TimeDuration
+        type: Modules.Tizen.Time.TimeDuration
     examples:
       - example: |
             var tizen = require("tizen");
@@ -102,7 +102,7 @@ properties:
   - name: unit
     summary: |
         Duration unit (milliseconds, seconds, minutes, hours, or days).
-        The default value is <Tizen.Time.TIME_DURATION_UNIT_MSECS> (milliseconds unit).
+        The default value is <Modules.Tizen.Time.TIME_DURATION_UNIT_MSECS> (milliseconds unit).
     type: String
-    default: Tizen.Time.TIME_DURATION_UNIT_MSECS
+    default: Modules.Tizen.Time.TIME_DURATION_UNIT_MSECS
 

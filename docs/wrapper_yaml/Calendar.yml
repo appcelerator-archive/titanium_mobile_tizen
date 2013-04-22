@@ -1,5 +1,5 @@
 ---
-name: Tizen.Calendar
+name: Modules.Tizen.Calendar
 summary:  interfaces and methods for users to manage their schedule. 
 description: |
     Separate calendars can be implemented for group related events or tasks. For example, a user may have a work, personal, and family calendar. A calendar entry is called an event and is composed of a series of attributes, such as purpose, starting time, and duration. A calendar is a collection of events.
@@ -112,11 +112,11 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The default Calendar object.
-        type: Tizen.Calendar.CalendarInstance       
+        type: Modules.Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
         summary:  |
-            The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT or Tizen.Calendar.CALENDAR_TYPE_TASK
+            The type of calendar. Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT or Modules.Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
     examples:
       - example: |
@@ -167,11 +167,11 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The matching Calendar object.
-        type: Tizen.Calendar.CalendarInstance       
+        type: Modules.Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
         summary:  |
-            The type of calendar. Tizen.Calendar.CALENDAR_TYPE_EVENT or Tizen.Calendar.CALENDAR_TYPE_TASK
+            The type of calendar. Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT or Modules.Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
       - name: id
         summary:  The calendar identifier.
@@ -190,18 +190,18 @@ methods:
             }
 
   - name: createCalendarTask
-    summary: Creates an instance of <Tizen.Calendar.CalendarTask>
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarTask>
     returns:
-        type: Tizen.Calendar.CalendarTask       
+        type: Modules.Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
         type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
         optional: true
   
   - name: createCalendarEvent
-    summary: Creates an instance of <Tizen.Calendar.CalendarEvent>
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarEvent>
     returns:
-        type: Tizen.Calendar.CalendarEvent       
+        type: Modules.Tizen.Calendar.CalendarEvent       
     parameters:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
@@ -222,25 +222,25 @@ methods:
             calendar.add(ev);
   
   - name: createCalendarAttendee
-    summary: Creates an instance of <Tizen.Calendar.CalendarAttendee>
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAttendee>
     returns:
-        type: Tizen.Calendar.CalendarAttendee
+        type: Modules.Tizen.Calendar.CalendarAttendee
     parameters:
       - name: attendeeParameters
         type: Dictionary<CalendarAttendeeInit>
                 
   - name: createCalendarRecurrenceRule
-    summary: Creates an instance of <Tizen.Calendar.CalendarRecurrenceRule>
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarRecurrenceRule>
     returns:
-        type: Tizen.Calendar.CalendarRecurrenceRule
+        type: Modules.Tizen.Calendar.CalendarRecurrenceRule
     parameters:
       - name: recurrenceRuleParameters
         type: Dictionary<CalendarRecurrenceRuleInit>
                 
   - name: createCalendarAlarm
-    summary: Creates an instance of <Tizen.Calendar.CalendarAlarm>
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAlarm>
     returns:
-        type: Tizen.Calendar.CalendarAlarm
+        type: Modules.Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
         type: [Dictionary<CalendarAlarmInitWithDate>, Dictionary<CalendarAlarmInitWithDuration>]
@@ -519,7 +519,7 @@ properties:
 
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place.
-    type: Tizen.SimpleCoordinates
+    type: Modules.Tizen.SimpleCoordinates
 
   - name: organizer
     summary: An attribute to store the name of the person who organized this event.
@@ -553,13 +553,13 @@ properties:
     
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
-    type: Array<Tizen.Calendar.CalendarAlarm>
+    type: Array<Modules.Tizen.Calendar.CalendarAlarm>
     examples:
       - example: |
             ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
             // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Tizen.createCalendarAlarm({before: 3600000,
-                                                   method: Tizen.Calendar.ALARM_METHOD_SOUND});
+            var alarm = Modules.Tizen.createCalendarAlarm({before: 3600000,
+                                                   method: Modules.Tizen.Calendar.ALARM_METHOD_SOUND});
             ev.alarms = [alarm];
 
   - name: categories
@@ -574,7 +574,7 @@ properties:
     
   - name: attendees
     summary: An attribute array that lists the people attending an event.
-    type: Array<Tizen.Calendar.CalendarAttendee>
+    type: Array<Modules.Tizen.Calendar.CalendarAttendee>
 
 ---
 name: CalendarTaskInit
@@ -730,7 +730,7 @@ properties:
     summary: |
         An attribute to store the participant's reference in the Contact API.
         If the contact is not resolved, this attribute will be set to null. 
-    type: Tizen.Contacts.ContactsRef
+    type: Modules.Tizen.Contacts.ContactsRef
 ---
 name: CalendarRecurrenceRuleInit
 summary: |
@@ -775,7 +775,7 @@ properties:
     type: Array<String>
     summary: |
         An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY, Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY, and Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY.
+        This property value is valid only for recurrence rules with a frequency type of Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY, Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY, and Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY.
         This property corresponds to BYDAY in RFC 5545.
                 
   - name: setPositions
@@ -842,7 +842,7 @@ properties:
 name: GetCalendarsResponse
 summary: |
     Simple object returned in the callback from
-    [getCalendars](Tizen.Calendar.getCalendars) method.
+    [getCalendars](Modules.Tizen.Calendar.getCalendars) method.
 extends: ErrorResponse
 properties:
   - name: success
@@ -866,4 +866,4 @@ properties:
   - name: items
     summary:  The array of Calendar objects.
     description: Will be undefined if `success` is `false`.
-    type: Array<Tizen.Calendar.CalendarItem>
+    type: Array<Modules.Tizen.Calendar.CalendarItem>

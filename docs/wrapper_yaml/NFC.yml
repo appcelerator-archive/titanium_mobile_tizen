@@ -1,4 +1,4 @@
-name: Tizen.NFC
+name: Modules.Tizen.NFC
 summary: |
   This API provides interfaces and methods for access to NFC devices.
 description: |
@@ -176,7 +176,7 @@ methods:
         
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
-        type: Tizen.NFC.NFCAdapter
+        type: Modules.Tizen.NFC.NFCAdapter
     examples:
       - example: |
             var tizen = require("tizen");
@@ -192,41 +192,41 @@ methods:
             }
 
   - name: createNDEFMessage
-    summary: Creates a <Tizen.NFC.NDEFMessage> object.
+    summary: Creates a <Modules.Tizen.NFC.NDEFMessage> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.NFC.NDEFMessage>.
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFMessage>.
         type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
         optional: true
     returns:
-        type: Tizen.NFC.NDEFMessage
+        type: Modules.Tizen.NFC.NDEFMessage
 
   - name: createNDEFRecord
-    summary: Creates a <Tizen.NFC.NDEFRecord> object.
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecord> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.NFC.NDEFRecord>.
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecord>.
         type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
     returns:
-        type: Tizen.NFC.NDEFRecord
+        type: Modules.Tizen.NFC.NDEFRecord
 
   - name: createNDEFRecordText
-    summary: Creates a <Tizen.NFC.NDEFRecordText> object.
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordText> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.NFC.NDEFRecordText> object.
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordText> object.
         type: createNDEFRecordTextParameters
     returns:
-        type: Tizen.NFC.NDEFRecordText
+        type: Modules.Tizen.NFC.NDEFRecordText
 
   - name: createNDEFRecordURI
-    summary: Creates a <Tizen.NFC.NDEFRecordURI> object.
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordURI> object.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.NFC.NDEFRecordURI>.
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordURI>.
         type: createNDEFRecordURIParameters
     returns:
-        type: Tizen.NFC.NDEFRecordURI
+        type: Modules.Tizen.NFC.NDEFRecordURI
     examples:
       - example: |
             // create a new NDEFRecord
@@ -235,21 +235,21 @@ methods:
             var payload = newRecord.payload;
 
   - name: createNDEFRecordMedia
-    summary: Creates a <Tizen.NFC.NDEFRecordMedia>.
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordMedia>.
     parameters:
       - name: parameters
-        summary: Initial parameters for <Tizen.NFC.NDEFRecordMedia>.
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordMedia>.
         type: createNDEFRecordMediaParameters
     returns:
-        type: Tizen.NFC.NDEFRecordMedia
+        type: Modules.Tizen.NFC.NDEFRecordMedia
 
 ---
 name: createNDEFMessageParametersNDEFRecord
 summary: Parameters for the createNDEFMessage.
 properties:
   - name: ndefRecords
-    summary: The array of NDEFRecord objects in the <Tizen.NFC.NDEFMessage>.
-    type: Array<Tizen.NFC.NDEFRecord>
+    summary: The array of NDEFRecord objects in the <Modules.Tizen.NFC.NDEFMessage>.
+    type: Array<Modules.Tizen.NFC.NDEFRecord>
 
 ---
 name: createNDEFMessageParametersrawData
@@ -298,7 +298,7 @@ properties:
     type: String
   - name: encoding
     summary:  |
-        The encoding type. Possible values are: <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
+        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
     type: String
     optional: true
 
