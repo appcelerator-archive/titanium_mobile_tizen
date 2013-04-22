@@ -23,10 +23,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/NFC/NDE
 				}
 			},
 
-			createNFCAdapter: function(args) {
-				return new NFCAdapter(args);
-			},
-
 			createNDEFMessage: function(args) {
 				return new NDEFMessage(args);
 			},

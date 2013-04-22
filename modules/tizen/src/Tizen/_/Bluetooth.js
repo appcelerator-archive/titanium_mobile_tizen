@@ -24,10 +24,6 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 			}
 		},
 
-		createBluetoothAdapter: function(object) {
-			return new BluetoothAdapter(object);
-		},
-
 		constants: {
 			BLUETOOTH_SECURITY_LEVEL_LOW: 'LOW',
 			BLUETOOTH_SECURITY_LEVEL_MEDIUM: 'MEDIUM',
