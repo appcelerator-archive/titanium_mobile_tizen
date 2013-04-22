@@ -46,7 +46,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attr
 						} else if(tizenFilters[i].toString() === '[object CompositeFilter]') {
 							filters.push(new filter(tizenFilters[i]));
 						} else if(tizenFilters[i].toString() === '[object AttributeRangeFilter]') {
-							filters.push(AttributeRangeFilter(tizenFilters[i]));
+							filters.push(new AttributeRangeFilter(tizenFilters[i]));
 						}
 					}
 
