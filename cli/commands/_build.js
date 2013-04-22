@@ -344,9 +344,10 @@ function build(logger, config, cli, finished) {
 							next(null, 'ok');
 						});
 					}, function (next) {
-						appc.zip.zipDirContent(
-							this.buildDir, 
-							path.join(this.buildDir, 'tizenapp.wgt'), 
+						appc.zip.zip(
+							null,
+							path.join(this.buildDir, 'tizenapp.wgt'),
+							this.buildDir,
 							function () {
 								next(null, 'ok');
 							});
