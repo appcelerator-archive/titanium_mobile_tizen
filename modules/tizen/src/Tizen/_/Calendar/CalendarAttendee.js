@@ -1,6 +1,6 @@
 // Wraps Tizen interface "CalendarAttendee" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Contact/ContactRef'], function(declare, Evented, ContactRef) {
 
 	var calendarAttendee = declare(Evented, {
 
@@ -13,7 +13,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				if (args.hasOwnProperty('uri')) {
 					// In Tizen module, the name of the RSVP property does not match its name in Tizen Device API
 					// (different case), so we have to map it by hand. In order to not change the argument, we clone it first.
-
+					
 					var i,
 						attendeeInitDict = {};
 					for (i in args.attendeeInitDict) {
@@ -104,10 +104,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			},
 			contactRef: {
 				get: function() {
-					return this._obj.contactRef;
+					return new ContactRef(this._obj.contactRef);
 				},
 				set: function(value) {
-					this._obj.contactRef = value;
+					this._obj.contactRef = value._obj;
 				}
 			}
 		}
