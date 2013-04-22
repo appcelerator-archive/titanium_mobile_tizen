@@ -17,54 +17,16 @@ methods:
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var listener = {
-                onDataStream: function(downloadRequest, receivedSize, totalSize) {
-                    console.log('Received with id: ' + downloadRequest.id + ', ' + receivedSize + '/' + totalSize);
-                },
-                onPause: function(downloadRequest) {
-                    console.log('Paused with id: ' + downloadRequest.id);
-                },
-                onCancel: function(downloadRequest) {
-                    console.log('Canceled with id: ' + downloadRequest.id);
-                },
-                onLoad: function(downloadRequest, fullPath) {
-                    console.log('Completed with id: ' + downloadRequest.id + ', full path: ' + fullPath);
-                },
-                onError: function(downloadRequest, error) {
-                    console.log('Failed with id: ' + downloadRequest.id + ', error name: ' + error.name);
-                }
-            };
-            // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = tizen.Download.createDownloadRequest({
-                url: "http://download.tizen.org/tools/README.txt",
-                destination: "documents"
-            });
-            downloadId = downloadRequest.send(listener);
 
   - name: abort
     summary: Cancels an ongoing download operation that is specified by the downloadId parameter.
-    examples:
-      - example: |
-            // Cancels the ongoing download operation with the specified id.
-            downloadRequest.abort();
  
   - name: pause
     summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
         The paused download operation can be resumed later by the resume() method.
-    examples:
-      - example: |
-            // Pauses the ongoing download operation with the specified id.
-            downloadRequest.pause();
 
   - name: resume 
     summary: Resumes a paused download operation that is specified by the downloadId parameter.
-    examples:
-      - example: |
-            // Resumes the paused download operation with the specified id.
-            downloadRequest.resume();
  
   - name: setListener
     summary: Sets the download callback to the download operation of given id.
@@ -73,34 +35,6 @@ methods:
       - name: downloadCallback
         summary: The method to invoke when the download state changes or an error occurs.
         type: DownloadCallback
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var listener = {
-                onDataStream: function(downloadRequest, receivedSize, totalSize) {
-                    console.log('Received with id: ' + downloadRequest.id + ', ' + receivedSize + '/' + totalSize);
-                },
-                onPause: function(downloadRequest) {
-                    console.log('Paused with id: ' + downloadRequest.id);
-                },
-                onCancel: function(downloadRequest) {
-                    console.log('Canceled with id: ' + downloadRequest.id);
-                },
-                onLoad: function(downloadRequest, fullPath) {
-                    console.log('Completed with id: ' + downloadRequest.id + ', full path: ' + fullPath);
-                },
-                onError: function(downloadRequest, error) {
-                    console.log('Failed with id: ' + downloadRequest.id + ', error name: ' + error.name);
-                }
-            };
-            // Starts downloading of the HTML file from the Web with the corresponding callbacks.
-            var downloadRequest = tizen.Download.createDownloadRequest({
-                url: "http://download.tizen.org/tools/README.txt",
-                destination: "documents"
-            });
-            downloadId = downloadRequest.send();
-            // Add the listener.
-            downloadRequest.setListener(listener);
 
 properties:
   - name: id

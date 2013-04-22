@@ -25,40 +25,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<SendMessageResponse>
         optional: true
-    examples: 
-      - example: |
-            var tizen = require("tizen");
-        
-            // Define the success callback
-            function messageSent(response) {
-                if (response.success) {
-                    var i = 0,
-                        recipients = response.recipients,
-                        recipientsCount = recipients.length;
-                    for (; i < recipientsCount; i++) {
-                        console.log("The SMS has been sent to " + recipients[i]);
-                    }
-                } else {
-                    console.error('The SMS could not be sent ' + response.error);
-                }
-            }
-        
-            // Define the success callback.
-            function serviceListCB(response) {
-                if (response.success) {
-                    var services = response.services;
-                    if (services.length > 0) {
-                        // SMS sending example
-                        var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
-                                                                 messageInitDict: {plainBody: 'I will arrive in 10 minutes.', to: ["+34666666666", "+34888888888"]}});
-                        // Send request
-                        services[0].sendMessage(msg, messageSent);
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: loadMessageBody
     summary: Attempts to load the body for the specified message. 
@@ -75,40 +41,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<LoadMessageBodyResponse> 
 
-    examples: 
-      - example: |
-            var tizen = require('tizen');
-            
-            var service; // Assume messaging service is initialized
-            // Define body loaded callback.
-            function onBodyLoaded(response) {
-                if (response.success) {
-                    var message = response.message;
-                    console.log('Body for message: ' + message.subject + 'from: ' + message.from + ' loaded.');
-                } else {
-                    console.error('An error occured while loading message body: ' + response.error);
-                }
-            }
-            
-            function messageQueryCallback(response) {
-                if (response.success) {
-                    var messages = response.messages,
-                        messagesCount = messages.length,
-                        i = 0,
-                        message;
-                    for (; i < messagesCount; i++) {
-                        var message = messages[i];
-                        if (!message.body.loaded) {
-                            service.loadMessageBody(message, onBodyLoaded);
-                        }
-                    }
-                } else {
-                    console.error('An error occured while finding messages: ' + response.error);
-                }
-            }
-            service.messageStorage.findMessages(tizen.createAttributeFilter({attributeName: 'type',
-                                                                             matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                                             matchValue: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL}), messageQueryCallback);
   - name: loadMessageAttachment
     summary: Attempts to load the specified message attachment. 
     description: |
@@ -123,30 +55,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<LoadMessageAttachementResponse> 
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            var service; // Assume messaging service is initialized
-            // Define success body loaded callback
-            function successCallback(attachment) {
-                console.log("attachment" + attachment.id + "is loaded to:" + attachment.filePath);
-            }
-            // Define error callback
-            function errorCallback(error) {
-                console.log("Cannot load message attachment" + error.message);
-            }
-            function messagesFoundCB(messages) {
-                for (var i = 0; i < messages.length; i++) {
-                    var message = messages[i];
-                    if (!message.attachments[0].loaded) {
-                        service.loadMessageAttachment(message.attachments[0], successCallback, errorCallback);
-                    }
-                }
-            }
-            service.messageStorage.findMessages(tizen.createAttributeFilter({attributeName: 'hasAttachment',
-                                                                             matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                                             matchValue: true}), messagesFoundCB);
 
   - name: sync
     summary: Synchronizes the service content with an external mail server. 
@@ -167,19 +75,6 @@ methods:
         summary: The maximum amount of messages retrieved within each folder. 
         type: Number
         optional: true
-    examples:
-      - example: |
-            // Define the success callback.
-            function serviceSynced() {
-                console.log("New messages are fetched!");
-            }
-            // Define the success callback.
-            function servicesListSuccessCB(services) {
-                services[0].sync(serviceSynced, null, 30);
-                // Subscribe to MessageStorage notification
-            }
-            var tizen = require("tizen");
-            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, servicesListSuccessCB);
 
   - name: syncFolder
     summary: Synchronizes the folder content with an external mail server. 
@@ -210,32 +105,6 @@ methods:
         summary: The maximum amount of messages retrieved within a given folder. 
         type: Number
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var emailService; // Assume email service is initialized
-            // Define the error callback.
-            function errorCallback(err) {
-                console.log(err.name + " error: " + err.message);
-            }
-            function serviceCallback(services) {
-                 emailService = services[0];
-            } 
-            // Define the success callback.
-            function folderSynced() {
-                console.log("New messages are fetched!");
-            }
-            function folderQueryCallback(folders) {
-                console.log(folders.length + " folders(s) found!");
-                for (var i = 0; i < folders.length; i++) {
-                    emailService.syncFolder(folders[i], folderSynced, null, 30);
-                }
-            }
-            tizen.messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceCallback, errorCallback);
-            var filter = tizen.createAttributeFilter({attributeName: 'serviceId',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                      matchValue: emailService.id});
-            emailService.messageStorage.findFolders(filter, folderQueryCallback);
 
   - name: stopSync
     summary: Stops sync() and syncFoler() operation. 

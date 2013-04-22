@@ -38,73 +38,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<GetCalendarsResponse>
-    examples:
-      - example: |
-            Example 1:
-            
-                var calendar,
-                    tizen = require("tizen");
-                
-                function eventFoundCallback(events) {
-                
-                    // The event has been successfully found
-                    // Changes the summary
-                    events[0].summary = 'HTML6 Webinar'; 
-                    calendar.update(events[0]);
-                    Titanium.API.info('First event was updated!');
-                }
-                
-                // Defines the error callback for all the asynchronous calls
-                
-                function errorCallback(response) {
-                
-                    Titanium.API.info( 'The following error occurred: ' +  response);
-                }
-                
-                // Defines the success callback for retrieving the list of calendars
-                
-                function calendarListCallback(calendars) {
-                
-                    if(calendars.length > 0) {
-                        calendar = calendars[0];
-                        Titanium.API.info('The calendar id is ' + calendar.id + ' and name ' + calendar.name);
-                        
-                        var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction',
-                                                         summary:'HTML5 Webinar', 
-                                                         startDate: new Date(2011, 3, 30, 10, 0), 
-                                                         duration: 3600000,
-                                                         location:'Huesca'});
-                        calendar.add(ev);
-                        
-                        // The event has been successfully added
-                        // Checks if the added event can be retrieved from the calendar
-                        // If the calendar was empty, only the item added through add() should be returned
-                        
-                        var filter = tizen.createAttributeFilter({attributeName: 'summary',
-                                                                     matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                                     matchValue: 'HTML5'});
-                        calendar.find(function(response){
-                                if(response.success) {
-                                    eventFoundCallback(response.items)
-                                } else {
-                                    errorCallback(response.error)
-                                }
-                            }, 
-                            filter
-                        );
-                    }
-                }
-                
-                // Gets a list of available calendars
-                
-                tizen.Calendar.getCalendars(tizen.Calendar.CALENDAR_TYPE_EVENT, 
-                    function(response){
-                        if(response.success) {
-                            calendarListCallback(response.calendars)
-                        } else {
-                            errorCallback(response.error)
-                        }
-                    });
 
   - name: getDefaultCalendar
     summary: Gets the default calendar, which is used for new items.
@@ -118,48 +51,6 @@ methods:
         summary:  |
             The type of calendar. Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT or Modules.Tizen.Calendar.CALENDAR_TYPE_TASK
         type: String
-    examples:
-      - example: |
-            var myCalendar,
-                tizen = require("tizen");
-        
-            // Defines the error callback for all the asynchronous calls
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            function eventFoundCallback(events) {
-                // The event has been successfully found
-                // Changes the summary
-                events[0].summary = 'HTML6 Webinar'; 
-                myCalendar.update(events[0]);
-                Titanium.API.info('First event was updated!');
-            }
-            
-            // Gets a list of available calendars
-            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            
-            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
-                                            summary:'HTML5 Webinar ', 
-                                            startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: 3600000,
-                                            location:'Huesca'});
-                          
-            myCalendar.add(ev);
-            
-            // The event has been added
-            // Checks if the added event can be retrieved from the calendar
-            // If the calendar was empty, only the item added through add() should be returned
-            var filter = tizen.createAttributeFilter({attributeName: 'summary',
-                                                         matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                         matchValue: 'HTML5'});
-            myCalendar.find(function(){
-                if(response.success) {
-                    eventFoundCallback(response.items);
-                } else {
-                    errorCallback(response.error);
-                }
-            }, filter);
           
   - name: getCalendar
     summary: Gets the calendar with the specified identifier and type.
@@ -176,18 +67,6 @@ methods:
       - name: id
         summary:  The calendar identifier.
         type: String
-    examples:
-      - example: |    
-            var calendarId; // calendarId supposed to be initialized
-            
-            var tizen = require("tizen");
-            
-            try {
-                var calendar = tizen.Calendar.getCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT, calendarId);
-                Titanium.API.info("Successfully retrieved event calendar with id: " + calendarId);
-            } catch(err) {
-                Titanium.API.info("Error: " + err.name);
-            }
 
   - name: createCalendarTask
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarTask>
@@ -206,21 +85,7 @@ methods:
       - name: eventParameters
         type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
         optional: true
-
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            // Gets the default calendar
-            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-        
-            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
-                                            summary:'HTML5 Webinar ', 
-                                            startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: 3600000,
-                                            location:'Huesca'});                   
-            calendar.add(ev);
-  
+ 
   - name: createCalendarAttendee
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAttendee>
     returns:
@@ -554,13 +419,6 @@ properties:
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
     type: Array<Modules.Tizen.Calendar.CalendarAlarm>
-    examples:
-      - example: |
-            ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
-            // Gives a sound notification 30 minutes before the item's start time
-            var alarm = Modules.Tizen.createCalendarAlarm({before: 3600000,
-                                                   method: Modules.Tizen.Calendar.ALARM_METHOD_SOUND});
-            ev.alarms = [alarm];
 
   - name: categories
     summary: |

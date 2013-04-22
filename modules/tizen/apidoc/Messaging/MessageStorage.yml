@@ -23,27 +23,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse> 
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            // Define success callback
-            function successCallback() {
-                console.log("Draft message added");
-            }
-            // Define error callback
-            function errorCallback(error) {
-                console.log("Cannot add draft message " + error.message);
-            }
-            // Define service query success callback.
-            function serviceListCB(services) {
-                if (services.length > 0) {
-                    var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
-                                                             messageInitDict: {plainBody: 'Tizen draft SMS message.'}});
-                    services[0].messageStorage.addDraftMessage(msg, successCallback, errorCallback);
-                }
-            }
-            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB);
 
   - name: findMessages
     summary: Queries messages from MessageStorage. 
@@ -72,25 +51,6 @@ methods:
         summary:  Define offset of the query.
         type: Number
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
-            function messageArrayCB(messages) {
-                console.log(messages.length + " message(s) fetched!");
-                for (var i = 0; i < messages.length; i++) {
-                  console.log(i + ". message from " + messages[i].from);
-                }
-            }
-            // Define error callback
-            function errorCallback(error) {
-                console.log("Cannot query messages" + error.message);
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                      matchValue: '2593'});
-            messageStorage.findMessages(filter, messageArrayCB, errorCallback);
 
   - name: removeMessages
     summary: Deletes messages from MessageStorage. 
@@ -110,28 +70,6 @@ methods:
         type: Callback<ErrorResponse> 
         optional: true
 
-    examples:
-      - example: |
-            // Define success callback
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
-            var tizen = require("tizen");
-            
-            function successCallback() {
-                console.log("Messages were deleted");
-            }
-            // Define error callback
-            function errorCallback(error) {
-                console.log("Cannot delete messages " + error.message);
-            }
-            function messageArrayCB(messages) {
-                messageStorage.removeMessages(messages, successCallback, errorCallback);
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                      matchValue: '2593'});
-            messageStorage.findMessages(filter, messageArrayCB);
-
   - name: updateMessages
     summary: Updates messages in MessageStorage. 
     description: |
@@ -147,28 +85,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse> 
         optional: true
-    examples:
-      - example: |
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage;
-            var tizen = require("tizen");
-            
-            // Define success callback
-            function successCallback() {
-                console.log("Messages were updated");
-            }
-            // Define error callback
-            function errorCallback(error) {
-                console.log("Cannot update messages " + error.message);
-            }
-            function messageArrayCB(messages) {
-                messages[0].isRead = true;
-                messageStorage.updateMessages(messages, successCallback, errorCallback);
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'isRead',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                      matchValue: 'false'});
-            messageStorage.findMessages(filter, messageArrayCB);
 
   - name: findConversations
     summary: Queries conversations from MessageStorage. 
@@ -197,26 +113,6 @@ methods:
         summary: Define offset of the query.
         type: Number
         optional: true
-    examples:
-      - example: |
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage;
-            var tizen = require("tizen");
-            
-            function conversationsArrayCB(conversations) {
-                console.log(conversations.length + " conversation(s) found!");
-                for (var i = 0; i < conversations.length; i++) {
-                    console.log(i + " . conversation preview " + conversations[i].preview);
-                }
-            }
-            // Define error callback.
-            function errorCallback(error) {
-                console.log("Cannot query conversations" + error.message);
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                      matchValue: '2593'});
-            messageStorage.findConversations(filter, conversationsArrayCB, errorCallback)
 
   - name: removeConversations
     summary: Deletes conversations from MessageStorage. 
@@ -235,32 +131,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
         optional: true
-    examples:
-      - example: |
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage;
-            var tizen = require("tizen");
-            
-            // Define success callback.
-            function successCallback() {
-                console.log("Conversations deleted");
-            }
-            // Define error callback.
-            function errorCallback(error) {
-                console.log("Cannot delete conversations " + error.message);
-            }
-            function conversationsArrayCB(conversations) {
-                messageStorage.removeConversations(conversations, successCallback, errorCallback);
-                console.log("Deleted " + conversations.length + " conversation(s)");
-            }
-            // Define error callback.
-            function queryErrorCB(error) {
-                console.log("Cannot query conversations" + error.message);
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'from',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                      matchValue: '2593'});
-            messageStorage.findConversations(filter, conversationsArrayCB, queryErrorCB);
 
   - name: findFolders
     summary: Queries folders from MessageStorage. 
@@ -274,22 +144,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<FindFoldersResponse>
-    examples:
-      - example: |
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage;
-            var tizen = require("tizen");
-            
-            function folderArrayCB(folders) {
-              console.log(folders.length + " folders(s) found!");
-              for (var i = 0; i < folders.length; i++) {
-                console.log(i + ", folder: " + folders[i].name);
-              }
-            }
-            var filter = tizen.createAttributeFilter({attributeName: 'serviceId',
-                                                      matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                      matchValue: service.id});
-            messageStorage.findFolders(filter, folderArrayCB);
 
   - name: addMessagesChangeListener
     summary: Subscribes to get notification when MessageStorage changes. 
@@ -311,23 +165,6 @@ methods:
         summary: Criteria to be used when filtering.
         type: Modules.Tizen.AbstractFilter
         optional: true
-    examples:
-      - example: |
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage;
-            
-            var messageChangeCallback = {
-                messagesupdated: function(messages) {
-                    console.log(messages.length + " message(s) updated");
-                },
-                messagesadded: function(messages) {
-                    console.log(messages.length + " message(s) added");
-                },
-                messagesremoved: function(messages) {
-                    console.log(messages.length + " message(s) removed");
-                }
-            };
-            messageStorage.addMessagesChangeListener(messageChangeCallback);
 
   - name: addConversationsChangeListener
     summary: Subscribes to get notification when MessageConversation changes. 
@@ -370,26 +207,6 @@ methods:
         summary: Criteria to be used when filtering.
         type: Modules.Tizen.AbstractFilter
         optional: true
-    examples:
-      - example: |
-            var watchId;
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
-            var folderChangeCB = {
-                foldersupdated: function(folders) {
-                    console.log(folders.length + " folders(s) updated. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                },
-                foldersadded: function(folders) {
-                    console.log(folders.length + " folders(s) added. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                },
-                foldersremoved: function(folders) {
-                    console.log(folders.length + " folders(s) removed. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                }
-            };
-            watchId = messageStorage.addFoldersChangeListener(folderChangeCB);
 
   - name: removeChangeListener
     summary: This method allows a message notification subscription to be cancelled. 
@@ -404,26 +221,6 @@ methods:
       - name: watchId
         summary:  Identifier of the subscription returned by addMessagesChangeListener, addConversationsChangeListener or addFoldersChangeListener methods. 
         type: Number
-    examples:
-      - example: |
-            var watchId;
-            var service; // Assume messaging service is initialized
-            var messageStorage = service.messageStorage; 
-            var folderChangeCB = {
-                foldersupdated: function(folders) {
-                    console.log(folders.length + " folders(s) updated. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                },
-                foldersadded: function(folders) {
-                    console.log(folders.length + " folders(s) added. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                },
-                foldersremoved: function(folders) {
-                    console.log(folders.length + " folders(s) removed. Cancel watching.");
-                    messageStorage.removeChangeListener(watchId);
-                }
-            };
-            watchId = messageStorage.addFoldersChangeListener(folderChangeCB);
 
 # Pseudo-type    
 ---

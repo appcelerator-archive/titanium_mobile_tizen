@@ -26,32 +26,6 @@ methods:
       - name: notification
         summary: A notification to post.
         type: Modules.Tizen.Notification
-    examples:
-      - example: |
-          try {
-                var tizen = require("tizen");
-                var appControl = tizen.Application.createApplicationControl({
-                                     operation: "http://tizen.org/appcontrol/operation/create_content",
-                                     uri: null,
-                                     mime: "image/jpg",
-                                     category: null
-                                 });
-                var notificationDict = {
-                            content : "This is a simple notificaiton.",
-                            iconPath : "images/image1.jpg",
-                            soundPath : "music/Over the horizon.mp3",
-                            vibration : true,
-                            appControl : appControl
-                        };
-                var notification = tizen.Notification.createStatusNotification({
-                                        statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
-                                        title: "Simple notification",
-                                        notificationInitDict: notificationDict
-                                   });
-                tizen.Notification.postNotification(notification);
-           } catch (err) {
-                Titanium.API.info(err.name + ": " + err.message);
-           }
 
   - name: update
     summary: Updates a previously posted notification.
@@ -61,16 +35,6 @@ methods:
       - name: notification
         summary: A notification to update.
         type: Modules.Tizen.Notification
-    examples:
-      - example: |
-          var tizen = require("tizen");
-          try {
-                // use a varible for the previoulsy posted notification.
-                notification.content = "My notification";
-                tizen.Notification.update(notification);
-           } catch (err) {
-                Titanium.API.info (err.name + ": " + err.message);
-           }
         
   - name: remove
     summary: Removes a previously posted notification.
@@ -80,28 +44,11 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
-    examples:
-      - example: |
-          var tizen = require("tizen");
-          try {
-                // use a varible for the previoulsy posted notification.
-                tizen.Notification.remove(notification.id);;
-           } catch (err) {
-                Titanium.API.info (err.name + ": " + err.message);
-           }
         
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
-    examples:
-      - example: |
-          var tizen = require("tizen");
-          try {
-              tizen.Notification.removeAll();
-          } catch (err) {
-              Titanium.API.info (err.name + ": " + err.message);
-          }
     
   - name: getNotification
     summary: Gets a previously posted notification by the current application.
@@ -113,17 +60,6 @@ methods:
       - name: id
         summary: A previously posted notification ID.
         type: String
-    examples:
-      - example: |
-          var tizen = require("tizen");
-          try {
-              // use a varible for the previoulsy posted notification.
-              // keeps notification id to use later.
-              var myId = notification.id;
-              var myNotification = tizen.Notification.getNotification(myId);
-          } catch (err) {
-              Titanium.API.info (err.name + ": " + err.message);
-          }
     
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
@@ -131,28 +67,6 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
     returns:
         type: Array<Modules.Tizen.Notification.Notification>
-    examples:
-      - example: |
-          var tizen = require("tizen");
-          try {
-              var notifications = tizen.Notification.getAll();
-              var index = 0;
-              for ( index = 0; notifications.length > index; index++ )
-              {
-                  Titanium.API.info(notifications[index].id);
-                  Titanium.API.info(notifications[index].title);
-                  Titanium.API.info(notifications[index].statusType);
-                  Titanium.API.info(notifications[index].type);
-                  Titanium.API.info(notifications[index].content);
-                  Titanium.API.info(notifications[index].postedTime);
-                  Titanium.API.info(notifications[index].iconPath);
-                  Titanium.API.info(notifications[index].soundPath);
-                  Titanium.API.info(notifications[index].vibration);
-                  Titanium.API.info(notifications[index].appControl);
-              } 
-          } catch (err) {
-              Titanium.API.info (err.name + ": " + err.message);
-          }
 
   - name: createStatusNotification
     summary: Creates and returns an instance of <Modules.Tizen.Notification.StatusNotification>.

@@ -26,16 +26,6 @@ methods:
       - name: id
         summary:  The Calendar item identifier.
         type: CalendarEventId
-    examples:
-      - example: |    
-            var myCalendar; // Calendar supposed to be initialized
-            var itemId; // Calendar item identifier
-            try {
-                var item = myCalendar.get(itemId);
-                Titanium.API.info("Successfully retrieved item with id: " + itemId);
-            } catch(err) {
-                Titanium.API.info("Error: " + err.name);
-            }    
         
   - name: add
     summary: Adds an item to the calendar synchronously.
@@ -51,17 +41,6 @@ methods:
       - name: item
         summary:  The calendar item to be added.
         type: Modules.Tizen.Calendar.CalendarItem
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
-                                            summary:'HTML5 Webinar ', 
-                                            startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: 3600000,
-                                            location:'Huesca'});
-            calendar.add(ev);
-            Titanium.API.info('Event added with uid ' + ev.id.uid);        
           
   - name: addBatch
     summary: Adds an array of items to the calendar asynchronously.
@@ -82,33 +61,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<AddBatchResponse>
         optional: true
-    examples:
-      - example: |    
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            function addEventsSuccess(events) {
-                Titanium.API.info("Successfully added " + events.length + " events!");
-            }
-            var tizen = require("tizen");
-            
-            // Gets the default calendar
-            var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            var ev = tizen.Calendar.createCalendarEvent({description:'HTML5 Introduction', 
-                                            summary:'HTML5 Webinar ', 
-                                            startDate: new Date(2011, 3, 30, 10, 0), 
-                                            duration: 3600000,
-                                            location:'Huesca'});
-            calendar.addBatch([ev], 
-                function(response){
-                    if(response.success) {
-                        addEventsSuccess(response.events);
-                    } else {
-                        errorCallback(response.error)
-                    }
-                });
 
   - name: update
     summary: Updates an existing item in the calendar synchronously with the one specified in the argument.
@@ -127,35 +79,6 @@ methods:
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
-    examples:
-      - example: |    
-            var myCalendar,
-                tizen = require("tizen");
-            
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            // Defines the event success callback.
-            function eventSearchSuccessCallback(events) {
-                events[0].description = 'New Description';
-                // Updates the first existing event.
-                myCalendar.update(events[0]);
-                Titanium.API.info("The first item description was updated!");
-            }
-            
-            // Gets the default calendar
-            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            
-            // Finds all events in a Calendar
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            });
         
   - name: updateBatch
     summary: Updates an array of existing items in the calendar asynchronously with the specified values in the argument.
@@ -178,47 +101,6 @@ methods:
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
-    examples:
-      - example: |    
-            var myCalendar,
-                tizen = require("tizen");
-                
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            // Defines the success callback
-            function updateEventsSuccess() {
-                Titanium.API.info("Successfully updated !" );
-            }
-            
-            // Defines the event success callback.
-            function eventSearchSuccessCallback(events) {
-                events[0].description = 'New Description 1';
-                events[1].description = 'New Description 2';
-                // Update the first two existing events.
-                myCalendar.updateBatch(events.slice(0,2),
-                    function(response){
-                        if(response.success){
-                            updateEventsSuccess();
-                        } else {
-                            errorCallback(response.error);
-                        }
-                    });
-            }
-            
-            // Gets the default calendar
-            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            
-            // Finds all events in Calendar
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            });
 
   - name: remove
     summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
@@ -230,31 +112,6 @@ methods:
       - name: id
         summary:  The identifier (ID attribute) of the item object to delete.
         type: CalendarEventId
-    examples:
-      - example: |    
-            var myCalendar,
-                tizen = require("tizen");
-                
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            // Defines the event success callback.
-            function eventSearchSuccessCallback(events) {
-                // Deletes the first existing event.
-                myCalendar.remove(events[0].id);
-                Titanium.API.info('The first event was removed');
-            }
-            // Gets default calendar
-            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            // Finds all events in Calendar
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            });
 
   - name: removeBatch
     summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
@@ -271,41 +128,7 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
         optional: true
-    examples:
-      - example: |    
-            var myCalendar,
-                tizen = require("tizen");
-                
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            // Defines the removeBatch callback
-            function removeBatchCallback() {
-                Titanium.API.info("Requested events were successfully removed.");
-            }
-            // Defines the event search success callback.
-            function eventSearchSuccessCallback(events) {
-                // Deletes the first two existing events.
-                myCalendar.removeBatch([events[0].id, events[1].id],
-                    function(response){
-                        if(response.success) {
-                            removeBatchCallback();
-                        } else {
-                            errorCallback(response.error);
-                        }
-                    });
-            }
-            // Gets default calendar
-            myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            // Retrieves all events in Calendar
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            });
+
   - name: find
     summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
     description: |
@@ -328,39 +151,6 @@ methods:
         summary:  The sort order in which the items return. 
         type: Modules.Tizen.SortMode
         optional: true
-    examples:
-      - example: |    
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            // Defines the event search success callback.
-            function eventSearchSuccessCallback(events) {
-                Titanium.API.info(events.length + ' results found.');
-            }
-            var tizen = require("tizen");
-            
-            // Gets default calendar
-            calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            
-            // Finds all events the calendar that contain in the summary the string Modules.Tizen.
-            var filter = tizen.createAttributeFilter({attributeName: 'summary',
-                                                               matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                               matchValue: 'Tizen'});
-            // The events returned by the find() query will be sorted by ascending summary
-            var sortingMode = tizen.createSortMode({attributeName: 'summary',
-                                                             order: tizen.SORT_MODE_ORDER_ASC});
-            
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            }, 
-            filter, 
-            sortingMode);
 
 events:
 
@@ -402,11 +192,7 @@ properties:
     summary: An attribute to assign a readable (descriptive) name for a calendar, such as work, personal, etc.
     type: STRING
     permission: read-only
-    examples:
-      - example: |    
-            // Gets the default calendar and show its name
-            calendar = Modules.Tizen.Calendar.getDefaultCalendar(Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT);
-            Titanium.API.info('The calendar name is ' + calendar.name);
+
 # Pseudo-type 
 ---
 name: CalendarEventId 

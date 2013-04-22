@@ -37,19 +37,6 @@ methods:
       - name: errorCallback
         summary: To be invoked if the setting value cannot be set. It is optional
         type: Callback<WebAPIError>
-    examples:
-      - example: |
-            // Define the success callback
-            function successCallback() {
-                Titanium.API.info("Success to setProperty");
-            }
-        
-            // Define the error callback.
-            function errorCallback(error) {
-                Titanium.API.info("Fail to setProperty" + error.message);
-            }
-            var tizen = require("tizen");
-            tizen.SystemSetting.setProperty(tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, "images/image1.jpg", successCallback, errorCallback);
         
   - name: getProperty
     summary: Gets the setting of the device
@@ -71,19 +58,6 @@ methods:
         summary: To be invoked if the setting value cannot be retrieved.
         type: Callback<WebAPIError>        
         optional: true
-    examples:
-      - example: |
-           // Define the success callback
-           function getPropertySuccessCallback(value) {
-             Titanium.API.info("Success to getProperty : " + value);
-           }
-
-           // Define the error callback.
-           function errorCallback(error) {
-             Titanium.API.info("Fail to getProperty" + error.message);
-           }
-           var tizen = require("tizen");
-           tizen.SystemSetting.getProperty(tizen.SystemSetting.SYSTEM_SETTING_TYPE_HOME_SCREEN, getPropertySuccessCallback, errorCallback);
     
 properties:
 

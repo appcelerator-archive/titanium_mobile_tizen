@@ -21,36 +21,6 @@ methods:
       - name: format
         summary:  The format to use for exporting.
         type: String
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' + response);
-            }
-            
-            // Defines the event search success callback.
-            function eventSearchSuccessCallback(events) {
-                // Converts the first event to iCalendar 2.0 format (default)
-                var vevent = events[0].convertToString(tizen.Calendar.CALENDAR_TEXT_FORMAT_ICALENDAR_20);
-                Titanium.API.info('iCalendar 2.0 representation of the event is: ' + vevent);
-            }
-            // Gets the default calendar
-            var myCalendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-            
-            // Finds all events in the first calendar that contain in the summary the string Modules.Tizen.
-            var filter = tizen.createAttributeFilter({attributeName: 'summary',
-                                                               matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                               matchValue: 'Tizen'});
-            myCalendar.find(function(response){
-                if(response.success) {
-                    eventSearchSuccessCallback(response.items)
-                } else {
-                    errorCallback(response.error)
-                }
-            }, 
-            filter);
         
   - name: clone
     summary: Clones the CalendarItem object, detached from any calendar.
@@ -64,19 +34,6 @@ methods:
       - name: item
         summary: The new clone of the CalendarItem object.
         type: Modules.Tizen.Calendar.CalendarItem
-    examples:
-      - example: |    
-            // Gets default calendar.
-            var tizen = require("tizen");
-            var calendar = tizen.Calendar.getDefaultCalendar();
-            var html5seminar = tizen.Calendar.createCalendarEvent({startDate: new Date(2012, 3, 4),
-                                                        duration: 3600000,
-                                                        summary: "HTML5 Seminar"});
-                                     
-            calendar.add(html5seminar);
-            var tizenseminar = html5seminar.clone();
-            tizenseminar.summary = "Tizen Seminar";
-            calendar.add(tizenseminar);    
  
 properties:
 
@@ -103,9 +60,6 @@ properties:
         
         The default value is an empty string.
     type: STRING
-    examples:
-      - example: |    
-            event.description = 'Tizen Codefest';
     
   - name: summary
     summary: |
@@ -113,9 +67,6 @@ properties:
         
         The default value is an empty string.
     type: STRING
-    examples:
-      - example: |    
-            event.summary = 'Launching the Tizen reference implementation';
 
   - name: isAllDay
     summary: |
@@ -124,9 +75,6 @@ properties:
         
         The default value for this attribute is false.
     type: Boolean
-    examples:
-      - example: |    
-            event.isAllDay = true; // All-Day event
 
   - name: startDate 
     summary: |
@@ -135,10 +83,6 @@ properties:
         
         startDate must be specified in the same time zone as endDate / dueDate if provided.
     type: Date
-    examples:
-      - example: |    
-            // 2010-04-30 09:00
-            event.startDate = new Date(2010, 3, 30, 9, 0);
 
   - name: duration
     summary: |
@@ -149,10 +93,6 @@ properties:
         
         Be rounded to second.
     type: Number
-    examples:
-      - example: |    
-            // 1 hour meeting
-            event.duration = 3600000;
 
   - name: location 
     summary: |
@@ -160,25 +100,16 @@ properties:
         
         The default value for this attribute is an empty string.
     type: String
-    examples:
-      - example: |    
-            event.location = 'Huesca';
     
   - name: geolocation
     summary: An attribute to store the global position latitude and longitude of the location where the event is planned to take place. (See RFC 5545 - Section 3.8.1.6).
     type: Modules.Tizen.SimpleCoordinates
-    examples:
-      - example: |    
-            event.geolocation = Modules.Tizen.createSimpleCoordinates(60.175, 24.934);
 
   - name: organizer
     summary: |
         An attribute to store the name of the person who organized this event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is initialized to an empty string.
     type: STRING
-    examples:
-      - example: |    
-            event.organizer = 'Mr. Jones';
 
   - name: visibility
     summary: |
@@ -194,10 +125,6 @@ properties:
         For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
         For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
     type: STRING
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            event.status = tizen.Calendar.CALENDAR_ITEM_STATUS_TENTATIVE;
 
   - name: priority
     summary: |
@@ -209,22 +136,10 @@ properties:
             - 5 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
             - 6-9 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
     type: STRING
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            task.priority = tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH;
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
     type: Array<Modules.Tizen.Calendar.CalendarAlarm>
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            ev.startDate = new Date(2011, 2, 11, 8, 0, 0);
-            // Gives a sound notification 30 minutes before the item's start time
-            var alarm = tizen.Calendar.createCalendarAlarm({before: 3600000,
-                                                   method: tizen.Calendar.Calendar.ALARM_METHOD_SOUND});
-            ev.alarms = [alarm];
 
   - name: categories
     summary: |
@@ -235,20 +150,11 @@ properties:
         Examples of categories are personal, work, vacation, travel, etc.
         By default, this attribute is set to an empty array.
     type: Array<String>
-    examples:
-      - example: |    
-            event.categories = ['Personal'];
 
   - name: attendees
     summary: |
         An attribute array that lists the people attending an event. (See RFC 5545 - Section 3.8.4.3).
         By default, this attribute is set to an empty array.
     type: Array<Modules.Tizen.Calendar.CalendarAttendee>
-    examples:
-      - example: |
-            var tizen = require("tizen");      
-            var attendee = tizen.Calendar.createCalendarAttendee({uri: 'mailto:bob@domain.com',
-                                           attendeeInitDict: {role: tizen.Calendar.ATTENDEE_ROLE_CHAIR, RSVP: true}});
-            event.attendees = [attendee];
 
   

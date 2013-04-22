@@ -23,14 +23,6 @@ methods:
         summary: The data structure describing application control details.
         type: Modules.Tizen.Application.ApplicationControl
         optional: true
-    examples:
-      - example: |
-            // Triggers an alarm on a given date/time
-            var tizen = require("tizen");
-            var alarm = tizen.Alarm.createAlarmAbsolute({date: new Date(2012, 10, 4, 8, 0)});
-            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/view", uri: "http://www.tizen.org"});
-            tizen.Alarm.add(alarm, "org.tizen.browser");
-            Titanium.API.info("Alarm added with id: " + alarm.id);
 
   - name: remove
     summary: Removes an alarm from the storage. 
@@ -41,19 +33,6 @@ methods:
       - name: id
         summary: The ID of the alarm to remove 
         type: String
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var alarms = tizen.Alarm.getAll();
-            // Removes the first alarm
-            if (alarms.length > 0) {
-                try {
-                    tizen.Alarm.remove(alarms[0].id);
-                    Titanium.API.info("Successfully removed the first alarm.");
-                } catch(error) {
-                    Titanium.API.info("Failed to remove the first alarm.");
-                }
-            }
 
   - name: removeAll
     description: |
@@ -71,11 +50,6 @@ methods:
       - name: id
         summary: The ID of the alarm to retrieve.
         type: String
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var alarm = tizen.Alarm.getAlarm(myAlarmID);
-            Titanium.API.info("The alarm will trigger at " + alarm.getNextScheduledDate());
 
   - name: getAll
     summary: Returns all alarms.
@@ -85,11 +59,6 @@ methods:
     returns: 
       - type: Array<Modules.Tizen.Alarm.Alarm>
         summary: All Alarm objects.
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var alarms = tizen.Alarm..getAll();
-            Titanium.API.info(alarms.length + " alarms present in the storage.");
 
   - name: createAlarmRelative
     summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmRelative>.
@@ -99,15 +68,6 @@ methods:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
         type: alarmRelativeParameters
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            // Sets an alarm in 3 hours from now
-            var alarm1 = tizen.Alarm.createAlarmRelative({delay: 3 * tizen.Alarm.PERIOD_HOUR});
-            tizen.Alarm.add(alarm1, "org.tizen.clock");
-            // Sets an alarm in one hour, recurring after every 2 minutes
-            var alarm2 = tizen.Alarm.createAlarmRelative({delay: tizen.Alarm.PERIOD_HOUR, 2 * tizen.Alarm.PERIOD_MINUTE});
-            tizen.Alarm.add(alarm2, "org.tizen.clock");
  
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
@@ -117,19 +77,6 @@ methods:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
         type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var date = new Date(2012, 0, 1, 8, 0);
-            // Sets an alarm on January 1st 2012 08:00
-            var alarm1 = tizen.Alarm.createAlarmAbsolute({date: date});
-            tizen.Alarm.add(alarm1, "org.tizen.clock");
-            // Sets an alarm on January 1st 2012 08:00, repeating every 2 days
-            var alarm2 = tizen.Alarm.createAlarmAbsolute({date: date, period: 2 * tizen.Alarm.PERIOD_DAY});
-            tizen.Alarm.add(alarm2, "org.tizen.clock");
-            // Sets an alarm occurring on every Saturday and Sunday, at 08:00, starting from January 1st 2012
-            var alarm3 = tizen.Alarm.createAlarmAbsolute({date: date, period: [tizen.Calendar.BY_DAY_VALUE_SA, tizen.Calendar.BY_DAY_VALUE_SU]});
-            tizen.Alarm.add(alarm3, "org.tizen.clock");
  
 properties:
   - name: PERIOD_MINUTE

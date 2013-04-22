@@ -120,23 +120,3 @@ properties:
         This array is empty if the message does not have attachments or the message body is not loaded and the attachment info is inaccessible (in this case, the "hasAttachment" attribute has to be checked).
     type: Array<Modules.Tizen.Messaging.MessageAttachment>
 
-examples:
-  - example: |
-        var tizen = require("tizen");
-        
-        // Define the success callback.
-        var messageSentCallback = function(recipients) {
-            console.log("Message sent successfully to " + recipients.length + " recipients.");
-        }
-        // Define the error callback.
-        function errorCallback(err) {
-            console.log(err.name + " error: " + err.message);
-        }
-        function serviceListCB(services) {
-           if (services.length > 0) {
-              var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS,
-                                                                messageInitDict: {plainBody: 'Tizen first SMS message.'}});
-              services[0].sendMessage(msg, messageSentCallback, errorCallback);
-           }
-        }
-        tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS, serviceListCB, errorCallback);

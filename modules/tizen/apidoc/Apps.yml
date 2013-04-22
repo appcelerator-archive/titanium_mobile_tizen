@@ -10,11 +10,6 @@ methods:
     returns: 
       - type: Modules.Tizen.Apps.Application
         summary: Application The data structure that defines current application.
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            var app = tizen.Apps.getCurrentApplication();
-            console.log("Current application's app id is " + app.appInfo.id);
 
   - name: launch
     summary: Launches an application with the given application ID.
@@ -29,17 +24,6 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
         optional: true
-    examples:
-      - example: |
-            function launchCallback(response) {
-                if (response.success) {
-                    console.log('The application has launched successfully');
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            var tizen = require('tizen');
-            tizen.Apps.launch("org.tizen.calculator", launchCallback);
 
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
@@ -68,38 +52,7 @@ methods:
             The method to invoke when the application gets back results from the launched application.
         type: Callback<LaunchAppControlReplyResponse>
         optional: true
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            var appControl = tizen.Application.createApplicationControl({operation: "http://tizen.org/appcontrol/operation/create_content",
-                                                                uri: null,
-                                                                mime: "image/jpeg",
-                                                                category: null});
-            function callback (response) {
-                if (response.success) {
-                    console.log('Launch application control succeed.');
-                } else {
-                    console.error('Launch application control failed. Reason: ' + response.error);
-                }
-            }
-            function replyCallback (response) {
-                if (response.success) {
-                    var data = response.data,
-                        i = 0,
-                        itemsCount = data.length,
-                        j, valuesCount, values;
-                    for (; i < itemsCount; i++) {
-                        console.log('#' + i + ' key:' + data[i].key);
-                        for (j = 0, values = data[i].value, valuesCount = values.length; j++) {
-                            console.log('    value#' + j + ':' + values[j]);
-                        }
-                    }
-                } else {
-                    console.error('The launch application control failed.');
-                }
-            }
-            tizen.Application.launchAppControl(appControl, null, callback, replyCallback);
-
+        
   - name: findAppControl
     summary: Finds application information can be launched with the given application control.  
     description: |
@@ -114,23 +67,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.. 
         type: Callback<FindAppControlResponse>
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            var appControl = tizen.Application.createApplicationControl({
-                operation: 'http://tizen.org/appcontrol/operation/create_content',
-                uri: null,
-                mime: 'image/jpeg',
-                category: null
-            });
-            function onFind (response) {
-                if (response.success) {
-                    console.log('Found ' + response.appInfo.length + ' applications'); 
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            tizen.Application.findAppControl(appControl, onFind); 
  
   - name: getAppsContext
     summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
@@ -141,23 +77,6 @@ methods:
         summary: The method to call when the invocation ends successfully.  
         type: Callback<AppsContextResponse>
 
-    examples:
-      - example: |
-            function onRunningAppsContext(response) {
-                if (response.success) {
-                    var i = 0,
-                        contexts = response.contexts,
-                        contextsCount = contexts.length;
-                    for (; i < contextsCount; i++) {
-                        addToTaskManager(contexts[i]);
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }  
-            }
-            var tizen = require('tizen');
-            tizen.Application.getAppsContext(onRunningAppsContext);
- 
   - name: getAppContext
     summary: |
         Gets the application context for the specified application context ID. 
@@ -181,22 +100,6 @@ methods:
       - name: callback
         summary: The method to call when the invocation ends successfully.
         type: Callback<AppsInfoResponse>
-    examples:
-      - example: |       
-            function onListInstalledApps(response) {
-                if (response.success) {
-                    var applications = response.applications,
-                        i = 0,
-                        applicationsCount = applications.length;
-                    for (; i < applicationsCount; i++) {
-                        addToApplicationGrid(applications[i]);
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            var tizen = require('tizen');
-            tizen.Application.getAppsInfo(onListInstalledApps);
  
   - name: getAppInfo
     summary: Gets application information for a specified application ID.  
@@ -213,11 +116,6 @@ methods:
         summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
         type: String
         optional: true
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            var appContext = tizen.Application.getAppContext(null);
-            console.log("Application context retrieved for app " + appContext.id);
  
 events:
   - name: installed

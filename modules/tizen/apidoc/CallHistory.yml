@@ -36,58 +36,7 @@ methods:
         summary: The offset in the result set, from where the results are listed (It is the same semantics as SQL OFFSET). The number of results listed is maximum the specified limit parameter. Defaults to 0, meaning no offset.
         optional: true
         type: Number
-    examples:
-      - example: |
-            var tizen = require("tizen");
-        
-            // Defines success callback
-            function onFind(response) {
-                if (response.success) {
-                    var results = response.entries;
-                    console.log(results.length + " call history item(s) found!");
-                    for (var i=0; i<results.length; i++) {
-                        console.log(i + ". " + results[i].toString()); // process the CallHistoryEntry
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-        
-            // Defines filter: list CS calls, most recent first
-            var filter = tizen.createAttributeFilter({attributeName: "type",
-                                                         matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                         matchValue: "TEL"});
-        
-            // Defines sort mode: descending on call start time.
-            var sortMode = tizen.createSortMode({attributeName: "startTime",
-                                                    order: tizen.SORT_MODE_ORDER_DESC});
-            
-            // Makes the query and wire up the callbacks
-            tizen.CallHistory.find(onFind, filter, sortMode);
-        
-            var numberfilter = tizen.createAttributeFilter({attributeName: "remoteParties.remoteParty",
-                                                               matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                               matchValue: "123456789"});
-        
-            // Creates a composite filter for time constraints
-            var y2009Filter = tizen.createAttributeRangeFilter({attributeName: "startTime",
-                                                                   initialValue: new Date(2009, 0, 1),
-                                                                   endValue: new Date(2010, 0, 1)});
-            var y2011Filter = tizen.createAttributeRangeFilter({attributeName: "startTime",
-                                                                   initialValue: new Date(2011, 0, 1),
-                                                                   endValue: new Date(2012, 0, 1)});
-            var datefilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_UNION,
-                                                             filters: [y2009Filter, y2011Filter]});
-            // Creates a filter to find all video calls (including cellular, skype, etc)
-            // The filter matches exactly any features from the "features" array
-            var tfilter = tizen.createAttributeFilter({attributeName: "features",
-                                                          matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                          matchValue: "VIDEOCALL"});
-            // Creates composite filter
-            var ifilter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
-                                                          filters: [numberFilter, dateFilter, tfilter]});
-            // Makes the query and wire up the callbacks; reuse sortMode
-            tizen.CallHistory.find(onFind, ifilter, sortMode);
+
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
     description: |
@@ -96,23 +45,7 @@ methods:
       - name: entry
         summary: Call history entry to be deleted. 
         type: CallHistoryEntry
-    examples:
-      - example: |
-            var tizen = require("tizen");
-        
-            // Defines success callback
-            function onFind(results) {
-                if (response.success) {
-                    var results = success.entries;
-                    if (results.length > 0) {
-                        tizen.CallHistory.remove(results[0]);
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            // Makes the query and wires up the callbacks
-            tizen.CallHistory.find(onFind);
+
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     description: |
@@ -125,21 +58,7 @@ methods:
         summary: A generic success handler.
         optional: true
         type: Callback<ErrorResponse>
-    examples:
-      - example: |
-            var tizen = require("tizen");
-        
-            // Defines success callback
-            function onFind(response) {
-                if (response.success) {
-                    tizen.CallHistory.removeBatch(results);
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-        
-            // Makes the query and wires up the callbacks
-            tizen.CallHistory.find(onFind);
+
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     description: |

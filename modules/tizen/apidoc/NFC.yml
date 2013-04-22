@@ -177,19 +177,6 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
         type: Modules.Tizen.NFC.NFCAdapter
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            try {
-            
-                var adapter = tizen.NFC.getDefaultAdapter();
-                
-            } catch (err) {
-            
-                console.log (err.name +": " + err.message);
-                
-            }
 
   - name: createNDEFMessage
     summary: Creates a <Modules.Tizen.NFC.NDEFMessage> object.
@@ -227,12 +214,6 @@ methods:
         type: createNDEFRecordURIParameters
     returns:
         type: Modules.Tizen.NFC.NDEFRecordURI
-    examples:
-      - example: |
-            // create a new NDEFRecord
-            var tizen = require("tizen");
-            var newRecord = tizen.NFC.createNDEFRecordURI({uri: "http://www.samsungmobile.com/"});
-            var payload = newRecord.payload;
 
   - name: createNDEFRecordMedia
     summary: Creates a <Modules.Tizen.NFC.NDEFRecordMedia>.

@@ -2,34 +2,6 @@
 name: Modules.Tizen.Calendar.CalendarEvent
 summary:  An interface that implements the calendarEvent object.
 extends: Modules.Tizen.Calendar.CalendarItem
-
-examples:
-      - example: |
-            Example 1:
-            
-                // Gets the default calendar
-                var tizen = require("tizen");
-                var calendar = tizen.Calendar.getDefaultCalendar(tizen.Calendar.CALENDAR_TYPE_EVENT);
-                
-                try {
-                
-                    var ev = tizen.Calendar.createCalendarEvent({stringRepresentation: "BEGIN:VCALENDAR\r\n" +
-                                                                                                "BEGIN:VEVENT\r\n" +
-                                                                                                "DTSTAMP:19970901T1300Z\r\n" +
-                                                                                                "DTSTART:19970903T163000Z\r\n" +
-                                                                                                "DTEND:19970903T190000Z\r\n" +
-                                                                                                "SUMMARY:Annual Employee Review\r\n" +
-                                                                                                "CATEGORIES:BUSINESS,HUMAN RESOURCES\r\n" +
-                                                                                                "END:VEVENT\r\n" +
-                                                                                                "END:VCALENDAR",
-                                                                          format: "ICALENDAR_20"});
-                               
-                    calendar.add(ev);
-                    Titanium.API.info('Event added with UID ' + ev.id.uid);
-                } catch (err) {
-                    
-                    Titanium.API.info("Failed to add VEVENT to the calendar, error: " + err.name);
-                }
 methods:
   - name: expandRecurrence
     summary: |
@@ -51,33 +23,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<ExpandRecurrenceResponse>
-    examples:
-      - example: |    
-            // Defines the error callback.
-            function errorCallback(response) {
-                Titanium.API.info( 'The following error occurred: ' +  response);
-            }
-            
-            // Defines the event expanding success callback.
-            function eventExpandingSuccessCallback(events) {
-                Titanium.API.info(events.length + ' event instances were returned.');
-            }
-            var tizen = require("tizen");
-            var calendar = tizen.Calendar.getDefaultCalendar();
-            var event = calendar.get(evId);
-            
-            if (event.recurrenceRule != null) {
-                // This is a recurring event. Expand all the instances during August 2011.
-                event.expandRecurrence(new Date(2011, 7, 1),
-                                    new Date(2011, 7, 31),
-                                    function(response){
-                                        if(response.success) {
-                                            eventExpandingSuccessCallback(response.events);
-                                        } else {
-                                            errorCallback(response.error);
-                                        }
-                                    });
-            }
   
 properties:
   - name: isDetached 
@@ -95,10 +40,6 @@ properties:
         This attribute is precise to the second. Milliseconds are ignored.
         
         The default value for this attribute is null.
-    examples:
-      - example: |    
-            // 2010-04-30 09:00
-            event.endDate = new Date(2010, 3, 30, 9, 0);    
         
   - name: availability
     type: String
@@ -119,13 +60,6 @@ properties:
         The detached instances (specific instances that have been modified as saved to the calendar) of a recurring event will not have any recurrence rule. 
         No recurrence rule can be set on detached instances either. If one tries to set a recurrence rule on a detached event, 
         a NotSupportedError should be thrown. Detached instances can be distinguished by checking their isDetached attribute. (See RFC 5545, Section 3.3.10.)
-    examples:
-      - example: |    
-            // Repeats daily for 7 days
-            var tizen = require("tizen");
-            var rule = tizen.Calendar.createCalendarRecurrenceRule({frequency: tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY,
-                                                                    ruleInitDict: {occurrenceCount: 7}});
-            event.recurrenceRule = rule;
 
 ---
 name: ExpandRecurrenceResponse

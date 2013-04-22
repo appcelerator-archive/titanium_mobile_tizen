@@ -14,25 +14,6 @@ methods:
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
         type: Dictionary<AttributeFilterUnit>
-    examples:
-      - example: |
-            // Define success callback
-            function successCallback(contacts) {
-                console.log(contacts.length + " contacts found.");
-            }
-        
-            // Define error callback
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-            var tizen = require("tizen");
-            
-            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
-            var filter = tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                         matchValue: "Chris"});
-            // Send request on contact address book.
-            tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
 
   - name: createAttributeRangeFilter
     summary: Creates and returns an instance of <Modules.Tizen.AttributeRangeFilter>.
@@ -44,29 +25,6 @@ methods:
         summary: Dictionary with initial arguments for AttributeRangeFilter.
         type: Dictionary<AttributeRangeFilterUnit>
 
-    examples:
-      - example: |
-            function successCallback(events) {
-                console.log(events.length + " events today.");
-            }
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-            var tizen = require("tizen");
-        
-            // Create an attribute range filter based on event start date: "All events occurring today".
-            var now_dt = tizen.Time.getCurrentDateTime();
-            var today_begin = tizen.Time.createTZDate({year: now_dt.getFullYear(),
-                                                          month: now_dt.getMonth(),
-                                                          day: now_dt.getDate()});
-            var today_end = today_begin.addDuration(tizen.Time.createTimeDuration({length: 1, 
-                                                                                 unit: tizen.Time.TIME_DURATION_UNIT_DAYS}));
-            var filter = tizen.createAttributeRangeFilter({attributeName: "startDate",
-                                                              initialValue: today_begin,
-                                                              endValue: today_end});
-            // Send a search request to default event calendar.
-            tizen.Calendar.getDefaultCalendar("EVENT").find(successCallback, errorCallback, filter);
-
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Modules.Tizen.CompositeFilter>.
     returns: 
@@ -76,38 +34,7 @@ methods:
       - name: Options
         summary: Dictionary with initial arguments for CompositeFilter.
         type: Dictionary<CompositeFilterUnit>
-    examples:
-      - example: |
-            // Define success callback
-            function successCallback(contacts) {
-                console.log(contacts.length + " contacts found.");
-            }
-        
-            // Define error callback
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-        
-            var tizen = require("tizen");
-            
-            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)
-            var firstNameFilter = tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                         matchValue: "Chris"});
-        
-            // Create an attribute filter based on last name: "Last name should be exactly 'Smith' (case insensitive)
-            var lastNameFilter = tizen.createAttributeFilter({attributeName: "name.lastName",
-                                                                 matchFlag: tizen.FILTER_MATCH_FLAG_EXACTLY,
-                                                                 matchValue: "Smith"});
-        
-            // Create a filter based on the intersection of these two filter:
-            // "First name should contain 'Chris' AND last name should be 'Smith'".
-            var filter = tizen.createCompositeFilter({type: tizen.COMPOSITE_FILTER_TYPE_INTERSECTION,
-                                                         filters: [firstNameFilter, lastNameFilter]});
-        
-            // Send request on contact address book.
-            tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter);
-            
+
   - name: createSortMode
     summary: Creates and returns an instance of <Modules.Tizen.SortMode>.
     returns: 
@@ -117,30 +44,6 @@ methods:
       - name: Options
         summary: Dictionary with initial arguments for SortMode.
         type: Dictionary<SortModeUnit>
-    examples:
-      - example: |
-            // Define a success callback
-            function successCallback(contacts) {
-                // The returned contacts are sorted by first name (ascending)
-                console.log(contacts.length + " contacts found.");
-            }
-        
-            // Define an error callback
-            function errorCallback(error) {
-                console.log("An error occurred: " + error.message);
-            }
-        
-            var tizen = require("tizen");
-        
-            // Create an attribute filter based on first name: "First name should contain 'Chris' (case insensitive)"
-            var filter = tizen.createAttributeFilter({attributeName: "name.firstName",
-                                                         matchFlag: tizen.FILTER_MATCH_FLAG_CONTAINS,
-                                                         matchValue: "Chris"});
-            // Sort by first name, ascending
-            var sortMode = tizen.createSortMode({attributeName: "name.firstName",
-                                                    order: tizen.SORT_MODE_ORDER_ASC});
-            // Send request on contact address book.
-            tizen.contact.getDefaultAddressBook().find(successCallback, errorCallback, filter, sortMode);
  
   - name: createSimpleCoordinates
     summary: Creates and returns an instance of <Modules.Tizen.SimpleCoordinates>.

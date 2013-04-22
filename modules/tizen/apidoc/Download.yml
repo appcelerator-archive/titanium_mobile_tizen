@@ -16,12 +16,6 @@ methods:
       - name: downloadId
         summary: The ID to get the download request information.
         type: Number
-    examples:
-      - example: |
-            var tizen = require("tizen");
-        
-            // Gets the download request information with the given id.
-            var downloadRequest = tizen.Download.getDownloadRequest(downloadId);
 
   - name: createDownloadRequest
     summary: Creates <Modules.Tizen.Download.DownloadRequest> object.
@@ -31,13 +25,6 @@ methods:
         type: Dictionary<createDownloadRequestParameters>
     returns:
         type: <Modules.Tizen.Download.DownloadRequest>
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var downloadRequest = tizen.Download.createDownloadRequest({
-                                        url: "http://download.tizen.org/tools/README.txt",
-                                        destination: "documents"
-                                  });
 
 properties:
   - name: DOWNLOAD_STATE_QUEUED

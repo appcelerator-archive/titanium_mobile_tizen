@@ -36,33 +36,6 @@ properties:
  - name: appId  
    summary: Holds the application id to launch when the notification is selected from the notification tray.
    type: String
-   examples:
-     - example: |
-          var tizen = require("tizen");
-          
-          try {
-                // gets a current application inforamtion with tizen.application.getAppInfo
-                var myappInfo = tizen.Application.getAppInfo();
-
-                var notificationDict = {
-                            content : "This is a simple notificaiton.",
-                            iconPath : "images/image1.jpg",
-                            soundPath : "music/Over the horizon.mp3",
-                            vibration : true,
-                            appId : myappInfo.id
-                          };
-
-                var notification = tizen.Notification.createStatusNotification({
-                                      statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
-                                      title: "Simple notification",
-                                      notificationInitDict: notificationDict
-                                   });
-
-                tizen.Notification.postNotification(notification);
-           } catch (err) {
-                Titanium.API.info (err.name + ": " + err.message);
-           }
-
    
  - name: progressValue 
    summary: The current progress value of notification.
@@ -74,41 +47,4 @@ properties:
         in the notification status tray would be different from exact progress value.
         progressValue":"  percent (1 to 100)
    type: Number
-   examples:
-     - example: |
-          var tizen = require("tizen");
-          
-          try {
-                var appControl = tizen.Application.createApplicationControl({
-                                     operation: "http://tizen.org/appcontrol/operation/create_content",
-                                     uri: null,
-                                     mime: "image/jpg",
-                                     category: null
-                                 });
-
-                var notificationDict = {
-                            content : "This is a progress notificaiton.",
-                            iconPath : "images/image2.jpg",
-                            soundPath : "music/Over the horizon.mp3",
-                            vibration : true,
-                            appControl : appControl,
-                            progressValue : 20
-                      };
-                // constructs the progress notification.
-                var notification = tizen.Notification.createStatusNotification({
-                                      statusType: tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS,
-                                      title: "Progress notification",
-                                      notificationInitDict: notificationDict
-                                   });
-                // posts the notification
-                tizen.Notification.postNotification(notification);
-
-                // updates the progress value of the notification.
-                notification.progressValue = 59;
-                tizen.Notification.update(notification);
-
-
-           } catch (err) {
-               Titanium.API.info (err.name + ": " + err.message);
-           }
 

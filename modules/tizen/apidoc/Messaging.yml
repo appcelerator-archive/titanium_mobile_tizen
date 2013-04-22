@@ -22,18 +22,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<MessagingMessageServiceResponse>
-    examples:
-      - example: |
-            var tizen = require('tizen');
-            // Define a callback.
-            function serviceListCB(response) {
-                if (response.success) {
-                    console.log('Found ' + response.services.length + ' email services');
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL, serviceListCB);
 
   - name: createMessage
     summary: Returns the <Modules.Tizen.Messaging.Message> object.
@@ -44,28 +32,6 @@ methods:
       - name: initDict
         summary: Provides specifying message attributes upon message creation.
         type: MessageInit
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            // Define the success callback.
-            var messageSentCallback = function(recipients) {
-                console.log("Message sent successfully to " + recipients.length + " recipients.");
-            }
-        
-            function serviceListCB(response) {
-                if (response.success) {
-                    var services = response.services;
-                    if (services.length > 0) {
-                        var msg = tizen.Messaging.createMessage({type: tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS,
-                                                                          messageInitDict: {plainBody: "Tizen first SMS message."}});
-                        services[0].sendMessage(msg, messageSentCallback, errorCallback);
-                    }
-                } else {
-                    console.error('An error occured: ' + response.error);
-                }
-            }
-        
-            tizen.Messaging.getMessageServices(tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGSMS, serviceListCB);
 
   - name: createMessageAttachment
     summary: Returns the <Modules.Tizen.Messaging.MessageAttachment> object.

@@ -58,47 +58,11 @@ methods:
                 <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
                 <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
         type: Array<String>
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.NFC.getDefaultAdapter();
-            
-            var onSuccessCB = {
-                onattach: function(nfcTag) {
-                    console.log("NFC Tag's type is " + nfcTag.type);
-                },
-                ondetach: function() {
-                    console.log("NFC Tag is detached");
-                }
-            };
-            adapter.setTagListener(onSuccessCB);
 
   - name: unsetTagListener
     summary: Unregisters the listener for detecting an NFC tag.
     description: |
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var adapter = tizen.NFC.getDefaultAdapter();
-
-            // Receives NFCTag
-            var onSuccessCB = {
-                onattach: function(nfcTag) {
-                    console.log("NFC Tag's type is " + nfcTag.type);
-                },
-                ondetach: function() {
-                    console.log("NFC Tag is detached");
-                }
-            };
-
-            // Unregister the listener
-            function unsetListen() {
-                adapter.unsetTagListener();
-            }
-
-            // registers to be notified when NFC tag is detected.
-            adapter.setTagListener(onSuccessCB)
 
   - name: getCachedMessage
     summary: Gets NDEF message cached when the tag was detected.
@@ -110,11 +74,6 @@ methods:
         To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
         type: Modules.Tizen.NFC.NDEFMessage
-    examples:
-      - example: |
-            // gets the cached message
-            var tizen = require("tizen");
-            var cachedMessage = tizen.NFC.getDefaultAdapter().getCachedMessage();
 
 events:
 

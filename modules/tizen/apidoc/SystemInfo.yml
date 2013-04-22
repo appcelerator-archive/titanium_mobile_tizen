@@ -33,14 +33,6 @@ methods:
         To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
     returns:
         type: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            var deviceCapabilities = tizen.SystemInfo.getCapabilities();
-            
-            if (deviceCapabilities.bluetooth) {
-                Titanium.API.info("Bluetooth is supported");
-            }
             
   - name: getPropertyValue
     summary: Retrieves the current state of a given system property.
@@ -66,19 +58,6 @@ methods:
         summary: Function called when an error occurred while retrieving the properties.
         type: Callback<Modules.Tizen.WebAPIError>
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            function onSuccessCallback(battery) {
-                Titanium.API.info("The battery level is " + battery.level);
-            }
-            
-            function onErrorCallback(error) {
-                Titanium.API.info("An error occurred " + error.message);
-            }
-        
-            tizen.SystemInfo.getPropertyValue(tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, onErrorCallback );
         
   - name: addPropertyValueChangeListener
     summary: Allows tracking the change of one or several system properties.
@@ -106,15 +85,6 @@ methods:
         summary:  An object containing the various options for fetching the properties requested.
         type: Dictionary<SystemInfoOptions>
         optional: true
-    examples:
-      - example: |
-            var tizen = require("tizen");
-            
-            function onSuccessCallback(battery) {
-                Titanium.API.info("Low battery:  " + battery.level);
-            }
-            
-            tizen.SystemInfo.addPropertyValueChangeListener(tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback, {lowThreshold : 0.2});
     
   - name: removePropertyValueChangeListener
     summary: |
@@ -130,18 +100,6 @@ methods:
       - name: listenerId
         summary:  Identifier of the subscription returned by the addPropertyValueChangeListener() method.
         type: Number
-    examples:
-      - example: |
-            var id = null;
-            var tizen = require("tizen");
-            
-            function onSuccessCallback(battery) {
-               Titanium.API.info("New value for Battery level is " + battery.level);
-               if (id != null) // After receiving the first notification, we clear it
-                  tizen.SystemInfo.removePropertyValueChangeListener(id);
-            }
-            
-            id = tizen.SystemInfo.addPropertyValueChangeListener(tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY, onSuccessCallback);
             
 properties:
 
