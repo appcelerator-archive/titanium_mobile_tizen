@@ -58,7 +58,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 							});
 						},
 						ondetach: function () {
-							self.FireEvent('peerdetached');
+							self.fireEvent('peerdetached');
 						}
 					});
 				}
