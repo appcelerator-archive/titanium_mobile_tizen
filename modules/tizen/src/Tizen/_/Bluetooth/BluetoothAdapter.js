@@ -1,46 +1,68 @@
 // Wraps Tizen interface "BluetoothAdapter" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler', 'Tizen/_/WebAPIError'],
-	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler'],
+	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler) {
 
-		var adapter = declare(Evented, {
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
 
-			constructor: function(args) {
-				if (args.toString() === '[object BluetoothAdapter]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
-				}
+		var listening,
+			adapter = declare(Evented, {
+
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
 
-			setName: function(name /*DOMString*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.setName(name, successCallback && function() {
-					successCallback();
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			setName: function(name /*DOMString*/, callback) {
+				this._obj.setName(name, callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
-			setPowered: function(state /*boolean*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.setPowered(state, successCallback && function() {
-					successCallback();
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			setPowered: function(state /*boolean*/, callback) {
+				this._obj.setPowered(state, callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
-			discoverDevices: function() {
+			// Device discovery will automatically start when user subscribes to one of the
+			// device discovery events.
+			addEventListener: function () {
 				var self = this;
-				return self._obj.discoverDevices(// BluetoothDiscoverDevicesSuccessCallback
-					{
-						onstarted: function() {
+				Evented.addEventListener.apply(this, arguments);
+
+				if (! listening) {
+					listening = true;
+					this._obj.discoverDevices({
+						onstarted: function () {
 							self.fireEvent('discoverystarted');
 						},
-						ondevicefound: function(device) {
-							self.fireEvent('devicefound', new BluetoothDevice(device));
+						ondevicefound: function (device) {
+							self.fireEvent('devicefound', {
+								device: new BluetoothDevice(device)
+							});
 						},
 						ondevicedisappeared: function(address) {
-							self.fireEvent('devicedisappeared', address);
+							self.fireEvent('devicedisappeared', {
+								address: address
+							});
 						},
 						onfinished: function(devices) {
 							var i = 0,
@@ -50,66 +72,108 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 							for (; i < len; i++) {
 								arr.push(new BluetoothDevice(devices[i]));
 							}
-							self.fireEvent('discoveryfinished', arr);
+							self.fireEvent('discoveryfinished', {
+								devices: arr
+							});
 						}
-					}, // ErrorCallback
-					function(e) {
-						self.fireEvent('discoveryerror', new WebAPIError(e));
+					}, function (e) {
+						self.fireEvent('discoveryerror', {
+							code: e.code,
+							error: e.type + ': ' + e.message
+						});
 					});
+				}
 			},
 
-			stopDiscovery: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.stopDiscovery(successCallback && function() {
-					successCallback();
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			stopDiscovery: function(callback) {
+				if(listening) {
+					// stopDiscovery automatically removes all Titanium event subscriptions.
+					// Otherwise, after stopping discovery and reinitiating it with addEventListener again,
+					// events that were subscribed to previously will start arriving, which generally is not
+					// intended.
+
+					Evented.removeEventListener('discoverystarted');
+					Evented.removeEventListener('devicefound');
+					Evented.removeEventListener('devicedisappeared');
+					Evented.removeEventListener('discoveryfinished');
+
+					listening = false;
+				}
+
+				this._obj.stopDiscovery(callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
-			getKnownDevices: function(successCallback /*BluetoothDeviceArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.getKnownDevices(function(devices) {
-						var i = 0,
-							len = devices.length,
-							arr = [];
+			getKnownDevices: function(callback) {
+				this._obj.getKnownDevices(callback && function(devices) {
+					var i = 0,
+						len = devices.length,
+						arr = [];
 
 						for (; i < len; i++) {
 							arr.push(new BluetoothDevice(devices[i]));
 						}
-						successCallback(arr);
-					}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+
+						callback({
+							code: 0,
+							success: true,
+							devices: arr
+						});
+					}, callback && function(e) {
+						onError(e, callback);
+					});
+			},
+
+			getDevice: function(address /*BluetoothAddress*/, callback) {
+				this._obj.getDevice(address, callback && function(device) {
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
+				}, callback && function(e) {
+						onError(e, callback);
 				});
 			},
 
-			getDevice: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.getDevice(address, function(device) {
-						successCallback(new BluetoothDevice(device));
-					}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			createBonding: function(address /*BluetoothAddress*/, callback) {
+				this._obj.createBonding(address, callback && function(device) {
+					callback({
+						code: 0,
+						success: true,
+						device: new BluetoothDevice(device)
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
-			createBonding: function(address /*BluetoothAddress*/, successCallback /*BluetoothDeviceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.createBonding(address, function(device) {
-						successCallback(new BluetoothDevice(device));
-					}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			destroyBonding: function(address /*BluetoothAddress*/, callback) {
+				this._obj.destroyBonding(address, callback && function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 
-			destroyBonding: function(address /*BluetoothAddress*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.destroyBonding(address, successCallback && function() {
-					successCallback();
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
-				});
-			},
-
-			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, successCallback /*BluetoothServiceSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.registerRFCOMMServiceByUUID(uuid, name, function(handler) {
-						successCallback(new BluetoothServiceHandler(handler));
-					}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, callback) {
+				this._obj.registerRFCOMMServiceByUUID(uuid, name, callback && function(handler) {
+					callback({
+						code: 0,
+						success: true,
+						handler: new BluetoothServiceHandler(handler)
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 

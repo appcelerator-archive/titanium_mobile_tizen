@@ -1,27 +1,37 @@
 // Wraps Tizen interface "BluetoothSocket" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare, Evented, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
-	var socket = declare(Evented, {
+	var listening,
+		socket = declare(Evented, {
 
-		constructor: function(args) {
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
+		},
+
+		addEventListener: function () {
 			var self = this;
-			if (args.toString() === '[object BluetoothSocket]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				self._obj = args;
+			Evented.addEventListener.apply(this, arguments);
+
+			if (! listening) {
+				listening = true;
+
+				this._obj.onmessage = function() {
+					self.fireEvent('socketmessagereceived');
+				};
+
+				this._obj.onclose = function() {
+					self.fireEvent('socketclosed');
+				};
+
+				self._obj.onerror = function(e) {
+					self.fireEvent('socketerror', {
+						code: e.code,
+						error: e.type + ': ' + e.message
+					});
+				};
 			}
-
-			self._obj.onmessage = function() {
-				self.fireEvent('socketmessagereceived');
-			};
-
-			self._obj.onclose = function() {
-				self.fireEvent('socketclosed');
-			};
-
-			self._obj.onerror = function(e) {
-				self.fireEvent('socketerror', new WebAPIError(e));
-			};
 		},
 
 		writeData: function(data) {
@@ -33,7 +43,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(declare
 		},
 
 		close: function() {
-			return this._obj.close();
+			this._obj.close();
 		},
 
 		constants: {

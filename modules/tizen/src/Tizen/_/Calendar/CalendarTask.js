@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 
 	var calendarTask = declare(CalendarItem, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarTask]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.
@@ -39,8 +39,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 		properties: {
 			dueDate: {
 				get: function() {
-					var dueDate = this._obj.dueDate;
-					return createDate(dueDate);
+					return helper.createDate(this._obj.dueDate);
 				},
 				set: function(value) {
 					this._obj.dueDate = helper.createTZDate(value);
@@ -48,8 +47,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 			},
 			completedDate: {
 				get: function() {
-					var completedDate = this._obj.completedDate;
-					return createDate(completedDate);
+					return helper.createDate(this._obj.completedDate);
 				},
 				set: function(value) {
 					this._obj.completedDate = helper.createTZDate(value);

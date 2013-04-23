@@ -1,0 +1,168 @@
+---
+name: Modules.Tizen.Notification
+summary: Module for managing notifications created based on application events.
+description: |
+    This module provides a way to notify user events that occur in applications to users.
+    which are represented by the <Modules.Tizen.Notification> object.
+    
+    The `Notification` module is a thin wrapper on the Tizen `NotificationManager`
+    class.
+    
+    See also:
+    
+    *   [Tizen Notification API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fnotification.html)
+    
+    *   [Tizen  Notification Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fnotification.html)
+    
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: postNotification
+    summary: Post the notification to display.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
+    parameters:
+      - name: notification
+        summary: A notification to post.
+        type: Modules.Tizen.Notification
+
+  - name: update
+    summary: Updates a previously posted notification.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
+    parameters:
+      - name: notification
+        summary: A notification to update.
+        type: Modules.Tizen.Notification
+        
+  - name: remove
+    summary: Removes a previously posted notification.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
+    parameters:
+      - name: id
+        summary: A previously posted notification ID.
+        type: String
+        
+  - name: removeAll
+    summary: Removes all previously posted notifications by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.write
+    
+  - name: getNotification
+    summary: Gets a previously posted notification by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
+    returns:
+        type: Modules.Tizen.Notification
+    parameters:
+      - name: id
+        summary: A previously posted notification ID.
+        type: String
+    
+  - name: getAll
+    summary: Gets all previously posted notifications by the current application.
+    description: |
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/notification.read
+    returns:
+        type: Array<Modules.Tizen.Notification.Notification>
+
+  - name: createStatusNotification
+    summary: Creates and returns an instance of <Modules.Tizen.Notification.StatusNotification>.
+    returns:
+        type: Modules.Tizen.Notification.StatusNotification
+    parameters:
+      - name: Options
+        summary: The dictionary representing information about the new notification.
+        type: Dictionary<StatusNotificationUnit>
+    
+properties:
+
+  - name: NOTIFICATION_TYPE_STATUS
+    summary: A notification type.
+        
+    description: |
+        STATUS - The posted status notification is displayed in the notification tray. 
+        The status notification consists of icon, title, content and time. 
+        The status notification can have the application control to launch the specific application when selected by the user.
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_SIMPLE
+    summary: A simple status notification.
+        
+    description: |
+        The simple status notification is basic status notification type and removed automatically when selected by the user. 
+        All simple status notifications can be removed by user interaction. 
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_ONGOING
+    summary: A status notification about an ongoing event.
+        
+    description: |
+        If the application needs to keep the user informed about the notification, consider using ongoing status notification. 
+        Please note that the ongoing status notification should be removed by the application that posted the notification. 
+    type: String
+    permission: read-only
+
+  - name: STATUS_NOTIFICATION_TYPE_PROGRESS
+    summary: A status notification with progress.
+        
+    description: |
+        The progress status notification can display the information for the progress of a job. 
+        Please note that the progress status notification should be removed by the application that posted the notification. 
+    type: String
+    permission: read-only
+
+# Pseudo-type
+---
+name: StatusNotificationInit
+summary: Contains additional information required to initialize a StatusNotification.
+properties:
+  - name: content
+    type: String
+    summary: The content of the status notification.
+
+  - name: iconPath
+    type: String
+    summary: The path to the icon to display in the notification.
+
+  - name: soundPath
+    type: String
+    summary: The path of sound file to play when the notification is shown.
+
+  - name: vibration
+    type: Boolean
+    summary: Holds whether to use vibration when the notification is shown.
+
+  - name: appControl
+    type: Modules.Tizen.Aplication.ApplicationControl
+    summary: Holds the application control to launch when the notification is selected from the notification tray.
+
+  - name: appId
+    type: String
+    summary: Holds the application id to launch when the notification is selected from the notification tray.
+
+  - name: progressValue
+    type: Number
+    summary: The initial progress value of the notification.
+
+---
+name: StatusNotificationUnit
+summary: Contains information required to initialize a StatusNotification.
+properties:
+  - name: statusType
+    type: String
+    summary: |
+        Notification type (supported values: <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>)
+
+  - name: title
+    type: String
+    summary: Name of notification.
+
+  - name: notificationInitDict
+    type: StatusNotificationInit
+    summary: (optional) Dictionary.
+    optional: true

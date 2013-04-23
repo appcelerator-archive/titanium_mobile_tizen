@@ -1,0 +1,236 @@
+---
+name: Modules.Tizen.SystemInfo
+summary: This Module provides  interfaces and methods providing web applications with access to various properties of the system.
+description: |
+    This API also provides interfaces and methods for users to get hardware devices status, to get the value of selected properties, and to set up asynchronous notifications of changes for selected values. The following provides an overview of the tree data structure:
+    BATTERY
+    CPU
+    STORAGE
+    DISPLAY
+    DEVICE_ORIENTATION
+    BUILD
+    NETWORK
+    WIFI_NETWORK
+    CELLULAR_NETWORK
+    SIM
+    
+    The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.
+    
+    See also:
+    
+    - [Tizen System Info API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fsysteminfo.html)
+    - [Tizen  System Info Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fsysteminfo.htm)
+
+extends: Titanium.Module
+platforms: [tizen]
+        
+methods:
+  - name: getCapabilities
+    summary: Retrieves the capabilities of the device.
+    description: |
+        The function must synchronously acquire the capabilities of the device.
+        
+        To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
+    returns:
+        type: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
+            
+  - name: getPropertyValue
+    summary: Retrieves the current state of a given system property.
+    description: |
+        The function must asynchronously acquire the current state of the requested property. 
+        If it is successful, the successCallback must be invoked with an object containing 
+        the information provided by the property.
+        
+        The errorCallback is launched with these error types:
+            - NotFoundError: If the property is not recognized.
+            - InvalidValuesError: If any of the input parameters contain an invalid value.
+            - UnknownError: In any other error case.
+        
+        To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
+    parameters:
+      - name: property 
+        summary: Name of the property to retrieve.
+        type: String
+      - name: successCallback
+        summary: Function called when the properties have been successfully retrieved.
+        type: Callback<Modules.Tizen.SystemInfo.SystemInfoProperty>
+      - name: errorCallback
+        summary: Function called when an error occurred while retrieving the properties.
+        type: Callback<Modules.Tizen.WebAPIError>
+        optional: true
+        
+  - name: addPropertyValueChangeListener
+    summary: Allows tracking the change of one or several system properties.
+    description: |
+        When called, it immediately returns and then asynchronously starts a watch process defined as this set of steps:
+        1. Acquire the system's current values for the property requested. If successful, it invokes the associated successCallback, 
+           passing the resulting property value. The type of the passed object is indicated by the property's value type in the definitions below. For example,
+           if you are passing <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY> for SystemInfoPropertyId, you'll get SystemInfoBattery object.
+        2. Register the successCallback to receive system events that the status of the requested properties may have changed.
+        3. When a system event is successfully received invoke the associated successCallback with an object containing the property values.
+        4. Repeat step 3 until removePropertyValueChangeListener function is called.
+        
+        To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
+    returns:
+        summary: Identifier used to clear the watch subscription.
+        type: Number
+    parameters:
+      - name: property 
+        summary: Name of the property to retrieve.
+        type: String
+      - name: successCallback
+        summary: Function called when the properties have been successfully retrieved.
+        type: Callback<Modules.Tizen.SystemInfo.SystemInfoProperty>
+      - name: options
+        summary:  An object containing the various options for fetching the properties requested.
+        type: Dictionary<SystemInfoOptions>
+        optional: true
+    
+  - name: removePropertyValueChangeListener
+    summary: |
+        Unsubscribes notifications for property changes set up by addPropertyValueChangeListener.
+    description: |
+        If a valid listenerId argument is passed that corresponds to a subscription already place, 
+        then the watch process MUST immediately terminate and no further callback is invoked. 
+        If the listenerId argument does not correspond to a valid subscription, 
+        the method should return without any further action.
+        
+        To use this function, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/systeminfo
+    parameters:
+      - name: listenerId
+        summary:  Identifier of the subscription returned by the addPropertyValueChangeListener() method.
+        type: Number
+            
+properties:
+
+  - name: SYSTEM_INFO_PROPERTY_ID_BATTERY
+    summary: BATTERY is for homescreen background image.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_CPU
+    summary: CPU is the device property identifier.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_STORAGE
+    summary: STORAGE is the device property identifier.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_DISPLAY
+    summary: DISPLAY is the device property identifier.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION
+    summary: DEVICE_ORIENTATION is the device property identifier.
+    type: STRING
+    
+    permission: read-only
+  - name: SYSTEM_INFO_PROPERTY_ID_BUILD
+    summary: BUILD is the device property identifier.
+    type: STRING
+    
+    permission: read-only    
+  - name: SYSTEM_INFO_PROPERTY_ID_NETWORK
+    summary: NETWORK is the device property identifier.
+    type: STRING
+    
+    permission: read-only    
+  - name: SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK
+    summary: WIFI_NETWORK is the device property identifier.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK
+    summary: CELLULAR_NETWORK is the device property identifier.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_PROPERTY_ID_SIM
+    summary: SIM is the device property identifier.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_NONE
+    summary: NONE is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_2G
+    summary: 2G is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_2_5G
+    summary: 2.5G is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_3G
+    summary: 3G is Data Network Type.
+    type: STRING
+    permission: read-only
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_4G
+    summary: 4G is Data Network Type.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_WIFI
+    summary: WIFI is Data Network Type.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_ETHERNET
+    summary: ETHERNET is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_UNKNOWN
+    summary: UNKNOWN is Data Network Type.
+    type: STRING
+    permission: read-only
+
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY
+    summary: PORTRAIT_PRIMARY is for homescreen background image.
+    type: STRING
+    permission: read-only    
+
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY
+    summary: PORTRAIT_SECONDARY is for homescreen background image.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY
+    summary: LANDSCAPE_PRIMARY is for homescreen background image.
+    type: STRING
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY
+    summary: LANDSCAPE_SECONDARY is for homescreen background image.
+    type: STRING
+    permission: read-only    
+    
+# Pseudo-type    
+---
+name: SystemInfoOptions
+summary: An object containing the various options for fetching the properties requested.
+properties:
+  - name: timeout
+    type: Number
+    summary: The number of milliseconds beyond which the operation must be interrupted.
+    
+  - name: highThreshold
+    type: Number
+    summary: |
+        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
+        if the property is a number and its value is greater than or equal to this number.
+    
+  - name: lowThreshold
+    type: Number
+    summary: |
+        This attribute has no effect on the get method. On the watch method, it indicates that the successCallback is only be triggered 
+        if the property is a number and its value is lower than or equal to this number. If both highThreshold and lowThreshold parameters are specified, 
+        the successCallback is triggered if and only if the property value is either lower than the value of lowThreshold or higher than the value of highThreshold.

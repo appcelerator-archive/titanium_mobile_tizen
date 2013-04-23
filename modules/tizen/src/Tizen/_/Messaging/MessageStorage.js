@@ -1,37 +1,57 @@
 // Wraps Tizen interface "MessageStorage" that resides in Tizen module "Messaging".
 
-define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageFolder', 'Tizen/_/Messaging/MessageConversation', 'Tizen/_/WebAPIError'],
-	function(declare, Message, MessageFolder, MessageConversation, WebAPIError) {
+define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageFolder', 'Tizen/_/Messaging/MessageConversation'],
+	function(declare, Message, MessageFolder, MessageConversation) {
+
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
+
+		function onSuccess (callback) {
+			callback({
+				code: 0,
+				success: true
+			});
+		}
 
 		var messageStorage = declare(null, {
 
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
-			addDraftMessage: function(message /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				this._obj.addDraftMessage(message._obj, successCallback, errorCallback && wrappedErrorCallback);
+			addDraftMessage: function(message /*Message*/, callback) {
+				this._obj.addDraftMessage(message._obj, callback && function () {
+					onSuccess(callback);
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			findMessages: function(filter /*AbstractFilter*/, successCallback /*MessageArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-				function messagesListSuceessCallBack(objects) {
+			findMessages: function(filter /*AbstractFilter*/, callback, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
+				this._obj.findMessages(filter._obj, callback && function (messages) {
 					var i = 0,
-						objectsCount = objects.length,
+						messagesCount = messages.length,
 						result = [];
-
-					for (; i < objectsCount; i++) {
-						result.push(new Message(objects[i]));
+					for (; i < messagesCount; i++) {
+						result.push(new Message(void 0, messages[i]));
 					}
-
-					successCallback(result);
-				}
-
-
-				this._obj.findMessages(filter._obj, messagesListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
+					callback({
+						code: 0,
+						success: true,
+						messages: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				}, sort ? sort._obj : sort, limit, offset);
 			},
 
-			removeMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			removeMessages: function(messages /*Message*/, callback) {
 				var i = 0,
 					tizenMessages = [],
 					len = messages.length;
@@ -40,10 +60,14 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					tizenMessages.push(messages[i]._obj);
 				}
 
-				this._obj.removeMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
+				this._obj.removeMessages(tizenMessages, callback && function () {
+					onSuccess(callback);
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			updateMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			updateMessages: function(messages /*Message*/, callback) {
 				var i = 0,
 					tizenMessages = [],
 					len = messages.length;
@@ -52,26 +76,32 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					tizenMessages.push(messages[i]._obj);
 				}
 
-				this._obj.updateMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
+				this._obj.updateMessages(tizenMessages, callback && function () {
+					onSuccess(callback);
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			findConversations: function(filter /*AbstractFilter*/, successCallback /*MessageConversationArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-				function conversationsListSuceessCallBack(objects) {
+			findConversations: function(filter /*AbstractFilter*/, callback, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
+				this._obj.findConversations(filter._obj, callback && function (conversations) {
 					var i = 0,
-						objectsCount = objects.length,
+						conversationsCount = conversations.lengh,
 						result = [];
-
-					for (; i < objectsCount; i++) {
-						result.push(new MessageConversation(objects[i]));
+					for (; i < conversationsCount; i++) {
+						result.push(new MessageConversation(conversations[i]));
 					}
-
-					successCallback(result);
-				}
-
-				this._obj.findConversations(filter._obj, conversationsListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
+					callback({
+						code: 0,
+						success: true,
+						conversations: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				}, sort ? sort._obj : sort, limit, offset);
 			},
 
-			removeConversations: function(conversations /*MessageConversation*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			removeConversations: function(conversations /*MessageConversation*/, callback) {
 				var i = 0,
 					tizenConversations = [],
 					len = conversations.length;
@@ -80,23 +110,29 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					tizenConversations.push(conversations[i]._obj);
 				}
 
-				this._obj.removeConversations(tizenConversations, successCallback, errorCallback && wrappedErrorCallback);
+				this._obj.removeConversations(tizenConversations, callback && function () {
+					onSuccess(callback);
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
-			findFolders: function(filter /*AbstractFilter*/, successCallback /*MessageFolderArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function foldersListSuccessCallBack(objects) {
+			findFolders: function(filter /*AbstractFilter*/, callback) {
+				this._obj.findFolders(filter._obj, callback && function (folders) {
 					var i = 0,
-						len = objects.length,
+						foldersCount = folders.length,
 						result = [];
-
-					for (; i < len; i++) {
-						result.push(new MessageFolder(objects[i]));
+					for  (; i < foldersCount; i++) {
+						result.push(new MessageFolder(folders[i]));
 					}
-
-					successCallback(result);
-				}
-
-				this._obj.findFolders(filter._obj, foldersListSuccessCallBack, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						folders: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
 			addMessagesChangeListener: function(messagesChangeCallback /*MessagesChangeCallback*/, filter /*AbstractFilter*/) {
@@ -106,13 +142,13 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						wrappedItems.push(new Message(items[i]));
+						wrappedItems.push(new Message(void 0, items[i]));
 					}
 
 					return wrappedItems;
 				}
 
-				var wrappedMessagesChangeCallback = {
+				return this._obj.addMessagesChangeListener(messagesChangeCallback && {
 					messagesupdated: function(items) {
 						messagesChangeCallback.messagesChangeCallback.messagesupdated(getWrappedItems(items));
 					},
@@ -124,9 +160,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					messagesremoved: function(items) {
 						messagesChangeCallback.messagesremoved(getWrappedItems(items));
 					}
-				};
-
-				return this._obj.addMessagesChangeListener(messagesChangeCallback && wrappedMessagesChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			addConversationsChangeListener: function(conversationsChangeCallback /*MessageConversationsChangeCallback*/, filter /*AbstractFilter*/) {
@@ -142,7 +176,8 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedConversationsChangeCallback = {
+				this._obj.addConversationsChangeListener(conversationsChangeCallback && 
+				{
 					conversationsupdated: function(items) {
 						conversationsChangeCallback.conversationsupdated(getWrappedItems(items));
 					},
@@ -154,9 +189,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					conversationsremoved: function(items) {
 						conversationsChangeCallback.conversationsremoved(getWrappedItems(items));
 					}
-				};
-
-				this._obj.addConversationsChangeListener(conversationsChangeCallback && wrappedConversationsChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			addFoldersChangeListener: function(foldersChangeCallback /*MessageFoldersChangeCallback*/, filter /*AbstractFilter*/) {
@@ -172,7 +205,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedFoldersChangeCallback = {
+				this._obj.addFoldersChangeListener(foldersChangeCallback && {
 					foldersupdated: function(items) {
 						foldersChangeCallback.foldersupdated(getWrappedItems(items));
 					},
@@ -184,9 +217,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					foldersremoved: function(items) {
 						foldersChangeCallback.foldersremoved(getWrappedItems(items));
 					}
-				};
-
-				this._obj.addFoldersChangeListener(wrappedFoldersChangeCallback, filter ? filter._obj : filter);
+				}, filter ? filter._obj : filter);
 			},
 
 			removeChangeListener: function(watchId /*long*/) {
@@ -195,10 +226,6 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 
 		});
 
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
-
-		messageStorage.prototype.declareClass = 'Tizen.Messaging.MessageStorage';
+		messageStorage.prototype.declaredClass = 'Tizen.Messaging.MessageStorage';
 		return messageStorage;
 	});

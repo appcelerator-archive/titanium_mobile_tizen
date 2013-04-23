@@ -1,0 +1,24 @@
+---
+name: Modules.Tizen.Apps.RequestedApplicationControl
+summary: |
+    This interface consists of an application control object and 2 methods. It describes an action requested and passed from other application and is passed to launch other applications. 
+    The newly launched application can get the requested application control through getRequestedAppControl() method, and send the results to the calling application through the replyResult() method after performing the required action requested the calling application.
+extends: Titanium.Proxy
+methods:
+  - name: replyResult
+    summary: Sends the results to the caller application. 
+    parameters: 
+      - name: data
+        summary: An array of ApplicationControlData objects.
+        type: ApplicationControlDataObject
+        optional: true
+
+  - name: replyFailure
+    summary: Notifies the calling application that the application failed to perform the requested action.  
+
+properties:
+  - name: appControl
+    summary: An attribute to store the application control object that describes caller application's request. It contains the information that the calling application passed to launchAppControl. 
+    type: Modules.Tizen.Apps.ApplicationControl
+    permission: read-only
+

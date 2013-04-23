@@ -1,0 +1,340 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothAdapter
+summary: The Bluetooth adapter interface that provides access to control the device's Bluetooth adapter.  
+description: |
+    This interface offers methods to control local Bluetooth behavior, such as:
+    
+        - Turn on/off Bluetooth radio;
+        - Scan for remote devices;
+        - Access known devices;
+        - Register a service in the device service database.
+    
+    To start device discovery, subscribe to one of the device discovery events defined in this interface. It will
+    start automaticaly. Note that you should stop discovery using the [stopDiscovery](Modules.Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
+    method as soon as you no longer need the discovery process.
+extends: Titanium.Proxy
+methods:
+
+  - name: setName
+    summary: Sets the local Bluetooth adapter name.
+    description: |
+        Sends a request to Bluetooth hardware to change the name of the local Bluetooth adapter to name.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
+    parameters: 
+      - name: name
+        summary: Name to set.
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+ 
+  - name: setPowered
+    summary: Turns Bluetooth adapter on or off. 
+    description: |
+        Sends a request to Bluetooth hardware to change the state to a given state. For most Bluetooth actions, the Bluetooth adapter must be powered on.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.admin
+
+    parameters: 
+      - name: state
+        summary: "State to set: true to power on Bluetooth, false to power it off." 
+        type: Boolean
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+
+  - name: stopDiscovery
+    summary: Stops the device discovery process session, if active. Automatically unsubscribes from all "discovery" events.
+    description: |
+        Device discovery is a heavyweight procedure, hence we recommend stopping discovery as soon as required device is found. This method cancels an active discovery session.
+        The ErrorCallback is launched with these error types:
+            ServiceNotAvailableError: If a Bluetooth device is turned off.
+            UnknownError: In any other error case.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+
+    parameters: 
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+
+  - name: getKnownDevices
+    summary: Gets all the devices that have information stored in the local Bluetooth adapter.    
+    description: |
+        A known device is one of the following:
+            a bonded device
+            a device found in last inquiry process
+        On success, it returns the list of currently known devices.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+
+    parameters: 
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<GetKnownDevicesResponse>
+
+  - name: getDevice
+    summary: Gets the BluetoothDevice object for a given device hardware address. 
+    description: |
+        This method returns device information stored in the local Bluetooth adapter for the specified device. A valid hardware address must be passed, such as "35:F4:59:D1:7A:03".
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+
+    parameters: 
+      - name: address
+        summary: Address of a remote Bluetooth device to get.  
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<GetDeviceResponse>
+        optional: true
+
+  - name: createBonding
+    summary: Initiates the bonding process with a remote device.  
+    description: |
+        To communicate with any remote Bluetooth device, it must be bonded (that is, the device should be authenticated). Only bonded devices can connect to services and exchange data with each other. This method initiates the bonding process with peer device, using the given MAC address.
+        If the bonding process is successful, the device information is sent through callback.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+
+    parameters: 
+      - name: address
+        summary: The MAC address of remote Bluetooth address to bond with.   
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<CreateBondingResponse>
+        optional: true
+
+  - name: destroyBonding
+    summary: Destroys bonding with a remote device.   
+    description: |
+        This method initiates the process to remove the given address from the bonded devices list.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+
+    parameters: 
+      - name: address
+        summary: Address of the bonded device.   
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+ 
+  - name: registerRFCOMMServiceByUUID
+    summary: Registers a service for other devices to consume.    
+    description: |
+        This method registers a service record in the device service record database with the specified uuid, name and auto assigned channel. On success of the service registration, it returns a Modules.Tizen.Bluetooth.BluetoothServiceHandler object as the first parameter of successCallback, and listens for client connections. The service handler can be used to be notified on client connections or to unregister the service. User interaction is mandatory to connect to a registered service and a link between devices is encrypted. This guarantees a registered service is securely protected.
+        Clients should do service discovery on this device with a specified uuid to determine the right channel.
+        [unregister](Modules.Tizen.Bluetooth.BluetoothServiceHandler.unregister) can be used to unregister the service record from the device service database and stop listening for client connections.
+        
+        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
+
+    parameters: 
+      - name: uuid
+        summary: UUID of the service, to which clients can connect.   
+        type: String
+
+      - name: name
+        summary: Name of the service.    
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<RegisterRFCOMMServiceByUUIDResponse>
+        optional: true
+ 
+events:
+  - name: discoverystarted
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+    summary: Event to be fired at the beginning of the device discovery process for finding the nearby Bluetooth device.
+    
+  - name: devicedisappeared
+    summary: Event to be fired when a device is lost from proximity. After that, this device is no longer visible.
+    properties:
+      - name: address
+        summary: Address of the device that is no longer in range or visible.
+        type: String
+        
+  - name: devicefound
+    summary: Event to be fired when a new device is discovered in the process of inquiry/discovery.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+    properties:
+      - name: device
+        summary: Found device.
+        type: Modules.Tizen.Bluetooth.BluetoothDevice
+
+  - name: discoveryfinished
+    summary: Event to be fired when the device discovery process has finished.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+    properties:
+      - name: foundDevices
+        summary: Array of devices found in this discovery session.
+        type: Array<Modules.Tizen.Bluetooth.BluetoothDevice>
+    
+  - name: discoveryerror
+    summary: Event to be fired when a Bluetooth device is turned off or any other error case.
+    description: |
+        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+    properties:
+      - name: error
+        summary: A string describing the error.
+        type: String
+
+      - name: code
+        summary: The error code.
+    
+properties:
+  - name: name
+    summary: The readable name of the Bluetooth adapter.
+    type: String
+    permission: read-only
+
+  - name: address
+    summary: The unique hardware address of the Bluetooth adapter, also known as the MAC address. 
+    type: String
+    permission: read-only
+
+  - name: powered
+    summary: Holds the current state of Bluetooth adapter.   
+    type: Boolean
+    permission: read-only
+
+  - name: visible
+    summary: Holds the current visibility of the device.    
+    type: Boolean
+    permission: read-only
+
+---
+name: GetKnownDevicesResponse
+summary: |
+    Simple object returned in the callback from
+    [getKnownDevices](Modules.Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: devices
+    summary:  List of devices known to local Bluetooth adapter. Each element is a Modules.Tizen.Bluetooth.BluetoothDevice.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Bluetooth.BluetoothDevice>
+
+---
+name: GetDeviceResponse
+summary: |
+    Simple object returned in the callback from
+    [getDevice](Modules.Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: device
+    summary:  Modules.Tizen.Bluetooth.BluetoothDevice object.
+    description: Will be undefined if `success` is `false`.
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
+
+---
+name: CreateBondingResponse
+summary: |
+    Simple object returned in the callback from
+    [createBonding](Modules.Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: device
+    summary:  Modules.Tizen.Bluetooth.BluetoothDevice object.
+    description: Will be undefined if `success` is `false`.
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
+
+---
+name: RegisterRFCOMMServiceByUUIDResponse
+summary: |
+    Simple object returned in the callback from
+    [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: handler
+    summary: Bluetooth service handler.
+    description: Will be undefined if `success` is `false`.
+    type: Modules.Tizen.Bluetooth.BluetoothServiceHandler
+

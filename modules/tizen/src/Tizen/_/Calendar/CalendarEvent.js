@@ -1,13 +1,21 @@
 // Wraps Tizen interface "CalendarEvent" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helper', 'Tizen/_/WebAPIError'], function(declare, CalendarItem, helper, WebAPIError) {
+define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helper'], function(declare, CalendarItem, helper) {
+
+	function onError (e, callback) {
+		callback({
+			code: e.code,
+			success: false,
+			error: e.type + ': ' + e.message
+		});
+	}
 
 	var calendarEvent = declare(CalendarItem, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarEvent]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.
@@ -33,12 +41,23 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 			}
 		},
 
-		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, successCallback /*CalendarEventArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			function wrappedErrorCallback(error) {
-				errorCallback(new WebAPIError(error));
-			}
+		expandRecurrence: function(startDate /*Date*/, endDate /*Date*/, callback) {
+			this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), callback && function(events) {
+				var i = 0,
+					eventsCount = events.length,
+					eventsItems = [];
 
-			return this._obj.expandRecurrence(helper.createTZDate(startDate), helper.createTZDate(endDate), successCallback, errorCallback && wrappedErrorCallback);
+				for (; i < eventsCount; i++) {
+					eventsItems.push(new calendarEvent(void 0, events[i]));
+				}
+				callback({
+					code: 0,
+					success: true,
+					events: eventsItems
+				});
+			}, callback && function(e) {
+					onError(e, callback);
+			});
 		},
 
 		constants: {

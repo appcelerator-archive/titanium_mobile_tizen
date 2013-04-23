@@ -2,9 +2,9 @@
 
 define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/SystemInfoStorage',
 	'Tizen/_/SystemInfo/SystemInfoDeviceCapability', 'Tizen/_/SystemInfo/SystemInfoCellularNetwork', 'Tizen/_/SystemInfo/SystemInfoSIM',
-	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Tizen/_/WebAPIError', 'Ti/_/Evented'],
+	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Ti/_/Evented'],
 	function(lang, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability, SystemInfoCellularNetwork,
-			 SystemInfoSIM, SystemInfoStorageUnit, WebAPIError, Evented) {
+			SystemInfoSIM, SystemInfoStorageUnit, Evented) {
 
 		var SystemInfo = lang.mixProps(require.mix({}, Evented), {
 
@@ -30,7 +30,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 
 			addPropertyValueChangeListener: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, options /*SystemInfoOptions*/) {
 				return tizen.systeminfo.addPropertyValueChangeListener(property, function(object) {
-					successCallback(wrap(object))
+					successCallback(wrap(object));
 				}, options);
 			},
 
@@ -48,6 +48,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 
 		}, true);
 
+		// Appropriate types are absent in Tizen, so we leave toString.
 		function wrap(object) {
 			if (object.toString() === '[object cpuinfo]') {
 				return new SystemInfoCpu(object);

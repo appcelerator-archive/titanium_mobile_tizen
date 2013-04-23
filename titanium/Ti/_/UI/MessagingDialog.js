@@ -43,6 +43,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function (declare, Evented) {
 				tizen.application.launchAppControl(appControl, self._id, function () {
 						console.log('Launch appControl succeeded')
 					}, function (e) {
+						self.fireEvent('complete', {
+							result: self.FAILED,
+							success: false
+						});
 						console.log('Launch appControl failed. Reason: ' + e.name)
 					}, serviceCB);
 			},

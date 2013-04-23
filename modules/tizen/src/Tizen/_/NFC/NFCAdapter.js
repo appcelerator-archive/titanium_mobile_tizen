@@ -1,68 +1,80 @@
 // Wraps Tizen interface "NFCAdapter" that resides in Tizen module "NFC".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPeer', 'Tizen/_/WebAPIError'], function(declare, Evented, NFCTag, NFCPeer, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPeer'], function(declare, Evented, NFCTag, NFCPeer) {
 
-	var adapter = declare(Evented, {
+	var listening,
+		adapter = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object NFCAdapter]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			} 
-		},
+			constructor: function(nativeObj) {
+					// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+					this._obj = nativeObj;
+			},
 
-		setPowered: function(state, successCallback, errorCallback) {
-			return this._obj.setPowered(state, successCallback && function() {
-				successCallback();
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
-			});
-		},
+			setPowered: function(state, callback) {
+				this._obj.setPowered(state, callback && function() {
+					callback({
+						success: true,
+						code: 0
+					});
+				}, callback && function(e) {
+					callback({
+						success: false,
+						error: e.type + ': ' + e.message,
+						code: e.code
+					});
+				});
+			},
 
-		setTagListener: function(detectCallback, tagFilter) {
+			setTagListener: function(detectCallback, tagFilter) {
+				this._obj.setTagListener({
+					onattach: function(nfcTag) {
+						detectCallback.onattach(new NFCTag(nfcTag));
+					},
+					ondetach: function() {
+						detectCallback.ondetach();
+					}
+				}, tagFilter);
+			},
 
-			return this._obj.setTagListener({
-				onattach: function(nfcTag) {
-					detectCallback.onattach(new NFCTag(nfcTag));
-				},
-				ondetach: function() {
-					detectCallback.ondetach();
+			unsetTagListener: function() {
+				this._obj.unsetTagListener();
+			},
+
+			addEventListener: function () {
+				var self = this;
+
+				Evented.addEventListener.apply(this, arguments);
+
+				if (! listening) {
+					listening = true;
+
+					// Add Peer event listeners.
+					this._obj.setPeerListener({
+						onattach: function (nfcPeer) {
+							self.fireEvent('peerattached', {
+								nfcPeer: new NFCPeer(nfcPeer)
+							});
+						},
+						ondetach: function () {
+							self.fireEvent('peerdetached');
+						}
+					});
 				}
-			}, tagFilter);
-		},
+			},
 
-		setPeerListener: function(detectCallback) {
-			return this._obj.setPeerListener({
-				onattach: function(nfcPeer) {
-					detectCallback.onattach(new NFCPeer(nfcPeer));
-				},
-				ondetach: function() {
-					detectCallback.ondetach();
-				}
-			});
-		},
+			getCachedMessage: function() {
+				return this._obj.getCachedMessage();
+			},
 
-		unsetTagListener: function() {
-			return this._obj.unsetTagListener();
-		},
-
-		unsetPeerListener: function() {
-			return this._obj.unsetPeerListener();
-		},
-
-		getCachedMessage: function() {
-			return this._obj.getCachedMessage();
-		},
-
-		constants: {
-			powered: {
-				get: function() {
-					return this._obj.powered;
+			constants: {
+				powered: {
+					get: function() {
+						return this._obj.powered;
+					}
 				}
 			}
-		}
 
-	});
+		});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

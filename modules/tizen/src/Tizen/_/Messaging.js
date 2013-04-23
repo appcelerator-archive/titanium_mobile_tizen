@@ -1,29 +1,30 @@
 // Wraps Tizen module "Messaging".
 
-define(['Ti/_/lang', 'Tizen/_/Messaging/MessageService', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageAttachment', 'Ti/_/Evented', 'Tizen/_/WebAPIError'],
-	function(lang, MessageService, Message, MessageAttachment, Evented, WebAPIError) {
+define(['Ti/_/lang', 'Tizen/_/Messaging/MessageService', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageAttachment', 'Ti/_/Evented'],
+	function(lang, MessageService, Message, MessageAttachment, Evented) {
 
 		return lang.mixProps(require.mix({}, Evented), {
 
-			getMessageServices: function(messageServiceType /*MessageServiceTag*/, successCallback /*MessageServiceArraySuccessCallback*/, errorCallback /*ErrorCallback*/, serviceId /*AccountServiceId*/) {
-
-				function servicesListSuccessCallBack(objects) {
+			getMessageServices: function(messageServiceType /*MessageServiceTag*/, callback, serviceId /*AccountServiceId*/) {
+				tizen.messaging.getMessageServices(messageServiceType, callback && function (services) {
 					var i = 0,
-						objectsCount = objects.length,
+						servicesCount = services.length,
 						result = [];
-
-					for (; i < objectsCount; i++) {
-						result.push(new MessageService(objects[i]));
+					for (; i < servicesCount; i++) {
+						result.push(new MessageService(services[i]));
 					}
-
-					successCallback(result);
-				}
-
-				function wrappedErrorCallback(error) {
-					errorCallback(new WebAPIError(error));
-				}
-
-				tizen.messaging.getMessageServices(messageServiceType, servicesListSuccessCallBack, errorCallback && wrappedErrorCallback, serviceId);
+					callback({
+						code: 0,
+						success: true,
+						services: result
+					});
+				}, callback && function (e) {
+					callback({
+						code: e.code,
+						success: true,
+						error: e.type + ': ' + e.message
+					});
+				}, serviceId);
 			},
 
 			createMessage: function(args) {

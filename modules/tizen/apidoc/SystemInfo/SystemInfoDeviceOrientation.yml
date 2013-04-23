@@ -1,0 +1,17 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoDeviceOrientation
+summary: This property reflects the information of the device orientation in this system.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+
+  - name: status
+    summary: |
+        This property reflects the information of the device orientation in this system.
+        The value is one of the constants defined for this type.
+        The supported device orientation types are: <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY>
+
+    type: String
+    permission: read-only

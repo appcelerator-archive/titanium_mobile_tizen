@@ -3,10 +3,10 @@
 define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, Blob) {
 
 	var record = declare(Evented, {
-		constructor: function(args) {
-			if (args.toString() === '[object NDEFRecord]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				if ('raw_data' in args) {
 					this._obj = new tizen.NDEFRecord(args.raw_data);
@@ -59,7 +59,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Ti/Blob'], function(declare, Evented, B
 			binaryString[i] = String.fromCharCode(byteArray[i]);
 		}
 		return binaryString.join('');
-	};
+	}
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

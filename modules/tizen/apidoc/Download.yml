@@ -1,0 +1,77 @@
+---
+name: Modules.Tizen.Download
+summary: |
+    The Download module provides methods to asynchronously download the contents of a URL to a storage.
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: getDownloadRequest
+    summary: Gets the DownloadRequest object from a given id.
+    description: |
+        Returns the download request information of the given id.
+    returns:
+        type: <Modules.Tizen.Download.DownloadRequest>
+    parameters:
+      - name: downloadId
+        summary: The ID to get the download request information.
+        type: Number
+
+  - name: createDownloadRequest
+    summary: Creates <Modules.Tizen.Download.DownloadRequest> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.Download.DownloadRequest>.
+        type: Dictionary<createDownloadRequestParameters>
+    returns:
+        type: <Modules.Tizen.Download.DownloadRequest>
+
+properties:
+  - name: DOWNLOAD_STATE_QUEUED
+    summary: Indicates that the download operation is listed in a queue.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_DOWNLOADING
+    summary:  Indicates that the download operation is in progress.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_PAUSED
+    summary: Indicates that the download operation is in a paused state by user request.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_CANCELED
+    summary: Indicates that the download operation is canceled by user request.
+    type: STRING
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_COMPLETED
+    summary: Indicates that the download operation is in a completed state.
+    type: STRING  
+    
+  - name: DOWNLOAD_STATE_FAILED
+    summary: Indicates that the download operation has failed due to some reasons.
+    type: STRING
+    permission: read-only
+
+---
+name: createDownloadRequestParameters
+summary: Parameters for the <Modules.Tizen.Download.createDownloadRequest>.
+properties:
+  - name: url
+    summary: The URL of the object to download.
+    type: String
+
+  - name: destination
+    summary: (optional) Destination folder to which a requested file object will be downloaded.
+        If the destination is not specified, the file will be downloaded to the default storage "Downloads".
+    type: String
+    optional: true
+
+  - name: fileName
+    summary: (optional) An attribute to store the file name for the specified URL. If the file name is not given, 
+        the original file name from URL is used.
+    type: String
+    optional: true

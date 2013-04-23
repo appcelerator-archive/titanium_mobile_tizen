@@ -3,7 +3,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 	function errorCallback(e, callback) {
 		callback({
 			code: -1,
-			message: e.type + ': ' + e.message,
+			error: e.type + ': ' + e.message,
 			success: false
 		});
 	}
@@ -38,7 +38,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 		callback({
 			code: 0,
 			success: true,
-			data: persons
+			persons: persons
 		});
 	}
 

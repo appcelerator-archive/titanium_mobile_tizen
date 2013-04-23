@@ -1,6 +1,6 @@
 // Wraps Tizen module "SystemSetting".
 
-define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Evented, WebAPIError) {
+define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
 	function errorCallback (e, callback) {
 		callback({
@@ -13,7 +13,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Even
 	return lang.mixProps(require.mix({}, Evented), {
 
 		setProperty: function(type /*SystemSettingType*/, value /*DOMString*/, callback) {
-			return tizen.systemsetting.setProperty(type, value, function() {
+			tizen.systemsetting.setProperty(type, value, callback && function() {
 				callback({
 					code: 0,
 					success: true
@@ -24,7 +24,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError'], function(lang, Even
 		},
 
 		getProperty: function(type /*SystemSettingType*/, callback) {
-			return tizen.systemsetting.getProperty(type, function(value) {
+			tizen.systemsetting.getProperty(type, callback && function(value) {
 				callback({
 					code: 0,
 					success: true,

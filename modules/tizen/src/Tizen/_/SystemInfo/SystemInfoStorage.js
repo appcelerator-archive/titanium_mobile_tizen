@@ -4,11 +4,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/SystemInfo/SystemInfoStorageUni
 
 	var storage = declare(Evented, {
 
-		constructor: function(args) {
+		constructor: function(nativeObj) {
 			// Automatically initialize system info storage units.
-			
+
 			var i = 0,
-				units = args,
+				units = nativeObj,
 				unitsCount = units.length,
 				result = [];
 
@@ -16,12 +16,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/SystemInfo/SystemInfoStorageUni
 				result.push(new SystemInfoStorageUnit(units[i]));
 			}
 
-			this._obj = args;
-			this.constants.__values__.units = result;
+			this._units = result;
 		},
 
-		constants: {
-			units: {}
+		getUnits: function() {
+			return this._units;
 		}
 
 	});

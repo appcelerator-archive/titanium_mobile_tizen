@@ -48,8 +48,7 @@ define(
 		},
 
 		openPhotoGallery: function(args) {
-			var photoGallery = require('Ti/_/Media/PhotoGallery');
-			photoGallery.open(args);
+			require('Ti/_/Media/PhotoGallery').open(args);
 		},
 
 		createAudioPlayer: function(args) {

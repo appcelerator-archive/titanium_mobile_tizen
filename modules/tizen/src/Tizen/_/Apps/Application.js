@@ -6,9 +6,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Apps/ApplicationInformation', '
 
 		var application = declare(Evented, {
 
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 				// automatically initialize appInfo
 				this.constants.__values__.appInfo = new ApplicationInformation(this._obj.appInfo);
 			},

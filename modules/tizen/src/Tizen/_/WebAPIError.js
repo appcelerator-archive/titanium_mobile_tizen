@@ -3,9 +3,9 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	var error = declare(Evented, {
 
-		constructor: function(args) {
+		constructor: function(nativeObj) {
 			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+			this._obj = nativeObj;
 		},
 
 		constants: {
