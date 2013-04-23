@@ -20,7 +20,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 		constants: {
 			id: {
 				get: function() {
-					return (this._obj == '[object CalendarEvent]') ? (new CalendarEventId(void 0, this._obj.id)) : this._obj.id;
+					return (this._obj == '[object CalendarEvent]') ? 
+						(new CalendarEventId(void 0, this._obj.id)) : 
+						this._obj.id;
 				}
 			},
 			lastModificationDate: {
