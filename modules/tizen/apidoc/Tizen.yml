@@ -55,6 +55,16 @@ methods:
         summary: Dictionary with initial arguments for SimpleCoordinates.
         type: Dictionary<SimpleCoordinatesUnit>
 
+  - name: createContactRef
+    summary: Creates and returns an instance of <Modules.Tizen.ContactRef>.
+    returns: 
+        type: Modules.Tizen.ContactRef
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for ContactRef.
+        type: Dictionary<ContactRefUnit>
+
 properties:
   - name: FILTER_MUCH_FLAG_EXACTLY
     summary: Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.
@@ -184,3 +194,14 @@ properties:
   - name: longitude
     type: Number
     summary: Longitude, of the WGS84 datum.
+
+---
+name: ContactRefUnit
+summary:  The fully-defined contact reference.
+properties:
+  - name: addressBookId
+    type: String
+    summary: The address book identifier.
+  - name: contactId
+    type: String
+    summary: The contact identifier inside the address book. 
