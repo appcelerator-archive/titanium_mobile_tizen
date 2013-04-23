@@ -5,9 +5,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var requestedApplicationControl = declare(Evented, {
 
-		constructor: function(args) {
-			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 			this.constants.__values__.appControl = {
 				key: this._obj.appControl.key,
 				value: this._obj.appControl.value

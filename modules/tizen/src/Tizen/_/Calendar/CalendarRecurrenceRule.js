@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 
 	var calendarRecurrenceRule = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarRecurrenceRule]') {
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.

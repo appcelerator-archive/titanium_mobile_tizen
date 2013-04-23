@@ -41,7 +41,7 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 
 			var result;
 			if (object.toString() === '[object StatusNotification]') {
-				result = this.createStatusNotification(object);
+				result = new StatusNotification(void 0, object);
 			}
 			else
 			{

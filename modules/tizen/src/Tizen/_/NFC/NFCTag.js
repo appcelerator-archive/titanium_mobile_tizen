@@ -12,11 +12,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 
 	var tag = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object NFCTag]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			}
+		constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 		},
 
 		readNDEF: function(callback) {
@@ -24,7 +22,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 				callback({
 					success: true,
 					code: 0,
-					ndefMessage: new NDEFMessage(ndefMessage)
+					ndefMessage: new NDEFMessage(void 0, ndefMessage)
 				});
 			}, callback && function(e) {
 				onError(e, callback);

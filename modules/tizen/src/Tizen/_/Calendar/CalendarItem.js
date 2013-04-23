@@ -4,9 +4,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 
 	var calendarItem = declare(Evented, {
 
-		constructor: function(args) {
-			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		convertToString: function(format /*CalendarTextFormat*/) {
@@ -14,13 +14,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 		},
 
 		clone: function() {
-			return new (require('Tizen/_/Calendar/CalendarEvent'))(this._obj.clone());
+			return new (require('Tizen/_/Calendar/CalendarEvent'))(void 0, this._obj.clone());
 		},
 
 		constants: {
 			id: {
 				get: function() {
-					return (this._obj == '[object CalendarEvent]') ? (new CalendarEventId(this._obj.id)) : this._obj.id;
+					return (this._obj == '[object CalendarEvent]') ? (new CalendarEventId(void 0, this._obj.id)) : this._obj.id;
 				}
 			},
 			lastModificationDate: {
@@ -151,7 +151,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 						l = attendees.length,
 						result = [];
 					for (; i < l; i++) {
-						result.push(new Attendee(attendees[i]));
+						result.push(new Attendee(void 0, attendees[i]));
 					}
 					return result;
 				},

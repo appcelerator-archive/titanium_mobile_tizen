@@ -5,7 +5,7 @@ define(['Ti/_/lang', 'Tizen/_/Download/DownloadRequest', 'Ti/_/Evented'], functi
 	return lang.mixProps(require.mix({}, Evented), {
 
 		getDownloadRequest: function(downloadId /*long*/) {
-			return new DownloadRequest(tizen.download.getDownloadRequest(downloadId));
+			return new DownloadRequest(void 0, tizen.download.getDownloadRequest(downloadId));
 		},
 
 		createDownloadRequest: function(args) {

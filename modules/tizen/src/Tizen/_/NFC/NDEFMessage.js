@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/N
 	function(declare, Evented, NDEFRecord, NDEFRecordURI, NDEFRecordText, NDEFRecordMedia) {
 
 		var msg = declare(Evented, {
-			constructor: function(args) {
-				if (args.toString() === '[object NDEFMessage]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
+			constructor: function(args, nativeObj) {
+				if (nativeObj) {
+					// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+					this._obj = nativeObj;
 				} else {
 					// args is a dictionary that the user of the wrapper module passed to the creator function.
 					// There are several Tizen constructors for this object.
@@ -52,16 +52,16 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFRecord', 'Tizen/_/NFC/N
 
 							switch (r.toString()) {
 								case '[object NDEFRecordURI]':
-									wrappedRecords[i] = new NDEFRecordURI(r);
+									wrappedRecords[i] = new NDEFRecordURI(void 0, r);
 									break;
 								case '[object NDEFRecordText]':
-									wrappedRecords[i] = new NDEFRecordText(r);
+									wrappedRecords[i] = new NDEFRecordText(void 0, r);
 									break;
 								case '[object NDEFRecordMedia]':
-									wrappedRecords[i] = new NDEFRecordMedia(r);
+									wrappedRecords[i] = new NDEFRecordMedia(void 0, r);
 									break;
 								default:
-									wrappedRecords[i] = new NDEFRecord(r);
+									wrappedRecords[i] = new NDEFRecord(void 0, r);
 							}
 						}
 

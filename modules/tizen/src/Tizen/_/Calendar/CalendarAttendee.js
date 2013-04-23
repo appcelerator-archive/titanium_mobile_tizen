@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Contact/ContactRef'], function(
 
 	var calendarAttendee = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarAttendee]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				if (args.hasOwnProperty('uri')) {
@@ -104,7 +104,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Contact/ContactRef'], function(
 			},
 			contactRef: {
 				get: function() {
-					return new ContactRef(this._obj.contactRef);
+					return new ContactRef(void 0, this._obj.contactRef);
 				},
 				set: function(value) {
 					this._obj.contactRef = value._obj;

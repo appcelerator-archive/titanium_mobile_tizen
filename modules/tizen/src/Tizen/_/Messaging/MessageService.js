@@ -19,9 +19,9 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 		}
 
 		var messageService = declare(null, {
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 				// Automatically initialize messageStorage.
 				this.constants.__values__.messageStorage = new MessageStorage(this._obj.messageStorage);
 			},
@@ -55,7 +55,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 					callback({
 						code: 0,
 						success: true,
-						attachment: new MessageAttachment(attachment)
+						attachment: new MessageAttachment(void 0, attachment)
 					});
 				}, callback && function (e) {
 					onError(e, callback);

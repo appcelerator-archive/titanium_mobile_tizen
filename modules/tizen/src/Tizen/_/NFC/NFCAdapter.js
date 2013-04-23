@@ -5,11 +5,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 	var listening,
 		adapter = declare(Evented, {
 
-			constructor: function(args) {
-				if (args.toString() === '[object NFCAdapter]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
-				}
+			constructor: function(nativeObj) {
+					// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+					this._obj = nativeObj;
 			},
 
 			setPowered: function(state, callback) {

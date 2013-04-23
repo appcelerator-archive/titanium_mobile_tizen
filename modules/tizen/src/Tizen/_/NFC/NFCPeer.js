@@ -5,11 +5,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 	var listening,
 		peer = declare(Evented, {
 
-			constructor: function(args) {
-				if (args.toString() === '[object NFCPeer]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
-				}
+			constructor: function(nativeObj) {
+					// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+					this._obj = nativeObj;
 			},
 
 			constants: {
@@ -29,7 +27,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 					listening = true;
 					this._obj.setReceiveNDEFListener(function (ndefMessage) {
 						self.fireEvent('ndefmessagereceived', {
-							message: new NDEFMessage(ndefMessage)
+							message: new NDEFMessage(void 0, ndefMessage)
 						});
 					});
 				}

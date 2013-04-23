@@ -13,11 +13,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], fu
 	var listening,
 		handler = declare(Evented, {
 
-			constructor: function(args) {
-				if (args.toString() === '[object BluetoothServiceHandler]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
-				}
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
 			addEventListener: function () {

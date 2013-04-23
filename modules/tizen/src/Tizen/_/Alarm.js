@@ -38,10 +38,10 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 			var result;
 
 			if (object.toString() === '[object AlarmRelative]') {
-				result = this.createAlarmRelative(object);
+				result = new AlarmRelative(void 0, object);
 			}
 			else if (object.toString() === '[object AlarmAbsolute]') {
-				result = this.createAlarmAbsolute(object);
+				result = new AlarmAbsolute(void 0, object);
 			} else {
 				console.error('Incorrect object type');
 			}

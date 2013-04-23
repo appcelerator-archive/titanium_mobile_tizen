@@ -15,13 +15,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 
 		var calendarInstance = declare(Evented, {
 
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
 			get: function(id /*CalendarItemId*/) {
-				return new CalendarEvent(this._obj.get(id._obj));
+				return new CalendarEvent(void 0, this._obj.get(id._obj));
 			},
 
 			add: function(item /*CalendarItem*/) {
@@ -135,8 +135,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 					callback && function(e) {
 						onError(e, callback);
 					},
-					(filter && (filter.toString() == '[object TizenAttributeFilter]')) ? filter._obj : filter,
-					(sortMode && (sortMode.toString() == '[object TizenSortMode]')) ? sortMode._obj : sortMode
+					(filter && (filter.toString() === '[object TizenAttributeFilter]')) ? filter._obj : filter,
+					(sortMode && (sortMode.toString() === '[object TizenSortMode]')) ? sortMode._obj : sortMode
 				);
 			},
 
@@ -149,9 +149,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 
 					for (; i < itemsCount; i++) {
 						if(items[i].toString() === '[object CalendarEvent]') {
-							wrappedItems.push(new CalendarEvent(items[i]));
+							wrappedItems.push(new CalendarEvent(void 0, items[i]));
 						} else if(items[i].toString() === '[object CalendarTask]') {
-							wrappedItems.push(new CalendarTask(items[i]));
+							wrappedItems.push(new CalendarTask(void 0, items[i]));
 						} else {
 							console.error('Cannot wrap item: ' + items[i]);
 						}
@@ -167,7 +167,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 
 					for (; i < itemsCount; i++) {
 						if(typeof ids[i] === 'object') {
-							wrappedIds.push(new CalendarEventId(ids[i]));
+							wrappedIds.push(new CalendarEventId(void 0, ids[i]));
 						} else if(typeof ids[i] === 'string') {
 							wrappedIds.push(ids[i]);
 						} else {

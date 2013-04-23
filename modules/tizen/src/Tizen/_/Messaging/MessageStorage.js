@@ -20,9 +20,9 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 
 		var messageStorage = declare(null, {
 
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
 			addDraftMessage: function(message /*Message*/, callback) {
@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 						messagesCount = messages.length,
 						result = [];
 					for (; i < messagesCount; i++) {
-						result.push(new Message(messages[i]));
+						result.push(new Message(void 0, messages[i]));
 					}
 					callback({
 						code: 0,
@@ -142,7 +142,7 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						wrappedItems.push(new Message(items[i]));
+						wrappedItems.push(new Message(void 0, items[i]));
 					}
 
 					return wrappedItems;
