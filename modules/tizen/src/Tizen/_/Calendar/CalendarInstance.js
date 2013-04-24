@@ -21,7 +21,15 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			},
 
 			get: function(id /*CalendarItemId*/) {
-				return new CalendarEvent(void 0, this._obj.get(id._obj));
+				var calendarItem;
+
+				if(typeof id === 'string'){
+					calendarItem = new CalendarTask(void 0, this._obj.get(id));
+				} else if(typeof id === 'object') {
+					calendarItem = new CalendarEvent(void 0, this._obj.get(id._obj));
+				}
+
+				return calendarItem;
 			},
 
 			add: function(item /*CalendarItem*/) {
