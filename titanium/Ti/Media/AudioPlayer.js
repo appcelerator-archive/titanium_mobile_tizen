@@ -9,16 +9,16 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 		_changeState: function(newState, description) {
 			Audio.prototype._changeState.apply(this, arguments);
 
-			var cons = this.constants.__values__,
-				evt = {};
+			var cons = this.constants.__values__;
 
 			cons.idle = this._initialized && !cons.playing;
 
-			evt.src = this;
-			evt.state = cons.state = newState;
-			evt.description = description;
-
-			this.fireEvent('change', evt);// external (interface) event
+			this.fireEvent('change', {
+				// external (interface) event
+				src: this,
+				state: cons.state = newState,
+				description: description
+			});
 		},
 
 		_error: function() {
