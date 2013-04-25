@@ -13,7 +13,7 @@ methods:
     description: |
         Added messages would be stored in the Drafts folder.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: message
         summary:  Draft message that should be added to the storage. 
@@ -27,7 +27,7 @@ methods:
   - name: findMessages
     summary: Queries messages from MessageStorage. 
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -59,7 +59,7 @@ methods:
             InvalidValuesError: If any of the input parameters contain an invalid value
             UnknownError: In any other error case.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: messages
         summary: Array of messages to be deleted. 
@@ -75,7 +75,7 @@ methods:
     description: |
         The backend MUST check whether the required updates can be applied and invoke the callback function with error message, if they cannot. Depending on the backend synchronization settings, the local changes in Modules.Tizen.Messaging.MessageStorage might be rewritten as a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related message service.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: messages
         summary: Array that should be updated. 
@@ -89,7 +89,7 @@ methods:
   - name: findConversations
     summary: Queries conversations from MessageStorage. 
     description: | 
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria to be used when filtering. 
@@ -121,7 +121,7 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.write
     parameters: 
       - name: conversations
         summary: Array of conversations to be deleted.
@@ -135,7 +135,7 @@ methods:
   - name: findFolders
     summary: Queries folders from MessageStorage. 
     description: |        
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: filter
         summary: Criteria used when filtering. 
@@ -152,7 +152,7 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: subscription identifier. 
@@ -173,7 +173,7 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: Subscription identifier. 
@@ -194,7 +194,7 @@ methods:
             InvalidValuesError: If any of the input parameters contains an invalid value.
             UnknownError: In any other error case.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     returns: 
       - type: Number
         summary: Subscription identifier. 
@@ -216,7 +216,7 @@ methods:
             UnknownError: In any other error case.
         If the subscriptionId argument is valid and corresponds to a subscription already in place, the subscription process MUST stop immediately and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId argument does not correspond to a valid subscription, the method will return without any further action.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/messaging.read
     parameters: 
       - name: watchId
         summary:  Identifier of the subscription returned by addMessagesChangeListener, addConversationsChangeListener or addFoldersChangeListener methods. 

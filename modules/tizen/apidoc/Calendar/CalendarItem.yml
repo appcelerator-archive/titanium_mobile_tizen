@@ -13,7 +13,7 @@ methods:
         Converts the calendar item to a string format that will be generated and returned synchronously. 
         The export format is set using the format parameter.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
     returns:
         summary: The representation of the Calendar item.
         type: String
@@ -29,7 +29,7 @@ methods:
         The CalendarItem object returned by the clone() method will have its identifier set to null and 
         will be detached from any calendar.
         
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.write
     parameters:
       - name: item
         summary: The new clone of the CalendarItem object.

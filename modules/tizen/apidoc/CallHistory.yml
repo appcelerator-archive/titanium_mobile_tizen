@@ -12,7 +12,7 @@ methods:
   - name: find
     summary: Finds and returns call history items.
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     parameters:
       - name: callback
         summary: This is a callback interface of CallHistory operations. For example code see CallHistory interface.
@@ -40,7 +40,7 @@ methods:
   - name: remove
     summary: Removes a call history entry synchronously by deleting it. 
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
@@ -49,7 +49,7 @@ methods:
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
       - name: entries
         summary: A list of call history entries to delete. 
@@ -62,7 +62,7 @@ methods:
   - name: removeAll
     summary: Removes the complete call history by deleting it. 
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
+        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.write
     parameters: 
       - name: callback
         summary: A generic success handler.
@@ -74,7 +74,7 @@ events:
   - name: itemsadded
     summary: Fired when a new call history item is added.
     description: |
-        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
+        To use this event, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     properties:
       - name: items
         summary: An array of CallHistoryEntry objects, representing the new items added to call history.
@@ -82,7 +82,7 @@ events:
   - name: itemschanged
     summary: Fires when the call history items have been changed.
     description: |
-        To use this event, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
+        To use this event, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/callhistory.read
     properties:
       - name: items
         summary: An array of CallHistoryEntry objects, representing the changed items in call history.
