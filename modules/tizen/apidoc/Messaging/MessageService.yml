@@ -15,7 +15,10 @@ methods:
     description: |
         The error message contains the name of the recipient who failed to receive the sent message.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/messaging.send
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.send`
+        
     parameters: 
       - name: message
         summary: The message to be sent. 
@@ -31,7 +34,10 @@ methods:
     description: |
         It is the back end's responsibility to detect which mime parts of the message are related to the message body and should be loaded. If the message body is loaded,  the callback will be invoked immediately.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
     parameters: 
       - name: message
         summary: Message with the body to be loaded. 
@@ -46,7 +52,10 @@ methods:
     description: |
         This method is used only for EMAIL services. If the message attachment is already loaded, the callback will be invoked immediately.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
     parameters: 
       - name: attachment
         summary: Message attachment to be loaded. 
@@ -61,7 +70,10 @@ methods:
     description: |
         This method is used only for EMAIL services. This method performs the same actions as syncFolder for every folder with Synchronizable flag set within the current Messaging service.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
     returns: 
       - type: Number
         summary: Identifier which can be used to stop this service operation. 
@@ -87,7 +99,10 @@ methods:
             whole message body
         The limit of latest messages for the given folder MUST be retrieved and put into Modules.Tizen.Messaging.MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/messaging.write
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
     returns: 
       - type: Number
         summary: Identifier which can be used to stop this service operation. 

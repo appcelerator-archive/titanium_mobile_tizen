@@ -30,7 +30,10 @@ methods:
     description: |
         The function must synchronously acquire the capabilities of the device.
         
-        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/systeminfo
+        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/systeminfo`
+        
     returns:
         type: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
             
@@ -46,7 +49,10 @@ methods:
             - InvalidValuesError: If any of the input parameters contain an invalid value.
             - UnknownError: In any other error case.
         
-        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/systeminfo
+        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/systeminfo`
+        
     parameters:
       - name: property 
         summary: Name of the property to retrieve.
@@ -70,7 +76,10 @@ methods:
         3. When a system event is successfully received invoke the associated successCallback with an object containing the property values.
         4. Repeat step 3 until removePropertyValueChangeListener function is called.
         
-        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/systeminfo
+        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/systeminfo`
+        
     returns:
         summary: Identifier used to clear the watch subscription.
         type: Number
@@ -95,7 +104,10 @@ methods:
         If the listenerId argument does not correspond to a valid subscription, 
         the method should return without any further action.
         
-        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/systeminfo
+        To use this function, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/systeminfo`
+        
     parameters:
       - name: listenerId
         summary:  Identifier of the subscription returned by the addPropertyValueChangeListener() method.

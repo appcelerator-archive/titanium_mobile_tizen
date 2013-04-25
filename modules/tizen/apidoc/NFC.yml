@@ -174,7 +174,10 @@ methods:
     description: |
         NFC adapter interface provides access to control the NFC adapter. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  http://tizen.org/privilege/nfc.common
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.common`
+        
     returns:
         type: Modules.Tizen.NFC.NFCAdapter
 
