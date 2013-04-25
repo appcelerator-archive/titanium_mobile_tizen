@@ -59,6 +59,75 @@ properties:
     type: String
     permission: read-only
 
+examples:
+  - title: Enumerate all folders in an email account.
+    example: |
+        This example shows how to enumerate all folders in an email account (like inbox, sent, etc).
+
+            var Tizen = require('tizen'),
+                serviceType = Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGEMAIL,
+                emailService;
+
+            // Initialize email service (Tizen object which allows email functionality).
+            function initEmailService(callBack) {
+                Tizen.Messaging.getMessageServices(serviceType, function (response) {
+                    if (response.success) {
+                        var services = response.services;
+                        if (services.length === 0) {
+                            console.error('The following error occurred: Services list is empty.');
+                            return;
+                        }
+
+                        services[0] && (emailService = services[0]);
+                        callBack && callBack();
+                    } else {
+                        console.log(response.error);
+                    }
+                });
+            }
+
+            // Search for, and print the names of, the email folders.
+            function findFolders() {
+
+                function foldersListCB(response) {
+                    if (response.success) {
+                        var folders = response.folders,
+                            foldersCount = folders.length,
+                            i = 0;
+
+                        console.log(foldersCount + ' folder(s) found.');
+
+                        if (foldersCount === 0) {
+                            console.log('Folders not found.');
+                            return;
+                        }
+
+                        // Print the folder names to the console
+                        for (; i < foldersCount; i++) {
+                            console.log('Folder: ' + folders[i].name);
+                        }
+                    } else {
+                        console.log('Error: ' + response.error);
+                    });
+                }
+
+                // Search for email folders
+                try {
+                    // Start to search list of folders from email account
+                    var attributeFilter = Tizen.createAttributeFilter({
+                        attributeName: 'serviceId',
+                        matchFlag: 'EXACTLY',
+                        matchValue: emailService.id
+                    });
+
+                    emailService.messageStorage.findFolders(attributeFilter, foldersListCB);
+                } catch(exc) {
+                    console.log('Error: ' + exc.message);
+                }
+            }
+            
+            initEmailService(findFolders);
+		
 # Pseudo-type    
 ---
 name: MessageInit
