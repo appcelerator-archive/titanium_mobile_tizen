@@ -354,7 +354,28 @@ properties:
     summary: COMPLETED - if the task has been cancelled.
     type: STRING
     permission: read-only
-    
+
+examples:
+  - title: Create and add an event
+    example: |
+        Create a single event and add it to the default calendar.
+        
+            var Tizen = require('tizen'),
+                calendar = Tizen.Calendar.getDefaultCalendar('EVENT');
+
+            try {
+                var calendarEvent = Tizen.Calendar.createCalendarEvent({
+                    description: 'Remember the milk',
+                    summary: 'Milk',
+                    startDate: new Date(2013, 4, 25, 18, 0),
+                    duration: 3600000,
+                    location: 'Grocery store'
+                });
+                calendar.add(calendarEvent);
+            } catch (err) {
+                console.error('Error adding event. Type: ' + err.type + ", message: " + err.message);
+                return;
+            }
 
 # Pseudo-types used in creators
 ---

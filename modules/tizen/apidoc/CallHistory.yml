@@ -105,6 +105,71 @@ events:
       - name: items
         summary: An array of CallHistoryEntry objects, representing the changed items in call history.
         type: Array<CallHistoryEntry>
+
+examples:
+  - title: Become aware of call-related events.
+    example: |
+        Subscribe/unsubscribe to call history event listeners, and observe changes, using graphical user interface and console logs.
+        
+            var Tizen = require('tizen'),
+                win = Ti.UI.createWindow({
+                    title: 'Call history listeners'
+                }),
+                addListenerBtn = Ti.UI.createButton({
+                    title: 'Add listeners',
+                    top: 20,
+                    left: 5
+                }),
+                removeListenerBtn = Ti.UI.createButton({
+                    title: 'Remove listeners',
+                    top: 60,
+                    left: 5
+                });
+
+            function onItemsAdded(e) {
+                var i = 0,
+                    items = e.items,
+                    itemsCount = items.length;
+                console.log('New call events.');
+                
+                for (; i < itemsCount; i++) {
+                    console.log(items[i].remoteParties[0].remoteParty + ': ' + items[i].startTime);
+                }
+            }
+            
+            function onItemsChanged(e) {
+                // Do something even more interesting...
+            }
+
+            addListenerBtn.addEventListener('click', function () {
+                try {
+                    // Register a call history callback
+                    Tizen.CallHistory.addEventListener('itemsadded', onItemsAdded);
+                    Tizen.CallHistory.addEventListener('itemschanged', onItemsChanged);
+
+                    addListenerBtn.enabled = false;
+
+                    removeListenerBtn.addEventListener('click', function () {
+                        try {
+                            // Unregister a previously registered listener
+                            Tizen.CallHistory.removeEventListener('itemsadded', onItemsAdded);
+                            Tizen.CallHistory.removeEventListener('itemschanged', onItemsChanged);
+                            win.remove(removeListenerBtn);
+                        } catch (removeExc) {
+                            console.error('Exception - code: ' + removeExc.name + ' message: ' + removeExc.message);
+                        }
+                        addListenerBtn.enabled = true;
+                        removeListenerBtn.removeEventListener('click');
+                    });
+
+                    win.add(removeListenerBtn);
+                } catch (error) {
+                    console.error('Exception - code: ' + error.name + ' message: ' + error.message);
+                }
+            });
+
+            win.add(addListenerBtn);
+
 # Pseudo-type
 ---
 name: CallHistoryEntry
