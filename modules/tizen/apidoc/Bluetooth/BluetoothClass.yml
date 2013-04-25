@@ -19,7 +19,7 @@ methods:
     description: |
         Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
         
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/bluetooth.gap
     returns: 
       - type: Boolean
     parameters: 

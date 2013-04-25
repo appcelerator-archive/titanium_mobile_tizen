@@ -10,7 +10,7 @@ methods:
         The client can then use CalendarEvent.isDetached attribute to identify detached instances.
         If the event is not saved to a calendar yet, only virtual instances will be returned.
         
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/calendar.read
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/calendar.read
     parameters:
       - name: startDate
         summary:  The start date/ time of an event(inclusive).

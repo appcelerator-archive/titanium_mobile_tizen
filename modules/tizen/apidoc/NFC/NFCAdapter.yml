@@ -15,7 +15,7 @@ methods:
   - name: setPowered
     summary: Turns NFC adapter on or off.
     description: |
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.admin
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  http://tizen.org/privilege/nfc.admin
     parameters:
       - name: state
         summary: The state of NFC adapter.
@@ -31,7 +31,7 @@ methods:
         If the registration completes successfully, the detectCallback MUST be invoked when NFC tag is detected.
         If no tagFilter is passed, it shall consider the default tagFilter. that is to set all tag types.
         
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  http://tizen.org/privilege/nfc.tag
     parameters:
       - name: detectCallback 
         summary: The success callback to be invoked when an NFC tag is detected or lost.
@@ -62,7 +62,7 @@ methods:
   - name: unsetTagListener
     summary: Unregisters the listener for detecting an NFC tag.
     description: |
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.tag
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  http://tizen.org/privilege/nfc.tag
 
   - name: getCachedMessage
     summary: Gets NDEF message cached when the tag was detected.
@@ -71,7 +71,7 @@ methods:
         launching your application should be returned. If the NDEF Message cannot be 
         successfully retrieved, a WebAPIError with the reason for the error MUST be thrown.
         
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application:  http://tizen.org/privilege/nfc.common
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  http://tizen.org/privilege/nfc.common
     returns:
         type: Modules.Tizen.NFC.NDEFMessage
 
@@ -80,7 +80,7 @@ events:
   - name: peerattached
     summary: Fired when an NFC peer-to-peer target is detected.
     description: |
-        To use this event, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/nfc.p2p
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/nfc.p2p
     properties:
       - name: nfcPeer
         summary: The attached NFC peer-to-peer target.
@@ -89,7 +89,7 @@ events:
   - name: peerdetached
     summary: Fired when the NFC peer-to-peer target connected is detached.
     description: |
-        To use this event, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/nfc.p2p
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/nfc.p2p
         
 ---
 name: NFCTagDetectCallback

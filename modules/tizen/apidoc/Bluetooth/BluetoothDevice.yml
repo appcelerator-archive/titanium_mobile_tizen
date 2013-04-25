@@ -17,7 +17,7 @@ methods:
         This method attempts to open a connection to the service identified by uuid on this remote device. This performs an SDP(Service Discovery Protocol) lookup on the local device for the given uuid and determines which channel to use.
         If opening a connection is successful, then a BluetoothSocket object with open state is sent using callback, through which data can be exchanged by both devices.
         
-        To use this method, you must include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/bluetooth.spp
 
     parameters: 
       - name: uuid

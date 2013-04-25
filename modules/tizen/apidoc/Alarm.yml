@@ -8,7 +8,7 @@ methods:
   - name: add
     summary: Adds an alarm to the storage.
     description: |
-        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/alarm
     parameters:
 
       - name: alarm
@@ -27,7 +27,7 @@ methods:
   - name: remove
     summary: Removes an alarm from the storage. 
     description: |
-        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/alarm
     parameters:
 
       - name: id
@@ -36,7 +36,7 @@ methods:
 
   - name: removeAll
     description: |
-        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application: http://tizen.org/privilege/alarm
     summary: Removes all alarms added by an application.
     description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
 
