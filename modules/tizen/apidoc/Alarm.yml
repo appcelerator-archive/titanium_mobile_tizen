@@ -8,7 +8,7 @@ methods:
   - name: add
     summary: Adds an alarm to the storage.
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
     parameters:
 
       - name: alarm
@@ -27,7 +27,7 @@ methods:
   - name: remove
     summary: Removes an alarm from the storage. 
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
     parameters:
 
       - name: id
@@ -36,7 +36,7 @@ methods:
 
   - name: removeAll
     description: |
-        To use this method, it is required to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
+        To use this method, you must to include the following privilege in the tiapp.xml file of your Titanium application: http://tizen.org/privilege/alarm
     summary: Removes all alarms added by an application.
     description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
 
@@ -68,7 +68,7 @@ methods:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
         type: alarmRelativeParameters
- 
+
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
     returns: 
@@ -98,6 +98,21 @@ properties:
     summary: 604800 - The period of a week. It define the number of seconds in a week. 
     type: Number
     permission: read-only
+
+examples:
+  - title: Relative alarm
+    example: |
+        This example creates and adds a relative alarm. The clock app will show up periodically.
+
+            var Tizen = require('tizen');
+            
+            var alarm = Tizen.Alarm.createAlarmRelative({
+                    delay: 0, 
+                    period: 1800
+                }),
+                
+            Tizen.Alarm.add(alarm, 'org.tizen.clock');
+ 
 
 ---
 name: alarmRelativeParameters
