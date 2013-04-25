@@ -583,3 +583,37 @@ properties:
         0x0400
     type: Number
     permission: read-only
+
+examples:
+  - title: Enable or disable BlueTooth adapter
+    example: |
+        This example shows how to enable or disable the default Bluetooth adapter using a GUI switch.
+        
+            var btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
+                win = Ti.UI.createWindow({
+                    backgroundColor: '#fff'
+                }),
+                btSwitch = Ti.UI.createSwitch({
+                    top: 20,
+                    titleOn: 'Bluetooth enabled',
+                    titleOff: 'Bluetooth disabled',
+                    value: btAdapter.powered
+                });
+
+                btSwitch.addEventListener('change', function(e) {
+                    if (btAdapter.powered != btSwitch.value) {
+                        // initiate power switching
+                        btAdapter.setPowered(btSwitch.value, function(response) {
+                            if (response.success) {
+                                btSwitch.enabled = true;
+                                console.log('Bluetooth powered ' + (btSwitch.value ? 'on' : 'off') + ' success.');
+                            } else {
+                                btSwitch.enabled = true;
+                                console.log('Failed to power on Bluetooth: ' + e.message + '(' + e.name + ')');
+                            }
+                        });
+                    }
+
+                    btSwitch.enabled = false;  // disable switch until current operation is finished
+                });
+
