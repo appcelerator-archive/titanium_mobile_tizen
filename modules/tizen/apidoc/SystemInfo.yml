@@ -299,7 +299,7 @@ properties:
   - name: data
     summary: The value of the requested property.
     description: |
-    	Will be undefined if `success` is `false`.
+        Will be undefined if `success` is `false`.
 
         The contents of this field will differ based on the system info property requested. The following objects may be
         returned:
