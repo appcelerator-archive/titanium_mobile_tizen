@@ -83,3 +83,22 @@ properties:
     summary: NOTIFICATION_EMAIL is for email notification alert tone.
     type: STRING
     permission: read-only
+
+examples:
+  - title: Configure email notification
+    example: |
+        This example shows how to programmatically change the sound of the new email notification.
+        
+            var Tizen = require('tizen');
+            Tizen.SystemSetting.setProperty(
+                Tizen.SystemSetting.SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL,
+                'sounds/email.mp4',   // must be an actual file (resolved to a document root0
+                function(response) {
+                    if (response.success) {
+                        console.log('Setting changed successfully.');
+                    } else {
+                        console.error('Error changing the setting: ' + response.error);
+                    }                    
+                }
+            );
+
