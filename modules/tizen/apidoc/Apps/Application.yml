@@ -1,6 +1,8 @@
 ---
 name: Modules.Tizen.Apps.Application
-summary: This interface defines the current application's information and the basic operations (such as exit or hide) for the current application.
+summary: |
+    This interface defines the current application's information and the basic operations (such as 
+    exit or hide) for the current application.
 extends: Titanium.Proxy
 createable: false
 methods:
@@ -11,10 +13,12 @@ methods:
   - name: getRequestedAppControl
     summary: Gets the requested application control passed to the current application. 
     description: |
-        Gets the requested application control that contains the application control passed by the launchAppControl() method from the calling application.
-        The requested application control contains the reason the application was launched and what it has to perform. 
-        For example, an application might be launched to display an image on a page by other application's request. 
-        In all of these cases, the application is responsible for checking the contents of the application control and responding appropriately when it is launched. 
+        Gets the requested application control that contains the application control passed by the 
+        launchAppControl() method from the calling application. The requested application control 
+        contains the reason the application was launched and what it has to perform. For example, an 
+        application might be launched to display an image on a page by other application's request. 
+        In all of these cases, the application is responsible for checking the contents of the 
+        application control and responding appropriately when it is launched.
     returns: 
       - type: <Modules.Tizen.Apps.RequestedApplicationControl>
         summary: The details of an requested application control

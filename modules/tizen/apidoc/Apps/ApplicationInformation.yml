@@ -25,7 +25,9 @@ properties:
     permission: read-only
 
   - name: show
-    summary: An attribute that determines whether the application information should be shown (such as in the menus) or not.  
+    summary: |
+        An attribute that determines whether the application information should be shown (such as in 
+        the menus) or not.
     type: Boolean
     permission: read-only
 

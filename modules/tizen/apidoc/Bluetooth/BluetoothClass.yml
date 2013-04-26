@@ -6,11 +6,20 @@ description: |
 
     Bluetooth CoD is a 24 bit integer created by the union of three components:
 
-        Exactly one Major Device Class(bits 8-12 of CoD) - This is the highest level of granularity for defining a Bluetooth Device.
-        Exactly one Minor Device Class(bits 2-7 of CoD) - This is to be interpreted only in the context of the Major Device Class. Thus, the meaning of these bits may change, depending on the value of 'Major Device Class'.
-        Zero or more Major Service Classes(bits 13-23) - Represents the services supported by the device.
+        * Exactly one Major Device Class(bits 8-12 of CoD) - This is the highest level of 
+        granularity for defining a Bluetooth Device.
 
-    The major and minor classes are intended to define a general family of devices with which any particular implementation wishes to be associated. No assumptions should be made about specific functionality or characteristics of any application, based solely on the assignment of a major or minor device class.
+        * Exactly one Minor Device Class(bits 2-7 of CoD) - This is to be interpreted only in the 
+        context of the Major Device Class. Thus, the meaning of these bits may change, depending on 
+        the value of 'Major Device Class'.
+
+        * Zero or more Major Service Classes(bits 13-23) - Represents the services supported by the 
+        device.
+
+    The major and minor classes are intended to define a general family of devices with which any 
+    particular implementation wishes to be associated. No assumptions should be made about specific 
+    functionality or characteristics of any application, based solely on the assignment of a major 
+    or minor device class.
 extends: Titanium.Proxy
 methods:
 
@@ -19,7 +28,8 @@ methods:
     description: |
         Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.gap`
         
@@ -35,7 +45,8 @@ properties:
     summary: | 
         The major device class. The value is one of the constants defined for this type. 
     description: | 
-        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
+        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, 
+        <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and other.
     type: Number
     permission: read-only
 
@@ -43,13 +54,18 @@ properties:
     summary: |
       The minor device class. The value is one of the constants defined for this type. 
     description: |
-      The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
+      The supported major types are: 
+      <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, 
+      <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and other.
     type: String
     permission: read-only
 
   - name:  services
     summary: |
         The services provided by this device.The value is one of the constants defined for this type. 
-        The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
+    description: |
+        The supported major types are: 
+        <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, 
+        <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>, and other.
     type: Array<Number>
     permission: read-only

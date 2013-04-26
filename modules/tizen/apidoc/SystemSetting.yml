@@ -1,6 +1,8 @@
 ---
 name: Modules.Tizen.SystemSetting
-summary: This Module provides interfaces and methods providing web applications with access to various values of the system.
+summary: |
+    This Module provides interfaces and methods providing web applications with access to various 
+    values of the system.
 description: |
     This API provides interface and method through features such as:
     
@@ -19,7 +21,8 @@ methods:
     description: |
         This method allows the user to set a value according to a given type.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/setting`
         
@@ -92,7 +95,7 @@ examples:
 ---
 name: SystemSettingResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getProperty](Modules.Tizen.SystemSetting.getProperty) method.
 extends: ErrorResponse
 properties:

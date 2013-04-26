@@ -1,18 +1,25 @@
 ---
 name: Modules.Tizen.Messaging
 summary: This specification defines interfaces to manage Message, retrieve messaging services.
-description: There is a object that allows access to the messaging API. Fetches all existing messaging services by type or a messaging service of a given type for concrete account. 
+description: |
+    There is a object that allows access to the messaging API. Fetches all existing messaging 
+    services by type or a messaging service of a given type for concrete account. 
 extends: Titanium.Module
 platforms: [tizen]
 
 methods:
   - name: getMessageServices
-    summary: Retrieves the messaging service of a given type for a given account, or all existing services supporting the given type, if serviceId is not given. 
+    summary: |
+        Retrieves the messaging service of a given type for a given account, or all existing 
+        services supporting the given type, if serviceId is not given. 
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+            Type of the services to be retrieved. 
+        description: |
+            Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
       - name: callback
@@ -37,7 +44,7 @@ methods:
 
       - name: initDict
         summary: Provides specifying attachment attributes upon messageAttachment creation.
-        type: MessageAttachmentUnit
+        type: MessageAttachmentInit
 
 properties:
   - name: MESSAGE_SERVICE_TAG_MESSAGING_SMS
@@ -127,11 +134,15 @@ examples:
 # Pseudo-type    
 ---
 name: MessageInit
-summary: An object containing the various options for inititalized <Modules.Tizen.Messaging.Message> object. It passing into constructor <Modules.Tizen.Message.createMessage>.
+summary: Simple object that contains parameters for [createMessage](Modules.Tizen.Messaging.createMessage).
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of message. 
+    description: |
+        The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options
@@ -141,7 +152,7 @@ properties:
 
 ---
 name: MessageInitDict
-summary: Provides specifying message attributes upon message creation. 
+summary: Used in <MessageInit>.
 properties: 
   - name: subject
     summary: The subject of a message. 
@@ -174,13 +185,16 @@ properties:
   - name: isHighPriority
     summary: The priority of a message. 
     description: |
-        This property is true, if the message has a high priority and false, if the message has a normal or low priority.
+        This property is true, if the message has a high priority and false, if the message has a
+        normal or low priority.
         This property is used only with Email messages.
     type: Boolean
 
 ---
-name: MessageAttachmentUnit
-summary: An object containing the path of file and mime type(optional)
+name: MessageAttachmentInit
+summary: |
+    Simple object that contains parameters for 
+    [createMessageAttachment](Modules.Tizen.Messaging.createMessageAttachment).
 properties:
   - name: filePath
     summary: Path to file.
@@ -194,7 +208,7 @@ properties:
 ---
 name: MessagingMessageServiceResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getMessageServices](Modules.Tizen.Messaging.getMessageServices) method.
 extends: ErrorResponse
 properties:

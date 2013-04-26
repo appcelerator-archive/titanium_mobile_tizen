@@ -16,7 +16,8 @@ methods:
   - name: request
     summary: Requests the minimum-state for a power resource.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/power`
         
@@ -24,14 +25,21 @@ methods:
       - name: resource
         summary: |
             The power resource for which the request is made.
+        description: |
             The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, <Modules.Tizen.Power.POWER_RESOURCE_CPU>
+            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, 
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>
         type: String
       - name: state
         summary: |
             The minimal power state in which the power resource is desired to be. 
+        description: |
             The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, <Modules.Tizen.Power.POWER_CPU_STATE_CPU_AWAKE>
+            The supported request types are: <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, 
+            <Modules.Tizen.Power.POWER_CPU_STATE_CPU_AWAKE>
         type: String
 
   - name: release
@@ -40,8 +48,10 @@ methods:
       - name: resource
         summary: |
             The power resource for which the request is made.
+        description: |
             The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, <Modules.Tizen.Power.POWER_RESOURCE_CPU>
+            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>,
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>
         type: String
 
   - name: isScreenOn
@@ -53,14 +63,16 @@ methods:
   - name: turnScreenOn
     summary: Turns on the screen.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/power`
 
   - name: turnScreenOff
     summary: Turns off the screen.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/power`
     
@@ -77,40 +89,44 @@ properties:
     permission: read-only
 
   - name: POWER_SCREEN_STATE_SCREEN_OFF
-    summary: SCREEN_OFF - This screen state cannot be requested but can only be used in the state change callback.
+    summary: This screen state cannot be requested but can only be used in the state change callback.
     type: STRING
     permission: read-only
 
   - name: POWER_SCREEN_STATE_SCREEN_DIM
-    summary: SCREEN_DIM - The minimal screen state is set to DIM and device does not change to OFF state automatically.
+    summary: The minimal screen state is set to DIM and device does not change to OFF state automatically.
     type: STRING
     permission: read-only
     
   - name: POWER_SCREEN_STATE_SCREEN_NORMAL
-    summary: |
-        SCREEN_NORMAL -  The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
+    summary: The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
+    description: |
         NORMAL state refers to the default screen brightness that a user has configured for the device. 
     type: STRING
     permission: read-only    
     
   - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
     summary: |
-        SCREEN_BRIGHT  - The minimal screen state is set to BRIGHT and device does not change to NORMAL state automatically.
+        The minimal screen state is set to BRIGHT and device does not change to NORMAL state 
+        automatically.
+    description: |
         BRIGHT state refers to the maximum screen brightness that the device provides. 
         Note that the change in brightness does not affect the system brightness setting, i.e., 
-        the system brightness value is automatically restored when the resource is released or the process is completed.
+        the system brightness value is automatically restored when the resource is released or the 
+        process is completed.
     type: STRING
     permission: read-only    
     
   - name: POWER_CPU_STATE_CPU_AWAKE
-    summary: CPU_AWAKE - The cpu state is set to be awaken and it does not go to SLEEP state automatically.
+    summary: The cpu state is set to be awaken and it does not go to SLEEP state automatically.
     type: STRING
     permission: read-only
 
   - name: screenBrightness
     summary: An attribute to store the screen brightness level for an application, from 0 to 1.
     description: |
-        To use this property, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this property, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/power`
         
@@ -130,7 +146,8 @@ events:
 examples:
   - title: Adjust brightness and turn screen off
     example: |
-        This example shows how to adjust screen brightness and turn it on or off using graphical user interface.
+        This example shows how to adjust screen brightness and turn it on or off using graphical 
+        user interface.
         
             var win = Titanium.UI.createWindow(),
                 buttonTurnOffScreen = Ti.UI.createButton({

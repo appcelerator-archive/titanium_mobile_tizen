@@ -1,7 +1,9 @@
 ---
 name: Modules.Tizen.Bluetooth.BluetoothSocket
 summary: The interface to represent the Bluetooth socket.   
-description: The socket object is created by BluetoothDevice.connectToServiceByUUID() or BluetoothAdapter.registerRFCOMMServiceByUUID().
+description: |
+    The socket object is created by BluetoothDevice.connectToServiceByUUID() or 
+    BluetoothAdapter.registerRFCOMMServiceByUUID().
 extends: Titanium.Proxy
 methods:
 
@@ -10,7 +12,8 @@ methods:
     description: |
         Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.spp`
         
@@ -25,9 +28,11 @@ methods:
   - name: readData
     summary: Reads data from the socket. 
     description: |
-        This should be called only in the 'socketmessagereceived' handler, that is, when data is ready on the socket. 
+        This should be called only in the 'socketmessagereceived' handler, that is, when data is 
+        ready on the socket. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.spp`
         
@@ -38,9 +43,12 @@ methods:
   - name: close
     summary: Closes the socket.  
     description: |
-        Calling this method closes the socket. BluetoothSocket.state changes to <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on success. 
+        Calling this method closes the socket. BluetoothSocket.state changes to 
+        <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on 
+        success. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.spp`
 
@@ -69,7 +77,10 @@ properties:
 
   - name: state
     summary: |
-        The current socket state.  The value is one of the constants defined for this type. The supported state types are: <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN>.
+        The current socket state.  The value is one of the constants defined for this type. 
+    description: |
+        The supported state types are: <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, 
+        and <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN>.
     type: String
     permission: read-only
 

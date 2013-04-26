@@ -18,7 +18,8 @@ methods:
   - name: get
     summary: Gets the calendar item with the specified identifier.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.read`
         
@@ -39,7 +40,8 @@ methods:
         If you wish to add a copy of an existing CalendarItem object, 
         call CalendarItem.clone() method first and pass the clone to the add() method.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -51,14 +53,16 @@ methods:
   - name: addBatch
     summary: Adds an array of items to the calendar asynchronously.
     description: |
-        If all the items are successfully added to the calendar, the success callback will be invoked, passing the list of CalendarItem objects that were added,
+        If all the items are successfully added to the calendar, the success callback will be 
+        invoked, passing the list of CalendarItem objects that were added,
         with their identifier set (id attribute).
         
         If you wish to update an existing item, call the update() method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
         call CalendarItem.clone() method first and pass the clone to the add() method.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -72,12 +76,15 @@ methods:
         optional: true
 
   - name: update
-    summary: Updates an existing item in the calendar synchronously with the one specified in the argument.
+    summary: |
+        Updates an existing item in the calendar synchronously with the one specified in the argument.
     description: |
-        In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
+        In case of recurring events, the default behavior is to update all their instances 
+        (including their detached ones), 
         as well. If you don't want that, the updateAllInstances flag should be set to false.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -87,18 +94,23 @@ methods:
         type: Modules.Tizen.Calendar.CalendarItem
       - name: updateAllInstances
         summary:  |
-            The flag indicating whether all the event instances should be updated as well or not (default value is true). 
+            The flag indicating whether all the event instances should be updated as well or not 
+            (default value is true). 
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
         
   - name: updateBatch
-    summary: Updates an array of existing items in the calendar asynchronously with the specified values in the argument.
+    summary: |
+        Updates an array of existing items in the calendar asynchronously with the specified 
+        values in the argument.
     description: |
-        In case of recurring events, the default behavior is to update all their instances (including their detached ones), 
+        In case of recurring events, the default behavior is to update all their instances 
+        (including their detached ones), 
         as well. If you don't want that, the updateAllInstances flag should be set to false.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -112,17 +124,23 @@ methods:
         optional: true
       - name: updateAllInstances
         summary:  |
-            The flag indicating whether all the event instances should be updated as well or not (default value is true). 
+            The flag indicating whether all the event instances should be updated as well or not 
+            (default value is true). 
             This parameter only applies to calendar events, and doesn't apply to tasks.
         type: Boolean
         optional: true
 
   - name: remove
-    summary: Removes an item from the calendar that corresponds to the specified identifier. This method will throw an exception if it fails to remove the specified calendar item.
+    summary: | 
+        Removes an item from the calendar that corresponds to the specified identifier. This 
+        method will throw an exception if it fails to remove the specified calendar item.
     description: |
-        For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) is set to null, this method will remove the event identified by uid, and all of its possible detached instances.
+        For (recurring) events: In the case of calendar events, if the recurrence id (rid attribute) 
+        is set to null, this method will remove the event identified by uid, and all of its possible 
+        detached instances.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -132,12 +150,17 @@ methods:
         type: CalendarEventId
 
   - name: removeBatch
-    summary: Removes several items from the calendar asynchronously depending on the specified identifiers.
+    summary: |
+        Removes several items from the calendar asynchronously depending on the specified 
+        identifiers.
     description: |
-        For (recurring) events: In the case of calendar events, if the recurrence id, rid, is set to null, 
-        this method will remove the event identified by uid, as well as all its possible detached instances.
+        For (recurring) events: In the case of calendar events, if the recurrence id, rid, is set to 
+        null, 
+        this method will remove the event identified by uid, as well as all its possible detached 
+        instances.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.write`
         
@@ -151,15 +174,26 @@ methods:
         optional: true
 
   - name: find
-    summary: Finds and fetches an array of CalendarItem objects for items stored in the calendar according to the supplied filter if it is valid else it will return all the items stored.
+    summary: |
+        Finds and fetches an array of CalendarItem objects for items stored in the calendar 
+        according to the supplied filter if it is valid else it will return all the items stored.
     description: |
-        If the filter is passed and contains valid values, only those values in the calendar that match the filter criteria as specified in the AbstractFilter interface will be returned in the callback(). If no filter is passed, or the filter contains any invalid value which is null or undefined, then the implementation must return the full list of items in the callback(). If no items are available in the calendar (it is empty) or no item matches the filter criteria, the callback() will be invoked with an empty array.
+        If the filter is passed and contains valid values, only those values in the calendar that 
+        match the filter criteria as specified in the AbstractFilter interface will be returned in 
+        the callback(). If no filter is passed, or the filter contains any invalid value which is 
+        null or undefined, then the implementation must return the full list of items in the 
+        callback(). If no items are available in the calendar (it is empty) or no item matches the 
+        filter criteria, the callback() will be invoked with an empty array.
         
         Filter specific remarks:
-            - For event filtering based on start/end dates, items that recur during the given time interval will be found, even if the parent item itself is outside the interval.
-            - For event filtering based on the identifier, the identifier type should be CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both the parent event and all its detached instances.
+            - For event filtering based on start/end dates, items that recur during the given time 
+            interval will be found, even if the parent item itself is outside the interval.
+            - For event filtering based on the identifier, the identifier type should be 
+            CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both 
+            the parent event and all its detached instances.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/calendar.read`
         
@@ -181,7 +215,8 @@ events:
   - name: itemsadded
     summary: Called when items are added to the calendar.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.read`
         
@@ -193,7 +228,8 @@ events:
   - name: itemsupdated
     summary: Called when items are updated in the calendar.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.read`
         
@@ -205,7 +241,8 @@ events:
   - name: itemsremoved
     summary: Called when item are removed from the calendar.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/calendar.read`
         
@@ -222,46 +259,23 @@ properties:
     permission: read-only
 
   - name: name
-    summary: An attribute to assign a readable (descriptive) name for a calendar, such as work, personal, etc.
+    summary: |
+        An attribute to assign a readable (descriptive) name for a calendar, such as work, 
+        personal, etc.
     type: STRING
     permission: read-only
 
-# Pseudo-type 
----
-name: CalendarEventId 
-summary: This interface contains a UID and an optional recurrence ID attribute to identify calendar events.
-description: |
-    The recurrence identifier (rid attribute) is used to identify a particular instance of a recurring event. 
-    All instances of the same recurring event have the same UID but different recurrence IDs.
-properties:
-  - name: uid
-    type: String
-    summary: |
-        An attribute to persistently, and uniquely identify a calendar event.
-        This value is assigned by the platform when the event is added to the calendar, 
-        it is locally unique and persistent for the life time of the event and it cannot be modified by the developers.
-        
-        See RFC 5545 (section 3.8.4.7) for more details about this parameter and algorithms to guarantee assignment of unique values. This value is assigned by the platform when the add() method is successfully invoked.
-    
-  - name: rid
-    type: String
-    summary: |
-        An attribute to store the recurrence ID of a CalendarEvent instance.
-        This attribute is used in conjunction with the uid property to identify 
-        a specific instance of a recurring event.
-        
-        The parent of a recurrence instance has its rid set to null.
-        By default, this attribute is set to null. 
-        (See RFC 5545 (section 3.8.4.4) for more details about this parameter.)
 # Pseudo-type        
 ---
 name: CalendarItemId 
-summary: A calendar item identifier, which can either be a <CalendarEventId> or a CalendarTaskId = String
+summary: |
+    A calendar item identifier, which can either be a <Modules.Tizen.Calendar.CalendarEventId> 
+    a CalendarTaskId (which is a String).
 
 ---
 name: AddBatchResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [addBatch](Modules.Tizen.Calendar.CalendarInstance.addBatch) method.
 extends: ErrorResponse
 properties:
@@ -291,7 +305,7 @@ properties:
 ---
 name: FindResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [find](Modules.Tizen.Calendar.CalendarInstance.find) method.
 extends: ErrorResponse
 properties:

@@ -13,7 +13,6 @@ properties:
   - name: type
     summary: A notification type.
     type: String
-    default: Modules.Tizen.Notification.NOTIFICATION_TYPE_STATUS
     permission: read-only
     
   - name: postedTime

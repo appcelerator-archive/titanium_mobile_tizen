@@ -22,7 +22,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.Download.DownloadRequest>.
-        type: Dictionary<createDownloadRequestParameters>
+        type: DownloadRequestInit
     returns:
         type: <Modules.Tizen.Download.DownloadRequest>
 
@@ -86,7 +86,7 @@ examples:
 
             downloadRequest.send(listener);
 ---
-name: createDownloadRequestParameters
+name: DownloadRequestInit
 summary: Parameters for the <Modules.Tizen.Download.createDownloadRequest>.
 properties:
   - name: url

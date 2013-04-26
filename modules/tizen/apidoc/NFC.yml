@@ -39,13 +39,15 @@ properties:
   - name: NFC_RECORD_TNF_URI
     type: Number
     summary: |
-        Indicates absolute URI, as defined in RFC 3986 [RFC 3986] format in RFC 2046 [RFC 2046] of NDEF record's type field.
+        Indicates absolute URI, as defined in RFC 3986 [RFC 3986] format in RFC 2046 [RFC 2046] of 
+        NDEF record's type field.
     permission: read-only
 
   - name: NFC_RECORD_TNF_EXTERNAL_RTD
     type: Number
     summary: |
-        Indicates NFC Forum external type [NFC RTD] format in RFC 2046 [RFC 2046] of NDEF record's type field.
+        Indicates NFC Forum external type [NFC RTD] format in RFC 2046 [RFC 2046] of NDEF record's 
+        type field.
     permission: read-only
 
   - name: NFC_RECORD_TNF_UNKNOWN
@@ -174,7 +176,8 @@ methods:
     description: |
         NFC adapter interface provides access to control the NFC adapter. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/nfc.common`
         
@@ -186,7 +189,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFMessage>.
-        type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
+        type: [NDEFMessageInitNDEFRecords, NDEFMessageInitRawData]
         optional: true
     returns:
         type: Modules.Tizen.NFC.NDEFMessage
@@ -196,7 +199,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecord>.
-        type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
+        type: [NDEFRecordInitRawData, NDEFRecordInit]
     returns:
         type: Modules.Tizen.NFC.NDEFRecord
 
@@ -205,7 +208,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordText> object.
-        type: createNDEFRecordTextParameters
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordText>
     returns:
         type: Modules.Tizen.NFC.NDEFRecordText
 
@@ -214,7 +217,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordURI>.
-        type: createNDEFRecordURIParameters
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordURI>
     returns:
         type: Modules.Tizen.NFC.NDEFRecordURI
 
@@ -223,7 +226,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordMedia>.
-        type: createNDEFRecordMediaParameters
+        type: NDEFRecordMediaInit
     returns:
         type: Modules.Tizen.NFC.NDEFRecordMedia
 
@@ -268,32 +271,32 @@ examples:
             }
 
 ---
-name: createNDEFMessageParametersNDEFRecord
-summary: Parameters for the createNDEFMessage.
+name: NDEFMessageInitNDEFRecords
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
 properties:
   - name: ndefRecords
     summary: The array of NDEFRecord objects in the <Modules.Tizen.NFC.NDEFMessage>.
     type: Array<Modules.Tizen.NFC.NDEFRecord>
 
 ---
-name: createNDEFMessageParametersrawData
-summary: Parameters for the createNDEFMessage.
+name: NDEFMessageInitRawData
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
 properties:
   - name: rawData
     summary: Serial byte array of the NDEF message.
     type: Array<Number>
 
 ---
-name: createNDEFRecordParameters
-summary: Parameters for the createNDEFRecord.
+name: NDEFRecordInitRawData
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
 properties:
   - name: rawData
     summary: Raw data of NDEFRecord.
     type: Array<Number>
 
 ---
-name: createNDEFRecordParametersrawData
-summary: Parameters for the createNDEFRecord.
+name: NDEFRecordInit
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
 properties:
   - name: tnf
     summary: The value of the record type (TNF value).
@@ -310,33 +313,8 @@ properties:
     optional: true
 
 ---
-name: createNDEFRecordTextParameters
-summary: Parameters for the createNDEFRecordText.
-properties:
-  - name: text
-    summary: The encoded text.
-    type: String
-  - name: languageCode
-    summary: |
-        The language code string value, followed by IANA [RFC 3066] (ex. en-US, ko-KR).
-    type: String
-  - name: encoding
-    summary:  |
-        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
-    type: String
-    optional: true
-
----
-name: createNDEFRecordURIParameters
-summary: Parameters for the createNDEFRecordURI.
-properties:
-  - name: text
-    summary: The URI string that will be stored in the payload.
-    type: String
-
----
-name: createNDEFRecordMediaParameters
-summary: Parameters for the createNDEFRecordMedia.
+name: NDEFRecordMediaInit
+summary: Simple object that contains parameters for [createNDEFRecordMedia](Modules.Tizen.NFC.createNDEFRecordMedia).
 properties:
   - name: mimeType
     type: String
@@ -344,4 +322,4 @@ properties:
         The mime type [RFC 2046] (ex. text/plain, image/jpeg ).
   - name: rawData
     summary: Raw media data.
-    type: Array<Number>
+    type: Array<Number> 
