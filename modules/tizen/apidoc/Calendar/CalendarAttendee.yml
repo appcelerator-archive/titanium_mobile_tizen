@@ -10,7 +10,7 @@ properties:
   - name: uri 
     summary: |
         An attribute to store the URI for the attendee.
-        
+    description: |    
         This is often an email in the form 'mailto:name@domain.com'.
     type: STRING
 
@@ -21,8 +21,9 @@ properties:
   - name: role 
     summary: |
         An attribute to denote the role of the attendee. (See RFC 5545, Section 3.2.16.)
-        
+    description: |    
         The value is one of the constants defined for this type:
+
             - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
             - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
             - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
@@ -33,8 +34,9 @@ properties:
   - name: status
     summary: |
         An attribute to store the participant's attendance status. (See RFC 5545, Section 3.2.12.)
-        
+    description: |    
         The value is one of the constants defined for this type:
+
             - ATTENDEE_STATUS_PENDING = 'PENDING'
             - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
             - ATTENDEE_STATUS_DECLINED = 'DECLINED'
@@ -49,14 +51,14 @@ properties:
   - name: rsvp 
     summary: |
         An attribute to store the attendee's participation status reply (RSVP). (See RFC 5545, Section 3.2.17.)
-        
+    description: |    
         By default, this attribute is set to FALSE.
     type: Boolean
 
   - name: type
     summary: |
         An attribute to indicate the type of a participant. (See RFC 5545, Section 3.2.3.)
-        
+    description: |    
         The value is one of the constants defined for this type: 
             - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
             - ATTENDEE_TYPE_GROUP = 'GROUP'
@@ -85,5 +87,6 @@ properties:
   - name: contactRef 
     summary: |
         An attribute to store the participant's reference in the Contact API.
+    description: |
         If the contact is not resolved, this attribute will be set to null. 
     type: Modules.Tizen.Contacts.ContactsRef

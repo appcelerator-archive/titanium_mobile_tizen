@@ -108,9 +108,11 @@ methods:
   - name: getAppContext
     summary: |
         Gets the application context for the specified application context ID. 
-        If the ID is set to null or is not set at all, the method returns the application context of the current application. 
-        The list of running applications and their application IDs is obtained with getAppsContext().
     description: |
+        If the ID is set to null or is not set at all, the method returns the application context of the current application. 
+
+        The list of running applications and their application IDs is obtained with getAppsContext().
+
         To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
 
         * `http://tizen.org/privilege/application.read`

@@ -20,6 +20,7 @@ properties:
   - name: deviceMajor
     summary: |
         Accessor to major device class identifiers of Bluetooth class of device (CoD).
+    description: |
         The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>, and ohter.
     type: Number
     permission: read-only
@@ -27,6 +28,7 @@ properties:
   - name: deviceMinor
     summary: |
         Accessor to minor device class identifiers of Bluetooth class of device (CoD). 
+    description: |
         The supported minor types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>, and ohter.
     type: Number
     permission: read-only
@@ -34,6 +36,7 @@ properties:
   - name: deviceService
     summary: |
         Accessor to major service class identifiers of Bluetooth class of device (CoD). 
+    description: |
         The supported types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>, and ohter. 
     type: Number
     permission: read-only

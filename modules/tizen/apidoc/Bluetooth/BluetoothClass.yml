@@ -50,6 +50,7 @@ properties:
   - name:  services
     summary: |
         The services provided by this device.The value is one of the constants defined for this type. 
+    description: |
         The supported major types are: <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>, <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>,
     type: Array<Number>
     permission: read-only

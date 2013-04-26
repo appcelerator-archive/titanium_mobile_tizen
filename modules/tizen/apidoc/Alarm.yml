@@ -133,6 +133,7 @@ properties:
   - name: daysOfTheWeek
     summary: |
         (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+    description: |
         Valid days of the week constants:
         <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
         <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
