@@ -134,6 +134,32 @@ properties:
     type: String
     permission: read-only
 
+examples:
+  - title: Simple notification
+    example: |
+        Create and show a simple notification in the status bar.
+        
+            var Tizen = require('tizen'),
+                // Notifications init parameters
+                appControl = Tizen.Apps.createApplicationControl({
+                    operation: 'http://tizen.org/appcontrol/operation/create_content',
+                    uri: null
+                }),        
+                notificationDict = {
+                    content: 'Hello world',
+                    vibration: true, 
+                    appControl: appControl
+                },
+
+            // Create and post notification
+            notification = Tizen.Notification.createStatusNotification({
+                statusType: Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE,
+                title: 'Simple notification',
+                notificationInitDict: notificationDict
+            });
+
+            Tizen.Notification.postNotification(notification);
+
 # Pseudo-type
 ---
 name: StatusNotificationInit
