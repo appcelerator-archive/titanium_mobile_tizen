@@ -87,7 +87,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
-        type: [Dictionary<CalendarTaskInit>, Dictionary<RepresentationInit>]
+        type: [Dictionary<CalendarTask>, RepresentationInit]
         optional: true
   
   - name: createCalendarEvent
@@ -96,7 +96,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarEvent       
     parameters:
       - name: eventParameters
-        type: [Dictionary<CalendarEventInit>, Dictionary<RepresentationInit>]
+        type: [CalendarEventInit, RepresentationInit]
         optional: true
  
   - name: createCalendarAttendee
@@ -105,7 +105,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarAttendee
     parameters:
       - name: attendeeParameters
-        type: Dictionary<CalendarAttendeeInit>
+        type: CalendarAttendeeInit
                 
   - name: createCalendarRecurrenceRule
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarRecurrenceRule>
@@ -113,7 +113,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarRecurrenceRule
     parameters:
       - name: recurrenceRuleParameters
-        type: Dictionary<CalendarRecurrenceRuleInit>
+        type: CalendarRecurrenceRuleInit
                 
   - name: createCalendarAlarm
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAlarm>
@@ -121,7 +121,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
-        type: [Dictionary<CalendarAlarmInitWithDate>, Dictionary<CalendarAlarmInitWithDuration>]
+        type: [CalendarAlarmInitWithDate, CalendarAlarmInitWithDuration]
         
 properties:
 
