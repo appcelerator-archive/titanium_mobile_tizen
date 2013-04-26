@@ -8,10 +8,6 @@ platforms: [tizen]
 methods:
   - name: getMessageServices
     summary: Retrieves the messaging service of a given type for a given account, or all existing services supporting the given type, if serviceId is not given. 
-    description: |
-        The errorCallback is launched with these error types:
-            InvalidValuesError: If any of the input parameters contain an invalid value, the encoding is not valid or onsuccess is null. Please note that to allow developers to ignore errors, errorCallback accepts null as a valid value.
-            UnknownError: In any other error case.
     parameters: 
       - name: messageServiceType
         summary: |

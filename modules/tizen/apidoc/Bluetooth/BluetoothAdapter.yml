@@ -57,10 +57,7 @@ methods:
     summary: Stops the device discovery process session, if active. Automatically unsubscribes from all "discovery" events.
     description: |
         Device discovery is a heavyweight procedure, hence we recommend stopping discovery as soon as required device is found. This method cancels an active discovery session.
-        The ErrorCallback is launched with these error types:
-            ServiceNotAvailableError: If a Bluetooth device is turned off.
-            UnknownError: In any other error case.
-        
+
         To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.gap`
