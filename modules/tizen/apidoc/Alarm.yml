@@ -124,7 +124,7 @@ examples:
 
 ---
 name: AlarmAbsoluteInit1
-summary: Parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+summary: Simple object that contains parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
@@ -146,7 +146,7 @@ properties:
 
 ---
 name: AlarmAbsoluteInit2
-summary: Parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+summary: Simple object that contains parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date

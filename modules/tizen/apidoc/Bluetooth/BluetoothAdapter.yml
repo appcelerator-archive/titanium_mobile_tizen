@@ -253,7 +253,7 @@ properties:
 ---
 name: GetKnownDevicesResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getKnownDevices](Modules.Tizen.Bluetooth.BluetoothAdapter.getKnownDevices) method.
 extends: ErrorResponse
 properties:
@@ -283,7 +283,7 @@ properties:
 ---
 name: GetDeviceResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getDevice](Modules.Tizen.Bluetooth.BluetoothAdapter.getDevice) method.
 extends: ErrorResponse
 properties:
@@ -313,7 +313,7 @@ properties:
 ---
 name: CreateBondingResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [createBonding](Modules.Tizen.Bluetooth.BluetoothAdapter.createBonding) method.
 extends: ErrorResponse
 properties:
@@ -343,7 +343,7 @@ properties:
 ---
 name: RegisterRFCOMMServiceByUUIDResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID) method.
 extends: ErrorResponse
 properties:

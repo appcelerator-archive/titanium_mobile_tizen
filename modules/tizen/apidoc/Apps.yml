@@ -229,7 +229,7 @@ examples:
 ---
 name: LaunchAppControlReplyResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [launchAppControl](Modules.Tizen.Apps.launchAppControl) method.
 extends: ErrorResponse
 properties:
@@ -259,7 +259,7 @@ properties:
 ---
 name: FindAppControlResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [findAppControl](Modules.Tizen.Apps.findAppControl) method.
 extends: ErrorResponse
 properties:
@@ -295,7 +295,7 @@ properties:
 ---
 name: AppsContextResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getAppsContexts](Modules.Tizen.Apps.getAppsContext) method.
 extends: ErrorResponse
 properties:
@@ -325,7 +325,7 @@ properties:
 ---
 name: AppsInfoResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getAppsInfo](Modules.Tizen.Apps.getAppsInfo) method.
 extends: ErrorResponse
 properties:

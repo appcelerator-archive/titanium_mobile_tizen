@@ -87,7 +87,7 @@ methods:
         type: Modules.Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
-        type: [Dictionary<CalendarTask>, RepresentationInit]
+        type: [Dictionary<Modules.Tizen.Calendar.CalendarTask>, RepresentationInit]
         optional: true
   
   - name: createCalendarEvent
@@ -467,30 +467,6 @@ properties:
   - name: attendees
     summary: An attribute array that lists the people attending an event.
     type: Array<Modules.Tizen.Calendar.CalendarAttendee>
-
----
-name: CalendarTaskInit
-summary: |
-    A dictionary that is used for creating calendar tasks.
-    
-    All the attributes are optional and are undefined by default.
-    
-    It also provides an interface for specifying task attributes upon task creation
-    
-    See CalendarTask interface for more information about the members.
-extends: CalendarItemInit
-properties:
-  - name: dueDate 
-    type: Date
-    summary: An attribute to store the due date and time for completing a task.
-    
-  - name: completedDate
-    type: Date
-    summary: An attribute to record the date and time when an task is completed.
-        
-  - name: progress
-    type: Number
-    summary: An attribute to denote the percent of completion of a task.
 
 ---
 name: CalendarEventInit
