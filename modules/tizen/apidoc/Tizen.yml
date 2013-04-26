@@ -143,9 +143,6 @@ examples:
             emailService.messageStorage.findMessages(attributeFilter, messagesFoundCB);
 
 # Pseudo-type
----
-name: AbstractFilter
-summary: Common interface used by different types of object filters.
 
 ---
 name: AttributeFilterInit
