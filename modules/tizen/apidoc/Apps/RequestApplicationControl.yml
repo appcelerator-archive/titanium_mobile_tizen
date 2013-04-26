@@ -10,7 +10,7 @@ methods:
     parameters: 
       - name: data
         summary: An array of ApplicationControlData objects.
-        type: ApplicationControlDataObject
+        type: Array<Modules.Tizen.Apps.ApplicationControlData>
         optional: true
 
   - name: replyFailure

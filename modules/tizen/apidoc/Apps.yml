@@ -5,6 +5,22 @@ summary: This API provides a way to launch other applications and access applica
 extends: Titanium.Module
 platforms: [tizen]
 methods:
+  - name: createApplicationControl
+    summary: Creates an instance of <Modules.Tizen.Apps.ApplicationControl>
+    returns:
+        type: Modules.Tizen.Apps.ApplicationControl
+    parameters:
+      - name: args
+        type: Dictionary<Modules.Tizen.Apps.ApplicationControl>
+
+  - name: createApplicationControlData
+    summary: Creates an instance of <Modules.Tizen.Apps.ApplicationControlData>
+    returns:
+        type: Modules.Tizen.Apps.ApplicationControlData
+    parameters:
+      - name: args
+        type: Dictionary<Modules.Tizen.Apps.ApplicationControlData>
+
   - name: getCurrentApplication
     summary: Gets the Application object defining the current application.
     returns: 
@@ -42,7 +58,7 @@ methods:
     parameters:
       - name: appControl
         summary: The data structure describing application control details.
-        type: ApplicationControl
+        type: Modules.Tizen.Apps.ApplicationControl
  
       - name: id
         summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
@@ -71,7 +87,7 @@ methods:
     parameters: 
       - name: appControl
         summary: A data structure describing application control details.
-        type: ApplicationControl
+        type: Modules.Tizen.Apps.ApplicationControl
 
       - name: callback
         summary: Function to invoke on success or failure.. 
@@ -211,44 +227,8 @@ examples:
             });
 
 
-# Pseudo-type
 ---
-name: ApplicationControlDataInit
-summary: Contains information required to initialize a <Modules.Tizen.Apps.ApplicationControlData>.
-properties:
-  - name: key
-    type: String
-    summary: An attribute to store the name of a key.
-  - name: value
-    type: Array<String>
-    summary: An attribute to store the value associated with a key.
-    
----
-name: ApplicationControlInit
-summary: Contains information required to initialize an <ApplicationControl>.
-properties:
-  - name: operation
-    type: String
-    summary: An attribute to store the string that defines the action to be performed by an application control.
-  - name: uri 
-    type: String
-    summary: (optional) An attribute to store the URI needed by application control.
-    optional: true
-  - name: mime  
-    type: String
-    summary: (optional) An attribute to store the MIME type of a content.
-    optional: true
-  - name: category   
-    type: String
-    summary: (optional) An attribute to store the category of the application to be launched.
-    optional: true
-  - name: data  
-    type: <Modules.Tizen.Apps.ApplicationControlData>
-    summary: (optional) An array of attributes to store the data needed for an application control.
-    optional: true
-
----
-name: ApplicationControl
+name: Modules.Tizen.Apps.ApplicationControl
 summary: "This interface consists of an operation, URI, MIME type, and data."
 description: |
     It describes an action to be performed by other applications and is passed to launch other applications. 
@@ -273,11 +253,11 @@ properties:
 
   - name: data
     summary: An array of attributes to store the data needed for an application control.  
-    type: Array<ApplicationControlData>
+    type: Array<Modules.Tizen.Apps.ApplicationControlData>
 
 ---
-name: ApplicationControlData
-summary: "This object defines a key/value pair used to pass data between applications through the <ApplicationControl> interface. "
+name: Modules.Tizen.Apps.ApplicationControlData
+summary: This object defines a key/value pair used to pass data between applications through the <Modules.Tizen.Apps.ApplicationControl> interface.
 createable: false
 properties:
   - name: key
@@ -316,7 +296,7 @@ properties:
   - name: data
     summary: List of ApplicationControlData objects.
     description: Will be undefined if `success` is `false`.
-    type: Array<ApplicationControlData>
+    type: Array<Modules.Tizen.Apps.ApplicationControlData>
     
 ---
 name: FindAppControlResponse
@@ -351,7 +331,7 @@ properties:
   - name: appControl
     summary: The application control that was passed on findAppControl.
     description: Will be undefined if `success` is `false`.
-    type: ApplicationControl
+    type: Modules.Tizen.Apps.ApplicationControl
     optional: true
 
 ---
