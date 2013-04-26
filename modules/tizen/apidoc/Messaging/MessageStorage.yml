@@ -2,8 +2,13 @@
 name: Modules.Tizen.Messaging.MessageStorage
 summary: MessageStorage management capabilities. 
 description: |
-    This interface allows a web application to query, update, and delete messages, and subscribe to MessageStorage changes. In addition to simple message queries, the MessageStorage interface provides functionality to find conversations and folders.
-    The conversation object represents a group of messages combined by the set of message fields. Email conversations are grouped by subject, while chat messages are grouped by sender and recipient fields.
+    This interface allows a web application to query, update, and delete messages, and subscribe to 
+    MessageStorage changes. In addition to simple message queries, the MessageStorage interface 
+    provides functionality to find conversations and folders.
+    
+    The conversation object represents a group of messages combined by the set of message fields. 
+    Email conversations are grouped by subject, while chat messages are grouped by sender and 
+    recipient fields.
 extends: Titanium.Proxy
 createable: false
 
@@ -13,7 +18,8 @@ methods:
     description: |
         Added messages would be stored in the Drafts folder.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -30,7 +36,8 @@ methods:
   - name: findMessages
     summary: Queries messages from MessageStorage. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -61,7 +68,8 @@ methods:
   - name: removeMessages
     summary: Deletes messages from MessageStorage. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -78,9 +86,15 @@ methods:
   - name: updateMessages
     summary: Updates messages in MessageStorage. 
     description: |
-        The backend MUST check whether the required updates can be applied and invoke the callback function with error message, if they cannot. Depending on the backend synchronization settings, the local changes in Modules.Tizen.Messaging.MessageStorage might be rewritten as a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related message service.
+        The backend MUST check whether the required updates can be applied and invoke the callback 
+        function with error message, if they cannot. Depending on the backend synchronization 
+        settings, the local changes in Modules.Tizen.Messaging.MessageStorage might be rewritten as
+        a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or 
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related 
+        message service.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -97,7 +111,8 @@ methods:
   - name: findConversations
     summary: Queries conversations from MessageStorage. 
     description: | 
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -128,7 +143,8 @@ methods:
   - name: removeConversations
     summary: Deletes conversations from MessageStorage. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -145,7 +161,8 @@ methods:
   - name: findFolders
     summary: Queries folders from MessageStorage. 
     description: |        
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -161,7 +178,8 @@ methods:
   - name: addMessagesChangeListener
     summary: Subscribes to get notifications when MessageStorage changes. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -181,7 +199,8 @@ methods:
   - name: addConversationsChangeListener
     summary: Subscribes to get notifications when MessageConversation changes. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -201,7 +220,8 @@ methods:
   - name: addFoldersChangeListener
     summary: Subscribes to get notification when MessageFolder changes. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
@@ -221,17 +241,22 @@ methods:
   - name: removeChangeListener
     summary: This method allows a message notification subscription to be cancelled. 
     description: |
-        If the watchId argument is valid and corresponds to a subscription already in place, the subscription process MUST stop immediately 
-        and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId argument does not correspond to a valid 
+        If the watchId argument is valid and corresponds to a subscription already in place, the 
+        subscription process MUST stop immediately 
+        and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId
+        argument does not correspond to a valid 
         subscription, the method will return without any further action.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.read`
         
     parameters: 
       - name: watchId
-        summary:  Identifier of the subscription returned by addMessagesChangeListener, addConversationsChangeListener or addFoldersChangeListener methods. 
+        summary: |
+            Identifier of the subscription returned by addMessagesChangeListener, 
+            addConversationsChangeListener or addFoldersChangeListener methods. 
         type: Number
 
 # Pseudo-type    
@@ -239,7 +264,8 @@ methods:
 name: MessagesChangeCallback
 summary: watchMessagesChanges callback. 
 description: |
-    This callback interface specifies a callback as a set of functions that will be invoked when messages from MessageStorage change. Each function 
+    This callback interface specifies a callback as a set of functions that will be invoked when 
+    messages from MessageStorage change. Each function 
     takes a list of messages as the input argument. 
 methods: 
   - name: messagesadded

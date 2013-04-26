@@ -1,20 +1,25 @@
 ---
 name: Modules.Tizen.Messaging
 summary: This specification defines interfaces to manage Message, retrieve messaging services.
-description: There is a object that allows access to the messaging API. Fetches all existing messaging services by type or a messaging service of a given type for concrete account. 
+description: |
+    There is a object that allows access to the messaging API. Fetches all existing messaging 
+    services by type or a messaging service of a given type for concrete account. 
 extends: Titanium.Module
 platforms: [tizen]
 
 methods:
   - name: getMessageServices
-    summary: Retrieves the messaging service of a given type for a given account, or all existing services supporting the given type, if serviceId is not given. 
+    summary: |
+        Retrieves the messaging service of a given type for a given account, or all existing 
+        services supporting the given type, if serviceId is not given. 
     parameters: 
       - name: messageServiceType
         summary: |
             Type of the services to be retrieved. 
         description: |
             Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
       - name: callback
@@ -135,7 +140,9 @@ properties:
     summary: |
         The type of message. 
     description: |
-        The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options
@@ -178,13 +185,16 @@ properties:
   - name: isHighPriority
     summary: The priority of a message. 
     description: |
-        This property is true, if the message has a high priority and false, if the message has a normal or low priority.
+        This property is true, if the message has a high priority and false, if the message has a
+        normal or low priority.
         This property is used only with Email messages.
     type: Boolean
 
 ---
 name: MessageAttachmentInit
-summary: Simple object that contains parameters for [createMessageAttachment](Modules.Tizen.Messaging.createMessageAttachment).
+summary: |
+    Simple object that contains parameters for 
+    [createMessageAttachment](Modules.Tizen.Messaging.createMessageAttachment).
 properties:
   - name: filePath
     summary: Path to file.

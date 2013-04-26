@@ -17,7 +17,8 @@ properties:
     summary: |
         Loads the status of the message body.
     description: |
-        This attribute describes whether the message body is loaded. It will be true if the message body is loaded, and false if the object is not loaded. The default value is false.
+        This attribute describes whether the message body is loaded. It will be true if the message 
+        body is loaded, and false if the object is not loaded. The default value is false.
     type: Boolean
     permission: read-only
 
@@ -29,12 +30,15 @@ properties:
     summary: |
         The HTML representation of the message body.
     description: |
-        This attribute holds an empty string if the message does not have HTML body content. This property is used only with Email messages.
+        This attribute holds an empty string if the message does not have HTML body content. This 
+        property is used only with Email messages.
     type: String
 
   - name: inlineAttachments
     summary: | 
         The list of the inline attachments.
     description: |
-        This array is empty, if the message does not have inline attachment or the message body is not loaded and attachments info is inaccessible (in this case the "loaded" attribute has to be checked).
+        This array is empty, if the message does not have inline attachment or the message body is 
+        not loaded and attachments info is inaccessible (in this case the "loaded" attribute has to 
+        be checked).
     type: Modules.Tizen.Messaging.MessageAttachment

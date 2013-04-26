@@ -3,8 +3,11 @@ name: Modules.Tizen.Messaging.MessageService
 summary: Message creating, sending, and fetching capabilities. 
 description: |
     This interface allows a web application to manipulate and send messages.
-    The interface allows you to fetch messages for all folders belonging to one account, with synchronizable flag set, using the sync() method, or for a given folder using the syncFolder() method.
-    The interface allows you to fetch the message body for a given message using loadMessageBody() method.
+    The interface allows you to fetch messages for all folders belonging to one account, with 
+    synchronizable flag set, using the sync() method, or for a given folder using the syncFolder() 
+    method.
+    The interface allows you to fetch the message body for a given message using loadMessageBody() 
+    method.
 
 extends: Titanium.Proxy
 createable: false
@@ -15,7 +18,8 @@ methods:
     description: |
         The error message contains the name of the recipient who failed to receive the sent message.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.send`
         
@@ -32,9 +36,12 @@ methods:
   - name: loadMessageBody
     summary: Attempts to load the body for the specified message. 
     description: |
-        It is the back end's responsibility to detect which mime parts of the message are related to the message body and should be loaded. If the message body is loaded,  the callback will be invoked immediately.
+        It is the back end's responsibility to detect which mime parts of the message are related to 
+        the message body and should be loaded. If the message body is loaded,  the callback will be 
+        invoked immediately.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -50,9 +57,11 @@ methods:
   - name: loadMessageAttachment
     summary: Attempts to load the specified message attachment. 
     description: |
-        This method is used only for EMAIL services. If the message attachment is already loaded, the callback will be invoked immediately.
+        This method is used only for EMAIL services. If the message attachment is already loaded, 
+        the callback will be invoked immediately.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -68,9 +77,12 @@ methods:
   - name: sync
     summary: Synchronizes the service content with an external mail server. 
     description: |
-        This method is used only for EMAIL services. This method performs the same actions as syncFolder for every folder with Synchronizable flag set within the current Messaging service.
+        This method is used only for EMAIL services. This method performs the same actions as 
+        syncFolder for every folder with Synchronizable flag set within the current Messaging 
+        service.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -92,14 +104,21 @@ methods:
     summary: Synchronizes the folder content with an external mail server. 
     description: |
         This method is used only for EMAIL services. This method is performed the following actions:
-            export local changes within a given folder from device to server (If exportUpdates flag set).
-            retrieve the list of available messages from within the given folder.
-        Messages are retrieved from a given folder, even if synchronizable flag for this folder is not set. The backend is to decide which data is retrieved for every message. It can be:
-            message header details
-            whole message body
-        The limit of latest messages for the given folder MUST be retrieved and put into <Modules.Tizen.Messaging.MessageStorage>. If the limit is not set, the entire folder MUST be retrieved.
+        export local changes within a given folder from device to server (If exportUpdates flag set).
+        retrieve the list of available messages from within the given folder.
+
+        Messages are retrieved from a given folder, even if synchronizable flag for this folder is 
+        not set. The backend is to decide which data is retrieved for every message. It can be:
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+            - message header details
+            - whole message body
+            
+        The limit of latest messages for the given folder MUST be retrieved and put into 
+        <Modules.Tizen.Messaging.MessageStorage>. If the limit is not set, the entire folder MUST be 
+        retrieved.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/messaging.write`
         
@@ -124,8 +143,11 @@ methods:
   - name: stopSync
     summary: Stops sync() and syncFoler() operation. 
     description: |
-        If the operationId argument is valid and corresponds to a service operation already in place, the operation MUST be stopped and its error callback MUST be invoked with error type AbortError.
-        If the operationId argument is not valid or does not correspond to a valid service operation, the method will return without any further action.
+        If the operationId argument is valid and corresponds to a service operation already in place, 
+        the operation MUST be stopped and its error callback MUST be invoked with error type 
+        AbortError.
+        If the operationId argument is not valid or does not correspond to a valid service operation, 
+        the method will return without any further action.
     parameters: 
       - name: opId
         summary: Service operation identifier. 
@@ -137,7 +159,8 @@ properties:
         The tag supported by this messaging service. 
     description: |
         Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
 
@@ -145,7 +168,8 @@ properties:
     summary: | 
         The interface for accessing MessageStorage for this Messaging service.
     description: |
-        If the backend does not support MessageStorage for this Messaging service, a WebAPIException is raised with error type NotSupportedError.
+        If the backend does not support MessageStorage for this Messaging service, a WebAPIException 
+        is raised with error type NotSupportedError.
     type: Modules.Tizen.Messaging.MessageStorage
     permission: read-only
 
