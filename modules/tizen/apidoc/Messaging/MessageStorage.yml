@@ -180,7 +180,8 @@ methods:
 
   - name: addConversationsChangeListener
     summary: Subscribes to get notifications when MessageConversation changes. 
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:
 
         * `http://tizen.org/privilege/messaging.read`
         

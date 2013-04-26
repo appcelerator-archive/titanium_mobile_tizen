@@ -587,6 +587,16 @@ properties:
     type: Number
     permission: read-only
 
+  - name: BLUETOOTH_SOCKET_STATE_CLOSED
+    summary: Closed state of Bluetooth socket.
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_SOCKET_STATE_OPEN
+    summary: Open state of Bluetooth socket.
+    type: Number
+    permission: read-only
+
 examples:
   - title: Enable or disable BlueTooth adapter
     example: |

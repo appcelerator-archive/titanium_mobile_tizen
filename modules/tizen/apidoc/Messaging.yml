@@ -127,7 +127,7 @@ examples:
 # Pseudo-type    
 ---
 name: MessageInit
-summary: An object containing the various options for inititalized <Modules.Tizen.Messaging.Message> object. It passing into constructor <Modules.Tizen.Message.createMessage>.
+summary: Simple object that contains parameters for [createMessage](Modules.Tizen.Messaging.createMessage).
 properties:
   - name: type
     summary: |
@@ -141,7 +141,7 @@ properties:
 
 ---
 name: MessageInitDict
-summary: Provides specifying message attributes upon message creation. 
+summary: Used in <MessageInit>.
 properties: 
   - name: subject
     summary: The subject of a message. 
@@ -180,7 +180,7 @@ properties:
 
 ---
 name: MessageAttachmentInit
-summary: Contains information required to initialize a message attachment.
+summary: Simple object that contains parameters for [createMessageAttachment](Modules.Tizen.Messaging.createMessageAttachment).
 properties:
   - name: filePath
     summary: Path to file.

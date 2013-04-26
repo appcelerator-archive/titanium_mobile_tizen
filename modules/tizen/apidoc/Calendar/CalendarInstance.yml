@@ -229,7 +229,7 @@ properties:
 # Pseudo-type        
 ---
 name: CalendarItemId 
-summary: A calendar item identifier, which can either be a <CalendarEventId> or a CalendarTaskId = String
+summary: A calendar item identifier, which can either be a <Modules.Tizen.Calendar.CalendarEventId> a CalendarTaskId (which is a String).
 
 ---
 name: AddBatchResponse

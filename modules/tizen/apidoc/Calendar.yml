@@ -155,22 +155,22 @@ properties:
     type: STRING
     permission: read-only    
     
-  - name: RECURRENTCE_RULE_FREQUENCY_DAILY
+  - name: RECURRENCE_RULE_FREQUENCY_DAILY
     summary: DAILY indicates the type of frequency for the recurrence of an event if the event occurs daily.
     type: STRING
     permission: read-only    
     
-  - name: RECURRENTCE_RULE_FREQUENCY_WEEKLY
+  - name: RECURRENCE_RULE_FREQUENCY_WEEKLY
     summary: WEEKLY indicates the type of frequency for the recurrence of an event if the event occurs weekly.
     type: STRING
     permission: read-only    
     
-  - name: RECURRENTCE_RULE_FREQUENCY_MONTHLY
+  - name: RECURRENCE_RULE_FREQUENCY_MONTHLY
     summary: MONTHLY indicates the type of frequency for the recurrence of an event if the event occurs monthly.
     type: STRING
     permission: read-only    
     
-  - name: RECURRENTCE_RULE_FREQUENCY_YEARLY
+  - name: RECURRENCE_RULE_FREQUENCY_YEARLY
     summary: YEARLY indicates the type of frequency for the recurrence of an event if the event occurs yearly.
     type: STRING
     permission: read-only
@@ -299,17 +299,17 @@ properties:
     type: STRING
     permission: read-only
 
-  - name: CALENDAR_ITEM_PRIOTITY_HIGH
+  - name: CALENDAR_ITEM_PRIORITY_HIGH
     summary: HIGH - if item priority is high
     type: STRING
     permission: read-only
 
-  - name: CALENDAR_ITEM_PRIOTITY_MEDIUM
+  - name: CALENDAR_ITEM_PRIORITY_MEDIUM
     summary: MEDIUM - if item priority is medium
     type: STRING
     permission: read-only    
     
-  - name: CALENDAR_ITEM_PRIOTITY_LOW
+  - name: CALENDAR_ITEM_PRIORITY_LOW
     summary: LOW - if item priority is low
     type: STRING
     permission: read-only
@@ -615,10 +615,10 @@ properties:
         
         Can be set to one of the following constants:
 
-          - RECURRENTCE_RULE_FREQUENCY_DAILY
-          - RECURRENTCE_RULE_FREQUENCY_WEEKLY
-          - RECURRENTCE_RULE_FREQUENCY_MONTHLY
-          - RECURRENTCE_RULE_FREQUENCY_YEARLY
+          - RECURRENCE_RULE_FREQUENCY_DAILY
+          - RECURRENCE_RULE_FREQUENCY_WEEKLY
+          - RECURRENCE_RULE_FREQUENCY_MONTHLY
+          - RECURRENCE_RULE_FREQUENCY_YEARLY
 
     type: String
 
