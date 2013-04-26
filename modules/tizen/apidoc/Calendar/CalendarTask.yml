@@ -8,6 +8,7 @@ properties:
     type: Date
     summary: |
         An attribute to store the due date and time for completing a task. (See RFC 5545 - Section 3.8.2.3).
+    description: |
         This dueDate must be in the same time zone as the startDate. The duration and dueDate are mutually exclusive,
         so only one of them can have the value null at any given time.
         
@@ -18,6 +19,7 @@ properties:
     type: Date
     summary: |
         An attribute to record the date and time when an task is completed. (See RFC 5545 - Section 3.8.2.1).
+    description: |
         This attribute is precise to the second. Milliseconds are ignored.
         
         The default value is undefined. If no value is provided, the task is not completed yet.
@@ -26,6 +28,7 @@ properties:
     type: Number
     summary: |
         An attribute to denote the percent of completion of a task.
+    description: |
         The value is a positive integer between 0 and 100. 
         A value of 0 indicates the task has not been started yet. 
         A value of 100 indicates that the task has been completed.

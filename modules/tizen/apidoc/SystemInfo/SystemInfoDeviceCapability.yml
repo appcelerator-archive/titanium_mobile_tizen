@@ -55,6 +55,7 @@ properties:
   - name: platformVersion
     summary: |
         The version of the platform in the "[Major].[Minor].[Build Version]" format. 
+    description: |
         For example, "1.0.0" represents a platform version where the major version is 1 and the minor and build versions are 0.
     type: String
     permission: read-only

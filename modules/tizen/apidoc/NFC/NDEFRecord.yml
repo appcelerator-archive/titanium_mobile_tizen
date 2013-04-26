@@ -22,8 +22,7 @@ properties:
 
   - name: type
     type: String
-    summary: |
-        
+    summary: |        
         The specified type in byte array. The byte array contains zero to 255 bytes. The byte array is converted to string
     permission: read-only
 
@@ -31,6 +30,7 @@ properties:
     type: String
     summary: |
         The record ID. The byte array contains zero to 255 bytes. 
+    description: |
         By default, this attribute is set to an empty array. The byte array is converted to string
     permission: read-only
 
@@ -38,5 +38,6 @@ properties:
     type: Titanium.Blob
     summary: |
         The record payload. The byte array contains zero to (2^32 - 1) bytes. 
+    description: |
         The byte array is converted to <Titanium.Blob>
     permission: read-only

@@ -11,7 +11,9 @@ methods:
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            Type of the services to be retrieved. 
+        description: |
+            Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
             <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
 
@@ -131,7 +133,9 @@ summary: Simple object that contains parameters for [createMessage](Modules.Tize
 properties:
   - name: type
     summary: |
-        The type of message. The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        The type of message. 
+    description: |
+        The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
 
   - name: options

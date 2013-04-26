@@ -8,6 +8,7 @@ properties:
   - name: messageId
     summary: |
         The ID of the parent message.
+    description: |
         It holds the ID of the message containing this body.
     type: String
     permission: read-only
@@ -15,6 +16,7 @@ properties:
   - name: loaded
     summary: |
         Loads the status of the message body.
+    description: |
         This attribute describes whether the message body is loaded. It will be true if the message body is loaded, and false if the object is not loaded. The default value is false.
     type: Boolean
     permission: read-only
@@ -26,6 +28,7 @@ properties:
   - name: htmlBody
     summary: |
         The HTML representation of the message body.
+    description: |
         This attribute holds an empty string if the message does not have HTML body content. This property is used only with Email messages.
     type: String
 

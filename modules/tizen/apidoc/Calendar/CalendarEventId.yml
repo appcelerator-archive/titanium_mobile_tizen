@@ -9,6 +9,7 @@ properties:
     type: String
     summary: |
         An attribute to persistently, and uniquely identify a calendar event.
+    description: |
         This value is assigned by the platform when the event is added to the calendar, 
         it is locally unique and persistent for the life time of the event and it cannot be modified by the developers.
         
@@ -18,6 +19,7 @@ properties:
     type: String
     summary: |
         An attribute to store the recurrence ID of a CalendarEvent instance.
+    description: |
         This attribute is used in conjunction with the uid property to identify 
         a specific instance of a recurring event.
         

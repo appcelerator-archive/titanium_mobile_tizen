@@ -9,6 +9,7 @@ properties:
   - name: id
     summary: |
         The conversation unique identifier.
+    description: |
         This property is the unique identifier for the conversation.
         The id is a locally unique and persistent property, assigned by the device or the web runtime (WRT).
     type: String
@@ -16,7 +17,9 @@ properties:
 
   - name: type
     summary: |
-        The type of the given conversation. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        The type of the given conversation. 
+    description: |
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
         <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
@@ -63,6 +66,7 @@ properties:
   - name: cc
     summary: |
         The carbon copy (cc) address of the latest message in the conversation.
+    description: |
         This property is used only for Email.
     type: Array<String>
     permission: read-only
@@ -70,6 +74,7 @@ properties:
   - name: bcc 
     summary: |
         The blind carbon copy (bcc) address of the latest message in the conversation.
+    description: |
         This property is used only for Email.
     type: Array<String>
     permission: read-only
@@ -77,6 +82,7 @@ properties:
   - name: lastMessageId
     summary: |
         The unique identifier of a latest message in conversation.
+    description: |
         This property is set up by the device or the web runtime environment.
     type: String
     permission: read-only

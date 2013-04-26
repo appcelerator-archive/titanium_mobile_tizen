@@ -35,6 +35,7 @@ properties:
   - name: mnc
     summary: |
         Represents Mobile Network Code (MNC) of the cellular network. 
+    description: |
         MNC is used in combination with MCC (also known as a "MCC / MNC tuple") to uniquely identify a mobile phone operator/carrier 
         using the GSM, CDMA, iDEN, TETRA and UMTS public land mobile networks and some satellite mobile networks.
     type: Number

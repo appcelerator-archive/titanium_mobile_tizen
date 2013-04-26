@@ -6,6 +6,7 @@ methods:
   - name: expandRecurrence
     summary: |
         This method takes into consideration all the parameters of the event recurrence rule to generate the instances occurring in a given time interval.
+    description: |
         The call involves retrieving from the database detached instances of an event to replace their corresponding virtual instances in the returned list. 
         The client can then use CalendarEvent.isDetached attribute to identify detached instances.
         If the event is not saved to a calendar yet, only virtual instances will be returned.
@@ -37,6 +38,7 @@ properties:
     type: Date
     summary: |
         An attribute to store the end date/time of an event.(see RFC 5545 - Section 3.8.2.2).
+    description: |
         This endDate must be in the same time zone as the startDate. 
         Note that duration and endDate are mutually exclusive, only one of them can be non-null.
         
@@ -48,6 +50,7 @@ properties:
     type: String
     summary: |
         An attribute to indicate the availability of a person for an event. (See RFC 5545 - Section 3.2.9).
+    description: |
         The value is one of the constants defined for this parameter : EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
         
         The default value is EVENT_AVAILABILITY_BUSY.
@@ -56,7 +59,7 @@ properties:
     type: Date
     summary: |
         An attribute to denote the recurrence rule for the event.
-        
+    description: |        
         The generated instances of a recurring event will have the same recurrence rule as their parent.
         This is useful when editing a particular event instance and choosing to update all instances from it.
         

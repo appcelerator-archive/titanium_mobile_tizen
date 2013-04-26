@@ -31,17 +31,21 @@ properties:
     description: |
         By default, this attribute is set to null.
         For SMS and MMS, folderId can be one of these numbers:
-            INBOX = 1,
-            OUTBOX = 2,
-            DRAFTS = 3,
-            SENTBOX = 4
+        
+            - INBOX = 1,
+            - OUTBOX = 2,
+            - DRAFTS = 3,
+            - SENTBOX = 4
+
     default: 
     type: String
     permission: read-only
 
   - name: type
     summary: |
-        The type of the given message. Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        The type of the given message. 
+    description: |
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
         <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
     type: String
     permission: read-only
@@ -82,6 +86,7 @@ properties:
   - name: hasAttachment
     summary: |
         The flag for existance of an attachment(s)
+    description: |
         This property is true, if the message has one or more attachments.
         This property is used only with Email and MMS messages.
     type: Boolean
@@ -90,6 +95,7 @@ properties:
   - name: isHighPriority
     summary: |
         The priority of a message.
+    description: |
         This property is true, if the message has a high priority. False, if the message has a normal or low priority.
         This property is used only with Email messages.
     type: Boolean
@@ -97,18 +103,21 @@ properties:
   - name: subject
     summary: |
         The subject of a message.
+    description: |
         This property is used only with Email and MMS messages.
     type: String
 
   - name: inResponseTo
     summary: |
         The unique identifier of the original message.
+    description: |
         If the message was replied to or forwarded, this property contains the ID of the original message, otherwise it is set to null.
     type: String
 
   - name: messageStatus
     summary: |
         The status of the given message.
+    description: |
         It can be one of these values: SENT, SENDING, FAILED, DRAFT.
         If the status of the current message does not correspond to any item from the list, an empty value will be returned.
     type: String
@@ -117,6 +126,7 @@ properties:
   - name: attachments
     summary: |
         The list of the message attachments.
+    description: |
         This array is empty if the message does not have attachments or the message body is not loaded and the attachment info is inaccessible (in this case, the "hasAttachment" attribute has to be checked).
     type: Array<Modules.Tizen.Messaging.MessageAttachment>
 

@@ -155,12 +155,15 @@ properties:
              For attributes of an array type, the filter will match if any value in the array matches.
   - name: matchFlag
     type: String
-    summary: |
-        (optional) Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, FILTER_MATCH_FLAG_EXISTS.
+    summary: (optional) Used for attribute-based filtering.
+    description: |
+        Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, FILTER_MATCH_FLAG_EXISTS.
     optional: ture
   - name: matchValue
     type: any
-    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this attribute is set to null.
+    summary: (optional) The value used for matching. 
+    description: |
+        The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this attribute is set to null.
     optional: true
 
 ---
