@@ -4,10 +4,17 @@ summary: This interface represents remote parties.
 platforms: [tizen]
 properties:
   - name: remoteParty
-    summary: An attribute to store the RPID. The remote party identifier (RPID) that is a unique identifier used by a service with call capability. It also includes phone numbers. Contacts are also defined per service, so an RPID can be resolved to a Contact. A null value means that the remote is hidden (private number). 
+    summary: An attribute to store the RPID. 
+    description: |
+        The remote party identifier (RPID) that is a unique identifier used by a service with call 
+        capability. It also includes phone numbers. Contacts are also defined per service, so an 
+        RPID can be resolved to a Contact. A null value means that the remote is hidden (private 
+        number).
     type: String
   - name: personId
-    summary: An attribute to store the identifier of the person that the raw contact belongs to. If the contact cannot be resolved, the value is null. See Contact API for more information. 
+    summary: An attribute to store the identifier of the person that the raw contact belongs to. 
+    description: |
+        If the contact cannot be resolved, the value is null. See Contact API for more information.
     type: String
 
 ---
@@ -37,7 +44,9 @@ properties:
     type: Number
     
   - name: entries
-    summary: An array of CallHistoryEntry objects, representing the result set of the query over the call history.
+    summary: |
+        An array of CallHistoryEntry objects, representing the result set of the query over the call 
+        history.
     description: Will be undefined if `success` is `false`.
     type: Array<CallHistoryEntry>
 

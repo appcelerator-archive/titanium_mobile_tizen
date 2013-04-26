@@ -59,7 +59,8 @@ methods:
   - name: writeNDEF
     summary: Writes NDEF data to the NFC tag.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+            Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
         
@@ -69,20 +70,25 @@ methods:
         type: Modules.Tizen.NFC.NDEFMessage
 
       - name: callback  
-        summary: Invoked in case of successfully writing the NDEF Data or in case of any error during writing the NDEF Data.
+        summary: |
+            Invoked in case of successfully writing the NDEF Data or in case of any error during 
+            writing the NDEF Data.
         type: Callback<ErrorResponse>
         optional: true
 
   - name: readNDEF
     summary: Reads NDEF data from the NFC tag.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
 
     parameters:
       - name: callback 
-        summary: Invoked in case of successfully reading the NDEF Data or any error during reading the NDEF Data.
+        summary: |
+            Invoked in case of successfully reading the NDEF Data or any error during reading 
+            the NDEF Data.
         type: Callback<NDEFReadResponse>
 
   - name: transceive
@@ -92,7 +98,8 @@ methods:
         Each tag type requires its own command to access tags. This API provides low level access
         of tag operation. (Note that you must know each tag technology.)
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
         

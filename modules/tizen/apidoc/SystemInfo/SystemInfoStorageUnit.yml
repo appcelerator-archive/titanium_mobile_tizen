@@ -27,6 +27,8 @@ properties:
     permission: read-only
 
   - name: isRemoveable
-    summary: true if this unit can be removed from the system (such as an sdcard unplugged), false otherwise.
+    summary: |
+        true if this unit can be removed from the system (such as an sdcard unplugged), false 
+        otherwise.
     type: Boolean
     permission: read-only

@@ -21,7 +21,8 @@ methods:
   - name: postNotification
     summary: Post the notification to display.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.write`
         
@@ -33,7 +34,8 @@ methods:
   - name: update
     summary: Updates a previously posted notification.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.write`
         
@@ -45,7 +47,8 @@ methods:
   - name: remove
     summary: Removes a previously posted notification.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.write`
         
@@ -57,7 +60,8 @@ methods:
   - name: removeAll
     summary: Removes all previously posted notifications by the current application.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.write`
         
@@ -65,7 +69,8 @@ methods:
   - name: getNotification
     summary: Gets a previously posted notification by the current application.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.read`
         
@@ -79,7 +84,8 @@ methods:
   - name: getAll
     summary: Gets all previously posted notifications by the current application.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/notification.read`
         
@@ -103,7 +109,8 @@ properties:
     description: |
         STATUS - The posted status notification is displayed in the notification tray. 
         The status notification consists of icon, title, content and time. 
-        The status notification can have the application control to launch the specific application when selected by the user.
+        The status notification can have the application control to launch the specific application 
+        when selected by the user.
     type: String
     permission: read-only
 
@@ -111,7 +118,8 @@ properties:
     summary: A simple status notification.
         
     description: |
-        The simple status notification is basic status notification type and removed automatically when selected by the user. 
+        The simple status notification is basic status notification type and removed automatically 
+        when selected by the user. 
         All simple status notifications can be removed by user interaction. 
     type: String
     permission: read-only
@@ -120,8 +128,9 @@ properties:
     summary: A status notification about an ongoing event.
         
     description: |
-        If the application needs to keep the user informed about the notification, consider using ongoing status notification. 
-        Please note that the ongoing status notification should be removed by the application that posted the notification. 
+        If the application needs to keep the user informed about the notification, consider using 
+        ongoing status notification. Please note that the ongoing status notification should be 
+        removed by the application that posted the notification. 
     type: String
     permission: read-only
 
@@ -130,7 +139,8 @@ properties:
         
     description: |
         The progress status notification can display the information for the progress of a job. 
-        Please note that the progress status notification should be removed by the application that posted the notification. 
+        Please note that the progress status notification should be removed by the application that 
+        posted the notification. 
     type: String
     permission: read-only
 
@@ -183,11 +193,15 @@ properties:
 
   - name: appControl
     type: Modules.Tizen.Aplication.ApplicationControl
-    summary: Holds the application control to launch when the notification is selected from the notification tray.
+    summary: |
+        Holds the application control to launch when the notification is selected from the 
+        notification tray.
 
   - name: appId
     type: String
-    summary: Holds the application id to launch when the notification is selected from the notification tray.
+    summary: |
+        Holds the application id to launch when the notification is selected from the notification 
+        tray.
 
   - name: progressValue
     type: Number
@@ -200,7 +214,11 @@ properties:
   - name: statusType
     type: String
     summary: |
-        Notification type (supported values: <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>)
+        Notification type.
+    description: |
+        Supported values: <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_SIMPLE>, 
+        <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_ONGOING>, 
+        <Modules.Tizen.Notification.STATUS_NOTIFICATION_TYPE_PROGRESS>.
 
   - name: title
     type: String

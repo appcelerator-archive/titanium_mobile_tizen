@@ -8,7 +8,9 @@ createable: false
 properties:
 
   - name: operatorName
-    summary: Represents the Operator Name String (ONS) of Common PCN Handset Specification (CPHS) in SIM card.
+    summary: |
+        Represents the Operator Name String (ONS) of Common PCN Handset Specification (CPHS) in 
+        SIM card.
     type: String
     permission: read-only
     

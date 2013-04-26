@@ -39,13 +39,15 @@ properties:
   - name: NFC_RECORD_TNF_URI
     type: Number
     summary: |
-        Indicates absolute URI, as defined in RFC 3986 [RFC 3986] format in RFC 2046 [RFC 2046] of NDEF record's type field.
+        Indicates absolute URI, as defined in RFC 3986 [RFC 3986] format in RFC 2046 [RFC 2046] of 
+        NDEF record's type field.
     permission: read-only
 
   - name: NFC_RECORD_TNF_EXTERNAL_RTD
     type: Number
     summary: |
-        Indicates NFC Forum external type [NFC RTD] format in RFC 2046 [RFC 2046] of NDEF record's type field.
+        Indicates NFC Forum external type [NFC RTD] format in RFC 2046 [RFC 2046] of NDEF record's 
+        type field.
     permission: read-only
 
   - name: NFC_RECORD_TNF_UNKNOWN
@@ -174,7 +176,8 @@ methods:
     description: |
         NFC adapter interface provides access to control the NFC adapter. 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/nfc.common`
         

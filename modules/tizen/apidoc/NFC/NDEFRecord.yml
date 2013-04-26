@@ -23,7 +23,8 @@ properties:
   - name: type
     type: String
     summary: |        
-        The specified type in byte array. The byte array contains zero to 255 bytes. The byte array is converted to string
+        The specified type in byte array. The byte array contains zero to 255 bytes. The byte array 
+        is converted to string
     permission: read-only
 
   - name: id

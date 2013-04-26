@@ -13,6 +13,7 @@ properties:
     description: |
         Number between 0.0 and 1.0, 
         representing the minimum and maximum values allowed on this system. 
-        Any threshold parameter used in a watch function to monitor this property applies to this attribute.
+        Any threshold parameter used in a watch function to monitor this property applies to this 
+        attribute.
     type: Number
     permission: read-only
