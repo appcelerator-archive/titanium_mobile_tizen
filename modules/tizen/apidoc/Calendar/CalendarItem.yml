@@ -135,12 +135,15 @@ properties:
   - name: priority
     summary: |
         An attribute to indicate the priority level of an item and may be used to relatively prioritize multiple items during a given period of time. (See RFC 5545 - Section 3.8.1.9).
-        The default value for this attribute is Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW priority.
+        The default value for this attribute is <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW> priority.
+
         If the native item database supports another priority schema (such as a range from 1 to 9), the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
-            - 1-4 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH,
-            - 5 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM,
-            - 6-9 to Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW.
+
+            - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
+            - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
+            - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
+
     type: STRING
 
   - name: alarms

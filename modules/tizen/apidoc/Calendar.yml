@@ -54,8 +54,10 @@ methods:
         type: Modules.Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
-        summary:  |
-            The type of calendar. Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT or Modules.Tizen.Calendar.CALENDAR_TYPE_TASK
+        summary: |
+            The type of calendar.
+        description: |
+            Can be <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
         type: String
           
   - name: getCalendar
@@ -70,8 +72,10 @@ methods:
         type: Modules.Tizen.Calendar.CalendarInstance       
     parameters:
       - name: type
-        summary:  |
-            The type of calendar. Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT or Modules.Tizen.Calendar.CALENDAR_TYPE_TASK
+        summary: |
+            The type of calendar.
+        description: |
+            Can be <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
         type: String
       - name: id
         summary:  The calendar identifier.
@@ -661,9 +665,11 @@ properties:
         
   - name: daysOfTheWeek
     type: Array<String>
-    summary: |
-        An attribute to store the days of the week associated with the recurrence rule.
-        This property value is valid only for recurrence rules with a frequency type of Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY, Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY, and Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY.
+    summary: An attribute to store the days of the week associated with the recurrence rule.
+    description: |
+        This property value is valid only for recurrence rules with a frequency type of <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>, 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>, and <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>.
+        
         This property corresponds to BYDAY in RFC 5545.
                 
   - name: setPositions
