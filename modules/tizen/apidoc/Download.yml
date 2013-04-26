@@ -87,7 +87,7 @@ examples:
             downloadRequest.send(listener);
 ---
 name: DownloadRequestInit
-summary: Parameters for the <Modules.Tizen.Download.createDownloadRequest>.
+summary: Simple object that contains parameters for the <Modules.Tizen.Download.createDownloadRequest>.
 properties:
   - name: url
     summary: The URL of the object to download.
@@ -95,12 +95,13 @@ properties:
 
   - name: destination
     summary: (optional) Destination folder to which a requested file object will be downloaded.
-        If the destination is not specified, the file will be downloaded to the default storage "Downloads".
+        If the destination is not specified, the file will be downloaded to the default storage 
+        "Downloads".
     type: String
     optional: true
 
   - name: fileName
-    summary: (optional) An attribute to store the file name for the specified URL. If the file name is not given, 
-        the original file name from URL is used.
+    summary: (optional) An attribute to store the file name for the specified URL. If the file name 
+    is not given, the original file name from URL is used.
     type: String
     optional: true
