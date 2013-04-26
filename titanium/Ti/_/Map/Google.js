@@ -39,27 +39,30 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/lang', 'Ti/App/Propertie
 			},
 
 			postscript: function() {
-				var self = this,
-					region = self.region || defaultRegion,
-					gmap = self._gmap = new gmaps.Map(self.domNode, {
-						disableDefaultUI: true,
-						zoom: 2,
-						zoomControl: true,
-						center: new gmaps.LatLng(region.latitude, region.longitude),
-						mapTypeId: mapType(self.mapType)
-					});
+				if (gmaps) {
+					//gmap may be undefined if internet connection absent
+					var self = this,
+						region = self.region || defaultRegion,
+						gmap = self._gmap = new gmaps.Map(self.domNode, {
+							disableDefaultUI: true,
+							zoom: 2,
+							zoomControl: true,
+							center: new gmaps.LatLng(region.latitude, region.longitude),
+							mapTypeId: mapType(self.mapType)
+						});
 
-				on(self, 'postlayout', function() {
-					gevent.trigger(gmap, 'resize');
-					self._updateMap(region, 1);
-					setTimeout(function () {
+					on(self, 'postlayout', function() {
+						gevent.trigger(gmap, 'resize');
 						self._updateMap(region, 1);
-						self._updateUserLocation(self.userLocation);
-						self.annotations.forEach(self._createMarker, self);
-						self._annotationEvents = [];
-						self._boundsEvt = gevent.addListener(gmap, 'bounds_changed', lang.hitch(self, '_fitRegion'));
-					}, 1);
-				});
+						setTimeout(function () {
+							self._updateMap(region, 1);
+							self._updateUserLocation(self.userLocation);
+							self.annotations.forEach(self._createMarker, self);
+							self._annotationEvents = [];
+							self._boundsEvt = gevent.addListener(gmap, 'bounds_changed', lang.hitch(self, '_fitRegion'));
+						}, 1);
+					});
+				}
 			},
 
 			destroy: function() {
