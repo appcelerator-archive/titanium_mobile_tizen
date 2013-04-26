@@ -93,7 +93,7 @@ methods:
     parameters:
       - name: Options
         summary: The dictionary representing information about the new notification.
-        type: Dictionary<StatusNotificationUnit>
+        type: Dictionary<StatusNotificationInit>
     
 properties:
 
@@ -194,7 +194,7 @@ properties:
     summary: The initial progress value of the notification.
 
 ---
-name: StatusNotificationUnit
+name: StatusNotificationInit
 summary: Contains information required to initialize a StatusNotification.
 properties:
   - name: statusType

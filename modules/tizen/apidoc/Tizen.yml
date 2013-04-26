@@ -13,7 +13,7 @@ methods:
     parameters: 
       - name: Options
         summary: Dictionary with initial arguments for AttributeFilter.
-        type: Dictionary<AttributeFilterUnit>
+        type: Dictionary<AttributeFilterInit>
 
   - name: createAttributeRangeFilter
     summary: Creates and returns an instance of <Modules.Tizen.AttributeRangeFilter>.
@@ -23,7 +23,7 @@ methods:
 
       - name: Options
         summary: Dictionary with initial arguments for AttributeRangeFilter.
-        type: Dictionary<AttributeRangeFilterUnit>
+        type: Dictionary<AttributeRangeFilterInit>
 
   - name: createCompositeFilter
     summary: Creates and returns an instance of <Modules.Tizen.CompositeFilter>.
@@ -33,7 +33,7 @@ methods:
 
       - name: Options
         summary: Dictionary with initial arguments for CompositeFilter.
-        type: Dictionary<CompositeFilterUnit>
+        type: Dictionary<CompositeFilterInit>
 
   - name: createSortMode
     summary: Creates and returns an instance of <Modules.Tizen.SortMode>.
@@ -43,7 +43,7 @@ methods:
 
       - name: Options
         summary: Dictionary with initial arguments for SortMode.
-        type: Dictionary<SortModeUnit>
+        type: Dictionary<SortModeInit>
  
   - name: createSimpleCoordinates
     summary: Creates and returns an instance of <Modules.Tizen.SimpleCoordinates>.
@@ -53,7 +53,7 @@ methods:
 
       - name: Options
         summary: Dictionary with initial arguments for SimpleCoordinates.
-        type: Dictionary<SimpleCoordinatesUnit>
+        type: Dictionary<SimpleCoordinatesInit>
 
   - name: createContactRef
     summary: Creates and returns an instance of <Modules.Tizen.ContactRef>.
@@ -63,7 +63,7 @@ methods:
 
       - name: Options
         summary: Dictionary with initial arguments for ContactRef.
-        type: Dictionary<ContactRefUnit>
+        type: Dictionary<ContactRefInit>
 
 properties:
   - name: FILTER_MATCH_FLAG_EXACTLY
@@ -148,8 +148,8 @@ name: AbstractFilter
 summary: Common interface used by different types of object filters.
 
 ---
-name: AttributeFilterUnit
-summary: Represents a filter based on an object attribute.
+name: AttributeFilterInit
+summary: Contains information required to initialize an AttributeFilter.
 properties:
   - name: attributeName
     type: String
@@ -167,8 +167,8 @@ properties:
     optional: true
 
 ---
-name: AttributeRangeFilterUnit
-summary: Represents a filter based on an object attribute which has values that are within a particular range.
+name: AttributeRangeFilterInit
+summary: Contains information required to initialize an AttributeRangeFilter.
 properties:
   - name: attributeName
     type: String
@@ -185,8 +185,8 @@ properties:
     optional: true
  
 ---
-name: CompositeFilterUnit
-summary: Represents a set of filters.
+name: CompositeFilterInit
+summary: Contains information required to initialize a CompositeFilter. 
 properties:
   - name: type
     type: String
@@ -198,8 +198,8 @@ properties:
     optional: true
     
 ---
-name: SortModeUnit
-summary: Common interface used for sorting of queried data.
+name: SortModeInit
+summary: Contains information required to initialize a SortMode. 
 properties:
   - name: attributeName
     type: String
@@ -211,8 +211,8 @@ properties:
     optional: true
 
 ---
-name: SimpleCoordinatesUnit
-summary:  Represents a point (latitude and longitude) in map coordinate system.
+name: SimpleCoordinatesInit
+summary: Contains information required to initialize a SimpleCoordinates object.
 properties:
   - name: latitude
     type: Number
@@ -222,8 +222,8 @@ properties:
     summary: Longitude, of the WGS84 datum.
 
 ---
-name: ContactRefUnit
-summary:  The fully-defined contact reference.
+name: ContactRefInit
+summary: Contains information required to initialize a ContactRef.
 properties:
   - name: addressBookId
     type: String

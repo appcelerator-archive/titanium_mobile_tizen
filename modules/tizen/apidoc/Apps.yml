@@ -213,7 +213,7 @@ examples:
 
 # Pseudo-type
 ---
-name: ApplicationControlDataUnit
+name: ApplicationControlDataInit
 summary: Contains information required to initialize a <Modules.Tizen.Apps.ApplicationControlData>.
 properties:
   - name: key
@@ -224,7 +224,7 @@ properties:
     summary: An attribute to store the value associated with a key.
     
 ---
-name: ApplicationControlUnit
+name: ApplicationControlInit
 summary: Contains information required to initialize an <ApplicationControl>.
 properties:
   - name: operation

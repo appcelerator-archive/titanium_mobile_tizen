@@ -37,7 +37,7 @@ methods:
 
       - name: initDict
         summary: Provides specifying attachment attributes upon messageAttachment creation.
-        type: MessageAttachmentUnit
+        type: MessageAttachmentInit
 
 properties:
   - name: MESSAGE_SERVICE_TAG_MESSAGING_SMS
@@ -179,8 +179,8 @@ properties:
     type: Boolean
 
 ---
-name: MessageAttachmentUnit
-summary: An object containing the path of file and mime type(optional)
+name: MessageAttachmentInit
+summary: Contains information required to initialize a message attachment.
 properties:
   - name: filePath
     summary: Path to file.
