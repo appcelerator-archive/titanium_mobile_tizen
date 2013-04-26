@@ -225,6 +225,62 @@ properties:
     type: STRING
     permission: read-only    
     
+examples:
+  - title: Get system information
+    example: |
+        Obtain several system information properties from the OS.
+        
+            var Tizen = require('tizen'),
+                data = [
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorage },
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfo },
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCell },
+                ],
+            dataLength = data.length;
+
+            function onCpuInfo(response) {
+                if (response.success) {
+                    console.log('Cpu load: ' + response.data.load);
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            function onStorage(response) {
+                if (response.success) {
+                    var storagesInfo = '',
+                        i = 0,
+                        storages = response.data,
+                        units = storages.getUnits(),
+                        storagesCount = units.length;
+    
+                    console.log('Storage: ');
+                    for (; i < storagesCount; i++) {
+                        console.log('   Type: ' + units[i].type);
+                        console.log('   Capacity: ' + Math.floor(units[i].capacity / 1000000) + ' MB');
+                        console.log('   Available capacity: ' + Math.floor(units[i].availableCapacity / 1000000) + ' MB');
+                        console.log('   Removable: ' + (units[i].isRemoveable ? 'Yes' : 'No');
+                    }
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            function onCell(response) {
+                if (response.success) {
+                    var cell = response.data;
+                    console.log('Cellular network: ');
+                    console.log('   Status: ' + cell.status);
+                    console.log('   IP address: ' + cell.ipAddress);
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            for (; i < dataLength; i++ ) {
+                Tizen.SystemInfo.getPropertyValue(data[i].propertyName, data[i].propertyCallback);
+            };
+
 # Pseudo-type    
 ---
 name: SystemInfoOptions
