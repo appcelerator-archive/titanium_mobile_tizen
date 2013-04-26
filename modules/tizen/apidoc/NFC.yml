@@ -227,6 +227,46 @@ methods:
     returns:
         type: Modules.Tizen.NFC.NDEFRecordMedia
 
+examples:
+  - title: Search tags
+    example: |
+        This example shows how to start searching for new NFC tags around and display their names.
+        
+            var nfc = require('tizen').NFC,
+                nfcAdapter;
+            
+            // Tag detection handler
+            function setTagDetect(response) {
+                var nfcTag;
+                
+                if (response.success) {
+                    var onSuccess = {
+                        onattach: function(tag) {
+                            console.log('Tag found:' + tag.type);
+                        },
+                        ondetach: function () {
+                            console.log('Tag successfully detached.');
+                        }
+                    };
+
+                    try {
+                        nfcAdapter.setTagListener(onSuccess);
+                    } catch (e) {
+                        console.error(e.name + ' : ' + e.message);
+                    }
+                } else {
+                    console.error('Failed to power on NFC: ' + response.error);
+                }
+            }
+
+			// Set up NFC and begin searching
+            try {
+                nfcAdapter = nfc.getDefaultAdapter();
+                nfcAdapter.setPowered(true, setTagDetect);
+            } catch (e) {
+                console.error('Failed to power on NFC: ' + e.message);
+            }
+
 ---
 name: createNDEFMessageParametersNDEFRecord
 summary: Parameters for the createNDEFMessage.
