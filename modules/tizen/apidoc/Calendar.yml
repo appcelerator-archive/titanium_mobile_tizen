@@ -471,13 +471,7 @@ properties:
 ---
 name: CalendarEventInit
 summary: |
-    A dictionary that is used for creating calendar events.
-    
-    Provides an interface for specifying event attributes upon event creation
-    
-    All the attributes are optional and are undefined by default.
-    
-    See CalendarEvent interface for more information about the members.
+    Simple object that contains parameters for [createCalendarEvent](Modules.Tizen.Calendar.createCalendarEvent).
     
 extends: CalendarItemInit
 properties:
@@ -498,7 +492,7 @@ properties:
 
 ---
 name: RepresentationInit
-summary: A dictionary that is used for creating both calendar tasks and events.
+summary: Simple object that contains parameters for [createCalendarEvent](Modules.Tizen.Calendar.createCalendarEvent).
 properties:
         
   - name: stringRepresentation
@@ -515,10 +509,7 @@ properties:
             
 ---
 name: CalendarAttendeeInit
-summary: |
-    The properties of a CalendarAttendee, to pass to its creator.
-    
-    See CalendarAttendee interface for more information about the members.
+summary: Simple object that contains parameters for [createCalendarAttendee](Modules.Tizen.Calendar.createCalendarAttendee).
 properties:
 
   - name: uri 
@@ -532,7 +523,7 @@ properties:
 
 ---
 name: AttendeeInitDict
-summary: The properties of a CalendarAttendee, to pass to its constructor.
+summary: Used in <CalendarAttendeeInit>.
 properties: 
 
   - name: name
@@ -601,10 +592,7 @@ properties:
     type: Modules.Tizen.Contacts.ContactsRef
 ---
 name: CalendarRecurrenceRuleInit
-summary: |
-    The properties of a CalendarRecurrenceRule to pass to its creator.
-    
-    For more information about the members, see CalendarRecurrenceRule interface.
+summary: Simple object that contains parameters for [createCalendarRecurrenceRule](Modules.Tizen.Calendar.createCalendarRecurrenceRule).
 properties: 
   - name: frequency
     summary: |
@@ -624,7 +612,7 @@ properties:
 
 ---
 name: CalendarRecurrenceRuleInitDict
-summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
+summary: Used in <CalendarRecurrenceRuleInit>.
 properties:
  
   - name: interval
@@ -664,7 +652,7 @@ properties:
     summary: An attribute to list date/time exceptions for the recurring event.
 ---
 name: CalendarAlarmInitWithDate
-summary: 
+summary: Simple object that contains parameters for [createCalendarAlarm](Modules.Tizen.Calendar.createCalendarAlarm).
 properties:
 
   - name: absoluteDate 
@@ -687,7 +675,7 @@ properties:
 
 ---
 name: CalendarAlarmInitWithDuration
-summary: 
+summary: Simple object that contains parameters for [createCalendarAlarm](Modules.Tizen.Calendar.createCalendarAlarm).
 properties:
    
   - name: before 

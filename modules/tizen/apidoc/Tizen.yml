@@ -146,7 +146,7 @@ examples:
 
 ---
 name: AttributeFilterInit
-summary: Contains information required to initialize an AttributeFilter.
+summary: Simple object that contains parameters for [createAttributeFilter](Modules.Tizen.createAttributeFilter).
 properties:
   - name: attributeName
     type: String
@@ -165,7 +165,7 @@ properties:
 
 ---
 name: AttributeRangeFilterInit
-summary: Contains information required to initialize an AttributeRangeFilter.
+summary: Simple object that contains parameters for [AttributeRangeFilter](Modules.Tizen.AttributeRangeFilter).
 properties:
   - name: attributeName
     type: String
@@ -183,7 +183,7 @@ properties:
  
 ---
 name: CompositeFilterInit
-summary: Contains information required to initialize a CompositeFilter. 
+summary: Simple object that contains parameters for [createCompositeFilter](Modules.Tizen.createCompositeFilter).
 properties:
   - name: type
     type: String
@@ -196,7 +196,7 @@ properties:
     
 ---
 name: SortModeInit
-summary: Contains information required to initialize a SortMode. 
+summary: Simple object that contains parameters for [createSortMode](Modules.Tizen.createSortMode).
 properties:
   - name: attributeName
     type: String
@@ -209,7 +209,7 @@ properties:
 
 ---
 name: SimpleCoordinatesInit
-summary: Contains information required to initialize a SimpleCoordinates object.
+summary: Simple object that contains parameters for [createSimpleCoordinates](Modules.Tizen.createSimpleCoordinates).
 properties:
   - name: latitude
     type: Number
@@ -220,7 +220,7 @@ properties:
 
 ---
 name: ContactRefInit
-summary: Contains information required to initialize a ContactRef.
+summary: Simple object that contains parameters for [createContactRef](Modules.Tizen.createContactRef).
 properties:
   - name: addressBookId
     type: String

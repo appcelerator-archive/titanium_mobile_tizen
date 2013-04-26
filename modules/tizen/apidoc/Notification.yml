@@ -163,7 +163,7 @@ examples:
 # Pseudo-type
 ---
 name: StatusNotificationInitDict
-summary: Contains additional information required to initialize a StatusNotification.
+summary: Used in <StatusNotificationInit>.
 properties:
   - name: content
     type: String
@@ -195,7 +195,7 @@ properties:
 
 ---
 name: StatusNotificationInit
-summary: Contains information required to initialize a StatusNotification.
+summary: Simple object that contains parameters for [createStatusNotification](Modules.Tizen.Notification.createStatusNotification).
 properties:
   - name: statusType
     type: String

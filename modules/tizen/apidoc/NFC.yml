@@ -269,7 +269,7 @@ examples:
 
 ---
 name: NDEFMessageInitNDEFRecords
-summary: Parameters for the createNDEFMessage.
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
 properties:
   - name: ndefRecords
     summary: The array of NDEFRecord objects in the <Modules.Tizen.NFC.NDEFMessage>.
@@ -277,7 +277,7 @@ properties:
 
 ---
 name: NDEFMessageInitRawData
-summary: Parameters for the createNDEFMessage.
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
 properties:
   - name: rawData
     summary: Serial byte array of the NDEF message.
@@ -285,7 +285,7 @@ properties:
 
 ---
 name: NDEFRecordInitRawData
-summary: Parameters for the createNDEFRecord.
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
 properties:
   - name: rawData
     summary: Raw data of NDEFRecord.
@@ -293,7 +293,7 @@ properties:
 
 ---
 name: NDEFRecordInit
-summary: Parameters for the createNDEFRecord.
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
 properties:
   - name: tnf
     summary: The value of the record type (TNF value).
@@ -311,7 +311,7 @@ properties:
 
 ---
 name: NDEFRecordMediaInit
-summary: Parameters for the createNDEFRecordMedia.
+summary: Simple object that contains parameters for [createNDEFRecordMedia](Modules.Tizen.NFC.createNDEFRecordMedia).
 properties:
   - name: mimeType
     type: String
