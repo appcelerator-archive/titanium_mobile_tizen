@@ -93,7 +93,7 @@ methods:
     parameters:
       - name: Options
         summary: The dictionary representing information about the new notification.
-        type: Dictionary<StatusNotificationInit>
+        type: StatusNotificationInit
     
 properties:
 
@@ -162,7 +162,7 @@ examples:
 
 # Pseudo-type
 ---
-name: StatusNotificationInit
+name: StatusNotificationInitDict
 summary: Contains additional information required to initialize a StatusNotification.
 properties:
   - name: content
@@ -207,6 +207,6 @@ properties:
     summary: Name of notification.
 
   - name: notificationInitDict
-    type: StatusNotificationInit
+    type: StatusNotificationInitDict
     summary: (optional) Dictionary.
     optional: true
