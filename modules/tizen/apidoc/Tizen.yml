@@ -67,7 +67,8 @@ methods:
 
 properties:
   - name: FILTER_MATCH_FLAG_EXACTLY
-    summary: Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.
+    summary: Indicates the attribute value should match exactly the given value (default).
+    description: For strings, the match is case-sensitive.
     type: String
     permission: read-only
 
@@ -77,17 +78,20 @@ properties:
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_CONTAINS
-    summary: Indicates the attribute value should contain the given string (strings only - case insensitive).
+    summary: Indicates the attribute value should contain the given string.
+    description: Strings only: case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_STARTSWITH
-    summary: Indicates the attribute value should start with the given string (strings only - case insensitive).
+    summary: Indicates the attribute value should start with the given string.
+    description: Strings only: case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_ENDSWITH
-    summary: Indicates the attribute value should end with the given string (strings only - case insensitive).
+    summary: Indicates the attribute value should end with the given string.
+    description: Strings only: case insensitive.
     type: String
     permission: read-only
 
@@ -112,7 +116,7 @@ properties:
     permission: read-only
 
   - name: COMPOSITE_FILTER_TYPE_INTERSECTION
-    summary: An intersection of filters ("AND" operator)
+    summary: An intersection of filters ("AND" operator).
     type: String
     permission: read-only
     
@@ -151,19 +155,26 @@ properties:
   - name: attributeName
     type: String
     summary: The name of the object attribute used for filtering.
-             This is the name of the object attribute exactly as it is defined in the object's interface. For attributes of complex type, use fully-qualified names (such as 'organizations.role' to filter on a contact's role in an organization).
-             For attributes of an array type, the filter will match if any value in the array matches.
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. 
+        For attributes of complex type, use fully-qualified names (such as 'organizations.role' to 
+        filter on a contact's role in an organization).
+        For attributes of an array type, the filter will match if any value in the array matches.
   - name: matchFlag
     type: String
     summary: (optional) Used for attribute-based filtering.
     description: |
-        Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, FILTER_MATCH_FLAG_EXISTS.
+        Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, 
+        FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, 
+        FILTER_MATCH_FLAG_EXISTS.
     optional: ture
   - name: matchValue
     type: any
     summary: (optional) The value used for matching. 
     description: |
-        The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this attribute is set to null.
+        The filter will match if the attribute value matches the given matchValue. This value is not 
+        used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this 
+        attribute is set to null.
     optional: true
 
 ---
@@ -173,15 +184,22 @@ properties:
   - name: attributeName
     type: String
     summary: The name of the object attribute used for filtering.
-             This is the name of the object attribute exactly as it is defined in the object's interface. For attributes of complex type, use fully-qualified names (such as 'organizations.role' to filter on a contact's role in an organization).
-             For attributes of an array type, the filter will match if any value in the array matches.
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. 
+        For attributes of complex type, use fully-qualified names (such as 'organizations.role' to 
+        filter on a contact's role in an organization).
+        
+        For attributes of an array type, the filter will match if any value in the array matches.
   - name: initialValue
     type: any
-    summary: (optional) Objects with an attribute that is greater than or equal to initialValue will match. By default, this attribute is set to null.
+    summary: |
+        (optional) Objects with an attribute that is greater than or equal to initialValue will match.
+    description: By default, this attribute is set to null.
     optional: true
   - name: endValue
     type: any
-    summary: (optional) Objects with an attribute that is strictly lower than to endValue will match. By default, this attribute is set to null.
+    summary: (optional) Objects with an attribute that is strictly lower than to endValue will match.
+    description: By default, this attribute is set to null.
     optional: true
  
 ---
