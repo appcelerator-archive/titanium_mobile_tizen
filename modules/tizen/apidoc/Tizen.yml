@@ -66,32 +66,32 @@ methods:
         type: Dictionary<ContactRefUnit>
 
 properties:
-  - name: FILTER_MUCH_FLAG_EXACTLY
+  - name: FILTER_MATCH_FLAG_EXACTLY
     summary: Indicates the attribute value should match exactly the given value (default). For strings, the match is case-sensitive.
     type: String
     permission: read-only
 
-  - name: FILTER_MUCH_FLAG_FULLSTRING
+  - name: FILTER_MATCH_FLAG_FULLSTRING
     summary: String-based matching. Matches the whole string (case insensitive).
     type: String
     permission: read-only
 
-  - name: FILTER_MUCH_FLAG_CONTAINS
+  - name: FILTER_MATCH_FLAG_CONTAINS
     summary: Indicates the attribute value should contain the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
-  - name: FILTER_MUCH_FLAG_STARTSWITH
+  - name: FILTER_MATCH_FLAG_STARTSWITH
     summary: Indicates the attribute value should start with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
-  - name: FILTER_MUCH_FLAG_ENDSWITH
+  - name: FILTER_MATCH_FLAG_ENDSWITH
     summary: Indicates the attribute value should end with the given string (strings only - case insensitive).
     type: String
     permission: read-only
 
-  - name: FILTER_MUCH_FLAG_EXISTS
+  - name: FILTER_MATCH_FLAG_EXISTS
     summary: Indicates the filter should match if the attribute exists.
     type: String
     permission: read-only
@@ -116,6 +116,32 @@ properties:
     type: String
     permission: read-only
     
+examples:
+  - title: Attribute filter
+    example: |
+        Use an attribute filter to remove a message from the message store.
+
+            // folderId and emailService must be initialized to valid values
+        
+            var Tizen = require('tizen'),
+                attributeFilter = Tizen.createAttributeFilter({
+                    attributeName: 'folderId',
+                    matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+                    matchValue: folderId
+                });
+
+            function messagesFoundCB(response) {
+                if (response.success) {
+                    console.log('Message removed successfully.');
+                }
+                else {
+                    console.log('Failed to remove message.');
+                }
+            }
+
+            // Remove selected message
+            emailService.messageStorage.findMessages(attributeFilter, messagesFoundCB);
+
 # Pseudo-type
 ---
 name: AbstractFilter
@@ -133,11 +159,11 @@ properties:
   - name: matchFlag
     type: String
     summary: |
-        (optional) Used for attribute-based filtering: FILTER_MUCH_FLAG_EXACTLY, FILTER_MUCH_FLAG_FULLSTRING, FILTER_MUCH_FLAG_CONTAINS, FILTER_MUCH_FLAG_STARTSWITH, FILTER_MUCH_FLAG_ENDSWITH, FILTER_MUCH_FLAG_EXISTS.
+        (optional) Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, FILTER_MATCH_FLAG_EXISTS.
     optional: ture
   - name: matchValue
     type: any
-    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MUCH_FLAG_EXISTS>. By default, this attribute is set to null.
+    summary: (optional) The value used for matching. The filter will match if the attribute value matches the given matchValue. This value is not used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this attribute is set to null.
     optional: true
 
 ---
