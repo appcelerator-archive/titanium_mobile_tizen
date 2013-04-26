@@ -76,7 +76,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
-        type: alarmRelativeParameters
+        type: Dictionary<Modules.Tizen.Alarm.AlarmRelative>
 
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
@@ -85,7 +85,7 @@ methods:
     parameters:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
-        type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
+        type: [Date, AlarmAbsoluteInit1, AlarmAbsoluteInit2]
  
 properties:
   - name: PERIOD_MINUTE
@@ -120,29 +120,11 @@ examples:
                     period: 1800
                 }),
                 
-            Tizen.Alarm.add(alarm, 'org.tizen.clock');
- 
+            Tizen.Alarm.add(alarm, 'org.tizen.clock'); 
 
 ---
-name: alarmRelativeParameters
-summary: Parameters for the createAlarmRelative.
-properties:
-  - name: delay
-    summary: |
-        An attribute to stores the difference in time (in seconds) between 
-        when an alarm is added and it is triggered.
-    type: Number
-
-  - name: period
-    summary: |
-        (optional) The duration (in seconds) between each trigger of an alarm. 
-        By default, this attribute is set to null, indicating that this alarm does not repeat.
-    type: Number
-    optional: true
-
----
-name: alarmAbsoluteParameters
-summary: Parameters for the createAlarmAbsolute.
+name: AlarmAbsoluteInit1
+summary: Parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
@@ -163,14 +145,14 @@ properties:
     optional: true
 
 ---
-name: alarmAbsoluteParametersPeriod
-summary: Parameters for the createAlarmAbsolute.
+name: AlarmAbsoluteInit2
+summary: Parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
     summary: |
-        (Optional) The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
   - name: period
-    summary: Duration in seconds between each trigger of the alarm.
+    summary: (Optional) Duration in seconds between each trigger of the alarm.
     type: Number
     optional: true
