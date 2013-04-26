@@ -301,9 +301,23 @@ properties:
     description: |
     	Will be undefined if `success` is `false`.
 
-        The contents of this field will differ based on the system info property requested. Please refer to
-        [SystemAPI reference](https://developer.tizen.org/help/topic/org.tizen.web.device.apireference/tizen/systeminfo.html)
-        for the list of all possible properties.		    	
+        The contents of this field will differ based on the system info property requested. The following objects may be
+        returned:
+
+            * <Modules.Tizen.SystemInfo.SystemInfoBattery>
+            * <Modules.Tizen.SystemInfo.SystemInfoBuild>
+            * <Modules.Tizen.SystemInfo.SystemInfoCellularNetwork>
+            * <Modules.Tizen.SystemInfo.SystemInfoCpu>
+            * <Modules.Tizen.SystemInfo.SystemInfoDeviceCapability>
+            * <Modules.Tizen.SystemInfo.SystemInfoDeviceOrientation>
+            * <Modules.Tizen.SystemInfo.SystemInfoDisplay>
+            * <Modules.Tizen.SystemInfo.SystemInfoNetwork>
+            * <Modules.Tizen.SystemInfo.SystemInfoProperty>
+            * <Modules.Tizen.SystemInfo.SystemInfoSim>
+            * <Modules.Tizen.SystemInfo.SystemInfoStorage>
+                * <Modules.Tizen.SystemInfo.SystemInfoStorageUnit>
+            * <Modules.Tizen.SystemInfo.SystemInfoWifiNetwork>
+
     type: Object
 
 # Pseudo-type    
