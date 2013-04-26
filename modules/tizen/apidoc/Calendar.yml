@@ -101,7 +101,6 @@ methods:
     parameters:
       - name: taskParameters
         type: [Dictionary<Modules.Tizen.Calendar.CalendarTask>, RepresentationInit]
-        optional: true
   
   - name: createCalendarEvent
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarEvent>
@@ -110,7 +109,6 @@ methods:
     parameters:
       - name: eventParameters
         type: [CalendarEventInit, RepresentationInit]
-        optional: true
  
   - name: createCalendarAttendee
     summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAttendee>
