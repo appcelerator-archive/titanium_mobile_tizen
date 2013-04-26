@@ -274,7 +274,7 @@ examples:
 ---
 name: SystemInfoResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getPropertyValue](Modules.Tizen.SystemInfo.getPropertyValue) method.
 extends: ErrorResponse
 properties:

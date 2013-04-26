@@ -699,7 +699,7 @@ properties:
 ---
 name: GetCalendarsResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getCalendars](Modules.Tizen.Calendar.getCalendars) method.
 extends: ErrorResponse
 properties:

@@ -42,7 +42,7 @@ events:
 ---
 name: NDEFMessageReadResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [setReceiveNDEFListener](Modules.Tizen.NFC.NFCPeer.setReceiveNDEFListener) method.
 extends: ErrorResponse
 properties:

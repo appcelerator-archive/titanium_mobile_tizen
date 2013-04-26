@@ -153,7 +153,7 @@ properties:
 ---
 name: SendMessageResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage) method.
 extends: ErrorResponse
 properties:
@@ -183,7 +183,7 @@ properties:
 ---
 name: LoadMessageBodyResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody) method.
 extends: ErrorResponse
 properties:
@@ -213,7 +213,7 @@ properties:
 ---
 name: LoadMessageAttachementResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [loadMessageAttachment](Modules.Tizen.Messaging.MessageService.loadMessageAttachment) method.
 extends: ErrorResponse
 properties:

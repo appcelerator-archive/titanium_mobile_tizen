@@ -323,7 +323,7 @@ methods:
 ---
 name: FindMessageResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [findMessages](Modules.Tizen.Messaging.MessageStorage.findMessages) method.
 extends: ErrorResponse
 properties:
@@ -353,7 +353,7 @@ properties:
 ---
 name: FindConversationsResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [findConversations](Modules.Tizen.Messaging.MessageStorage.findConversations) method.
 extends: ErrorResponse
 properties:
@@ -383,7 +383,7 @@ properties:
 ---
 name: FindFoldersResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [findFolders](Modules.Tizen.Messaging.MessageStorage.findFolders) method.
 extends: ErrorResponse
 properties:

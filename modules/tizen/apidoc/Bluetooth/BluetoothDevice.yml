@@ -69,7 +69,7 @@ properties:
 ---
 name: ConnectToServiceByUUIDResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [connectToServiceByUUID](Modules.Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) method.
 extends: ErrorResponse
 properties:

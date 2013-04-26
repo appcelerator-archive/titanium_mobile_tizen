@@ -107,7 +107,7 @@ methods:
 ---
 name: NDEFReadResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [readNDEF](Modules.Tizen.NFC.NFCTag.readNDEF) method.
 extends: ErrorResponse
 properties:
@@ -137,7 +137,7 @@ properties:
 ---
 name: TransceiveResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [transceive](Modules.Tizen.NFC.NFCTag.transceive) method.
 extends: ErrorResponse
 properties:

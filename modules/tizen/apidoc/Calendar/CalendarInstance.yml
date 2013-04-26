@@ -234,7 +234,7 @@ summary: A calendar item identifier, which can either be a <CalendarEventId> or 
 ---
 name: AddBatchResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [addBatch](Modules.Tizen.Calendar.CalendarInstance.addBatch) method.
 extends: ErrorResponse
 properties:
@@ -264,7 +264,7 @@ properties:
 ---
 name: FindResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [find](Modules.Tizen.Calendar.CalendarInstance.find) method.
 extends: ErrorResponse
 properties:
