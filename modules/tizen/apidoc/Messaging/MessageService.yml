@@ -97,7 +97,7 @@ methods:
         Messages are retrieved from a given folder, even if synchronizable flag for this folder is not set. The backend is to decide which data is retrieved for every message. It can be:
             message header details
             whole message body
-        The limit of latest messages for the given folder MUST be retrieved and put into Modules.Tizen.Messaging.MessageStorage. If the limit is not set, the entire folder MUST be retrieved.
+        The limit of latest messages for the given folder MUST be retrieved and put into <Modules.Tizen.Messaging.MessageStorage>. If the limit is not set, the entire folder MUST be retrieved.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
 

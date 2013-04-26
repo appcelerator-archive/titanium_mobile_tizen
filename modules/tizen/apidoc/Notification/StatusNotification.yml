@@ -15,7 +15,6 @@ properties:
    summary: The status notification type.
    type: String
    permission: read-only
-   default: Modules.Tizen.Notification.NOTIFICATION_TYPE_STATUS
  
  - name: iconPath
    summary: The path to the icon to display in the notification.

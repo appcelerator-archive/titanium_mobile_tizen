@@ -58,6 +58,6 @@ properties:
   - name: synchronizable 
     summary:  |
         This attribute shows whether this folder should be synchronized.
-        This attribute affects the behavior of the Modules.Tizen.Messaging.MessageService.sync() method.
+        This attribute affects the behavior of the <Modules.Tizen.Messaging.MessageService.sync> method.
     type: Boolean
     permission: read-only
