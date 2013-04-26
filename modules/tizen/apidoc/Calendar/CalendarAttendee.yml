@@ -1,7 +1,8 @@
 ---
 name: Modules.Tizen.Calendar.CalendarAttendee
 summary:  |
-    This interface implements the CalendarAttendee object that contains information about an event attendee.
+    This interface implements the CalendarAttendee object that contains information about an event 
+    attendee.
     
     By default, each of the attributes of this interface are undefined.
 extends: Titanium.Proxy
@@ -50,7 +51,8 @@ properties:
 
   - name: rsvp 
     summary: |
-        An attribute to store the attendee's participation status reply (RSVP). (See RFC 5545, Section 3.2.17.)
+        An attribute to store the attendee's participation status reply (RSVP). 
+        (See RFC 5545, Section 3.2.17.)
     description: |    
         By default, this attribute is set to FALSE.
     type: Boolean
@@ -71,17 +73,20 @@ properties:
 
   - name: group 
     summary: |
-        An attribute to store the participant's group or list membership. (See RFC 5545, Section 3.2.11.)
+        An attribute to store the participant's group or list membership. 
+        (See RFC 5545, Section 3.2.11.)
     type: STRING
 
   - name: delegatorURI 
     summary: |
-        An attribute to store the URI of the person who has delegated their participation to this attendee. (See RFC 5545, Section 3.2.4.)
+        An attribute to store the URI of the person who has delegated their participation to this 
+        attendee. (See RFC 5545, Section 3.2.4.)
     type: STRING
 
   - name: delegateURI 
     summary: |
-        An attribute to stores the URI of the attendee to whom the person has delegated his participation. (See RFC 5545, Section 3.2.5.)
+        An attribute to stores the URI of the attendee to whom the person has delegated his 
+        participation. (See RFC 5545, Section 3.2.5.)
     type: STRING
 
   - name: contactRef 

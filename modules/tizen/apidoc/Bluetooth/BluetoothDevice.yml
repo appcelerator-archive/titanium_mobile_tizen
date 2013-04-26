@@ -2,7 +2,8 @@
 name: Modules.Tizen.Bluetooth.BluetoothDevice
 summary: The interface which represents a remote Bluetooth device.   
 description: |
-    This interface holds information about a remote device available on a local Bluetooth device, such as device name, address, bonding status, etc.
+    This interface holds information about a remote device available on a local Bluetooth device, 
+    such as device name, address, bonding status, etc.
     A BluetoothDevice object can be retrieved using one of the following APIs:
         BluetoothAdapter.getDevice()
         BluetoothAdapter.getKnownDevices()
@@ -14,10 +15,15 @@ methods:
   - name: connectToServiceByUUID
     summary: Creates a socket connection to the specified service UUID.
     description: |
-        This method attempts to open a connection to the service identified by uuid on this remote device. This performs an SDP(Service Discovery Protocol) lookup on the local device for the given uuid and determines which channel to use.
-        If opening a connection is successful, then a BluetoothSocket object with open state is sent using callback, through which data can be exchanged by both devices.
+        This method attempts to open a connection to the service identified by uuid on this remote 
+        device. This performs an SDP(Service Discovery Protocol) lookup on the local device for the 
+        given uuid and determines which channel to use.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        If opening a connection is successful, then a BluetoothSocket object with open state is sent
+        using callback, through which data can be exchanged by both devices.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.spp`
 
@@ -52,7 +58,9 @@ properties:
     permission: read-only
 
   - name: isTrusted
-    summary: The value is necessary to check if the local Bluetooth adapter recognizes the Bluetooth device as a trusted device. 
+    summary: |
+        The value is necessary to check if the local Bluetooth adapter recognizes the Bluetooth
+        device as a trusted device. 
     type: Boolean
     permission: read-only
 

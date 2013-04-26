@@ -7,9 +7,11 @@ methods:
   - name: unregister
     summary: Unregisters a service record from service database. 
     description: |
-        This method unregisters a service record from the Bluetooth services record database and stops listening for new connections to this service.
+        This method unregisters a service record from the Bluetooth services record database and 
+        stops listening for new connections to this service.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/bluetooth.spp`
 
