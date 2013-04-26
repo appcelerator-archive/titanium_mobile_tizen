@@ -126,112 +126,112 @@ properties:
 
   - name: SYSTEM_INFO_PROPERTY_ID_BATTERY
     summary: BATTERY is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_ID_CPU
     summary: CPU is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_ID_STORAGE
     summary: STORAGE is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_ID_DISPLAY
     summary: DISPLAY is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION
     summary: DEVICE_ORIENTATION is the device property identifier.
-    type: STRING
+    type: String
     
     permission: read-only
   - name: SYSTEM_INFO_PROPERTY_ID_BUILD
     summary: BUILD is the device property identifier.
-    type: STRING
+    type: String
     
     permission: read-only    
   - name: SYSTEM_INFO_PROPERTY_ID_NETWORK
     summary: NETWORK is the device property identifier.
-    type: STRING
+    type: String
     
     permission: read-only    
   - name: SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK
     summary: WIFI_NETWORK is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK
     summary: CELLULAR_NETWORK is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_PROPERTY_ID_SIM
     summary: SIM is the device property identifier.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_NONE
     summary: NONE is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_2G
     summary: 2G is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_2_5G
     summary: 2.5G is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_3G
     summary: 3G is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
     
   - name: SYSTEM_INFO_NETWORK_TYPE_4G
     summary: 4G is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_WIFI
     summary: WIFI is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_NETWORK_TYPE_ETHERNET
     summary: ETHERNET is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_NETWORK_TYPE_UNKNOWN
     summary: UNKNOWN is Data Network Type.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY
     summary: PORTRAIT_PRIMARY is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY
     summary: PORTRAIT_SECONDARY is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY
     summary: LANDSCAPE_PRIMARY is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY
     summary: LANDSCAPE_SECONDARY is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only    
     
 examples:

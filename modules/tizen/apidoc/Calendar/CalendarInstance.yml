@@ -255,14 +255,14 @@ properties:
 
   - name: id 
     summary: An attribute to uniquely identify a calendar.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: name
     summary: |
         An attribute to assign a readable (descriptive) name for a calendar, such as work, 
         personal, etc.
-    type: STRING
+    type: String
     permission: read-only
 
 # Pseudo-type        

@@ -13,11 +13,11 @@ properties:
         An attribute to store the URI for the attendee.
     description: |    
         This is often an email in the form 'mailto:name@domain.com'.
-    type: STRING
+    type: String
 
   - name: name
     summary: An attribute to store the name of an attendee.
-    type: STRING
+    type: String
 
   - name: role 
     summary: |
@@ -30,7 +30,7 @@ properties:
             - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
             
         The default value is ATTENDEE_ROLE_REQ_PARTICIPANT.
-    type: STRING
+    type: String
 
   - name: status
     summary: |
@@ -47,7 +47,7 @@ properties:
             - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
             
         The default value is ATTENDEE_STATUS_PENDING.
-    type: STRING
+    type: String
 
   - name: rsvp 
     summary: |
@@ -69,25 +69,25 @@ properties:
             - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
             
         The default value is ATTENDEE_TYPE_INDIVIDUAL.
-    type: STRING
+    type: String
 
   - name: group 
     summary: |
         An attribute to store the participant's group or list membership. 
         (See RFC 5545, Section 3.2.11.)
-    type: STRING
+    type: String
 
   - name: delegatorURI 
     summary: |
         An attribute to store the URI of the person who has delegated their participation to this 
         attendee. (See RFC 5545, Section 3.2.4.)
-    type: STRING
+    type: String
 
   - name: delegateURI 
     summary: |
         An attribute to stores the URI of the attendee to whom the person has delegated his 
         participation. (See RFC 5545, Section 3.2.5.)
-    type: STRING
+    type: String
 
   - name: contactRef 
     summary: |

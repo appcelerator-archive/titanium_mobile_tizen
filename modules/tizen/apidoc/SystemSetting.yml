@@ -55,22 +55,22 @@ properties:
 
   - name: SYSTEM_SETTING_TYPE_HOME_SCREEN
     summary: HOME_SCREEN is for homescreen background image.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_LOCK_SCREEN
     summary: LOCK_SCREEN is for lockscreen background image.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_INCOMING_CALL
     summary: INCOMING_CALL is for incoming call ringtone.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: SYSTEM_SETTING_TYPE_NOTIFICATION_EMAIL
     summary: NOTIFICATION_EMAIL is for email notification alert tone.
-    type: STRING
+    type: String
     permission: read-only
 
 examples:

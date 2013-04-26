@@ -74,14 +74,14 @@ properties:
         information than what is provided in the summary attribute. (See RFC 5545 - Section 3.8.1.5).
         
         The default value is an empty string.
-    type: STRING
+    type: String
     
   - name: summary
     summary: |
         An attribute to store a short summary or subject for an item. (See RFC 5545 - Section 3.8.1.12)
     description: |    
         The default value is an empty string.
-    type: STRING
+    type: String
 
   - name: isAllDay
     summary: |
@@ -135,7 +135,7 @@ properties:
         (See RFC 5545 - Section 3.8.4.3).
     description: |
         By default, this attribute is initialized to an empty string.
-    type: STRING
+    type: String
 
   - name: visibility
     summary: |
@@ -146,7 +146,7 @@ properties:
         CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
         CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
         The default value is CALENDAR_ITEM_VISIBILITY_PUBLIC.
-    type: STRING
+    type: String
 
   - name: status
     summary: |
@@ -155,7 +155,7 @@ properties:
     description: |
         For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
         For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
-    type: STRING
+    type: String
 
   - name: priority
     summary: |
@@ -175,7 +175,7 @@ properties:
             - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
             - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
 
-    type: STRING
+    type: String
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.

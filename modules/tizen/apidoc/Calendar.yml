@@ -138,129 +138,129 @@ properties:
 
   - name: CALENDAR_TYPE_EVENT 
     summary: EVENT indicates the type of a calendar if a calendar contains events (VEVENT objects)
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_TYPE_TASK
     summary: TASK indicates the type of a calendar if a calendar contains tasks (VTODO objects)
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_TEXT_FORMAT_ICALENDAR_20
     summary: ICALENDAR_20 is type of textual format of a Calendar if the textual format is iCalendar v2.0.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_TEXT_FORMAT_VCALENDAR_10
     summary: VCALENDAR_10 is type of textual format of a Calendar if the textual format is vCalendar v1.0
-    type: STRING
+    type: String
     permission: read-only
     
   - name: ALARM_METHOD_SOUND
     summary: SOUND indicates the type of an alarm if sound is played to alert the user.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ALARM_METHOD_DISPLAY
     summary: |
         DISPLAY indicates the type of an alarm if display on screen without any sound is used to 
         alert the user.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: RECURRENCE_RULE_FREQUENCY_DAILY
     summary: |
         DAILY indicates the type of frequency for the recurrence of an event if the event occurs 
         daily.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: RECURRENCE_RULE_FREQUENCY_WEEKLY
     summary: |
         WEEKLY indicates the type of frequency for the recurrence of an event if the event occurs 
         weekly.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: RECURRENCE_RULE_FREQUENCY_MONTHLY
     summary: |
         MONTHLY indicates the type of frequency for the recurrence of an event if the event occurs 
         monthly.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: RECURRENCE_RULE_FREQUENCY_YEARLY
     summary: |
         YEARLY indicates the type of frequency for the recurrence of an event if the event occurs 
         yearly.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: BY_DAY_VALUE_MO
     summary: MO  indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: BY_DAY_VALUE_TU
     summary: TU indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: BY_DAY_VALUE_WE
     summary: WE indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only
     
   - name: BY_DAY_VALUE_TH
     summary: TH indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: BY_DAY_VALUE_FR
     summary: FR indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: BY_DAY_VALUE_SA
     summary: SA indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: BY_DAY_VALUE_SU
     summary: SU indicates the values for CalendarRecurrenceRule.daysOfWeek.
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: EVENT_AVAILABILITY_BUSY
     summary: BUSY indicates the availability of time for an event.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: EVENT_AVAILABILITY_FREE
     summary: |
         FREE indicates the availability of time for an event if the specified time slot is not 
         vacant.
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_TYPE_INDIVIDUAL
     summary: INDIVIDUAL - Individual
-    type: STRING
+    type: String
     permission: read-only
 
   - name: ATTENDEE_TYPE_GROUP
     summary: GROUP - Group of individuals
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ATTENDEE_TYPE_RESOURCE 
     summary: RESOURCE  - Physical resource
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_TYPE_ROOM
     summary: ROOM - Room resource
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ATTENDEE_TYPE_UNKNOWN
@@ -269,119 +269,119 @@ properties:
 
   - name: ATTENDEE_STATUS_PENDING
     summary: PENDING - if the participant has not yet responded to the event
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_STATUS_ACCEPTED
     summary: ACCEPTED - if the participant has accepted the event
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ATTENDEE_STATUS_DECLINED
     summary: DECLINED - if the participant has declined the event
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_STATUS_TENTATIVE
     summary: TENTATIVE - if the participant has tentatively accepted the event
-    type: STRING
+    type: String
     permission: read-only
 
   - name: ATTENDEE_STATUS_DELEGATED
     summary: DELEGATED - if the participant has delegated attendance to another participant
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ATTENDEE_STATUS_COMPLETED
     summary: COMPLETED - if the participant's event has been completed
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_STATUS_IN_PROCESS
     summary: IN_PROCESS - if the participant's event is currently in process
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_ROLE_REQ_PARTICIPANT
     summary: REQ_PARTICIPANT - if the participation of an attendee is mandatory
-    type: STRING
+    type: String
     permission: read-only
 
   - name: ATTENDEE_ROLE_OPT_PARTICIPANT
     summary: OPT_PARTICIPANT - if the participation of an attendee is optional
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: ATTENDEE_ROLE_NON_PARTICIPANT
     summary: |
         NON_PARTICIPANT - if the attendee is not a participant but is copied for information 
         purposes
-    type: STRING
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_ROLE_CHAIR
     summary: CHAIR - if the attendee is the chairperson of the event.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_PRIORITY_HIGH
     summary: HIGH - if item priority is high
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_PRIORITY_MEDIUM
     summary: MEDIUM - if item priority is medium
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: CALENDAR_ITEM_PRIORITY_LOW
     summary: LOW - if item priority is low
-    type: STRING
+    type: String
     permission: read-only
     
   - name: CALENDAR_ITEM_VISIBILITY_PUBLIC
     summary: PUBLIC - if item visibility is public
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_VISIBILITY_PRIVATE
     summary: PRIVATE - if item visiblity is private
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL
     summary: CONFIDENTIAL - if item visibility is confidential
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_TENTATIVE
     summary: TENTATIVE - if the event is tentative.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_CONFIRMED
     summary: CONFIRMED - if the event is confirmed.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: CALENDAR_ITEM_STATUS_CANCELLED
     summary: CANCELLED - if the event/task is cancelled.
-    type: STRING
+    type: String
     permission: read-only
     
   - name: CALENDAR_ITEM_STATUS_NEEDS_ACTION
     summary: NEEDS_ACTION - if the task needs action.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: CALENDAR_ITEM_STATUS_IN_PROCESS
     summary: IN_PROCESS - if the task has been completed.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: CALENDAR_ITEM_STATUS_COMPLETED
     summary: COMPLETED - if the task has been cancelled.
-    type: STRING
+    type: String
     permission: read-only
 
 examples:
@@ -417,11 +417,11 @@ properties:
     
   - name: description 
     summary: An attribute to store the textual descriptions of an item.
-    type: STRING
+    type: String
     
   - name: summary
     summary: An attribute to store a short summary or subject for an item.
-    type: STRING
+    type: String
     
   - name: isAllDay
     summary: |
@@ -451,7 +451,7 @@ properties:
 
   - name: organizer
     summary: An attribute to store the name of the person who organized this event.
-    type: STRING
+    type: String
     
   - name: visibility
     summary: |
@@ -460,7 +460,7 @@ properties:
         The value is one of the constants defined for this parameter : 
             CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
             CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
-    type: STRING
+    type: String
 
   - name: status
     summary: |
@@ -468,7 +468,7 @@ properties:
     description: |
         For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
         For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
-    type: STRING
+    type: String
     
   - name: priority
     summary: |
@@ -489,7 +489,7 @@ properties:
             - 5 to CALENDAR_ITEM_PRIORITY_MEDIUM,
             - 6-9 to CALENDAR_ITEM_PRIORITY_LOW.
             
-    type: STRING
+    type: String
     
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.
@@ -566,7 +566,7 @@ properties:
 
   - name: uri 
     summary: An attribute to store the URI for the attendee.
-    type: STRING
+    type: String
 
   - name: attendeeInitDict
     summary: (optional) The properties of a CalendarAttendee, to pass to its constructor.
@@ -580,7 +580,7 @@ properties:
 
   - name: name
     summary: An attribute to store the name of an attendee.
-    type: STRING
+    type: String
 
   - name: role 
     summary: |
@@ -591,7 +591,7 @@ properties:
             - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
             - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
         
-    type: STRING
+    type: String
 
   - name: status
     summary: |
@@ -606,7 +606,7 @@ properties:
             - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
             - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
             
-    type: STRING
+    type: String
 
   - name: rsvp 
     summary: An attribute to store the attendee's participation status reply (RSVP).
@@ -622,24 +622,24 @@ properties:
             - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
             - ATTENDEE_TYPE_ROOM = 'ROOM'
             - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
-    type: STRING
+    type: String
 
   - name: group 
     summary: (optional) An attribute to store the participant's group or list membership.
-    type: STRING
+    type: String
     optional: true
 
   - name: delegatorURI 
     summary: |
         An attribute to store the URI of the person who has delegated their participation to this 
         attendee.
-    type: STRING
+    type: String
 
   - name: delegateURI 
     summary: |
         An attribute to stores the URI of the attendee to whom the person has delegated his 
         participation.
-    type: STRING
+    type: String
 
   - name: contactRef 
     summary: |

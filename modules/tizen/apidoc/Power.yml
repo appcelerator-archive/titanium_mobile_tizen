@@ -80,29 +80,29 @@ properties:
 
   - name: POWER_RESOURCE_SCREEN
     summary: SCREEN is aligned with <Modules.Tizen.SystemInfo> property value.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: POWER_RESOURCE_CPU
     summary: CPU is aligned with <Modules.Tizen.SystemInfo> property value.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: POWER_SCREEN_STATE_SCREEN_OFF
     summary: This screen state cannot be requested but can only be used in the state change callback.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: POWER_SCREEN_STATE_SCREEN_DIM
     summary: The minimal screen state is set to DIM and device does not change to OFF state automatically.
-    type: STRING
+    type: String
     permission: read-only
     
   - name: POWER_SCREEN_STATE_SCREEN_NORMAL
     summary: The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
     description: |
         NORMAL state refers to the default screen brightness that a user has configured for the device. 
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
@@ -114,12 +114,12 @@ properties:
         Note that the change in brightness does not affect the system brightness setting, i.e., 
         the system brightness value is automatically restored when the resource is released or the 
         process is completed.
-    type: STRING
+    type: String
     permission: read-only    
     
   - name: POWER_CPU_STATE_CPU_AWAKE
     summary: The cpu state is set to be awaken and it does not go to SLEEP state automatically.
-    type: STRING
+    type: String
     permission: read-only
 
   - name: screenBrightness
