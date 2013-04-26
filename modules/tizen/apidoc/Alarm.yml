@@ -8,7 +8,8 @@ methods:
   - name: add
     summary: Adds an alarm to the storage.
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application: 
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application: 
 
         * `http://tizen.org/privilege/alarm`
         
@@ -30,7 +31,8 @@ methods:
   - name: remove
     summary: Removes an alarm from the storage. 
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/alarm`
         
@@ -42,12 +44,15 @@ methods:
 
   - name: removeAll
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/alarm`
         
     summary: Removes all alarms added by an application.
-    description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
+    description: |
+        Because each application has its own alarm storage, this method will only remove alarms 
+        added by the calling application.
 
   - name: getAlarm
     summary: Returns an alarm as per the specified identifier.
@@ -124,15 +129,19 @@ examples:
 
 ---
 name: AlarmAbsoluteInit1
-summary: Simple object that contains parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+summary: |
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
     summary: |
-        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
   - name: daysOfTheWeek
     summary: |
-        (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+        (optional) The days of the week associated with the recurrence rule. By default, this 
+        attribute is set to an empty array.
     description: |
         Valid days of the week constants:
         <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
@@ -147,12 +156,15 @@ properties:
 
 ---
 name: AlarmAbsoluteInit2
-summary: Simple object that contains parameters for [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+summary: | 
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
     summary: |
-        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
   - name: period
     summary: (Optional) Duration in seconds between each trigger of the alarm.
     type: Number

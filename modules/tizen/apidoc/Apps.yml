@@ -30,7 +30,8 @@ methods:
   - name: launch
     summary: Launches an application with the given application ID.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:....................................................................................................
 
         * `http://tizen.org/privilege/application.launch`
         
@@ -47,11 +48,22 @@ methods:
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
     description: |
-        An application can launch other applications with the application control, and get back the results from the launched applications.
-        The application control consists of an operation, URI, and MIME type, and describes the request to be performed by the newly launched application. The application control is passed to the launchAppControl() method to launch an application. The system tries to find the proper application to perform the requested application control, then launches the selected application.
-        The application control request is passed to the newly launched application and it can be accessed by getRequestedAppControl() method. The passed application control contains the reason the application was launched and information about what the application is doing. The launched application can send a result to the caller application with the replyResult() method of RequestedApplicationControl interface.
+        An application can launch other applications with the application control, and get back the 
+        results from the launched applications. The application control consists of an operation, 
+        URI, and MIME type, and describes the request to be performed by the newly launched 
+        application. The application control is passed to the launchAppControl() method to launch an 
+        application. The system tries to find the proper application to perform the requested 
+        application control, then launches the selected application.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The application control request is passed to the newly launched application and it can be 
+        accessed by getRequestedAppControl() method. The passed application control contains the 
+        reason the application was launched and information about what the application is doing. 
+        The launched application can send a result to the caller application with the replyResult() 
+        method of the [RequestedApplicationControl](Modules.Tizen.Apps.RequestedApplicationControl) 
+        interface.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.launch`
         
@@ -61,7 +73,10 @@ methods:
         type: Modules.Tizen.Apps.ApplicationControl
  
       - name: id
-        summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
+        summary: |
+            An identifier of the application to be launched. If the ID is null or not specified, 
+            then the system tries to find the application to be launched for the requested 
+            application control.
         type: String
 
       - name: callback
@@ -71,16 +86,19 @@ methods:
 
       - name: replyCallback
         summary: |
-            The method to invoke when the application gets back results from the launched application.
+            The method to invoke when the application gets back results from the launched 
+            application.
         type: Callback<LaunchAppControlReplyResponse>
         optional: true
         
   - name: findAppControl
     summary: Finds application information can be launched with the given application control.  
     description: |
-        An application can get a list of other applications can be launched with the application control.
+        An application can get a list of other applications can be launched with the application 
+        control.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -94,9 +112,14 @@ methods:
         type: Callback<FindAppControlResponse>
  
   - name: getAppsContext
-    summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    summary: |
+        Gets a list of application contexts for applications that are currently running on a device.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The information contained for each application corresponds to the application state at the 
+        time when the list was generated. 
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -109,11 +132,13 @@ methods:
     summary: |
         Gets the application context for the specified application context ID. 
     description: |
-        If the ID is set to null or is not set at all, the method returns the application context of the current application. 
+        If the ID is set to null or is not set at all, the method returns the application context 
+        of the current application. 
 
         The list of running applications and their application IDs is obtained with getAppsContext().
 
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -122,13 +147,21 @@ methods:
         summary: A data structure that lists running application details.
     parameters: 
       - name: contextId
-        summary: "A string representing an application context ID. If the ID is not provided, the application context of the calling application will be returned."
+        summary: |
+            A string representing an application context ID. 
+        description: |
+            If the ID is not provided, the application context of the calling application will be 
+            returned.
         type: String
 
   - name: getAppsInfo
-    summary: Gets the list of installed application's information on a device. The information contained on each application corresponds to the application state at the moment when the list was generated. 
+    summary: Gets the list of installed application's information on a device.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The information contained on each application corresponds to the application state at the 
+        moment when the list was generated. 
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -140,10 +173,12 @@ methods:
   - name: getAppInfo
     summary: Gets application information for a specified application ID.  
     description: |
-        If the ID is set to null or not set at all, it returns application information for the current application. 
-        The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+        If the ID is set to null or not set at all, it returns application information for the 
+        current application. The list of installed applications and their application IDs is 
+        obtained with getAppsInfo(). 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -152,7 +187,9 @@ methods:
         summary: The application metadata
     parameters: 
       - name: id
-        summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
+        summary: |
+            A string representing application ID. If the ID is not provided, the application 
+            information of the calling application will be returned.
         type: String
         optional: true
  
@@ -160,7 +197,8 @@ events:
   - name: installed
     summary: Fired when an application is installed.
     description: | 
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -172,7 +210,8 @@ events:
   - name: updated
     summary: Fired when an application is updated.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -184,7 +223,8 @@ events:
   - name: uninstalled
     summary: Fired when an application is uninstalled.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -196,7 +236,8 @@ events:
 examples:
   - title: Getting information about the installed applications
     example: |
-        The following example shows how to obtain and show various data about the installed applications.
+        The following example shows how to obtain and show various data about the installed 
+        applications.
         
             var self = Ti.UI.createWindow(),
                 Tizen = require('tizen');

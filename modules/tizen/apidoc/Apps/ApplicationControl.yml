@@ -2,12 +2,16 @@
 name: Modules.Tizen.Apps.ApplicationControl
 summary: "This interface consists of an operation, URI, MIME type, and data."
 description: |
-    It describes an action to be performed by other applications and is passed to launch other applications. 
-    If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application. 
+    Describes an action to be performed by other applications and is passed to launch other 
+    applications. If the system gets the application control request, it finds the corresponding 
+    application to be launched with the delivered application control and launches the selected 
+    application. 
 createable: false
 properties:
   - name: operation
-    summary: An attribute to store the string that defines the action to be performed by an application control. 
+    summary: | 
+        An attribute to store the string that defines the action to be performed by an application 
+        control. 
     type: String
 
   - name: uri
