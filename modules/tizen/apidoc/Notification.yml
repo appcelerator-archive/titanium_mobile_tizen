@@ -173,7 +173,7 @@ examples:
 # Pseudo-type
 ---
 name: StatusNotificationInitDict
-summary: Used in <StatusNotificationInit>.
+summary: Simple object used in <StatusNotificationInit>.
 properties:
   - name: content
     type: String

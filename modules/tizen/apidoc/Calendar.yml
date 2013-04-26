@@ -410,7 +410,7 @@ examples:
 ---
 name: CalendarItemInit
 summary: |
-    A dictionary that is used for creating calendar items.
+    A simple object that is used for creating calendar items.
 description: |
     These attributes are shared by both calendar events and tasks.
 properties:
@@ -575,7 +575,7 @@ properties:
 
 ---
 name: AttendeeInitDict
-summary: Used in <CalendarAttendeeInit>.
+summary: Simple object used in <CalendarAttendeeInit>.
 properties: 
 
   - name: name
@@ -674,7 +674,7 @@ properties:
 
 ---
 name: CalendarRecurrenceRuleInitDict
-summary: Used in <CalendarRecurrenceRuleInit>.
+summary: Simple object used in <CalendarRecurrenceRuleInit>.
 properties:
  
   - name: interval

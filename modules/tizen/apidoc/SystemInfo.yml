@@ -343,7 +343,7 @@ properties:
 # Pseudo-type    
 ---
 name: SystemInfoOptions
-summary: An object containing the various options for fetching the properties requested.
+summary: A simple object containing the various options for fetching the properties requested.
 properties:
   - name: timeout
     type: Number
