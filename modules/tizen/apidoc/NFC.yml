@@ -186,7 +186,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFMessage>.
-        type: [createNDEFMessageParametersNDEFRecord, createNDEFMessageParametersrawData]
+        type: [NDEFMessageInitNDEFRecords, NDEFMessageInitRawData]
         optional: true
     returns:
         type: Modules.Tizen.NFC.NDEFMessage
@@ -196,7 +196,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecord>.
-        type: [createNDEFRecordParameters, createNDEFRecordParametersrawData]
+        type: [NDEFRecordInitRawData, NDEFRecordInit]
     returns:
         type: Modules.Tizen.NFC.NDEFRecord
 
@@ -205,7 +205,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordText> object.
-        type: createNDEFRecordTextParameters
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordText>
     returns:
         type: Modules.Tizen.NFC.NDEFRecordText
 
@@ -214,7 +214,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordURI>.
-        type: createNDEFRecordURIParameters
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordURI>
     returns:
         type: Modules.Tizen.NFC.NDEFRecordURI
 
@@ -223,7 +223,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordMedia>.
-        type: createNDEFRecordMediaParameters
+        type: NDEFRecordMediaInit
     returns:
         type: Modules.Tizen.NFC.NDEFRecordMedia
 
@@ -268,7 +268,7 @@ examples:
             }
 
 ---
-name: createNDEFMessageParametersNDEFRecord
+name: NDEFMessageInitNDEFRecords
 summary: Parameters for the createNDEFMessage.
 properties:
   - name: ndefRecords
@@ -276,7 +276,7 @@ properties:
     type: Array<Modules.Tizen.NFC.NDEFRecord>
 
 ---
-name: createNDEFMessageParametersrawData
+name: NDEFMessageInitRawData
 summary: Parameters for the createNDEFMessage.
 properties:
   - name: rawData
@@ -284,7 +284,7 @@ properties:
     type: Array<Number>
 
 ---
-name: createNDEFRecordParameters
+name: NDEFRecordInitRawData
 summary: Parameters for the createNDEFRecord.
 properties:
   - name: rawData
@@ -292,7 +292,7 @@ properties:
     type: Array<Number>
 
 ---
-name: createNDEFRecordParametersrawData
+name: NDEFRecordInit
 summary: Parameters for the createNDEFRecord.
 properties:
   - name: tnf
@@ -310,32 +310,7 @@ properties:
     optional: true
 
 ---
-name: createNDEFRecordTextParameters
-summary: Parameters for the createNDEFRecordText.
-properties:
-  - name: text
-    summary: The encoded text.
-    type: String
-  - name: languageCode
-    summary: |
-        The language code string value, followed by IANA [RFC 3066] (ex. en-US, ko-KR).
-    type: String
-  - name: encoding
-    summary:  |
-        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
-    type: String
-    optional: true
-
----
-name: createNDEFRecordURIParameters
-summary: Parameters for the createNDEFRecordURI.
-properties:
-  - name: text
-    summary: The URI string that will be stored in the payload.
-    type: String
-
----
-name: createNDEFRecordMediaParameters
+name: NDEFRecordMediaInit
 summary: Parameters for the createNDEFRecordMedia.
 properties:
   - name: mimeType
@@ -344,4 +319,4 @@ properties:
         The mime type [RFC 2046] (ex. text/plain, image/jpeg ).
   - name: rawData
     summary: Raw media data.
-    type: Array<Number>
+    type: Array<Number> 
