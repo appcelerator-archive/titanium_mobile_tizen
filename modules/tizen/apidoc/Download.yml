@@ -63,26 +63,26 @@ examples:
         
             var Tizen = require('tizen'),
                 listener = {
-	                onDataStream: function(request, receivedSize, totalSize) {
-	                    console.log('"onDataStream" event. id=' + request.id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
-	                },
-	                onPause: function(request) {
-	                    console.log('"onPause" event.');
-	                },
-	                onCancel: function(request) {
-	                    console.log('"onCancel" event.');
-	                },
-	                onLoad: function(request, fullPath) {
-	                    console.log('"onLoad" event.');
-	                },
-	                onError: function(request, error) {
-	                    console.error('"onError" event:' + error.name);
-	            },
-	            downloadRequest = Tizen.Download.createDownloadRequest({
-	                url: 'http://preview.appcelerator.com/appcelerator/studio/standalone/install/rc/Titanium_Studio.exe',
-	                destination: 'documents',
-	                fileName: 'Titanium_Studio.exe')
-	            });
+                    onDataStream: function(request, receivedSize, totalSize) {
+                        console.log('"onDataStream" event. id=' + request.id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
+                    },
+                    onPause: function(request) {
+                        console.log('"onPause" event.');
+                    },
+                    onCancel: function(request) {
+                        console.log('"onCancel" event.');
+                    },
+                    onLoad: function(request, fullPath) {
+                        console.log('"onLoad" event.');
+                    },
+                    onError: function(request, error) {
+                        console.error('"onError" event:' + error.name);
+                },
+                downloadRequest = Tizen.Download.createDownloadRequest({
+                    url: 'http://preview.appcelerator.com/appcelerator/studio/standalone/install/rc/Titanium_Studio.exe',
+                    destination: 'documents',
+                    fileName: 'Titanium_Studio.exe')
+                });
 
             downloadRequest.send(listener);
 ---

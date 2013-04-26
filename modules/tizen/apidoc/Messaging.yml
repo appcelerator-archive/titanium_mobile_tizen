@@ -127,7 +127,7 @@ examples:
             }
             
             initEmailService(findFolders);
-		
+
 # Pseudo-type    
 ---
 name: MessageInit

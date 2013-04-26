@@ -259,7 +259,7 @@ examples:
                 }
             }
 
-			// Set up NFC and begin searching
+            // Set up NFC and begin searching
             try {
                 nfcAdapter = nfc.getDefaultAdapter();
                 nfcAdapter.setPowered(true, setTagDetect);
