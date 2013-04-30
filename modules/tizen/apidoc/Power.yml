@@ -99,18 +99,23 @@ properties:
     permission: read-only
     
   - name: POWER_SCREEN_STATE_SCREEN_NORMAL
-    summary: The minimal screen state is set to NORMAL and device does not change to DIM state automatically.
+    summary: |
+        The minimal screen state is set to POWER_SCREEN_STATE_SCREEN_NORMAL and device does not 
+        change to POWER_SCREEN_STATE_SCREEN_DIM state automatically.
     description: |
-        NORMAL state refers to the default screen brightness that a user has configured for the device. 
+        The <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL> state refers to the default 
+        screen brightness that a user has configured for the device. 
     type: String
     permission: read-only    
     
   - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
     summary: |
-        The minimal screen state is set to BRIGHT and device does not change to NORMAL state 
-        automatically.
+        The minimal screen state is set to POWER_SCREEN_STATE_SCREEN_BRIGHT and device does not 
+        change to the POWER_SCREEN_STATE_SCREEN_NORMAL state automatically.
     description: |
-        BRIGHT state refers to the maximum screen brightness that the device provides. 
+        The <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT> state refers to the maximum 
+        screen brightness that the device provides. 
+        
         Note that the change in brightness does not affect the system brightness setting, i.e., 
         the system brightness value is automatically restored when the resource is released or the 
         process is completed.

@@ -107,7 +107,7 @@ properties:
     summary: A notification type.
         
     description: |
-        STATUS - The posted status notification is displayed in the notification tray. 
+        The posted status notification is displayed in the notification tray. 
         The status notification consists of icon, title, content and time. 
         The status notification can have the application control to launch the specific application 
         when selected by the user.
