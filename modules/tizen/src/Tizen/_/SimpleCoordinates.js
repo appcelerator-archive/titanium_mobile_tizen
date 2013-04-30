@@ -9,7 +9,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				this._obj = new tizen.SimpleCoordinates(args.latitude, args.longitude);
+				if('latitude' in args && 'longitude' in args) {
+					this._obj = new tizen.SimpleCoordinates(args.latitude, args.longitude);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

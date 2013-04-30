@@ -9,7 +9,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				this._obj = new tizen.SortMode(args.attributeName, args.order);
+				if('attributeName' in args) {
+					this._obj = new tizen.SortMode(args.attributeName, args.order);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

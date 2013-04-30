@@ -9,12 +9,16 @@ define(['Ti/_/declare', 'Tizen/_/Notification/Notification'], function(declare, 
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				var notificationInitDict;
-				if (args.notificationInitDict) {
-					notificationInitDict = args.notificationInitDict;
-					notificationInitDict.appControl && (notificationInitDict.appControl = notificationInitDict.appControl._obj);
+				if('statusType' in args && 'title' in args) {
+					var notificationInitDict;
+					if (args.notificationInitDict) {
+						notificationInitDict = args.notificationInitDict;
+						notificationInitDict.appControl && (notificationInitDict.appControl = notificationInitDict.appControl._obj);
+					}
+					this._obj = new tizen.StatusNotification(args.statusType, args.title, args.notificationInitDict);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
-				this._obj = new tizen.StatusNotification(args.statusType, args.title, args.notificationInitDict);
 			}
 		},
 

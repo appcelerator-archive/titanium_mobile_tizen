@@ -25,7 +25,7 @@ define(['Ti/_/declare', 'Tizen/_/Calendar/CalendarItem', 'Tizen/_/Calendar/helpe
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
 
-				if (args.hasOwnProperty('stringRepresentation') && args.hasOwnProperty('format')) {
+				if ('stringRepresentation' in args && 'format' in args) {
 					this._obj = new tizen.CalendarEvent(args.stringRepresentation, args.format);
 				} else {
 					var eventInitDict = args,

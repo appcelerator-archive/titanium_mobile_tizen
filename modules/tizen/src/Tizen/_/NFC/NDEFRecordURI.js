@@ -9,7 +9,11 @@ define(['Ti/_/declare', 'Tizen/_/NFC/NDEFRecord'], function(declare, NDEFRecord)
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				this._obj = new tizen.NDEFRecordURI(args.uri);
+				if('uri' in args) {
+					this._obj = new tizen.NDEFRecordURI(args.uri);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

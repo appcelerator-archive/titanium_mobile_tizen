@@ -9,8 +9,12 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/MessageBody', 'Ti/_/Evented'], functi
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				this._obj = new tizen.Message(args.type, args.messageInitDict);
+				if('type' in args){
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					this._obj = new tizen.Message(args.type, args.messageInitDict);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 			this.body = new MessageBody(this._obj.body);
 		},

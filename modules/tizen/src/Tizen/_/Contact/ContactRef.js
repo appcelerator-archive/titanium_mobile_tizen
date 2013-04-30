@@ -11,8 +11,12 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				this._obj = new tizen.ContactRef(args.addressBookId, args.contactId);
+				if('addressBookId' in args && 'contactId' in args) {
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					this._obj = new tizen.ContactRef(args.addressBookId, args.contactId);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 
