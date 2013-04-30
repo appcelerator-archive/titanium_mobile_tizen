@@ -58,9 +58,10 @@ properties:
         (See RFC 5545 - Section 3.2.9).
     description: |
         The value is one of the constants defined for this parameter : 
-        EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'
+        <Modules.Tizen.Calendar.EVENT_AVAILABILITY_BUSY> or 
+        <Modules.Tizen.Calendar.EVENT_AVAILABILITY_FREE>.
         
-        The default value is EVENT_AVAILABILITY_BUSY.
+        The default value is <Modules.Tizen.Calendar.EVENT_AVAILABILITY_BUSY>.
         
   - name: recurrenceRule 
     type: Date

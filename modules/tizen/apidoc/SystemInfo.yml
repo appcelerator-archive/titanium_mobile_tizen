@@ -8,16 +8,16 @@ description: |
     the value of selected properties, and to set up asynchronous notifications of changes for 
     selected values. The following provides an overview of the tree data structure:
     
-    - BATTERY
-    - CPU
-    - STORAGE
-    - DISPLAY
-    - DEVICE_ORIENTATION
-    - BUILD
-    - NETWORK
-    - WIFI_NETWORK
-    - CELLULAR_NETWORK
-    - SIM
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DISPLAY>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BUILD>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM>
     
     The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.
     
@@ -245,7 +245,7 @@ examples:
                     { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfo },
                     { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCell },
                 ],
-            dataLength = data.length;
+                dataLength = data.length;
 
             function onCpuInfo(response) {
                 if (response.success) {
