@@ -25,11 +25,11 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-        - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
-        - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
-        - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_REQ_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_OPT_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_NON_PARTICIPANT>
             
-        The default value is ATTENDEE_ROLE_REQ_PARTICIPANT.
+        The default value is <Modules.Tizen.Calendar.ATTENDEE_ROLE_REQ_PARTICIPANT>.
     type: String
 
   - name: status
@@ -38,15 +38,15 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-        - ATTENDEE_STATUS_PENDING = 'PENDING'
-        - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
-        - ATTENDEE_STATUS_DECLINED = 'DECLINED'
-        - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
-        - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
-        - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
-        - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_PENDING>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_ACCEPTED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DECLINED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_TENTATIVE>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DELEGATED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_COMPLETED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_IN_PROCESS>
             
-        The default value is ATTENDEE_STATUS_PENDING.
+        The default value is <Modules.Tizen.Calendar.ATTENDEE_STATUS_PENDING>.
     type: String
 
   - name: rsvp 
@@ -63,13 +63,13 @@ properties:
     description: |    
         The value is one of the constants defined for this type: 
 
-        - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
-        - ATTENDEE_TYPE_GROUP = 'GROUP'
-        - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
-        - ATTENDEE_TYPE_ROOM = 'ROOM'
-        - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_INDIVIDUAL>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_GROUP>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_RESOURCE>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_ROOM>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_UNKNOWN>
             
-        The default value is ATTENDEE_TYPE_INDIVIDUAL.
+        The default value is <Modules.Tizen.Calendar.ATTENDEE_TYPE_INDIVIDUAL>.
     type: String
 
   - name: group 
