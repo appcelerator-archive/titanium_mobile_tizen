@@ -93,9 +93,9 @@ define(
 		saveToPhotoGallery: function(media, callbacks) {
 			var file,
 				blob;
-			if(media instanceof Blob){
+			if(media instanceof Blob) {
 				blob = media;
-				file = blob.file;				
+				file = blob.file;
 			} else if(media instanceof Titanium.Filesystem.File) {
 				file = media;
 				blob = file.read();
