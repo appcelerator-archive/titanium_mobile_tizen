@@ -7,7 +7,9 @@ description: |
     methods. 
     In those cases, the implementation MAY return, in some situations, only the meta-information of 
     a message without the loaded body. 
-    In those situations, the method MessageService.loadMessageBody() should be used.
+    In those situations, the method 
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody)
+    should be used.
 extends: Titanium.Proxy
 
 properties:
@@ -18,8 +20,8 @@ properties:
         The ID is a locally unique and persistent property, assigned by the device or the web 
         runtime (WRT). For new messages created using the Message constructor, the id is assigned on 
         the first occasion that the message is processed by the underlying platform, such as a call 
-        to MessageService.send(). Before the id is assigned, it is set to null.
-        By default, this attribute is set to null.
+        to [send](Modules.Tizen.Messaging.MessageService.send). Before the id is assigned, it is set 
+        to null. By default, this attribute is set to null.
     type: String
     default: null
     permission: read-only

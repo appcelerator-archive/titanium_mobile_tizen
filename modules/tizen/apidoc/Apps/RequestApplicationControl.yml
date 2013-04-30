@@ -7,8 +7,10 @@ description: |
     requested and passed from other application and is passed to launch other applications. 
 
     The newly launched application can get the requested application control through 
-    getRequestedAppControl() method, and send the results to the calling application through the 
-    replyResult() method after performing the required action requested the calling application.
+    [getRequestedAppControl](Modules.Tizen.Apps.Application.getRequestedAppControl) 
+    method, and send the results to the calling application through the 
+    [replyResult](Modules.Tizen.Apps.RequestedApplicationControl.replyResult) 
+    method after performing the required action requested the calling application.
 extends: Titanium.Proxy
 methods:
   - name: replyResult

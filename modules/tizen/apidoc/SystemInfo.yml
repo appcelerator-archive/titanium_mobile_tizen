@@ -119,7 +119,9 @@ methods:
     parameters:
       - name: listenerId
         summary: |
-            Identifier of the subscription returned by the addPropertyValueChangeListener() method.
+            Identifier of the subscription returned by the 
+            [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener)
+            method.
         type: Number
             
 properties:

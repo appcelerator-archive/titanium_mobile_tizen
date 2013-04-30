@@ -32,8 +32,8 @@ methods:
     summary: Clones the CalendarItem object, detached from any calendar.
     description: |
         
-        The CalendarItem object returned by the clone() method will have its identifier set to null 
-        and will be detached from any calendar.
+        The CalendarItem object returned by the [clone](Modules.Tizen.Calendar.CalendarItem.clone) 
+        method will have its identifier set to null and will be detached from any calendar.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  

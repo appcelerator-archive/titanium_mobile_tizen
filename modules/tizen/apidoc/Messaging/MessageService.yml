@@ -4,7 +4,8 @@ summary: Message creating, sending, and fetching capabilities.
 description: |
     This interface allows a web application to manipulate and send messages.
     The interface allows you to fetch messages for all folders belonging to one account, with 
-    synchronizable flag set, using the sync() method, or for a given folder using the syncFolder() 
+    synchronizable flag set, using the [sync](Modules.Tizen.Messaging.MessageService.sync) method, 
+    or for a given folder using the [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) 
     method.
     The interface allows you to fetch the message body for a given message using loadMessageBody() 
     method.
@@ -141,7 +142,9 @@ methods:
         optional: true
 
   - name: stopSync
-    summary: Stops sync() and syncFoler() operation. 
+    summary: |
+        Stops [sync](Modules.Tizen.Messaging.MessageService.sync) and 
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) operation. 
     description: |
         If the operationId argument is valid and corresponds to a service operation already in place, 
         the operation MUST be stopped and its error callback MUST be invoked with error type 

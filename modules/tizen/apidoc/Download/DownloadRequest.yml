@@ -27,7 +27,8 @@ methods:
  
   - name: pause
     summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
-        The paused download operation can be resumed later by the resume() method.
+        The paused download operation can be resumed later by the 
+        [resume](Modules.Tizen.Download.DownloadRequest.resume) method.
 
   - name: resume 
     summary: Resumes a paused download operation that is specified by the downloadId parameter.
@@ -80,7 +81,7 @@ methods:
     summary: |
         Called when a download is successful and it called multiple times as the download progresses.
     description: |
-        The interval between onprogress() callback is platform-dependent. When the download is 
+        The interval between `onprogress` callback is platform-dependent. When the download is 
         started, the receivedSize can be 0.
     parameters:
       - name: downloadRequest
@@ -93,13 +94,17 @@ methods:
         summary: The total size of data to receive in bytes.
         type: Number
   - name: onPause
-    summary: Called when the download operation is paused by the pause() method.
+    summary: |
+        Called when the download operation is paused by the 
+        [pause](Modules.Tizen.Download.DownloadRequest.pause) method.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
         type: <Modules.Tizen.Download.DownloadRequest>
   - name: onCancel
-    summary: Called when download is canceled by the cancel() method.
+    summary: |
+        Called when download is canceled by the 
+        [cancel](Modules.Tizen.Download.DownloadRequest.cancel) method.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
