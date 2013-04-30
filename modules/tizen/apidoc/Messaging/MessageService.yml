@@ -7,8 +7,8 @@ description: |
     synchronizable flag set, using the [sync](Modules.Tizen.Messaging.MessageService.sync) method, 
     or for a given folder using the [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) 
     method.
-    The interface allows you to fetch the message body for a given message using loadMessageBody() 
-    method.
+    The interface allows you to fetch the message body for a given message using the
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody) method.
 
 extends: Titanium.Proxy
 createable: false

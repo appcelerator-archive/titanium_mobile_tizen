@@ -18,10 +18,10 @@ properties:
     summary: The message unique identifier. 
     description: |
         This property is the unique identifier for the message.
-        The ID is a locally unique and persistent property, assigned by the device or the web 
-        runtime (WRT). For new messages created using the Message constructor, the id is assigned on 
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
+        runtime (WRT). For new messages created using the Message constructor, the `id` is assigned on 
         the first occasion that the message is processed by the underlying platform, such as a call 
-        to [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage). Before the id is 
+        to [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage). Before the `id` is 
         assigned, it is set to null. By default, this attribute is set to null.
     type: String
     default: null

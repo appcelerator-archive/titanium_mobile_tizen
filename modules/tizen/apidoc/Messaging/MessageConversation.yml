@@ -13,7 +13,8 @@ properties:
         The conversation unique identifier.
     description: |
         This property is the unique identifier for the conversation.
-        The id is a locally unique and persistent property, assigned by the device or the web runtime (WRT).
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
+        runtime (WRT).
     type: String
     permission: read-only
 

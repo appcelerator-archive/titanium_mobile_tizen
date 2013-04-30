@@ -17,7 +17,7 @@ properties:
         The folder unique identifier.
     description: |
         This property is the unique identifier for the folder.
-        The id is a locally unique and persistent property, assigned by the device or the web 
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
         runtime (WRT).
     type: String
     permission: read-only
@@ -72,7 +72,7 @@ properties:
   - name: synchronizable 
     summary:  |
         This attribute shows whether this folder should be synchronized.
-        This attribute affects the behavior of the <Modules.Tizen.Messaging.MessageService.sync> 
+        This attribute affects the behavior of the [sync](Modules.Tizen.Messaging.MessageService.sync)
         method.
     type: Boolean
     permission: read-only

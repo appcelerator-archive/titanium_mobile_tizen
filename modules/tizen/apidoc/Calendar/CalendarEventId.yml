@@ -26,7 +26,7 @@ properties:
     summary: |
         An attribute to store the recurrence ID of a CalendarEvent instance.
     description: |
-        This attribute is used in conjunction with the uid property to identify 
+        This attribute is used in conjunction with the `uid` property to identify 
         a specific instance of a recurring event.
         
         The parent of a recurrence instance has its rid set to null.
