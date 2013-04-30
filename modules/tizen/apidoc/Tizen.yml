@@ -164,9 +164,11 @@ properties:
     type: String
     summary: (optional) Used for attribute-based filtering.
     description: |
-        Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, 
-        FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, 
-        FILTER_MATCH_FLAG_EXISTS.
+        Used for attribute-based filtering: <Modules.Tizen.FILTER_MATCH_FLAG_EXACTLY>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_FULLSTRING>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_CONTAINS>, <Modules.Tizen.FILTER_MATCH_FLAG_STARTSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_ENDSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>.
     optional: ture
   - name: matchValue
     type: any
