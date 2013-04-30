@@ -88,7 +88,7 @@ methods:
     description: |
         The backend MUST check whether the required updates can be applied and invoke the callback 
         function with error message, if they cannot. Depending on the backend synchronization 
-        settings, the local changes in Modules.Tizen.Messaging.MessageStorage might be rewritten as
+        settings, the local changes in <Modules.Tizen.Messaging.MessageStorage> might be rewritten as
         a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or 
         [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related 
         message service.

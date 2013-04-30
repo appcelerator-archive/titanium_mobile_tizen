@@ -79,19 +79,19 @@ properties:
 
   - name: FILTER_MATCH_FLAG_CONTAINS
     summary: Indicates the attribute value should contain the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_STARTSWITH
     summary: Indicates the attribute value should start with the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_ENDSWITH
     summary: Indicates the attribute value should end with the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 
@@ -164,9 +164,11 @@ properties:
     type: String
     summary: (optional) Used for attribute-based filtering.
     description: |
-        Used for attribute-based filtering: FILTER_MATCH_FLAG_EXACTLY, FILTER_MATCH_FLAG_FULLSTRING, 
-        FILTER_MATCH_FLAG_CONTAINS, FILTER_MATCH_FLAG_STARTSWITH, FILTER_MATCH_FLAG_ENDSWITH, 
-        FILTER_MATCH_FLAG_EXISTS.
+        Used for attribute-based filtering: <Modules.Tizen.FILTER_MATCH_FLAG_EXACTLY>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_FULLSTRING>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_CONTAINS>, <Modules.Tizen.FILTER_MATCH_FLAG_STARTSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_ENDSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>.
     optional: ture
   - name: matchValue
     type: any
@@ -209,7 +211,11 @@ properties:
   - name: type
     type: String
     summary: | 
-        The composite filter type: COMPOSITE_FILTER_TYPE_UNION, COMPOSITE_FILTER_TYPE_INTERSECTION.
+        The composite filter type. One of the following -
+        
+        - <Modules.Tizen.COMPOSITE_FILTER_TYPE_UNION>,
+        - <Modules.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION>.
+        
   - name: filters
     type: Array<AbstractFilter>
     summary: (optional) The list of filters in the composite filter.
@@ -225,7 +231,11 @@ properties:
   - name: order
     type: String
     summary: |
-        (optional) The type of the sorting: SORT_ORDER_MODE_ASC, SORT_ORDER_MODE_DESC.
+        (optional) The type of the sorting: 
+
+        - <Modules.Tizen.SORT_ORDER_MODE_ASC>, 
+        - <Modules.Tizen.SORT_ORDER_MODE_DESC>.
+        
     optional: true
 
 ---

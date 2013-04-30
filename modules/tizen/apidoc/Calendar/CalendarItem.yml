@@ -74,14 +74,14 @@ properties:
         information than what is provided in the summary attribute. (See RFC 5545 - Section 3.8.1.5).
         
         The default value is an empty string.
-    type: STRING
+    type: String
     
   - name: summary
     summary: |
         An attribute to store a short summary or subject for an item. (See RFC 5545 - Section 3.8.1.12)
     description: |    
         The default value is an empty string.
-    type: STRING
+    type: String
 
   - name: isAllDay
     summary: |
@@ -135,7 +135,7 @@ properties:
         (See RFC 5545 - Section 3.8.4.3).
     description: |
         By default, this attribute is initialized to an empty string.
-    type: STRING
+    type: String
 
   - name: visibility
     summary: |
@@ -143,19 +143,21 @@ properties:
         (See RFC 5545 - Section 3.8.1.3).
     description: |
         The value is one of the constants defined for this parameter : 
-        CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
-        CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
-        The default value is CALENDAR_ITEM_VISIBILITY_PUBLIC.
-    type: STRING
+
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE>
+
+        The default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>.
+    type: String
 
   - name: status
     summary: |
         An attribute to store the overall confirmation status for a calendar component. 
         (See RFC 5545 - Section 3.8.1.11).
     description: |
-        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
-        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
-    type: STRING
+        For an event, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED>.
+        For a task, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION>.
+    type: String
 
   - name: priority
     summary: |
@@ -171,11 +173,11 @@ properties:
         the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
 
-            - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
-            - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
-            - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
+        - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
+        - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
+        - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
 
-    type: STRING
+    type: String
 
   - name: alarms
     summary: An attribute array to lists the alarms (or reminders) associated to an item.

@@ -37,10 +37,10 @@ properties:
         By default, this attribute is set to null.
         For SMS and MMS, folderId can be one of these numbers:
         
-            - INBOX = 1,
-            - OUTBOX = 2,
-            - DRAFTS = 3,
-            - SENTBOX = 4
+        - INBOX = 1,
+        - OUTBOX = 2,
+        - DRAFTS = 3,
+        - SENTBOX = 4
 
     default: 
     type: String
@@ -50,9 +50,12 @@ properties:
     summary: |
         The type of the given message. 
     description: |
-        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
-        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
-        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        Can be one of this constants: 
+
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        
     type: String
     permission: read-only
 
@@ -132,6 +135,7 @@ properties:
         The status of the given message.
     description: |
         It can be one of these values: SENT, SENDING, FAILED, DRAFT.
+        
         If the status of the current message does not correspond to any item from the list, an empty 
         value will be returned.
     type: String

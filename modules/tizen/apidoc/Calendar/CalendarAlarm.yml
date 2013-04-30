@@ -30,8 +30,8 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-            - ALARM_METHOD_SOUND = 'SOUND'
-            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
     
   - name: description  
     type: String

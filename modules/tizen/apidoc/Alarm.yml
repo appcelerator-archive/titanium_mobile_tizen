@@ -144,13 +144,15 @@ properties:
         attribute is set to an empty array.
     description: |
         Valid days of the week constants:
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_WE>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_TH>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_FR>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_SA>
-        <Modules.Tizen.Calendar.BY_DAY_VALUE_SU>
+        
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_WE>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_TH>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_FR>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_SA>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_SU>
+
     type: Array<String>
     optional: true
 

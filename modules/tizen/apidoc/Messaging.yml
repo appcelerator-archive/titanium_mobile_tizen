@@ -11,7 +11,7 @@ methods:
   - name: getMessageServices
     summary: |
         Retrieves the messaging service of a given type for a given account, or all existing 
-        services supporting the given type, if serviceId is not given. 
+        services supporting the given type, if `serviceId` is not given. 
     parameters: 
       - name: messageServiceType
         summary: |

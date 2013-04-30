@@ -52,22 +52,24 @@ methods:
         summary: Filter to be used when specific NFC tag is detected.
         description: |
             Valid values are:
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
-                <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+
         type: Array<String>
 
   - name: unsetTagListener

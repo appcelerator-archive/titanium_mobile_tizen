@@ -190,7 +190,6 @@ methods:
       - name: parameters
         summary: Initial parameters for <Modules.Tizen.NFC.NDEFMessage>.
         type: [NDEFMessageInitNDEFRecords, NDEFMessageInitRawData]
-        optional: true
     returns:
         type: Modules.Tizen.NFC.NDEFMessage
 
