@@ -14,7 +14,8 @@ methods:
     summary: Gets the requested application control passed to the current application. 
     description: |
         Gets the requested application control that contains the application control passed by the 
-        launchAppControl() method from the calling application. The requested application control 
+        [launchAppControl](Modules.Tizen.Apps.launchAppControl) method from the calling application. 
+        The requested application control 
         contains the reason the application was launched and what it has to perform. For example, an 
         application might be launched to display an image on a page by other application's request. 
         In all of these cases, the application is responsible for checking the contents of the 

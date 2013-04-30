@@ -5,9 +5,10 @@ description: |
     This interface holds information about a remote device available on a local Bluetooth device, 
     such as device name, address, bonding status, etc.
     A BluetoothDevice object can be retrieved using one of the following APIs:
-        BluetoothAdapter.getDevice()
-        BluetoothAdapter.getKnownDevices()
-        BluetoothAdapter.createBonding()
+
+    - [getDevice](Modules.Tizen.Bluetooth.BluetoothAdapter.getDevice)
+    - [getKnownDevices](Modules.Tizen.Bluetooth.BluetoothAdapter.getKnownDevices)
+    - [createBonding](Modules.Tizen.Bluetooth.BluetoothAdapter.createBonding)
 
 extends: Titanium.Proxy
 methods:

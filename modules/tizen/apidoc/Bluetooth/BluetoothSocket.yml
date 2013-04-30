@@ -2,8 +2,9 @@
 name: Modules.Tizen.Bluetooth.BluetoothSocket
 summary: The interface to represent the Bluetooth socket.   
 description: |
-    The socket object is created by BluetoothDevice.connectToServiceByUUID() or 
-    BluetoothAdapter.registerRFCOMMServiceByUUID().
+    The socket object is created by 
+    [connectToServiceByUUID](Modules.Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) or 
+    [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID).
 extends: Titanium.Proxy
 methods:
 

@@ -51,14 +51,17 @@ methods:
         An application can launch other applications with the application control, and get back the 
         results from the launched applications. The application control consists of an operation, 
         URI, and MIME type, and describes the request to be performed by the newly launched 
-        application. The application control is passed to the launchAppControl() method to launch an 
+        application. The application control is passed to the 
+        [launchAppControl](Modules.Tizen.Apps.launchAppControl) method to launch an 
         application. The system tries to find the proper application to perform the requested 
         application control, then launches the selected application.
         
         The application control request is passed to the newly launched application and it can be 
-        accessed by getRequestedAppControl() method. The passed application control contains the 
+        accessed by [getRequestedAppControl](Modules.Tizen.Apps.Application.getRequestedAppControl) 
+        method. The passed application control contains the 
         reason the application was launched and information about what the application is doing. 
-        The launched application can send a result to the caller application with the replyResult() 
+        The launched application can send a result to the caller application with the 
+        [replyResult](Modules.Tizen.Apps.RequestedApplicationControl.replyResult) 
         method of the [RequestedApplicationControl](Modules.Tizen.Apps.RequestedApplicationControl) 
         interface.
         
@@ -135,7 +138,8 @@ methods:
         If the ID is set to null or is not set at all, the method returns the application context 
         of the current application. 
 
-        The list of running applications and their application IDs is obtained with getAppsContext().
+        The list of running applications and their application IDs is obtained with 
+        [getAppsContext](Modules.Tizen.Apps.getAppsContext).
 
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
@@ -175,7 +179,7 @@ methods:
     description: |
         If the ID is set to null or not set at all, it returns application information for the 
         current application. The list of installed applications and their application IDs is 
-        obtained with getAppsInfo(). 
+        obtained with [getAppsInfo](Modules.Tizen.Apps.getAppsInfo). 
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  

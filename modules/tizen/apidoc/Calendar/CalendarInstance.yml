@@ -7,9 +7,15 @@ description: |
     This interface offers the following methods to manage events in a calendar:
 
     *   Finding items using a key-value filter.
-    *   Adding items to a specific calendar using add() / addBatch() methods.
-    *   Updating existing items using update() / updateBatch() methods.
-    *   Deleting existing items using remove() / removeBatch() methods.
+    
+    *   Adding items to a specific calendar using [add](Modules.Tizen.Calendar.CalendarInstance.add)
+    / [addBatch](Modules.Tizen.Calendar.CalendarInstance.addBatch) methods.
+
+    *   Updating existing items using [update](Modules.Tizen.Calendar.CalendarInstance.update] / 
+    [updateBatch](Modules.Tizen.Calendar.CalendarInstance.updateBatch) methods.
+
+    *   Deleting existing items using [remove](Modules.Tizen.Calendar.CalendarInstance.remove) / 
+    [removeBatch](Modules.Tizen.Calendar.CalendarInstance.removeBatch) methods.
 
 extends: Titanium.Proxy
 createable: false
@@ -36,9 +42,11 @@ methods:
     description: |
         If the item is successfully inserted in the calendar, 
         the CalendarItem will have its identifier (id attribute) set when the method returns.
-        To update an existing item, call the update() method instead. 
+        To update an existing item, call the [update](Modules.Tizen.Calendar.CalendarInstance.update]
+        method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
-        call CalendarItem.clone() method first and pass the clone to the add() method.
+        call [clone](Modules.Tizen.Calendar.CalendarItem.clone) method first and pass the clone to the 
+        [add](Modules.Tizen.Calendar.CalendarInstance.add) method.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
@@ -57,9 +65,11 @@ methods:
         invoked, passing the list of CalendarItem objects that were added,
         with their identifier set (id attribute).
         
-        If you wish to update an existing item, call the update() method instead. 
+        If you wish to update an existing item, call the 
+        [update](Modules.Tizen.Calendar.CalendarInstance.update] method instead. 
         If you wish to add a copy of an existing CalendarItem object, 
-        call CalendarItem.clone() method first and pass the clone to the add() method.
+        call [clone](Modules.Tizen.Calendar.CalendarItem.clone) method first and pass the clone to 
+        the  [add](Modules.Tizen.Calendar.CalendarInstance.add) method.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
@@ -180,10 +190,10 @@ methods:
     description: |
         If the filter is passed and contains valid values, only those values in the calendar that 
         match the filter criteria as specified in the AbstractFilter interface will be returned in 
-        the callback(). If no filter is passed, or the filter contains any invalid value which is 
+        the `callback`. If no filter is passed, or the filter contains any invalid value which is 
         null or undefined, then the implementation must return the full list of items in the 
-        callback(). If no items are available in the calendar (it is empty) or no item matches the 
-        filter criteria, the callback() will be invoked with an empty array.
+        `callback`. If no items are available in the calendar (it is empty) or no item matches the 
+        filter criteria, the `callback` will be invoked with an empty array.
         
         Filter specific remarks:
 
@@ -203,7 +213,9 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<FindResponse>
       - name: filter
-        summary: The supplied data used to filter the results of the find() method. 
+        summary: |
+            The supplied data used to filter the results of the 
+            [find](Modules.Tizen.Calendar.CalendarInstance) method.
         type: Modules.Tizen.AbstractFilter
         optional: true  
       - name: sortMode

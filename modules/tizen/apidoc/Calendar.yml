@@ -12,8 +12,8 @@ description: |
     To know more about this specification, see [RFC 5545](http://tools.ietf.org/html/rfc5545).
     
     This API provides functionality to read, create, delete, and update items in specific calendars. 
-    Calendars can be obtained using the getCalendars() method, which returns an array of Calendar 
-    objects.
+    Calendars can be obtained using the [getCalendars](Modules.Tizen.Calendar.getCalendars) 
+    method, which returns an array of [Calendar](Modules.Tizen.Calendar) objects.
             
     The `Calendar` module is a thin wrapper on the Tizen `Calendar` class.
     
@@ -31,11 +31,12 @@ methods:
   - name: getCalendars
     summary: Gets an array of Calendar objects.
     description: |
-        If the operation completes successfully, the callback() will be invoked with all the 
+        If the operation completes successfully, the `callback` will be invoked with all the 
         calendars found and available. 
+        
         The first calendar in the list is always the default calendar.
         
-        If no Calendar object is available, the callback() is invoked with an empty array.
+        If no Calendar object is available, the `callback` is invoked with an empty array.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  

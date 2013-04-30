@@ -18,8 +18,8 @@ properties:
         by the developers.
         
         See RFC 5545 (section 3.8.4.7) for more details about this parameter and algorithms to 
-        guarantee assignment of unique values. This value is assigned by the platform when the add() 
-        method is successfully invoked.    
+        guarantee assignment of unique values. This value is assigned by the platform when the 
+        [add](Modules.Tizen.Calendar.CalendarInstance.add) method is successfully invoked.
         
   - name: rid
     type: String
