@@ -173,9 +173,9 @@ properties:
         the implementation must convert those values to the supported values. 
         For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
 
-            - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
-            - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
-            - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
+        - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
+        - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
+        - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
 
     type: String
 

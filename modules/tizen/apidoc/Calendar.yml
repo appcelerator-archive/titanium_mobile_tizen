@@ -50,7 +50,7 @@ methods:
             Supported values:
 
             - <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT>
-            - <Modules.Tizen.Calendar.CALENDAR_TYPE_TAST>
+            - <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>
 
         type: String
       - name: callback
@@ -467,7 +467,7 @@ properties:
 
         - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>
         - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE>
-        - <Modules.Tizen.Calendar.CALENDAR_ITEM_CONFIDENTIAL>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL>
 
     type: String
 

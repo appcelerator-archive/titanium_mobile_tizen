@@ -37,10 +37,10 @@ properties:
         By default, this attribute is set to null.
         For SMS and MMS, folderId can be one of these numbers:
         
-            - INBOX = 1,
-            - OUTBOX = 2,
-            - DRAFTS = 3,
-            - SENTBOX = 4
+        - INBOX = 1,
+        - OUTBOX = 2,
+        - DRAFTS = 3,
+        - SENTBOX = 4
 
     default: 
     type: String

@@ -187,11 +187,11 @@ methods:
         
         Filter specific remarks:
 
-            - For event filtering based on start/end dates, items that recur during the given time 
-            interval will be found, even if the parent item itself is outside the interval.
-            - For event filtering based on the identifier, the identifier type should be 
-            CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both 
-            the parent event and all its detached instances.
+        - For event filtering based on start/end dates, items that recur during the given time 
+        interval will be found, even if the parent item itself is outside the interval.
+        - For event filtering based on the identifier, the identifier type should be 
+        CalendarEventID (uid and rid). If no recurrence ID is given, the filter will match both 
+        the parent event and all its detached instances.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of 
         your Titanium application:  

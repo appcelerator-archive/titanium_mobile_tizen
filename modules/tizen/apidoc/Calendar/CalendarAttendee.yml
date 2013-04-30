@@ -25,9 +25,9 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-            - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
-            - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
-            - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+        - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
+        - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
+        - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
             
         The default value is ATTENDEE_ROLE_REQ_PARTICIPANT.
     type: String
@@ -38,13 +38,13 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-            - ATTENDEE_STATUS_PENDING = 'PENDING'
-            - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
-            - ATTENDEE_STATUS_DECLINED = 'DECLINED'
-            - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
-            - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
-            - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
-            - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+        - ATTENDEE_STATUS_PENDING = 'PENDING'
+        - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
+        - ATTENDEE_STATUS_DECLINED = 'DECLINED'
+        - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
+        - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
+        - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
+        - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
             
         The default value is ATTENDEE_STATUS_PENDING.
     type: String
@@ -63,11 +63,11 @@ properties:
     description: |    
         The value is one of the constants defined for this type: 
 
-            - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
-            - ATTENDEE_TYPE_GROUP = 'GROUP'
-            - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
-            - ATTENDEE_TYPE_ROOM = 'ROOM'
-            - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+        - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
+        - ATTENDEE_TYPE_GROUP = 'GROUP'
+        - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
+        - ATTENDEE_TYPE_ROOM = 'ROOM'
+        - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
             
         The default value is ATTENDEE_TYPE_INDIVIDUAL.
     type: String
