@@ -79,8 +79,8 @@ methods:
     summary: Synchronizes the service content with an external mail server. 
     description: |
         This method is used only for EMAIL services. This method performs the same actions as 
-        syncFolder for every folder with Synchronizable flag set within the current Messaging 
-        service.
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) for every folder with 
+        `Synchronizable` flag set within the current Messaging service.
         
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  

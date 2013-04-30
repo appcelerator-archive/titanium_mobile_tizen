@@ -44,10 +44,10 @@ properties:
     type: Date
     summary: |
         An attribute to indicate the end date of a recurrence duration of an event using either an 
-        end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
+        end date (`untilDate` attribute) or a number of occurrences (`occurrenceCount` attribute).
     description: |
         By default, this attribute is set to null, meaning that the event recurs infinitely, unless 
-        occurrenceCount is set.
+        `occurrenceCount` is set.
         This attribute is precise to the second. Milliseconds are ignored.
         
         This property corresponds to UNTIL in RFC 5545.
@@ -57,10 +57,10 @@ properties:
     summary: |
         An attribute to indicate the number of occurrences of a recurring event.
     description: |
-        The recurrence duration of an event can be defined using either an end date (untilDate 
-        attribute) or a number of occurrences (occurrenceCount attribute).
+        The recurrence duration of an event can be defined using either an end date (`untilDate` 
+        attribute) or a number of occurrences (`occurrenceCount` attribute).
         By default, this attribute is set to -1, meaning that the event recurs infinitely, unless 
-        untilDate is set.
+        `untilDate` is set.
         
         This property corresponds to COUNT in RFC 5545.
         

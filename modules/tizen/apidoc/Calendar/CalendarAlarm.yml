@@ -8,7 +8,7 @@ properties:
     summary: |
         An attribute to record the absolute date and time when an alarm should be triggered.
     description: |
-        absoluteDate and before are mutually exclusive.
+        `absoluteDate` and `before` are mutually exclusive.
         
         This attribute is precise to the second. Milliseconds are ignored.
     
@@ -19,7 +19,7 @@ properties:
         triggered.
     description: |
         The duration should be positive.
-        absoluteDate and before are mutually exclusive.
+        `absoluteDate` and `before` are mutually exclusive.
         
         Will be rounded to integer seconds.
         

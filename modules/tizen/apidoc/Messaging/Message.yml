@@ -149,7 +149,7 @@ properties:
         The list of the message attachments.
     description: |
         This array is empty if the message does not have attachments or the message body is not
-        loaded and the attachment info is inaccessible (in this case, the "hasAttachment" attribute 
+        loaded and the attachment info is inaccessible (in this case, the `hasAttachment` attribute 
         has to be checked).
     type: Array<Modules.Tizen.Messaging.MessageAttachment>
 

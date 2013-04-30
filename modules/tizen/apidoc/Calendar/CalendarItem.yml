@@ -101,7 +101,7 @@ properties:
     description: |
         The default value for this attribute is null.
         
-        startDate must be specified in the same time zone as endDate / dueDate if provided.
+        `startDate` must be specified in the same time zone as `endDate` / `dueDate` if provided.
     type: Date
 
   - name: duration

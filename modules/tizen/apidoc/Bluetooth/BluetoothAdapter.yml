@@ -167,8 +167,8 @@ methods:
         This method registers a service record in the device service record database with the 
         specified uuid, name and auto assigned channel. 
         On success of the service registration, it returns a 
-        <Modules.Tizen.Bluetooth.BluetoothServiceHandler> object as the first parameter of 
-        successCallback, and listens for client connections. The service handler can be used to be
+        <Modules.Tizen.Bluetooth.BluetoothServiceHandler> object as the `handler` property of the
+        argument to `callback`, and listens for client connections. The service handler can be used to be
         notified on client connections or to unregister 
         the service. User interaction is mandatory to connect to a registered service and a link 
         between devices is encrypted. This guarantees a 

@@ -3,7 +3,7 @@ name: Modules.Tizen.AttributeFilter
 summary: AttributeFilter represents a filter based on an object attribute. 
 description: |
     Represents the query statement for the specified value of the matchValue by the rule of 
-    matchFlag. If no matchValue is defined, the filter will match all objects that have the 
+    `matchFlag`. If no `matchValue` is defined, the filter will match all objects that have the 
     attribute defined (same as the <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS> filter works), 
     otherwise, it will only match objects which have an attribute that matches the given value.
 extends: Modules.Tizen.AbstractFilter

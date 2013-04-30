@@ -56,7 +56,7 @@ properties:
 
   - name: isRead 
     summary:  |
-        The flag "isRead" for the latest message in the conversation.
+        The flag `isRead` for the latest message in the conversation.
         This property is true, if the message has been read, false, if not.
     type: String
     permission: read-only
