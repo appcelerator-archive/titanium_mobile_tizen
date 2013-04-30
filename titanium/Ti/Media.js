@@ -91,8 +91,18 @@ define(
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
-			var file = media instanceof Blob ? media.file : media,
+			var file,
+				blob;
+			if(media instanceof Blob){
+				blob = media;
+				file = blob.file;				
+			} else if(media instanceof Titanium.Filesystem.File) {
+				file = media;
 				blob = file.read();
+			} else {
+				console.error('Error in saveToGallery method');
+				return;
+			}
 
 			function errorCB(e) {
 				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
