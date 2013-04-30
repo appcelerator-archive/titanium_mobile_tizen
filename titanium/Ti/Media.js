@@ -91,28 +91,51 @@ define(
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
-			var file = media instanceof Blob ? media.file : media,
-				blob = file.read();
+			var file,
+				blob,
+				searchString = 'base64,',
+				base64String;
 
 			function errorCB(e) {
-				callbacks && typeof callbacks.error === 'function' && callbacks.error(e);
+				console.error(e.message);
+				callbacks && typeof callbacks.error === 'function' && callbacks.error();
 			}
+
+			if(media instanceof Blob) {
+				blob = media;
+				file = blob.file;
+			} else if(media instanceof Titanium.Filesystem.File) {
+				file = media;
+				blob = file.read();
+			} else {
+				return errorCB({message: 'Incorrect type of media argument'});
+			}
+
+			base64String = blob.toString();
+			var index = base64String.indexOf(searchString);
+
+			if(index === -1) {
+				return errorCB({message: 'Error: prefix base64 not found'});
+			}
+
+			base64String = base64String.substring(index + searchString.length);
 
 			tizen.filesystem.resolve('images',
 				function(dir) {
 					var writeToStream = function (fileStream) {
-						fileStream.writeBase64(blob._data);
+						fileStream.writeBase64(base64String);
 						fileStream.close();
 						callbacks && typeof callbacks.success === 'function' && callbacks.success();
 					};
 
 					try {
-						dir.createFile(file.name).openStream('rw', writeToStream,errorCB);
+						dir.createFile(file.name).openStream('rw', writeToStream, errorCB);
 					} catch(e) {
 						errorCB(e);
 					}
 				},
-				errorCB, 'rw'
+				errorCB,
+				'rw'
 			);
 		},
 
