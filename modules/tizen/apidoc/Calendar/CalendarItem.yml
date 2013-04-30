@@ -143,9 +143,11 @@ properties:
         (See RFC 5545 - Section 3.8.1.3).
     description: |
         The value is one of the constants defined for this parameter : 
-        CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
-        CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
-        The default value is CALENDAR_ITEM_VISIBILITY_PUBLIC.
+
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE>
+
+        The default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>.
     type: String
 
   - name: status
@@ -153,8 +155,8 @@ properties:
         An attribute to store the overall confirmation status for a calendar component. 
         (See RFC 5545 - Section 3.8.1.11).
     description: |
-        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
-        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
+        For an event, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED>.
+        For a task, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION>.
     type: String
 
   - name: priority

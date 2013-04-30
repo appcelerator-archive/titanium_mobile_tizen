@@ -45,7 +45,13 @@ methods:
     parameters:
       - name: type
         summary:  |
-            The type of calendar. CALENDAR_TYPE_EVENT="EVENT" or CALENDAR_TYPE_TASK="TASK"
+            The type of calendar.
+        description: |
+            Supported values:
+
+            - <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT>
+            - <Modules.Tizen.Calendar.CALENDAR_TYPE_TAST>
+
         type: String
       - name: callback
         summary: Function to invoke on success or failure.
@@ -458,16 +464,19 @@ properties:
         An attribute to mark the visibility (secrecy) level of the item.
     description: |
         The value is one of the constants defined for this parameter : 
-            CALENDAR_ITEM_VISIBILITY_PUBLIC = 'PUBLIC',
-            CALENDAR_ITEM_VISIBILITY_PRIVATE = 'PRIVATE', ...
+
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_CONFIDENTIAL>
+
     type: String
 
   - name: status
     summary: |
         An attribute to store the overall confirmation status for a calendar component.
     description: |
-        For an event, the default value is CALENDAR_ITEM_STATUS_CONFIRMED = 'CONFIRMED'. 
-        For a task, the default value is CALENDAR_ITEM_STATUS_NEEDS_ACTION = 'NEEDS_ACTION'.
+        For an event, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED>. 
+        For a task, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION>.
     type: String
     
   - name: priority
@@ -477,17 +486,18 @@ properties:
         May be used to relatively prioritize multiple items during a given period of time. 
         (See RFC 5545 - Section 3.8.1.9).
 
-        The default value for this attribute is CALENDAR_ITEM_PRIORITY_LOW priority.
+        The default value for this attribute is <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW> 
+        priority.
 
         If the native item database supports another priority schema (such as a range from 1 to 9),
         the implementation must 
         convert those values to the supported values. 
 
-        For instance, RFC 5545 suggests the following mapping for a range from 1 to 9:
+        For instance, RFC 5545 suggests the following mapping for a range from 1 to 9.
         
-            - 1-4 to CALENDAR_ITEM_PRIORITY_HIGH,
-            - 5 to CALENDAR_ITEM_PRIORITY_MEDIUM,
-            - 6-9 to CALENDAR_ITEM_PRIORITY_LOW.
+        - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
+        - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
+        - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
             
     type: String
     
@@ -532,7 +542,7 @@ properties:
         (See RFC 5545 - Section 3.2.9).
 
         The value is one of the constants defined for this parameter : 
-        EVENT_AVAILABILITY_BUSY = 'BUSY' or EVENT_AVAILABILITY_FREE = 'FREE'        
+        <Modules.Tizen.Calendar.EVENT_AVAILABILITY_BUSY> or <Modules.Tizen.Calendar.EVENT_AVAILABILITY_FREE>.
   - name: recurrenceRule 
     type: Date
     summary: An attribute to denote the recurrence rule for the event.
@@ -554,8 +564,8 @@ properties:
     description: |    
         The value is one of the constants defined for this parameter :
         
-            - CALENDAR_TEXT_FORMAT_ICALENDAR_20 = "ICALENDAR_20",
-            - CALENDAR_TEXT_FORMAT_VCALENDAR_10 = "VCALENDAR_10".
+        - <Modules.Tizen.Calendar.CALENDAR_TEXT_FORMAT_ICALENDAR_20>,
+        - <Modules.Tizen.Calendar.CALENDAR_TEXT_FORMAT_VCALENDAR_10>.
             
 ---
 name: CalendarAttendeeInit
@@ -587,9 +597,10 @@ properties:
         An attribute to denote the role of the attendee.
     description: |    
         The value is one of the constants defined for this type:
-            - ATTENDEE_ROLE_REQ_PARTICIPANT = 'REQ_PARTICIPANT'
-            - ATTENDEE_ROLE_OPT_PARTICIPANT = 'OPT_PARTICIPANT'
-            - ATTENDEE_ROLE_NON_PARTICIPANT = 'NON_PARTICIPANT'
+
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_REQ_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_OPT_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_NON_PARTICIPANT>
         
     type: String
 
@@ -598,13 +609,14 @@ properties:
         An attribute to store the participant's attendance status.
     description: |    
         The value is one of the constants defined for this type:
-            - ATTENDEE_STATUS_PENDING = 'PENDING'
-            - ATTENDEE_STATUS_ACCEPTED = 'ACCEPTED'
-            - ATTENDEE_STATUS_DECLINED = 'DECLINED'
-            - ATTENDEE_STATUS_TENTATIVE = 'TENTATIVE'
-            - ATTENDEE_STATUS_DELEGATED = 'DELEGATED'
-            - ATTENDEE_STATUS_COMPLETED = 'COMPLETED'
-            - ATTENDEE_STATUS_IN_PROCESS = 'PROCESS'
+
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_PENDING>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_ACCEPTED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DECLINED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_TENTATIVE>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DELEGATED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_COMPLETED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_IN_PROCESS>
             
     type: String
 
@@ -617,11 +629,13 @@ properties:
         An attribute to indicate the type of a participant.
     description: |
         The value is one of the constants defined for this type: 
-            - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
-            - ATTENDEE_TYPE_GROUP = 'GROUP'
-            - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
-            - ATTENDEE_TYPE_ROOM = 'ROOM'
-            - ATTENDEE_TYPE_UNKNOWN = 'UNKNOWN'
+
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_INDIVIDUAL>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_GROUP>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_RESOURCE>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_ROOM>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_UNKNOWN>
+
     type: String
 
   - name: group 
@@ -661,10 +675,10 @@ properties:
         
         Can be set to one of the following constants:
 
-          - RECURRENCE_RULE_FREQUENCY_DAILY
-          - RECURRENCE_RULE_FREQUENCY_WEEKLY
-          - RECURRENCE_RULE_FREQUENCY_MONTHLY
-          - RECURRENCE_RULE_FREQUENCY_YEARLY
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>
 
     type: String
 
@@ -744,8 +758,9 @@ properties:
         An attribute to denote the notification method used by an alarm.
     description: |    
         The value is one of the constants defined for this type:
-            - ALARM_METHOD_SOUND = 'SOUND'
-            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
     
   - name: description
     type: String
@@ -772,8 +787,8 @@ properties:
     description: |    
         The value is one of the constants defined for this type:
 
-            - ALARM_METHOD_SOUND = 'SOUND'
-            - ALARM_METHOD_DISPLAY = 'DISPLAY'
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
     
   - name: description
     type: String

@@ -101,7 +101,8 @@ properties:
     optional: true
 
   - name: fileName
-    summary: (optional) An attribute to store the file name for the specified URL. If the file name 
-    is not given, the original file name from URL is used.
+    summary: |
+        (optional) An attribute to store the file name for the specified URL. If the file name 
+        is not given, the original file name from URL is used.
     type: String
     optional: true

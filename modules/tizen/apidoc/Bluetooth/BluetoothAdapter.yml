@@ -5,10 +5,10 @@ summary: |
 description: |
     This interface offers methods to control local Bluetooth behavior, such as:
     
-        - Turn on/off Bluetooth radio;
-        - Scan for remote devices;
-        - Access known devices;
-        - Register a service in the device service database.
+    - Turn on/off Bluetooth radio;
+    - Scan for remote devices;
+    - Access known devices;
+    - Register a service in the device service database.
     
     To start device discovery, subscribe to one of the device discovery events defined in this 
     interface. It will start automaticaly. Note that you should stop discovery using the 

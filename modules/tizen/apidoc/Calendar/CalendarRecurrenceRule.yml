@@ -13,7 +13,8 @@ properties:
         This property corresponds to FREQ in RFC 5545.
         
         The value is one of the constants defined for this type:
-            - ECURRENTCE_RULE_FREQUENCY_DAILY = 'DAILY'
+
+            - RECURRENCE_RULE_FREQUENCY_DAILY = 'DAILY'
             - RECURRENCE_RULE_FREQUENCY_WEEKLY = 'WEEKLY'
             - RECURRENCE_RULE_FREQUENCY_MONTHLY = 'MONTHLY'
             - RECURRENCE_RULE_FREQUENCY_YEARLY = 'YEARLY'

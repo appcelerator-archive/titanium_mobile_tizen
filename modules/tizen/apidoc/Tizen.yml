@@ -79,19 +79,19 @@ properties:
 
   - name: FILTER_MATCH_FLAG_CONTAINS
     summary: Indicates the attribute value should contain the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_STARTSWITH
     summary: Indicates the attribute value should start with the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 
   - name: FILTER_MATCH_FLAG_ENDSWITH
     summary: Indicates the attribute value should end with the given string.
-    description: Strings only: case insensitive.
+    description: For strings, case insensitive.
     type: String
     permission: read-only
 

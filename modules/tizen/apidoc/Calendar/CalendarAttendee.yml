@@ -62,6 +62,7 @@ properties:
         An attribute to indicate the type of a participant. (See RFC 5545, Section 3.2.3.)
     description: |    
         The value is one of the constants defined for this type: 
+
             - ATTENDEE_TYPE_INDIVIDUAL = 'INDIVIDUAL'
             - ATTENDEE_TYPE_GROUP = 'GROUP'
             - ATTENDEE_TYPE_RESOURCE = 'RESOURCE' 
