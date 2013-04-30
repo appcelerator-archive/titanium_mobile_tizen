@@ -357,8 +357,9 @@ properties:
         Indicates that the successCallback is only be triggered if the property is a number and its 
         value is greater than or equal to this number.
     description: |
-        This attribute has no effect on the get method. On the watch method, it indicates that the 
-        successCallback is only be triggered 
+        On the [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener) 
+        method, this attribute indicates that the 
+        `successCallback` is only be triggered 
         if the property is a number and its value is greater than or equal to this number.
     
   - name: lowThreshold
@@ -367,9 +368,10 @@ properties:
         Indicates that the successCallback is only be triggered if the property is a number and its 
         value is lower than or equal to this number.
     description: |
-        This attribute has no effect on the get method. On the watch method, it indicates that the 
-        successCallback is only be triggered 
+        On the [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener) 
+        method, it indicates that the 
+        `successCallback` is only be triggered 
         if the property is a number and its value is lower than or equal to this number. If both 
-        highThreshold and lowThreshold parameters are specified, 
-        the successCallback is triggered if and only if the property value is either lower than the 
-        value of lowThreshold or higher than the value of highThreshold.
+        `highThreshold` and `lowThreshold` parameters are specified, 
+        the `successCallback` is triggered if and only if the property value is either lower than the 
+        value of `lowThreshold` or higher than the value of `highThreshold`.

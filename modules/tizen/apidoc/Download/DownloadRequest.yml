@@ -104,7 +104,7 @@ methods:
   - name: onCancel
     summary: |
         Called when download is canceled by the 
-        [cancel](Modules.Tizen.Download.DownloadRequest.cancel) method.
+        [abort](Modules.Tizen.Download.DownloadRequest.abort) method.
     parameters:
       - name: downloadRequest
         summary: Current started download operation.

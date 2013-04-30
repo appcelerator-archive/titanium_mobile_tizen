@@ -3,7 +3,8 @@ name: Modules.Tizen.Messaging.Message
 summary: Defines the content and attributes of a message. 
 description: |
     This interface allows a web application to define the set of properties linked to a message.
-    It also allows an application to retrieve the content of a message through the MessageStorage 
+    It also allows an application to retrieve the content of a message through the 
+    <Modules.Tizen.Messaging.MessageStorage>
     methods. 
     In those cases, the implementation MAY return, in some situations, only the meta-information of 
     a message without the loaded body. 
@@ -20,8 +21,8 @@ properties:
         The ID is a locally unique and persistent property, assigned by the device or the web 
         runtime (WRT). For new messages created using the Message constructor, the id is assigned on 
         the first occasion that the message is processed by the underlying platform, such as a call 
-        to [send](Modules.Tizen.Messaging.MessageService.send). Before the id is assigned, it is set 
-        to null. By default, this attribute is set to null.
+        to [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage). Before the id is 
+        assigned, it is set to null. By default, this attribute is set to null.
     type: String
     default: null
     permission: read-only

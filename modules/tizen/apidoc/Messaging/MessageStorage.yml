@@ -255,8 +255,11 @@ methods:
     parameters: 
       - name: watchId
         summary: |
-            Identifier of the subscription returned by addMessagesChangeListener, 
-            addConversationsChangeListener or addFoldersChangeListener methods. 
+            Identifier of the subscription returned by 
+            [addMessagesChangeListener](Modules.Tizen.Messaging.MessageStorage.addMessagesChangeListener), 
+            [addConversationsChangeListener](Modules.Tizen.Messaging.MessageStorage.addConversationsChangeListener) or 
+            [addFoldersChangeListener](Modules.Tizen.Messaging.MessageStorage.addFoldersChangeListener) 
+            methods. 
         type: Number
 
 # Pseudo-type    
