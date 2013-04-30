@@ -10,6 +10,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Contact/ContactRef'], function(
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
+				// Check if the required parameters are present (do not check for the optional ones).
 				if ('uri' in args) {
 					// In Tizen module, the name of the RSVP property does not match its name in Tizen Device API
 					// (different case), so we have to map it by hand. In order to not change the argument, we clone it first.

@@ -16,7 +16,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 				//
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
-
+				
+				// Check if the required parameters are present (do not check for the optional ones).
 				if ('before' in args && 'method' in args) {
 					this._obj = new tizen.CalendarAlarm(helper.createTimeDuration(args.before), args.method, args.description);
 				} else if ('absoluteDate' in args && 'method' in args) {

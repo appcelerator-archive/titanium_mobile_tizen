@@ -17,7 +17,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
 
-				// The frequency is a required parameter.
+				// Check if the required parameters are present (do not check for the optional ones).
 				if ('frequency' in args) {
 
 					var initDict = args,

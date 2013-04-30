@@ -11,6 +11,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			} else {
 				if('attributeName' in args) {
 					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					// Check if the required parameters are present (do not check for the optional ones).
 					this._obj = new tizen.AttributeRangeFilter(args.attributeName, args.initialValue, args.endValue);
 				} else {
 					throw new Error('Constructor with given parameters doesn\'t exist');
