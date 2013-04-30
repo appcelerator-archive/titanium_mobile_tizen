@@ -10,8 +10,13 @@ properties:
   - name: status
     summary: |
         This property reflects the information of the device orientation in this system.
+    description: |
         The value is one of the constants defined for this type.
-        The supported device orientation types are: <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY>, <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY>
+        The supported device orientation types are: 
+        <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY>, 
+        <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY>, 
+        <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY>, 
+        <Modules.Tizen.SystemInfo.SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY>
 
     type: String
     permission: read-only

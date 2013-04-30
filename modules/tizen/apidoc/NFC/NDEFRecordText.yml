@@ -20,5 +20,6 @@ properties:
   - name: encoding
     type: String
     summary: |
-        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
+        The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> 
+        or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
     permission: read-only

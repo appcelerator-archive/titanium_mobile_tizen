@@ -9,22 +9,24 @@ properties:
     type: String
     summary: |
         The type of the NFC tag. Valid values are:
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
-        <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+        - <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+        
     permission: read-only
 
   - name: isSupportedNDEF
@@ -43,6 +45,7 @@ properties:
     type: Array<Object>
     summary: |
         The value is all tag information. It is pairs of key and value. 
+    description: |
         The array's index is the pair's key and value is its value.
     permission: read-only
 
@@ -56,7 +59,8 @@ methods:
   - name: writeNDEF
     summary: Writes NDEF data to the NFC tag.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+            Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
         
@@ -66,20 +70,25 @@ methods:
         type: Modules.Tizen.NFC.NDEFMessage
 
       - name: callback  
-        summary: Invoked in case of successfully writing the NDEF Data or in case of any error during writing the NDEF Data.
+        summary: |
+            Invoked in case of successfully writing the NDEF Data or in case of any error during 
+            writing the NDEF Data.
         type: Callback<ErrorResponse>
         optional: true
 
   - name: readNDEF
     summary: Reads NDEF data from the NFC tag.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
 
     parameters:
       - name: callback 
-        summary: Invoked in case of successfully reading the NDEF Data or any error during reading the NDEF Data.
+        summary: |
+            Invoked in case of successfully reading the NDEF Data or any error during reading 
+            the NDEF Data.
         type: Callback<NDEFReadResponse>
 
   - name: transceive
@@ -89,7 +98,8 @@ methods:
         Each tag type requires its own command to access tags. This API provides low level access
         of tag operation. (Note that you must know each tag technology.)
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/nfc.tag`
         
@@ -107,7 +117,7 @@ methods:
 ---
 name: NDEFReadResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [readNDEF](Modules.Tizen.NFC.NFCTag.readNDEF) method.
 extends: ErrorResponse
 properties:
@@ -137,7 +147,7 @@ properties:
 ---
 name: TransceiveResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [transceive](Modules.Tizen.NFC.NFCTag.transceive) method.
 extends: ErrorResponse
 properties:

@@ -5,6 +5,22 @@ summary: This API provides a way to launch other applications and access applica
 extends: Titanium.Module
 platforms: [tizen]
 methods:
+  - name: createApplicationControl
+    summary: Creates an instance of <Modules.Tizen.Apps.ApplicationControl>
+    returns:
+        type: Modules.Tizen.Apps.ApplicationControl
+    parameters:
+      - name: args
+        type: Dictionary<Modules.Tizen.Apps.ApplicationControl>
+
+  - name: createApplicationControlData
+    summary: Creates an instance of <Modules.Tizen.Apps.ApplicationControlData>
+    returns:
+        type: Modules.Tizen.Apps.ApplicationControlData
+    parameters:
+      - name: args
+        type: Dictionary<Modules.Tizen.Apps.ApplicationControlData>
+
   - name: getCurrentApplication
     summary: Gets the Application object defining the current application.
     returns: 
@@ -14,7 +30,8 @@ methods:
   - name: launch
     summary: Launches an application with the given application ID.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:....................................................................................................
 
         * `http://tizen.org/privilege/application.launch`
         
@@ -31,21 +48,35 @@ methods:
   - name: launchAppControl
     summary: Launches an application with the specified application control. 
     description: |
-        An application can launch other applications with the application control, and get back the results from the launched applications.
-        The application control consists of an operation, URI, and MIME type, and describes the request to be performed by the newly launched application. The application control is passed to the launchAppControl() method to launch an application. The system tries to find the proper application to perform the requested application control, then launches the selected application.
-        The application control request is passed to the newly launched application and it can be accessed by getRequestedAppControl() method. The passed application control contains the reason the application was launched and information about what the application is doing. The launched application can send a result to the caller application with the replyResult() method of RequestedApplicationControl interface.
+        An application can launch other applications with the application control, and get back the 
+        results from the launched applications. The application control consists of an operation, 
+        URI, and MIME type, and describes the request to be performed by the newly launched 
+        application. The application control is passed to the launchAppControl() method to launch an 
+        application. The system tries to find the proper application to perform the requested 
+        application control, then launches the selected application.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The application control request is passed to the newly launched application and it can be 
+        accessed by getRequestedAppControl() method. The passed application control contains the 
+        reason the application was launched and information about what the application is doing. 
+        The launched application can send a result to the caller application with the replyResult() 
+        method of the [RequestedApplicationControl](Modules.Tizen.Apps.RequestedApplicationControl) 
+        interface.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.launch`
         
     parameters:
       - name: appControl
         summary: The data structure describing application control details.
-        type: ApplicationControl
+        type: Modules.Tizen.Apps.ApplicationControl
  
       - name: id
-        summary: "An identifier of the application to be launched. If the ID is null or not specified, then the system tries to find the application to be launched for the requested application control."
+        summary: |
+            An identifier of the application to be launched. If the ID is null or not specified, 
+            then the system tries to find the application to be launched for the requested 
+            application control.
         type: String
 
       - name: callback
@@ -55,32 +86,40 @@ methods:
 
       - name: replyCallback
         summary: |
-            The method to invoke when the application gets back results from the launched application.
+            The method to invoke when the application gets back results from the launched 
+            application.
         type: Callback<LaunchAppControlReplyResponse>
         optional: true
         
   - name: findAppControl
     summary: Finds application information can be launched with the given application control.  
     description: |
-        An application can get a list of other applications can be launched with the application control.
+        An application can get a list of other applications can be launched with the application 
+        control.
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
     parameters: 
       - name: appControl
         summary: A data structure describing application control details.
-        type: ApplicationControl
+        type: Modules.Tizen.Apps.ApplicationControl
 
       - name: callback
         summary: Function to invoke on success or failure.. 
         type: Callback<FindAppControlResponse>
  
   - name: getAppsContext
-    summary: Gets a list of application contexts for applications that are currently running on a device. The information contained for each application corresponds to the application state at the time when the list was generated. 
+    summary: |
+        Gets a list of application contexts for applications that are currently running on a device.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The information contained for each application corresponds to the application state at the 
+        time when the list was generated. 
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -92,10 +131,14 @@ methods:
   - name: getAppContext
     summary: |
         Gets the application context for the specified application context ID. 
-        If the ID is set to null or is not set at all, the method returns the application context of the current application. 
-        The list of running applications and their application IDs is obtained with getAppsContext().
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        If the ID is set to null or is not set at all, the method returns the application context 
+        of the current application. 
+
+        The list of running applications and their application IDs is obtained with getAppsContext().
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -104,13 +147,21 @@ methods:
         summary: A data structure that lists running application details.
     parameters: 
       - name: contextId
-        summary: "A string representing an application context ID. If the ID is not provided, the application context of the calling application will be returned."
+        summary: |
+            A string representing an application context ID. 
+        description: |
+            If the ID is not provided, the application context of the calling application will be 
+            returned.
         type: String
 
   - name: getAppsInfo
-    summary: Gets the list of installed application's information on a device. The information contained on each application corresponds to the application state at the moment when the list was generated. 
+    summary: Gets the list of installed application's information on a device.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        The information contained on each application corresponds to the application state at the 
+        moment when the list was generated. 
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -122,10 +173,12 @@ methods:
   - name: getAppInfo
     summary: Gets application information for a specified application ID.  
     description: |
-        If the ID is set to null or not set at all, it returns application information for the current application. 
-        The list of installed applications and their application IDs is obtained with getAppsInfo(). 
+        If the ID is set to null or not set at all, it returns application information for the 
+        current application. The list of installed applications and their application IDs is 
+        obtained with getAppsInfo(). 
         
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -134,7 +187,9 @@ methods:
         summary: The application metadata
     parameters: 
       - name: id
-        summary: "A string representing application ID. If the ID is not provided, the application information of the calling application will be returned."  
+        summary: |
+            A string representing application ID. If the ID is not provided, the application 
+            information of the calling application will be returned.
         type: String
         optional: true
  
@@ -142,7 +197,8 @@ events:
   - name: installed
     summary: Fired when an application is installed.
     description: | 
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -154,7 +210,8 @@ events:
   - name: updated
     summary: Fired when an application is updated.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -166,7 +223,8 @@ events:
   - name: uninstalled
     summary: Fired when an application is uninstalled.
     description: |
-        To use this event, you must include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
 
         * `http://tizen.org/privilege/application.read`
         
@@ -178,7 +236,8 @@ events:
 examples:
   - title: Getting information about the installed applications
     example: |
-        The following example shows how to obtain and show various data about the installed applications.
+        The following example shows how to obtain and show various data about the installed 
+        applications.
         
             var self = Ti.UI.createWindow(),
                 Tizen = require('tizen');
@@ -210,88 +269,10 @@ examples:
                 }
             });
 
-
-# Pseudo-type
----
-name: ApplicationControlDataUnit
-summary: Contains information required to initialize a <Modules.Tizen.Apps.ApplicationControlData>.
-properties:
-  - name: key
-    type: String
-    summary: An attribute to store the name of a key.
-  - name: value
-    type: Array<String>
-    summary: An attribute to store the value associated with a key.
-    
----
-name: ApplicationControlUnit
-summary: Contains information required to initialize an <ApplicationControl>.
-properties:
-  - name: operation
-    type: String
-    summary: An attribute to store the string that defines the action to be performed by an application control.
-  - name: uri 
-    type: String
-    summary: (optional) An attribute to store the URI needed by application control.
-    optional: true
-  - name: mime  
-    type: String
-    summary: (optional) An attribute to store the MIME type of a content.
-    optional: true
-  - name: category   
-    type: String
-    summary: (optional) An attribute to store the category of the application to be launched.
-    optional: true
-  - name: data  
-    type: <Modules.Tizen.Apps.ApplicationControlData>
-    summary: (optional) An array of attributes to store the data needed for an application control.
-    optional: true
-
----
-name: ApplicationControl
-summary: "This interface consists of an operation, URI, MIME type, and data."
-description: |
-    It describes an action to be performed by other applications and is passed to launch other applications. 
-    If the system gets the application control request, it finds the corresponding application to be launched with the delivered application control and launches the selected application. 
-createable: false
-properties:
-  - name: operation
-    summary: An attribute to store the string that defines the action to be performed by an application control. 
-    type: String
-
-  - name: uri
-    summary: An attribute to store the URI needed by application control.  
-    type: String
-
-  - name: mime
-    summary: An attribute to store the MIME type of a content. 
-    type: String
-
-  - name: category
-    summary: An attribute to store the category of the application to be launched.   
-    type: Boolean
-
-  - name: data
-    summary: An array of attributes to store the data needed for an application control.  
-    type: Array<ApplicationControlData>
-
----
-name: ApplicationControlData
-summary: "This object defines a key/value pair used to pass data between applications through the <ApplicationControl> interface. "
-createable: false
-properties:
-  - name: key
-    summary: An attribute to store the name of a key. 
-    type: String
-
-  - name: value
-    summary: An attribute to store the value associated with a key. 
-    type: Array<String>
-
 ---
 name: LaunchAppControlReplyResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [launchAppControl](Modules.Tizen.Apps.launchAppControl) method.
 extends: ErrorResponse
 properties:
@@ -316,12 +297,12 @@ properties:
   - name: data
     summary: List of ApplicationControlData objects.
     description: Will be undefined if `success` is `false`.
-    type: Array<ApplicationControlData>
+    type: Array<Modules.Tizen.Apps.ApplicationControlData>
     
 ---
 name: FindAppControlResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [findAppControl](Modules.Tizen.Apps.findAppControl) method.
 extends: ErrorResponse
 properties:
@@ -351,13 +332,13 @@ properties:
   - name: appControl
     summary: The application control that was passed on findAppControl.
     description: Will be undefined if `success` is `false`.
-    type: ApplicationControl
+    type: Modules.Tizen.Apps.ApplicationControl
     optional: true
 
 ---
 name: AppsContextResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getAppsContexts](Modules.Tizen.Apps.getAppsContext) method.
 extends: ErrorResponse
 properties:
@@ -387,7 +368,7 @@ properties:
 ---
 name: AppsInfoResponse
 summary: |
-    Simple object returned in the callback from
+    Simple object returned in the callback from the
     [getAppsInfo](Modules.Tizen.Apps.getAppsInfo) method.
 extends: ErrorResponse
 properties:

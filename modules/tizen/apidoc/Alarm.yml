@@ -8,7 +8,8 @@ methods:
   - name: add
     summary: Adds an alarm to the storage.
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application: 
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application: 
 
         * `http://tizen.org/privilege/alarm`
         
@@ -30,7 +31,8 @@ methods:
   - name: remove
     summary: Removes an alarm from the storage. 
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/alarm`
         
@@ -42,12 +44,15 @@ methods:
 
   - name: removeAll
     description: |
-        To use this method, you must to include the following privilege in the `tiapp.xml` file of your Titanium application:  
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
 
         * `http://tizen.org/privilege/alarm`
         
     summary: Removes all alarms added by an application.
-    description: Because each application has its own alarm storage, this method will only remove alarms added by the calling application.
+    description: |
+        Because each application has its own alarm storage, this method will only remove alarms 
+        added by the calling application.
 
   - name: getAlarm
     summary: Returns an alarm as per the specified identifier.
@@ -76,7 +81,7 @@ methods:
     parameters:
       - name: parameters
         summary: Initial arguments for AlarmRelative.
-        type: alarmRelativeParameters
+        type: Dictionary<Modules.Tizen.Alarm.AlarmRelative>
 
   - name: createAlarmAbsolute
     summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
@@ -85,7 +90,7 @@ methods:
     parameters:
       - name: parameterrs
         summary: Initial arguments for AlarmAbsolute.
-        type: [alarmAbsoluteParameters, alarmAbsoluteParametersPeriod]
+        type: [Date, AlarmAbsoluteInit1, AlarmAbsoluteInit2]
  
 properties:
   - name: PERIOD_MINUTE
@@ -120,37 +125,24 @@ examples:
                     period: 1800
                 }),
                 
-            Tizen.Alarm.add(alarm, 'org.tizen.clock');
- 
+            Tizen.Alarm.add(alarm, 'org.tizen.clock'); 
 
 ---
-name: alarmRelativeParameters
-summary: Parameters for the createAlarmRelative.
-properties:
-  - name: delay
-    summary: |
-        An attribute to stores the difference in time (in seconds) between 
-        when an alarm is added and it is triggered.
-    type: Number
-
-  - name: period
-    summary: |
-        (optional) The duration (in seconds) between each trigger of an alarm. 
-        By default, this attribute is set to null, indicating that this alarm does not repeat.
-    type: Number
-    optional: true
-
----
-name: alarmAbsoluteParameters
-summary: Parameters for the createAlarmAbsolute.
+name: AlarmAbsoluteInit1
+summary: |
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
     summary: |
-        The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
   - name: daysOfTheWeek
     summary: |
-        (optional) The days of the week associated with the recurrence rule. By default, this attribute is set to an empty array.
+        (optional) The days of the week associated with the recurrence rule. By default, this 
+        attribute is set to an empty array.
+    description: |
         Valid days of the week constants:
         <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
         <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
@@ -163,14 +155,17 @@ properties:
     optional: true
 
 ---
-name: alarmAbsoluteParametersPeriod
-summary: Parameters for the createAlarmAbsolute.
+name: AlarmAbsoluteInit2
+summary: | 
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
 properties:
   - name: date
     type: Date
     summary: |
-        (Optional) The absolute date/time when the alarm is initially triggered. It is precise to the second; milliseconds will be ignored.
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
   - name: period
-    summary: Duration in seconds between each trigger of the alarm.
+    summary: (Optional) Duration in seconds between each trigger of the alarm.
     type: Number
     optional: true

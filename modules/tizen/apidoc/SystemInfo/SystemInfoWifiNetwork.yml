@@ -29,6 +29,7 @@ properties:
     
   - name: signalStrength
     summary: |
-        This connection's signal strength, as a normalized value between 0 (no signal detected) and 1 (the level is at its maximum value).
+        This connection's signal strength, as a normalized value between 0 (no signal detected) and 
+        1 (the level is at its maximum value).
     type: Number
     permission: read-only
