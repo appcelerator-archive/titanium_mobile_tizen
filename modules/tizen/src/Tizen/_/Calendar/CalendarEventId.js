@@ -10,10 +10,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.uid) {
+				if ('uid' in args) {
 					this._obj = new tizen.CalendarEventId(args.uid, args.rid);
 				} else {
-					console.error('Constructor with such parameters not found in CalendarEventId.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

@@ -24,7 +24,7 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 				} else if ('date' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date);
 				} else {
-					console.error('Constructor with given parameters doesn\'t exist');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

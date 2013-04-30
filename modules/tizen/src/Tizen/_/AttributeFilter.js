@@ -10,10 +10,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('attributeName')) {
+				if ('attributeName' in args) {
 					this._obj = new tizen.AttributeFilter(args.attributeName, args.matchFlag, args.matchValue);
 				} else {
-					console.error('AttributeFilter\'s constructor with such parameters not found.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

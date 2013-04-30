@@ -10,10 +10,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('filePath')) {
+				if ('filePath' in args) {
 					this._obj = new tizen.MessageAttachment(args.filePath, args.mimeType);
 				} else {
-					console.error('MessageAttachment\'s constructor with such arguments not found.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

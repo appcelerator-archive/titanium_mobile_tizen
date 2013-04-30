@@ -10,10 +10,10 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('url')) {
+				if ('url' in args) {
 					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
 				} else {
-					console.error('Constructor with such parameters does not exist in DownloadRequest.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

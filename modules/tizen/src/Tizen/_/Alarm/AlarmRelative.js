@@ -9,8 +9,12 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				this._obj = new tizen.AlarmRelative(args.delay, args.period);
+				if('delay' in args) {
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					this._obj = new tizen.AlarmRelative(args.delay, args.period);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

@@ -18,7 +18,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 				// any parameter at all, so the count of the parameters must also be correct.
 
 				// The frequency is a required parameter.
-				if (args.hasOwnProperty('frequency')) {
+				if ('frequency' in args) {
 
 					var initDict = args,
 						untilDate = args.ruleInitDict && args.ruleInitDict.untilDate,
@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 					this._obj = new tizen.CalendarRecurrenceRule(initDict.frequency, initDict.ruleInitDict);
 
 				} else {
-					console.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},
