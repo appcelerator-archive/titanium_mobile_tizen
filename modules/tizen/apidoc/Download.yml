@@ -50,6 +50,7 @@ properties:
   - name: DOWNLOAD_STATE_COMPLETED
     summary: Indicates that the download operation is in a completed state.
     type: String  
+    permission: read-only
     
   - name: DOWNLOAD_STATE_FAILED
     summary: Indicates that the download operation has failed due to some reasons.

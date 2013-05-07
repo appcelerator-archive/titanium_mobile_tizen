@@ -42,13 +42,16 @@ methods:
         type: DownloadCallback
 
 properties:
+
   - name: id
     summary: The ID of the corresponding download operation.
     type: Number
     permission: read-only
+
   - name: url
     summary: Store the URL of the object to download.
     type: String
+
   - name: destination
     summary: |
         Stores the folder path of the destination folder to which a requested file object will be 
@@ -58,20 +61,25 @@ properties:
         "Downloads".
     type: String
     optional: true
+
   - name: fileName
     summary: An attribute to store the file name for the specified URL. 
     description: |
         If the file name is not given, the original file name from URL is used.
     type: String
     optional: true
+
   - name: state
     summary: Gets the download state of an operation for current downloadRequest object
     type: String
+    permission: read-only
+
   - name: MIMEtype
     summary: |
         Returns a valid MIME type of the downloaded file when the download operation has been 
         started and successfully retrieved the file header.
     type: String
+    permission: read-only
 
 ---
 name: DownloadCallback
