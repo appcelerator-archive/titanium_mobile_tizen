@@ -47,5 +47,5 @@ events:
     properties:
       - name: message
         summary: The received message.
-        type: <Modules.Tizen.NFC.NDEFMessage>
+        type: Modules.Tizen.NFC.NDEFMessage
         

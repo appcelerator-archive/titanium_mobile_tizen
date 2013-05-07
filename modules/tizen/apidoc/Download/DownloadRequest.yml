@@ -86,7 +86,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Modules.Tizen.Download.DownloadRequest>
+        type: Modules.Tizen.Download.DownloadRequest
       - name: receivedSize
         summary: The size of data received in bytes.
         type: Number
@@ -100,7 +100,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Modules.Tizen.Download.DownloadRequest>
+        type: Modules.Tizen.Download.DownloadRequest
   - name: onCancel
     summary: |
         Called when download is canceled by the 
@@ -108,7 +108,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Modules.Tizen.Download.DownloadRequest>
+        type: Modules.Tizen.Download.DownloadRequest
   - name: onLoad
     summary: Called when the download operation is completed with the final full path.
     description: |
@@ -117,7 +117,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Modules.Tizen.Download.DownloadRequest>
+        type: Modules.Tizen.Download.DownloadRequest
       - name: fullPath
         summary: The final full path for the downloaded file.
         type: String
@@ -126,7 +126,7 @@ methods:
     parameters:
       - name: downloadRequest
         summary: Current started download operation.
-        type: <Modules.Tizen.Download.DownloadRequest>
+        type: Modules.Tizen.Download.DownloadRequest
       - name: error
         summary: The reason for the download failure.
         type: Callback<Modules.Tizen.WebAPIError>

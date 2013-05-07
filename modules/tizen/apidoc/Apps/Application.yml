@@ -21,7 +21,7 @@ methods:
         In all of these cases, the application is responsible for checking the contents of the 
         application control and responding appropriately when it is launched.
     returns: 
-      - type: <Modules.Tizen.Apps.RequestedApplicationControl>
+      - type: Modules.Tizen.Apps.RequestedApplicationControl
         summary: The details of an requested application control
 
 properties:
