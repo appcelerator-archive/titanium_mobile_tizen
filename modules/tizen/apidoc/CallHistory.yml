@@ -24,11 +24,12 @@ methods:
             This is a callback interface of CallHistory operations. 
         type: Callback<CallHistoryFindResponse>
       - name: filter
-        summary: A filter defined on CallHistoryEntry attributes. It can be a composite filter.
-        description: |
-            AbstractFilter is a common interface used by different types of object filters. 
-            Never use this base interface directly, instead use AbstractFilter subtypes, such as 
-            AttributeFilter, AttributeRangeFilter, and CompositeFilter. 
+        summary: |
+            A filter defined on [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry)
+            attributes. Use [AbstractFilter](Modules.Tizen.AbstractFilter) subtypes, such as 
+            [AttributeFilter](Modules.Tizen.AttributeRangeFilter), 
+            [AttributeRangeFilter](Modules.Tizen.AttributeRangeFilter), and 
+            [CompositeFilter](Modules.Tizen.CompositeFilter).
         optional: true
         type: Modules.Tizen.AbstractFilter
       - name: sortMode
@@ -42,8 +43,8 @@ methods:
         optional: true
         type: Number
       - name: offset
-        summary: The offset in the result set, from where the results are listed 
-        description: |
+        summary: |
+            The offset in the result set, from where the results are listed.
             (It has the same semantics as SQL OFFSET). The number of results listed is maximum the 
             specified limit parameter. Defaults to 0, meaning no offset.
         optional: true
@@ -60,7 +61,7 @@ methods:
     parameters:
       - name: entry
         summary: Call history entry to be deleted. 
-        type: CallHistoryEntry
+        type: Modules.Tizen.CallHistory.CallHistoryEntry
 
   - name: removeBatch
     summary: Removes a list of call history entries asynchronously by deleting them. 
@@ -73,7 +74,7 @@ methods:
     parameters: 
       - name: entries
         summary: A list of call history entries to delete. 
-        type: Array<CallHistoryEntry>
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
       - name: callback
         summary: A generic success handler.
         optional: true
@@ -106,9 +107,9 @@ events:
     properties:
       - name: items
         summary: |
-            An array of CallHistoryEntry objects, representing the new items added to call 
-            history.
-        type: Array<CallHistoryEntry>
+            An array of [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry) objects, 
+            representing the new items added to call history.
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
   - name: itemschanged
     summary: Fires when the call history items have been changed.
     description: |
@@ -119,8 +120,10 @@ events:
         
     properties:
       - name: items
-        summary: An array of CallHistoryEntry objects, representing the changed items in call history.
-        type: Array<CallHistoryEntry>
+        summary: |
+            An array of [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry) objects, 
+            representing the changed items in call history.
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
 
 examples:
   - title: Become aware of call-related events.

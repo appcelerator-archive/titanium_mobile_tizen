@@ -45,8 +45,8 @@ properties:
     
   - name: entries
     summary: |
-        An array of CallHistoryEntry objects, representing the result set of the query over the call 
-        history.
+        An array of [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry) objects, 
+        representing the result set of the query over the call history.
     description: Will be undefined if `success` is `false`.
-    type: Array<CallHistoryEntry>
+    type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
 
