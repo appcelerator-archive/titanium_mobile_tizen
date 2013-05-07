@@ -25,7 +25,8 @@ properties:
 
   - name: period
     summary: |
-        An attribute to stores the duration (in seconds) between each trigger of an alarm. 
+        (optional) An attribute to stores the duration (in seconds) between each trigger 
+        of an alarm.
     description: |
         By default, this attribute is set to null, indicating that this alarm does not repeat.
     type: Number

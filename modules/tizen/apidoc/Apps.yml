@@ -119,7 +119,7 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.. 
         type: Callback<FindAppControlResponse>
- 
+
   - name: getAppsContext
     summary: |
         Gets a list of application contexts for applications that are currently running on a device.
@@ -161,6 +161,7 @@ methods:
             A string representing an application context ID. If the ID is not provided, the 
             application context of the calling application will be returned.
         type: String
+        optional: true
 
   - name: getAppsInfo
     summary: Gets the list of installed application's information on a device.
@@ -177,8 +178,8 @@ methods:
       - name: callback
         summary: The method to call when the invocation ends successfully.
         type: Callback<AppsInfoResponse>
- 
-  - name: getAppInfo
+
+ - name: getAppInfo
     summary: Gets application information for a specified application ID.  
     description: |
         If the ID is set to null or not set at all, it returns application information for the 

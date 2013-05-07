@@ -693,7 +693,7 @@ properties:
 
   - name: ruleInitDict
     summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
-    type: Dictionary<CalendarRecurrenceRuleInitDict>
+    type: CalendarRecurrenceRuleInitDict
 
 ---
 name: CalendarRecurrenceRuleInitDict

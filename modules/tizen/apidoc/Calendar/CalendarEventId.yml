@@ -24,7 +24,7 @@ properties:
   - name: rid
     type: String
     summary: |
-        An attribute to store the recurrence ID of a CalendarEvent instance.
+        (optional) An attribute to store the recurrence ID of a CalendarEvent instance.
     description: |
         This attribute is used in conjunction with the `uid` property to identify 
         a specific instance of a recurring event.

@@ -115,7 +115,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<GetDeviceResponse>
-        optional: true
 
   - name: createBonding
     summary: Initiates the bonding process with a remote device.  
@@ -139,7 +138,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<CreateBondingResponse>
-        optional: true
 
   - name: destroyBonding
     summary: Destroys bonding with a remote device.   
@@ -159,7 +157,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
-        optional: true
  
   - name: registerRFCOMMServiceByUUID
     summary: Registers a service for other devices to consume.    
@@ -197,7 +194,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<RegisterRFCOMMServiceByUUIDResponse>
-        optional: true
  
 events:
   - name: discoverystarted

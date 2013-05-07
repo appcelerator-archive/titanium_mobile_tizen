@@ -15,17 +15,17 @@ properties:
     type: String
 
   - name: uri
-    summary: An attribute to store the URI needed by application control.  
+    summary: (optional) An attribute to store the URI needed by application control.  
     type: String
 
   - name: mime
-    summary: An attribute to store the MIME type of a content. 
+    summary: (optional) An attribute to store the MIME type of a content. 
     type: String
 
   - name: category
-    summary: An attribute to store the category of the application to be launched.   
+    summary: (optional) An attribute to store the category of the application to be launched.   
     type: Boolean
 
   - name: data
-    summary: An array of attributes to store the data needed for an application control.  
+    summary: (optional) An array of attributes to store the data needed for an application control.  
     type: Array<Modules.Tizen.Apps.ApplicationControlData>
