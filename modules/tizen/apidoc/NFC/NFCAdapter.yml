@@ -30,7 +30,8 @@ methods:
             Function called when NFC adapter is enabled or disabled successfully or when an error 
             has occurred.
         type: Callback<ErrorResponse>
-  
+        optional: true
+
   - name: setTagListener
     summary: Registers a callback function to invoke when an NFC tag is detected.
     description: |

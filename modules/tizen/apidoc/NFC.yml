@@ -307,7 +307,7 @@ properties:
     summary: The record payload.
     type: Array<Number>
   - name: id
-    summary: The record ID.
+    summary: (optional) The record ID.
     type: Array<Number>
     optional: true
 

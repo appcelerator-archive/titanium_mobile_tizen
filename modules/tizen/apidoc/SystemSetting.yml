@@ -36,7 +36,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>
-        optional: true
         
   - name: getProperty
     summary: Gets the setting of the device
@@ -49,7 +48,6 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<SystemSettingResponse>
-        optional: true
     
 properties:
 

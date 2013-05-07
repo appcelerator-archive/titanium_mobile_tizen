@@ -111,7 +111,6 @@ methods:
       - name: callback  
         summary: Invoked in case of successfully transceiving the raw data or if any error occured.
         type: Callback<TransceiveResponse>
-        optional: true
 
 # Pseudo-type
 ---

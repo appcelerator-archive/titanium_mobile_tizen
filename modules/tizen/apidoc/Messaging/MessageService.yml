@@ -91,7 +91,7 @@ methods:
       - type: Number
         summary: Identifier which can be used to stop this service operation. 
     parameters: 
-      - name: allback
+      - name: callback
         summary:  To be invoked if all the actions are completed successfully
         type: Callback<ErrorResponse>
         optional: true
