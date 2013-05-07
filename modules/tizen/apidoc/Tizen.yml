@@ -169,9 +169,9 @@ properties:
         <Modules.Tizen.FILTER_MATCH_FLAG_CONTAINS>, <Modules.Tizen.FILTER_MATCH_FLAG_STARTSWITH>, 
         <Modules.Tizen.FILTER_MATCH_FLAG_ENDSWITH>, 
         <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>.
-    optional: ture
+    optional: true
   - name: matchValue
-    type: any
+    type: [String, Number, Date, Object]
     summary: (optional) The value used for matching. 
     description: |
         The filter will match if the attribute value matches the given matchValue. This value is not 
@@ -193,13 +193,13 @@ properties:
         
         For attributes of an array type, the filter will match if any value in the array matches.
   - name: initialValue
-    type: any
+    type: [String, Number, Date, Object]
     summary: |
         (optional) Objects with an attribute that is greater than or equal to initialValue will match.
     description: By default, this attribute is set to null.
     optional: true
   - name: endValue
-    type: any
+    type: [String, Number, Date, Object]
     summary: (optional) Objects with an attribute that is strictly lower than to endValue will match.
     description: By default, this attribute is set to null.
     optional: true
@@ -217,7 +217,7 @@ properties:
         - <Modules.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION>.
         
   - name: filters
-    type: Array<AbstractFilter>
+    type: Array<Modules.Tizen.AbstractFilter>
     summary: (optional) The list of filters in the composite filter.
     optional: true
     
