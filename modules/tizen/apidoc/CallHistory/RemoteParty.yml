@@ -11,11 +11,14 @@ properties:
         RPID can be resolved to a Contact. A null value means that the remote is hidden (private 
         number).
     type: String
+    permission: read-only
+
   - name: personId
     summary: An attribute to store the identifier of the person that the raw contact belongs to. 
     description: |
         If the contact cannot be resolved, the value is null. See Contact API for more information.
     type: String
+    permission: read-only
 
 ---
 name: CallHistoryFindResponse
