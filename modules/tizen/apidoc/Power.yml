@@ -24,18 +24,14 @@ methods:
     parameters:
       - name: resource
         summary: |
-            The power resource for which the request is made.
-        description: |
-            The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, 
-            <Modules.Tizen.Power.POWER_RESOURCE_CPU>
+            The power resource for which the request is made. The supported request types are: 
+            <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, 
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>.
         type: String
       - name: state
         summary: |
-            The minimal power state in which the power resource is desired to be. 
-        description: |
-            The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, 
+            The minimal power state in which the power resource is desired to be. The supported 
+            request types are: <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, 
             <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, 
             <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, 
             <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, 
@@ -47,11 +43,9 @@ methods:
     parameters:
       - name: resource
         summary: |
-            The power resource for which the request is made.
-        description: |
-            The value is one of the constants defined for this type. 
-            The supported request types are: <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>,
-            <Modules.Tizen.Power.POWER_RESOURCE_CPU>
+            The power resource for which the request is made. The supported request types are: 
+            <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>,
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>.
         type: String
 
   - name: isScreenOn

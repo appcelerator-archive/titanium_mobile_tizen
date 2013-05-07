@@ -192,7 +192,7 @@ properties:
     summary: Holds whether to use vibration when the notification is shown.
 
   - name: appControl
-    type: Modules.Tizen.Aplication.ApplicationControl
+    type: Modules.Tizen.Apps.ApplicationControl
     summary: |
         Holds the application control to launch when the notification is selected from the 
         notification tray.

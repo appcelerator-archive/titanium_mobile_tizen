@@ -11,4 +11,3 @@ methods:
     summary: This method returns the array of storage units connected to this device.
     returns:
         type: Array<Modules.Tizen.SystemInfo.SystemInfoStorageUnit>
-    permission: read-only

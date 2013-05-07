@@ -32,7 +32,7 @@ properties:
    summary: |
        Holds the application control to launch when the notification is selected from the 
        notification tray.
-   type: Modules.Tizen.ApplicationControl 
+   type: Modules.Tizen.Apps.ApplicationControl
    
  - name: appId  
    summary: |
