@@ -1,6 +1,8 @@
 define(['Ti/_/declare', 'Ti/Blob', 'Ti/Media'],
 	function(declare, Blob, Media) {
-		var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*'),
+		//TODO: From the next release (Tizen 2.1.0), this additional data will not be needed.
+		var additionalData = [new tizen.ApplicationControlData("selectionMode", ["single"])],
+			service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*', null, additionalData),
 			photoExt = ['jpg', 'gif', 'png', 'svg'],
 			videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 			imgMimeType = {
@@ -85,6 +87,7 @@ define(['Ti/_/declare', 'Ti/Blob', 'Ti/Media'],
 						//Something went wrong
 						onfailure:function() {console.error('Something went wrong')}
 					};
+
 
 				function readFromStream(fileStream) {
 					var contents = fileStream.readBase64(fileStream.bytesAvailable),
