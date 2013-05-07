@@ -37,7 +37,7 @@ methods:
     summary: Launches an application with the given application ID.
     description: |
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
-        Titanium application:....................................................................................................
+        Titanium application:
 
         * `http://tizen.org/privilege/application.launch`
         
@@ -179,7 +179,7 @@ methods:
         summary: The method to call when the invocation ends successfully.
         type: Callback<AppsInfoResponse>
 
- - name: getAppInfo
+  - name: getAppInfo
     summary: Gets application information for a specified application ID.  
     description: |
         If the ID is set to null or not set at all, it returns application information for the 
