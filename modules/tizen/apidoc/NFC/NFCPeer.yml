@@ -2,7 +2,7 @@ name: Modules.Tizen.NFC.NFCPeer
 summary: |
   Accesses to the NFC peer-to-peer target.
 extends: Titanium.Proxy
-
+createable: false
 properties:
 
   - name: isConnected

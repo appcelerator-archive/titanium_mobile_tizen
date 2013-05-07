@@ -3,6 +3,7 @@ name: Modules.Tizen.CallHistory.CallHistoryEntry
 summary: |
     This interface represents the subset of properties of calls, which become a call record in the 
     call history after the call ends.
+createable: false
 properties:
   - name: uid
     summary: An attribute to store The unique identifier of a call record. 

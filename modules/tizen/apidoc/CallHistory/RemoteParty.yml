@@ -2,6 +2,7 @@
 name: Modules.Tizen.CallHistory.RemoteParty
 summary: This interface represents remote parties.
 platforms: [tizen]
+createable: false
 properties:
   - name: remoteParty
     summary: An attribute to store the RPID. 

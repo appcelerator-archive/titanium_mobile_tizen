@@ -6,7 +6,6 @@ description: |
     applications. If the system gets the application control request, it finds the corresponding 
     application to be launched with the delivered application control and launches the selected 
     application. 
-createable: false
 properties:
   - name: operation
     summary: | 

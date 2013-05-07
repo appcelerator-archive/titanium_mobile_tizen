@@ -3,7 +3,7 @@ name: Modules.Tizen.Messaging.MessageBody
 summary: Describes a message body. 
 description: Message body is comprised of a plain text part, an HTML part, and inline attachments. 
 extends: Titanium.Proxy
-
+createable: false
 properties:
   - name: messageId
     summary: |

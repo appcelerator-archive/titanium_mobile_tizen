@@ -12,6 +12,7 @@ description: |
     [replyResult](Modules.Tizen.Apps.RequestedApplicationControl.replyResult) 
     method after performing the required action requested the calling application.
 extends: Titanium.Proxy
+createable: false
 methods:
   - name: replyResult
     summary: Sends the results to the caller application. 

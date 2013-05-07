@@ -3,7 +3,6 @@ name: Modules.Tizen.Apps.ApplicationControlData
 summary: |
     This object defines a key/value pair used to pass data between applications through the 
     <Modules.Tizen.Apps.ApplicationControl> interface.
-createable: false
 properties:
   - name: key
     summary: An attribute to store the name of a key. 

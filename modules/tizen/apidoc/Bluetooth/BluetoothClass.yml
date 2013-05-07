@@ -21,6 +21,7 @@ description: |
     functionality or characteristics of any application, based solely on the assignment of a major 
     or minor device class.
 extends: Titanium.Proxy
+createable: false
 methods:
 
   - name: hasService

@@ -15,6 +15,7 @@ description: |
     [stopDiscovery](Modules.Tizen.Bluetooth.BluetoothAdapter.stopDiscovery)
     method as soon as you no longer need the discovery process.
 extends: Titanium.Proxy
+createable: false
 methods:
 
   - name: setName

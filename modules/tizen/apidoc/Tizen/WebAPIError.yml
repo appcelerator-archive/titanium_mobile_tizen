@@ -5,7 +5,7 @@ description: |
     This interface will be used by the APIs in order to return them in the error callback of 
     asynchronous methods. 
 extends: Titanium.Proxy
-
+createable: false
 properties: 
   - name: code
     summary: 16-bit error code. 

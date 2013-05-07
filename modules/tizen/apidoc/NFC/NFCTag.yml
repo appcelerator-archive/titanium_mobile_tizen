@@ -2,7 +2,7 @@ name: Modules.Tizen.NFC.NFCTag
 summary: |
   Accesses to the NFC tag.
 extends: Titanium.Proxy
-
+createable: false
 properties:
 
   - name: type

@@ -11,6 +11,7 @@ description: |
     - [createBonding](Modules.Tizen.Bluetooth.BluetoothAdapter.createBonding)
 
 extends: Titanium.Proxy
+createable: false
 methods:
 
   - name: connectToServiceByUUID

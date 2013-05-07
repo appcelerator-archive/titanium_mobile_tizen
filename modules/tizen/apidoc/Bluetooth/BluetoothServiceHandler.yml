@@ -2,6 +2,7 @@
 name: Modules.Tizen.Bluetooth.BluetoothServiceHandler
 summary: The Bluetooth service interface. 
 extends: Titanium.Proxy
+createable: false
 methods:
 
   - name: unregister

@@ -6,6 +6,7 @@ description: |
     [connectToServiceByUUID](Modules.Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) or 
     [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID).
 extends: Titanium.Proxy
+createable: false
 methods:
 
   - name: writeData
