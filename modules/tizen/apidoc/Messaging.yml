@@ -15,9 +15,8 @@ methods:
     parameters: 
       - name: messageServiceType
         summary: |
-            Type of the services to be retrieved. 
-        description: |
-            Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            Type of the services to be retrieved. Can be one of this constants: 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
             <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
             <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
         type: String
@@ -147,7 +146,7 @@ properties:
 
   - name: options
     summary: (optional) Provides specifying message attributes upon message creation.
-    type: messageInitDict
+    type: MessageInitDict
     optional: true
 
 ---

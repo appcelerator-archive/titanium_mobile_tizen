@@ -49,9 +49,8 @@ methods:
         type: NFCTagDetectCallback
 
       - name: tagFilter 
-        summary: Filter to be used when specific NFC tag is detected.
-        description: |
-            Valid values are:
+        summary: |
+            Filter to be used when specific NFC tag is detected. Valid values are:
 
             - <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
             - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
@@ -120,6 +119,7 @@ events:
         
 ---
 name: NFCTagDetectCallback
+summary: Object containing callbacks to be invoked when a tag is attached or detached.
 methods:
   - name: onattach
     summary: The method invoked when a tag is attached.
