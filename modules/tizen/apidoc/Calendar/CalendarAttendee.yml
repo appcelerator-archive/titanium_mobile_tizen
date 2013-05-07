@@ -95,4 +95,4 @@ properties:
         An attribute to store the participant's reference in the Contact API.
     description: |
         If the contact is not resolved, this attribute will be set to null. 
-    type: Modules.Tizen.Contacts.ContactsRef
+    type: Modules.Tizen.ContactRef

@@ -35,7 +35,7 @@ methods:
     parameters:
       - name: id
         summary:  The Calendar item identifier.
-        type: CalendarEventId
+        type: Modules.Tizen.Calendar.CalendarEventId
         
   - name: add
     summary: Adds an item to the calendar synchronously.
@@ -157,7 +157,7 @@ methods:
     parameters:
       - name: id
         summary:  The identifier (ID attribute) of the item object to delete.
-        type: CalendarEventId
+        type: Modules.Tizen.Calendar.CalendarEventId
 
   - name: removeBatch
     summary: |
@@ -177,7 +177,7 @@ methods:
     parameters:
       - name: ids
         summary: The identifiers (id attribute) of the items to delete
-        type: Array<CalendarEventId>
+        type: Array<Modules.Tizen.Calendar.CalendarEventId>
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<ErrorResponse>

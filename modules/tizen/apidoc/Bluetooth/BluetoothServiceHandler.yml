@@ -26,6 +26,7 @@ events:
     summary: The callback to be invoked when a remote device connected to this service.
     properties:
       - name: socket
+        summary: The socket object that can be used for communication with the connected device.
         type: Modules.Tizen.Bluetooth.BluetoothSocket
             
 properties:

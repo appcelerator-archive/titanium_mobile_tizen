@@ -27,7 +27,7 @@ methods:
 properties:
   - name: appInfo
     summary: An attribute to store the application information for the current application. 
-    type: <Modules.Tizen.Apps.ApplicationInformation>
+    type: Modules.Tizen.Apps.ApplicationInformation
     permission: read-only
 
   - name: contextId

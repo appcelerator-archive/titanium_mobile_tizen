@@ -46,13 +46,8 @@ methods:
     parameters:
       - name: type
         summary:  |
-            The type of calendar.
-        description: |
-            Supported values:
-
-            - <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT>
-            - <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>
-
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> and
+            <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.            
         type: String
       - name: callback
         summary: Function to invoke on success or failure.
@@ -72,9 +67,7 @@ methods:
     parameters:
       - name: type
         summary: |
-            The type of calendar.
-        description: |
-            Can be <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or
             <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
         type: String
           
@@ -92,9 +85,7 @@ methods:
     parameters:
       - name: type
         summary: |
-            The type of calendar.
-        description: |
-            Can be <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or 
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or 
             <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
         type: String
       - name: id
@@ -107,6 +98,9 @@ methods:
         type: Modules.Tizen.Calendar.CalendarTask       
     parameters:
       - name: taskParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            types of this argument for more details.
         type: [Dictionary<Modules.Tizen.Calendar.CalendarTask>, RepresentationInit]
   
   - name: createCalendarEvent
@@ -115,6 +109,9 @@ methods:
         type: Modules.Tizen.Calendar.CalendarEvent       
     parameters:
       - name: eventParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
         type: [CalendarEventInit, RepresentationInit]
  
   - name: createCalendarAttendee
@@ -123,6 +120,9 @@ methods:
         type: Modules.Tizen.Calendar.CalendarAttendee
     parameters:
       - name: attendeeParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
         type: CalendarAttendeeInit
                 
   - name: createCalendarRecurrenceRule
@@ -131,6 +131,9 @@ methods:
         type: Modules.Tizen.Calendar.CalendarRecurrenceRule
     parameters:
       - name: recurrenceRuleParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
         type: CalendarRecurrenceRuleInit
                 
   - name: createCalendarAlarm
@@ -139,6 +142,9 @@ methods:
         type: Modules.Tizen.Calendar.CalendarAlarm
     parameters:
       - name: alarmParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
         type: [CalendarAlarmInitWithDate, CalendarAlarmInitWithDuration]
         
 properties:
@@ -272,6 +278,7 @@ properties:
     
   - name: ATTENDEE_TYPE_UNKNOWN
     summary: UNKNOWN - Unknown
+    type: String
     permission: read-only    
 
   - name: ATTENDEE_STATUS_PENDING
@@ -661,7 +668,8 @@ properties:
         An attribute to store the participant's reference in the Contact API.
     description: |
         If the contact is not resolved, this attribute will be set to null. 
-    type: Modules.Tizen.Contacts.ContactsRef
+    type: Modules.Tizen.ContactRef
+    
 ---
 name: CalendarRecurrenceRuleInit
 summary: | 

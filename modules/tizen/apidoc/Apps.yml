@@ -11,6 +11,9 @@ methods:
         type: Modules.Tizen.Apps.ApplicationControl
     parameters:
       - name: args
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details.
         type: Dictionary<Modules.Tizen.Apps.ApplicationControl>
 
   - name: createApplicationControlData
@@ -19,6 +22,9 @@ methods:
         type: Modules.Tizen.Apps.ApplicationControlData
     parameters:
       - name: args
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details.
         type: Dictionary<Modules.Tizen.Apps.ApplicationControlData>
 
   - name: getCurrentApplication
@@ -152,10 +158,8 @@ methods:
     parameters: 
       - name: contextId
         summary: |
-            A string representing an application context ID. 
-        description: |
-            If the ID is not provided, the application context of the calling application will be 
-            returned.
+            A string representing an application context ID. If the ID is not provided, the 
+            application context of the calling application will be returned.
         type: String
 
   - name: getAppsInfo
