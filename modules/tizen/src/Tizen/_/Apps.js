@@ -198,6 +198,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 				} else {
 					console.error('Constructor with such parameters not found for ApplicationControl.');
 				}
+			},
+
+			getAppSharedURI: function(id) {
+				return tizen.application.getAppSharedURI(id);
 			}
 		}, true);
 
