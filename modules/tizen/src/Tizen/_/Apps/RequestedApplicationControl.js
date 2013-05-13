@@ -30,6 +30,12 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 						data: a.data,
 						_obj: new tizen.ApplicationControl(a.operation, a.uri, a.mime, a.category, a.data)
 					};
+				}					
+			},
+
+			callerAppId: {
+				get: function() {
+					return this._obj.callerAppId;
 				}
 			}
 		}
