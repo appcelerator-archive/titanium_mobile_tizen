@@ -8,14 +8,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		constructor: function(nativeObj) {
 			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 			this._obj = nativeObj;
-			this.constants.__values__.appControl = {
-				key: this._obj.appControl.key,
-				value: this._obj.appControl.value
-			};
 		},
 
-		replyResult: function() {
-			this._obj.replyResult(new tizen.ApplicationControlData(this.constants.__values__.appControl.key, this.constants.__values__.appControl.value));
+		replyResult: function(data) {
+			this._obj.replyResult(data);
 		},
 
 		replyFailure: function() {
@@ -23,7 +19,19 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 		constants: {
-			appControl: {}
+			appControl: {
+				get: function() {
+					var a = this._obj.appControl;
+					return {
+						operation: a.operation,
+						uri: a.uri,
+						mime: a.mime,
+						category: a.category,
+						data: a.data,
+						_obj: new tizen.ApplicationControl(a.operation, a.uri, a.mime, a.category, a.data)
+					};
+				}
+			}
 		}
 
 	});
