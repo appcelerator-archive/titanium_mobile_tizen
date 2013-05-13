@@ -345,11 +345,11 @@ function build(logger, config, cli, finished) {
 						});
 					}, function (next) {
 						appc.zip.zip(
-							null,
-							path.join(this.buildDir, 'tizenapp.wgt'),
-							this.buildDir,
-							function () {
-								next(null, 'ok');
+								this.buildDir,
+								path.join(this.buildDir, 'tizenapp.wgt'),
+								{ basePath : this.buildDir},
+								function(desc) {
+									next(null, 'ok');
 							});
 					}
 					], function (err) {
