@@ -35,6 +35,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarInstance', 'Tizen
 				);
 			},
 
+			getUnifiedCalendar: function(type /*CalendarType*/) {
+				return new CalendarInstance(tizen.calendar.getUnifiedCalendar(type));
+			},
+
 			getDefaultCalendar: function(type /*CalendarType*/) {
 				return new CalendarInstance(tizen.calendar.getDefaultCalendar(type));
 			},

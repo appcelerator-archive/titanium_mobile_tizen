@@ -29,6 +29,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 				get: function() {
 					return this._obj.lastModificationDate;
 				}
+			},
+			calendarId: {
+				get: function() {
+					return this._obj.calendarId;
+				}
 			}
 		},
 
