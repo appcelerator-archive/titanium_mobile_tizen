@@ -1,5 +1,5 @@
 define(function() {
-
+	
 	var photoExt = ['jpg', 'gif', 'png', 'svg'],
 		videoExt = ['mp4', 'mov', 'flv', 'wmv', 'avi', 'ogg', 'ogv'],
 		imgMimeType = {
@@ -9,7 +9,30 @@ define(function() {
 			'svg': 'image/svg+xml'
 		};
 
-	return {
+	function _getValueByKey(arr, key) {
+		var i = 0,
+			len = arr.length,
+			path;
+
+		for (; i < len; i++) {
+			if (arr[i].key == key) {
+				path = arr[i].value[0];
+			}
+		}
+
+		if(!path) {
+			console.error('Can\'t find path to selected item');
+		} else {
+			return path;
+		}
+	}
+
+	function _getFileExt(path) {
+		return path.substring(path.lastIndexOf('.') + 1);
+	}
+
+
+	var virtualRootResolver = {
 		PHOTO: 1,
 		VIDEO: 2,
 		UNKNOWN: 3,
@@ -29,7 +52,7 @@ define(function() {
 		// Our method to get a virtual root from a fully qualified file name is
 		// to simply remove the '/opt/usr/media/' part from the file name.
 
-		_removePrefix: function(path) {
+		removePrefix: function(path) {
 			var nP;
 			if (path.indexOf(this.prefix) === 0) {
 				nP = path.replace(this.prefix, '');
@@ -39,16 +62,10 @@ define(function() {
 			return nP;
 		},
 
-		_fileName: function(path) {
-			return path.substring(path.lastIndexOf('/') + 1);
-		},
-
-		_fileExt: function(path) {
-			return path.substring(path.lastIndexOf('.') + 1);
-		},
-
-		_getRoot: function(path) {
-			var noP = this._removePrefix(path).toLowerCase(), d = noP.substring(0, noP.indexOf('/'));
+		//String - Tizen's virtual root ('images', 'videos' ....)
+		getRoot: function(path) {
+			var noP = this.removePrefix(path).toLowerCase(),
+				d = noP.substring(0, noP.indexOf('/'));
 
 			if (this.tizenRoots.indexOf(d) !== -1) {
 				return d;
@@ -57,53 +74,52 @@ define(function() {
 			}
 		},
 
-		_getFile: function(path) {
-			if (this._getRoot(path)) {
-				var noP = this._removePrefix(path);
+		getFilePathInVR: function(path) {
+			if (this.getRoot(path)) {
+				var noP = this.removePrefix(path);
 				return noP.substring(noP.indexOf('/'));
 			}
 		},
 
-		_fileType: function(_fileExt) {
+		fileType: function(fileExt) {
 			var type = this.UNKNOWN;
-			if (photoExt.indexOf(_fileExt) !== -1) {
+			if (photoExt.indexOf(fileExt) !== -1) {
 				type = this.PHOTO;
-			} else if (videoExt.indexOf(_fileExt) !== -1) {
+			} else if (videoExt.indexOf(fileExt) !== -1) {
 				type = this.VIDEO;
 			}
 			return type;
-		},
+		}
+	}
 
-		//arguments:
-		// data - Key-value pairs providing additional information for the control request.
+
+	return {
+
+		// Handles Tizen OS callback for item selection, translates the native path of the selected item to
+		// a virtual root-based path, reads the file, and calls Titanium callbacks with the Blob (or an error).
+		//
+		// arguments:
+		// data - Key-value pairs, sent from Tizen OS after selecting a media item,
+		//        providing additional information for the control request.
 		// args - (optional) Simple object for specifying options from user. The following properties are used here:
 		//        success and error
-
-		pickToItemCB: function(data, args) {
+		selectedItemCB: function(data, args) {      // error, success,
 
 			if (!data) {
 				console.error('Error: ApplicationControlData is empty');
 			}
 
-			var self = this,
-				i = 0,
-				len = data.length,
-				file,
-				path,
-				Media = require('Ti/Media');
-
-			for (; i < len; i++) {
-				if (data[i].key == this.selectedKey) {
-					path = data[i].value[0];
-				}
-			}
+			var path = _getValueByKey(data, virtualRootResolver.selectedKey),
+				Media = require('Ti/Media'),
+				ext = _getFileExt(path),
+				fileType = virtualRootResolver.fileType(ext);
 
 			function readFromStream(fileStream) {
 				var contents = fileStream.readBase64(fileStream.bytesAvailable),
 					blob = new (require('Ti/Blob'))({
 						data: contents,
 						length: contents.length,
-						mimeType: imgMimeType[self._fileExt(path)] || 'text/plain',
+						mimeType: imgMimeType[ext] || 'text/plain',
 						// we cannot return a Titanium.Filesystem.File here, because the file is not in the HTML5
 						// local storage and therefore not accessible to Titanium Filesystem
 						file: null,
@@ -116,11 +132,11 @@ define(function() {
 					};
 				fileStream.close();
 				args && args.success && args.success(event);
-			};
+			}
 
 			function resolveFileCB(dir) {
 				//Resolve to file
-				file = dir.resolve(self._getFile(path));
+				var file = dir.resolve(virtualRootResolver.getFilePathInVR(path));
 				file.openStream(
 					// open for reading
 					'r',
@@ -128,21 +144,30 @@ define(function() {
 					readFromStream,
 					// error callback
 					function(e) {
-						console.error('Error with open stream' + e.message)
+						args && args.error && args.error({
+							code: -1,
+							error: e.message,
+							success: false
+						});
+						console.error('Error with open stream' + e.message);
 					}
 				);
-			};
+			}
 
-			if (this._fileType(this._fileExt(path)) === this.PHOTO) {
+			if (fileType === virtualRootResolver.PHOTO) {
 				// Resolve to directory
 				tizen.filesystem.resolve(
-					self._getRoot(path),
+					virtualRootResolver.getRoot(path),
 					resolveFileCB,
 					function(e) {
-						console.error('Error: ' + e.message);
+						args && args.error && args.error({
+							code: -1,
+							error: e.message,
+							success: false
+						});
 					}, 'rw');
 
-			} else if (this._fileType(this._fileExt(path)) === this.VIDEO) {
+			} else if (fileType === virtualRootResolver.VIDEO) {
 				var event = {
 					cropRect: null,
 					media: path, // For video files we return only 'path'
@@ -150,7 +175,12 @@ define(function() {
 				}
 				args && args.success && args.success(event);
 			} else {
-				console.error('This format of file is not supported');
+				args && args.error && args.error({
+					code: -1,
+					error: 'This format ' + ext + ' of file is not supported',
+					success: false
+				});
+				console.error('This format ' + ext + ' of file is not supported');
 			}
 		}
 	};
