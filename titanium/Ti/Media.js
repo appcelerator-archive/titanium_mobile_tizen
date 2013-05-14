@@ -1,9 +1,8 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'],
-	function(Evented, lang, Blob, h2c, Sound, AudioPlayer) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/_/Media/virtualRoot'],
+	function(Evented, lang, Blob, h2c, Sound, AudioPlayer, virtualRoot) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
-
 
 	return lang.setObject('Ti.Media', Evented, {
 
@@ -161,28 +160,29 @@ define(
 			h2c([document.body], options);
 		},
 
-		showCamera: function() {
+		showCamera: function(args) {
 			if (!this.isCameraSupported) return;
 
 			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null);
 
-			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app',
-				function(){
+			tizen.application.launchAppControl(
+				appControl,
+				null,
+				function() {
 					// On succeeded
-					console.log('launch service succeeded');
+					console.log('Launch service Camera succeeded');
 				},
-				function(e) {
-					//On Failed
-					console.warn('launch service failed. Reason : ' + e.name);
+				args && args.error ? args.error : function(e) {
+					console.error('Something wrong with launching service - Camera. '+ e.name);
 				},
 				{
-					// callee now sends a reply 
-					onsuccess: function(reply) {
-						console.log('onsuccess:' + reply.key + ';' + reply.value);
+					// callee now sends a reply
+					onsuccess: function(data) {
+						virtualRoot.pickToItemCB(data, args);
 					},
-					// Something went wrong 
-					onfailure: function() {
-						console.warn('launch service failed');
+					//Something went wrong
+					onfailure:function() {
+						console.error('Something went wrong');
 					}
 				}
 			);
