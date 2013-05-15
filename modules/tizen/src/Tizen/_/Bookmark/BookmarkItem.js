@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkFolder'], func
 		constants: {
 			parent: {
 				get: function() {
-					return new BookmarkFolder(this._obj.parent);
+					return this._obj.parent ? new BookmarkFolder(void 0, this._obj.parent) : this._obj.parent;
 				}
 			},
 
@@ -35,6 +35,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkFolder'], func
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	BookmarkItem.prototype.declaredClass = 'Tizen.Bookmark.BookmarkItem';
 	return BookmarkItem;
 });

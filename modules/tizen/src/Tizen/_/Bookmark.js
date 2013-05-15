@@ -14,9 +14,9 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkItem', 'Tizen/_/B
 					length = bookmarks && bookmarks.length;
 				for (; i < length; i++) {
 					if (bookmarks[i] instanceof tizen.BookmarkItem) {
-						result.push(new BookmarkItem(bookmarks[i]));
+						result.push(new BookmarkItem(void 0, bookmarks[i]));
 					} else if (bookmarks[i] instanceof tizen.BookmarkFolder) {
-						result.push(new BookmarkFolder(bookmarks[i]));
+						result.push(new BookmarkFolder(void 0, bookmarks[i]));
 					}
 				}
 

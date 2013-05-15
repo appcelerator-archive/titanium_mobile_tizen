@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		constants: {
 			parent: {
 				get: function() {
-					return new BookmarkFolder(this._obj.parent);
+					return this._obj.parent ? new BookmarkFolder(void 0, this._obj.parent) : this._obj.parent;
 				}
 			},
 
@@ -29,6 +29,8 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	});
 
+	// Initialize declaredClass, so that toString() works properly on such objects.
+	// Correct operation of toString() is required for proper wrapping and automated testing.
 	BookmarkFolder.prototype.declaredClass = 'Tizen.Bookmark.BookmarkFolder';
 	return BookmarkFolder;
 });
