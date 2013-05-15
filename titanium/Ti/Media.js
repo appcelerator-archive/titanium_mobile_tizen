@@ -97,23 +97,22 @@ define(
 			//Open default Tizet music applicatin with ApplicationControl
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null);
 
-			tizen.application.launchAppControl(service, 'org.tizen.music-player',
+			tizen.application.launchAppControl(
+				service,
+				'org.tizen.music-player',
 				function() {
-					console.log('launch service succeeded');
+					args && args.success && args.success();
+					console.log('Launch service Music Player succeeded');
 				},
 				function(e) {
-					console.warn('launch service failed. Reason : ' + e.name);
-				},
-				{
-					// callee now sends a reply
-					onsuccess: function(reply) {
-						console.log('onsuccess:' + reply.key + ';' + reply.value);
-					},
-					// Something went wrong
-					onfailure: function() {
-						console.log('launch service failed');
-					}
-				});
+					args && args.error && args.error({
+						code: -1,
+						error: e.message,
+						success: false
+					});
+					console.error('Something wrong with launching service - Music Player. '+ e.message);
+				}
+			);
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
