@@ -24,12 +24,12 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkItem', 'Tizen/_/B
 			},
 
 			add: function(bookmark /*BookmarkItem or BookmarkFolder*/, parentFolder /*ParentFolder*/) {
-				parentFolder = parentFolder._obj || null;
+				parentFolder = (parentFolder && parentFolder._obj) || null;
 				tizen.bookmark.add(bookmark, parentFolder);
 			},
 
 			remove: function(bookmark /*BookmarkItem or BookmarkFolder*/) {
-				bookmark = bookmark._obj || null;
+				bookmark = (bookmark && bookmark._obj) || null;
 				tizen.bookmark.remove(bookmark);
 			},
 
