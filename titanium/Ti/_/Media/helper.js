@@ -40,7 +40,7 @@ define(function() {
 		removablePrefix: '/opt/usr/storage/sdcard/',
 		removable: 'removable1',
 		selectedKey: 'http://tizen.org/appcontrol/data/selected',
-		tizenRoots: ['images', 'videos', 'downloads', 'documents', 'removable1'],
+		tizenRoots: ['images', 'videos', 'downloads', 'documents', 'removable1', 'camera'],
 
 		// From Tizen's photo gallery or camera we receive the fully qualified file name
 		// (for example, /opt/usr/media/image.jpg). We will need to open the file
