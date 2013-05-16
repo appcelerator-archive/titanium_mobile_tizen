@@ -56,6 +56,13 @@ properties:
     type: CalendarItemId
     permission: read-only
 
+  - name: calendarId
+    summary: |
+        An attribute to identify the calendar in which this item is saved.
+    description: |
+        By default, this attribute is set to null.
+    type: String
+
   - name: lastModificationDate
     summary: |
         An attribute to identify the last modified date and time of an item.
