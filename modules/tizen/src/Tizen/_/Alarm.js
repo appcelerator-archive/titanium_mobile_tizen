@@ -43,7 +43,7 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 			else if (object.toString() === '[object AlarmAbsolute]') {
 				result = new AlarmAbsolute(void 0, object);
 			} else {
-				console.error('Incorrect object type');
+				throw new Error('Object of unknown type');
 			}
 
 			return result;

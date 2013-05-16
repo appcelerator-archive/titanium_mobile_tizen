@@ -25,7 +25,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/MessagePort/LocalMessagePort', 'Ti
 				} else if (object.toString() === '[object RemoteMessagePort]') {
 					return new RemoteMessagePort(object);
 				} else {
-					console.error('Incorrect object type');
+					throw new Error('Object of unknown type');
 				}
 			}
 		}, true);

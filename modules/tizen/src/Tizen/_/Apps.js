@@ -181,7 +181,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						_obj: new tizen.ApplicationControlData(args.key, args.value)
 					};
 				} else {
-					console.error('Constructor with such parameters not found for ApplicationControlData.');
+					throw new Error('Constructor with such parameters not found for ApplicationControlData.');
 				}
 			},
 
@@ -196,12 +196,12 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						_obj: new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data)
 					};
 				} else {
-					console.error('Constructor with such parameters not found for ApplicationControl.');
+					throw new Error('Constructor with such parameters not found for ApplicationControl.');
 				}
 			},
 
 			getAppSharedURI: function(id) {
-				return tizen.application.getAppSharedURI(id);
+					return tizen.application.getAppSharedURI(id);
 			}
 		}, true);
 
