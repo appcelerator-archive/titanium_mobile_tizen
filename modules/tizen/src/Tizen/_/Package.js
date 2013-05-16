@@ -29,6 +29,7 @@ define(['Ti/_/lang', 'Tizen/_/Package/PackageInformation', 'Ti/_/Evented'], func
 						code: 0,
 						success: true,
 						id: id,
+						progress: 100,
 						onprogress: false,
 						oncomplette: true
 					});
