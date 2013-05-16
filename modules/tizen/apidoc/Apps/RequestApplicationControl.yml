@@ -36,3 +36,9 @@ properties:
     type: Modules.Tizen.Apps.ApplicationControl
     permission: read-only
 
+  - name: callerAppId
+    summary: |
+        An attribute to store the caller application's ID.
+    type: String
+    permission: read-only
+

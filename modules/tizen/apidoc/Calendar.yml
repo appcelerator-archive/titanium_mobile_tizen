@@ -53,6 +53,28 @@ methods:
         summary: Function to invoke on success or failure.
         type: Callback<GetCalendarsResponse>
 
+  - name: getUnifiedCalendar
+    summary: Gets the aggregation of all calendars.
+    description: |
+        The unified calendar is the aggregation of all calendars that are obtained from getCalendars 
+        and contains all events or tasks. It does not have the calendar id nor name which are set to 
+        null. 
+        
+        If an item is added to the unified calendar, it will be saved in the default calendar. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/calendar.read`
+        
+    returns:
+        summary: The default Calendar object.
+        type: Modules.Tizen.Calendar.CalendarInstance 
+    parameters:
+      - name: type
+        summary: The unified Calendar object.             
+        type: String
+
   - name: getDefaultCalendar
     summary: Gets the default calendar, which is used for new items.
     description: |

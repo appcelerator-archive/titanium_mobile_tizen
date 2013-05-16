@@ -1,0 +1,154 @@
+---
+name: Modules.Tizen.DataControl.SQLDataControlConsumer
+summary: This interface defines SQL data type operations.
+extends: Titanium.Proxy
+createable: false
+
+methods:
+  - name: insert
+    summary: |
+        Inserts new rows into a table owned by an SQL-type data control provider.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: insertionData
+        summary: The data on columns and values to insert. 
+        type: RowData
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlInsertResponse>
+        optional: true
+
+  - name: update
+    summary: |
+        Updates values of a table owned by an SQL-type data control provider.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: updateData
+        summary: The data on columns and values to update. 
+        type: RowData
+
+      - name: where
+        summary: |
+            A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
+            itself such as `column1 = 'stringValue' AND column2 = numericValue`.
+        type: RowData
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+        optional: true
+
+  - name: remove
+    summary: |
+        Delete rows from a table that is owned by an SQL-type data control provider. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: where
+        summary: |
+            A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
+            itself such as `column1 = 'stringValue' AND column2 = numericValue`.
+        type: RowData
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+        optional: true
+
+  - name: select
+    summary: |
+        Selects the specified columns to be queried.
+    description: |
+        The result set of the specified columns is retrieved from a table owned by an SQL-type data 
+        control provider.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: columns
+        summary: The columns to select.
+        type: Array<String>
+
+      - name: where
+        summary: |
+            A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
+            itself such as `column1 = 'stringValue' AND column2 = numericValue`.
+        type: RowData
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+        optional: true
+
+---
+name: DataControlInsertResponse
+summary: |
+    Simple object returned in the callback from the
+    [insert](Modules.Tizen.DataControl.SQLDataControlConsumer.insert) method.
+extends: DataControlResponse
+properties:
+  - name: insertRowId
+    summary: |
+        The inserted row ID set by the data control provider if the specified providerResult is true, 
+        else -1.
+    description: Will be undefined if `success` is `false`.
+    type: Number
+
+---
+name: DataControlSelectResponse
+summary: |
+    Simple object returned in the callback from the
+    [select](Modules.Tizen.DataControl.SQLDataControlConsumer.select) method.
+extends: DataControlResponse
+properties:
+  - name: rows
+    summary: The resulting rows.
+    description: Will be undefined if `success` is `false`.
+    type: Array<RowData>
+

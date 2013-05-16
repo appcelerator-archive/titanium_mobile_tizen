@@ -202,6 +202,22 @@ methods:
         type: String
         optional: true
  
+  - name: getAppSharedURI
+    summary: Gets URI of read-only shared directory of application for a specified application ID.
+    description: |
+        The shared directory is used to export data to other applications. If the ID is set to null 
+        or not set at all, it returns shared directory URI for the current application.                
+    returns:
+      - type: String
+        summary: The shared directory URI of application.
+    parameters: 
+      - name: id
+        summary: |
+            A string representing application ID. If the ID is not provided, the shared directory 
+            URI of the calling application will be returned.
+        type: String
+        optional: true
+
 events:
   - name: installed
     summary: Fired when an application is installed.

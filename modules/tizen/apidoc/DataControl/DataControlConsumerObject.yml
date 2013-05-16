@@ -1,0 +1,32 @@
+---
+name: Modules.Tizen.DataControl.DataControlConsumerObject
+summary: This interface provides common attributes for other derived `DataControlCunsumerObject`.
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: type
+    summary: An attribute to store the DataType.
+    description: |
+        Valid values are: 
+        [DATA_TYPE_MAP](Modules.Tizen.DataControl.DATA_TYPE_MAP] or 
+        [DATA_TYPE_SQL](Modules.Tizen.DataControl.DATA_TYPE_SQL].
+    type: String
+    permission: read-only
+
+  - name: providerId
+    summary: |
+        An attribute to hold a provider identifier of the application whom it shares the `DataControl`
+        with.
+    description: |
+        This attribute should be known to users who want to interact with application to provide. 
+    type: String
+    permission: read-only
+
+  - name: dataId
+    summary: |
+        The dataId identifies specific data, usually a database table to process(insert, delete, 
+        update).
+    description: The string consists of one or more components, separated by a slash('/').
+    type: String
+    permission: read-only
+
