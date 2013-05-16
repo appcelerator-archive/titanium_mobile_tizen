@@ -1,7 +1,7 @@
 ---
 name: Modules.Tizen.DataControl.MappedDataControlConsumer
 summary: This interface defines MAP data type operations.
-extends: Modules.Tizen.DataControl
+extends: Titanium.Proxy
 createable: false
 
 methods:

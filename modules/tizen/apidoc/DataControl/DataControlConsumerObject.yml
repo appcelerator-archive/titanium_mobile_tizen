@@ -1,7 +1,7 @@
 ---
 name: Modules.Tizen.DataControl.DataControlConsumerObject
 summary: This interface provides common attributes for other derived `DataControlCunsumerObject`.
-extends: Modules.Tizen.DataControl
+extends: Titanium.Proxy
 createable: false
 properties:
   - name: type
@@ -29,3 +29,4 @@ properties:
     description: The string consists of one or more components, separated by a slash('/').
     type: String
     permission: read-only
+

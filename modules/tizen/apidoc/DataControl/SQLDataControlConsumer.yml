@@ -1,7 +1,7 @@
 ---
 name: Modules.Tizen.DataControl.SQLDataControlConsumer
 summary: This interface defines SQL data type operations.
-extends: Modules.Tizen.DataControl
+extends: Titanium.Proxy
 createable: false
 
 methods:
@@ -24,7 +24,7 @@ methods:
 
       - name: insertionData
         summary: The data on columns and values to insert. 
-        type: Modules.Tizen.DataControl.RowData
+        type: RowData
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -50,13 +50,13 @@ methods:
 
       - name: updateData
         summary: The data on columns and values to update. 
-        type: Modules.Tizen.DataControl.RowData
+        type: RowData
 
       - name: where
         summary: |
             A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
             itself such as `column1 = 'stringValue' AND column2 = numericValue`.
-        type: Modules.Tizen.DataControl.RowData
+        type: RowData
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -84,7 +84,7 @@ methods:
         summary: |
             A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
             itself such as `column1 = 'stringValue' AND column2 = numericValue`.
-        type: Modules.Tizen.DataControl.RowData
+        type: RowData
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -119,7 +119,7 @@ methods:
         summary: |
             A filter to select desired rows to update. It is an SQL `WHERE` clause excluding the `WHERE`
             itself such as `column1 = 'stringValue' AND column2 = numericValue`.
-        type: Modules.Tizen.DataControl.RowData
+        type: RowData
 
       - name: callback
         summary: Function to invoke on success or failure.
@@ -150,5 +150,5 @@ properties:
   - name: rows
     summary: The resulting rows.
     description: Will be undefined if `success` is `false`.
-    type: Array<Modules.Tizen.DataControl.RowData>
+    type: Array<RowData>
 

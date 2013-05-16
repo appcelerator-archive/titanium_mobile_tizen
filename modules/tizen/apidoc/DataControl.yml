@@ -55,7 +55,8 @@ methods:
         optional: true
 
 ---
-name: Modules.Tizen.DataControl.RowData
+name: RowData
+createable: false
 summary: |
     The dictionary represents RowData holding 1 row of SQL selection results from another 
     application.
