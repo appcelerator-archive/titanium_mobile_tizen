@@ -2,9 +2,11 @@
 
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/AttributeRangeFilter', 'Tizen/_/CompositeFilter', 'Tizen/_/SortMode',
 	'Tizen/_/SimpleCoordinates', 'Tizen/_/Power', 'Tizen/_/Calendar', 'Tizen/_/Download', 'Tizen/_/Alarm', 'Tizen/_/CallHistory', 'Tizen/_/Notification', 'Tizen/_/Apps',
-	'Tizen/_/SystemSetting', 'Tizen/_/Bluetooth', 'Tizen/_/Messaging', 'Tizen/_/SystemInfo', 'Tizen/_/NFC', 'Tizen/_/Contact/ContactRef', 'Tizen/_/Bookmark', 'Tizen/_/DataControl', 'Tizen/_/Package', 'Tizen/_/MessagePort'],
+	'Tizen/_/SystemSetting', 'Tizen/_/Bluetooth', 'Tizen/_/Messaging', 'Tizen/_/SystemInfo', 'Tizen/_/NFC', 'Tizen/_/Contact/ContactRef', 'Tizen/_/Bookmark', 
+	'Tizen/_/DataControl', 'Tizen/_/Package', 'Tizen/_/MessagePort', 'Tizen/_/DataSynchronization'],
 	function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, 
-			 Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, NFC, ContactRef, Bookmark, DataControl, Package, MessagePort) {
+			 Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, 
+			 NFC, ContactRef, Bookmark, DataControl, Package, MessagePort, DataSynchronization) {
 
 		var Tizen = lang.mixProps(require.mix({}, Evented), {
 
@@ -58,7 +60,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attribu
 				Bookmark: Bookmark,
 				DataControl: DataControl,
 				Package: Package,
-				MessagePort: MessagePort
+				MessagePort: MessagePort,
+				DataSynchronization: DataSynchronization
 			}
 
 		}, true);
