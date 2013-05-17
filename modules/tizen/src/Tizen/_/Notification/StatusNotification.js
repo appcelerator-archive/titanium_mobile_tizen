@@ -1,6 +1,6 @@
 // Wraps Tizen interface "StatusNotification" that resides in Tizen module "Application".
 
-define(['Ti/_/declare', 'Tizen/_/Notification/Notification'], function(declare, Notification) {
+define(['Ti/_/declare', 'Tizen/_/Notification/Notification', 'Tizen/_/Notification/NotificationDetailInfo'], function(declare, Notification, NotificationDetailInfo) {
 
 	var StatusNotification = declare(Notification, {
 
@@ -40,6 +40,62 @@ define(['Ti/_/declare', 'Tizen/_/Notification/Notification'], function(declare, 
 					this._obj.iconPath = value;
 				}
 			},
+			subIconPath: {
+				get: function() {
+					return this._obj.subIconPath;
+				},
+				set: function(value) {
+					this._obj.subIconPath = value;
+				}
+			},
+			number: {
+				get: function() {
+					return this._obj.number;
+				},
+				set: function(value) {
+					this._obj.number = value;
+				}
+			},
+			detailInfo: {
+				get: function() {
+					var objects = this._obj.detailInfo,
+						i = 0,
+						objectsCount = objects.length,
+						result = [];
+
+					for (; i < objectsCount; i++) {
+						result.push(new NotificationDetailInfo(void 0, objects[i]));
+					}
+					return result;
+				},
+				set: function(value) {
+					var arr = value,
+						i = 0,
+						len = arr.length,
+						res = [];
+
+						for (; i < len; i++) {
+							res.push(arr[i]._obj);
+						}
+					this._obj.detailInfo = res;
+				}
+			},
+			backgroundImagePath: {
+				get: function() {
+					return this._obj.backgroundImagePath;
+				},
+				set: function(value) {
+					this._obj.backgroundImagePath = value;
+				}
+			},
+			thumbnails: {
+				get: function() {
+					return this._obj.thumbnails;
+				},
+				set: function(value) {
+					this._obj.thumbnails = value;
+				}
+			},
 			soundPath: {
 				get: function() {
 					return this._obj.soundPath;
@@ -70,6 +126,14 @@ define(['Ti/_/declare', 'Tizen/_/Notification/Notification'], function(declare, 
 				},
 				set: function(value) {
 					this._obj.appId = value;
+				}
+			},
+			progressType: {
+				get: function() {
+					return this._obj.progressType;
+				},
+				set: function(value) {
+					this._obj.progressType = value;
 				}
 			},
 			progressValue: {
