@@ -18,8 +18,35 @@ properties:
  
  - name: iconPath
    summary: The path to the icon to display in the notification.
-   type: String   
-  
+   type: String
+
+ - name: subIconPath
+   summary: The sub icon path to display in the notification.
+   type: String
+
+ - name: number
+   summary: The number of events to display in the notification.
+   type: Number
+
+ - name: detailInfo
+   summary: |
+        Appends lines of the detail information to the notification. This attribute is available in simple
+        status notification. By default, this attribute is initialized with an empty array.
+        The maximum number of detail information elements in the array is 2.
+   type: Array<Modules.Tizen.Notification.NotificationDetailInfo>
+
+ - name: backgroundImagePath
+   summary: |
+        The image path to use as the background of the notification.
+        This attribute is available on simple or thumbnail status notifications.
+   type: String
+
+ - name: thumbnails
+   summary: |
+        The image paths associated with the thumbnail status notification. By default, this attribute
+        is initialized with an empty array. The maximum number of thumbnail path elements in the array is 4.
+   type: Array<String>
+
  - name: soundPath 
    summary: The path of sound file to play when the notification is shown.
    type: String
@@ -39,6 +66,16 @@ properties:
        Holds the application id to launch when the notification is selected from the notification 
        tray.
    type: String
+
+ - name: progressType
+   summary: |
+        Defines the type for an ongoing notification's progress.
+   description: |
+        Supporting notification progress types are: <Modules.Tizen.Notification.NOTIFICATION_PROGRESS_TYPE_BYTE> - The progress is indicated in bytes.
+        <Modules.Tizen.Notification.NOTIFICATION_PROGRESS_TYPE_PERCENTAGE> - The progress is indicated in percentage.
+
+   type: String
+   default: Modules.Tizen.Notification.NOTIFICATION_PROGRESS_TYPE_PERCENTAGE
    
  - name: progressValue 
    summary: The current progress value of notification.
