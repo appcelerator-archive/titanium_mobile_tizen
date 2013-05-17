@@ -1,0 +1,113 @@
+---
+name: Modules.Tizen.Bookmark
+summary: This interface provides access to the bookmark folder and bookmark item.
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: createBookmarkItem
+    summary: Creates an instance of <Modules.Tizen.Bookmark.BookmarkItem>
+    returns:
+        type: Modules.Tizen.Bookmark.BookmarkItem
+    parameters:
+      - name: args
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details.
+        type: Dictionary<BookmarkItemInit>
+
+  - name: createBookmarkFolder
+    summary: Creates an instance of <Modules.Tizen.Bookmark.BookmarkFolder>
+    returns:
+        type: Modules.Tizen.Bookmark.BookmarkFolder
+    parameters:
+      - name: args
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details.
+        type: Dictionary<BookmarkFolderInit>
+
+  - name: getBookmarks
+    summary: Gets all bookmark items and bookmark folders.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/bookmark.read`
+
+        This is a platform level privilege.
+
+    returns: 
+      - type: Array<Modules.Tizen.Bookmark.Bookmark>
+    
+    parameters:
+      - name: parentFolder
+        summary: The parent bookmark folder to retrieve the result bookmarks.
+        type: Modules.Tizen.Bookmark.BookmarkFolder
+        optional: true
+
+      - name: recursive
+        summary: | 
+            The flag indicating whether sub-bookmarks are also retrieved recursively or not.
+        type: Boolean
+        optional: true
+
+  - name: add
+    summary: Adds a bookmark item or a bookmark folder.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/bookmark.write`
+
+        This is a platform level privilege.
+
+    parameters:
+      - name: bookmark
+        summary: The bookmark to be added.
+        type: Modules.Tizen.Bookmark.Bookmark
+
+      - name: parentFolder
+        summary: | 
+            The parent folder of a bookmark to be added.
+        type: Modules.Tizen.Bookmark.BookmarkFolder
+        optional: true
+
+  - name: remove
+    summary: Gets information of the installed packages.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/bookmark.write`
+        
+        This is a platform level privilege.
+
+    parameters:
+      - name: bookmark
+        summary: | 
+            The bookmark to be removed.
+        type: Modules.Tizen.Bookmark.Bookmark
+        optional: true  
+
+---
+name: BookmarkItemInit
+summary: Simple object that contains parameters for [createBookmarkItem](Modules.Tizen.Bookmark.createBookmarkItem).
+properties:
+  - name: title
+    type: String
+    summary: The title of the bookmark.
+        
+  - name: url
+    type: String
+    summary: The uri of the bookmark.
+
+---
+name: BookmarkFolderInit
+summary: Simple object that contains parameters for [createBookmarkFolder](Modules.Tizen.Bookmark.createBookmarkFolder).
+properties:
+  - name: title
+    type: String
+    summary: The title of the bookmark folder.
+        

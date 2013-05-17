@@ -1,0 +1,18 @@
+---
+name: Modules.Tizen.Bookmark.BookmarkFolder
+summary: This interface implements the BookmarkFolder object.
+extends: Modules.Tizen.Bookmark.Bookmark
+createable: true
+properties:
+  - name: parent
+    summary: |
+        The parent bookmark folder.
+        This attribute is meaningful when this object is successfully added or retrieved. If this BookmarkItem is not added yet, its value is set to undefined.
+        If the parent bookmark folder indicates the root bookmark folder, the value will be null.
+    type: Modules.Tizen.Bookmark.BookmarkFolder
+    permission: read-only
+
+  - name: title
+    summary: The title of the bookmark folder. 
+    type: String
+    permission: read-only
