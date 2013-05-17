@@ -10,9 +10,8 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothAdapter'], func
 			if (object.toString() === '[object BluetoothAdapter]') {
 				return this.createBluetoothAdapter(object);
 			}
-			else
-			{
-				console.error('Incorrect object type');
+			else {
+				throw new Error('Object of unknown type');
 			}
 		},
 

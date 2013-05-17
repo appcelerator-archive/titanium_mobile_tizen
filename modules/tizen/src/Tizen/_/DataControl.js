@@ -16,7 +16,7 @@ function(lang, MappedDataControlConsumer, SQLDataControlConsumer, Evented) {
 			} else if('getValue' in obj) {
 				return new MappedDataControlConsumer(void 0, obj);
 			} else {
-				console.error('getDataControlConsumer error');
+				throw new Error('Object of unknown type');
 			}
 		}
 

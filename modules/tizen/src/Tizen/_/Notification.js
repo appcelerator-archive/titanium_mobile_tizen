@@ -43,9 +43,8 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 			if (object.toString() === '[object StatusNotification]') {
 				result = new StatusNotification(void 0, object);
 			}
-			else
-			{
-				console.error('Incorrect object type');
+			else {
+				throw new Error('Object of unknown type');
 			}
 			return result;
 		},
