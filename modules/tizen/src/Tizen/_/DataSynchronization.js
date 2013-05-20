@@ -30,31 +30,31 @@ function(lang, Evented, SyncInfo, SyncServiceInfo, SyncProfileInfo, SyncStatisti
 		},
 
 		add: function(profile /*SyncProfileInfo*/) {
-			tizen.datasynchronization.add(profile._obj);
+			tizen.datasync.add(profile._obj);
 		},
 
 		update: function(profile /*SyncProfileInfo*/) {
-			tizen.datasynchronization.update(profile._obj);
+			tizen.datasync.update(profile._obj);
 		},
 
 		remove: function(profileId /*SyncProfileId*/) {
-			tizen.datasynchronization.remove(profileId);
+			tizen.datasync.remove(profileId);
 		},
 
 		getMaxProfilesNum: function() {
-			return tizen.datasynchronization.getMaxProfilesNum();
+			return tizen.datasync.getMaxProfilesNum();
 		},
 
 		getProfilesNum: function() {
-			return tizen.datasynchronization.getProfilesNum();
+			return tizen.datasync.getProfilesNum();
 		},
 
 		getSyncProfileInfo: function(profileId /*SyncProfileId*/) {
-			return new SyncProfileInfo(void 0, tizen.datasynchronization.get(profileId));
+			return new SyncProfileInfo(void 0, tizen.datasync.get(profileId));
 		},
 
 		getAll: function() {
-			var objects = tizen.datasynchronization.getAll(),
+			var objects = tizen.datasync.getAll(),
 				i = 0,
 				objectsCount = objects.length,
 				result = [];
@@ -65,15 +65,15 @@ function(lang, Evented, SyncInfo, SyncServiceInfo, SyncProfileInfo, SyncStatisti
 		},
 
 		startSync: function(profileId /*SyncProfileId*/, progressCallback /*SyncProgressCallback*/) {
-			tizen.datasynchronization.startSync(profileId, progressCallback);
+			tizen.datasync.startSync(profileId, progressCallback);
 		},
 
 		stopSync: function(profileId /*SyncProfileId*/) {
-			tizen.datasynchronization.stopSync(profileId);
+			tizen.datasync.stopSync(profileId);
 		},
 
 		getLastSyncStatistics: function(profileId /*SyncProfileId*/) {
-			var objects = tizen.datasynchronization.getLastSyncStatistics(profileId),
+			var objects = tizen.datasync.getLastSyncStatistics(profileId),
 				i = 0,
 				objectsCount = objects.length,
 				result = [];
@@ -84,15 +84,15 @@ function(lang, Evented, SyncInfo, SyncServiceInfo, SyncProfileInfo, SyncStatisti
 		},
 
 		createSyncInfo: function(args) {
-			return new SyncInfo(args); //Need to add this module SyncInfo in define, with path Ti/Tizen/DataSynchronization/SyncInfo
+			return new SyncInfo(args); 
 		},
 
 		createSyncServiceInfo: function(args) {
-			return new SyncServiceInfo(args); //Need to add this module SyncServiceInfo in define, with path Ti/Tizen/DataSynchronization/SyncServiceInfo
+			return new SyncServiceInfo(args); 
 		},
 
 		createSyncProfileInfo: function(args) {
-			return new SyncProfileInfo(args); //Need to add this module SyncProfileInfo in define, with path Ti/Tizen/DataSynchronization/SyncProfileInfo
+			return new SyncProfileInfo(args);
 		},
 
 	}, true);

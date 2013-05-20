@@ -8,7 +8,15 @@ function(declare, SyncInfo, SyncServiceInfo) {
 				this._obj = nativeObj;
 			} else {
 				// Check if the required parameters are present (do not check for the optional ones).
-				this._obj = new tizen.SyncProfileInfo(args.profileName, args.syncInfo, args.serviceInfo);
+				if(args.serviceInfo.length > 0) {
+					var serviceInfoArr = [];
+					for(var i=0; i<args.serviceInfo.length; ++i) {
+						serviceInfoArr.push(args.serviceInfo[i]._obj);
+					}
+					this._obj = new tizen.SyncProfileInfo(args.profileName, args.syncInfo._obj, serviceInfoArr);
+				} else {
+					this._obj = new tizen.SyncProfileInfo(args.profileName, args.syncInfo._obj);
+				}
 			}
 		},
 
@@ -39,7 +47,7 @@ function(declare, SyncInfo, SyncServiceInfo) {
 			},
 			serviceInfo: {
 				get: function() {
-					if(!this._obj.serviceInfo)
+					if(!this._obj || !this._obj.serviceInfo)
 						return this._obj.serviceInfo;
 						
 					var objects = this._obj.serviceInfo,
