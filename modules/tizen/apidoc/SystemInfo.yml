@@ -14,10 +14,12 @@ description: |
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DISPLAY>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BUILD>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_LOCALE>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_NETWORK>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK>
     - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_PERIPHERAL>
     
     The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.
     
@@ -149,13 +151,18 @@ properties:
   - name: SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION
     summary: DEVICE_ORIENTATION is the device property identifier.
     type: String
-    
     permission: read-only
+
   - name: SYSTEM_INFO_PROPERTY_ID_BUILD
     summary: BUILD is the device property identifier.
     type: String
-    
-    permission: read-only    
+    permission: read-only  
+
+  - name: SYSTEM_INFO_PROPERTY_ID_LOCALE
+    summary: LOCALE is the device property identifier.
+    type: String
+    permission: read-only  
+
   - name: SYSTEM_INFO_PROPERTY_ID_NETWORK
     summary: NETWORK is the device property identifier.
     type: String
@@ -175,6 +182,11 @@ properties:
     summary: SIM is the device property identifier.
     type: String
     permission: read-only    
+
+  - name: SYSTEM_INFO_PROPERTY_ID_PERIPHERAL
+    summary: PERIPHERAL is the device property identifier.
+    type: String
+    permission: read-only  
     
   - name: SYSTEM_INFO_NETWORK_TYPE_NONE
     summary: NONE is Data Network Type.
@@ -233,6 +245,46 @@ properties:
     
   - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY
     summary: LANDSCAPE_SECONDARY is for homescreen background image.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_ABSENT
+    summary: ABSENT is Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_INITIALIZING
+    summary: INITIALIZING is Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_READY
+    summary: READY is Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_PIN_REQUIRED
+    summary: PIN_REQUIRED is Sim State.
+    type: String
+    permission: read-only
+    
+  - name: SYSTEM_INFO_SIM_STATE_PUK_REQUIRED
+    summary: PUK_REQUIRED is Sim State.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_SIM_STATE_NETWORK_LOCKED
+    summary: NETWORK_LOCKED is Sim State.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_SIM_STATE_SIM_LOCKED
+    summary: SIM_LOCKED is Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_UNKNOWN
+    summary: UNKNOWN is Sim State.
     type: String
     permission: read-only    
     

@@ -7,6 +7,30 @@ createable: false
 
 properties:
 
+  - name: state
+    summary: |
+       Represents the SIM card state.
+    description: |
+        The value is one of the constants defined for this type:
+        
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_ABSENT>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_INITIALIZING>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_READY>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_PIN_REQUIRED>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_PUK_REQUIRED>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_NETWORK_LOCKED>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_SIM_LOCKED>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_SIM_STATE_UNKNOWN>
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a bublic level privilege.
+    type: String
+    permission: read-only
+
   - name: operatorName
     summary: |
         Represents the Operator Name String (ONS) of Common PCN Handset Specification (CPHS) in 

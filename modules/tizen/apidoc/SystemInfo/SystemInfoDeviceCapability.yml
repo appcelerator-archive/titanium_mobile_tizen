@@ -17,6 +17,11 @@ properties:
     type: Boolean
     permission: read-only
 
+  - name: nfcReservedPush
+    summary: Indicates whether the device supports NFC reserved push.
+    type: Boolean
+    permission: read-only
+
   - name: multiTouchCount
     summary: The number of point in Multi-point touch.
     type: Boolean
@@ -27,6 +32,11 @@ properties:
     type: Boolean
     permission: read-only
 
+  - name: inputKeyboardLayout
+    summary: Indicates whether the device supports the built-in keyboard layout.
+    type: String
+    permission: read-only
+
   - name: wifi
     summary: Indicates whether the device supports Wi-Fi. 
     type: Boolean
@@ -35,6 +45,17 @@ properties:
   - name: wifiDirect
     summary: Indicates whether the device supports Wi-Fi direct.
     type: Boolean
+    permission: read-only
+
+  - name: opengles
+    summary: ndicates whether the device supports OpenGL-ES.
+    type: Boolean
+    permission: read-only
+
+  - name: openglestextureFormat
+    summary: |
+        The device 3DC texture format for OpenGL-ES. One example of possible output is as follows: "3dc/atc/etc/ptc/pvrtc/utc"
+    type: String
     permission: read-only
 
   - name: openglesVersion1_1
@@ -64,6 +85,36 @@ properties:
   - name: platformName
     summary: The name of the platform.
     type: String
+    permission: read-only
+
+  - name: webApiVersion
+    summary: |
+        The version of the Tizen Web API in the [Major].[Minor] format. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
+    type: String
+    permission: read-only
+
+  - name: nativeApiVersion
+    summary: The version of the native Tizen API in the [Major].[Minor] format.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
+    type: String
+    permission: read-only
+
+  - name: camera
+    summary: Indicates whether the device supports camera.
+    type: Boolean
     permission: read-only
 
   - name: cameraFront
@@ -151,8 +202,18 @@ properties:
     type: Boolean
     permission: read-only
 
+  - name: speechSynthesis
+    summary: Indicates whether the device supports speech synthesis.
+    type: Boolean
+    permission: read-only
+
   - name: accelerometer
     summary: Indicates whether the device supports Accelerometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: accelerometerWakeup
+    summary: Indicates whether the device supports Accelerometer sensor wake-up feature.
     type: Boolean
     permission: read-only
 
@@ -161,8 +222,18 @@ properties:
     type: Boolean
     permission: read-only
 
+  - name: barometerWakeup
+    summary: Indicates whether the device supports Barometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
   - name: gyroscope
     summary: Indicates whether the device supports Gyroscope sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: gyroscopeWakeup
+    summary: Indicates whether the device supports Gyroscope sensor wake-up feature.
     type: Boolean
     permission: read-only
 
@@ -171,7 +242,122 @@ properties:
     type: Boolean
     permission: read-only
 
+  - name: magnetometerWakeup
+    summary: Indicates whether the device supports Magnetometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: photometer
+    summary: Indicates whether the device supports Photometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: photometerWakeup
+    summary: Indicates whether the device supports Photometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
   - name: proximity
     summary: Indicates whether the device supports Proximity sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: proximityWakeup
+    summary: Indicates whether the device supports Proximity sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: tiltmeter
+    summary: Indicates whether the device supports Tiltmeter sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: tiltmeterWakeup
+    summary: Indicates whether the device supports Tiltmeter sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: dataEncryption
+    summary: Indicates whether the device supports data encryption.
+    type: Boolean
+    permission: read-only
+
+  - name: graphicsAcceleration
+    summary: Indicates whether the device supports hardware acceleration for 2D/3D graphics.
+    type: Boolean
+    permission: read-only
+
+  - name: push
+    summary: Indicates whether the device supports push service.
+    type: Boolean
+    permission: read-only
+
+  - name: telephony
+    summary: Indicates whether the device supports the telephony feature.
+    type: Boolean
+    permission: read-only
+
+  - name: telephonyMms
+    summary: Indicates whether the device supports the mms feature.
+    type: Boolean
+    permission: read-only
+
+  - name: telephonySms
+    summary: Indicates whether the device supports the sms feature.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSizeNormal
+    summary: Indicates whether the device supports the screen normal size.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSize480_800
+    summary: Indicates whether the device supports the 480 * 800 screen size.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSize720_1280
+    summary: Indicates whether the device supports the 720 * 1280 screen size.
+    type: Boolean
+    permission: read-only
+
+  - name: autoRotation
+    summary: Indicates whether the device supports auto rotation.
+    type: Boolean
+    permission: read-only
+
+  - name: shellAppWidget
+    summary: Indicates whether the device supports shell app widget.
+    type: Boolean
+    permission: read-only
+
+  - name: visionImageRecognition
+    summary: Indicates whether the device supports vision image recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: visionQrcodeGeneration
+    summary: Indicates whether the device supports vision qrcode generation.
+    type: Boolean
+    permission: read-only
+
+  - name: visionQrcodeRecognition
+    summary: Indicates whether the device supports vision qrcode recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: visionFaceRecognition
+    summary: Indicates whether the device supports vision face recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: secureElement
+    summary: Indicates whether the device supports secure element.
+    type: Boolean
+    permission: read-only
+
+  - name: nativeOspCompatible
+    summary: Indicates whether the device supports native osp API.
     type: Boolean
     permission: read-only

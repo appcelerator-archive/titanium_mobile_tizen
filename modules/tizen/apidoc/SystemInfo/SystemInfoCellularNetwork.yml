@@ -54,6 +54,24 @@ properties:
     permission: read-only
     
   - name: isRoaming
+    summary: Represents the International Mobile Equipment Identity (IMEI).
+    type: String
+    permission: read-only
+
+  - name: isFlightMode
     summary: Whether the connection is set up while the device is roaming.
+    type: Boolean
+    permission: read-only
+
+  - name: imei
+    summary: Represents the International Mobile Equipment Identity (IMEI).
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/systemmanager`
+
+        This is a partner level privilege.
+        
     type: Boolean
     permission: read-only

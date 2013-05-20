@@ -26,9 +26,13 @@ properties:
     type: Number
     permission: read-only
 
-  - name: isRemoveable
+  - name: isRemovable
     summary: |
-        true if this unit can be removed from the system (such as an sdcard unplugged), false 
-        otherwise.
+        An attribute to indicate whether a device can be removed or not.
+        The following values are supported:
+
+        true - If this storage unit can be removed from the system (such as an sdcard unplugged)
+        false - If this storage unit cannot be removed from the system
+    
     type: Boolean
     permission: read-only
