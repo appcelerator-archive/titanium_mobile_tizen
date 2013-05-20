@@ -43,7 +43,17 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 				SYSTEM_INFO_PROPERTY_ID_STORAGE: 'STORAGE',
 				SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK: 'WIFI_NETWORK',
 				SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK: 'CELLULAR_NETWORK',
-				SYSTEM_INFO_PROPERTY_ID_SIM: 'SIM'
+				SYSTEM_INFO_PROPERTY_ID_SIM: 'SIM',
+				SYSTEM_INFO_PROPERTY_ID_LOCALE: 'LOCALE',
+				SYSTEM_INFO_PROPERTY_ID_PERIPHERAL: 'PERIPHERAL',
+				SYSTEM_INFO_SIM_STATE_ABSENT: 'ABSENT',
+				SYSTEM_INFO_SIM_STATE_INITIALIZING: 'INITIALIZING',
+				SYSTEM_INFO_SIM_STATE_READY: 'READY',
+				SYSTEM_INFO_SIM_STATE_PIN_REQUIRED: 'PIN_REQUIRED',
+				SYSTEM_INFO_SIM_STATE_PUK_REQUIRED: 'PUK_REQUIRED',
+				SYSTEM_INFO_SIM_STATE_NETWORK_LOCKED: 'NETWORK_LOCKED',
+				SYSTEM_INFO_SIM_STATE_SIM_LOCKED: 'SIM_LOCKED',
+				SYSTEM_INFO_SIM_STATE_UNKNOWN: 'UNKNOWN'
 			}
 
 		}, true);
@@ -63,6 +73,12 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 				return new SystemInfoSIM(object);
 			}
 			if (object.toString() === '[object devicecapabilitiesinfo]') {
+				return new SystemInfoDeviceCapability(object);
+			}
+			if (object.toString() === '[object systeminfolocale]') {
+				return new SystemInfoDeviceCapability(object);
+			}
+			if (object.toString() === '[object systeminfolocale]') {
 				return new SystemInfoDeviceCapability(object);
 			}
 		}
