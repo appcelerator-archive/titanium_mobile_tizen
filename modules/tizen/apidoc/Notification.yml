@@ -100,6 +100,15 @@ methods:
       - name: Options
         summary: The dictionary representing information about the new notification.
         type: StatusNotificationInit
+
+  - name: createNotificationDetailInfo
+    summary: Creates and returns an instance of <Modules.Tizen.Notification.NotificationDetailInfo>.
+    returns:
+        type: Modules.Tizen.Notification.NotificationDetailInfo
+    parameters:
+      - name: Options
+        summary: The dictionary representing information about the new notificationDetailInfo.
+        type: NotificationDetailInfoInit
     
 properties:
 
@@ -124,6 +133,16 @@ properties:
     type: String
     permission: read-only
 
+  - name: STATUS_NOTIFICATION_TYPE_THUMBNAIL
+    summary: A status notification with thumbnail.
+
+    description: |
+        The thumbnail status notification posts a thumbnail-format notification which
+        includes several thumbnail image paths. The thumbnail status notification is also
+        removed by a user selection.
+    type: String
+    permission: read-only
+
   - name: STATUS_NOTIFICATION_TYPE_ONGOING
     summary: A status notification about an ongoing event.
         
@@ -143,6 +162,17 @@ properties:
         posted the notification. 
     type: String
     permission: read-only
+
+  - name: NOTIFICATION_PROGRESS_TYPE_PERCENTAGE
+    summary: The progress is indicated in percentage.
+    type: String
+    permission: read-only
+
+  - name: NOTIFICATION_PROGRESS_TYPE_BYTE
+    summary: The progress is indicated in bytes.
+    type: String
+    permission: read-only
+
 
 examples:
   - title: Simple notification
@@ -227,4 +257,19 @@ properties:
   - name: notificationInitDict
     type: StatusNotificationInitDict
     summary: (optional) Dictionary.
+    optional: true
+
+---
+name: NotificationDetailInfoInit
+summary: Simple object that contains parameters for [createNotificationDetailInfo](Modules.Tizen.Notification.createNotificationDetailInfo).
+platforms: [tizen]
+properties:
+  - name: mainText
+    type: String
+    summary: |
+        The main content of the detail information. This attribute is available on simple status notifications.
+
+  - name: subText
+    type: String
+    summary: The secondary content of the detail information.
     optional: true
