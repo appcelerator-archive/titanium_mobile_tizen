@@ -61,7 +61,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attribu
 				DataControl: DataControl,
 				Package: Package,
 				MessagePort: MessagePort,
-				DataSynchronization: DataSynchronization
+				DataSync: DataSynchronization
 			}
 
 		}, true);
