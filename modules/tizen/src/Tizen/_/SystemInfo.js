@@ -78,7 +78,7 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 			if (object.toString() === '[object systeminfolocale]') {
 				return new SystemInfoDeviceCapability(object);
 			}
-			if (object.toString() === '[object systeminfolocale]') {
+			if (object.toString() === '[object systeminfoperipheral]') {
 				return new SystemInfoDeviceCapability(object);
 			}
 		}
