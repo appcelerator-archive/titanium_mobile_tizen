@@ -1,5 +1,5 @@
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-	var obj = declare(null, {
+	var obj = declare(Evented, {
 
 		constructor: function(args, nativeObj) {
 			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
