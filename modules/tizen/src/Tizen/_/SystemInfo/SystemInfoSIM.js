@@ -10,6 +10,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 		constants: {
+			state: {
+				get: function() {
+					return this._obj.state;
+				}
+			},
 			operatorName: {
 				get: function() {
 					return this._obj.operatorName;

@@ -25,6 +25,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.availableCapacity;
 				}
 			},
+			isRemovable: {
+				get: function() {
+					return this._obj.isRemovable;
+				}
+			},
 			isRemoveable: {
 				get: function() {
 					return this._obj.isRemoveable;
