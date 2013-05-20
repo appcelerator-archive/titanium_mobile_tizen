@@ -52,7 +52,7 @@ methods:
 
         * `http://tizen.org/privilege/package.info`
 
-        This is a bublic level privilege.
+        This is a public level privilege.
 
     parameters:
       - name: callback
@@ -68,7 +68,7 @@ methods:
 
         * `http://tizen.org/privilege/package.info`
 
-        This is a bublic level privilege.
+        This is a public level privilege.
 
     returns:
         type: Modules.Tizen.Package.PackageInformation
@@ -88,7 +88,7 @@ events:
 
         * `http://tizen.org/privilege/package.info`
 
-        This is a bublic level privilege.
+        This is a public level privilege.
         
     properties:
       - name: info
@@ -103,7 +103,7 @@ events:
 
         * `http://tizen.org/privilege/package.info`
 
-        This is a bublic level privilege.
+        This is a public level privilege.
         
     properties:
       - name: info
@@ -118,7 +118,7 @@ events:
 
         * `http://tizen.org/privilege/package.info`
         
-        This is a bublic level privilege.
+        This is a public level privilege.
         
     properties:
       - name: id
