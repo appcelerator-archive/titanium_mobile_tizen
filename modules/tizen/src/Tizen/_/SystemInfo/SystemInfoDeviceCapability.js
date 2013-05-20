@@ -21,8 +21,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				}
 			},
 			nfcReservedPush: {
-				get: this._obj.nfcReservedPush;
-			}
+				get: function() {
+					this._obj.nfcReservedPush;
+				}
+			},
 			multiTouchCount: {
 				get: function() {
 					return this._obj.multiTouchCount;
