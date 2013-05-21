@@ -54,7 +54,8 @@ properties:
 
   - name: openglestextureFormat
     summary: |
-        The device 3DC texture format for OpenGL-ES. One example of possible output is as follows: "3dc/atc/etc/ptc/pvrtc/utc"
+        The device 3DC texture format for OpenGL-ES. One example of possible output is as follows:
+        "3dc/atc/etc/ptc/pvrtc/utc"
     type: String
     permission: read-only
 
