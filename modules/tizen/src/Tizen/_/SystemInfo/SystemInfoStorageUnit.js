@@ -30,6 +30,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.isRemovable;
 				}
 			}
+		}
 	});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
