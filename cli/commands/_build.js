@@ -46,9 +46,9 @@ var ti = require('titanium-sdk'),
 	// Defines the default list of privileges for a Tizen application. If a privilege is not declared, the corresponding Tizen feature will be
 	// unavailable. By default adds minimal required set of privileges
 	defaultPrivilegesList = 
-			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
-			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.read"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/systeminfo"/> -->\n'+
+			'<!-- <tizen:privilege name="http://tizen.org/privilege/tizen"/> -->\n'+
 			'<!-- <tizen:privilege name="http://tizen.org/privilege/alarm"/> -->\n'+
 			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.launch"/> -->\n'+
 			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/> -->\n'+
@@ -1136,7 +1136,8 @@ build.prototype = {
 		}
 
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
-		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid);
+		templt = templt.replace('%%PACKAGE_ID%%', this.tiapp.tizen.appid);
+		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid + '.' + this.tiapp.name);
 		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
 		
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
