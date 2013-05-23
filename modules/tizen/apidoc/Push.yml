@@ -60,7 +60,7 @@ methods:
   - name: disconnectService
     summary: Disconnects to the push service and stop receiving push notifications. 
     description: |
-        To use this method, you must include the following privilege in the tiapp.xml file of your 
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:
 
         * ` http://tizen.org/privilege/push`
@@ -72,7 +72,7 @@ methods:
         Gets the push service registration ID for this application if the registration process was successful. 
         null is returned if the application has not been registered yet. 
     description: |
-        To use this method, you must include the following privilege in the tiapp.xml file of your 
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:
 
         * ` http://tizen.org/privilege/push`

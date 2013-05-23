@@ -54,8 +54,8 @@ properties:
     permission: read-only
     
   - name: isRoaming
-    summary: Represents the International Mobile Equipment Identity (IMEI).
-    type: String
+    summary: Whether the connection is set up while the device is roaming.
+    type: Boolean
     permission: read-only
 
   - name: isFlightMode
@@ -73,5 +73,5 @@ properties:
 
         This is a partner level privilege.
         
-    type: Boolean
+    type: String
     permission: read-only
