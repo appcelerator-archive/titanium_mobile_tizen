@@ -2,9 +2,9 @@
 
 define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/SystemInfoStorage',
 	'Tizen/_/SystemInfo/SystemInfoDeviceCapability', 'Tizen/_/SystemInfo/SystemInfoCellularNetwork', 'Tizen/_/SystemInfo/SystemInfoSIM',
-	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Ti/_/Evented'],
+	'Tizen/_/SystemInfo/SystemInfoStorageUnit', 'Tizen/_/SystemInfo/SystemInfoLocale', 'Tizen/_/SystemInfo/SystemInfoPeripheral', 'Ti/_/Evented'],
 	function(lang, SystemInfoCpu, SystemInfoStorage, SystemInfoDeviceCapability, SystemInfoCellularNetwork,
-			SystemInfoSIM, SystemInfoStorageUnit, Evented) {
+			SystemInfoSIM, SystemInfoStorageUnit, SystemInfoLocale, SystemInfoPeripheral, Evented) {
 
 		var SystemInfo = lang.mixProps(require.mix({}, Evented), {
 
@@ -75,11 +75,11 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 			if (object.toString() === '[object devicecapabilitiesinfo]') {
 				return new SystemInfoDeviceCapability(object);
 			}
-			if (object.toString() === '[object systeminfolocale]') {
-				return new SystemInfoDeviceCapability(object);
+			if (object.toString() === '[object localeinfo]') {
+				return new SystemInfoLocale(object);
 			}
-			if (object.toString() === '[object systeminfoperipheral]') {
-				return new SystemInfoDeviceCapability(object);
+			if (object.toString() === '[object peripheralinfo]') {
+				return new SystemInfoPeripheral(object);
 			}
 		}
 

@@ -193,7 +193,7 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 						mime: args.mime,
 						category: args.category,
 						data: args.data,
-						_obj: new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data)
+						_obj: new tizen.ApplicationControl(args.operation, args.uri, args.mime, args.category, args.data || null)
 					};
 				} else {
 					throw new Error('Constructor with such parameters not found for ApplicationControl.');

@@ -1,0 +1,26 @@
+---
+name: Modules.Tizen.Push.PushMessage
+summary: This interface specifies the push message that is delivered from the push service. 
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: appData
+    summary: An attribute to store the push notification data. 
+    description: This data is the message that the sender wants to send and its length must be less than 1 KB.  
+    type: String
+    permission: read-only
+
+  - name: alertMessage
+    summary: An attribute to store the push notification message that is displayed as an alert message to the user. 
+    type: String
+    permission: read-only
+
+  - name: iconPath
+    summary: An attribute to store the icon path of a package. 
+    type: String
+    permission: read-only
+
+  - name: date
+    summary: An attribute to store the date/time when a push notification message is received. 
+    type: Date
+    permission: read-only

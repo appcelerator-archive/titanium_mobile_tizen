@@ -1,8 +1,5 @@
-// Wraps Tizen interface "SystemInfoStorageUnit" that resides in Tizen module "SystemInfo".
-
 define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
-
-	var storageUnit = declare(Evented, {
+	var obj = declare(Evented, {
 
 		constructor: function(nativeObj) {
 			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
@@ -10,31 +7,27 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 		constants: {
-			type: {
+			appData: {
 				get: function() {
-					return this._obj.type;
+					return this._obj.appData;
 				}
 			},
-			capacity: {
+			alertMessage: {
 				get: function() {
-					return this._obj.capacity;
+					return this._obj.alertMessage;
 				}
 			},
-			availableCapacity: {
+			date: {
 				get: function() {
-					return this._obj.availableCapacity;
+					return this._obj.date;
 				}
 			},
-			isRemovable: {
-				get: function() {
-					return this._obj.isRemovable;
-				}
-			}
-		}
+		},
+
 	});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.
-	storageUnit.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoStorageUnit';
-	return storageUnit;
+	obj.prototype.declaredClass = 'Tizen.Push.PushMessage';
+	return obj;
 });
