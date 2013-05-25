@@ -249,42 +249,42 @@ properties:
     permission: read-only
 
   - name: SYSTEM_INFO_SIM_STATE_ABSENT
-    summary: ABSENT is Sim State.
+    summary: ABSENT Sim State.
     type: String
     permission: read-only
 
   - name: SYSTEM_INFO_SIM_STATE_INITIALIZING
-    summary: INITIALIZING is Sim State.
+    summary: INITIALIZING Sim State.
     type: String
     permission: read-only
 
   - name: SYSTEM_INFO_SIM_STATE_READY
-    summary: READY is Sim State.
+    summary: READY Sim State.
     type: String
     permission: read-only
 
   - name: SYSTEM_INFO_SIM_STATE_PIN_REQUIRED
-    summary: PIN_REQUIRED is Sim State.
+    summary: PIN_REQUIRED Sim State.
     type: String
     permission: read-only
     
   - name: SYSTEM_INFO_SIM_STATE_PUK_REQUIRED
-    summary: PUK_REQUIRED is Sim State.
+    summary: PUK_REQUIRED Sim State.
     type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_SIM_STATE_NETWORK_LOCKED
-    summary: NETWORK_LOCKED is Sim State.
+    summary: NETWORK_LOCKED Sim State.
     type: String
     permission: read-only    
     
   - name: SYSTEM_INFO_SIM_STATE_SIM_LOCKED
-    summary: SIM_LOCKED is Sim State.
+    summary: SIM_LOCKED Sim State.
     type: String
     permission: read-only
 
   - name: SYSTEM_INFO_SIM_STATE_UNKNOWN
-    summary: UNKNOWN is Sim State.
+    summary: UNKNOWN Sim State.
     type: String
     permission: read-only    
     

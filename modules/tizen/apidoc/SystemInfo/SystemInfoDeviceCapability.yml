@@ -24,7 +24,7 @@ properties:
 
   - name: multiTouchCount
     summary: The number of point in Multi-point touch.
-    type: Boolean
+    type: Number
     permission: read-only
 
   - name: inputKeyboard
@@ -55,7 +55,7 @@ properties:
   - name: openglestextureFormat
     summary: |
         The device 3DC texture format for OpenGL-ES. One example of possible output is as follows:
-        "3dc/atc/etc/ptc/pvrtc/utc"
+        "`3dc/atc/etc/ptc/pvrtc/utc`"
     type: String
     permission: read-only
 
@@ -92,7 +92,7 @@ properties:
     summary: |
         The version of the Tizen Web API in the [Major].[Minor] format. 
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:
 
         * `http://tizen.org/privilege/system`
@@ -104,7 +104,7 @@ properties:
   - name: nativeApiVersion
     summary: The version of the native Tizen API in the [Major].[Minor] format.
     description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:
 
         * `http://tizen.org/privilege/system`
