@@ -17,7 +17,7 @@ define(['Ti/_/declare', 'Ti/_/UI/FontWidget', 'Ti/_/dom', 'Ti/_/css', 'Ti/_/styl
 			// Regular expression to detect email addresses, and replacement pattern that makes them clickable.
 			linkifyEmail: {
 				reg: /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g,
-				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/send\', \'org.tizen.email\', \'\', \'to\', \'[$1]\') ">[$1]</a>'
+				replace_text: '<a href="#" ontouchend="autoLinkClick(event, \'http://tizen.org/appcontrol/operation/compose\', \'tizen.email\', \'\', \'http://tizen.org/appcontrol/data/to\', \'[$1]\') ">[$1]</a>'
 			},
 
 			// Regular expression to detect phone numbers, and replacement pattern that makes them clickable.
