@@ -29,18 +29,3 @@ events:
         summary: |
             The RemoteMessagePort port that can be used to reply for the received message.
         type: Modules.Tizen.MessagePort.RemoteMessagePort
-
----
-name: MessagePortDataItem
-platforms: [tizen]
-summary: |
-    A dictionary for specifying the data item that is transferred.
-
-properties:
-  - name: key
-    type: String
-    summary: Key of a message.
-
-  - name: value
-    type: String
-    summary: Value of a message.
