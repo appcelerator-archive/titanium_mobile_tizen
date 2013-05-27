@@ -167,54 +167,56 @@ define(
 				}
 			}
 
-			ContactsTizen.getAllPeople(function(persons) {
-				// Success callback for getAllPeople.
-				// Formulate the data for the TableView in the format that it understands.
-				for(var i = 0, len = persons.length; i < len; i++) {
-					data.push({ title: persons[i]['fullName'], hasChild: true, test: persons[i].id });
-				}
-
-				data.sort(function(a,b) {
-					// Sorting by title.
-					if (a.title < b.title)
-						return -1;
-					if (a.title > b.title)
-						return 1;
-					return 0;
-				});
-				addHeaders(data);
-
-				tableViewOptions = {
-					data:data,
-					headerTitle: 'Contacts',
-					footerTitle:persons.length + ' Contacts',
-					backgroundColor: '#FFF',
-					rowBackgroundColor: 'white',
-					height: '90%',
-					top: 0
-				};
-
-				// Create the TableView which will be our picker.
-				tableview = UI.createTableView(tableViewOptions);
-
-				tableview.addEventListener('click', function(e) {
-					e.person = self.getPersonByID(e.rowData.test);
-					if (values.selectedPerson) {
-						values.selectedPerson(e);
-						win.close();
+			ContactsTizen.getAllPeople(function(a) {
+				if(a.success) {
+					var persons = a.persons;
+					// Success callback for getAllPeople.
+					// Formulate the data for the TableView in the format that it understands.
+					for(var i = 0, len = persons.length; i < len; i++) {
+						data.push({ title: persons[i]['fullName'], hasChild: true, test: persons[i].id });
 					}
-				});
-				closeBtn.addEventListener('click', function(e) {
-					values.cancel && values.cancel();
-					win.close();
-				});
 
-				win.add(tableview);
-				win.add(closeBtn);
-				win.open();
-			},
-			function(e){ //Error callback
-				console.error('Problems with getting the contacts, Error: ' + e.message);
+					data.sort(function(a,b) {
+						// Sorting by title.
+						if (a.title < b.title)
+							return -1;
+						if (a.title > b.title)
+							return 1;
+						return 0;
+					});
+					addHeaders(data);
+
+					tableViewOptions = {
+						data:data,
+						headerTitle: 'Contacts',
+						footerTitle:persons.length + ' Contacts',
+						backgroundColor: '#FFF',
+						rowBackgroundColor: 'white',
+						height: '90%',
+						top: 0
+					};
+
+					// Create the TableView which will be our picker.
+					tableview = UI.createTableView(tableViewOptions);
+
+					tableview.addEventListener('click', function(e) {
+						e.person = self.getPersonByID(e.rowData.test);
+						if (values.selectedPerson) {
+							values.selectedPerson(e);
+							win.close();
+						}
+					});
+					closeBtn.addEventListener('click', function(e) {
+						values.cancel && values.cancel();
+						win.close();
+					});
+
+					win.add(tableview);
+					win.add(closeBtn);
+					win.open();
+				} else {
+					console.error('Problems with getting the contacts, Error: ' + e.error);
+				}
 			});
 		}
 	});
