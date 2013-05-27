@@ -1,0 +1,70 @@
+---
+name: Modules.Tizen.DataSynchronization.SyncInfo
+summary: This interface defines the sync information.
+description: |
+    The [MANUAL](Modules.Tizen.DataSynchronization.SYNC_MODE_MANUAL) sync mode accepts the sync type 
+    and the [PERIODIC](Modules.Tizen.DataSynchronization.SYNC_MODE_PERIODIC) mode accepts the sync 
+    interval, whereas the [PUSH](Modules.Tizen.DataSynchronization.SYNC_MODE_PUSH) mode does not 
+    accept any additional parameters.
+extends: Titanium.Proxy
+properties:
+  - name: url
+    summary:  An attribute to store the URL of the sync server.
+    type: String
+
+  - name: id
+    summary: An attribute to store the login ID for the sync server.
+    description: |
+        When an attempt to retrieve the saved value is made, it will return null to prevent any 
+        compromise on the privacy of the login ID.
+    type: String
+
+  - name: password
+    summary:  An attribute to store the login password to the sync server.
+    description: |
+        When an attempt to retrieve the saved value is made, it will return null to prevent any 
+        compromise on the privacy of the login ID.
+    type: String
+
+  - name: mode
+    summary:  An attribute to store the sync mode. 
+    description: |
+        Can be one of: [MANUAL](Modules.Tizen.DataSynchronization.SYNC_MODE_MANUAL), 
+        [PERIODIC](Modules.Tizen.DataSynchronization.SYNC_MODE_PERIODIC), or
+        [PUSH](Modules.Tizen.DataSynchronization.SYNC_MODE_PUSH).
+    type: String
+
+  - name: type
+    summary: An attribute to store the sync type. 
+    description: |
+        This attribute is used when the sync mode is set to 
+        [MANUAL](Modules.Tizen.DataSynchronization.SYNC_MODE_MANUAL) option. Can be one of:
+
+        * [SYNC_TYPE_TWO_WAY](Modules.Tizen.DataSynchronization.SYNC_TYPE_TWO_WAY)
+        * [SYNC_TYPE_SLOW](Modules.Tizen.DataSynchronization.SYNC_TYPE_SLOW)
+        * [SYNC_TYPE_ONE_WAY_FROM_CLIENT](Modules.Tizen.DataSynchronization.SYNC_TYPE_ONE_WAY_FROM_CLIENT)
+        * [SYNC_TYPE_REFRESH_FROM_CLIENT](Modules.Tizen.DataSynchronization.SYNC_TYPE_REFRESH_FROM_CLIENT)
+        * [SYNC_TYPE_ONE_WAY_FROM_SERVER](Modules.Tizen.DataSynchronization.SYNC_TYPE_ONE_WAY_FROM_SERVER)
+        * [SYNC_TYPE_REFRESH_FROM_SERVER](Modules.Tizen.DataSynchronization.SYNC_TYPE_REFRESH_FROM_SERVER)
+        
+    type: String
+    optional: true
+
+  - name: interval
+    summary:  An attribute to store the sync interval.
+    description: |
+        This attribute is used when the sync mode is set to 
+        [PERIODIC](Modules.Tizen.DataSynchronization.SYNC_MODE_PERIODIC) option. Can be one of:
+
+        * [SYNC_INTERVAL_5_MINUTES](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_5_MINUTES)
+        * [SYNC_INTERVAL_15_MINUTES](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_15_MINUTES)
+        * [SYNC_INTERVAL_1_HOUR](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_1_HOUR)
+        * [SYNC_INTERVAL_4_HOURS](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_4_HOURS)
+        * [SYNC_INTERVAL_12_HOURS](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_12_HOURS)
+        * [SYNC_INTERVAL_1_DAY](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_1_DAY)
+        * [SYNC_INTERVAL_1_WEEK](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_1_WEEK)
+        * [SYNC_INTERVAL_1_MONTH](Modules.Tizen.DataSynchronization.SYNC_INTERVAL_1_MONTH)
+        
+    type: String
+    optional: true
+

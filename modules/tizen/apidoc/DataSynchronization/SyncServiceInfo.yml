@@ -1,0 +1,36 @@
+---
+name: Modules.Tizen.DataSynchronization.SyncServiceInfo
+summary: This interface defines the sync service information.
+extends: Titanium.Proxy
+properties:
+  - name: enable
+    summary: An attribute to enable or disable a service category for sync.
+    type: Boolean
+
+  - name: serviceType
+    summary: An attribute to indicate the sync service type.
+    description: |
+        Can be either 
+        [SYNC_SERVICE_TYPE_CONTACT](Modules.Tizen.DataSynchronization.SYNC_SERVICE_TYPE_CONTACT) or
+        [SYNC_SERVICE_TYPE_EVENT](Modules.Tizen.DataSynchronization.SYNC_SERVICE_TYPE_EVENT).
+    type: String
+
+  - name: serverDatabaseUri
+    summary: An attribute to store the sync service DB URI of the server.
+    type: String
+
+  - name: id
+    summary: (optional) An attribute to store the sync service DB access ID to the server.
+    description: |
+        This is used only when the server requires a separate access right to each DB. When the 
+        saved value is retrieved, it will return `null` not to reveal the privacy issue.
+    type: Boolean
+    optional: true
+
+  - name: password
+    summary: (optional) An attribute to store the sync service DB access password to the server.
+    description: |
+        This is used only when the server requires a separate access right to each DB. When the 
+        saved value is retrieved, it will return `null` not to reveal the privacy issue.
+    type: Boolean
+    optional: true    
