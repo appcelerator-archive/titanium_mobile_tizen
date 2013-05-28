@@ -5,7 +5,10 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 	var Alarm = lang.mixProps(require.mix({}, Evented), {
 
 		add: function(alarm /*Alarm*/, applicationId /*ApplicationId*/, appControl /*ApplicationControl*/) {
-			tizen.alarm.add(alarm._obj, applicationId, appControl ? appControl._obj : appControl);
+			// Tizen distinguishes between undefined appControl (this gives an error) and missing appControl.
+			appControl ? 
+				tizen.alarm.add(alarm._obj, applicationId, appControl._obj) :
+				tizen.alarm.add(alarm._obj, applicationId);
 		},
 
 		remove: function(id /*AlarmId*/) {
