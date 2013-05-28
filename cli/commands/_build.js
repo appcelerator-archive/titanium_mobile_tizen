@@ -42,41 +42,56 @@ var ti = require('titanium-sdk'),
 		'.jpeg': 'image/jpg'
 	},
 	devId,								// stores the target device/emulator ID
-	tizenConfigXmlSources, 				// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
+	tizenConfigXmlSources,				// stores the content of the <tizen> node from tiapp.xml, will be added into config.xml directly
 	// Defines the default list of privileges for a Tizen application. If a privilege is not declared, the corresponding Tizen feature will be
 	// unavailable. By default adds minimal required set of privileges
-	defaultPrivilegesList = 
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/systeminfo"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/tizen"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/alarm"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/application.launch"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/calendar.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/callhistory.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/contact.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/content.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/download"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.send"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/messaging.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.admin"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.cardemulation"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.common"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/nfc.tag"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.read"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/notification.write"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/power"/> -->\n'+
-			'<!-- <tizen:privilege name="http://tizen.org/privilege/setting"/> -->\n'+
+	defaultPrivilegesList =
+			'<tizen:privilege name="http://tizen.org/privilege/system"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/tizen"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/systeminfo"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/system"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/setting"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/secureelement"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/push"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/power"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/package.info"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/notification"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.tag"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.p2p"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.common"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/nfc.admin"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/networkbearerselection"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.send"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/messaging.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/download"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/datasync"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/datacontrol.consumer"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/content.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/contact.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/callhistory.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.write"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/calendar.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.spp"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.gap"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/bluetooth.admin"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/appmanager.kill"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/appmanager.certificate"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/application.read"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/application.launch"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/alarm"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/fullscreen"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/location"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/mediacapture"/>\n'+
+			'<tizen:privilege name="http://tizen.org/privilege/unlimitedstorage"/>\n'+
 			'<access origin="*" subdomains="true"/>\n';
 
 // silence uglify's default warn mechanism
@@ -91,7 +106,7 @@ exports.config = function (logger, config, cli) {
 						default: false,
 						desc: __('debug Tizen application')
 					},
-				},				
+				},
 				options: {
 					'deploy-type': {
 						abbr: 'D',
@@ -105,16 +120,7 @@ exports.config = function (logger, config, cli) {
 						desc: __('the id for the Tizen device or emulator'),
 						hint: __('device id')
 					},
-					// 'run-dev-id': {
-					// 	abbr: 'R',
-					// 	desc: __('run widget on this device'),
-					// 	hint: __('device id')
-					// },			
-					// 'debug-dev-id': {
-					// 	abbr: 'B',
-					// 	desc: __('debug widget on this device'),
-					// 	hint: __('device id')
-					// },
+
 					'keystore': {
 						abbr: 'K',
 						desc: __('the location of the certificate file'),
@@ -126,21 +132,6 @@ exports.config = function (logger, config, cli) {
 								keystorePath = afs.resolvePath(keystorePath);
 								if (!afs.exists(keystorePath) || !fs.lstatSync(keystorePath).isFile()) {
 									throw new appc.exception(__('Invalid certificate file location'));
-								}
-								return true;
-							}
-						}
-					},
-					'alias': {
-						abbr: 'L',
-						desc: __('the alias for the keystore'),
-						hint: 'alias',
-						prompt: {
-							label: __('Keystore alias'),
-							error: __('Invalid keystore alias'),
-							validator: function (alias) {
-								if (!alias) {
-									throw new appc.exception(__('Invalid keystore alias'));
 								}
 								return true;
 							}
@@ -161,16 +152,31 @@ exports.config = function (logger, config, cli) {
 							}
 						}
 					},
-					'key-password': {
-						abbr: 'K',
-						desc: __('the password for the key'),
+					'keystoreca': {
+						abbr: 'C',
+						desc: __('author certificate authority path'),
 						password: true,
 						prompt: {
-							label: __('Key password'),
-							error: __('Invalid key password'),
+							label: __('certificate authority path'),
+							error: __('Invalid certificate authority'),
 							validator: function (password) {
 								if (!password) {
-									throw new appc.exception(__('Invalid key password'));
+									throw new appc.exception(__('Invalid file path'));
+								}
+								return true;
+							}
+						}
+					},
+					'rootca': {
+						abbr: 'R',
+						desc: __('root certificate authority path, optional'),
+						password: true,
+						prompt: {
+							label: __('certificate authority path'),
+							error: __('Invalid root certificate CA'),
+							validator: function (password) {
+								if (!password) {
+									throw new appc.exception(__('Invalid file path'));
 								}
 								return true;
 							}
@@ -265,14 +271,14 @@ function build(logger, config, cli, finished) {
 	this.splashHtml = '';
 	this.codeProcessor = cli.codeProcessor;
 	this.tizenSdkDir = 'c:/tizen-sdk';
-	this.targetDevice = void 0;//cli.argv['dev-id'];	
-	this.debugDevice = void 0;//cli.argv['debug-dev-id'];
+	this.targetDevice = void 0;
+	this.debugDevice = void 0;
 	this.runDevice = cli.argv['device'];
 	this.tizenCert = cli.argv['keystore'];
-	this.storeType = 'pkcs12';
-	this.alias = cli.argv['alias'];
 	this.storePasword = cli.argv['password'];
 	this.keypass = cli.argv['key-password'];
+	this.keystoreca  = cli.argv['keystoreca'];
+	this.rootca = cli.argv['rootca'];
 
 	var pkgJson = this.readTiPackageJson();
 	this.packages = [{
@@ -373,6 +379,9 @@ function build(logger, config, cli, finished) {
 				// async.series is used to structure callback-dependent code.
 				async.series([
 					function (next) {
+						// Find Tizen SDK location. Tizen CLI and wgy signing depends on it.
+							this.detectTizenSDK(logger, next);
+					}.bind(this), function (next) {
 						this.minifyJavaScript();
 						this.createFilesystemRegistry();
 						this.createIndexHtml();
@@ -398,9 +407,6 @@ function build(logger, config, cli, finished) {
 								next(null, 'ok');
 							});
 						}
-					}.bind(this), function (next) {
-							// Find Tizen SDK location. Tizen CLI depends on it.
-							this.detectTizenSDK(logger, next);
 					}.bind(this),function (next) {
 						if (devId) {
 							// Need to uninstall the old version of the widget before installing a new version of it.
@@ -442,7 +448,7 @@ function build(logger, config, cli, finished) {
 					}.bind(this)
 					], function (err) {
 						if (err) 
-							console.log('Failed:' + err)						
+							console.log('Failed:' + err);
 						finished && finished.call(this);
 				});
 			});
@@ -582,7 +588,7 @@ build.prototype = {
 		this.logger.info(__n('Searching for %s Titanium Module', 'Searching for %s Titanium Modules', this.tiapp.modules.length));
 		appc.timodule.find(this.tiapp.modules, 'tizen', this.deployType, this.titaniumSdkVersion, this.moduleSearchPaths, this.logger, function (modules) {
 			if (modules.missing.length) {
-				this.logger.error(__('Could not find all required Titanium Modules:'))
+				this.logger.error(__('Could not find all required Titanium Modules:'));
 				modules.missing.forEach(function (m) {
 					this.logger.error('   id: ' + m.id + '\t version: ' + (m.version || 'latest') + '\t platform: ' + m.platform + '\t deploy-type: ' + m.deployType);
 				}, this);
@@ -626,7 +632,7 @@ build.prototype = {
 
 				var libDir = ((pkgJson.directories && pkgJson.directories.lib) || '').replace(/^\//, '');
 
-				var mainFilePath = path.join(moduleDir, libDir, (pkgJson.main || '').replace(jsExtRegExp, '') + '.js')
+				var mainFilePath = path.join(moduleDir, libDir, (pkgJson.main || '').replace(jsExtRegExp, '') + '.js');
 				if (!afs.exists(mainFilePath)) {
 					this.logger.error(__('Invalid Titanium Mobile Module "%s": unable to find main file "%s"', module.id, pkgJson.main) + '\n');
 					process.exit(1);
@@ -1097,7 +1103,7 @@ build.prototype = {
 					this.tiapp.tizen.appid = existingId;
 				}
 				confNode = node.firstChild;
-				
+
 				// Read content of <tizen> node, to add it into prj/build/tizen/config.xml later.
 				while (confNode) {
 					if (tizenConfigXmlSources) {
@@ -1127,7 +1133,7 @@ build.prototype = {
 	// Create the config.xml file (from template) which will go into the wgt.
 	createConfigXml: function () {
 		var templt = fs.readFileSync(path.join(this.mobilewebSdkPath, 'templates', 'app', 'config.tmpl'), 'utf8').toString();
-		
+
 		// Use the URL as the Tizen widget ID, if it's available.
 		if (!this.tiapp.url || 0 === this.tiapp.url || 'http://' === this.tiapp.url) {
 			templt = templt.replace('%%WIDGET_ID%%', 'widget.' + this.tiapp.id);
@@ -1139,7 +1145,7 @@ build.prototype = {
 		templt = templt.replace('%%PACKAGE_ID%%', this.tiapp.tizen.appid);
 		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid + '.' + this.tiapp.name);
 		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
-		
+
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
 	},
 
@@ -1459,25 +1465,30 @@ build.prototype = {
 		// Sign Tizen application with our custom signer utility. 
 		// The stock signer utility web-sign is not used, because it depends on the file ".project" created in Tizen IDE
 		// (and Tizen IDE is not used in Titanium workflow).
+		var vmparams = '-Dcli.home=' + this.tizenSdkDir + '/tools/ide -Dcli.name=' + this.tizenSdkDir+ '/tools/ide/bin/web-signing -Dlog4j.configuration=log4j-info.xml',
+			cmdSign = 'java ' + vmparams + ' ' + '-jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signApp.jar') ;
 
-		var cmdSign = 'java -jar "' + path.join(this.mobilewebSdkPath, 'utils', 'signapp.jar') + '" -sig_proj ' +this.buildDir;
 		logger.info(__('Signing application in  "%s" ', this.buildDir));
+	
+		cmdSign = cmdSign + ' -s ' + this.tizenSdkDir;
+		cmdSign = cmdSign + ' -t ' + this.buildDir;
+		
 		if (this.tizenCert) {
-			// use user's certificate to sign application
-			cmdSign = cmdSign + ' -cert ' + this.tizenCert;
-			if (this.storeType) {
-				cmdSign = cmdSign + ' -storetype ' + this.storeType;
-			}
-			if (this.storePasword) {
-				cmdSign = cmdSign + ' -storepass ' + this.storePasword;
-			}
-			if (this.alias) {
-				cmdSign = cmdSign + ' -alias ' + this.alias;
-			}
-			if (this.keypass) {
-				cmdSign = cmdSign + ' -keypass ' + this.keypass;
-			}
+			cmdSign = cmdSign + ' -a ' + this.tizenCert;
 		}
+
+		if (this.storePasword) {
+			cmdSign = cmdSign + ' -p ' + this.storePasword;
+		}
+
+		if (this.keystoreca) {
+			cmdSign = cmdSign + ' -c ' + this.keystoreca;
+		}
+
+		if (this.rootca) {
+			cmdSign = cmdSign + ' -r ' + this.rootca;
+		}
+
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
 
 		runner.exec(
@@ -1539,13 +1550,13 @@ function renderTemplate(template, props) {
 // Parameters:	
 // - length: result string length
 function randomString(length) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(''),
-    	str = '';
-    if (! length) {
-        length = Math.floor(Math.random() * chars.length);
-    }
-    for (var i = 0; i < length; i++) {
-        str += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return str;
+	var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(''),
+		str = '';
+	if (! length) {
+		length = Math.floor(Math.random() * chars.length);
+	}
+	for (var i = 0; i < length; i++) {
+	str += chars[Math.floor(Math.random() * chars.length)];
+	}
+	return str;
 }
