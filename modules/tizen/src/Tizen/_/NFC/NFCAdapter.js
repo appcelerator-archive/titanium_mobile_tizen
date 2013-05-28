@@ -33,7 +33,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NFCTag', 'Tizen/_/NFC/NFCPe
 					ondetach: function() {
 						detectCallback.ondetach();
 					}
-				}, tagFilter);
+				}, tagFilter || null);
 			},
 
 			unsetTagListener: function() {
