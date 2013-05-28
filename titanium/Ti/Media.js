@@ -115,6 +115,9 @@ define(
 			);
 		},
 
+		// In Tizen, this function won't work until https://jira.appcelerator.org/browse/TIMOB-12416 
+		// is resolved
+		
 		saveToPhotoGallery: function(media, callbacks) {
 			var file,
 				blob,
