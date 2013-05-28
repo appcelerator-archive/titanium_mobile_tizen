@@ -21,14 +21,19 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 			},
 
 			launch: function(id /*ApplicationId*/, callback) {
-				tizen.application.launch(id, callback && function () {
-					callback({
-						code: 0,
-						success: true
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				if(!callback) {
+					tizen.application.launch(id);
+				} else {
+					tizen.application.launch(id, function () {
+						callback({
+							code: 0,
+							success: true
+						});
+					}, function (e) {
+						onError(e, callback);
 					});
-				}, callback && function (e) {
-					onError(e, callback);
-				});
+				}
 			},
 
 			launchAppControl: function(appControl /*Object*/, id /*ApplicationId*/, callback, replyCallback) {
