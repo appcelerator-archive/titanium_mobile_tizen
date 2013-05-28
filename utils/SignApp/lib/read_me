@@ -1,0 +1,5 @@
+put here  jars from <tizen-sdk-root>/tools/ide/lib :
+   commons-cli-1.2.jar
+   HashSign.jar
+   org.tizen.common_2.0.0.201305141719.jar
+   org.tizen.common.sign_2.0.0.201305161358.jar
