@@ -1,9 +1,8 @@
 define(
-	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer'],
-	function(Evented, lang, Blob, h2c, Sound, AudioPlayer) {
+	['Ti/_/Evented', 'Ti/_/lang', 'Ti/Blob', 'Ti/h2c', 'Ti/Media/Sound', 'Ti/Media/AudioPlayer', 'Ti/_/Media/helper'],
+	function(Evented, lang, Blob, h2c, Sound, AudioPlayer, helper) {
 
 	var deviceCapabilities = tizen.systeminfo.getCapabilities();
-
 
 	return lang.setObject('Ti.Media', Evented, {
 
@@ -48,7 +47,34 @@ define(
 		},
 
 		openPhotoGallery: function(args) {
-			require('Ti/_/Media/PhotoGallery').open(args);
+			//TODO: From the next release (Tizen 2.1.0), this additional data will not be needed.
+			var additionalData = [new tizen.ApplicationControlData("selectionMode", ["single"])],
+				service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/pick', null, 'image/*', null, additionalData);
+
+			tizen.application.launchAppControl(service,
+					null,
+					function() {
+						console.log('Launch service Photo Gallery succeeded');
+					},
+					function(e){
+						args && args.error && args.error({
+							code: -1,
+							error: e.message,
+							success: false
+						});
+						console.error('Something wrong with launching service - Photo Gallery. '+ e.message);
+					},
+					{
+						// callee now sends a reply
+						onsuccess: function(data) {
+							helper.selectedItemCB(data, args);
+						},
+						//Something went wrong
+						onfailure:function() {
+							console.error('Something went wrong');
+						}
+					}
+				);
 		},
 
 		createAudioPlayer: function(args) {
@@ -67,27 +93,26 @@ define(
 			'vibrate' in navigator && navigator.vibrate(require.is(pattern, 'Array') ? pattern : [pattern | 0]);
 		},
 
-		showMusicLibrary: function(args) {
+		openMusicLibrary: function(args) {
 			//Open default Tizet music applicatin with ApplicationControl
 			var service = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/view', null, 'audio/*', null);
 
-			tizen.application.launchAppControl(service, 'org.tizen.music-player',
+			tizen.application.launchAppControl(
+				service,
+				'org.tizen.music-player',
 				function() {
-					console.log('launch service succeeded');
+					args && args.success && args.success();
+					console.log('Launch service Music Player succeeded');
 				},
 				function(e) {
-					console.warn('launch service failed. Reason : ' + e.name);
-				},
-				{
-					// callee now sends a reply
-					onsuccess: function(reply) {
-						console.log('onsuccess:' + reply.key + ';' + reply.value);
-					},
-					// Something went wrong
-					onfailure: function() {
-						console.log('launch service failed');
-					}
-				});
+					args && args.error && args.error({
+						code: -1,
+						error: e.message,
+						success: false
+					});
+					console.error('Something wrong with launching service - Music Player. '+ e.message);
+				}
+			);
 		},
 
 		saveToPhotoGallery: function(media, callbacks) {
@@ -161,28 +186,34 @@ define(
 			h2c([document.body], options);
 		},
 
-		showCamera: function() {
+		showCamera: function(args) {
 			if (!this.isCameraSupported) return;
 
 			var appControl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/create_content', null, 'image/jpeg', null);
 
-			tizen.application.launchAppControl(appControl, 'org.tizen.camera-app',
-				function(){
+			tizen.application.launchAppControl(
+				appControl,
+				null,
+				function() {
 					// On succeeded
-					console.log('launch service succeeded');
+					console.log('Launch service Camera succeeded');
 				},
-				function(e) {
-					//On Failed
-					console.warn('launch service failed. Reason : ' + e.name);
+				function(e){
+					args && args.error && args.error({
+						code: -1,
+						error: e.message,
+						success: false
+					});
+					console.error('Something wrong with launching service - Camera. '+ e.message);
 				},
 				{
-					// callee now sends a reply 
-					onsuccess: function(reply) {
-						console.log('onsuccess:' + reply.key + ';' + reply.value);
+					// callee now sends a reply
+					onsuccess: function(data) {
+						helper.selectedItemCB(data, args);
 					},
-					// Something went wrong 
-					onfailure: function() {
-						console.warn('launch service failed');
+					//Something went wrong
+					onfailure:function() {
+						console.error('Something went wrong');
 					}
 				}
 			);
