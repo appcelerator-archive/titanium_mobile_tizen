@@ -1243,7 +1243,7 @@ build.prototype = {
 			stdout = '',
 			stderr = '';
 
-		child = runner.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip']);
+		child = runner.spawn(path.resolve(this.find7za(logger).toString()), ['a', path.join(this.buildDir, 'tizenapp.wgt'), this.buildDir + '/*', '-tzip', '-x!.manifest.tmp']);
 		child.stdout.on('data', function (data) {
 			stdout += data.toString();
 		});
