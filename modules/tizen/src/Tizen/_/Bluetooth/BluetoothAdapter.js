@@ -26,9 +26,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 						code: 0,
 						success: true
 					});
-				}, callback && function(e) {
+				} || null,
+				callback && function(e) {
 					onError(e, callback);
-				});
+				} || null);
 			},
 
 			setPowered: function(state /*boolean*/, callback) {
@@ -37,9 +38,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 						code: 0,
 						success: true
 					});
-				}, callback && function(e) {
+				} || null, 
+				callback && function(e) {
 					onError(e, callback);
-				});
+				} || null);
 			},
 
 			// Device discovery will automatically start when user subscribes to one of the
@@ -75,6 +77,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 							self.fireEvent('discoveryfinished', {
 								devices: arr
 							});
+
+							listening = false;
 						}
 					}, function (e) {
 						self.fireEvent('discoveryerror', {
@@ -105,9 +109,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 						code: 0,
 						success: true
 					});
-				}, callback && function(e) {
+				} || null,
+				callback && function(e) {
 					onError(e, callback);
-				});
+				} || null);
 			},
 
 			getKnownDevices: function(callback) {
@@ -160,9 +165,9 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 						code: 0,
 						success: true
 					});
-				}, callback && function(e) {
+				} || null, callback && function(e) {
 					onError(e, callback);
-				});
+				} || null);
 			},
 
 			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, callback) {
