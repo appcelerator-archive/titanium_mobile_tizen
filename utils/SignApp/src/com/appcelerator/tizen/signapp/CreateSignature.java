@@ -67,7 +67,7 @@ public class CreateSignature {
 
 			if(authorP12.isEmpty() && authorP12pwd.isEmpty() && authorCA.isEmpty()){
 				//use default  certificate instead of provided by user for authors signature
-				authorP12 = tizenDir + "/tools/ide/sample/samsung.devmode.sdk.cert.p12"; //"com/appcelerator/tizen/signapp/samsung.devmode.sdk.cert.p12";
+				authorP12 = tizenDir + "/tools/certificate-generator/titanium.cert.p12";
 				authorP12pwd = "1234";
 				authorCA = tizenDir + "/tools/certificate-generator/certificates/developer/tizen-developer-ca.cer";
 				rootCA = "";

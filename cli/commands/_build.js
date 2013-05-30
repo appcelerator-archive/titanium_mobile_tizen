@@ -473,7 +473,7 @@ build.prototype = {
 		this.logger.info(__('Validating theme'));
 		this.theme = this.tiapp.mobileweb.theme || 'default';
 		if (!afs.exists(this.mobilewebThemeDir + '/' + this.theme)) {
-			logger.error(__('Unable to find the "%s" theme. Please verify the theme setting in the tiapp.xml.', this.theme) + '\n');
+			this.logger.error(__('Unable to find the "%s" theme. Please verify the theme setting in the tiapp.xml.', this.theme) + '\n');
 			process.exit(1);
 		}
 		this.logger.debug(__('Using %s theme', this.theme.cyan));
@@ -1143,7 +1143,8 @@ build.prototype = {
 
 		templt = templt.replace('%%WIDGET_NAME%%', this.tiapp.name);
 		templt = templt.replace('%%PACKAGE_ID%%', this.tiapp.tizen.appid);
-		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid + '.' + this.tiapp.name);
+		//aplication name node cannot contain special symbols and underscore symbol
+		templt = templt.replace('%%APP_ID%%', this.tiapp.tizen.appid + '.' + this.tiapp.name.replace(/[^A-Za-z]/g, ""));
 		templt = templt.replace('%%FEATURES_LIST%%', tizenConfigXmlSources ? tizenConfigXmlSources : defaultPrivilegesList );
 
 		fs.writeFileSync(path.join(this.buildDir, 'config.xml'), templt, 'utf8');
@@ -1475,18 +1476,17 @@ build.prototype = {
 		
 		if (this.tizenCert) {
 			cmdSign = cmdSign + ' -a ' + this.tizenCert;
-		}
+			if (this.storePasword) {
+				cmdSign = cmdSign + ' -p ' + this.storePasword;
+			}
 
-		if (this.storePasword) {
-			cmdSign = cmdSign + ' -p ' + this.storePasword;
-		}
+			if (this.keystoreca) {
+				cmdSign = cmdSign + ' -c ' + this.keystoreca;
+			}
 
-		if (this.keystoreca) {
-			cmdSign = cmdSign + ' -c ' + this.keystoreca;
-		}
-
-		if (this.rootca) {
-			cmdSign = cmdSign + ' -r ' + this.rootca;
+			if (this.rootca) {
+				cmdSign = cmdSign + ' -r ' + this.rootca;
+			}			
 		}
 
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
