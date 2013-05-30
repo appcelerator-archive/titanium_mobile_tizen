@@ -1476,18 +1476,17 @@ build.prototype = {
 		
 		if (this.tizenCert) {
 			cmdSign = cmdSign + ' -a ' + this.tizenCert;
-		}
+			if (this.storePasword) {
+				cmdSign = cmdSign + ' -p ' + this.storePasword;
+			}
 
-		if (this.storePasword) {
-			cmdSign = cmdSign + ' -p ' + this.storePasword;
-		}
+			if (this.keystoreca) {
+				cmdSign = cmdSign + ' -c ' + this.keystoreca;
+			}
 
-		if (this.keystoreca) {
-			cmdSign = cmdSign + ' -c ' + this.keystoreca;
-		}
-
-		if (this.rootca) {
-			cmdSign = cmdSign + ' -r ' + this.rootca;
+			if (this.rootca) {
+				cmdSign = cmdSign + ' -r ' + this.rootca;
+			}			
 		}
 
 		logger.info(__('Signer commandline:  "%s" ', cmdSign));
