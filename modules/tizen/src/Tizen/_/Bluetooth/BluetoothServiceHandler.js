@@ -33,16 +33,19 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], fu
 			},
 
 			unregister: function(callback) {
-				this._obj.unregister(callback && function() {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof callback !== 'undefined') && args.push(function() {
 						callback({
 							code: 0,
 							success: true
 						});
 					},
-					callback && function(e) {
+					function(e) {
 						onError(e, callback);
 					}
 				);
+				this._obj.unregister.call(this._obj, args);
 			},
 
 			constants: {

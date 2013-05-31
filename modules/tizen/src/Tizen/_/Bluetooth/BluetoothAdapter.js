@@ -21,27 +21,37 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 
 
 			setName: function(name /*DOMString*/, callback) {
-				this._obj.setName(name, callback && function() {
-					callback({
-						code: 0,
-						success: true
-					});
-				} || null,
-				callback && function(e) {
-					onError(e, callback);
-				} || null);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ name ];
+				(typeof callback !== 'undefined') && args.push(
+					function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					function(e) {
+						onError(e, callback);
+					}
+				);
+				this._obj.setName.apply(this._obj, args);
 			},
 
 			setPowered: function(state /*boolean*/, callback) {
-				this._obj.setPowered(state, callback && function() {
-					callback({
-						code: 0,
-						success: true
-					});
-				} || null, 
-				callback && function(e) {
-					onError(e, callback);
-				} || null);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ state ];
+				(typeof callback !== 'undefined') && args.push(
+					function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					}, 
+					function(e) {
+						onError(e, callback);
+					}
+				);
+				this._obj.setPowered.apply(this._obj, args);
 			},
 
 			// Device discovery will automatically start when user subscribes to one of the
@@ -90,6 +100,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			stopDiscovery: function(callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
 				if(listening) {
 					// stopDiscovery automatically removes all Titanium event subscriptions.
 					// Otherwise, after stopping discovery and reinitiating it with addEventListener again,
@@ -104,15 +116,16 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 					listening = false;
 				}
 
-				this._obj.stopDiscovery(callback && function() {
-					callback({
-						code: 0,
-						success: true
+				(typeof callback !== 'undefined') && args.push(function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					callback && function(e) {
+						onError(e, callback);
 					});
-				} || null,
-				callback && function(e) {
-					onError(e, callback);
-				} || null);
+				this._obj.stopDiscovery.apply(this._obj, args);
 			},
 
 			getKnownDevices: function(callback) {
@@ -160,14 +173,18 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 			},
 
 			destroyBonding: function(address /*BluetoothAddress*/, callback) {
-				this._obj.destroyBonding(address, callback && function() {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				args = [ address ];
+				(typeof callback !== 'undefined') && args.push(function() {
 					callback({
 						code: 0,
 						success: true
 					});
-				} || null, callback && function(e) {
+				}, 
+				callback && function(e) {
 					onError(e, callback);
-				} || null);
+				});
+				this._obj.destroyBonding(this._obj, args);
 			},
 
 			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, callback) {
