@@ -22,7 +22,7 @@ methods:
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
 
-        * `http://tizen.org/privilege/messaging.send`
+        * `http://tizen.org/privilege/messaging.write`
         
     parameters: 
       - name: message

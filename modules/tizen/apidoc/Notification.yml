@@ -24,7 +24,7 @@ methods:
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
 
-        * `http://tizen.org/privilege/notification.write`
+        * `http://tizen.org/privilege/notification`
         
     parameters:
       - name: notification
@@ -37,7 +37,7 @@ methods:
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
 
-        * `http://tizen.org/privilege/notification.write`
+        * `http://tizen.org/privilege/notification`
         
     parameters:
       - name: notification
@@ -50,7 +50,7 @@ methods:
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
 
-        * `http://tizen.org/privilege/notification.write`
+        * `http://tizen.org/privilege/notification`
         
     parameters:
       - name: id
@@ -63,17 +63,11 @@ methods:
         To use this method, you must include the following privilege in the `tiapp.xml` file of your 
         Titanium application:  
 
-        * `http://tizen.org/privilege/notification.write`
+        * `http://tizen.org/privilege/notification`
         
     
   - name: getNotification
     summary: Gets a previously posted notification by the current application.
-    description: |
-        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
-        Titanium application:  
-
-        * `http://tizen.org/privilege/notification.read`
-        
     returns:
         type: Modules.Tizen.Notification
     parameters:

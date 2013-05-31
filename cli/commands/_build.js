@@ -1361,7 +1361,7 @@ build.prototype = {
 		if (this.runDevice && this.runDevice != 'none') {
 			this.executeTizenCLICommand(
 				'web-run',
-				'-t 10 -i ' + this.tiapp.tizen.appid + ' --device=' + this.runDevice,
+				'-t 10 -i ' + this.tiapp.tizen.appid + '.' + this.tiapp.name.replace(/[^A-Za-z]/g, "") + ' --device=' + this.runDevice,
 				logger,
 				callback);
 		} else {
@@ -1467,7 +1467,7 @@ build.prototype = {
 		// The stock signer utility web-sign is not used, because it depends on the file ".project" created in Tizen IDE
 		// (and Tizen IDE is not used in Titanium workflow).
 		var vmparams = '-Dcli.home=' + this.tizenSdkDir + '/tools/ide -Dcli.name=' + this.tizenSdkDir+ '/tools/ide/bin/web-signing -Dlog4j.configuration=log4j-info.xml',
-			cmdSign = 'java ' + vmparams + ' ' + '-jar ' + path.join(this.mobilewebSdkPath, 'utils', 'signApp.jar') ;
+			cmdSign = 'java ' + vmparams + ' ' + '-jar ' + '"' + path.join(this.mobilewebSdkPath, 'utils', 'signApp.jar') + '"' ;
 
 		logger.info(__('Signing application in  "%s" ', this.buildDir));
 	

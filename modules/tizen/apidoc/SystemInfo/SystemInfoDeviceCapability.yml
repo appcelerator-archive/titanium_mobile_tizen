@@ -80,6 +80,13 @@ properties:
     description: |
         For example, "1.0.0" represents a platform version where the major version is 1 and the 
         minor and build versions are 0.
+
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
     type: String
     permission: read-only
 
