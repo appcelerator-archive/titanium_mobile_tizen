@@ -19,18 +19,24 @@ define(['Ti/_/declare', 'Tizen/_/DataControl/DataControlConsumerObject'], functi
 		},
 
 		addValue: function(reqId /*unsigned long*/, key /*DOMString*/, value /*DOMString*/, callback) {
-			return this._obj.addValue(reqId, key, value, 
-				callback && function (reqId) {
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [
+				reqId,
+				key,
+				value
+			];
+			(typeof callback !== 'undefined') && args.push(function (reqId) {
 					callback({
 						code: 0,
 						success: true,
 						reqId: reqId
 					})
 				},
-				callback && function (reqId, e) {
+				function (reqId, e) {
 					onError(e, callback, reqId);
 				}
-			)
+			);
+			return this._obj.addValue.apply(this._obj, args)
 		},
 
 		removeValue: function(reqId /*unsigned long*/, key /*DOMString*/, value /*DOMString*/, callback) {

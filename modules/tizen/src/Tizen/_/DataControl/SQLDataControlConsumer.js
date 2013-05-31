@@ -19,8 +19,12 @@ define(['Ti/_/declare', 'Tizen/_/DataControl/DataControlConsumerObject'], functi
 		},
 
 		insert: function(reqId /*unsigned long*/, insertionData /*RowData*/, callback) {
-			return this._obj.insert(reqId, insertionData, 
-				callback && function (reqId, insertRowId) {
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [
+				reqId,
+				insertionData
+			];
+			(typeof callback !== 'undefined') && args.push(function (reqId, insertRowId) {
 					callback({
 						code: 0,
 						success: true,
@@ -28,57 +32,75 @@ define(['Ti/_/declare', 'Tizen/_/DataControl/DataControlConsumerObject'], functi
 						insertRowId: insertRowId
 					})
 				},
-				callback && function (reqId, e) {
+				function (reqId, e) {
 					onError(e, callback, reqId);
 				}
 			);
+			return this._obj.insert.apply(this._obj, args);
 		},
 
 		update: function(reqId /*unsigned long*/, updateData /*RowData*/, where /*DOMString*/, callback) {
-			return this._obj.update(reqId, updateData, where, 
-				callback && function (reqId) {
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [
+				reqId,
+				updateData,
+				where
+			];
+			(typeof callback !== 'undefined') && args.push(function (reqId) {
 					callback({
 						code: 0,
 						success: true,
 						reqId: reqId,
 					})
 				},
-				callback && function (reqId, e) {
+				function (reqId, e) {
 					onError(e, callback, reqId);
 				}
 			);
+			return this._obj.update.apply(this._obj, args);
 		},
 
 		remove: function(reqId /*unsigned long*/, where /*DOMString*/, callback) {
-			return this._obj.remove(reqId, where, 
-				callback && function (reqId) {
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [
+				reqId,
+				where
+			];
+			(typeof callback !== 'undefined') && args.push(function (reqId) {
 					callback({
 						code: 0,
 						success: true,
 						reqId: reqId,
 					})
 				},
-				callback && function (reqId, e) {
+				function (reqId, e) {
 					onError(e, callback, reqId);
 				}
 			);
+			return this._obj.remove.apply(this._obj, args);
 		},
 
 		select: function(reqId /*unsigned long*/, columns /*DOMString*/, where /*DOMString*/, callback, page /*unsigned long*/, maxNumberPerPage /*unsigned long*/) {
-			return this._obj.select(reqId, columns, where, 
-				callback && function (rows, reqId) {
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [
+				reqId,
+				columns,
+				where,
+				function (rows, reqId) {
 					callback({
 						code: 0,
 						success: true,
 						rows: rows,
 						reqId: reqId,
-					})
+					});
 				},
-				callback && function (reqId, e) {
+				function (reqId, e) {
 					onError(e, callback, reqId);
 				},
-				page, maxNumberPerPage
-			);
+			];
+			(typeof page !== 'undefined') && args.push(page);
+			(typeof maxNumberPerPage !== 'undefined') && args.push(maxNumberPerPage);
+			return this._obj.select.apply(this._obj, args);
 		}
 	});
 
