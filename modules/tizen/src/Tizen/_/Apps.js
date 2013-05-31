@@ -37,7 +37,9 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 			},
 
 			launchAppControl: function(appControl /*Object*/, id /*ApplicationId*/, callback, replyCallback) {
-				var wrappedReplyCallback = {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ appControl._obj ], 
+				wrappedReplyCallback = {
 					onsuccess: replyCallback && function(data) {
 						var i = 0,
 							len = data.length,
@@ -72,14 +74,20 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 					}
 				};
 
-				tizen.application.launchAppControl(appControl._obj, id, callback && function () {
-					callback({
-						code: 0,
-						success: true
-					});
-				}, callback && function (e) {
-					onError(e, callback);
-				}, replyCallback && wrappedReplyCallback);
+				(typeof id !== 'undefined') && args.push(id);
+				(typeof callback !== 'undefined') && args.push(function () {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					function (e) {
+						onError(e, callback);
+					}
+				);
+				(typeof replyCallback !== 'undefined') && args.push(wrappedReplyCallback);
+
+				tizen.application.launchAppControl.apply(tizen.application, args);
 			},
 
 			findAppControl: function(appControl /*Object*/, callback) {
@@ -127,7 +135,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 			},
 
 			getAppContext: function(contextId /*ApplicationContextId*/) {
-				return new ApplicationContext(tizen.application.getAppContext(contextId));
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof contextId !== 'undefined') && args.push(contextId);
+				return new ApplicationContext(tizen.application.getAppContext.apply(tizen.application, args));
 			},
 
 			getAppsInfo: function(callback) {
@@ -149,7 +160,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 			},
 
 			getAppInfo: function(id /*ApplicationId*/) {
-				return new ApplicationInformation(tizen.application.getAppInfo(id));
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof id !== 'undefined') && args.push(id);
+				return new ApplicationInformation(tizen.application.getAppInfo.apply(tizen.application, args));
 			},
 
 			addEventListener: function () {
