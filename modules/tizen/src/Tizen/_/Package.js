@@ -88,7 +88,10 @@ define(['Ti/_/lang', 'Tizen/_/Package/PackageInformation', 'Ti/_/Evented'], func
 		},
 
 		getPackageInfo: function(id /*PackageId*/) {
-			var packageInfo = izen.package.getPackageInfo(id);
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [];
+			(typeof id !== 'undefined') && args.push(id);
+			var packageInfo = tizen.package.getPackageInfo.apply(tizen.package, args);
 			return new PackageInformation(void 0, packageInfo);
 		},
 
