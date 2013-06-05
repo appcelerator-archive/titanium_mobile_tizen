@@ -184,7 +184,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				callback && function(e) {
 					onError(e, callback);
 				});
-				this._obj.destroyBonding(this._obj, args);
+				this._obj.destroyBonding.apply(this._obj, args);
 			},
 
 			registerRFCOMMServiceByUUID: function(uuid /*BluetoothUUID*/, name /*DOMString*/, callback) {
