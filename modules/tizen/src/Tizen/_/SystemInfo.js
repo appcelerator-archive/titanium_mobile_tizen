@@ -29,9 +29,15 @@ define(['Ti/_/lang', 'Tizen/_/SystemInfo/SystemInfoCpu', 'Tizen/_/SystemInfo/Sys
 			},
 
 			addPropertyValueChangeListener: function(property /*PropertyId*/, successCallback /*SystemInfoPropertySuccessCallback*/, options /*SystemInfoOptions*/) {
-				return tizen.systeminfo.addPropertyValueChangeListener(property, function(object) {
-					successCallback(wrap(object));
-				}, options);
+				// Tizen distinguishes between undefined optional parameters (this gives an error) and missing optional parameters (this is correct).
+				var args = [
+					property,
+					function(object) {
+						successCallback(wrap(object));
+					}
+				];
+				(typeof options !== 'undefined') && args.push(options);
+				return tizen.systeminfo.addPropertyValueChangeListener.apply(tizen.systeminfo, args);
 			},
 
 			removePropertyValueChangeListener: function(listenerId /*unsigned long*/) {
