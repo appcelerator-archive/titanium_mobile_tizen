@@ -9,10 +9,13 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/MessageBody', 'Ti/_/Evented'], functi
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
 			} else {
-				// Check if the required parameters are present (do not check for the optional ones).
+				// Check if the required parameters are present
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				if('type' in args){
 					// args is a dictionary that the user of the wrapper module passed to the creator function.
-					this._obj = new tizen.Message(args.type, args.messageInitDict);
+					this._obj = (typeof args.messageInitDict !== 'undefined') ? 
+						new tizen.Message(args.type, args.messageInitDict) : 
+						new tizen.Message(args.type);
 				} else {
 					throw new Error('Constructor with given parameters doesn\'t exist');
 				}

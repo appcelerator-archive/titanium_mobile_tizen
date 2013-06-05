@@ -10,9 +10,12 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				// Check if the required parameters are present (do not check for the optional ones).
+				// Check if the required parameters are present
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				if ('filePath' in args) {
-					this._obj = new tizen.MessageAttachment(args.filePath, args.mimeType);
+					this._obj = (typeof args.mimeType !== 'undefined') ? 
+						new tizen.MessageAttachment(args.filePath, args.mimeType) : 
+						new tizen.MessageAttachment(args.filePath);
 				} else {
 					throw new Error('Constructor with given parameters doesn\'t exist');
 				}

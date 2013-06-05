@@ -27,15 +27,20 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 			},
 
 			sendMessage: function(message /*Message*/, callback) {
-				this._obj.sendMessage(message._obj, callback && function (recipients) {
-					callback({
-						code: 0,
-						success: true,
-						recipients: recipients
-					}, function (e) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ message._obj ];
+				(typeof callback !== 'undefined') && args.push(function (recipients) {
+						callback({
+							code: 0,
+							success: true,
+							recipients: recipients
+						})
+					}, 
+					function (e) {
 						onError(e, callback);
-					});
-				});
+					}
+				);
+				this._obj.sendMessage.apply(this._obj, args);
 			},
 
 			loadMessageBody: function(message /*Message*/, callback) {
@@ -63,19 +68,31 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Tizen/_/Messaging/MessageStorage
 			},
 
 			sync: function(callback, limit /*unsigned long*/) {
-				return this._obj.sync(callback && function () {
-					onSuccess(callback);
-				}, callback && function (e) {
-					onError(e, callback);
-				}, limit);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					}, 
+					function (e) {
+						onError(e, callback);
+					}
+				);
+				(typeof limit !== 'undefined') && args.push(limit);
+				return this._obj.sync.apply(this._obj, args);
 			},
 
 			syncFolder: function(folder /*MessageFolder*/, callback, limit /*unsigned long*/) {
-				return this._obj.syncFolder(folder._obj, callback && function () {
-					onSuccess(callback);
-				}, callback && function (e) {
-					onError(e, callback);
-				}, limit);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ folder._obj ];
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					},
+					function (e) {
+						onError(e, callback);
+					}
+				);
+				(typeof limit !== 'undefined') && args.push(limit);
+				return this._obj.syncFolder.apply(this._obj, args);
 			},
 
 			stopSync: function(opId /*long*/) {
