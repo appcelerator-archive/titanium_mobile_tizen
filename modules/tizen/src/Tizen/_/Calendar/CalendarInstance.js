@@ -37,57 +37,71 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			},
 
 			addBatch: function(items /*CalendarItem*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					itemsCount = items.length,
-					unwrappedItems = [];
+					unwrappedItems = [],
+					args = [];
 
 				for (; i < itemsCount; i++) {
 					unwrappedItems.push(items[i]._obj);
 				}
 
-				this._obj.addBatch(unwrappedItems, callback && function(items) {
-					var objectsCount = items.length,
-						wrappedItems = [];
+				args.push(unwrappedItems);
+				(typeof callback !== 'undefined') && args.push(function(items) {
+						var objectsCount = items.length,
+							wrappedItems = [];
 
-					for (i = 0; i < objectsCount; i++) {
-						wrappedItems.push(new CalendarItem(items[i]));
-					}
+						for (i = 0; i < objectsCount; i++) {
+							wrappedItems.push(new CalendarItem(items[i]));
+						}
 
-					callback({
-						code: 0,
-						success: true,
-						items: wrappedItems
-					});
-				}, callback && function(e) {
+						callback({
+							code: 0,
+							success: true,
+							items: wrappedItems
+						});
+					},
+					function(e) {
 						onError(e, callback);
-					});
+					}
+				);
+
+				this._obj.addBatch.apply(this._obj, args);
 			},
 
 			update: function(item /*CalendarItem*/, updateAllInstances /*boolean*/) {
-				this._obj.update(item._obj, updateAllInstances);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ item._obj ];
+				(typeof updateAllInstances !== 'undefined') && args.push(updateAllInstances);
+				this._obj.update.apply(this._obj, args);
 			},
 
 			updateBatch: function(items /*CalendarItem*/, callback, updateAllInstances /*boolean*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					itemsCount = items.length,
-					unwrappeDItems = [];
+					unwrappeDItems = [],
+					args = [];
 
 				for (; i < itemsCount; i++) {
 					unwrappeDItems.push(items[i]._obj);
 				}
 
-				this._obj.updateBatch(unwrappeDItems,
-					callback && function() {
+				args.push(unwrappeDItems);
+				(typeof callback !== 'undefined') && args.push(function() {
 						callback({
 							code: 0,
 							success: true
 						});
 					},
-					callback && function(e) {
+					function(e) {
 						onError(e, callback);
-					},
-					updateAllInstances
+					}
 				);
+				(typeof updateAllInstances !== 'undefined') && args.push(updateAllInstances);
+
+				this._obj.updateBatch.apply(this._obj, args);
 			},
 
 			remove: function(id /*CalendarItemId*/) {
@@ -105,27 +119,35 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 			},
 
 			removeBatch: function(ids /*CalendarItemId*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					idsCount = ids.length,
-					unwrappedIds = [];
+					unwrappedIds = [],
+					args = [];
 
 				for (; i < idsCount; i++) {
 					unwrappedIds.push(ids[i]._obj);
 				}
 
-				this._obj.removeBatch(unwrappedIds, callback && function() {
-					callback({
-						code: 0,
-						success: true
-					});
-				}, callback && function(e) {
-					onError(e, callback);
-				});
+				args.push(unwrappedIds);
+				(typeof callback !== 'undefined') && args.push(function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					function(e) {
+						onError(e, callback);
+					}
+				);
+
+				this._obj.removeBatch.apply(this._obj, args);
 			},
 
 			find: function(callback, filter /*AbstractFilter*/, sortMode /*SortMode*/) {
-				this._obj.find(
-					callback && function(items) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					function(items) {
 						var i = 0,
 							len = items.length,
 							calendarItems = [];
@@ -140,12 +162,13 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEvent', 'Tizen
 							items: calendarItems
 						});
 					},
-					callback && function(e) {
+					function(e) {
 						onError(e, callback);
-					},
-					(filter && (filter.toString() === '[object TizenAttributeFilter]')) ? filter._obj : filter,
-					(sortMode && (sortMode.toString() === '[object TizenSortMode]')) ? sortMode._obj : sortMode
-				);
+					}
+				];
+				(typeof filter !== 'undefined') && args.push((filter && filter._obj) || filter);
+				(typeof sortMode !== 'undefined') && args.push((sortMode && sortMode._obj) || sortMode);
+				this._obj.find.apply(this._obj, args);
 			},
 
 			addEventListener: function () {
