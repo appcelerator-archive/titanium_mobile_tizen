@@ -25,7 +25,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 		},
 
 		sendMessage: function(data /*MessagePortDataItem*/, localMessagePort /*LocalMessagePort*/) {
-			this._obj.sendMessage(data, localMessagePort ? localMessagePort._obj : localMessagePort);
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			args = [ data ];
+			(typeof localMessagePort !== 'undefined') && args.push(localMessagePort && localMessagePort._obj || localMessagePort);
+			this._obj.sendMessage.apply(this._obj, args);
 		}
 	});
 
