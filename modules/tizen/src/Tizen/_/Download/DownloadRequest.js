@@ -12,7 +12,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// Check if the required parameters are present (do not check for the optional ones).
 				if ('url' in args) {
-					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
+					this._obj = new tizen.DownloadRequest(args.url, args.destination || null, args.fileName || null);
 				} else {
 					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
