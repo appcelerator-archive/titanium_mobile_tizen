@@ -65,7 +65,47 @@ function(lang, Evented, SyncInfo, SyncServiceInfo, SyncProfileInfo, SyncStatisti
 		},
 
 		startSync: function(profileId /*SyncProfileId*/, progressCallback /*SyncProgressCallback*/) {
-			tizen.datasync.startSync(profileId, progressCallback);
+			// Tizen distinguishes between undefined optional parameters (this gives an error) and missing optional parameters (this is correct).
+			var args = [ profileId ];
+			(typeof progressCallback !== 'undefined') && args.push({
+				onprogress: function(profileId, serviceType, isFromServer, totalPerService, syncedPerService) {
+					progressCallback({
+						code: 0,
+						success: true,
+						profileId: profileId,
+						progress : {
+							serviceType: serviceType,
+							isFromServer: isFromServer,
+							totalPerService: totalPerService,
+							syncedPerService: syncedPerService
+						}
+					});
+				},
+				oncompleted: function(profileId) {
+					progressCallback({
+						code: 0,
+						success: true,
+						completed: ture,
+						profileId: profileId
+					});
+				},
+				onstopped: function(profileId) {
+					progressCallback({
+						code: 0,
+						success: true,
+						stopped : true,
+						profileId: profileId
+					});
+				},
+				onfailed: function(profileId, e) {
+					progressCallback({
+						code: e.code,
+						success: false,
+						error: e.type + ': ' + e.message
+					});
+				}
+			});
+			tizen.datasync.startSync.call(tizen.datasync, args);
 		},
 
 		stopSync: function(profileId /*SyncProfileId*/) {
