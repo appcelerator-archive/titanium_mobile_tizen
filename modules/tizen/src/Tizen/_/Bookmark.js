@@ -6,11 +6,13 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkItem', 'Tizen/_/B
 		return lang.mixProps(require.mix({}, Evented), {
 
 			getBookmarks: function(parentFolder /*BookmarkFolder*/, recursive /*boolean*/) {
-				parentFolder = (parentFolder && parentFolder._obj) || null;
-				recursive = recursive || false;
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof parentFolder !== 'undefined') && args.push((parentFolder && parentFolder._obj) || parentFolder);
+				(typeof recursive !== 'undefined') && args.push(recursive);
 				var i = 0,
 					result = [],
-					bookmarks = tizen.bookmark.get(parentFolder, recursive),
+					bookmarks = tizen.bookmark.get.apply(tizen.bookmark, args),
 					length = bookmarks && bookmarks.length;
 				for (; i < length; i++) {
 					if (bookmarks[i] instanceof tizen.BookmarkItem) {
@@ -24,13 +26,17 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/Bookmark/BookmarkItem', 'Tizen/_/B
 			},
 
 			add: function(bookmark /*BookmarkItem or BookmarkFolder*/, parentFolder /*ParentFolder*/) {
-				parentFolder = (parentFolder && parentFolder._obj) || null;
-				tizen.bookmark.add(bookmark, parentFolder);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ bookmark._obj ];
+				(typeof parentFolder !== 'undefined') && args.push((parentFolder && parentFolder._obj) || parentFolder);
+				tizen.bookmark.add.apply(tizen.bookmark, args);
 			},
 
 			remove: function(bookmark /*BookmarkItem or BookmarkFolder*/) {
-				bookmark = (bookmark && bookmark._obj) || null;
-				tizen.bookmark.remove(bookmark);
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof bookmark !== 'undefined') && args.push((bookmark && bookmark._obj) || bookmark);
+				tizen.bookmark.remove.apply(tizen.bookmark, args);
 			},
 
 			createBookmarkItem: function(dict) {
