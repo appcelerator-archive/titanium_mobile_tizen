@@ -23,14 +23,18 @@ define(['Ti/_/lang', 'Tizen/_/Package/PackageInformation', 'Ti/_/Evented'], func
 		},
 
 		unregisterService: function(callback /*SuccessCallback*/) {
-			tizen.push.unregisterService(callback && function() {
-				callback({
-					code: 0,
-					success: true
-				});
-			}, callback && function(e) {
-				onError(e, callback);
-			});
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [];
+			(typeof callback !== 'undefined') && args.push(function() {
+					callback({
+						code: 0,
+						success: true
+					});
+				},
+				function(e) {
+					onError(e, callback);
+				})
+			tizen.push.unregisterService.apply(tizen.push, args);
 		},
 
 		connectService: function(callback /*PushNotificationCallback*/) {
