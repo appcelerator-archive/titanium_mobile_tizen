@@ -11,7 +11,9 @@ define(['Ti/_/declare', 'Tizen/_/NFC/NDEFRecord'], function(declare, NDEFRecord)
 			} else {
 				// Check if the required parameters are present (do not check for the optional ones).
 				if('text' in args && 'languageCode' in args) {
-					this._obj = new tizen.NDEFRecordText(args.text, args.languageCode, args.encoding);
+					this._obj = ('encoding' in args) ? 
+						new tizen.NDEFRecordText(args.text, args.languageCode, args.encoding):
+						new tizen.NDEFRecordText(args.text, args.languageCode);
 				} else {
 					throw new Error('Constructor with given parameters doesn\'t exist');
 				}

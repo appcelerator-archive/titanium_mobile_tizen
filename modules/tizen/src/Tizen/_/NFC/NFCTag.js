@@ -30,14 +30,19 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(dec
 		},
 
 		writeNDEF: function(ndefMessage, callback) {
-			this._obj.writeNDEF(ndefMessage._obj, callback && function() {
-				callback({
-					success: true,
-					code: 0
-				});
-			}, callback && function(e) {
-				onError(e, callback);
-			});
+			// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+			var args = [ ndefMessage._obj ];
+			(typeof callback !== 'undefined') && args.push(function() {
+					callback({
+						success: true,
+						code: 0
+					});
+				},
+				function(e) {
+					onError(e, callback);
+				}
+			);
+			this._obj.writeNDEF.apply(this._obj, args);
 		},
 
 		transceive: function(data, callback) {
