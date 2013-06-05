@@ -10,7 +10,7 @@ define(['Ti/_/lang', 'Tizen/_/Alarm/AlarmRelative', 'Tizen/_/Alarm/AlarmAbsolute
 				alarm._obj,
 				applicationId
 			];
-			(typeof appControl !== 'undefined') && args.push(appControl._obj);
+			(typeof appControl !== 'undefined') && args.push((appControl && appControl._obj) || appControl);
 			tizen.alarm.add.apply(tizen.alarm, args);
 		},
 
