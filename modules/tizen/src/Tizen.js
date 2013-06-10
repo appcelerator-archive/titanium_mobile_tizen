@@ -2,9 +2,11 @@
 
 define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/AttributeRangeFilter', 'Tizen/_/CompositeFilter', 'Tizen/_/SortMode',
 	'Tizen/_/SimpleCoordinates', 'Tizen/_/Power', 'Tizen/_/Calendar', 'Tizen/_/Download', 'Tizen/_/Alarm', 'Tizen/_/CallHistory', 'Tizen/_/Notification', 'Tizen/_/Apps',
-	'Tizen/_/SystemSetting', 'Tizen/_/Bluetooth', 'Tizen/_/Messaging', 'Tizen/_/SystemInfo', 'Tizen/_/NFC'],
-	function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power,
-			 Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, NFC) {
+	'Tizen/_/SystemSetting', 'Tizen/_/Bluetooth', 'Tizen/_/Messaging', 'Tizen/_/SystemInfo', 'Tizen/_/NFC', 'Tizen/_/Contact/ContactRef', 'Tizen/_/Bookmark', 
+	'Tizen/_/DataControl', 'Tizen/_/Package', 'Tizen/_/MessagePort', 'Tizen/_/DataSynchronization', 'Tizen/_/Push'],
+	function(lang, Evented, AttributeFilter, AttributeRangeFilter, CompositeFilter, SortMode, SimpleCoordinates, Power, 
+			 Calendar, Download, Alarm, CallHistory, Notification, Apps, SystemSetting, Bluetooth, Messaging, SystemInfo, 
+			 NFC, ContactRef, Bookmark, DataControl, Package, MessagePort, DataSynchronization, Push) {
 
 		var Tizen = lang.mixProps(require.mix({}, Evented), {
 
@@ -26,6 +28,10 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attribu
 
 			createSimpleCoordinates: function(args) {
 				return new SimpleCoordinates(args);
+			},
+
+			createContactRef: function(args){
+				return new ContactRef(args);
 			},
 
 			constants: {
@@ -50,7 +56,13 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attribu
 				Bluetooth: Bluetooth,
 				Messaging: Messaging,
 				SystemInfo: SystemInfo,
-				NFC: NFC
+				NFC: NFC,
+				Bookmark: Bookmark,
+				DataControl: DataControl,
+				Package: Package,
+				MessagePort: MessagePort,
+				DataSync: DataSynchronization,
+				Push: Push
 			}
 
 		}, true);

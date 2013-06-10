@@ -1,0 +1,29 @@
+---
+name: Modules.Tizen.AttributeRangeFilter
+summary: |
+    AttributeRangeFilter represents a filter based on an object attribute which has values that are 
+    within a particular range.  
+description: Range filters, where only one boundary is set, are available.
+extends: Modules.Tizen.AbstractFilter
+
+properties:
+  - name: attributeName
+    summary: The name of the object attribute used for filtering. 
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. 
+        For attributes of complex type, use fully-qualified names (such as 'organizations.role' to 
+        filter on a contact's role in an organization). 
+        For attributes of an array type, the filter will match if any value in the array matches. 
+    type: String
+
+  - name: initialValue
+    summary: Objects with an attribute that is greater than or equal to initialValue will match. 
+    description: "By default, this attribute is set to null."
+    type: Object
+    default: null
+
+  - name: endValue
+    summary: Objects with an attribute that is strictly lower than to endValue will match.  
+    description: "By default, this attribute is set to null."
+    type: Object
+    default: null

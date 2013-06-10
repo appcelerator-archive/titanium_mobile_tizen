@@ -1,0 +1,261 @@
+---
+name: Modules.Tizen
+summary: The mine module of Tizen Web Device API
+description: "This is the Tizen root interface."
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+
+  - name: createAttributeFilter
+    summary: Creates and returns an instance of <Modules.Tizen.AttributeFilter>.
+    returns: 
+        type: Modules.Tizen.AttributeFilter
+    parameters: 
+      - name: Options
+        summary: Dictionary with initial arguments for AttributeFilter.
+        type: Dictionary<AttributeFilterInit>
+
+  - name: createAttributeRangeFilter
+    summary: Creates and returns an instance of <Modules.Tizen.AttributeRangeFilter>.
+    returns: 
+        type: Modules.Tizen.AttributeRangeFilter
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for AttributeRangeFilter.
+        type: Dictionary<AttributeRangeFilterInit>
+
+  - name: createCompositeFilter
+    summary: Creates and returns an instance of <Modules.Tizen.CompositeFilter>.
+    returns: 
+        type: Modules.Tizen.CompositeFilter
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for CompositeFilter.
+        type: Dictionary<CompositeFilterInit>
+
+  - name: createSortMode
+    summary: Creates and returns an instance of <Modules.Tizen.SortMode>.
+    returns: 
+        type: Modules.Tizen.SortMode
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for SortMode.
+        type: Dictionary<SortModeInit>
+ 
+  - name: createSimpleCoordinates
+    summary: Creates and returns an instance of <Modules.Tizen.SimpleCoordinates>.
+    returns: 
+        type: Modules.Tizen.SimpleCoordinates
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for SimpleCoordinates.
+        type: Dictionary<SimpleCoordinatesInit>
+
+  - name: createContactRef
+    summary: Creates and returns an instance of <Modules.Tizen.ContactRef>.
+    returns: 
+        type: Modules.Tizen.ContactRef
+    parameters: 
+
+      - name: Options
+        summary: Dictionary with initial arguments for ContactRef.
+        type: Dictionary<ContactRefInit>
+
+properties:
+  - name: FILTER_MATCH_FLAG_EXACTLY
+    summary: Indicates the attribute value should match exactly the given value (default).
+    description: For strings, the match is case-sensitive.
+    type: String
+    permission: read-only
+
+  - name: FILTER_MATCH_FLAG_FULLSTRING
+    summary: String-based matching. Matches the whole string (case insensitive).
+    type: String
+    permission: read-only
+
+  - name: FILTER_MATCH_FLAG_CONTAINS
+    summary: Indicates the attribute value should contain the given string.
+    description: For strings, case insensitive.
+    type: String
+    permission: read-only
+
+  - name: FILTER_MATCH_FLAG_STARTSWITH
+    summary: Indicates the attribute value should start with the given string.
+    description: For strings, case insensitive.
+    type: String
+    permission: read-only
+
+  - name: FILTER_MATCH_FLAG_ENDSWITH
+    summary: Indicates the attribute value should end with the given string.
+    description: For strings, case insensitive.
+    type: String
+    permission: read-only
+
+  - name: FILTER_MATCH_FLAG_EXISTS
+    summary: Indicates the filter should match if the attribute exists.
+    type: String
+    permission: read-only
+
+  - name: SORT_ORDER_MODE_ASC
+    summary: Indicates the sorting order is ascending
+    type: String
+    permission: read-only
+
+  - name: SORT_ORDER_MODE_DESC
+    summary: Indicates the sorting order is descending
+    type: String
+    permission: read-only
+
+  - name: COMPOSITE_FILTER_TYPE_UNION
+    summary: A union of filters ("OR" operator)
+    type: String
+    permission: read-only
+
+  - name: COMPOSITE_FILTER_TYPE_INTERSECTION
+    summary: An intersection of filters ("AND" operator).
+    type: String
+    permission: read-only
+    
+examples:
+  - title: Attribute filter
+    example: |
+        Use an attribute filter to remove a message from the message store.
+
+            // folderId and emailService must be initialized to valid values
+        
+            var Tizen = require('tizen'),
+                attributeFilter = Tizen.createAttributeFilter({
+                    attributeName: 'folderId',
+                    matchFlag: Tizen.FILTER_MATCH_FLAG_EXACTLY,
+                    matchValue: folderId
+                });
+
+            function messagesFoundCB(response) {
+                if (response.success) {
+                    console.log('Message removed successfully.');
+                }
+                else {
+                    console.log('Failed to remove message.');
+                }
+            }
+
+            // Remove selected message
+            emailService.messageStorage.findMessages(attributeFilter, messagesFoundCB);
+
+# Pseudo-type
+
+---
+name: AttributeFilterInit
+summary: Simple object that contains parameters for [createAttributeFilter](Modules.Tizen.createAttributeFilter).
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for filtering.
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. 
+        For attributes of complex type, use fully-qualified names (such as 'organizations.role' to 
+        filter on a contact's role in an organization).
+        For attributes of an array type, the filter will match if any value in the array matches.
+  - name: matchFlag
+    type: String
+    summary: (optional) Used for attribute-based filtering.
+    description: |
+        Used for attribute-based filtering: <Modules.Tizen.FILTER_MATCH_FLAG_EXACTLY>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_FULLSTRING>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_CONTAINS>, <Modules.Tizen.FILTER_MATCH_FLAG_STARTSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_ENDSWITH>, 
+        <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>.
+    optional: true
+  - name: matchValue
+    type: [String, Number, Date, Object]
+    summary: (optional) The value used for matching. 
+    description: |
+        The filter will match if the attribute value matches the given matchValue. This value is not 
+        used if the matchFlag is set to <Modules.Tizen.FILTER_MATCH_FLAG_EXISTS>. By default, this 
+        attribute is set to null.
+    optional: true
+
+---
+name: AttributeRangeFilterInit
+summary: Simple object that contains parameters for [AttributeRangeFilter](Modules.Tizen.AttributeRangeFilter).
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for filtering.
+    description: |
+        This is the name of the object attribute exactly as it is defined in the object's interface. 
+        For attributes of complex type, use fully-qualified names (such as 'organizations.role' to 
+        filter on a contact's role in an organization).
+        
+        For attributes of an array type, the filter will match if any value in the array matches.
+  - name: initialValue
+    type: [String, Number, Date, Object]
+    summary: |
+        (optional) Objects with an attribute that is greater than or equal to initialValue will match.
+    description: By default, this attribute is set to null.
+    optional: true
+  - name: endValue
+    type: [String, Number, Date, Object]
+    summary: (optional) Objects with an attribute that is strictly lower than to endValue will match.
+    description: By default, this attribute is set to null.
+    optional: true
+ 
+---
+name: CompositeFilterInit
+summary: Simple object that contains parameters for [createCompositeFilter](Modules.Tizen.createCompositeFilter).
+properties:
+  - name: type
+    type: String
+    summary: | 
+        The composite filter type. One of the following -
+        
+        - <Modules.Tizen.COMPOSITE_FILTER_TYPE_UNION>,
+        - <Modules.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION>.
+        
+  - name: filters
+    type: Array<Modules.Tizen.AbstractFilter>
+    summary: (optional) The list of filters in the composite filter.
+    optional: true
+    
+---
+name: SortModeInit
+summary: Simple object that contains parameters for [createSortMode](Modules.Tizen.createSortMode).
+properties:
+  - name: attributeName
+    type: String
+    summary: The name of the object attribute used for sorting.
+  - name: order
+    type: String
+    summary: |
+        (optional) The type of the sorting: 
+
+        - <Modules.Tizen.SORT_ORDER_MODE_ASC>, 
+        - <Modules.Tizen.SORT_ORDER_MODE_DESC>.
+        
+    optional: true
+
+---
+name: SimpleCoordinatesInit
+summary: Simple object that contains parameters for [createSimpleCoordinates](Modules.Tizen.createSimpleCoordinates).
+properties:
+  - name: latitude
+    type: Number
+    summary: Latitude, of the WGS84 datum.
+  - name: longitude
+    type: Number
+    summary: Longitude, of the WGS84 datum.
+
+---
+name: ContactRefInit
+summary: Simple object that contains parameters for [createContactRef](Modules.Tizen.createContactRef).
+properties:
+  - name: addressBookId
+    type: String
+    summary: The address book identifier.
+  - name: contactId
+    type: String
+    summary: The contact identifier inside the address book. 

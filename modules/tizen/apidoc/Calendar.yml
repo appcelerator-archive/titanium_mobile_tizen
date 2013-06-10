@@ -1,0 +1,857 @@
+---
+name: Modules.Tizen.Calendar
+summary:  interfaces and methods for users to manage their schedule. 
+description: |
+    Separate calendars can be implemented for group related events or tasks. For example, a user may 
+    have a work, personal, and family calendar. A calendar entry is called an event and is composed 
+    of a series of attributes, such as purpose, starting time, and duration. A calendar is a 
+    collection of events.
+    Internet Calendaring and Scheduling Core Object Specification (iCalendar), defines a format for 
+    exchanging event items. Mapping to specified event/task attributes in this API is as per this 
+    specification. 
+    To know more about this specification, see [RFC 5545](http://tools.ietf.org/html/rfc5545).
+    
+    This API provides functionality to read, create, delete, and update items in specific calendars. 
+    Calendars can be obtained using the [getCalendars](Modules.Tizen.Calendar.getCalendars) 
+    method, which returns an array of [Calendar](Modules.Tizen.Calendar) objects.
+            
+    The `Calendar` module is a thin wrapper on the Tizen `Calendar` class.
+    
+    See also:
+  
+    *   [Tizen Calendar API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fcalendar.html)
+    
+    *   [Tizen  System Info Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcalendar.htm)
+    
+
+extends: Titanium.Module
+platforms: [tizen]
+ 
+methods:
+  - name: getCalendars
+    summary: Gets an array of Calendar objects.
+    description: |
+        If the operation completes successfully, the `callback` will be invoked with all the 
+        calendars found and available. 
+        
+        The first calendar in the list is always the default calendar.
+        
+        If no Calendar object is available, the `callback` is invoked with an empty array.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/calendar.read`
+        
+    parameters:
+      - name: type
+        summary:  |
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> and
+            <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.            
+        type: String
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<GetCalendarsResponse>
+
+  - name: getUnifiedCalendar
+    summary: Gets the aggregation of all calendars.
+    description: |
+        The unified calendar is the aggregation of all calendars that are obtained from getCalendars 
+        and contains all events or tasks. It does not have the calendar id nor name which are set to 
+        null. 
+        
+        If an item is added to the unified calendar, it will be saved in the default calendar. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/calendar.read`
+        
+    returns:
+        summary: The default Calendar object.
+        type: Modules.Tizen.Calendar.CalendarInstance 
+    parameters:
+      - name: type
+        summary: The unified Calendar object.             
+        type: String
+
+  - name: getDefaultCalendar
+    summary: Gets the default calendar, which is used for new items.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/calendar.read`
+        
+    returns:
+        summary: The default Calendar object.
+        type: Modules.Tizen.Calendar.CalendarInstance       
+    parameters:
+      - name: type
+        summary: |
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or
+            <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
+        type: String
+          
+  - name: getCalendar
+    summary: Gets the calendar with the specified identifier and type.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/calendar.read`
+        
+    returns:
+        summary: The matching Calendar object.
+        type: Modules.Tizen.Calendar.CalendarInstance       
+    parameters:
+      - name: type
+        summary: |
+            The type of calendar. Can be one of <Modules.Tizen.Calendar.CALENDAR_TYPE_EVENT> or 
+            <Modules.Tizen.Calendar.CALENDAR_TYPE_TASK>.
+        type: String
+      - name: id
+        summary:  The calendar identifier.
+        type: String
+
+  - name: createCalendarTask
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarTask>
+    returns:
+        type: Modules.Tizen.Calendar.CalendarTask       
+    parameters:
+      - name: taskParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            types of this argument for more details.
+        type: [Dictionary<Modules.Tizen.Calendar.CalendarTask>, RepresentationInit]
+  
+  - name: createCalendarEvent
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarEvent>
+    returns:
+        type: Modules.Tizen.Calendar.CalendarEvent       
+    parameters:
+      - name: eventParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
+        type: [CalendarEventInit, RepresentationInit]
+ 
+  - name: createCalendarAttendee
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAttendee>
+    returns:
+        type: Modules.Tizen.Calendar.CalendarAttendee
+    parameters:
+      - name: attendeeParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
+        type: CalendarAttendeeInit
+                
+  - name: createCalendarRecurrenceRule
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarRecurrenceRule>
+    returns:
+        type: Modules.Tizen.Calendar.CalendarRecurrenceRule
+    parameters:
+      - name: recurrenceRuleParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
+        type: CalendarRecurrenceRuleInit
+                
+  - name: createCalendarAlarm
+    summary: Creates an instance of <Modules.Tizen.Calendar.CalendarAlarm>
+    returns:
+        type: Modules.Tizen.Calendar.CalendarAlarm
+    parameters:
+      - name: alarmParameters
+        summary: | 
+            Parameters required to initialize the object being created. See the documentation on the
+            type of this argument for more details. 
+        type: [CalendarAlarmInitWithDate, CalendarAlarmInitWithDuration]
+        
+properties:
+
+  - name: CALENDAR_TYPE_EVENT 
+    summary: EVENT indicates the type of a calendar if a calendar contains events (VEVENT objects)
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_TYPE_TASK
+    summary: TASK indicates the type of a calendar if a calendar contains tasks (VTODO objects)
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_TEXT_FORMAT_ICALENDAR_20
+    summary: ICALENDAR_20 is type of textual format of a Calendar if the textual format is iCalendar v2.0.
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_TEXT_FORMAT_VCALENDAR_10
+    summary: VCALENDAR_10 is type of textual format of a Calendar if the textual format is vCalendar v1.0
+    type: String
+    permission: read-only
+    
+  - name: ALARM_METHOD_SOUND
+    summary: SOUND indicates the type of an alarm if sound is played to alert the user.
+    type: String
+    permission: read-only    
+    
+  - name: ALARM_METHOD_DISPLAY
+    summary: |
+        DISPLAY indicates the type of an alarm if display on screen without any sound is used to 
+        alert the user.
+    type: String
+    permission: read-only    
+    
+  - name: RECURRENCE_RULE_FREQUENCY_DAILY
+    summary: |
+        DAILY indicates the type of frequency for the recurrence of an event if the event occurs 
+        daily.
+    type: String
+    permission: read-only    
+    
+  - name: RECURRENCE_RULE_FREQUENCY_WEEKLY
+    summary: |
+        WEEKLY indicates the type of frequency for the recurrence of an event if the event occurs 
+        weekly.
+    type: String
+    permission: read-only    
+    
+  - name: RECURRENCE_RULE_FREQUENCY_MONTHLY
+    summary: |
+        MONTHLY indicates the type of frequency for the recurrence of an event if the event occurs 
+        monthly.
+    type: String
+    permission: read-only    
+    
+  - name: RECURRENCE_RULE_FREQUENCY_YEARLY
+    summary: |
+        YEARLY indicates the type of frequency for the recurrence of an event if the event occurs 
+        yearly.
+    type: String
+    permission: read-only
+
+  - name: BY_DAY_VALUE_MO
+    summary: MO  indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only
+
+  - name: BY_DAY_VALUE_TU
+    summary: TU indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only
+
+  - name: BY_DAY_VALUE_WE
+    summary: WE indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only
+    
+  - name: BY_DAY_VALUE_TH
+    summary: TH indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only    
+    
+  - name: BY_DAY_VALUE_FR
+    summary: FR indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only    
+    
+  - name: BY_DAY_VALUE_SA
+    summary: SA indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only
+
+  - name: BY_DAY_VALUE_SU
+    summary: SU indicates the values for CalendarRecurrenceRule.daysOfWeek.
+    type: String
+    permission: read-only    
+
+  - name: EVENT_AVAILABILITY_BUSY
+    summary: BUSY indicates the availability of time for an event.
+    type: String
+    permission: read-only    
+    
+  - name: EVENT_AVAILABILITY_FREE
+    summary: |
+        FREE indicates the availability of time for an event if the specified time slot is not 
+        vacant.
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_TYPE_INDIVIDUAL
+    summary: INDIVIDUAL - Individual
+    type: String
+    permission: read-only
+
+  - name: ATTENDEE_TYPE_GROUP
+    summary: GROUP - Group of individuals
+    type: String
+    permission: read-only    
+    
+  - name: ATTENDEE_TYPE_RESOURCE 
+    summary: RESOURCE  - Physical resource
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_TYPE_ROOM
+    summary: ROOM - Room resource
+    type: String
+    permission: read-only    
+    
+  - name: ATTENDEE_TYPE_UNKNOWN
+    summary: UNKNOWN - Unknown
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_PENDING
+    summary: PENDING - if the participant has not yet responded to the event
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_ACCEPTED
+    summary: ACCEPTED - if the participant has accepted the event
+    type: String
+    permission: read-only    
+    
+  - name: ATTENDEE_STATUS_DECLINED
+    summary: DECLINED - if the participant has declined the event
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_TENTATIVE
+    summary: TENTATIVE - if the participant has tentatively accepted the event
+    type: String
+    permission: read-only
+
+  - name: ATTENDEE_STATUS_DELEGATED
+    summary: DELEGATED - if the participant has delegated attendance to another participant
+    type: String
+    permission: read-only    
+    
+  - name: ATTENDEE_STATUS_COMPLETED
+    summary: COMPLETED - if the participant's event has been completed
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_STATUS_IN_PROCESS
+    summary: IN_PROCESS - if the participant's event is currently in process
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_ROLE_REQ_PARTICIPANT
+    summary: REQ_PARTICIPANT - if the participation of an attendee is mandatory
+    type: String
+    permission: read-only
+
+  - name: ATTENDEE_ROLE_OPT_PARTICIPANT
+    summary: OPT_PARTICIPANT - if the participation of an attendee is optional
+    type: String
+    permission: read-only    
+    
+  - name: ATTENDEE_ROLE_NON_PARTICIPANT
+    summary: |
+        NON_PARTICIPANT - if the attendee is not a participant but is copied for information 
+        purposes
+    type: String
+    permission: read-only    
+
+  - name: ATTENDEE_ROLE_CHAIR
+    summary: CHAIR - if the attendee is the chairperson of the event.
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_PRIORITY_HIGH
+    summary: HIGH - if item priority is high
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_PRIORITY_MEDIUM
+    summary: MEDIUM - if item priority is medium
+    type: String
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_PRIORITY_LOW
+    summary: LOW - if item priority is low
+    type: String
+    permission: read-only
+    
+  - name: CALENDAR_ITEM_VISIBILITY_PUBLIC
+    summary: PUBLIC - if item visibility is public
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_VISIBILITY_PRIVATE
+    summary: PRIVATE - if item visiblity is private
+    type: String
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL
+    summary: CONFIDENTIAL - if item visibility is confidential
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_TENTATIVE
+    summary: TENTATIVE - if the event is tentative.
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_CONFIRMED
+    summary: CONFIRMED - if the event is confirmed.
+    type: String
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_STATUS_CANCELLED
+    summary: CANCELLED - if the event/task is cancelled.
+    type: String
+    permission: read-only
+    
+  - name: CALENDAR_ITEM_STATUS_NEEDS_ACTION
+    summary: NEEDS_ACTION - if the task needs action.
+    type: String
+    permission: read-only
+
+  - name: CALENDAR_ITEM_STATUS_IN_PROCESS
+    summary: IN_PROCESS - if the task has been completed.
+    type: String
+    permission: read-only    
+    
+  - name: CALENDAR_ITEM_STATUS_COMPLETED
+    summary: COMPLETED - if the task has been cancelled.
+    type: String
+    permission: read-only
+
+examples:
+  - title: Create and add an event
+    example: |
+        Create a single event and add it to the default calendar.
+        
+            var Tizen = require('tizen'),
+                calendar = Tizen.Calendar.getDefaultCalendar('EVENT');
+
+            try {
+                var calendarEvent = Tizen.Calendar.createCalendarEvent({
+                    description: 'Remember the milk',
+                    summary: 'Milk',
+                    startDate: new Date(2013, 4, 25, 18, 0),
+                    duration: 3600000,
+                    location: 'Grocery store'
+                });
+                calendar.add(calendarEvent);
+            } catch (err) {
+                console.error('Error adding event. Type: ' + err.type + ", message: " + err.message);
+                return;
+            }
+
+# Pseudo-types used in creators
+---
+name: CalendarItemInit
+summary: |
+    A simple object that is used for creating calendar items.
+description: |
+    These attributes are shared by both calendar events and tasks.
+properties:
+    
+  - name: description 
+    summary: An attribute to store the textual descriptions of an item.
+    type: String
+    
+  - name: summary
+    summary: An attribute to store a short summary or subject for an item.
+    type: String
+    
+  - name: isAllDay
+    summary: |
+        An attribute that behaves like a flag to indicate whether an event is an all-day event or 
+        not.
+    type: Boolean
+    
+  - name: startDate 
+    summary: An attribute to store the start date/time for an item.e / dueDate if provided.
+    type: Date
+    
+  - name: duration
+    summary: An attribute to denote the duration of the calendar component (milliseconds).
+    type: Number
+    
+  - name: location 
+    summary: |
+        An attribute to store the location or the intended venue for the activity defined by 
+        the calendar item.
+    type: String
+
+  - name: geolocation
+    summary: |
+        An attribute to store the global position latitude and longitude of the location where the 
+        event is planned to take place.
+    type: Modules.Tizen.SimpleCoordinates
+
+  - name: organizer
+    summary: An attribute to store the name of the person who organized this event.
+    type: String
+    
+  - name: visibility
+    summary: |
+        An attribute to mark the visibility (secrecy) level of the item.
+    description: |
+        The value is one of the constants defined for this parameter : 
+
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PUBLIC>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_PRIVATE>
+        - <Modules.Tizen.Calendar.CALENDAR_ITEM_VISIBILITY_CONFIDENTIAL>
+
+    type: String
+
+  - name: status
+    summary: |
+        An attribute to store the overall confirmation status for a calendar component.
+    description: |
+        For an event, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_CONFIRMED>. 
+        For a task, the default value is <Modules.Tizen.Calendar.CALENDAR_ITEM_STATUS_NEEDS_ACTION>.
+    type: String
+    
+  - name: priority
+    summary: |
+        An attribute to indicate the priority level of an item. 
+    description: |
+        May be used to relatively prioritize multiple items during a given period of time. 
+        (See RFC 5545 - Section 3.8.1.9).
+
+        The default value for this attribute is <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW> 
+        priority.
+
+        If the native item database supports another priority schema (such as a range from 1 to 9),
+        the implementation must 
+        convert those values to the supported values. 
+
+        For instance, RFC 5545 suggests the following mapping for a range from 1 to 9.
+        
+        - 1-4 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_HIGH>,
+        - 5 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_MEDIUM>,
+        - 6-9 to <Modules.Tizen.Calendar.CALENDAR_ITEM_PRIORITY_LOW>.
+            
+    type: String
+    
+  - name: alarms
+    summary: An attribute array to lists the alarms (or reminders) associated to an item.
+    type: Array<Modules.Tizen.Calendar.CalendarAlarm>
+
+  - name: categories
+    summary: |
+        An attribute to indicate the item categories or subtypes of a calendar component. 
+    description: |
+        The categories are useful in searching for a calendar component of a particular type and 
+        category. 
+        (See RFC 5545 - Section 3.8.1.2).  
+        
+        Examples of categories are personal, work, vacation, travel, etc.
+        By default, this attribute is set to an empty array.
+    type: Array<String>
+    
+  - name: attendees
+    summary: An attribute array that lists the people attending an event.
+    type: Array<Modules.Tizen.Calendar.CalendarAttendee>
+
+---
+name: CalendarEventInit
+summary: |
+    Simple object that contains parameters for 
+    [createCalendarEvent](Modules.Tizen.Calendar.createCalendarEvent).
+    
+extends: CalendarItemInit
+properties:
+   
+  - name: endDate 
+    type: Date
+    summary: An attribute to store the end date/time of an event.
+        
+  - name: availability
+    type: String
+    summary: |
+        An attribute to indicate the availability of a person for an event. 
+    description: |
+        (See RFC 5545 - Section 3.2.9).
+
+        The value is one of the constants defined for this parameter : 
+        <Modules.Tizen.Calendar.EVENT_AVAILABILITY_BUSY> or <Modules.Tizen.Calendar.EVENT_AVAILABILITY_FREE>.
+  - name: recurrenceRule 
+    type: Date
+    summary: An attribute to denote the recurrence rule for the event.
+
+---
+name: RepresentationInit
+summary: |
+    Simple object that contains parameters for 
+    [createCalendarEvent](Modules.Tizen.Calendar.createCalendarEvent).
+properties:
+        
+  - name: stringRepresentation
+    type: String
+    summary: Data in string format 'iCalendar 1.0' or 'iCalendar 2.0'
+  - name: format
+    type: String
+    summary: |
+        Indicates the type of textual format of a Calendar.
+    description: |    
+        The value is one of the constants defined for this parameter :
+        
+        - <Modules.Tizen.Calendar.CALENDAR_TEXT_FORMAT_ICALENDAR_20>,
+        - <Modules.Tizen.Calendar.CALENDAR_TEXT_FORMAT_VCALENDAR_10>.
+            
+---
+name: CalendarAttendeeInit
+summary: |
+    Simple object that contains parameters for 
+    [createCalendarAttendee](Modules.Tizen.Calendar.createCalendarAttendee).
+properties:
+
+  - name: uri 
+    summary: An attribute to store the URI for the attendee.
+    type: String
+
+  - name: attendeeInitDict
+    summary: (optional) The properties of a CalendarAttendee, to pass to its constructor.
+    type: Dictionary<AttendeeInitDict>
+    optional: true
+
+---
+name: AttendeeInitDict
+summary: Simple object used in <CalendarAttendeeInit>.
+properties: 
+
+  - name: name
+    summary: An attribute to store the name of an attendee.
+    type: String
+
+  - name: role 
+    summary: |
+        An attribute to denote the role of the attendee.
+    description: |    
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_REQ_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_OPT_PARTICIPANT>
+        - <Modules.Tizen.Calendar.ATTENDEE_ROLE_NON_PARTICIPANT>
+        
+    type: String
+
+  - name: status
+    summary: |
+        An attribute to store the participant's attendance status.
+    description: |    
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_PENDING>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_ACCEPTED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DECLINED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_TENTATIVE>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_DELEGATED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_COMPLETED>
+        - <Modules.Tizen.Calendar.ATTENDEE_STATUS_IN_PROCESS>
+            
+    type: String
+
+  - name: rsvp 
+    summary: An attribute to store the attendee's participation status reply (RSVP).
+    type: Boolean
+
+  - name: type
+    summary: |
+        An attribute to indicate the type of a participant.
+    description: |
+        The value is one of the constants defined for this type: 
+
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_INDIVIDUAL>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_GROUP>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_RESOURCE>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_ROOM>
+        - <Modules.Tizen.Calendar.ATTENDEE_TYPE_UNKNOWN>
+
+    type: String
+
+  - name: group 
+    summary: (optional) An attribute to store the participant's group or list membership.
+    type: String
+    optional: true
+
+  - name: delegatorURI 
+    summary: |
+        An attribute to store the URI of the person who has delegated their participation to this 
+        attendee.
+    type: String
+
+  - name: delegateURI 
+    summary: |
+        An attribute to stores the URI of the attendee to whom the person has delegated his 
+        participation.
+    type: String
+
+  - name: contactRef 
+    summary: |
+        An attribute to store the participant's reference in the Contact API.
+    description: |
+        If the contact is not resolved, this attribute will be set to null. 
+    type: Modules.Tizen.ContactRef
+    
+---
+name: CalendarRecurrenceRuleInit
+summary: | 
+    Simple object that contains parameters for 
+    [createCalendarRecurrenceRule](Modules.Tizen.Calendar.createCalendarRecurrenceRule).
+properties: 
+  - name: frequency
+    summary: |
+         An attribute to store the frequency of a recurrence rule.
+    description: |
+        This property corresponds to FREQ in RFC 5545.
+        
+        Can be set to one of the following constants:
+
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>
+
+    type: String
+
+  - name: ruleInitDict
+    summary: The properties of a CalendarRecurrenceRule to pass to its constructor. 
+    type: CalendarRecurrenceRuleInitDict
+
+---
+name: CalendarRecurrenceRuleInitDict
+summary: Simple object used in <CalendarRecurrenceRuleInit>.
+properties:
+ 
+  - name: interval
+    type: Number
+    summary: |
+        An attribute to specify how often the recurrence rule repeats over the unit of time 
+        indicated by its frequency.
+        
+  - name: untilDate
+    type: Date
+    summary: |
+        An attribute to indicate the end date of a recurrence duration of an event using either and 
+        end date (untilDate attribute) or a number of occurrences (occurrenceCount attribute).
+        
+  - name: occurrenceCount
+    type: Number
+    summary: An attribute to indicate the number of occurrences of a recurring event.
+        
+  - name: daysOfTheWeek
+    type: Array<String>
+    summary: An attribute to store the days of the week associated with the recurrence rule.
+    description: |
+        This property value is valid only for recurrence rules with a frequency type of 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>, 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>, 
+        and <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>.
+        
+        This property corresponds to BYDAY in RFC 5545.
+                
+  - name: setPositions
+    type: Array<Number>
+    summary: |
+        An attribute to store a list of ordinal numbers that filters which recurrences to include 
+        in the recurrence rule's frequency.
+    description: |
+        For example, a yearly recurrence rule that has a daysOfTheWeek value that specifies Monday 
+        through Friday, and a setPositions array containing 2 and -1, occurs only on the second 
+        weekday and last weekday of every year.
+
+        Values can be from 1 to 366 or -366 to -1. Negative values indicate counting backwards from 
+        the end of the recurrence rule's frequency (week, month, or year).
+
+        This attribute must only be used in conjunction with another BYxxx rule part 
+        (such as daysOfTheWeek).
+
+        This property corresponds to BYSETPOS in RFC 5545.
+        
+        By default, this attribute is set to an empty array
+        
+  - name: exceptions
+    type: Array<Date>
+    summary: An attribute to list date/time exceptions for the recurring event.
+---
+name: CalendarAlarmInitWithDate
+summary: |
+    Simple object that contains parameters for 
+    [createCalendarAlarm](Modules.Tizen.Calendar.createCalendarAlarm).
+properties:
+
+  - name: absoluteDate 
+    type: Date
+    summary: An attribute to record the absolute date and time when an alarm should be triggered.
+             
+  - name: method 
+    type: String
+    summary: |
+        An attribute to denote the notification method used by an alarm.
+    description: |    
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
+    
+  - name: description
+    type: String
+    summary: (optional) An attribute to store the description of an alarm.
+    optional: true
+
+---
+name: CalendarAlarmInitWithDuration
+summary: |
+    Simple object that contains parameters for 
+    [createCalendarAlarm](Modules.Tizen.Calendar.createCalendarAlarm).
+properties:
+   
+  - name: before 
+    type: Number
+    summary: |
+        An attribute to store the duration before an event starts on which the alarm should be 
+        triggered (milliseconds).
+        
+  - name: method 
+    type: String
+    summary: |
+        An attribute to denote the notification method used by an alarm.
+    description: |    
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
+    
+  - name: description
+    type: String
+    summary: (optional) An attribute to store the description of an alarm.
+    optional: true
+
+---
+name: GetCalendarsResponse
+summary: |
+    Simple object returned in the callback from the
+    [getCalendars](Modules.Tizen.Calendar.getCalendars) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+
+  - name: items
+    summary:  The array of Calendar objects.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Calendar.CalendarItem>

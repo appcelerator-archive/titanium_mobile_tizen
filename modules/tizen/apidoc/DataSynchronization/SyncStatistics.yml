@@ -1,0 +1,80 @@
+---
+name: Modules.Tizen.DataSynchronization.SyncStatistics
+summary: This interface defines the sync statistics for a profile service. 
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: syncStatus
+    summary: An attribute to store the last sync status for a corresponding service category.
+    description: |
+        Can be one of:
+
+        * [SYNC_STATUS_SUCCESS](Modules.Tizen.DataSynchronization.SYNC_STATUS_SUCCESS)
+        * [SYNC_STATUS_FAIL](Modules.Tizen.DataSynchronization.SYNC_STATUS_FAIL)
+        * [SYNC_STATUS_STOP](Modules.Tizen.DataSynchronization.SYNC_STATUS_STOP)
+        * [SYNC_STATUS_NONE](Modules.Tizen.DataSynchronization.SYNC_STATUS_NONE)
+        
+    type: String
+    permission: read-only
+
+  - name: serviceType
+    summary: An attribute to indicate the sync service type.
+    description: |
+        Can be one of:
+
+        * [SYNC_TYPE_TWO_WAY](Modules.Tizen.DataSynchronization.SYNC_TYPE_TWO_WAY)
+        * [SYNC_TYPE_SLOW](Modules.Tizen.DataSynchronization.SYNC_TYPE_SLOW)
+        * [SYNC_TYPE_ONE_WAY_FROM_CLIENT](Modules.Tizen.DataSynchronization.SYNC_TYPE_ONE_WAY_FROM_CLIENT)
+        * [SYNC_TYPE_REFRESH_FROM_CLIENT](Modules.Tizen.DataSynchronization.SYNC_TYPE_REFRESH_FROM_CLIENT)
+        * [SYNC_TYPE_ONE_WAY_FROM_SERVER](Modules.Tizen.DataSynchronization.SYNC_TYPE_ONE_WAY_FROM_SERVER)
+        * [SYNC_TYPE_REFRESH_FROM_SERVER](Modules.Tizen.DataSynchronization.SYNC_TYPE_REFRESH_FROM_SERVER)
+        
+    type: String
+    permission: read-only
+    
+  - name: lastSyncTime
+    summary: An attribute to store the last sync time. 
+    type: Date
+    permission: read-only
+
+  - name:  serverToClientTotal 
+    summary: An attribute to indicate the total number of items sent from the server to the client direction.
+    type: Number
+    permission: read-only
+
+  - name:  serverToClientAdded 
+    summary: An attribute to indicate the number of added items from the server to the client direction.
+    type: Number
+    permission: read-only
+
+  - name:  serverToClientUpdated 
+    summary: An attribute to indicate the number of updated items from the server to the client direction.
+    type: Number
+    permission: read-only
+
+  - name:  serverToClientRemoved 
+    summary: An attribute to indicate the number of removed items from the server to the client direction. 
+    type: Number
+    permission: read-only
+
+  - name:  clientToServerTotal 
+    summary: An attribute to indicate the total number of items from the client to the server direction. 
+    type: Number
+    permission: read-only
+
+  - name:  clientToServerAdded 
+    summary: An attribute to indicate the number of added items from the client to the server direction. 
+    type: Number
+    permission: read-only
+
+  - name:  clientToServerUpdated 
+    summary: An attribute to indicate the number of updated items from the client to the server direction. 
+    type: Number
+    permission: read-only
+
+  - name:  clientToServerRemoved 
+    summary: An attribute to indicate the number of removed items from the client to the server direction. 
+    type: Number
+    permission: read-only
+
+

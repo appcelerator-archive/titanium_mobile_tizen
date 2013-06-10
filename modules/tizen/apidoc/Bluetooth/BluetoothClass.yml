@@ -1,0 +1,164 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothClass
+summary: Interface to represent Bluetooth Class of Device/Service(CoD). 
+description: |
+    Bluetooth device class describes the characteristics and capabilities of a device.
+
+    Bluetooth CoD is a 24 bit integer created by the union of three components:
+
+        * Exactly one Major Device Class(bits 8-12 of CoD) - This is the highest level of 
+        granularity for defining a Bluetooth Device.
+
+        * Exactly one Minor Device Class(bits 2-7 of CoD) - This is to be interpreted only in the 
+        context of the Major Device Class. Thus, the meaning of these bits may change, depending on 
+        the value of 'Major Device Class'.
+
+        * Zero or more Major Service Classes(bits 13-23) - Represents the services supported by the 
+        device.
+
+    The major and minor classes are intended to define a general family of devices with which any 
+    particular implementation wishes to be associated. No assumptions should be made about specific 
+    functionality or characteristics of any application, based solely on the assignment of a major 
+    or minor device class.
+extends: Titanium.Proxy
+createable: false
+methods:
+
+  - name: hasService
+    summary: Checks whether the given service exists in the services. 
+    description: |
+        Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your
+        Titanium application:  
+
+        * `http://tizen.org/privilege/bluetooth.gap`
+        
+    returns: 
+      - type: Boolean
+    parameters: 
+      - name: service
+        summary: The service to check.  
+        type: Number
+ 
+properties:
+  - name: major
+    summary: | 
+        The major device class. The value is one of the constants defined for this type. 
+    description: | 
+        The supported major types are: 
+
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_PHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_NETWORK>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_AUDIO_VIDEO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_PERIPHERAL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_IMAGING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_WEARABLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_TOY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_HEALTH>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_UNCATEGORIZED>
+        
+    type: Number
+    permission: read-only
+
+  - name: minor
+    summary: |
+      The minor device class. The value is one of the constants defined for this type. 
+    description: |
+        The supported minor types are: 
+        
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAMCORDER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HANDSFREE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HEADPHONES>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HIFI>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_LOUDSPEAKER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_MICROPHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_UNRECOGNIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VCR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_LAPTOP>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_SERVER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_WEARABLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_THERMOMETER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_UNDEFINED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_CAMERA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_DISPLAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_PRINTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_SCANNER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_GAMEPAD>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_JOYSTICK>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CELLULAR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CORDLESS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_ISDN>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_SMARTPHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_CONTROLLER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_DOLL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_GAME>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_ROBOT>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_VEHICLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_GLASSES>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_HELMET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_JACKET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_PAGER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAR_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_GAMING_TOY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_PORTABLE_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_SETTOP_BOX>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CAMERA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CONFERENCING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_WEARABLE_HEADSET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_ANKLE_PROSTHESIS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_DATA_DISPLAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_GLUCOSE_METER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_KNEE_PROSTHESIS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_MEDICATION_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_OXIMETER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_STEP_COUNTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_WEIGHING_SCALE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_CARD_READER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DEGITIZER_TABLET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DIGITAL_PEN>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_SCANNER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_POINTING_DEVICE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_REMOTE_CONTROL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_SENSING_DEVICE >
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_WRITST_WATCH>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_DISPLAY_AND_LOUDSPEAKER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BLOOD_PRESSURE_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BODY_COMPOSITION_ANALYZER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_RATE_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_INPUT_DEVICE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_MODEM_OR_GATEWAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_HANDHELD_PC_OR_PDA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_PALM_PC_OR_PDA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD_AND_POINTING_DEVICE>
+
+    type: String
+    permission: read-only
+
+  - name:  services
+    summary: |
+        The services provided by this device.The value is one of the constants defined for this type. 
+    description: |
+        The supported types are: 
+        
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_NETWORKING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_RENDERING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_CAPTURING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_OBJECT_TRANSFER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_TELEPHONY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_INFORMATION>
+
+    type: Array<Number>
+    permission: read-only

@@ -4,9 +4,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var storageUnit = declare(Evented, {
 
-		constructor: function(args) {
-			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		constants: {
@@ -25,9 +25,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.availableCapacity;
 				}
 			},
-			isRemoveable: {
+			isRemovable: {
 				get: function() {
-					return this._obj.isRemoveable;
+					return this._obj.isRemovable;
 				}
 			}
 		}

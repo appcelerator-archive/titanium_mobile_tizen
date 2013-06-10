@@ -1,0 +1,26 @@
+---
+name: Modules.Tizen.DataSynchronization.SyncProfileInfo
+summary: |
+    This interface defines the sync profile information, based on which the synchronization is 
+    performed.
+extends: Titanium.Proxy
+properties:
+  - name: profileId
+    summary: |
+        An attribute to store the unique identifier provided by the platform for a profile that has 
+        been successfully added. 
+    type: String
+
+  - name: profileName
+    summary: An attribute to store the profile name. 
+    type: String
+
+  - name: syncInfo
+    summary: An attribute to store the sync info.
+    type: Modules.Tizen.DataSynchronization.SyncInfo
+
+  - name:  serviceInfo 
+    summary: (optional) An attribute to indicate the service info.
+    type: Array<Modules.Tizen.DataSynchronization.SyncServiceInfo>
+    optional: true
+

@@ -1,0 +1,30 @@
+---
+name: Modules.Tizen.Apps.ApplicationControl
+summary: "This interface consists of an operation, URI, MIME type, and data."
+description: |
+    Describes an action to be performed by other applications and is passed to launch other 
+    applications. If the system gets the application control request, it finds the corresponding 
+    application to be launched with the delivered application control and launches the selected 
+    application. 
+properties:
+  - name: operation
+    summary: | 
+        An attribute to store the string that defines the action to be performed by an application 
+        control. 
+    type: String
+
+  - name: uri
+    summary: (optional) An attribute to store the URI needed by application control.  
+    type: String
+
+  - name: mime
+    summary: (optional) An attribute to store the MIME type of a content. 
+    type: String
+
+  - name: category
+    summary: (optional) An attribute to store the category of the application to be launched.   
+    type: Boolean
+
+  - name: data
+    summary: (optional) An array of attributes to store the data needed for an application control.  
+    type: Array<Modules.Tizen.Apps.ApplicationControlData>

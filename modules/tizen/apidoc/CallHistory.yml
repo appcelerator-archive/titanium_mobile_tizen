@@ -1,0 +1,192 @@
+---
+name: Modules.Tizen.CallHistory
+summary: The top level CallHistory module.  
+description: |
+    This API provides interfaces and methods for retrieving information from the call history.
+
+    For more information on the CallHistory features, see 
+    [Tizen Web App Programming: Call History](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsocial_guide%2Fcall.htm)
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: find
+    summary: Finds and returns call history items.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/callhistory.read`
+        
+    parameters:
+      - name: callback
+        summary: |
+            This is a callback interface of CallHistory operations. 
+        type: Callback<CallHistoryFindResponse>
+      - name: filter
+        summary: |
+            A filter defined on [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry)
+            attributes. Use [AbstractFilter](Modules.Tizen.AbstractFilter) subtypes, such as 
+            [AttributeFilter](Modules.Tizen.AttributeRangeFilter), 
+            [AttributeRangeFilter](Modules.Tizen.AttributeRangeFilter), and 
+            [CompositeFilter](Modules.Tizen.CompositeFilter).
+        optional: true
+        type: Modules.Tizen.AbstractFilter
+      - name: sortMode
+        summary: The sorting order preference of the result set.
+        optional: true
+        type: Modules.Tizen.SortMode
+      - name: limit
+        summary: |
+            The maximum limits the query result is set to as specified by the parameter (It is 
+            the same meaning as SQL LIMIT). If 0, there is no limit set.
+        optional: true
+        type: Number
+      - name: offset
+        summary: |
+            The offset in the result set, from where the results are listed.
+            (It has the same semantics as SQL OFFSET). The number of results listed is maximum the 
+            specified limit parameter. Defaults to 0, meaning no offset.
+        optional: true
+        type: Number
+
+  - name: remove
+    summary: Removes a call history entry synchronously by deleting it. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/callhistory.write`
+        
+    parameters:
+      - name: entry
+        summary: Call history entry to be deleted. 
+        type: Modules.Tizen.CallHistory.CallHistoryEntry
+
+  - name: removeBatch
+    summary: Removes a list of call history entries asynchronously by deleting them. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/callhistory.write`
+        
+    parameters: 
+      - name: entries
+        summary: A list of call history entries to delete. 
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
+      - name: callback
+        summary: A generic success handler.
+        optional: true
+        type: Callback<ErrorResponse>
+
+  - name: removeAll
+    summary: Removes the complete call history by deleting it. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/callhistory.write`
+        
+    parameters: 
+      - name: callback
+        summary: A generic success handler.
+        optional: true
+        type: Callback<ErrorResponse>
+
+events:
+
+  - name: itemsadded
+    summary: Fired when a new call history item is added.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/callhistory.read`
+        
+    properties:
+      - name: items
+        summary: |
+            An array of [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry) objects, 
+            representing the new items added to call history.
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
+  - name: itemschanged
+    summary: Fires when the call history items have been changed.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/callhistory.read`
+        
+    properties:
+      - name: items
+        summary: |
+            An array of [CallHistoryEntry](Modules.Tizen.CallHistory.CallHistoryEntry) objects, 
+            representing the changed items in call history.
+        type: Array<Modules.Tizen.CallHistory.CallHistoryEntry>
+
+examples:
+  - title: Become aware of call-related events.
+    example: |
+        Subscribe/unsubscribe to call history event listeners, and observe changes, using graphical 
+        user interface and console logs.
+        
+            var Tizen = require('tizen'),
+                win = Ti.UI.createWindow({
+                    title: 'Call history listeners'
+                }),
+                addListenerBtn = Ti.UI.createButton({
+                    title: 'Add listeners',
+                    top: 20,
+                    left: 5
+                }),
+                removeListenerBtn = Ti.UI.createButton({
+                    title: 'Remove listeners',
+                    top: 60,
+                    left: 5
+                });
+
+            function onItemsAdded(e) {
+                var i = 0,
+                    items = e.items,
+                    itemsCount = items.length;
+                console.log('New call events.');
+                
+                for (; i < itemsCount; i++) {
+                    console.log(items[i].remoteParties[0].remoteParty + ': ' + items[i].startTime);
+                }
+            }
+            
+            function onItemsChanged(e) {
+                // Do something even more interesting...
+            }
+
+            addListenerBtn.addEventListener('click', function () {
+                try {
+                    // Register a call history callback
+                    Tizen.CallHistory.addEventListener('itemsadded', onItemsAdded);
+                    Tizen.CallHistory.addEventListener('itemschanged', onItemsChanged);
+
+                    addListenerBtn.enabled = false;
+
+                    removeListenerBtn.addEventListener('click', function () {
+                        try {
+                            // Unregister a previously registered listener
+                            Tizen.CallHistory.removeEventListener('itemsadded', onItemsAdded);
+                            Tizen.CallHistory.removeEventListener('itemschanged', onItemsChanged);
+                            win.remove(removeListenerBtn);
+                        } catch (removeExc) {
+                            console.error('Exception - code: ' + removeExc.name + ' message: ' + removeExc.message);
+                        }
+                        addListenerBtn.enabled = true;
+                        removeListenerBtn.removeEventListener('click');
+                    });
+
+                    win.add(removeListenerBtn);
+                } catch (error) {
+                    console.error('Exception - code: ' + error.name + ' message: ' + error.message);
+                }
+            });
+
+            win.add(addListenerBtn);
+

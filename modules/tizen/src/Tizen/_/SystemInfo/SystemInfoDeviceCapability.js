@@ -4,11 +4,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var capability = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object devicecapabilitiesinfo]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			}
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		constants: {
@@ -22,6 +20,11 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.nfc;
 				}
 			},
+			nfcReservedPush: {
+				get: function() {
+					this._obj.nfcReservedPush;
+				}
+			},
 			multiTouchCount: {
 				get: function() {
 					return this._obj.multiTouchCount;
@@ -32,9 +35,24 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.inputKeyboard;
 				}
 			},
+			inputKeyboardLayout: {
+				get: function() {
+					return this._obj.inputKeyboardLayout;
+				}
+			},
 			wifiDirect: {
 				get: function() {
 					return this._obj.wifiDirect;
+				}
+			},
+			opengles: {
+				get: function() {
+					return this._obj.opengles;
+				}
+			},
+			openglestextureFormat: {
+				get: function() {
+					return this._obj.openglestextureFormat;
 				}
 			},
 			openglesVersion1_1: {
@@ -50,6 +68,21 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			fmRadio: {
 				get: function() {
 					return this._obj.fmRadio;
+				}
+			},
+			webApiVersion: {
+				get: function() {
+					return this._obj.webApiVersion;
+				}
+			},
+			nativeApiVersion: {
+				get: function() {
+					return this._obj.nativeApiVersion;
+				}
+			},
+			camera: {
+				get: function() {
+					return this._obj.camera;
 				}
 			},
 			cameraFrontFlash: {
@@ -117,9 +150,19 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.speechRecognition;
 				}
 			},
+			speechSynthesis: {
+				get: function() {
+					return this._obj.speechSynthesis;
+				}
+			},
 			accelerometer: {
 				get: function() {
 					return this._obj.accelerometer;
+				}
+			},
+			accelerometerWakeup: {
+				get: function() {
+					return this._obj.accelerometerWakeup;
 				}
 			},
 			barometer: {
@@ -127,9 +170,19 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.barometer;
 				}
 			},
+			barometerWakeup: {
+				get: function() {
+					return this._obj.barometerWakeup;
+				}
+			},
 			gyroscope: {
 				get: function() {
 					return this._obj.gyroscope;
+				}
+			},
+			gyroscopeWakeup: {
+				get: function() {
+					return this._obj.gyroscopeWakeup;
 				}
 			},
 			magnetometer: {
@@ -137,9 +190,124 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					return this._obj.magnetometer;
 				}
 			},
+			magnetometerWakeup: {
+				get: function() {
+					return this._obj.magnetometerWakeup;
+				}
+			},
+			photometer: {
+				get: function() {
+					return this._obj.photometer;
+				}
+			},
+			photometerWakeup: {
+				get: function() {
+					return this._obj.photometerWakeup;
+				}
+			},
 			proximity: {
 				get: function() {
 					return this._obj.proximity;
+				}
+			},
+			proximityWakeup: {
+				get: function() {
+					return this._obj.proximityWakeup;
+				}
+			},
+			tiltmeter: {
+				get: function() {
+					return this._obj.tiltmeter;
+				}
+			},
+			tiltmeterWakeup: {
+				get: function() {
+					return this._obj.tiltmeterWakeup;
+				}
+			},
+			dataEncryption: {
+				get: function() {
+					return this._obj.dataEncryption;
+				}
+			},
+			graphicsAcceleration: {
+				get: function() {
+					return this._obj.graphicsAcceleration;
+				}
+			},
+			push: {
+				get: function() {
+					return this._obj.push;
+				}
+			},
+			telephony: {
+				get: function() {
+					return this._obj.telephony;
+				}
+			},
+			telephonyMms: {
+				get: function() {
+					return this._obj.telephonyMms;
+				}
+			},
+			telephonySms: {
+				get: function() {
+					return this._obj.telephonySms;
+				}
+			},
+			screenSizeNormal: {
+				get: function() {
+					return this._obj.screenSizeNormal;
+				}
+			},
+			screenSize480_800: {
+				get: function() {
+					return this._obj.screenSize480_800;
+				}
+			},
+			screenSize720_1280: {
+				get: function() {
+					return this._obj.screenSize720_1280;
+				}
+			},
+			autoRotation: {
+				get: function() {
+					return this._obj.autoRotation;
+				}
+			},
+			shellAppWidget: {
+				get: function() {
+					return this._obj.shellAppWidget;
+				}
+			},
+			visionImageRecognition: {
+				get: function() {
+					return this._obj.visionImageRecognition;
+				}
+			},
+			visionQrcodeGeneration: {
+				get: function() {
+					return this._obj.visionQrcodeGeneration;
+				}
+			},
+			visionQrcodeRecognition: {
+				get: function() {
+					return this._obj.visionQrcodeRecognition;
+				}
+			},
+			visionFaceRecognition: {
+				get: function() {
+					return this._obj.visionFaceRecognition;
+				}
+			},
+			secureElement: {
+				get: function() {
+					return this._obj.secureElement;
+				}
+			},
+			nativeOspCompatible: {
+				get: function() {
+					return this._obj.nativeOspCompatible;
 				}
 			}
 		}

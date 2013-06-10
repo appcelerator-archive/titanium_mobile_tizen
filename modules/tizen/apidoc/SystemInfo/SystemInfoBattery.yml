@@ -1,0 +1,24 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoBattery
+summary: This property reflects the general state of the system's battery.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+        
+  - name: level
+    summary: |
+        Specifies how much the internal battery remains, scaled from 0 to 1. 
+    description: |
+        A value of 0 means that the battery level is the lowest before 
+        the system enters shutdown mode, and 1 indicates that the system's charge is maximum.
+        Any threshold parameter used in a watch function to monitor this property applies to this 
+        attribute.
+    type: Number
+    permission: read-only
+
+  - name: isCharging
+    summary: Indicates whether the battery source is currently charging.
+    type: Boolean
+    permission: read-only

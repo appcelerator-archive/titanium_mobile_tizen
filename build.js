@@ -72,7 +72,8 @@ async.series(
 				{src : 'src/*', dst : 'src/'},
 				{src : 'dependencyAnalyzer/*', dst : 'dependencyAnalyzer/'},
 				{src : 'themes/*', dst : 'themes/'},
-				{src : 'utils/signapp.jar', dst : 'utils/'},
+				{src : 'package.json', dst : 'package.json'},
+				{src : 'utils/signApp.jar', dst : 'utils/'}
 			];
 
 		info('Clean up, deleting ' + titaniumTizenSdk);

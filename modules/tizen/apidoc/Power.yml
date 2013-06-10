@@ -1,0 +1,183 @@
+---
+name: Modules.Tizen.Power
+summary: This Module provides  support for requesting power management related resource states.
+description: |
+    The `Power` module is a thin wrapper on the Tizen `Power` class.
+    
+    See also:
+  
+    - [Tizen Power API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fpower.html)
+    - [Tizen  Power Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fpower.htm)
+
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: request
+    summary: Requests the minimum-state for a power resource.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/power`
+        
+    parameters:
+      - name: resource
+        summary: |
+            The power resource for which the request is made. The supported request types are: 
+            <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>, 
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>.
+        type: String
+      - name: state
+        summary: |
+            The minimal power state in which the power resource is desired to be. The supported 
+            request types are: <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_OFF>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_DIM>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL>, 
+            <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT>, 
+            <Modules.Tizen.Power.POWER_CPU_STATE_CPU_AWAKE>
+        type: String
+
+  - name: release
+    summary: Releases the power state request for the given resource.
+    parameters:
+      - name: resource
+        summary: |
+            The power resource for which the request is made. The supported request types are: 
+            <Modules.Tizen.Power.POWER_RESOURCE_SCREEN>,
+            <Modules.Tizen.Power.POWER_RESOURCE_CPU>.
+        type: String
+
+  - name: isScreenOn
+    summary: Returns true if the screen is on.
+    returns:
+        summary: true if screen is on.
+        type: Boolean
+
+  - name: turnScreenOn
+    summary: Turns on the screen.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/power`
+
+  - name: turnScreenOff
+    summary: Turns off the screen.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/power`
+    
+properties:
+
+  - name: POWER_RESOURCE_SCREEN
+    summary: SCREEN is aligned with <Modules.Tizen.SystemInfo> property value.
+    type: String
+    permission: read-only
+
+  - name: POWER_RESOURCE_CPU
+    summary: CPU is aligned with <Modules.Tizen.SystemInfo> property value.
+    type: String
+    permission: read-only
+
+  - name: POWER_SCREEN_STATE_SCREEN_OFF
+    summary: This screen state cannot be requested but can only be used in the state change callback.
+    type: String
+    permission: read-only
+
+  - name: POWER_SCREEN_STATE_SCREEN_DIM
+    summary: The minimal screen state is set to DIM and device does not change to OFF state automatically.
+    type: String
+    permission: read-only
+    
+  - name: POWER_SCREEN_STATE_SCREEN_NORMAL
+    summary: |
+        The minimal screen state is set to POWER_SCREEN_STATE_SCREEN_NORMAL and device does not 
+        change to POWER_SCREEN_STATE_SCREEN_DIM state automatically.
+    description: |
+        The <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_NORMAL> state refers to the default 
+        screen brightness that a user has configured for the device. 
+    type: String
+    permission: read-only    
+    
+  - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
+    summary: |
+        The minimal screen state is set to POWER_SCREEN_STATE_SCREEN_BRIGHT and device does not 
+        change to the POWER_SCREEN_STATE_SCREEN_NORMAL state automatically.
+    description: |
+        The <Modules.Tizen.Power.POWER_SCREEN_STATE_SCREEN_BRIGHT> state refers to the maximum 
+        screen brightness that the device provides. 
+        
+        Note that the change in brightness does not affect the system brightness setting, i.e., 
+        the system brightness value is automatically restored when the resource is released or the 
+        process is completed.
+    type: String
+    permission: read-only    
+    
+  - name: POWER_CPU_STATE_CPU_AWAKE
+    summary: The cpu state is set to be awaken and it does not go to SLEEP state automatically.
+    type: String
+    permission: read-only
+
+  - name: screenBrightness
+    summary: An attribute to store the screen brightness level for an application, from 0 to 1.
+    description: |
+        To use this property, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
+
+        * `http://tizen.org/privilege/power`
+        
+    type: Number
+
+events:
+  - name: screenstateshanged
+    summary: Called on screen state change.
+    properties:
+      - name: previousState
+        type: String
+        summary: The previous screen state.
+      - name: changedState 
+        type: String
+        summary: The changed screen state.
+
+examples:
+  - title: Adjust brightness and turn screen off
+    example: |
+        This example shows how to adjust screen brightness and turn it on or off using graphical 
+        user interface.
+        
+            var win = Titanium.UI.createWindow(),
+                buttonTurnOffScreen = Ti.UI.createButton({
+                    title: 'Turn Off Screen',
+                    top: 10
+                }),
+                Tizen = require('tizen'),
+                brightnessLabel = Titanium.UI.createLabel({
+                    text: 'Brightness: ' + Tizen.Power.screenBrightness,
+                    top: 55,
+                    left: 20
+                }),
+                slider = Titanium.UI.createSlider({
+                    top: 80,
+                    left: 10,
+                    right: 10,
+                    min: 0,
+                    max: 1,
+                    value: Tizen.Power.screenBrightness
+                });
+
+            buttonTurnOffScreen.addEventListener('click', function() {
+                Tizen.Power.turnScreenOff();
+            });
+
+            slider.addEventListener('change', function(e) {
+                brightnessLabel.text = String.format('Brightness: %3.1f', e.value);
+                Tizen.Power.screenBrightness = e.value;
+            });
+
+            win.add(buttonTurnOffScreen);
+            win.add(slider);
+            win.add(brightnessLabel);
+        

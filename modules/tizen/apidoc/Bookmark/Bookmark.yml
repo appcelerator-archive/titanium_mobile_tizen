@@ -1,0 +1,7 @@
+---
+name: Modules.Tizen.Bookmark.Bookmark
+summary: |
+    This interface is an abstract interface for <Modules.Tizen.Bookmark.BookmarkItem> and <Modules.Tizen.Bookmark.BookmarkFolder> types. 
+    
+extends: Titanium.Proxy
+createable: false

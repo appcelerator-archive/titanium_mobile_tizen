@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 
 	var calendarAlarm = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarAlarm]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.
@@ -16,21 +16,14 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 				//
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
-
-				if (args.hasOwnProperty('before') && args.hasOwnProperty('method')) {
-					var before = args.before;
-
-					before && (before = helper.createTimeDuration(before));
-					this._obj = new tizen.CalendarAlarm(before, args.method, args.description);
-
-				} else if (args.hasOwnProperty('absoluteDate') && args.hasOwnProperty('method')) {
-					var absoluteDate = args.absoluteDate;
-
-					absoluteDate && (absoluteDate = helper.createTZDate(absoluteDate));
-					this._obj = new tizen.CalendarAlarm(absoluteDate, args.method, args.description);
-
+				
+				// Check if the required parameters are present (do not check for the optional ones).
+				if ('before' in args && 'method' in args) {
+					this._obj = new tizen.CalendarAlarm(helper.createTimeDuration(args.before), args.method, args.description);
+				} else if ('absoluteDate' in args && 'method' in args) {
+					this._obj = new tizen.CalendarAlarm(helper.createTZDate(args.absoluteDate), args.method, args.description);
 				} else {
-					console.error('Constructor with such parameters does not exist in CalendarAlarm.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

@@ -1,0 +1,45 @@
+---
+name: Modules.Tizen.Alarm.AlarmAbsolute
+summary: This interface provides an absolute alarm, which triggers at a specified absolute date.
+description: |
+    If a period is provided, the alarm keeps triggering for the given interval. 
+    If the daysOfTheWeek array is not empty, the alarm triggers every week, for the given days, at 
+    the time defined by date attribute. 
+extends: Modules.Tizen.Alarm.Alarm
+
+methods:
+  - name: getNextScheduledDate
+    summary: Returns the date/time of the next alarm trigger. 
+    description: |
+        If the alarm has expired, this method returns null. The returned date is precise to the 
+        second.
+    returns: 
+      - type: Date
+        summary: The date/time of the next alarm trigger.
+
+properties:
+  - name: date
+    summary: An attribute to store the absolute date/time when the alarm is initially triggered.
+    description: This attribute is precise to the second; milliseconds will be ignored. 
+    type: Date
+    permission: read-only
+
+  - name: period
+    summary: An attribute to store the duration in seconds between each trigger of the alarm. 
+    description: |
+        By default, this attribute is set to null, indicating that this alarm does not repeat. The 
+        period and daysOfTheWeek attributes are mutually exclusive. 
+    type: Number
+    default: null
+    permission: read-only
+
+  - name: daysOfTheWeek
+    summary: An attribute to store the days of the week associated with the recurrence rule.
+    description: |
+        By default, this attribute is set to an empty array. 
+        If this array is non-empty, the period attribute will be set to 
+        <Modules.Tizen.Alarm.PERIOD_WEEK>, since the alarm will recur weekly.
+        The period and daysOfTheWeek attributes are mutually exclusive. 
+    type: Array<String>
+    permission: read-only
+    

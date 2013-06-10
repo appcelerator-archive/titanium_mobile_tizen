@@ -1,0 +1,276 @@
+---
+name: Modules.Tizen.Package
+summary: This API provides functionalities to install or uninstall packages, and retrieve information about installed packages.
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+  - name: install
+    summary: Installs a package with a specified package path on a device.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/packagemanager.install`
+
+        This is a platform level privilege.
+    
+    parameters:
+      - name: path
+        summary: The package path to install
+        type: String
+
+      - name: callback
+        summary: | 
+            The method to invoke when the installation is in progress or has been completed or when an error occurs.
+        type: Callback<PackageProgressCallbackResponse>
+
+  - name: uninstall
+    summary: Uninstalls the package with a specified package ID.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/packagemanager.install`
+
+        This is a platform level privilege.
+    parameters:
+      - name: id
+        summary: The package ID to uninstall.
+        type: String
+
+      - name: callback
+        summary: | 
+            The method to invoke when the uninstallation is in progress or has been completed or when an error occurs.
+        type: Callback<PackageProgressCallbackResponse>
+
+  - name: getPackagesInfo
+    summary: Gets information of the installed packages.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/package.info`
+
+        This is a public level privilege.
+
+    parameters:
+      - name: callback
+        summary: | 
+            The method to call when an invocation ends successfully or an error occurs.
+        type: Callback<PackageInformationArraySuccessCallbackResponse>    
+
+  - name: getPackageInfo
+    summary: Gets information of an installed package.
+    description: |
+        To use this method, you must include the following privilege in the tiapp.xml file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/package.info`
+
+        This is a public level privilege.
+
+    returns:
+        type: Modules.Tizen.Package.PackageInformation
+
+    parameters:
+      - name: id
+        summary: A string representing package ID.
+        type: String
+        optional: true
+
+events:
+  - name: packageinstalled
+    summary: Fired when a package is installed.
+    description: | 
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/package.info`
+
+        This is a public level privilege.
+        
+    properties:
+      - name: info
+        summary: The information of the installed package.
+        type: Modules.Tizen.Package.PackageInformation
+
+  - name: updated
+    summary: Fired when a package is updated.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/package.info`
+
+        This is a public level privilege.
+        
+    properties:
+      - name: info
+        summary: The information of the updated package.
+        type: Modules.Tizen.Apps.ApplicationInformation
+
+  - name: uninstalled
+    summary: Fired when a package is uninstalled.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/package.info`
+        
+        This is a public level privilege.
+        
+    properties:
+      - name: id
+        summary: The ID of the uninstalled package.
+        type: String
+
+examples:
+  - title: Getting information about the installed packages
+    example: |
+        The following example shows how to obtain and show various data about the installed 
+        packages.
+        
+            var Tizen = require('tizen'), 
+            win = Ti.UI.createWindow({
+                layout: 'vertical',
+                bakgroundColor: '#ffffff'
+            }),
+            button = Ti.UI.createButton({
+                top: 10,
+                left: 10,
+                title: 'Get packages info'
+            }),
+            headView = Ti.UI.createView({
+                layout: 'horizontal',
+                height: 25,
+                bottom: 0,
+            }),
+            headLabel = Ti.UI.createLabel({
+                text: 'Packages'
+            });
+            tabView = Ti.UI.createTableView({
+                top: 10,
+                headerView: headView,
+                data : []
+            });
+            
+            button.addEventListener('click', getPackagesInfo);
+            
+            headView.add(headLabel);
+            win.add(button);
+            win.add(tabView);
+            
+            // get info about all installed pakages
+            function getPackagesInfo() {
+                Tizen.Package.getPackagesInfo(onListInstalledPackages);
+            }
+            
+            // this callbeck accepts array of PackageInformation as property informationArray of response object 
+            function onListInstalledPackages(response) {
+                if (response.success) {
+                    var dictionary = [],
+                        packages = response.informationArray,
+                        i = 0,
+                        l = packages.length;
+                    for (; i < l; i++) {
+                        dictionary.push(createRow(packages[i]));
+                    }
+                    tabView.setData(dictionary);
+                } else {
+                    alert(response.error);
+                }
+            }
+            
+            // this function creates row for table view
+            function createRow(package) {
+                var row = Ti.UI.createTableViewRow({
+                    touchEnabled: true,
+                    height: 50
+                }),
+                view = Ti.UI.createView({
+                    layout: 'horizontal'
+                }),
+                label = Ti.UI.createLabel({
+                    text: package.name,
+                    left: 10
+                });
+                view.add(label);
+                row.add(view);
+                return row;
+            }
+
+---
+name: PackageProgressCallbackResponse
+summary: |
+    Simple object returned in the callback from the
+    [install](Modules.Tizen.Package.install) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: onprogress
+    summary: Indicates if request in progress.
+    description: Will be undefined if `success` is `false`.
+    type: Boolean
+
+  - name: oncomplete
+    summary: Indicates if the request is completed.
+    description: Will be undefined if `success` is `false`.
+    type: Boolean
+
+  - name: id
+    summary: The package ID
+    description: Will be undefined if `success` is `false`.
+    type: String
+
+  - name: progress
+    summary: The progress in percentage
+    description: Will be undefined if `success` is `false`.
+    type: Number
+    
+---
+name: PackageInformationArraySuccessCallbackResponse
+summary: |
+    Simple object returned in the callback from the
+    [getPackagesInfo](Modules.Tizen.Package.getPackagesInfo) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: informationArray
+    summary: A list of installed packages information.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Package.PackageInformation>

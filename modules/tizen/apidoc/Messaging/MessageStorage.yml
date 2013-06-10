@@ -1,0 +1,441 @@
+---
+name: Modules.Tizen.Messaging.MessageStorage
+summary: MessageStorage management capabilities. 
+description: |
+    This interface allows a web application to query, update, and delete messages, and subscribe to 
+    MessageStorage changes. In addition to simple message queries, the MessageStorage interface 
+    provides functionality to find conversations and folders.
+    
+    The conversation object represents a group of messages combined by the set of message fields. 
+    Email conversations are grouped by subject, while chat messages are grouped by sender and 
+    recipient fields.
+extends: Titanium.Proxy
+createable: false
+
+methods:
+  - name: addDraftMessage
+    summary: Adds a draft message to MessageStorage. 
+    description: |
+        Added messages would be stored in the Drafts folder.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: message
+        summary:  Draft message that should be added to the storage. 
+        type: Modules.Tizen.Messaging.Message
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
+        optional: true
+
+  - name: findMessages
+    summary: Queries messages from MessageStorage. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    parameters: 
+      - name: filter
+        summary: Criteria to be used when filtering. 
+        type: Modules.Tizen.AbstractFilter 
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<FindMessageResponse>
+
+      - name: sort
+        summary: Sorting mode for the query. 
+        type: Modules.Tizen.SortMode
+        optional: true
+
+      - name: limit
+        summary: Parameter for limiting query result. 
+        type: Number
+        optional: true
+
+      - name: offset
+        summary:  Define offset of the query.
+        type: Number
+        optional: true
+
+  - name: removeMessages
+    summary: Deletes messages from MessageStorage. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: messages
+        summary: Array of messages to be deleted. 
+        type: Array<Modules.Tizen.Messaging.Message>
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
+        optional: true
+
+  - name: updateMessages
+    summary: Updates messages in MessageStorage. 
+    description: |
+        The backend MUST check whether the required updates can be applied and invoke the callback 
+        function with error message, if they cannot. Depending on the backend synchronization 
+        settings, the local changes in <Modules.Tizen.Messaging.MessageStorage> might be rewritten as
+        a result of invoking the [sync](Modules.Tizen.Messaging.MessageService.sync) or 
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) methods of the related 
+        message service.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: messages
+        summary: Array that should be updated. 
+        type: Array<Modules.Tizen.Messaging.Message>
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse> 
+        optional: true
+
+  - name: findConversations
+    summary: Queries conversations from MessageStorage. 
+    description: | 
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    parameters: 
+      - name: filter
+        summary: Criteria to be used when filtering. 
+        type: Modules.Tizen.AbstractFilter 
+
+      - name: callback
+        summary:  Function to invoke on success or failure.
+        type: Callback<FindConversationsResponse>
+
+      - name: sort
+        summary: Sorting rules for the query.
+        type: Modules.Tizen.SortMode
+        optional: true
+
+      - name: limit
+        summary: Parameter for limiting the query result.
+        type: Number
+        optional: true
+
+      - name: offset
+        summary: Define offset of the query.
+        type: Number
+        optional: true
+
+  - name: removeConversations
+    summary: Deletes conversations from MessageStorage. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: conversations
+        summary: Array of conversations to be deleted.
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+
+  - name: findFolders
+    summary: Queries folders from MessageStorage. 
+    description: |        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    parameters: 
+      - name: filter
+        summary: Criteria used when filtering. 
+        type: Modules.Tizen.AbstractFilter
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<FindFoldersResponse>
+
+  - name: addMessagesChangeListener
+    summary: Subscribes to get notifications when MessageStorage changes. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    returns: 
+      - type: Number
+        summary: subscription identifier. 
+    parameters: 
+      - name: messagesChangeCallback
+        summary: Function to be called when MessageStorage changes.
+        type: MessagesChangeCallback
+
+      - name: filter
+        summary: Criteria to be used when filtering.
+        type: Modules.Tizen.AbstractFilter
+        optional: true
+
+  - name: addConversationsChangeListener
+    summary: Subscribes to get notifications when MessageConversation changes. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    returns: 
+      - type: Number
+        summary: Subscription identifier. 
+    parameters: 
+      - name: conversationsChangeCallback
+        summary: Function to be called when MessageConversation changes. 
+        type: MessageConversationsChangeCallback
+
+      - name: filter
+        summary: Criteria to be used when filtering.
+        type: Modules.Tizen.AbstractFilter
+        optional: true
+
+  - name: addFoldersChangeListener
+    summary: Subscribes to get notification when MessageFolder changes. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    returns: 
+      - type: Number
+        summary: Subscription identifier. 
+    parameters: 
+      - name: foldersChangeCallback
+        summary: Callback that is called when MessageFolder changes. 
+        type: MessageFoldersChangeCallback
+
+      - name: filter
+        summary: Criteria to be used when filtering.
+        type: Modules.Tizen.AbstractFilter
+        optional: true
+
+  - name: removeChangeListener
+    summary: This method allows a message notification subscription to be cancelled. 
+    description: |
+        If the watchId argument is valid and corresponds to a subscription already in place, the 
+        subscription process MUST stop immediately 
+        and further MessagingStorage change notifications MUST NOT be invoked. If the subscriptionId
+        argument does not correspond to a valid 
+        subscription, the method will return without any further action.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.read`
+        
+    parameters: 
+      - name: watchId
+        summary: |
+            Identifier of the subscription returned by 
+            [addMessagesChangeListener](Modules.Tizen.Messaging.MessageStorage.addMessagesChangeListener), 
+            [addConversationsChangeListener](Modules.Tizen.Messaging.MessageStorage.addConversationsChangeListener) or 
+            [addFoldersChangeListener](Modules.Tizen.Messaging.MessageStorage.addFoldersChangeListener) 
+            methods. 
+        type: Number
+
+# Pseudo-type    
+---
+name: MessagesChangeCallback
+summary: watchMessagesChanges callback. 
+description: |
+    This callback interface specifies a callback as a set of functions that will be invoked when 
+    messages from MessageStorage change. Each function 
+    takes a list of messages as the input argument. 
+methods: 
+  - name: messagesadded
+    summary: Method invoked when messages are added to the MessageStorage. 
+    parameters:
+      - name: addedMessages 
+        summary: Array of added messages.
+        type: Array<Modules.Tizen.Messaging.Message>
+
+  - name: messagesupdated 
+    summary: Method invoked when messages are updated in MessageStorage. 
+    parameters:
+      - name: updatedMessages 
+        summary: Array of updated messages. 
+        type: Array<Modules.Tizen.Messaging.Message>
+
+  - name: removedMessages
+    summary: Method invoked when messages are removed from MessageStorage. 
+    parameters:
+      - name: removedMessages 
+        summary: Array of updated messages. 
+        type: Array<Modules.Tizen.Messaging.Message>
+
+---
+name: MessageConversationsChangeCallback
+summary: watchConversationsChanges callback. 
+description: |
+    This callback interface specifies a callback as a set of functions that will be 
+    invoked when message folders from MessageStorage change. Each function takes a list 
+    of folders as the input argument. . 
+methods: 
+  - name: conversationsadded
+    summary: Method invoked when conversations are added to MessageStorage. 
+    parameters:
+      - name: addedConversations 
+        summary: Array of added conversations. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+  - name: conversationsupdated 
+    summary: Method invoked when conversations are updated in MessageStorage. 
+    parameters:
+      - name: updatedConversations 
+        summary: Array of updated messages. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+  - name: conversationsremoved
+    summary: Method invoked when conversations are removed from MessageStorage. 
+    parameters:
+      - name: removedConversations 
+        summary: Array of updated messages. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+---
+name: MessageFoldersChangeCallback
+summary: watchFoldersChanges callback. 
+description: |
+    This callback interface specifies a callback as a set of functions that will be invoked 
+    when message folders from MessageStorage change. Each function takes a list of folders 
+    as the input argument.
+methods:
+  - name: foldersadded
+    summary: Method invoked when folders are added to MessageStorage. 
+    parameters:
+      - name: addedFolders 
+        summary: Array of added folders. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+  - name: foldersupdated
+    summary: Method invoked when folders are updated in MessageStorage. 
+    parameters:
+      - name: updatedFolders 
+        summary: Array of updated folders. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+  - name: removedFolders
+    summary: Method invoked when folders are removed from MessageStorage. 
+    parameters:
+      - name: removedConversations 
+        summary: Array of removed folders. 
+        type: Array<Modules.Tizen.Messaging.MessageConversation>
+
+---
+name: FindMessageResponse
+summary: |
+    Simple object returned in the callback from the
+    [findMessages](Modules.Tizen.Messaging.MessageStorage.findMessages) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: messages
+    summary: Array of messages that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Messaging.Message>
+
+---
+name: FindConversationsResponse
+summary: |
+    Simple object returned in the callback from the
+    [findConversations](Modules.Tizen.Messaging.MessageStorage.findConversations) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: conversations
+    summary: Array of conversations that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Messaging.MessageConversation>
+    
+---
+name: FindFoldersResponse
+summary: |
+    Simple object returned in the callback from the
+    [findFolders](Modules.Tizen.Messaging.MessageStorage.findFolders) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: folders
+    summary: Array of folders that satisfy the query.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Messaging.MessageFolder>

@@ -1,0 +1,35 @@
+---
+name: Modules.Tizen.Calendar.CalendarEventId 
+summary: |
+    This interface contains a UID and an optional recurrence ID attribute to identify calendar 
+    events.
+description: |
+    The recurrence identifier (rid attribute) is used to identify a particular instance of a 
+    recurring event. 
+    All instances of the same recurring event have the same UID but different recurrence IDs.
+properties:
+  - name: uid
+    type: String
+    summary: |
+        An attribute to persistently, and uniquely identify a calendar event.
+    description: |
+        This value is assigned by the platform when the event is added to the calendar, 
+        it is locally unique and persistent for the life time of the event and it cannot be modified 
+        by the developers.
+        
+        See RFC 5545 (section 3.8.4.7) for more details about this parameter and algorithms to 
+        guarantee assignment of unique values. This value is assigned by the platform when the 
+        [add](Modules.Tizen.Calendar.CalendarInstance.add) method is successfully invoked.
+        
+  - name: rid
+    type: String
+    summary: |
+        (optional) An attribute to store the recurrence ID of a CalendarEvent instance.
+    description: |
+        This attribute is used in conjunction with the `uid` property to identify 
+        a specific instance of a recurring event.
+        
+        The parent of a recurrence instance has its rid set to null.
+        By default, this attribute is set to null. 
+        (See RFC 5545 (section 3.8.4.4) for more details about this parameter.)
+

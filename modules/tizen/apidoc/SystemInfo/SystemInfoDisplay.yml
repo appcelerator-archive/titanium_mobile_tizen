@@ -1,0 +1,48 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoDisplay
+summary: This property reflects the information of the Display.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+  - name: resolutionWidth
+    summary: |
+        The total number of addressable pixels in the horizontal direction of a rectangular entity 
+        (such as Camera, Display, Image, Video, ...) 
+        when held in its default orientation.
+    type: Number
+    permission: read-only
+
+  - name: resolutionHeight
+    summary: |
+        The total number of addressable pixels in the vertical direction of a rectangular element 
+        (such as Camera, Display, Image, Video, ...) 
+        when held in its default orientation.
+    type: Number
+    permission: read-only
+
+  - name: dotsPerInchWidth
+    summary: Resolution of this device, along its width, in dots per inch.
+    type: Number
+    permission: read-only
+
+  - name: dotsPerInchHeight
+    summary: Resolution of this device, along its height, in dots per inch.
+    type: Number
+    permission: read-only
+
+  - name: physicalWidth
+    summary: The display's physical width in millimeters.
+    type: Number
+    permission: read-only
+
+  - name: physicalHeight
+    summary: The display's physical height in millimeters.
+    type: Number
+    permission: read-only
+
+  - name: brightness
+    summary: The current brightness, from 0 to 1.
+    type: Number
+    permission: read-only

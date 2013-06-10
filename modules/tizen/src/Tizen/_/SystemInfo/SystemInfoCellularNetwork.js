@@ -4,11 +4,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var celluralNetwork = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object cellularnetworkinfo]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			}
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		constants: {
@@ -56,6 +54,16 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 				get: function() {
 					return this._obj.isRoaming;
 				}
+			},
+			isFlightMode: {
+				get: function() {
+					return this._obj.isFlightMode;
+				}
+			},
+			imei: {
+				get: function() {
+					return this._obj.imei;
+				}
 			}
 		}
 
@@ -64,5 +72,5 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.
 	celluralNetwork.prototype.declaredClass = 'Tizen.SystemInfo.SystemInfoCellularNetwork';
-	return celluralNetwork
+	return celluralNetwork;
 });

@@ -1,0 +1,26 @@
+---
+name: Modules.Tizen.Notification.NotificationDetailInfo
+summary: The NotificationDetailInfo object that contains the detail information to the notification.
+description: |
+    By default, each of the attributes of this interface are undefined.
+    
+extends: Titanium.Proxy
+
+properties:
+
+ - name: mainText
+   summary: The main content of the detail information. This attribute is available on simple status notifications.
+   type: String
+ 
+ - name: subText
+   summary: The secondary content of the detail information.
+   type: String
+
+examples:
+  - title: Simple notification
+    example: |
+        var detailInfo1 = new tizen.NotificationDetailInfo('Missed Call from James', 'Feb 11 2013');
+        notification.detailInfo = [detailInfo1];
+
+
+

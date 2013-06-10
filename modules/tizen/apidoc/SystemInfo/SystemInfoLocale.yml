@@ -1,0 +1,25 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoLocale
+summary: This property reflects the locale information of the current device.
+
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+            
+  - name: language
+    summary: |
+        Indicates the current language setting in the (LANGUAGE)_(REGION) syntax.
+    description: |
+        The language setting is in the ISO 630-2 format and the region setting is in the ISO 3166-1 format. 
+        The language setting is case-sensitive.
+    type: String
+    permission: read-only
+
+  - name: country
+    summary: Indicates the current country setting in the (LANGUAGE)_(REGION) syntax. 
+    description: |
+        The language setting is in the ISO 630-2 format and the region setting is in the ISO 3166-1 format. 
+        The country setting is case-sensitive.
+    type: String
+    permission: read-only

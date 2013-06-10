@@ -1,0 +1,38 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoStorageUnit
+summary: This property exposes a single storage device connected to this system.
+
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+            
+  - name: type
+    summary: |
+        The type of storage device. 
+    description: |
+        The value is one of the constants defined for this type.
+        The supported storage unit types are: "UNKNOWN", "INTERNAL", "MMC", and "USB_HOST".
+    type: String
+    permission: read-only
+
+  - name: capacity
+    summary: The amount of data that this device can hold, in bytes.
+    type: Number
+    permission: read-only
+
+  - name: availableCapacity
+    summary: The amount of available data that this device can hold, in bytes.
+    type: Number
+    permission: read-only
+
+  - name: isRemovable
+    summary: |
+        An attribute to indicate whether a device can be removed or not.
+        The following values are supported:
+
+        * `true` - If this storage unit can be removed from the system (such as an sdcard unplugged)
+        * `false` - If this storage unit cannot be removed from the system
+    
+    type: Boolean
+    permission: read-only

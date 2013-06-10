@@ -4,13 +4,18 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var filter = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object AttributeRangeFilter]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				this._obj = new tizen.AttributeRangeFilter(args.attributeName, args.initialValue, args.endValue);
+				if('attributeName' in args) {
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					// Check if the required parameters are present (do not check for the optional ones).
+					this._obj = new tizen.AttributeRangeFilter(args.attributeName, args.initialValue, args.endValue);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

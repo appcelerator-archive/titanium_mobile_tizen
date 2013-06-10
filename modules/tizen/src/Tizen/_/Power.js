@@ -2,14 +2,16 @@
 
 define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
-	var Power = lang.mixProps(require.mix({}, Evented), {
+	var listening;
+
+	return lang.mixProps(require.mix({}, Evented), {
 
 		request: function(resource /*PowerResource*/, state /*PowerState*/) {
-			return tizen.power.request(resource, state);
+			tizen.power.request(resource, state);
 		},
 
 		release: function(resource /*PowerResource*/) {
-			return tizen.power.release(resource);
+			tizen.power.release(resource);
 		},
 
 		isScreenOn: function() {
@@ -17,11 +19,27 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 		},
 
 		turnScreenOn: function() {
-			return tizen.power.turnScreenOn();
+			 tizen.power.turnScreenOn();
 		},
 
 		turnScreenOff: function() {
-			return tizen.power.turnScreenOff();
+			 tizen.power.turnScreenOff();
+		},
+
+		addEventListener: function () {
+			var self = this;
+			Evented.addEventListener.apply(this, arguments);
+
+			if (! listening) {
+				listening = true;
+
+				tizen.power.setScreenStateChangeListener(function (prevState, changedState) {
+					self.fireEvent('screenstatechanged', {
+						previousState: prevState,
+						changedState: changedState
+					});
+				});
+			}
 		},
 
 		constants: {
@@ -47,11 +65,4 @@ define(['Ti/_/lang', 'Ti/_/Evented'], function(lang, Evented) {
 
 	}, true);
 
-
-	function onTizenEventScreenStateChange(previousState, changedState) {
-		Power.fireEvent('screenStateChanged', {previousState: previousState, changedState: changedState});
-	}
-
-	tizen.power.setScreenStateChangeListener(onTizenEventScreenStateChange);
-	return Power;
 });

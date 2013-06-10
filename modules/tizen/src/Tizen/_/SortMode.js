@@ -4,12 +4,17 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var sm = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object SortMode]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
-				this._obj = new tizen.SortMode(args.attributeName, args.order);
+				// Check if the required parameters are present (do not check for the optional ones).
+				if('attributeName' in args) {
+					this._obj = new tizen.SortMode(args.attributeName, args.order);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

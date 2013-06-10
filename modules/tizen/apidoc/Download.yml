@@ -1,0 +1,109 @@
+---
+name: Modules.Tizen.Download
+summary: |
+    The Download module provides methods to asynchronously download the contents of a URL to a storage.
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: getDownloadRequest
+    summary: Gets the DownloadRequest object from a given id.
+    description: |
+        Returns the download request information of the given id.
+    returns:
+        type: Modules.Tizen.Download.DownloadRequest
+    parameters:
+      - name: downloadId
+        summary: The ID to get the download request information.
+        type: Number
+
+  - name: createDownloadRequest
+    summary: Creates <Modules.Tizen.Download.DownloadRequest> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.Download.DownloadRequest>.
+        type: DownloadRequestInit
+    returns:
+        type: Modules.Tizen.Download.DownloadRequest
+
+properties:
+  - name: DOWNLOAD_STATE_QUEUED
+    summary: Indicates that the download operation is listed in a queue.
+    type: String
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_DOWNLOADING
+    summary:  Indicates that the download operation is in progress.
+    type: String
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_PAUSED
+    summary: Indicates that the download operation is in a paused state by user request.
+    type: String
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_CANCELED
+    summary: Indicates that the download operation is canceled by user request.
+    type: String
+    permission: read-only
+
+  - name: DOWNLOAD_STATE_COMPLETED
+    summary: Indicates that the download operation is in a completed state.
+    type: String  
+    permission: read-only
+    
+  - name: DOWNLOAD_STATE_FAILED
+    summary: Indicates that the download operation has failed due to some reasons.
+    type: String
+    permission: read-only
+
+examples:
+  - title: Download workflow
+    example: |
+        Demonstrates how to initiate and handle a download.
+        
+            var Tizen = require('tizen'),
+                listener = {
+                    onDataStream: function(request, receivedSize, totalSize) {
+                        console.log('"onDataStream" event. id=' + request.id + ', receivedSize=' + receivedSize + ', totalSize=' + totalSize);
+                    },
+                    onPause: function(request) {
+                        console.log('"onPause" event.');
+                    },
+                    onCancel: function(request) {
+                        console.log('"onCancel" event.');
+                    },
+                    onLoad: function(request, fullPath) {
+                        console.log('"onLoad" event.');
+                    },
+                    onError: function(request, error) {
+                        console.error('"onError" event:' + error.name);
+                },
+                downloadRequest = Tizen.Download.createDownloadRequest({
+                    url: 'http://preview.appcelerator.com/appcelerator/studio/standalone/install/rc/Titanium_Studio.exe',
+                    destination: 'documents',
+                    fileName: 'Titanium_Studio.exe')
+                });
+
+            downloadRequest.send(listener);
+---
+name: DownloadRequestInit
+summary: Simple object that contains parameters for the <Modules.Tizen.Download.createDownloadRequest>.
+properties:
+  - name: url
+    summary: The URL of the object to download.
+    type: String
+
+  - name: destination
+    summary: (optional) Destination folder to which a requested file object will be downloaded.
+        If the destination is not specified, the file will be downloaded to the default storage 
+        "Downloads".
+    type: String
+    optional: true
+
+  - name: fileName
+    summary: |
+        (optional) An attribute to store the file name for the specified URL. If the file name 
+        is not given, the original file name from URL is used.
+    type: String
+    optional: true

@@ -1,0 +1,12 @@
+name: Modules.Tizen.NFC.NDEFRecordMedia
+summary: |
+  The NDEFRecord that has mime type payload.
+extends: Modules.Tizen.NFC.NDEFRecord
+
+properties:
+
+  - name: mimeType
+    type: String
+    summary: |
+        The mime type [RFC 2046] (ex. text/plain, image/jpeg ).
+    permission: read-only

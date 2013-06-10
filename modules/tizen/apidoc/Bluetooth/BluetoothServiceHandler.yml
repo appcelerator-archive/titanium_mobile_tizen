@@ -1,0 +1,47 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothServiceHandler
+summary: The Bluetooth service interface. 
+extends: Titanium.Proxy
+createable: false
+methods:
+
+  - name: unregister
+    summary: Unregisters a service record from service database. 
+    description: |
+        This method unregisters a service record from the Bluetooth services record database and 
+        stops listening for new connections to this service.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/bluetooth.spp`
+
+    parameters: 
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+        optional: true
+
+events:
+  - name: remotedeviceconnected
+    summary: The callback to be invoked when a remote device connected to this service.
+    properties:
+      - name: socket
+        summary: The socket object that can be used for communication with the connected device.
+        type: Modules.Tizen.Bluetooth.BluetoothSocket
+            
+properties:
+  - name: uuid
+    summary: UUID of the service. 
+    type: String
+    permission: read-only
+
+  - name: name
+    summary: The name of the service. 
+    type: String
+    permission: read-only
+
+  - name: isConnected
+    summary: The value is necessary to check if any other Bluetooth devices use this service. 
+    type: Boolean
+    permission: read-only

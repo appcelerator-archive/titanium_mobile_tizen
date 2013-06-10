@@ -1,77 +1,145 @@
 // Wraps Tizen interface "MessageStorage" that resides in Tizen module "Messaging".
 
-define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageFolder', 'Tizen/_/Messaging/MessageConversation', 'Tizen/_/WebAPIError'],
-	function(declare, Message, MessageFolder, MessageConversation, WebAPIError) {
+define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageFolder', 'Tizen/_/Messaging/MessageConversation'],
+	function(declare, Message, MessageFolder, MessageConversation) {
+
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
+
+		function onSuccess (callback) {
+			callback({
+				code: 0,
+				success: true
+			});
+		}
 
 		var messageStorage = declare(null, {
 
-			constructor: function(args) {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
-			addDraftMessage: function(message /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				this._obj.addDraftMessage(message._obj, successCallback, errorCallback && wrappedErrorCallback);
-			},
-
-			findMessages: function(filter /*AbstractFilter*/, successCallback /*MessageArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-				function messagesListSuceessCallBack(objects) {
-					var i = 0,
-						objectsCount = objects.length,
-						result = [];
-
-					for (; i < objectsCount; i++) {
-						result.push(new Message(objects[i]));
+			addDraftMessage: function(message /*Message*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ message._obj ];
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					},
+					function (e) {
+						onError(e, callback);
 					}
-
-					successCallback(result);
-				}
-
-
-				this._obj.findMessages(filter._obj, messagesListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
+				);
+				this._obj.addDraftMessage.apply(this._obj, args);
 			},
 
-			removeMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			findMessages: function(filter /*AbstractFilter*/, callback, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					filter._obj,
+					function (messages) {
+						var i = 0,
+							messagesCount = messages.length,
+							result = [];
+						for (; i < messagesCount; i++) {
+							result.push(new Message(void 0, messages[i]));
+						}
+						callback({
+							code: 0,
+							success: true,
+							messages: result
+						});
+					},
+					function (e) {
+						onError(e, callback);
+					}
+				];
+				(typeof sort !== 'undefined') && args.push(sort && sort._obj || sort);
+				(typeof limit !== 'undefined') && args.push(limit);
+				(typeof offset !== 'undefined') && args.push(offset);
+				this._obj.findMessages.apply(this._obj, args);
+			},
+
+			removeMessages: function(messages /*Message*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					tizenMessages = [],
-					len = messages.length;
+					len = messages.length,
+					args = [];
 
 				for (; i < len; i++) {
 					tizenMessages.push(messages[i]._obj);
 				}
 
-				this._obj.removeMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
+				args.push(tizenMessages);
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					},
+					function (e) {
+						onError(e, callback);
+					}
+				);
+
+				this._obj.removeMessages.apply(this._obj, args);
 			},
 
-			updateMessages: function(messages /*Message*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			updateMessages: function(messages /*Message*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					tizenMessages = [],
-					len = messages.length;
+					len = messages.length,
+					args = [];
 
 				for (; i < len; i++) {
 					tizenMessages.push(messages[i]._obj);
 				}
 
-				this._obj.updateMessages(tizenMessages, successCallback, errorCallback && wrappedErrorCallback);
-			},
-
-			findConversations: function(filter /*AbstractFilter*/, successCallback /*MessageConversationArraySuccessCallback*/, errorCallback /*ErrorCallback*/, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
-				function conversationsListSuceessCallBack(objects) {
-					var i = 0,
-						objectsCount = objects.length,
-						result = [];
-
-					for (; i < objectsCount; i++) {
-						result.push(new MessageConversation(objects[i]));
+				args.push(tizenMessages);
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					},
+					function (e) {
+						onError(e, callback);
 					}
+				);
 
-					successCallback(result);
-				}
-
-				this._obj.findConversations(filter._obj, conversationsListSuceessCallBack, errorCallback && wrappedErrorCallback, sort ? sort._obj : sort, limit, offset);
+				this._obj.updateMessages.apply(this._obj, args);
 			},
 
-			removeConversations: function(conversations /*MessageConversation*/, successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
+			findConversations: function(filter /*AbstractFilter*/, callback, sort /*SortMode*/, limit /*unsigned long*/, offset /*unsigned long*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					filter._obj,
+					function (conversations) {
+						var i = 0,
+							conversationsCount = conversations.lengh,
+							result = [];
+						for (; i < conversationsCount; i++) {
+							result.push(new MessageConversation(conversations[i]));
+						}
+						callback({
+							code: 0,
+							success: true,
+							conversations: result
+						});
+					}, 
+					callback && function (e) {
+						onError(e, callback);
+					}
+				];
+				(typeof sort !== 'undefined') && args.push(sort && sort._obj || sort);
+				(typeof limit !== 'undefined') && args.push(limit);
+				(typeof offset !== 'undefined') && args.push(offset);
+				this._obj.findConversations.apply(this._obj, args);
+			},
+
+			removeConversations: function(conversations /*MessageConversation*/, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
 				var i = 0,
 					tizenConversations = [],
 					len = conversations.length;
@@ -80,56 +148,89 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					tizenConversations.push(conversations[i]._obj);
 				}
 
-				this._obj.removeConversations(tizenConversations, successCallback, errorCallback && wrappedErrorCallback);
+				args.push(tizenConversations);
+				(typeof callback !== 'undefined') && args.push(function () {
+						onSuccess(callback);
+					},
+					function (e) {
+						onError(e, callback);
+					}
+				);
+
+				this._obj.removeConversations.apply(this._obj, args);
 			},
 
-			findFolders: function(filter /*AbstractFilter*/, successCallback /*MessageFolderArraySuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				function foldersListSuccessCallBack(objects) {
+			findFolders: function(filter /*AbstractFilter*/, callback) {
+				this._obj.findFolders(filter._obj, callback && function (folders) {
 					var i = 0,
-						len = objects.length,
+						foldersCount = folders.length,
 						result = [];
-
-					for (; i < len; i++) {
-						result.push(new MessageFolder(objects[i]));
+					for  (; i < foldersCount; i++) {
+						result.push(new MessageFolder(folders[i]));
 					}
-
-					successCallback(result);
-				}
-
-				this._obj.findFolders(filter._obj, foldersListSuccessCallBack, errorCallback && wrappedErrorCallback);
+					callback({
+						code: 0,
+						success: true,
+						folders: result
+					});
+				}, callback && function (e) {
+					onError(e, callback);
+				});
 			},
 
 			addMessagesChangeListener: function(messagesChangeCallback /*MessagesChangeCallback*/, filter /*AbstractFilter*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					{
+						messagesupdated: function(items) {
+							messagesChangeCallback.messagesupdated(getWrappedItems(items));
+						},
+
+						messagesadded: function(items) {
+							messagesChangeCallback.messagesadded(getWrappedItems(items));
+						},
+
+						messagesremoved: function(items) {
+							messagesChangeCallback.messagesremoved(getWrappedItems(items));
+						}
+					}
+				];
+
 				function getWrappedItems(items) {
 					var i = 0,
 						itemsCount = items.length,
 						wrappedItems = [];
 
 					for (; i < itemsCount; i++) {
-						wrappedItems.push(new Message(items[i]));
+						wrappedItems.push(new Message(void 0, items[i]));
 					}
 
 					return wrappedItems;
 				}
 
-				var wrappedMessagesChangeCallback = {
-					messagesupdated: function(items) {
-						messagesChangeCallback.messagesChangeCallback.messagesupdated(getWrappedItems(items));
-					},
+				(typeof filter !== 'undefined') && args.push(filter && filter._obj || filter);
 
-					messagesadded: function(items) {
-						messagesChangeCallback.messagesadded(getWrappedItems(items));
-					},
-
-					messagesremoved: function(items) {
-						messagesChangeCallback.messagesremoved(getWrappedItems(items));
-					}
-				};
-
-				return this._obj.addMessagesChangeListener(messagesChangeCallback && wrappedMessagesChangeCallback, filter ? filter._obj : filter);
+				return this._obj.addMessagesChangeListener.apply(this._obj, args);
 			},
 
 			addConversationsChangeListener: function(conversationsChangeCallback /*MessageConversationsChangeCallback*/, filter /*AbstractFilter*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					{
+						conversationsupdated: function(items) {
+							conversationsChangeCallback.conversationsupdated(getWrappedItems(items));
+						},
+
+						conversationsadded: function(items) {
+							conversationsChangeCallback.conversationsadded(getWrappedItems(items));
+						},
+
+						conversationsremoved: function(items) {
+							conversationsChangeCallback.conversationsremoved(getWrappedItems(items));
+						}
+					}
+				];
+
 				function getWrappedItems(items) {
 					var i = 0,
 						itemsCount = items.length,
@@ -142,24 +243,29 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedConversationsChangeCallback = {
-					conversationsupdated: function(items) {
-						conversationsChangeCallback.conversationsupdated(getWrappedItems(items));
-					},
+				(typeof filter !== 'undefined') && args.push(filter._obj);
 
-					conversationsadded: function(items) {
-						conversationsChangeCallback.conversationsadded(getWrappedItems(items));
-					},
-
-					conversationsremoved: function(items) {
-						conversationsChangeCallback.conversationsremoved(getWrappedItems(items));
-					}
-				};
-
-				this._obj.addConversationsChangeListener(conversationsChangeCallback && wrappedConversationsChangeCallback, filter ? filter._obj : filter);
+				this._obj.addConversationsChangeListener.apply(this._obj, args);
 			},
 
 			addFoldersChangeListener: function(foldersChangeCallback /*MessageFoldersChangeCallback*/, filter /*AbstractFilter*/) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [
+					{
+						foldersupdated: function(items) {
+							foldersChangeCallback.foldersupdated(getWrappedItems(items));
+						},
+
+						foldersadded: function(items) {
+							foldersChangeCallback.foldersadded(getWrappedItems(items));
+						},
+
+						foldersremoved: function(items) {
+							foldersChangeCallback.foldersremoved(getWrappedItems(items));
+						}
+					}
+				]; 
+
 				function getWrappedItems(items) {
 					var i = 0,
 						itemsCount = items.length,
@@ -172,21 +278,9 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 					return wrappedItems;
 				}
 
-				var wrappedFoldersChangeCallback = {
-					foldersupdated: function(items) {
-						foldersChangeCallback.foldersupdated(getWrappedItems(items));
-					},
+				(typeof filter !== 'undefined') && args.push(filter && filter._obj || filter);
 
-					foldersadded: function(items) {
-						foldersChangeCallback.foldersadded(getWrappedItems(items));
-					},
-
-					foldersremoved: function(items) {
-						foldersChangeCallback.foldersremoved(getWrappedItems(items));
-					}
-				};
-
-				this._obj.addFoldersChangeListener(wrappedFoldersChangeCallback, filter ? filter._obj : filter);
+				this._obj.addFoldersChangeListener.apply(this._obj, args);
 			},
 
 			removeChangeListener: function(watchId /*long*/) {
@@ -195,10 +289,6 @@ define(['Ti/_/declare', 'Tizen/_/Messaging/Message', 'Tizen/_/Messaging/MessageF
 
 		});
 
-		function wrappedErrorCallback(error) {
-			errorCallback(new WebAPIError(error));
-		}
-
-		messageStorage.prototype.declareClass = 'Tizen.Messaging.MessageStorage';
+		messageStorage.prototype.declaredClass = 'Tizen.Messaging.MessageStorage';
 		return messageStorage;
 	});

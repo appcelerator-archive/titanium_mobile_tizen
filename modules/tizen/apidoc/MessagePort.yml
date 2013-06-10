@@ -1,0 +1,88 @@
+---
+name: Modules.Tizen.MessagePort
+summary: This API provides the functionality for communicating with other applications.
+    
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: requestLocalMessagePort
+    summary: Requests a LocalMessage Port instance to start receiving message from another application.
+    returns:
+        type: Modules.Tizen.MessagePort.LocalMessagePort
+        
+    parameters:
+      - name: localMessagePortName
+        summary: The name of the local message port to retrieve.
+        type: String
+
+  - name: requestTrustedLocalMessagePort
+    summary: Requests a trusted LocalMessagePort instance to receive message from another application.
+    returns:
+        type: Modules.Tizen.MessagePort.LocalMessagePort
+
+    parameters:
+      - name: localMessagePortName
+        summary: The name of the local message port to retrieve.
+        type: String
+
+  - name: requestRemoteMessagePort
+    summary: Requests a RemoteMessagePort instance to send message to another application.
+    returns:
+        type: Modules.Tizen.MessagePort.RemoteMessagePort
+
+    parameters:
+      - name: appId
+        summary: The ID of the application to send messages.
+        type: String
+
+      - name: remoteMessagePortName
+        summary: The name of remote message port.
+        type: String
+
+  - name: requestTrustedRemoteMessagePort
+    summary: Requests a trusted RemoteMessagePort instance to receive message from another application.
+    returns:
+        type: Modules.Tizen.MessagePort.RemoteMessagePort
+
+    parameters:
+      - name: appId
+        summary: The ID of the application to send messages.
+        type: String
+
+      - name: remoteMessagePortName
+        summary: The name of remote message port.
+        type: String
+
+examples:
+  - title: Example
+    example: |
+        //Code for the first application
+        var localMsgPort = Tizen.MessagePort.requestLocalMessagePort('MessagePortA');
+        localMsgPort.addEventListener('received', function(e) {
+            alert(e.data[0].value); //Some message
+        });
+
+        //Code for the second application
+        var remoteMsgPort = Tizen.MessagePort.requestRemoteMessagePort('D0zb7HQO2e.KSHelp', 'MessagePortA');
+        remoteMsgPort.sendMessage([
+            {
+                key: 'First',
+                value: 'Some message'
+            }
+        ]);
+
+---
+name: MessagePortDataItem
+platforms: [tizen]
+summary: |
+    A dictionary for specifying the data item that is transferred.
+
+properties:
+  - name: key
+    type: String
+    summary: Key of a message.
+
+  - name: value
+    type: String
+    summary: Value of a message.

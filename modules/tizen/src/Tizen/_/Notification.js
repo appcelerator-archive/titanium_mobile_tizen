@@ -1,6 +1,6 @@
 // Wraps Tizen module "Notification".
 
-define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'], function(lang, StatusNotification, Evented) {
+define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Tizen/_/Notification/NotificationDetailInfo', 'Ti/_/Evented'], function(lang, StatusNotification, NotificationDetailInfo, Evented) {
 
 	return lang.mixProps(require.mix({}, Evented), {
 
@@ -41,11 +41,10 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 
 			var result;
 			if (object.toString() === '[object StatusNotification]') {
-				result = this.createStatusNotification(object);
+				result = new StatusNotification(void 0, object);
 			}
-			else
-			{
-				console.error("Incorrect object type");
+			else {
+				throw new Error('Object of unknown type');
 			}
 			return result;
 		},
@@ -54,11 +53,18 @@ define(['Ti/_/lang', 'Tizen/_/Notification/StatusNotification', 'Ti/_/Evented'],
 			return new StatusNotification(args);
 		},
 
+		createNotificationDetailInfo: function(args) {
+			return new NotificationDetailInfo(args);
+		},
+
 		constants: {
 			NOTIFICATION_TYPE_STATUS: 'STATUS',
 			STATUS_NOTIFICATION_TYPE_SIMPLE: 'SIMPLE',
+			STATUS_NOTIFICATION_TYPE_THUMBNAIL: 'THUMBNAIL',
 			STATUS_NOTIFICATION_TYPE_ONGOING: 'ONGOING',
-			STATUS_NOTIFICATION_TYPE_PROGRESS: 'PROGRESS'
+			STATUS_NOTIFICATION_TYPE_PROGRESS: 'PROGRESS',
+			NOTIFICATION_PROGRESS_TYPE_PERCENTAGE: 'PERCENTAGE',
+			NOTIFICATION_PROGRESS_TYPE_BYTE: 'BYTE'
 		}
 
 	}, true);

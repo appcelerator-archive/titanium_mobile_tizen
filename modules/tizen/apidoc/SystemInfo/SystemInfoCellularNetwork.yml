@@ -1,0 +1,77 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoCellularNetwork
+summary: This property reflects the information of the Cellular network in this system.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+
+  - name: status
+    summary: Represents the status (ON or OFF) of the cellular  interface.
+    type: String
+    permission: read-only
+    
+  - name: apn
+    summary: Represents an Access Point Name of the cellular network.
+    type: String
+    permission: read-only
+    
+  - name: ipAddress
+    summary: Represents the IPv4 address of cellular network.
+    type: String
+    permission: read-only
+    
+  - name: ipv6Address
+    summary: Represents Mobile Country Code (MCC) of the cellular network.
+    type: String
+    permission: read-only
+    
+  - name: mcc
+    summary: Represents Mobile Country Code (MCC) of the cellular network.
+    type: Number
+    permission: read-only
+    
+  - name: mnc
+    summary: |
+        Represents Mobile Network Code (MNC) of the cellular network. 
+    description: |
+        MNC is used in combination with MCC (also known as a "MCC / MNC tuple") to uniquely identify 
+        a mobile phone operator/carrier 
+        using the GSM, CDMA, iDEN, TETRA and UMTS public land mobile networks and some satellite 
+        mobile networks.
+    type: Number
+    permission: read-only
+
+  - name: cellId
+    summary: Represents Cell Id.
+    type: Number
+    permission: read-only
+    
+  - name: lac
+    summary: Represents Location Area Code.
+    type: Number
+    permission: read-only
+    
+  - name: isRoaming
+    summary: Whether the connection is set up while the device is roaming.
+    type: Boolean
+    permission: read-only
+
+  - name: isFlightMode
+    summary: Whether the connection is set up while the device is roaming.
+    type: Boolean
+    permission: read-only
+
+  - name: imei
+    summary: Represents the International Mobile Equipment Identity (IMEI).
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/systemmanager`
+
+        This is a partner level privilege.
+        
+    type: String
+    permission: read-only

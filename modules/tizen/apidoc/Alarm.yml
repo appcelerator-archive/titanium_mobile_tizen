@@ -1,0 +1,173 @@
+---
+name: Modules.Tizen.Alarm
+summary: This API provides the functionality for setting and unsetting of alarms.
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+  - name: add
+    summary: Adds an alarm to the storage.
+    description: |
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/alarm`
+        
+    parameters:
+
+      - name: alarm
+        summary: An alarm to add.
+        type: Modules.Tizen.Alarm.Alarm
+
+      - name: applicationId
+        summary: The ID of the application to execute when the alarm is triggered. 
+        type: String
+
+      - name: appControl
+        summary: The data structure describing application control details.
+        type: Modules.Tizen.Apps.ApplicationControl
+        optional: true
+
+  - name: remove
+    summary: Removes an alarm from the storage. 
+    description: |
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
+
+        * `http://tizen.org/privilege/alarm`
+        
+    parameters:
+
+      - name: id
+        summary: The ID of the alarm to remove 
+        type: String
+
+  - name: removeAll
+    description: |
+        To use this method, you must to include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
+
+        * `http://tizen.org/privilege/alarm`
+        
+    summary: Removes all alarms added by an application.
+    description: |
+        Because each application has its own alarm storage, this method will only remove alarms 
+        added by the calling application.
+
+  - name: getAlarm
+    summary: Returns an alarm as per the specified identifier.
+    returns: 
+      - type: Modules.Tizen.Alarm.Alarm
+        summary: Alarm An alarm object with the specified ID. 
+    parameters:
+
+      - name: id
+        summary: The ID of the alarm to retrieve.
+        type: String
+
+  - name: getAll
+    summary: Returns all alarms.
+    description: |
+        This method returns all alarms in an application storage. 
+        Alarms that have already been triggered are removed automatically from the storage. 
+    returns: 
+      - type: Array<Modules.Tizen.Alarm.Alarm>
+        summary: All Alarm objects.
+
+  - name: createAlarmRelative
+    summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmRelative>.
+    returns: 
+        type: Modules.Tizen.Alarm.AlarmRelative
+    parameters:
+      - name: parameters
+        summary: Initial arguments for AlarmRelative.
+        type: Dictionary<Modules.Tizen.Alarm.AlarmRelative>
+
+  - name: createAlarmAbsolute
+    summary: Creates and returns an instance of <Modules.Tizen.Alarm.AlarmAbsolute>.
+    returns: 
+        type: Modules.Tizen.Alarm.AlarmAbsolute
+    parameters:
+      - name: parameterrs
+        summary: Initial arguments for AlarmAbsolute.
+        type: [Date, AlarmAbsoluteInit1, AlarmAbsoluteInit2]
+ 
+properties:
+  - name: PERIOD_MINUTE
+    summary: 60 - The period of a minute. It defines the number of seconds per minute. 
+    type: Number
+    permission: read-only
+    
+  - name: PERIOD_HOUR
+    summary: 3600 - The period of an hour. It defines the number of seconds per hour.
+    type: Number
+    permission: read-only
+
+  - name: PERIOD_DAY
+    summary: 86400 - The period of a day. It defines the number of seconds per day.
+    type: Number
+    permission: read-only
+
+  - name: PERIOD_WEEK
+    summary: 604800 - The period of a week. It define the number of seconds in a week. 
+    type: Number
+    permission: read-only
+
+examples:
+  - title: Relative alarm
+    example: |
+        This example creates and adds a relative alarm. The clock app will show up periodically.
+
+            var Tizen = require('tizen');
+            
+            var alarm = Tizen.Alarm.createAlarmRelative({
+                    delay: 0, 
+                    period: 1800
+                }),
+                
+            Tizen.Alarm.add(alarm, 'org.tizen.clock'); 
+
+---
+name: AlarmAbsoluteInit1
+summary: |
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+properties:
+  - name: date
+    type: Date
+    summary: |
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
+  - name: daysOfTheWeek
+    summary: |
+        (optional) The days of the week associated with the recurrence rule. By default, this 
+        attribute is set to an empty array.
+    description: |
+        Valid days of the week constants:
+        
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_MO>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_TU>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_WE>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_TH>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_FR>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_SA>
+        - <Modules.Tizen.Calendar.BY_DAY_VALUE_SU>
+
+    type: Array<String>
+    optional: true
+
+---
+name: AlarmAbsoluteInit2
+summary: | 
+    Simple object that contains parameters for 
+    [createAlarmAbsolute](Modules.Tizen.Alarm.createAlarmAbsolute).
+properties:
+  - name: date
+    type: Date
+    summary: |
+        The absolute date/time when the alarm is initially triggered. It is precise to the second; 
+        milliseconds will be ignored.
+  - name: period
+    summary: (Optional) Duration in seconds between each trigger of the alarm.
+    type: Number
+    optional: true

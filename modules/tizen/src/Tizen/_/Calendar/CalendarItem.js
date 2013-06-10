@@ -1,12 +1,12 @@
 // Wraps Tizen interface "CalendarItem" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/helper'], function(declare, Evented, CalendarEventId, helper) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tizen/_/Calendar/CalendarAttendee', 'Tizen/_/Calendar/helper'], function(declare, Evented, CalendarEventId, Attendee, helper) {
 
 	var calendarItem = declare(Evented, {
 
-		constructor: function(args) {
-			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		convertToString: function(format /*CalendarTextFormat*/) {
@@ -14,18 +14,25 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 		},
 
 		clone: function() {
-			return new (require('Tizen/_/Calendar/CalendarEvent'))(this._obj.clone());
+			return new (require('Tizen/_/Calendar/CalendarEvent'))(void 0, this._obj.clone());
 		},
 
 		constants: {
 			id: {
 				get: function() {
-					return (this._obj == '[object CalendarEvent]') ? (new CalendarEventId(this._obj.id)) : this._obj.id;
+					return (this._obj == '[object CalendarEvent]') ? 
+						(new CalendarEventId(void 0, this._obj.id)) : 
+						this._obj.id;
 				}
 			},
 			lastModificationDate: {
 				get: function() {
 					return this._obj.lastModificationDate;
+				}
+			},
+			calendarId: {
+				get: function() {
+					return this._obj.calendarId;
 				}
 			}
 		},
@@ -146,10 +153,23 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/CalendarEventId', 'Tiz
 			},
 			attendees: {
 				get: function() {
-					return this._obj.attendees;
+					var i = 0,
+						attendees = this._obj.attendees,
+						l = attendees.length,
+						result = [];
+					for (; i < l; i++) {
+						result.push(new Attendee(void 0, attendees[i]));
+					}
+					return result;
 				},
 				set: function(value) {
-					this._obj.attendees = value;
+					var i = 0,
+						l = value.length,
+						result = [];
+					for (; i < l; i++) {
+						result.push(value[i]._obj);
+					}
+					this._obj.attendees = result;
 				}
 			}
 		}

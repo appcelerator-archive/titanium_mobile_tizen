@@ -1,0 +1,371 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
+summary: SystemInfoDeviceCapability object.
+
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+
+  - name: bluetooth
+    summary: Indicates whether the device supports Bluetooth.
+    type: Boolean
+    permission: read-only
+
+  - name: nfc
+    summary: Indicates whether the device supports NFC.
+    type: Boolean
+    permission: read-only
+
+  - name: nfcReservedPush
+    summary: Indicates whether the device supports NFC reserved push.
+    type: Boolean
+    permission: read-only
+
+  - name: multiTouchCount
+    summary: The number of point in Multi-point touch.
+    type: Number
+    permission: read-only
+
+  - name: inputKeyboard
+    summary: Indicates whether the device supports Keyboard.
+    type: Boolean
+    permission: read-only
+
+  - name: inputKeyboardLayout
+    summary: Indicates whether the device supports the built-in keyboard layout.
+    type: String
+    permission: read-only
+
+  - name: wifi
+    summary: Indicates whether the device supports Wi-Fi. 
+    type: Boolean
+    permission: read-only
+
+  - name: wifiDirect
+    summary: Indicates whether the device supports Wi-Fi direct.
+    type: Boolean
+    permission: read-only
+
+  - name: opengles
+    summary: ndicates whether the device supports OpenGL-ES.
+    type: Boolean
+    permission: read-only
+
+  - name: openglestextureFormat
+    summary: |
+        The device 3DC texture format for OpenGL-ES. One example of possible output is as follows:
+        "`3dc/atc/etc/ptc/pvrtc/utc`"
+    type: String
+    permission: read-only
+
+  - name: openglesVersion1_1
+    summary: Indicates whether the device supports OpenGL-ES version 1.1.
+    type: Boolean
+    permission: read-only
+
+  - name: openglesVersion2_0
+    summary: Indicates whether the device supports OpenGL-ES version 2.0.
+    type: Boolean
+    permission: read-only
+
+  - name: fmRadio
+    summary: Indicates whether the device supports  FM radio.
+    type: Boolean
+    permission: read-only
+
+  - name: platformVersion
+    summary: |
+        The version of the platform in the "[Major].[Minor].[Build Version]" format. 
+    description: |
+        For example, "1.0.0" represents a platform version where the major version is 1 and the 
+        minor and build versions are 0.
+
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
+    type: String
+    permission: read-only
+
+  - name: platformName
+    summary: The name of the platform.
+    type: String
+    permission: read-only
+
+  - name: webApiVersion
+    summary: |
+        The version of the Tizen Web API in the [Major].[Minor] format. 
+    description: |
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
+    type: String
+    permission: read-only
+
+  - name: nativeApiVersion
+    summary: The version of the native Tizen API in the [Major].[Minor] format.
+    description: |
+        To use this property, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/system`
+
+        This is a public level privilege.
+    type: String
+    permission: read-only
+
+  - name: camera
+    summary: Indicates whether the device supports camera.
+    type: Boolean
+    permission: read-only
+
+  - name: cameraFront
+    summary: Indicates whether the device supports front camera
+    type: Boolean
+    permission: read-only
+
+  - name: cameraFrontFlash
+    summary: Indicates whether the device supports flash on the front camera.
+    type: Boolean
+    permission: read-only
+
+  - name: cameraBack
+    summary: Indicates whether the device supports back-side camera.
+    type: Boolean
+    permission: read-only
+
+  - name: cameraBackFlash
+    summary: Indicates whether the device supports on the back-side camera.
+    type: Boolean
+    permission: read-only
+
+  - name: location
+    summary: Indicates whether the device supports location
+    type: Boolean
+    permission: read-only
+
+  - name: locationGps
+    summary: Indicates whether the device supports GPS based location feature.
+    type: Boolean
+    permission: read-only
+
+  - name: locationWps
+    summary: Indicates whether the device supports  WPS based location feature.
+    type: Boolean
+    permission: read-only
+
+  - name: microphone
+    summary: Indicates whether the device supports Microphone.
+    type: Boolean
+    permission: read-only
+   
+  - name: usbHost
+    summary: Indicates whether the device supports USB host.
+    type: Boolean
+    permission: read-only
+
+  - name: usbAccessory
+    summary: Indicates whether the device supports USB accessory.
+    type: Boolean
+    permission: read-only
+
+  - name: screenOutputRca
+    summary: Indicates whether the device supports RCA output.
+    type: Boolean
+    permission: read-only
+
+  - name: screenOutputHdmi
+    summary: Indicates whether the device supports HDMI output.
+    type: Boolean
+    permission: read-only
+
+  - name: platformCoreCpuArch
+    summary: The device CPU architecture. possible output (armv6 / armv7 / x86 / llvm)
+    type: String
+    permission: read-only
+
+  - name: platformCoreFpuArch
+    summary: The device FPU architecture. possible output (vfpv2 / vfpv3 / sse2 / sse3 / ssse3)
+    type: String
+    permission: read-only
+
+  - name: sipVoip
+    summary: Indicates whether the device supports VOIP.
+    type: Boolean
+    permission: read-only
+
+  - name: duid
+    summary: The device unique ID.
+    type: String
+    permission: read-only
+
+  - name: speechRecognition
+    summary: Indicates whether the device supports speech recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: speechSynthesis
+    summary: Indicates whether the device supports speech synthesis.
+    type: Boolean
+    permission: read-only
+
+  - name: accelerometer
+    summary: Indicates whether the device supports Accelerometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: accelerometerWakeup
+    summary: Indicates whether the device supports Accelerometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: barometer
+    summary: Indicates whether the device supports Barometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: barometerWakeup
+    summary: Indicates whether the device supports Barometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: gyroscope
+    summary: Indicates whether the device supports Gyroscope sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: gyroscopeWakeup
+    summary: Indicates whether the device supports Gyroscope sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: magnetometer
+    summary: Indicates whether the device supports Magnetometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: magnetometerWakeup
+    summary: Indicates whether the device supports Magnetometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: photometer
+    summary: Indicates whether the device supports Photometer sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: photometerWakeup
+    summary: Indicates whether the device supports Photometer sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: proximity
+    summary: Indicates whether the device supports Proximity sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: proximityWakeup
+    summary: Indicates whether the device supports Proximity sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: tiltmeter
+    summary: Indicates whether the device supports Tiltmeter sensor.
+    type: Boolean
+    permission: read-only
+
+  - name: tiltmeterWakeup
+    summary: Indicates whether the device supports Tiltmeter sensor wake-up feature.
+    type: Boolean
+    permission: read-only
+
+  - name: dataEncryption
+    summary: Indicates whether the device supports data encryption.
+    type: Boolean
+    permission: read-only
+
+  - name: graphicsAcceleration
+    summary: Indicates whether the device supports hardware acceleration for 2D/3D graphics.
+    type: Boolean
+    permission: read-only
+
+  - name: push
+    summary: Indicates whether the device supports push service.
+    type: Boolean
+    permission: read-only
+
+  - name: telephony
+    summary: Indicates whether the device supports the telephony feature.
+    type: Boolean
+    permission: read-only
+
+  - name: telephonyMms
+    summary: Indicates whether the device supports the mms feature.
+    type: Boolean
+    permission: read-only
+
+  - name: telephonySms
+    summary: Indicates whether the device supports the sms feature.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSizeNormal
+    summary: Indicates whether the device supports the screen normal size.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSize480_800
+    summary: Indicates whether the device supports the 480 * 800 screen size.
+    type: Boolean
+    permission: read-only
+
+  - name: screenSize720_1280
+    summary: Indicates whether the device supports the 720 * 1280 screen size.
+    type: Boolean
+    permission: read-only
+
+  - name: autoRotation
+    summary: Indicates whether the device supports auto rotation.
+    type: Boolean
+    permission: read-only
+
+  - name: shellAppWidget
+    summary: Indicates whether the device supports shell app widget.
+    type: Boolean
+    permission: read-only
+
+  - name: visionImageRecognition
+    summary: Indicates whether the device supports vision image recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: visionQrcodeGeneration
+    summary: Indicates whether the device supports vision qrcode generation.
+    type: Boolean
+    permission: read-only
+
+  - name: visionQrcodeRecognition
+    summary: Indicates whether the device supports vision qrcode recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: visionFaceRecognition
+    summary: Indicates whether the device supports vision face recognition.
+    type: Boolean
+    permission: read-only
+
+  - name: secureElement
+    summary: Indicates whether the device supports secure element.
+    type: Boolean
+    permission: read-only
+
+  - name: nativeOspCompatible
+    summary: Indicates whether the device supports native osp API.
+    type: Boolean
+    permission: read-only

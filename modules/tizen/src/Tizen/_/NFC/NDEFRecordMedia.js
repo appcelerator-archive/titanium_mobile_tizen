@@ -4,12 +4,17 @@ define(['Ti/_/declare', 'Tizen/_/NFC/NDEFRecord'], function(declare, NDEFRecord)
 
 	var record = declare(NDEFRecord, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object NDEFRecordMedia]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
-				this._obj = new tizen.NDEFRecordMedia(args.mimeType, args.data);
+				// Check if the required parameters are present (do not check for the optional ones).
+				if('mimeType' in args && 'data' in args){
+					this._obj = new tizen.NDEFRecordMedia(args.mimeType, args.data);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

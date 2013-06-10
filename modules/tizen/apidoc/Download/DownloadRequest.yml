@@ -1,0 +1,140 @@
+---
+name: Modules.Tizen.Download.DownloadRequest
+summary: Defines the download request object.
+extends: Titanium.Proxy
+
+methods:
+  - name: send
+    summary: Starts a download operation with the specified URL information.
+    description: |
+        Returns an identifier for each download operation.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/download`
+        
+    returns:
+        type: Number
+    parameters:
+      - name: downloadCallback
+        summary: The method to invoke when the download state changes or an error occurs.
+        type: DownloadCallback
+        optional: true
+
+  - name: abort
+    summary: Cancels an ongoing download operation that is specified by the downloadId parameter.
+ 
+  - name: pause
+    summary: Pauses an ongoing download operation that is specified by the downloadId parameter.
+        The paused download operation can be resumed later by the 
+        [resume](Modules.Tizen.Download.DownloadRequest.resume) method.
+
+  - name: resume 
+    summary: Resumes a paused download operation that is specified by the downloadId parameter.
+ 
+  - name: setListener
+    summary: Sets the download callback to the download operation of given id.
+        It's possible to change or register the listener of download operation using the saved id.
+    parameters:
+      - name: downloadCallback
+        summary: The method to invoke when the download state changes or an error occurs.
+        type: DownloadCallback
+
+properties:
+
+  - name: id
+    summary: The ID of the corresponding download operation.
+    type: Number
+    permission: read-only
+
+  - name: url
+    summary: Store the URL of the object to download.
+    type: String
+
+  - name: destination
+    summary: |
+        Stores the folder path of the destination folder to which a requested file object will be 
+        downloaded.
+    description: |
+        If the destination is not specified,  the file will be downloaded to the default storage 
+        "Downloads".
+    type: String
+    optional: true
+
+  - name: fileName
+    summary: An attribute to store the file name for the specified URL. 
+    description: |
+        If the file name is not given, the original file name from URL is used.
+    type: String
+    optional: true
+
+  - name: state
+    summary: Gets the download state of an operation for current downloadRequest object
+    type: String
+    permission: read-only
+
+  - name: MIMEtype
+    summary: |
+        Returns a valid MIME type of the downloaded file when the download operation has been 
+        started and successfully retrieved the file header.
+    type: String
+    permission: read-only
+
+---
+name: DownloadCallback
+summary: Defines notification callbacks for the download state change or progress.
+methods:
+  - name: onDataStream
+    summary: |
+        Called when a download is successful and it called multiple times as the download progresses.
+    description: |
+        The interval between `onprogress` callback is platform-dependent. When the download is 
+        started, the receivedSize can be 0.
+    parameters:
+      - name: downloadRequest
+        summary: Current started download operation.
+        type: Modules.Tizen.Download.DownloadRequest
+      - name: receivedSize
+        summary: The size of data received in bytes.
+        type: Number
+      - name: totalSize
+        summary: The total size of data to receive in bytes.
+        type: Number
+  - name: onPause
+    summary: |
+        Called when the download operation is paused by the 
+        [pause](Modules.Tizen.Download.DownloadRequest.pause) method.
+    parameters:
+      - name: downloadRequest
+        summary: Current started download operation.
+        type: Modules.Tizen.Download.DownloadRequest
+  - name: onCancel
+    summary: |
+        Called when download is canceled by the 
+        [abort](Modules.Tizen.Download.DownloadRequest.abort) method.
+    parameters:
+      - name: downloadRequest
+        summary: Current started download operation.
+        type: Modules.Tizen.Download.DownloadRequest
+  - name: onLoad
+    summary: Called when the download operation is completed with the final full path.
+    description: |
+        If the same file name already exists in the destination, it is changed according to the 
+        platform policy and delivered in this callback.
+    parameters:
+      - name: downloadRequest
+        summary: Current started download operation.
+        type: Modules.Tizen.Download.DownloadRequest
+      - name: fullPath
+        summary: The final full path for the downloaded file.
+        type: String
+  - name: onError
+    summary: Called when the download operation fails.
+    parameters:
+      - name: downloadRequest
+        summary: Current started download operation.
+        type: Modules.Tizen.Download.DownloadRequest
+      - name: error
+        summary: The reason for the download failure.
+        type: Callback<Modules.Tizen.WebAPIError>

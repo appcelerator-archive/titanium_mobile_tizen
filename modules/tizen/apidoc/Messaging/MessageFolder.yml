@@ -1,0 +1,78 @@
+---
+name: Modules.Tizen.Messaging.MessageFolder
+summary: Defines the email folder.
+description: |
+    This interface allows a web application to get the set of properties that are linked to an email
+    folder.
+    The concept of folders is present in several email protocols, such as IMAP, Mail For Exchange.
+    If the Messaging service does not represent email or an email protocol supporting the concept of 
+    folders on a server, this service have one folder which is the standard INBOX folder.
+
+extends: Titanium.Proxy
+createable: false
+
+properties:
+  - name: id
+    summary: |
+        The folder unique identifier.
+    description: |
+        This property is the unique identifier for the folder.
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
+        runtime (WRT).
+    type: String
+    permission: read-only
+
+  - name: parentId
+    summary: |
+        The unique identifier for the parent folder of this folder.
+    description: |
+        If this folder is a root folder, the parent folder id is null.
+    type: String
+    permission: read-only
+
+  - name: contentType  
+    summary: |
+        The type of the messages contained within this folder.
+    description: |
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
+    permission: read-only
+
+  - name: name
+    summary: |
+        The visible name of the folder.
+    description: |
+        Can be modified. By default, it contains the folder name from the server.
+        In case the current Messaging service does not support remote folders on the server 
+        (and this folder is the only one that the current service has), this attribute contains 
+        the service name, by default.
+    type: Number
+
+  - name: path
+    summary: |
+        The whole path of the remote folder on the server.
+    description: |
+        If the current Messaging service does not support remote folders on the server, this 
+        attribute will be empty.
+    type: String
+    permission: read-only
+
+  - name: type
+    summary: |
+        The standard type of the folder.
+    description: |
+        It can be one of the following values: INBOX, OUTBOX, DRAFTS, SENTBOX.
+        If this folder is not a standard folder, an empty value must be returned.
+        This property is unique for each type within one Messaging service.
+    type: String
+    permission: read-only
+
+  - name: synchronizable 
+    summary:  |
+        This attribute shows whether this folder should be synchronized.
+        This attribute affects the behavior of the [sync](Modules.Tizen.Messaging.MessageService.sync)
+        method.
+    type: Boolean
+    permission: read-only

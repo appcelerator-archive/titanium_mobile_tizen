@@ -1,43 +1,59 @@
 // Wraps Tizen interface "NFCPeer" that resides in Tizen module "NFC".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage', 'Tizen/_/WebAPIError'], function(declare, Evented, NDEFMessage, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/NFC/NDEFMessage'], function(declare, Evented, NDEFMessage) {
 
-	var peer = declare(Evented, {
+	var listening,
+		peer = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object NFCPeer]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			}
-		},
+			constructor: function(nativeObj) {
+					// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+					this._obj = nativeObj;
+			},
 
-		constants: {
-			isConnected: {
-				get: function() {
-					return this._obj.isConnected;
+			constants: {
+				isConnected: {
+					get: function() {
+						return this._obj.isConnected;
+					}
 				}
+			},
+
+			addEventListener: function () {
+				var self = this;
+
+				Evented.addEventListener.apply(this, arguments);
+
+				if (! listening) {
+					listening = true;
+					this._obj.setReceiveNDEFListener(function (ndefMessage) {
+						self.fireEvent('ndefmessagereceived', {
+							message: new NDEFMessage(void 0, ndefMessage)
+						});
+					});
+				}
+			},
+
+			sendNDEF: function(ndefMessage, callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [ ndefMessage._obj ];
+				(typeof callback !== 'undefined') && args.push(function() {
+						callback({
+							success: true,
+							code: 0
+						});
+					}, 
+					function(e) {
+						callback({
+							success: false,
+							error: e.type + ': ' + e.message,
+							code: e.code
+						});
+					}
+				);
+				this._obj.sendNDEF.call(this._obj);
 			}
-		},
 
-		setReceiveNDEFListener: function(readCallback) {
-			return this._obj.setReceiveNDEFListener(function(ndefMessage) {
-				readCallback(new NDEFMessage(ndefMessage));
-			});
-		},
-
-		unsetReceiveNDEFListener: function() {
-			return this._obj.unsetReceiveNDEFListener();
-		},
-
-		sendNDEF: function(ndefMessage, successCallback, errorCallback) {
-			return this._obj.sendNDEF(ndefMessage._obj, successCallback && function() {
-				successCallback();
-			}, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
-			});
-		}
-
-	});
+		});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

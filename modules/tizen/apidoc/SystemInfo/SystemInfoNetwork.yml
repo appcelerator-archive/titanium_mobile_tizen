@@ -1,0 +1,24 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoNetwork
+summary: This property reflects the information of the data network in this system.
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+  - name: networkType
+    summary: |
+        Represents the network type of the current data network.
+    description: |    
+        The value is one of the constants defined for this type:
+        
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_NONE>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2G>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_2_5G>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_3G>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_4G>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_WIFI>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_ETHERNET>, 
+        - <Modules.Tizen.SystemInfo.SYSTEM_INFO_NETWORK_TYPE_UNKNOWN>
+        
+    type: String
+    permission: read-only

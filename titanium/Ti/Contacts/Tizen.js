@@ -5,7 +5,7 @@ define(
 	function errorCallback(e, callback) {
 		callback({
 			code: -1,
-			message: e.type + ': ' + e.message,
+			error: e.type + ': ' + e.message,
 			success: false
 		});
 	}
@@ -25,7 +25,7 @@ define(
 				callback({
 					code: 0,
 					success: true,
-					data: persons
+					persons: persons
 				});
 			}, function (e) {
 				errorCallback(e, callback);
@@ -66,7 +66,7 @@ define(
 				callback({
 					code: 0,
 					success: true,
-					data: persons
+					persons: persons
 				});
 			}, function (e) {
 				errorCallback(e, callback);

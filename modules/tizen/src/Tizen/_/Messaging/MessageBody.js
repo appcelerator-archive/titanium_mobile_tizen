@@ -4,9 +4,9 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var messageBody = declare(Evented, {
 
-		constructor: function(args) {
-			// args is a native Tizen object; simply wrap it (take ownership of it)
-			this._obj = args;
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		constants: {

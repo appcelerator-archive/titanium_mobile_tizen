@@ -1,22 +1,32 @@
 // Wraps Tizen interface "BluetoothDevice" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/Bluetooth/BluetoothClass', 'Tizen/_/WebAPIError'],
-	function(declare, Evented, BluetoothSocket, BluetoothClass, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/Bluetooth/BluetoothClass'],
+	function(declare, Evented, BluetoothSocket, BluetoothClass) {
+
+		function onError (e, callback) {
+			callback({
+				code: e.code,
+				success: false,
+				error: e.type + ': ' + e.message
+			});
+		}
 
 		var device = declare(Evented, {
 
-			constructor: function(args) {
-				if (args.toString() === '[object BluetoothDevice]') {
-					// args is a native Tizen object; simply wrap it (take ownership of it)
-					this._obj = args;
-				}
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			},
 
-			connectToServiceByUUID: function(uuid /*BluetoothUUID*/, successCallback /*BluetoothSocketSuccessCallback*/, errorCallback /*ErrorCallback*/) {
-				return this._obj.connectToServiceByUUID(uuid, function(socket) {
-					successCallback(new BluetoothSocket(socket));
-				}, errorCallback && function(e) {
-					errorCallback(new WebAPIError(e));
+			connectToServiceByUUID: function(uuid /*BluetoothUUID*/, callback) {
+				this._obj.connectToServiceByUUID(uuid, callback && function(socket) {
+					callback({
+						code: 0,
+						success: true,
+						socket: new BluetoothSocket(socket)
+					});
+				}, callback && function(e) {
+					onError(e, callback);
 				});
 			},
 

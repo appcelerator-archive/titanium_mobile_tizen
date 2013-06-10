@@ -4,16 +4,20 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var messageAttachment = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object MessageAttachment]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('filePath')) {
-					this._obj = new tizen.MessageAttachment(args.filePath, args.mimeType);
+				// Check if the required parameters are present
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				if ('filePath' in args) {
+					this._obj = (typeof args.mimeType !== 'undefined') ? 
+						new tizen.MessageAttachment(args.filePath, args.mimeType) : 
+						new tizen.MessageAttachment(args.filePath);
 				} else {
-					console.error('MessageAttachment\'s constructor with such arguments not found.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

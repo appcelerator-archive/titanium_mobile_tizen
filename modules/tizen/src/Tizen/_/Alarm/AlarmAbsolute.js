@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 
 	var AlarmAbsolute = declare(Alarm, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object AlarmAbsolute]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.
@@ -16,7 +16,7 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 				//
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
-				
+
 				if ('date' in args && 'period' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date, args.period);
 				} else if ('date' in args && 'daysOfTheWeek' in args) {
@@ -24,7 +24,7 @@ define(['Ti/_/declare', 'Tizen/_/Alarm/Alarm'], function(declare, Alarm) {
 				} else if ('date' in args) {
 					this._obj = new tizen.AlarmAbsolute(args.date);
 				} else {
-					console.error('Constructor with given parameters doesn\'t exist');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

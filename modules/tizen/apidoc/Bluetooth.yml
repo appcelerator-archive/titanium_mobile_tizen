@@ -1,0 +1,732 @@
+---
+name: Modules.Tizen.Bluetooth
+summary: This specification defines interfaces and methods to manage Bluetooth. 
+description: |
+    For more information on the Bluetooth features, see 
+    [Bluetooth Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fcommunication_guide%2Fbluetooth.htm). 
+    
+extends: Titanium.Module
+platforms: [tizen]
+methods:
+  - name: getDefaultAdapter
+    summary: Returns the default local Bluetooth adapter.
+    returns: 
+      - type: Modules.Tizen.Bluetooth.BluetoothAdapter
+        summary: The local BluetoothAdapter object.
+        description: |
+            To use this method, you must include the following privilege in the `tiapp.xml` file of 
+            your Titanium application:  
+
+                * `http://tizen.org/privilege/bluetooth.gap`
+
+properties:
+  - name: deviceMajor
+    summary: |
+        Accessor to major device class identifiers of Bluetooth class of device (CoD).
+    description: |
+        The supported major types are: 
+
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_MISC>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_PHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_NETWORK>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_AUDIO_VIDEO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_PERIPHERAL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_IMAGING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_WEARABLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_TOY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_HEALTH>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MAJOR_UNCATEGORIZED>
+        
+    type: Number
+    permission: read-only
+
+  - name: deviceMinor
+    summary: |
+        Accessor to minor device class identifiers of Bluetooth class of device (CoD). 
+    description: |
+        The supported minor types are: 
+        
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAMCORDER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HANDSFREE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HEADPHONES>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_HIFI>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_LOUDSPEAKER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_MICROPHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_UNRECOGNIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VCR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_LAPTOP>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_SERVER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_WEARABLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_THERMOMETER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_UNDEFINED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_CAMERA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_DISPLAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_PRINTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_SCANNER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_GAMEPAD>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_JOYSTICK>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CELLULAR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CORDLESS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_ISDN>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_SMARTPHONE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_UNCATEGORIZED>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_CONTROLLER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_DOLL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_GAME>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_ROBOT>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_TOY_VEHICLE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_GLASSES>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_HELMET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_JACKET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_PAGER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAR_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_GAMING_TOY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_PORTABLE_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_SETTOP_BOX>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CAMERA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CONFERENCING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_WEARABLE_HEADSET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_ANKLE_PROSTHESIS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_DATA_DISPLAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_GLUCOSE_METER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_KNEE_PROSTHESIS>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_MEDICATION_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_OXIMETER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_STEP_COUNTER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_WEIGHING_SCALE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_CARD_READER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DEGITIZER_TABLET>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DIGITAL_PEN>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_SCANNER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_POINTING_DEVICE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_REMOTE_CONTROL>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_SENSING_DEVICE >
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_WRITST_WATCH>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_AV_DISPLAY_AND_LOUDSPEAKER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BLOOD_PRESSURE_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BODY_COMPOSITION_ANALYZER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_RATE_MONITOR>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_INPUT_DEVICE>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_MODEM_OR_GATEWAY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_HANDHELD_PC_OR_PDA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_PALM_PC_OR_PDA>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD_AND_POINTING_DEVICE>
+        
+    type: Number
+    permission: read-only
+
+  - name: deviceService
+    summary: |
+        Accessor to major service class identifiers of Bluetooth class of device (CoD). 
+    description: |
+        The supported types are: 
+        
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_NETWORKING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_RENDERING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_CAPTURING>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_OBJECT_TRANSFER>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_AUDIO>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_TELEPHONY>
+        - <Modules.Tizen.Bluetooth.BLUETOOTH_CLASS_DEVICE_SERVICE_INFORMATION>
+
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_MISC
+    summary: |
+        0x00 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_COMPUTER
+    summary: |
+        0x01 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_PHONE
+    summary: |
+        0x02 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_NETWORK
+    summary: |
+        0x03 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_AUDIO_VIDEO
+    summary: |
+        0x04 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_PERIPHERAL
+    summary: |
+        0x05 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_IMAGING
+    summary: |
+        0x06 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_WEARABLE
+    summary: |
+        0x07 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_TOY
+    summary: |
+        0x08
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_HEALTH
+    summary: |
+        0x09
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MAJOR_UNCATEGORIZED
+    summary: |
+        0x1F 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_UNCATEGORIZED
+    summary: |
+        0x00 
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_DESKTOP
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_SERVER
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_LAPTOP
+    summary: |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_HANDHELD_PC_OR_PDA
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_PALM_PC_OR_PDA
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_COMPUTER_WEARABLE
+    summary: |
+        0x06
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_UNCATEGORIZED
+    summary: |
+        0x00
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CELLULAR
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_CORDLESS
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_SMARTPHONE
+    summary: |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_MODEM_OR_GATEWAY
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PHONE_ISDN
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_UNRECOGNIZED
+    summary: |
+        0x00
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_WEARABLE_HEADSET
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HANDSFREE
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_MICROPHONE
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_LOUDSPEAKER
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HEADPHONES
+    summary: |
+        0x06
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_PORTABLE_AUDIO
+    summary: |
+        0x07
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAR_AUDIO
+    summary: |
+        0x08
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_SETTOP_BOX
+    summary: |
+        0x09
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_HIFI
+    summary: |
+        0x0a
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VCR
+    summary: |
+        0x0b
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CAMERA
+    summary: |
+        0x0c
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_CAMCORDER
+    summary: |
+        0x0d
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_MONITOR
+    summary: |
+        0x0e
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_DISPLAY_AND_LOUDSPEAKER
+    summary: |
+        0x0f
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_VIDEO_CONFERENCING
+    summary: |
+        0x10
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_AV_GAMING_TOY
+    summary: |
+        0x12
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_UNCATEGORIZED
+    summary: |
+        0
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD
+    summary: |
+        0x10
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_POINTING_DEVICE
+    summary: |
+        0x20
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_KEYBOARD_AND_POINTING_DEVICE
+    summary: |
+        0x30
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_JOYSTICK
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_GAMEPAD
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_REMOTE_CONTROL
+    summary:  |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_SENSING_DEVICE 
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DEGITIZER_TABLET
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_CARD_READER
+    summary: |
+        0x06
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_DIGITAL_PEN
+    summary: |
+        0x07
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_SCANNER
+    summary: |
+        0x08
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_PERIPHERAL_HANDHELD_INPUT_DEVICE
+    summary: |
+        0x09
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_UNCATEGORIZED
+    summary: |
+        0x00
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_DISPLAY
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_CAMERA
+    summary: |
+        0x08
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_SCANNER
+    summary: |
+        0x10
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_IMAGING_PRINTER
+    summary: |
+        0x20
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_WRITST_WATCH
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_PAGER
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_JACKET
+    summary: |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_HELMET
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_WEARABLE_GLASSES
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_ROBOT
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_VEHICLE
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_DOLL
+    summary: |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_CONTROLLER
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_TOY_GAME
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_UNDEFINED
+    summary: |
+        0x00
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BLOOD_PRESSURE_MONITOR
+    summary: |
+        0x01
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_THERMOMETER
+    summary: |
+        0x02
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_WEIGHING_SCALE
+    summary: |
+        0x03
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_GLUCOSE_METER
+    summary: |
+        0x04
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_OXIMETER
+    summary: |
+        0x05
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_PULSE_RATE_MONITOR
+    summary: |
+        0x06
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_DATA_DISPLAY
+    summary: |
+        0x07
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_STEP_COUNTER
+    summary: |
+        0x08
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_BODY_COMPOSITION_ANALYZER
+    summary: |
+        0x09
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_MEDICATION_MONITOR
+    summary: |
+        0x0b
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_KNEE_PROSTHESIS
+    summary: |
+        0x0c
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_MINOR_HEALTH_ANKLE_PROSTHESIS
+    summary: |
+        0x0d
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_LIMITED_DISCOVERABILITY
+    summary: |
+        0x0001
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_POSITIONING
+    summary: |
+        0x0008
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_NETWORKING
+    summary: |
+        0x0010
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_RENDERING
+    summary: |
+        0x0020
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_CAPTURING
+    summary: |
+        0x0040
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_OBJECT_TRANSFER
+    summary: |
+        0x0080
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_AUDIO
+    summary: |
+        0x0100
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_TELEPHONY
+    summary: |
+        0x0200
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_CLASS_DEVICE_SERVICE_INFORMATION
+    summary: |
+        0x0400
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_SOCKET_STATE_CLOSED
+    summary: Closed state of Bluetooth socket.
+    type: Number
+    permission: read-only
+
+  - name: BLUETOOTH_SOCKET_STATE_OPEN
+    summary: Open state of Bluetooth socket.
+    type: Number
+    permission: read-only
+
+examples:
+  - title: Enable or disable BlueTooth adapter
+    example: |
+        This example shows how to enable or disable the default Bluetooth adapter using a GUI switch.
+        
+            var btAdapter = require('tizen').Bluetooth.getDefaultAdapter(),
+                win = Ti.UI.createWindow({
+                    backgroundColor: '#fff'
+                }),
+                btSwitch = Ti.UI.createSwitch({
+                    top: 20,
+                    titleOn: 'Bluetooth enabled',
+                    titleOff: 'Bluetooth disabled',
+                    value: btAdapter.powered
+                });
+
+                btSwitch.addEventListener('change', function(e) {
+                    if (btAdapter.powered != btSwitch.value) {
+                        // initiate power switching
+                        btAdapter.setPowered(btSwitch.value, function(response) {
+                            if (response.success) {
+                                btSwitch.enabled = true;
+                                console.log('Bluetooth powered ' + (btSwitch.value ? 'on' : 'off') + ' success.');
+                            } else {
+                                btSwitch.enabled = true;
+                                console.log('Failed to power on Bluetooth: ' + e.message + '(' + e.name + ')');
+                            }
+                        });
+                    }
+
+                    btSwitch.enabled = false;  // disable switch until current operation is finished
+                });
+

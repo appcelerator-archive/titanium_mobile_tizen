@@ -1,0 +1,406 @@
+---
+name: Modules.Tizen.SystemInfo
+summary: |
+    This Module provides interfaces and methods providing web applications with access to various 
+    properties of the system.
+description: |
+    This API also provides interfaces and methods for users to get hardware devices status, to get 
+    the value of selected properties, and to set up asynchronous notifications of changes for 
+    selected values. The following provides an overview of the tree data structure:
+    
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DISPLAY>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BUILD>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_LOCALE>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_SIM>
+    - <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_PERIPHERAL>
+    
+    The `SystemInfo` module is a thin wrapper on the Tizen `SystemInfo` class.
+    
+    See also:
+    
+    - [Tizen System Info API](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.device.apireference%2Ftizen%2Fsysteminfo.html)
+    - [Tizen  System Info Guide](https://developer.tizen.org/help/index.jsp?topic=%2Forg.tizen.web.appprogramming%2Fhtml%2Fguide%2Fsys_guide%2Fsysteminfo.htm)
+
+extends: Titanium.Module
+platforms: [tizen]
+        
+methods:
+  - name: getCapabilities
+    summary: Retrieves the capabilities of the device.
+    description: |
+        The function must synchronously acquire the capabilities of the device.
+    returns:
+        type: Modules.Tizen.SystemInfo.SystemInfoDeviceCapability
+            
+  - name: getPropertyValue
+    summary: Retrieves the current state of a given system property.
+    description: |
+        The function asynchronously acquires the current state of the requested property. 
+    parameters:
+      - name: property 
+        summary: Name of the property to retrieve.
+        type: String
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<SystemInfoResponse>
+        
+  - name: addPropertyValueChangeListener
+    summary: Allows tracking the change of one or several system properties.
+    description: |
+        When called, it immediately returns and then asynchronously starts a watch process defined 
+        as this set of steps:
+        
+        1. Acquire the system's current values for the property requested. If successful, it invokes 
+        the associated successCallback, 
+           passing the resulting property value. The type of the passed object is indicated by the 
+           property's value type in the definitions below. For example,
+           if you are passing <Modules.Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_BATTERY> for 
+           SystemInfoPropertyId, you'll get SystemInfoBattery object.
+           
+        2. Register the successCallback to receive system events that the status of the requested 
+        properties may have changed.
+        
+        3. When a system event is successfully received invoke the associated successCallback with 
+        an object containing the property values.
+        
+        4. Repeat step 3 until removePropertyValueChangeListener function is called.
+        
+    returns:
+        summary: Identifier used to clear the watch subscription.
+        type: Number
+    parameters:
+      - name: property 
+        summary: Name of the property to retrieve.
+        type: String
+      - name: successCallback
+        summary: Function called when the properties have been successfully retrieved.
+        type: Callback<Modules.Tizen.SystemInfo.SystemInfoProperty>
+      - name: options
+        summary:  An object containing the various options for fetching the properties requested.
+        type: Dictionary<SystemInfoOptions>
+        optional: true
+    
+  - name: removePropertyValueChangeListener
+    summary: |
+        Unsubscribes notifications for property changes set up by addPropertyValueChangeListener.
+    description: |
+        If a valid listenerId argument is passed that corresponds to a subscription already place, 
+        then the watch process MUST immediately terminate and no further callback is invoked. 
+        If the listenerId argument does not correspond to a valid subscription, 
+        the method should return without any further action.
+    parameters:
+      - name: listenerId
+        summary: |
+            Identifier of the subscription returned by the 
+            [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener)
+            method.
+        type: Number
+            
+properties:
+
+  - name: SYSTEM_INFO_PROPERTY_ID_BATTERY
+    summary: BATTERY is for homescreen background image.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_CPU
+    summary: CPU is the device property identifier.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_STORAGE
+    summary: STORAGE is the device property identifier.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_DISPLAY
+    summary: DISPLAY is the device property identifier.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_DEVICE_ORIENTATION
+    summary: DEVICE_ORIENTATION is the device property identifier.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_PROPERTY_ID_BUILD
+    summary: BUILD is the device property identifier.
+    type: String
+    permission: read-only  
+
+  - name: SYSTEM_INFO_PROPERTY_ID_LOCALE
+    summary: LOCALE is the device property identifier.
+    type: String
+    permission: read-only  
+
+  - name: SYSTEM_INFO_PROPERTY_ID_NETWORK
+    summary: NETWORK is the device property identifier.
+    type: String
+    
+    permission: read-only    
+  - name: SYSTEM_INFO_PROPERTY_ID_WIFI_NETWORK
+    summary: WIFI_NETWORK is the device property identifier.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK
+    summary: CELLULAR_NETWORK is the device property identifier.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_PROPERTY_ID_SIM
+    summary: SIM is the device property identifier.
+    type: String
+    permission: read-only    
+
+  - name: SYSTEM_INFO_PROPERTY_ID_PERIPHERAL
+    summary: PERIPHERAL is the device property identifier.
+    type: String
+    permission: read-only  
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_NONE
+    summary: NONE is Data Network Type.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_2G
+    summary: 2G is Data Network Type.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_2_5G
+    summary: 2.5G is Data Network Type.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_3G
+    summary: 3G is Data Network Type.
+    type: String
+    permission: read-only
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_4G
+    summary: 4G is Data Network Type.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_WIFI
+    summary: WIFI is Data Network Type.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_NETWORK_TYPE_ETHERNET
+    summary: ETHERNET is Data Network Type.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_NETWORK_TYPE_UNKNOWN
+    summary: UNKNOWN is Data Network Type.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_PRIMARY
+    summary: PORTRAIT_PRIMARY is for homescreen background image.
+    type: String
+    permission: read-only    
+
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_PORTRAIT_SECONDARY
+    summary: PORTRAIT_SECONDARY is for homescreen background image.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_PRIMARY
+    summary: LANDSCAPE_PRIMARY is for homescreen background image.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_DEVICE_ORIENTATION_STATUS_LANDSCAPE_SECONDARY
+    summary: LANDSCAPE_SECONDARY is for homescreen background image.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_ABSENT
+    summary: ABSENT Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_INITIALIZING
+    summary: INITIALIZING Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_READY
+    summary: READY Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_PIN_REQUIRED
+    summary: PIN_REQUIRED Sim State.
+    type: String
+    permission: read-only
+    
+  - name: SYSTEM_INFO_SIM_STATE_PUK_REQUIRED
+    summary: PUK_REQUIRED Sim State.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_SIM_STATE_NETWORK_LOCKED
+    summary: NETWORK_LOCKED Sim State.
+    type: String
+    permission: read-only    
+    
+  - name: SYSTEM_INFO_SIM_STATE_SIM_LOCKED
+    summary: SIM_LOCKED Sim State.
+    type: String
+    permission: read-only
+
+  - name: SYSTEM_INFO_SIM_STATE_UNKNOWN
+    summary: UNKNOWN Sim State.
+    type: String
+    permission: read-only    
+    
+examples:
+  - title: Get system information
+    example: |
+        Obtain several system information properties from the OS.
+        
+            var Tizen = require('tizen'),
+                data = [
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_STORAGE, propertyCallback: onStorage },
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CPU, propertyCallback: onCpuInfo },
+                    { propertyName: Tizen.SystemInfo.SYSTEM_INFO_PROPERTY_ID_CELLULAR_NETWORK, propertyCallback: onCell },
+                ],
+                dataLength = data.length;
+
+            function onCpuInfo(response) {
+                if (response.success) {
+                    console.log('Cpu load: ' + response.data.load);
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            function onStorage(response) {
+                if (response.success) {
+                    var storagesInfo = '',
+                        i = 0,
+                        storages = response.data,
+                        units = storages.getUnits(),
+                        storagesCount = units.length;
+    
+                    console.log('Storage: ');
+                    for (; i < storagesCount; i++) {
+                        console.log('   Type: ' + units[i].type);
+                        console.log('   Capacity: ' + Math.floor(units[i].capacity / 1000000) + ' MB');
+                        console.log('   Available capacity: ' + Math.floor(units[i].availableCapacity / 1000000) + ' MB');
+                        console.log('   Removable: ' + (units[i].isRemoveable ? 'Yes' : 'No');
+                    }
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            function onCell(response) {
+                if (response.success) {
+                    var cell = response.data;
+                    console.log('Cellular network: ');
+                    console.log('   Status: ' + cell.status);
+                    console.log('   IP address: ' + cell.ipAddress);
+                } else {
+                    console.error(response.error);
+                }
+            }
+
+            for (; i < dataLength; i++ ) {
+                Tizen.SystemInfo.getPropertyValue(data[i].propertyName, data[i].propertyCallback);
+            };
+
+# Pseudo-type    
+---
+name: SystemInfoResponse
+summary: |
+    Simple object returned in the callback from the
+    [getPropertyValue](Modules.Tizen.SystemInfo.getPropertyValue) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: data
+    summary: The value of the requested property.
+    description: |
+        Will be undefined if `success` is `false`.
+
+        The contents of this field will differ based on the system info property requested. The 
+        following objects may be returned:
+
+            * <Modules.Tizen.SystemInfo.SystemInfoBattery>
+            * <Modules.Tizen.SystemInfo.SystemInfoBuild>
+            * <Modules.Tizen.SystemInfo.SystemInfoCellularNetwork>
+            * <Modules.Tizen.SystemInfo.SystemInfoCpu>
+            * <Modules.Tizen.SystemInfo.SystemInfoDeviceCapability>
+            * <Modules.Tizen.SystemInfo.SystemInfoDeviceOrientation>
+            * <Modules.Tizen.SystemInfo.SystemInfoDisplay>
+            * <Modules.Tizen.SystemInfo.SystemInfoNetwork>
+            * <Modules.Tizen.SystemInfo.SystemInfoProperty>
+            * <Modules.Tizen.SystemInfo.SystemInfoSim>
+            * <Modules.Tizen.SystemInfo.SystemInfoStorage>
+                * <Modules.Tizen.SystemInfo.SystemInfoStorageUnit>
+            * <Modules.Tizen.SystemInfo.SystemInfoWifiNetwork>
+
+    type: Object
+
+# Pseudo-type    
+---
+name: SystemInfoOptions
+summary: A simple object containing the various options for fetching the properties requested.
+properties:
+  - name: timeout
+    type: Number
+    summary: The number of milliseconds beyond which the operation must be interrupted.
+    
+  - name: highThreshold
+    type: Number
+    summary: |
+        Indicates that the successCallback is only be triggered if the property is a number and its 
+        value is greater than or equal to this number.
+    description: |
+        On the [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener) 
+        method, this attribute indicates that the 
+        `successCallback` is only be triggered 
+        if the property is a number and its value is greater than or equal to this number.
+    
+  - name: lowThreshold
+    type: Number
+    summary: |
+        Indicates that the successCallback is only be triggered if the property is a number and its 
+        value is lower than or equal to this number.
+    description: |
+        On the [addPropertyValueChangeListener](Modules.Tizen.SystemInfo.addPropertyValueChangeListener) 
+        method, it indicates that the 
+        `successCallback` is only be triggered 
+        if the property is a number and its value is lower than or equal to this number. If both 
+        `highThreshold` and `lowThreshold` parameters are specified, 
+        the `successCallback` is triggered if and only if the property value is either lower than the 
+        value of `lowThreshold` or higher than the value of `highThreshold`.
