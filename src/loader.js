@@ -563,7 +563,9 @@
 					xhr.send(null);
 
 					if (xhr.status < 400) {
-						onload(xhr.responseText);
+						xhr.responseText && xhr.responseText.length > 0 ? 
+							onload(xhr.responseText):
+							onfail(xhr.status);
 					} else {
 						onfail(xhr.status);
 					}
