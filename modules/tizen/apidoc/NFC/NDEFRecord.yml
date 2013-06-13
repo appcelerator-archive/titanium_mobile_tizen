@@ -1,0 +1,46 @@
+name: Modules.Tizen.NFC.NDEFRecord
+summary: |
+  The NDEFRecord interface.
+extends: Titanium.Proxy
+
+properties:
+
+  - name: tnf
+    type: Number
+    summary: |
+        The value of the record type (TNF value).
+    description: |
+        At least the following values MUST be supported:
+
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_EMPTY>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_WELL_KNOWN>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_MIME_MEDIA>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_URI>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_EXTERNAL_RTD>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_UNKNOWN>
+        - <Modules.Tizen.NFC.NFC_RECORD_TNF_UNCHANGED>
+        
+    permission: read-only
+
+  - name: type
+    type: String
+    summary: |        
+        The specified type in byte array. The byte array contains zero to 255 bytes. The byte array 
+        is converted to string
+    permission: read-only
+
+  - name: id
+    type: String
+    summary: |
+        The record ID. The byte array contains zero to 255 bytes. 
+    description: |
+        By default, this attribute is set to an empty array. The byte array is converted to string
+    permission: read-only
+
+  - name: payload
+    type: Titanium.Blob
+    summary: |
+        The record payload. The byte array contains zero to (2^32 - 1) bytes. 
+    description: |
+        The byte array is converted to <Titanium.Blob>
+    permission: read-only

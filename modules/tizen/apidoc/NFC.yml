@@ -1,0 +1,324 @@
+name: Modules.Tizen.NFC
+summary: |
+  This API provides interfaces and methods for access to NFC devices.
+description: |
+  Near Field Communication (NFC) is an international standard (ISO/IEC 18092) 
+  that specifies an interface and protocol for simple wireless interconnection 
+  of closely coupled devices operating at 13.56 MHz. 
+  There are three groups of application scenarios for NFC: The first one is 
+  to hold a device close to a wireless tag to exchange some digital information or data. 
+  The second is to hold two devices close to each other to exchange some information 
+  or data between them. The third one is to make payments by holding mobile phones 
+  close to point of sales terminals instead of swiping smart cards. 
+  Provides functionality to discover contents (such as images, videos, or music) 
+  that are available on the device. 
+
+extends: Titanium.Module
+platforms: [tizen]
+
+properties:
+
+  - name: NFC_RECORD_TNF_EMPTY
+    type: Number
+    summary: |
+        Indicates empty format of NDEF record's type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_WELL_KNOWN
+    type: Number
+    summary: |
+        Indicates RTD(Record Type Definition) format of NDEF record's type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_MIME_MEDIA
+    type: Number
+    summary: |
+        Indicates MIME Media types format in RFC 2046 [RFC 2046] of NDEF record's type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_URI
+    type: Number
+    summary: |
+        Indicates absolute URI, as defined in RFC 3986 [RFC 3986] format in RFC 2046 [RFC 2046] of 
+        NDEF record's type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_EXTERNAL_RTD
+    type: Number
+    summary: |
+        Indicates NFC Forum external type [NFC RTD] format in RFC 2046 [RFC 2046] of NDEF record's 
+        type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_UNKNOWN
+    type: Number
+    summary: |
+        Indicates unknown type format in RFC 2046 [RFC 2046] of NDEF record's type field.
+    permission: read-only
+
+  - name: NFC_RECORD_TNF_UNCHANGED
+    type: Number
+    summary: |
+        Indicates that the payload is an intermediate or final chunk of a chunked NDEF record.
+    permission: read-only
+
+  - name: NDEF_RECORD_TEXT_ENCODING_UTF8
+    type: String
+    summary: |
+        Indicates NDEFRecordText UTF8 encoding
+    permission: read-only
+
+  - name: NDEF_RECORD_TEXT_ENCODING_UTF16
+    type: String
+    summary: |
+        Indicates NDEFRecordText UTF16 encoding
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_GENERIC_TARGET
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_A
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_4A
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_3A
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_MIFARE_MINI
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_MIFARE_1K
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_MIFARE_4K
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_MIFARE_ULTRA
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_MIFARE_DESFIRE
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_B
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_4B
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO14443_BPRIME
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_FELICA
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_JEWEL
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_ISO15693
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+  - name: NFC_TAG_TYPE_UNKNOWN_TARGET
+    type: String
+    summary: |
+        NFC tag type.
+    permission: read-only
+
+methods:
+  - name: getDefaultAdapter
+    summary: Returns the default NFC adapter on the device.
+    description: |
+        NFC adapter interface provides access to control the NFC adapter. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of 
+        your Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.common`
+        
+    returns:
+        type: Modules.Tizen.NFC.NFCAdapter
+
+  - name: createNDEFMessage
+    summary: Creates a <Modules.Tizen.NFC.NDEFMessage> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFMessage>.
+        type: [NDEFMessageInitNDEFRecords, NDEFMessageInitRawData]
+    returns:
+        type: Modules.Tizen.NFC.NDEFMessage
+
+  - name: createNDEFRecord
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecord> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecord>.
+        type: [NDEFRecordInitRawData, NDEFRecordInit]
+    returns:
+        type: Modules.Tizen.NFC.NDEFRecord
+
+  - name: createNDEFRecordText
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordText> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordText> object.
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordText>
+    returns:
+        type: Modules.Tizen.NFC.NDEFRecordText
+
+  - name: createNDEFRecordURI
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordURI> object.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordURI>.
+        type: Dictionary<Modules.Tizen.NFC.NDEFRecordURI>
+    returns:
+        type: Modules.Tizen.NFC.NDEFRecordURI
+
+  - name: createNDEFRecordMedia
+    summary: Creates a <Modules.Tizen.NFC.NDEFRecordMedia>.
+    parameters:
+      - name: parameters
+        summary: Initial parameters for <Modules.Tizen.NFC.NDEFRecordMedia>.
+        type: NDEFRecordMediaInit
+    returns:
+        type: Modules.Tizen.NFC.NDEFRecordMedia
+
+examples:
+  - title: Search tags
+    example: |
+        This example shows how to start searching for new NFC tags around and display their names.
+        
+            var nfc = require('tizen').NFC,
+                nfcAdapter;
+            
+            // Tag detection handler
+            function setTagDetect(response) {
+                var nfcTag;
+                
+                if (response.success) {
+                    var onSuccess = {
+                        onattach: function(tag) {
+                            console.log('Tag found:' + tag.type);
+                        },
+                        ondetach: function () {
+                            console.log('Tag successfully detached.');
+                        }
+                    };
+
+                    try {
+                        nfcAdapter.setTagListener(onSuccess);
+                    } catch (e) {
+                        console.error(e.name + ' : ' + e.message);
+                    }
+                } else {
+                    console.error('Failed to power on NFC: ' + response.error);
+                }
+            }
+
+            // Set up NFC and begin searching
+            try {
+                nfcAdapter = nfc.getDefaultAdapter();
+                nfcAdapter.setPowered(true, setTagDetect);
+            } catch (e) {
+                console.error('Failed to power on NFC: ' + e.message);
+            }
+
+---
+name: NDEFMessageInitNDEFRecords
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
+properties:
+  - name: ndefRecords
+    summary: The array of NDEFRecord objects in the <Modules.Tizen.NFC.NDEFMessage>.
+    type: Array<Modules.Tizen.NFC.NDEFRecord>
+
+---
+name: NDEFMessageInitRawData
+summary: Simple object that contains parameters for [createNDEFMessage](Modules.Tizen.NFC.createNDEFMessage).
+properties:
+  - name: rawData
+    summary: Serial byte array of the NDEF message.
+    type: Array<Number>
+
+---
+name: NDEFRecordInitRawData
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
+properties:
+  - name: rawData
+    summary: Raw data of NDEFRecord.
+    type: Array<Number>
+
+---
+name: NDEFRecordInit
+summary: Simple object that contains parameters for [createNDEFRecord](Modules.Tizen.NFC.createNDEFRecord).
+properties:
+  - name: tnf
+    summary: The value of the record type (TNF value).
+    type: String
+  - name: type
+    summary: The specified type in byte array. The byte array contains zero to 255 bytes.
+    type: Array<Number>
+  - name: payload
+    summary: The record payload.
+    type: Array<Number>
+  - name: id
+    summary: (optional) The record ID.
+    type: Array<Number>
+    optional: true
+
+---
+name: NDEFRecordMediaInit
+summary: Simple object that contains parameters for [createNDEFRecordMedia](Modules.Tizen.NFC.createNDEFRecordMedia).
+properties:
+  - name: mimeType
+    type: String
+    summary: |
+        The mime type [RFC 2046] (ex. text/plain, image/jpeg ).
+  - name: rawData
+    summary: Raw media data.
+    type: Array<Number> 

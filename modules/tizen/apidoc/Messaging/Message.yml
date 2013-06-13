@@ -1,0 +1,155 @@
+---
+name: Modules.Tizen.Messaging.Message
+summary: Defines the content and attributes of a message. 
+description: |
+    This interface allows a web application to define the set of properties linked to a message.
+    It also allows an application to retrieve the content of a message through the 
+    <Modules.Tizen.Messaging.MessageStorage>
+    methods. 
+    In those cases, the implementation MAY return, in some situations, only the meta-information of 
+    a message without the loaded body. 
+    In those situations, the method 
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody)
+    should be used.
+extends: Titanium.Proxy
+
+properties:
+  - name: id
+    summary: The message unique identifier. 
+    description: |
+        This property is the unique identifier for the message.
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
+        runtime (WRT). For new messages created using the Message constructor, the `id` is assigned on 
+        the first occasion that the message is processed by the underlying platform, such as a call 
+        to [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage). Before the `id` is 
+        assigned, it is set to null. By default, this attribute is set to null.
+    type: String
+    default: null
+    permission: read-only
+
+  - name: conversationId
+    summary: The unique identifier of the conversation to which this message belongs. 
+    description: By default, this attribute is set to null.
+    type: String
+    default: null
+    permission: read-only
+
+  - name: folderId
+    summary: The unique identifier of the folder to which this message belongs. 
+    description: |
+        By default, this attribute is set to null.
+        For SMS and MMS, folderId can be one of these numbers:
+        
+        - INBOX = 1,
+        - OUTBOX = 2,
+        - DRAFTS = 3,
+        - SENTBOX = 4
+
+    default: 
+    type: String
+    permission: read-only
+
+  - name: type
+    summary: |
+        The type of the given message. 
+    description: |
+        Can be one of this constants: 
+
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        - <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        
+    type: String
+    permission: read-only
+
+  - name: timestamp
+    summary: The timestamp of a message. 
+    description: |
+        For a received message, the timestamps indicates the time a message was received. For a sent 
+        message, the timestamp indicates the time a message was sent. By default, this attribute is 
+        set to null. 
+    type: Date
+    permission: read-only
+
+  - name: from
+    summary: The source address (or source phone number) of a message. 
+    description: |
+        This property is set up by the device or the web runtime environment. By default, 
+        this attribute is set to null. 
+    type: String
+    permission: read-only
+
+  - name: to
+    summary: The destination of a message. 
+    type: Array<String>
+
+  - name: cc
+    summary: The carbon copy address of a message. This property is used only with Email messages. 
+    type: Array<String>
+
+  - name: bcc
+    summary: | 
+        The blind carbon copy (bcc) address of a message. This property is used only with Email 
+        messages. 
+    type: Array<String>
+
+  - name: body
+    summary: The body of a message. 
+    type: Modules.Tizen.Messaging.MessageBody
+
+  - name: isRead
+    summary: The flag for read state. This property is true, if the message has been read. False, if not. 
+    type: Boolean
+
+  - name: hasAttachment
+    summary: |
+        The flag for existance of an attachment(s)
+    description: |
+        This property is true, if the message has one or more attachments.
+        This property is used only with Email and MMS messages.
+    type: Boolean
+    permission: read-only
+
+  - name: isHighPriority
+    summary: |
+        The priority of a message.
+    description: |
+        This property is true, if the message has a high priority. False, if the message has a 
+        normal or low priority. This property is used only with Email messages.
+    type: Boolean
+
+  - name: subject
+    summary: |
+        The subject of a message.
+    description: |
+        This property is used only with Email and MMS messages.
+    type: String
+
+  - name: inResponseTo
+    summary: |
+        The unique identifier of the original message.
+    description: |
+        If the message was replied to or forwarded, this property contains the ID of the original 
+        message, otherwise it is set to null.
+    type: String
+
+  - name: messageStatus
+    summary: |
+        The status of the given message.
+    description: |
+        It can be one of these values: SENT, SENDING, FAILED, DRAFT.
+        
+        If the status of the current message does not correspond to any item from the list, an empty 
+        value will be returned.
+    type: String
+    permission: read-only
+
+  - name: attachments
+    summary: |
+        The list of the message attachments.
+    description: |
+        This array is empty if the message does not have attachments or the message body is not
+        loaded and the attachment info is inaccessible (in this case, the `hasAttachment` attribute 
+        has to be checked).
+    type: Array<Modules.Tizen.Messaging.MessageAttachment>
+

@@ -1,0 +1,92 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothSocket
+summary: The interface to represent the Bluetooth socket.   
+description: |
+    The socket object is created by 
+    [connectToServiceByUUID](Modules.Tizen.Bluetooth.BluetoothDevice.connectToServiceByUUID) or 
+    [registerRFCOMMServiceByUUID](Modules.Tizen.Bluetooth.BluetoothAdapter.registerRFCOMMServiceByUUID).
+extends: Titanium.Proxy
+createable: false
+methods:
+
+  - name: writeData
+    summary: Writes data onto the socket. 
+    description: |
+        Writes a sequence of bytes onto the socket and returns the number of bytes actually written. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/bluetooth.spp`
+        
+    returns: 
+      - type: Number
+        summary: The number of bytes actually sent. 
+    parameters: 
+      - name: data
+        summary: Data to send. 
+        type: Array<Number>
+ 
+  - name: readData
+    summary: Reads data from the socket. 
+    description: |
+        This should be called only in the 'socketmessagereceived' handler, that is, when data is 
+        ready on the socket. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/bluetooth.spp`
+        
+    returns: 
+      - type: Array<Number>
+        summary: Sequence of bytes successfully read. 
+
+  - name: close
+    summary: Closes the socket.  
+    description: |
+        Calling this method closes the socket. BluetoothSocket.state changes to 
+        <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, and  'socketclosed' is invoked on 
+        success. 
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/bluetooth.spp`
+
+events:
+  - name: socketmessagereceived
+    summary: The callback to be invoked when an incoming message is received from the peer.
+  
+  - name: socketclosed
+    summary: The callback to be invoked when the socket is closed.
+    
+  - name: socketerror
+    summary: The callback to be invoked when an error occurs.
+    properties:
+      - name: error
+        summary: If `success` is false, a string describing the error.
+        type: String
+
+      - name: code
+        summary: If `success` is false, the error code if available.
+
+properties:
+  - name: uuid
+    summary: Service UUID to which this socket is connected. 
+    type: String
+    permission: read-only
+
+  - name: state
+    summary: |
+        The current socket state.  The value is one of the constants defined for this type. 
+    description: |
+        The supported state types are: <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_CLOSED>, 
+        and <Modules.Tizen.Bluetooth.BLUETOOTH_SOCKET_STATE_OPEN>.
+    type: String
+    permission: read-only
+
+  - name: peer
+    summary: The peer device to which this socket is connected. 
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
+    permission: read-only

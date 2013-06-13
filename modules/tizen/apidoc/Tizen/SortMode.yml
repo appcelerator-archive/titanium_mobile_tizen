@@ -1,0 +1,16 @@
+---
+name: Modules.Tizen.SortMode
+summary: SortMode is a common interface used for sorting of queried data.  
+description: Note that the sorting result of list type attributes is not determined. 
+extends: Titanium.Proxy
+
+properties:
+  - name: attributeName
+    summary: The name of the object attribute used for sorting. 
+    type: String
+
+  - name: order
+    summary: The type of the sorting. 
+    description: By default, this attribute is set to <Modules.Tizen.SORT_ORDER_MODE_ASC>.
+    type: String
+    default: Modules.Tizen.SORT_ORDER_MODE_ASC

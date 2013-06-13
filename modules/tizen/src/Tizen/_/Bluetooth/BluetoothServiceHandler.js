@@ -1,45 +1,71 @@
 // Wraps Tizen interface "BluetoothServiceHandler" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket', 'Tizen/_/WebAPIError'], function(declare, Evented, BluetoothSocket, WebAPIError) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothSocket'], function(declare, Evented, BluetoothSocket) {
 
-	var handler = declare(Evented, {
+	function onError (e, callback) {
+		callback({
+			code: e.code,
+			success: false,
+			error: e.type + ': ' + e.message
+		});
+	}
 
-		constructor: function(args) {
-			var self = this;
-			if (args.toString() === '[object BluetoothServiceHandler]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				self._obj = args;
-			}
+	var listening,
+		handler = declare(Evented, {
 
-			self._obj.onconnect = function(socket) {
-				self.fireEvent('remotedeviceconnected', new BluetoothSocket(socket));
-			};
-		},
+			constructor: function(nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
+			},
 
-		unregister: function(successCallback /*SuccessCallback*/, errorCallback /*ErrorCallback*/) {
-			return this._obj.unregister(successCallback, errorCallback && function(e) {
-				errorCallback(new WebAPIError(e));
-			});
-		},
+			addEventListener: function () {
+				var self = this;
+				Evented.addEventListener.apply(this, arguments);
 
-		constants: {
-			uuid: {
-				get: function() {
-					return this._obj.uuid;
+				if (! listening) {
+					listening = true;
+						this._obj.onconnect = function(socket) {
+						self.fireEvent('remotedeviceconnected', {
+							socket: new BluetoothSocket(socket)
+						});
+					};
 				}
 			},
-			name: {
-				get: function() {
-					return this._obj.name;
-				}
+
+			unregister: function(callback) {
+				// Tizen distinguishes between undefined parameter (this gives an error) and missing parameter (correct).
+				var args = [];
+				(typeof callback !== 'undefined') && args.push(function() {
+						callback({
+							code: 0,
+							success: true
+						});
+					},
+					function(e) {
+						onError(e, callback);
+					}
+				);
+				this._obj.unregister.call(this._obj, args);
 			},
-			isConnected: {
-				get: function() {
-					return this._obj.isConnected;
+
+			constants: {
+				uuid: {
+					get: function() {
+						return this._obj.uuid;
+					}
+				},
+				name: {
+					get: function() {
+						return this._obj.name;
+					}
+				},
+				isConnected: {
+					get: function() {
+						return this._obj.isConnected;
+					}
 				}
 			}
-		}
-	});
+		});
 
 	// Initialize declaredClass, so that toString() works properly on such objects.
 	// Correct operation of toString() is required for proper wrapping and automated testing.

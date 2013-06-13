@@ -1,0 +1,5 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoProperty
+summary: Common abstract interface used by different types of system information objects.
+extends: Titanium.Proxy
+createable: false

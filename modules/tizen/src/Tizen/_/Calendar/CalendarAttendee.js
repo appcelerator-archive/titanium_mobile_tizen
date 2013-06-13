@@ -1,19 +1,31 @@
 // Wraps Tizen interface "CalendarAttendee" that resides in Tizen module "Calendar".
 
-define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Contact/ContactRef'], function(declare, Evented, ContactRef) {
 
 	var calendarAttendee = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarAttendee]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('uri')) {
-					this._obj = new tizen.CalendarAttendee(args.uri, args.attendeeInitDict);
+				// Check if the required parameters are present (do not check for the optional ones).
+				if ('uri' in args) {
+					// In Tizen module, the name of the RSVP property does not match its name in Tizen Device API
+					// (different case), so we have to map it by hand. In order to not change the argument, we clone it first.
+					
+					var i,
+						attendeeInitDict = {};
+					for (i in args.attendeeInitDict) {
+						if (! args.attendeeInitDict.hasOwnProperty(i)) {
+							continue;
+						}
+						(i === 'rsvp') ? attendeeInitDict.RSVP = args.attendeeInitDict.rsvp : attendeeInitDict[i] = args.attendeeInitDict[i];
+					}
+					this._obj = new tizen.CalendarAttendee(args.uri, attendeeInitDict);
 				} else {
-					console.error("Constructor with such parameters not found in CalendarAttendee.");
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},
@@ -51,7 +63,7 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 					this._obj.status = value;
 				}
 			},
-			RSVP: {
+			rsvp: {
 				get: function() {
 					return this._obj.RSVP;
 				},
@@ -93,10 +105,10 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 			},
 			contactRef: {
 				get: function() {
-					return this._obj.contactRef;
+					return new ContactRef(void 0, this._obj.contactRef);
 				},
 				set: function(value) {
-					this._obj.contactRef = value;
+					this._obj.contactRef = value._obj;
 				}
 			}
 		}

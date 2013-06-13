@@ -1,0 +1,41 @@
+---
+name: Modules.Tizen.Messaging.MessageAttachment
+summary: Defines the content and attributes of a message attachment. 
+extends: Titanium.Proxy
+
+properties:
+  - name: id
+    summary: |
+        The ID of the attachment.
+    description: |
+        It holds the identifier of the attachment within its parent message.
+        By default, this attribute is set to null.
+    type: String
+    permission: read-only
+
+  - name: messageId
+    summary: |
+        The ID of the parent message.
+    description: |
+        By default, this attribute is set to null.
+    type: String
+    permission: read-only
+
+  - name: mimeType
+    summary: |
+        The attachment MIME type.
+    description: |
+        It describes the MIME type of the attachment, for example; "text/html".
+        By default, this attribute is set to null.
+    type: String
+    permission: read-only
+
+
+  - name: filePath
+    summary: | 
+        The location path to the loaded attachment file.
+    description: |
+        It holds the location path to the loaded attachment file, appropriate for the File System 
+        API, NULL if the attachment is not loaded from the remote server.
+    type: Modules.Tizen.Messaging.MessageAttachment
+    permission: read-only

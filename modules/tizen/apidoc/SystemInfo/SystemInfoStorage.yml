@@ -1,0 +1,13 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoStorage
+summary: This property exposes the data storage devices connected to this system.
+
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+methods:
+            
+  - name: getUnits
+    summary: This method returns the array of storage units connected to this device.
+    returns:
+        type: Array<Modules.Tizen.SystemInfo.SystemInfoStorageUnit>

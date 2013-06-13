@@ -1,0 +1,140 @@
+---
+name: Modules.Tizen.DataControl.MappedDataControlConsumer
+summary: This interface defines MAP data type operations.
+extends: Titanium.Proxy
+createable: false
+
+methods:
+  - name: addValue
+    summary: |
+        Adds the value associated with the specified key to a key-values map owned by MAP-type data 
+        control provider. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: key
+        summary: The key to search a mapped data. 
+        type: String
+
+      - name: value
+        summary: The value to add into values array mapped by the key.
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+        optional: true
+
+  - name: removeValue
+    summary: |
+        Removes the value associated with the specified key from a key-values map owned by MAP-type 
+        data control provider. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: key
+        summary: The key to search a mapped data. 
+        type: String
+
+      - name: value
+        summary: The value to remove from a values array mapped by the key.
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+        optional: true
+
+  - name: getValue
+    summary: |
+        Gets value associated with the specified key, from a key-values map owned by MAP-type data 
+        control provider. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: value
+        summary: The value to remove from a values array mapped by the key.
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlGetValueResponse>
+
+  - name: updateValue
+    summary: |
+        Sets the value associated with the specified key with a new value. 
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application: 
+
+        * `http://tizen.org/privilege/datacontrol.consumer` (privilege level: *partner*)
+        
+    parameters:
+
+      - name: reqId
+        summary: |
+            A unique identifier for the current operation. A developer should increase reqId value 
+            to ensure it is unique for each method.
+        type: Number
+
+      - name: key
+        summary: The key to search a mapped data. 
+        type: String
+
+      - name: oldValue
+        summary: The value to update in values array mapped by the key. 
+        type: String
+
+      - name: newValue
+        summary:  The new value to replace in values array mapped by the key. 
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<DataControlResponse>
+
+---
+name: DataControlGetValueResponse
+summary: |
+    Simple object returned in the callback from the
+    [getValue](Modules.Tizen.DataControl.MappedDataControlConsumer.getValue) method.
+extends: DataControlResponse
+properties:
+  - name: values
+    summary: The resulting values.
+    description: Will be undefined if `success` is `false`.
+    type: Array<String>
+

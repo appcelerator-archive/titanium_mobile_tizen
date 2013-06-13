@@ -4,16 +4,17 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 
 	var downloadRequest = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object DownloadRequest]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				if (args.hasOwnProperty('url')) {
-					this._obj = new tizen.DownloadRequest(args.url, args.destination, args.fileName);
+				// Check if the required parameters are present (do not check for the optional ones).
+				if ('url' in args) {
+					this._obj = new tizen.DownloadRequest(args.url, args.destination || null, args.fileName || null);
 				} else {
-					console.error('Constructor with such parameters does not exist in DownloadRequest.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},
@@ -25,10 +26,10 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				onprogress: function(id, receivedSize, totalSize) {
 					downloadCallback.onDataStream(self, receivedSize, totalSize);
 				},
-				onpaused: function(id) {
+				onpaused: function() {
 					downloadCallback.onPause(self);
 				},
-				oncanceled: function(id) {
+				oncanceled: function() {
 					downloadCallback.onCancel(self);
 				},
 				oncompleted: function(id, fullPath) {
@@ -37,7 +38,7 @@ define(['Ti/_/declare', 'Tizen/_/WebAPIError', 'Ti/_/Evented'], function(declare
 				onfailed: function(id, error) {
 					downloadCallback.onError(self, new WebAPIError(error));
 				}
-			}
+			};
 		},
 
 		send: function(downloadCallback /*DownloadCallback*/) {

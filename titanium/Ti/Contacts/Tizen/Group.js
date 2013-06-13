@@ -1,9 +1,9 @@
-define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Person', 'Ti/Contacts'], function(Evented, lang, contactHelper, Person, Contacts) {
+define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/_/Contacts/helper', 'Ti/Contacts'], function(Evented, lang, contactHelper, Contacts) {
 
 	function errorCallback(e, callback) {
 		callback({
 			code: -1,
-			message: e.type + ': ' + e.message,
+			error: e.type + ': ' + e.message,
 			success: false
 		});
 	}
@@ -20,7 +20,9 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 	function findContactsSuccessCallback (contacts, group, callback) {
 		var contactsCount = contacts.length,
 			groupsCount, j, groupIds,
-			i = 0, persons = [];
+			i = 0,
+			persons = [],
+			Person = require('Ti/Contacts/Person');
 
 		for (; i < contactsCount; i++) {
 			groupIds = contacts[i].groupIds;
@@ -38,7 +40,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 		callback({
 			code: 0,
 			success: true,
-			data: persons
+			persons: persons
 		});
 	}
 
@@ -55,7 +57,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 			});
 		},
 
-		sortedMembers: function(sortBy, group, successCallback, errorCallback) {
+		sortedMembers: function(sortBy, group, callback) {
 			var sortField = (sortBy === Contacts.CONTACTS_SORT_FIRST_NAME) ? 'name.firstName' : 'name.lastName',
 				// Create a SortMode object to define the desired contact sorting mode:
 				sortMode = new tizen.SortMode(sortField, 'ASC'),
@@ -63,7 +65,7 @@ define(['Ti/_/Evented', 'Ti/_/lang', 'Ti/Tizen/_/contactHelper', 'Ti/Contacts/Pe
 
 			// Tell Tizen to perform the search.
 			addressbook.find(function(contacts) {
-				findContactsSuccessCallback(contacts, group, successCallback);
+				findContactsSuccessCallback(contacts, group, callback);
 			}, function (e) {
 				errorCallback(e, callback);
 			}, null, sortMode);

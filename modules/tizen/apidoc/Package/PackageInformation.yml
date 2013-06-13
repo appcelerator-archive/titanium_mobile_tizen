@@ -1,0 +1,55 @@
+---
+name: Modules.Tizen.Package.PackageInformation
+summary: This interface defines the metadata information available to an installed package.
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: id
+    summary: An attribute to store the identifier of a package. 
+    type: String
+    permission: read-only
+
+  - name: name
+    summary: An attribute to store the package name.
+    type: String
+    permission: read-only
+
+  - name: iconPath
+    summary: An attribute to store the icon path of a package. 
+    type: String
+    permission: read-only
+
+  - name: version
+    summary: An attribute to store the package version. 
+    type: String
+    permission: read-only
+
+  - name: totalSize
+    summary: An attribute to store the total installed size(package + data) of a package.
+    type: Number
+    permission: read-only
+
+  - name: dataSize
+    summary: An attribute to store the current data size of a package.
+    type: Number
+    permission: read-only
+
+  - name: lastModified
+    summary: An attribute to store the latest installed or updated time of a package.
+    type: Date
+    permission: read-only
+
+  - name: author
+    summary: An attribute to store the author of a package.
+    type: String
+    permission: read-only
+
+  - name: description
+    summary: An attribute to store the package description.
+    type: String
+    permission: read-only
+
+  - name: appIds
+    summary: An attribute to store the application ID list of a package.
+    type: Array<String>
+    permission: read-only

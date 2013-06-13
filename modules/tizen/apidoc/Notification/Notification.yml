@@ -1,0 +1,30 @@
+---
+name: Modules.Tizen.Notification.Notification
+summary: The interface which represents notification.
+extends: Titanium.Proxy
+createable: false
+
+properties:
+  - name: id
+    summary: A notification id.
+    type: String
+    permission: read-only
+    
+  - name: type
+    summary: A notification type.
+    type: String
+    permission: read-only
+    
+  - name: postedTime
+    summary: The time that the notification is posted.
+    type: Date
+    permission: read-only
+    
+  - name: title
+    summary: The title to display in the notification.
+    type: String
+ 
+  - name: content
+    summary: The content to display in the notification.
+    type: String
+    

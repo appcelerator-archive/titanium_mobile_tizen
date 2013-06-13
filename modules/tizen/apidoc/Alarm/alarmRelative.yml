@@ -1,0 +1,34 @@
+---
+name: Modules.Tizen.Alarm.AlarmRelative
+summary: This interface provides the relative alarm, which occurs at a fixed interval in future.
+description: |
+    This alarm triggers after a duration mentioned in delay attribute from the moment the alarm is 
+    added. If the interval attribute is set to true, the alarm is triggered repeatedly for the 
+    specified time. 
+extends: Modules.Tizen.Alarm.Alarm
+methods:
+  - name: getRemainingSeconds
+    summary: Returns duration (in seconds) before the next alarm is triggered. 
+    description: |
+        If the alarm has expired, this method returns null.
+    returns:
+      - type: Number
+        summary: The duration before the next alarm trigger.
+
+properties:
+  - name: delay
+    summary: |
+        An attribute to stores the difference in time (in seconds) between when an alarm is added 
+        and it is triggered.
+    type: Number
+    permission: read-only
+
+  - name: period
+    summary: |
+        (optional) An attribute to stores the duration (in seconds) between each trigger 
+        of an alarm.
+    description: |
+        By default, this attribute is set to null, indicating that this alarm does not repeat.
+    type: Number
+    default: null
+    permission: read-only

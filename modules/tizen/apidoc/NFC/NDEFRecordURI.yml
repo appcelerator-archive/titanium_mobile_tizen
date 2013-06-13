@@ -1,0 +1,13 @@
+name: Modules.Tizen.NFC.NDEFRecordURI
+summary: |
+  The NDEFRecord that has URI type payload.
+extends: Modules.Tizen.NFC.NDEFRecord
+
+properties:
+
+  - name: uri
+    type: String
+    summary: |
+        The URI string that will be stored in the payload.
+    permission: read-only
+

@@ -1,0 +1,36 @@
+---
+name: Modules.Tizen.MessagePort.RemoteMessagePort
+summary: This interface provides interface provides methods to send messages.
+extends: Titanium.Proxy
+platforms: [tizen]
+createable: false
+
+methods:
+  - name: sendMessage
+    summary: Sends messages to the specified application.
+    parameters:
+      - name: data
+        summary: The name of the local message port to retrieve.
+        type: Array<MessagePortDataItem>
+
+      - name: localMessagePort
+        summary: |
+            LocalMessagePort object that gives local message port of the current application.
+            It can be used to receive reply messages from the other end of the message port.
+        type: Modules.Tizen.MessagePort.LocalMessagePort
+
+properties:
+  - name: messagePortName
+    summary: An attribute to store the message port name.
+    type: String
+    permission: read-only
+
+  - name: appId
+    summary: An attribute that store the application ID to connect with.
+    type: String
+    permission: read-only
+
+  - name: isTrusted
+    summary: An attribute that determines whether the message port is trusted or not.
+    type: Boolean
+    permission: read-only

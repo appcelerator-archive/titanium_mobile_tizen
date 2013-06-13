@@ -6,13 +6,17 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var contactRef = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object ContactRef]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				this._obj = new tizen.ContactRef(args.addressBookId, args.contactId);
+				if('addressBookId' in args && 'contactId' in args) {
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					this._obj = new tizen.ContactRef(args.addressBookId, args.contactId);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
+				}
 			}
 		},
 

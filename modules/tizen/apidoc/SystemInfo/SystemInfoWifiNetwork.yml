@@ -1,0 +1,35 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoWifiNetwork
+summary: This property reflects the information of the Wi-Fi network in this system.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+
+  - name: status
+    summary: Represents the status (ON or OFF) of the Wi-Fi interface.
+    type: String
+    permission: read-only
+    
+  - name: ssid
+    summary: Represents the SSID of a Wi-Fi network.
+    type: String
+    permission: read-only
+    
+  - name: ipAddress
+    summary: Represents the IPv4 address of Wi-Fi network.
+    type: String
+    permission: read-only
+    
+  - name: ipv6Address
+    summary: Represents the IPv6 address of Wi-Fi network.
+    type: String
+    permission: read-only
+    
+  - name: signalStrength
+    summary: |
+        This connection's signal strength, as a normalized value between 0 (no signal detected) and 
+        1 (the level is at its maximum value).
+    type: Number
+    permission: read-only

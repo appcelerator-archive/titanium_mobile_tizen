@@ -1,0 +1,25 @@
+name: Modules.Tizen.NFC.NDEFRecordText
+summary: |
+  The NDEFRecord that has the text type payload.
+extends: Modules.Tizen.NFC.NDEFRecord
+
+properties:
+
+  - name: text
+    type: String
+    summary: |
+        The encoded text.
+    permission: read-only
+
+  - name: languageCode
+    type: String
+    summary: |
+        The language code string value, followed by IANA[RFC 3066] (ex: en-US, ko-KR).
+    permission: read-only
+
+  - name: encoding
+    type: String
+    summary: |
+        (optional) The encoding type. Possible values are: <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF8> 
+        or <Modules.Tizen.NFC.NDEF_RECORD_TEXT_ENCODING_UTF16>
+    permission: read-only

@@ -1,0 +1,92 @@
+---
+name: Modules.Tizen.Messaging.MessageConversation
+summary: Defines the message conversation (also known as the thread of messages). 
+description: |
+    This interface allows a web application to get the set of properties linked to a conversation. 
+    This interface provides only read-only attributes. 
+extends: Titanium.Proxy
+createable: false
+
+properties:
+  - name: id
+    summary: |
+        The conversation unique identifier.
+    description: |
+        This property is the unique identifier for the conversation.
+        The `id` is a locally unique and persistent property, assigned by the device or the web 
+        runtime (WRT).
+    type: String
+    permission: read-only
+
+  - name: type
+    summary: |
+        The type of the given conversation. 
+    description: |
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
+    permission: read-only
+
+  - name: timestamp
+    summary:  |
+        The timestamp of the latest message in the conversation.
+        This property is set up by the device or the web runtime environment.
+    type: Date
+    permission: read-only
+
+  - name: messageCount  
+    summary: The count of messages in the conversation. 
+    type: Number
+    permission: read-only
+
+  - name: unreadMessages
+    summary: The count of unread messages in the conversation. 
+    type: Number
+    permission: read-only
+
+  - name: preview
+    summary: A preview of the latest message in the conversation. 
+    type: String
+    permission: read-only
+
+  - name: subject
+    summary: Subject of the conversation (applicable for group chats, MMS, email).
+    type: String
+    permission: read-only
+
+  - name: isRead 
+    summary:  |
+        The flag `isRead` for the latest message in the conversation.
+        This property is true, if the message has been read, false, if not.
+    type: String
+    permission: read-only
+
+  - name: to  
+    summary: The destination of the latest message in the conversation. 
+    type: Array<String>
+    permission: read-only
+
+  - name: cc
+    summary: |
+        The carbon copy (cc) address of the latest message in the conversation.
+    description: |
+        This property is used only for Email.
+    type: Array<String>
+    permission: read-only
+
+  - name: bcc 
+    summary: |
+        The blind carbon copy (bcc) address of the latest message in the conversation.
+    description: |
+        This property is used only for Email.
+    type: Array<String>
+    permission: read-only
+
+  - name: lastMessageId
+    summary: |
+        The unique identifier of a latest message in conversation.
+    description: |
+        This property is set up by the device or the web runtime environment.
+    type: String
+    permission: read-only

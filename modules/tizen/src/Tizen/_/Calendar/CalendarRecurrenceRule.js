@@ -4,10 +4,10 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 
 	var calendarRecurrenceRule = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CalendarRecurrenceRule]') {
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
 				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+				this._obj = nativeObj;
 			} else {
 				// args is a dictionary that the user of the wrapper module passed to the creator function.
 				// There are several Tizen constructors for this object.
@@ -17,8 +17,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 				// Note that Tizen calls distinguish between passing an undefined parameter and not passing 
 				// any parameter at all, so the count of the parameters must also be correct.
 
-				// The frequency is a required parameter.
-				if (args.hasOwnProperty('frequency')) {
+				// Check if the required parameters are present (do not check for the optional ones).
+				if ('frequency' in args) {
 
 					var initDict = args,
 						untilDate = args.ruleInitDict && args.ruleInitDict.untilDate,
@@ -39,7 +39,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Calendar/helper'], function(dec
 					this._obj = new tizen.CalendarRecurrenceRule(initDict.frequency, initDict.ruleInitDict);
 
 				} else {
-					console.error('Constructor with such parameters not found in CalendarRecurrenceRule.');
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
 			}
 		},

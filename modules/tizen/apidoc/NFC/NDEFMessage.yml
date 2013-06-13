@@ -1,0 +1,28 @@
+name: Modules.Tizen.NFC.NDEFMessage
+summary: |
+  The NDEFMessage interface.
+extends: Titanium.Proxy
+
+properties:
+
+  - name: recordCount
+    type: Number
+    summary: |
+        The number of records in the NDEFMessage.
+    permission: read-only
+
+  - name: records
+    type: Array<Modules.Tizen.NFC.NDEFRecord>
+    summary: |
+        The array of NDEFRecord objects in the NDEFMessage.
+
+methods:
+  - name: toByte
+    summary: Gets the serial byte array of the NDEF message.
+    description: |
+        If the operation completes successfully, it returns the serial byte array of the NDEF message. 
+        If the result cannot be successfully retrieved, a WebAPIError with the reason for the error 
+        MUST be thrown.
+    returns:
+        type: Array<Number>
+

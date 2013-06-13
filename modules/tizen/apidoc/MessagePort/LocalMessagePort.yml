@@ -1,0 +1,31 @@
+---
+name: Modules.Tizen.MessagePort.LocalMessagePort
+summary: This interface provides methods to receive data.
+extends: Titanium.Proxy
+platforms: [tizen]
+createable: false
+
+properties:
+  - name: messagePortName
+    summary: An attribute that stores the name of the message port name.
+    type: String
+    permission: read-only
+
+  - name: isTrusted
+    summary: An attribute that determines whether the message port is trusted or not.
+    type: Boolean
+    permission: read-only
+
+events:
+  - name: received
+    summary: Fired when a new a message port listener receive messages from other applications.
+
+    properties:
+      - name: data
+        type: Array<MessagePortDataItem>
+        summary: An array of data received from another application.
+
+      - name: remoteMessagePort
+        summary: |
+            The RemoteMessagePort port that can be used to reply for the received message.
+        type: Modules.Tizen.MessagePort.RemoteMessagePort

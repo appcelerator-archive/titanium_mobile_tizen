@@ -1,0 +1,106 @@
+---
+name: Modules.Tizen.Calendar.CalendarRecurrenceRule
+summary: |
+    This interface implements the CalendarRecurrenceRule object, which contains information about 
+    the recurrence of an event. (See RFC 5545, Section 3.3.10.)
+extends: Titanium.Proxy        
+properties:
+  - name: frequency 
+    type: String
+    summary: |
+        An attribute to store the frequency of a recurrence rule.
+    description: |
+        This property corresponds to FREQ in RFC 5545.
+        
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>
+        - <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>
+  
+  - name: interval
+    type: Number
+    summary: |
+        An attribute to specify how often the recurrence rule repeats over the unit of time 
+        indicated by its frequency.
+    description: |
+        This attribute is linked to the frequency attribute and for a interval of n, 
+        the event will recur every n of recurrence attribute.
+        
+        For example, if the interval attribute is set to 2 and frequency attribute is set to 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>, 
+        then the event will recur every 2 weeks.
+        
+        The default interval value is 1, that is, every day if the CalendarRecurrenceRule frequency 
+        attribute is <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_DAILY>, 
+        every week if frequency is <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>, every 
+        month if frequency is <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY> or every 
+        year if frequency is <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>.
+        
+        This property corresponds to INTERVAL in RFC 5545.
+        
+  - name: untilDate
+    type: Date
+    summary: |
+        An attribute to indicate the end date of a recurrence duration of an event using either an 
+        end date (`untilDate` attribute) or a number of occurrences (`occurrenceCount` attribute).
+    description: |
+        By default, this attribute is set to null, meaning that the event recurs infinitely, unless 
+        `occurrenceCount` is set.
+        This attribute is precise to the second. Milliseconds are ignored.
+        
+        This property corresponds to UNTIL in RFC 5545.
+        
+  - name: occurrenceCount
+    type: Number
+    summary: |
+        An attribute to indicate the number of occurrences of a recurring event.
+    description: |
+        The recurrence duration of an event can be defined using either an end date (`untilDate` 
+        attribute) or a number of occurrences (`occurrenceCount` attribute).
+        By default, this attribute is set to -1, meaning that the event recurs infinitely, unless 
+        `untilDate` is set.
+        
+        This property corresponds to COUNT in RFC 5545.
+        
+  - name: daysOfTheWeek
+    type: Array<String>
+    summary: |
+        An attribute to store the days of the week associated with the recurrence rule.
+    description: |
+        This property value is valid only for recurrence rules with a frequency type of 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_WEEKLY>, 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_MONTHLY>, and 
+        <Modules.Tizen.Calendar.RECURRENCE_RULE_FREQUENCY_YEARLY>.
+        This property corresponds to BYDAY in RFC 5545.
+        
+        By default, this attribute is set to an empty array.
+        
+  - name: setPositions
+    type: Array<Number>
+    summary: |
+        An attribute to store a list of ordinal numbers that filters which recurrences to include in 
+        the recurrence rule's frequency.
+    description: |
+        For example, a yearly recurrence rule that has a daysOfTheWeek value that specifies Monday 
+        through Friday, and a setPositions array containing 2 and -1, occurs only on the second 
+        weekday and last weekday of every year.
+        Values can be from 1 to 366 or -366 to -1. Negative values indicate counting backwards from 
+        the end of the recurrence rule's frequency (week, month, or year).
+        This attribute must only be used in conjunction with another BYxxx rule part 
+        (such as daysOfTheWeek).
+        This property corresponds to BYSETPOS in RFC 5545.
+        
+        By default, this attribute is set to an empty array
+        
+  - name: exceptions
+    type: Array<Date>
+    summary: |
+        An attribute to list date/time exceptions for the recurring event. (See RFC 5545, 
+        Section 3.8.5.1.)
+    description: |
+        This attribute is precise to the second. Milliseconds are ignored.
+        This property corresponds to EXDATE in RFC 5545.
+        
+        By default, this attribute is set to an empty array.

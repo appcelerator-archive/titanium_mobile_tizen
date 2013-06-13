@@ -1,0 +1,133 @@
+name: Modules.Tizen.NFC.NFCAdapter
+summary: |
+  NFC adapter interface that provides access to control the adapter.
+extends: Titanium.Proxy
+createable: false
+properties:
+
+  - name: powered
+    type: Boolean
+    summary: |
+        The state of the NFC adapter.
+    permission: read-only
+
+methods:
+  - name: setPowered
+    summary: Turns NFC adapter on or off.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.admin`
+        
+    parameters:
+      - name: state
+        summary: The state of NFC adapter.
+        type: Boolean
+
+      - name: callback 
+        summary: |
+            Function called when NFC adapter is enabled or disabled successfully or when an error 
+            has occurred.
+        type: Callback<ErrorResponse>
+        optional: true
+
+  - name: setTagListener
+    summary: Registers a callback function to invoke when an NFC tag is detected.
+    description: |
+        If the registration completes successfully, the detectCallback MUST be invoked when NFC tag 
+        is detected. If no tagFilter is passed, it shall consider the default tagFilter. that is to 
+        set all tag types.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.tag`
+        
+    parameters:
+      - name: detectCallback 
+        summary: The success callback to be invoked when an NFC tag is detected or lost.
+        type: NFCTagDetectCallback
+
+      - name: tagFilter 
+        summary: |
+            Filter to be used when specific NFC tag is detected. Valid values are:
+
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_GENERIC_TARGET>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_3A>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_MINI>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_1K>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_4K>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_ULTRA>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_MIFARE_DESFIRE>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_B>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_4B>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO14443_BPRIME>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_FELICA>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_JEWEL>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_ISO15693>
+            - <Modules.Tizen.NFC.NFC_TAG_TYPE_UNKNOWN_TARGET>
+
+        type: Array<String>
+
+  - name: unsetTagListener
+    summary: Unregisters the listener for detecting an NFC tag.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.tag`
+
+  - name: getCachedMessage
+    summary: Gets NDEF message cached when the tag was detected.
+    description: |
+        If the operation completes successfully, the NDEF Message that was last read before 
+        launching your application should be returned. If the NDEF Message cannot be 
+        successfully retrieved, a WebAPIError with the reason for the error MUST be thrown.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.common`
+        
+    returns:
+        type: Modules.Tizen.NFC.NDEFMessage
+
+events:
+
+  - name: peerattached
+    summary: Fired when an NFC peer-to-peer target is detected.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.p2p`
+        
+    properties:
+      - name: nfcPeer
+        summary: The attached NFC peer-to-peer target.
+        type: Modules.Tizen.NFC.NFCPeer
+
+  - name: peerdetached
+    summary: Fired when the NFC peer-to-peer target connected is detached.
+    description: |
+        To use this event, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.p2p`
+        
+---
+name: NFCTagDetectCallback
+summary: Object containing callbacks to be invoked when a tag is attached or detached.
+methods:
+  - name: onattach
+    summary: The method invoked when a tag is attached.
+    parameters:
+      - name: nfcTag
+        summary: The attached NFC tag.
+        type: Modules.Tizen.NFC.NFCTag
+
+  - name: ondetach
+    summary: The method invoked when the connected tag is detached.

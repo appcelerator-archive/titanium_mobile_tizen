@@ -1,0 +1,268 @@
+---
+name: Modules.Tizen.Messaging.MessageService
+summary: Message creating, sending, and fetching capabilities. 
+description: |
+    This interface allows a web application to manipulate and send messages.
+    The interface allows you to fetch messages for all folders belonging to one account, with 
+    synchronizable flag set, using the [sync](Modules.Tizen.Messaging.MessageService.sync) method, 
+    or for a given folder using the [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) 
+    method.
+    The interface allows you to fetch the message body for a given message using the
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody) method.
+
+extends: Titanium.Proxy
+createable: false
+
+methods:
+  - name: sendMessage
+    summary: Attempts to send the specified message. 
+    description: |
+        The error message contains the name of the recipient who failed to receive the sent message.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: message
+        summary: The message to be sent. 
+        type: Modules.Tizen.Messaging.Message
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<SendMessageResponse>
+        optional: true
+
+  - name: loadMessageBody
+    summary: Attempts to load the body for the specified message. 
+    description: |
+        It is the back end's responsibility to detect which mime parts of the message are related to 
+        the message body and should be loaded. If the message body is loaded,  the callback will be 
+        invoked immediately.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: message
+        summary: Message with the body to be loaded. 
+        type: Modules.Tizen.Messaging.MessageBody
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<LoadMessageBodyResponse> 
+
+  - name: loadMessageAttachment
+    summary: Attempts to load the specified message attachment. 
+    description: |
+        This method is used only for EMAIL services. If the message attachment is already loaded, 
+        the callback will be invoked immediately.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    parameters: 
+      - name: attachment
+        summary: Message attachment to be loaded. 
+        type: Modules.Tizen.Messaging.MessageAttachment
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<LoadMessageAttachementResponse> 
+
+  - name: sync
+    summary: Synchronizes the service content with an external mail server. 
+    description: |
+        This method is used only for EMAIL services. This method performs the same actions as 
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) for every folder with 
+        `Synchronizable` flag set within the current Messaging service.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    returns: 
+      - type: Number
+        summary: Identifier which can be used to stop this service operation. 
+    parameters: 
+      - name: callback
+        summary:  To be invoked if all the actions are completed successfully
+        type: Callback<ErrorResponse>
+        optional: true
+
+      - name: limit
+        summary: The maximum amount of messages retrieved within each folder. 
+        type: Number
+        optional: true
+
+  - name: syncFolder
+    summary: Synchronizes the folder content with an external mail server. 
+    description: |
+        This method is used only for EMAIL services. This method is performed the following actions:
+        export local changes within a given folder from device to server (If exportUpdates flag set).
+        retrieve the list of available messages from within the given folder.
+
+        Messages are retrieved from a given folder, even if synchronizable flag for this folder is 
+        not set. The backend is to decide which data is retrieved for every message. It can be:
+        
+        - message header details
+        - whole message body
+            
+        The limit of latest messages for the given folder MUST be retrieved and put into 
+        <Modules.Tizen.Messaging.MessageStorage>. If the limit is not set, the entire folder MUST be 
+        retrieved.
+        
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/messaging.write`
+        
+    returns: 
+      - type: Number
+        summary: Identifier which can be used to stop this service operation. 
+    parameters: 
+      - name: folder
+        summary: Folder to be synchronized. 
+        type: Modules.Tizen.Messaging.MessageFolder
+
+      - name: callback
+        summary: Function to be invoked if all actions are completed successfully. 
+        type: Callback<ErrorResponse>
+        optional: true
+
+      - name: limit
+        summary: The maximum amount of messages retrieved within a given folder. 
+        type: Number
+        optional: true
+
+  - name: stopSync
+    summary: |
+        Stops [sync](Modules.Tizen.Messaging.MessageService.sync) and 
+        [syncFolder](Modules.Tizen.Messaging.MessageService.syncFolder) operation. 
+    description: |
+        If the operationId argument is valid and corresponds to a service operation already in place, 
+        the operation MUST be stopped and its error callback MUST be invoked with error type 
+        AbortError.
+        If the operationId argument is not valid or does not correspond to a valid service operation, 
+        the method will return without any further action.
+    parameters: 
+      - name: opId
+        summary: Service operation identifier. 
+        type: Number
+
+properties:
+  - name: type
+    summary: | 
+        The tag supported by this messaging service. 
+    description: |
+        Can be one of this constants: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
+    permission: read-only
+
+  - name: messageStorage
+    summary: | 
+        The interface for accessing MessageStorage for this Messaging service.
+    description: |
+        If the backend does not support MessageStorage for this Messaging service, a WebAPIException 
+        is raised with error type NotSupportedError.
+    type: Modules.Tizen.Messaging.MessageStorage
+    permission: read-only
+
+# Pseudo-types
+---
+name: SendMessageResponse
+summary: |
+    Simple object returned in the callback from the
+    [sendMessage](Modules.Tizen.Messaging.MessageService.sendMessage) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: recipients
+    summary: Recipients of the message.
+    description: Will be undefined if `success` is `false`.
+    type: Array<String>
+
+---
+name: LoadMessageBodyResponse
+summary: |
+    Simple object returned in the callback from the
+    [loadMessageBody](Modules.Tizen.Messaging.MessageService.loadMessageBody) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: message
+    summary: Message containing the loaded body.
+    description: Will be undefined if `success` is `false`.
+    type: Modules.Tizen.Messaging.MessageBody
+
+---
+name: LoadMessageAttachementResponse
+summary: |
+    Simple object returned in the callback from the
+    [loadMessageAttachment](Modules.Tizen.Messaging.MessageService.loadMessageAttachment) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: attachment
+    summary: Loaded attachment.
+    description: Will be undefined if `success` is `false`.
+    type: Modules.Tizen.Messaging.MessageAttachment

@@ -5,22 +5,26 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attr
 
 	var filter = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object CompositeFilter]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
+		constructor: function(args, nativeObj) {
+			if (nativeObj) {
+				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+				this._obj = nativeObj;
 			} else {
-				// args is a dictionary that the user of the wrapper module passed to the creator function.
-				var i = 0,
-					filters = args.filters,
-					filtersCount = filters.length,
-					result = [];
+				if('type' in args && 'filters' in args) {
+					// args is a dictionary that the user of the wrapper module passed to the creator function.
+					var i = 0,
+						filters = args.filters,
+						filtersCount = filters.length,
+						result = [];
 
-				for (; i < filtersCount; i++) {
-					result.push(filters[i]._obj);
+					for (; i < filtersCount; i++) {
+						result.push(filters[i]._obj);
+					}
+
+					this._obj = new tizen.CompositeFilter(args.type, result);
+				} else {
+					throw new Error('Constructor with given parameters doesn\'t exist');
 				}
-
-				this._obj = new tizen.CompositeFilter(args.type, result);
 			}
 		},
 
@@ -42,11 +46,11 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/AttributeFilter', 'Tizen/_/Attr
 
 					for (; i < len; i++) {
 						if(tizenFilters[i].toString() === '[object AttributeFilter]') {
-							filters.push(new AttributeFilter(tizenFilters[i]));
+							filters.push(new AttributeFilter(void 0, tizenFilters[i]));
 						} else if(tizenFilters[i].toString() === '[object CompositeFilter]') {
-							filters.push(new filter(tizenFilters[i]));
+							filters.push(new filter(void 0, tizenFilters[i]));
 						} else if(tizenFilters[i].toString() === '[object AttributeRangeFilter]') {
-							filters.push(AttributeRangeFilter(tizenFilters[i]));
+							filters.push(new AttributeRangeFilter(void 0, tizenFilters[i]));
 						}
 					}
 

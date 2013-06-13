@@ -1,0 +1,14 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoPeripheral
+summary: This property reflects the peripheral information of the current device.
+
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+            
+  - name: isVideoOutputOn
+    summary: |
+        Represents the video out status.
+    type: Boolean
+    permission: read-only

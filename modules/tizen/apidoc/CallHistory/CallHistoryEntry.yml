@@ -1,0 +1,79 @@
+---
+name: Modules.Tizen.CallHistory.CallHistoryEntry
+summary: |
+    This interface represents the subset of properties of calls, which become a call record in the 
+    call history after the call ends.
+createable: false
+properties:
+  - name: uid
+    summary: An attribute to store The unique identifier of a call record. 
+    type: String
+    permission: read-only
+    
+  - name: type
+    summary: An attribute to store the service type of the call saved to call history.  
+    description: | 
+        The following values are the supported:
+
+        - TEL - for all protocols with phone number addressing (PSTN, GSM, CDMA, LTE, etc.)
+        - XMPP - for generic XMPP calls
+        - SIP - for generic SIP calls
+
+    type: String
+    permission: read-only
+
+  - name: features
+    summary: |
+        An array of attributes to store the features associated with the call service are saved to 
+        call history.
+    description:  | 
+        The following values are the supported:
+
+        - CALL - for all call types
+        - VOICECALL - for voice-only calls
+        - VIDEOCALL - for audio and video channel support in the call
+        - EMERGENCYCALL - to denote an emergency call
+
+    type: Array<String>
+    permission: read-only
+
+  - name: remoteParties
+    summary: An array of attributes to store the remote parties participating in the call. 
+    type: Array<Modules.Tizen.CallHistory.RemoteParty>
+    permission: read-only
+
+  - name: startTime
+    summary: |
+        An attribute to store the start time of the call. 
+    description: |
+        The exact meaning is defined by the back-end. The intention of this attribute is to give the 
+        moment when media channels come up. 
+    type: Date
+    permission: read-only
+
+  - name: duration
+    summary: An attribute to store the duration of the call in seconds. 
+    description: |
+        The exact meaning is defined by the back-end. The intention of this attribute is to count 
+        the duration from media channels up to the moment when media channels tear down, on the same 
+        call service. If the call gets migrated to another service, another call history entry is 
+        used. 
+    type: Number
+    permission: read-only
+
+  - name: direction
+    summary: |
+        An attribute to store to indicate whether the call was dialed, received, missed, blocked or 
+        rejected.
+    description: |
+        The following values are the supported:
+        
+        - 'DIALED' - for dialed calls
+        - 'RECEIVED' - for received calls
+        - 'MISSEDNEW' - for missed calls not seen yet
+        - 'MISSED' - for missed calls
+        - 'BLOCKED' - for blocked calls
+        - 'REJECTED' - for rejected calls
+
+    type: String
+

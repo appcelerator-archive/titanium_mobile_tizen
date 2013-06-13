@@ -4,14 +4,17 @@ define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	var sim = declare(Evented, {
 
-		constructor: function(args) {
-			if (args.toString() === '[object siminfo]') {
-				// args is a native Tizen object; simply wrap it (take ownership of it)
-				this._obj = args;
-			}
+		constructor: function(nativeObj) {
+			// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
+			this._obj = nativeObj;
 		},
 
 		constants: {
+			state: {
+				get: function() {
+					return this._obj.state;
+				}
+			},
 			operatorName: {
 				get: function() {
 					return this._obj.operatorName;

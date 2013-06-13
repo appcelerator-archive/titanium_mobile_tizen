@@ -1,0 +1,18 @@
+---
+name: Modules.Tizen.ContactRef
+summary: |
+    Contains both the identifier of the address book which the contact is in, and the contact 
+    identifier within this address book.
+description: This interface is used by other APIs to uniquely and globaly identify contacts. 
+extends: Titanium.Proxy
+
+properties:
+  - name: addressBookId
+    summary: The address book identifier.
+    description: |
+        The value of this attribute shall be null if the address book is the default address book.
+    type: String
+
+  - name: contactId
+    summary: The contact identifier inside the address book. 
+    type: String

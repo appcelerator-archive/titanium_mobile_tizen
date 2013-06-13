@@ -1,0 +1,13 @@
+---
+name: Modules.Tizen.SystemInfo.SystemInfoBuild
+summary: This property reflects the information of the current device.
+    
+extends: Modules.Tizen.SystemInfo.SystemInfoProperty
+createable: false
+
+properties:
+
+  - name: model
+    summary: Represents the model name of the current device.
+    type: String
+    permission: read-only

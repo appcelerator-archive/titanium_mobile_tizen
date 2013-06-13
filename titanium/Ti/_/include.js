@@ -32,7 +32,7 @@ define(function() {
 				x = new XMLHttpRequest();
 				x.open("GET", url, false);
 				x.send(null);
-				if (x.status === 200 || x.status === 0) {
+				if (x.status < 400) {
 					c = x.responseText;
 				} else {
 					throw new Error("Failed to load include \"" + url + "\": " + x.status);

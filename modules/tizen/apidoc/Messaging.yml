@@ -1,0 +1,235 @@
+---
+name: Modules.Tizen.Messaging
+summary: This specification defines interfaces to manage Message, retrieve messaging services.
+description: |
+    There is a object that allows access to the messaging API. Fetches all existing messaging 
+    services by type or a messaging service of a given type for concrete account. 
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: getMessageServices
+    summary: |
+        Retrieves the messaging service of a given type for a given account, or all existing 
+        services supporting the given type, if `serviceId` is not given. 
+    parameters: 
+      - name: messageServiceType
+        summary: |
+            Type of the services to be retrieved. Can be one of this constants: 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+            <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+        type: String
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<MessagingMessageServiceResponse>
+
+  - name: createMessage
+    summary: Returns the <Modules.Tizen.Messaging.Message> object.
+    returns:
+      - type: Modules.Tizen.Messaging.Message
+    parameters: 
+
+      - name: initDict
+        summary: Provides specifying message attributes upon message creation.
+        type: MessageInit
+
+  - name: createMessageAttachment
+    summary: Returns the <Modules.Tizen.Messaging.MessageAttachment> object.
+    returns:
+      - type: Modules.Tizen.Messaging.MessageAttachment
+    parameters:
+
+      - name: initDict
+        summary: Provides specifying attachment attributes upon messageAttachment creation.
+        type: MessageAttachmentInit
+
+properties:
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_SMS
+    summary: messaging.sms constant for SMS services
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_MMS
+    summary: messaging.mms constant for MMS services
+    type: String
+    permission: read-only
+
+  - name: MESSAGE_SERVICE_TAG_MESSAGING_EMAIL
+    summary: messaging.email constant for email services
+    type: String
+    permission: read-only
+
+examples:
+  - title: Enumerate all folders in an email account.
+    example: |
+        This example shows how to enumerate all folders in an email account (like inbox, sent, etc).
+
+            var Tizen = require('tizen'),
+                serviceType = Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGINGEMAIL,
+                emailService;
+
+            // Initialize email service (Tizen object which allows email functionality).
+            function initEmailService(callBack) {
+                Tizen.Messaging.getMessageServices(serviceType, function (response) {
+                    if (response.success) {
+                        var services = response.services;
+                        if (services.length === 0) {
+                            console.error('The following error occurred: Services list is empty.');
+                            return;
+                        }
+
+                        services[0] && (emailService = services[0]);
+                        callBack && callBack();
+                    } else {
+                        console.log(response.error);
+                    }
+                });
+            }
+
+            // Search for, and print the names of, the email folders.
+            function findFolders() {
+
+                function foldersListCB(response) {
+                    if (response.success) {
+                        var folders = response.folders,
+                            foldersCount = folders.length,
+                            i = 0;
+
+                        console.log(foldersCount + ' folder(s) found.');
+
+                        if (foldersCount === 0) {
+                            console.log('Folders not found.');
+                            return;
+                        }
+
+                        // Print the folder names to the console
+                        for (; i < foldersCount; i++) {
+                            console.log('Folder: ' + folders[i].name);
+                        }
+                    } else {
+                        console.log('Error: ' + response.error);
+                    });
+                }
+
+                // Search for email folders
+                try {
+                    // Start to search list of folders from email account
+                    var attributeFilter = Tizen.createAttributeFilter({
+                        attributeName: 'serviceId',
+                        matchFlag: 'EXACTLY',
+                        matchValue: emailService.id
+                    });
+
+                    emailService.messageStorage.findFolders(attributeFilter, foldersListCB);
+                } catch(exc) {
+                    console.log('Error: ' + exc.message);
+                }
+            }
+            
+            initEmailService(findFolders);
+
+# Pseudo-type    
+---
+name: MessageInit
+summary: Simple object that contains parameters for [createMessage](Modules.Tizen.Messaging.createMessage).
+properties:
+  - name: type
+    summary: |
+        The type of message. 
+    description: |
+        The supported types are: <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_SMS>, 
+        <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_MMS>, 
+        and <Modules.Tizen.Messaging.MESSAGE_SERVICE_TAG_MESSAGING_EMAIL>.
+    type: String
+
+  - name: options
+    summary: (optional) Provides specifying message attributes upon message creation.
+    type: MessageInitDict
+    optional: true
+
+---
+name: MessageInitDict
+summary: Used in <MessageInit>.
+properties: 
+  - name: subject
+    summary: The subject of a message. 
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+  - name: to
+    summary: The destination addresses (or phone numbers) of a message. 
+    type: Array<String>
+
+  - name: cc
+    summary: The carbon copy addresses of a message. 
+    description: This property is used only with Email messages. 
+    type: Array<String>
+
+  - name: bcc
+    summary: The blind carbon copy addresses of a message. 
+    type: Array<String>
+
+  - name: plainBody
+    summary: The plain text representation of the message body.
+    description: This property is used only with Email and MMS messages. 
+    type: String
+
+  - name: htmlBody
+    summary: The HTML representation of the message body. 
+    description: This property is used only with Email messages. 
+    type: String
+
+  - name: isHighPriority
+    summary: The priority of a message. 
+    description: |
+        This property is true, if the message has a high priority and false, if the message has a
+        normal or low priority.
+        This property is used only with Email messages.
+    type: Boolean
+
+---
+name: MessageAttachmentInit
+summary: |
+    Simple object that contains parameters for 
+    [createMessageAttachment](Modules.Tizen.Messaging.createMessageAttachment).
+properties:
+  - name: filePath
+    summary: Path to file.
+    type: String
+
+  - name: mimeType
+    summary: (optional) Provides specifying mimeType of file.
+    type: String
+    optional: true
+
+---
+name: MessagingMessageServiceResponse
+summary: |
+    Simple object returned in the callback from the
+    [getMessageServices](Modules.Tizen.Messaging.getMessageServices) method.
+extends: ErrorResponse
+properties:
+  - name: success
+    summary: Indicates if the operation succeeded.
+    description: Returns `true` if request succeeded, `false` otherwise.
+    type: Boolean
+    
+  - name: error
+    summary: Error message, if any returned.
+    description: Will be undefined if `success` is `true`.
+    type: String
+    
+  - name: code
+    summary: Error code. Returns 0 if `success` is `true`.
+    description: |
+        Error code will be 0 if `success` is `true`, nonzero otherwise. If the error
+        was generated by the operating system, that system's error value is used.
+        Otherwise, this value will be -1.
+    type: Number
+    
+  - name: services
+    summary: Array of available MessageService objects on the device.
+    description: Will be undefined if `success` is `false`.
+    type: Array<Modules.Tizen.Messaging.MessageService>

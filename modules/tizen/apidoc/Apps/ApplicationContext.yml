@@ -1,0 +1,15 @@
+---
+name: Modules.Tizen.Apps.ApplicationContext
+summary: This interface defines the information available about a running application. 
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: id
+    summary: An attribute to store the ID of a running application.  
+    type: String
+    permission: read-only
+
+  - name: appId
+    summary: An attribute to store the ID of an installed application.   
+    type: String
+    permission: read-only

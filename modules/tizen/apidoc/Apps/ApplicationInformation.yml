@@ -1,0 +1,47 @@
+---
+name: Modules.Tizen.Apps.ApplicationInformation
+summary: This interface defines the metadata information available to an installed application. 
+extends: Titanium.Proxy
+createable: false
+properties:
+  - name: id
+    summary: An attribute to store the identifier of an application for application management. 
+    type: String
+    permission: read-only
+
+  - name: name
+    summary: An attribute to store the name of an application.  
+    type: String
+    permission: read-only
+
+  - name: iconPath
+    summary: An attribute to store the icon path of an application. 
+    type: String
+    permission: read-only
+
+  - name: version
+    summary: An attribute to store the version of an application. 
+    type: String
+    permission: read-only
+
+  - name: show
+    summary: |
+        An attribute that determines whether the application information should be shown (such as in 
+        the menus) or not.
+    type: Boolean
+    permission: read-only
+
+  - name: categories
+    summary: An array of attributes to store the categories that the app belongs to. 
+    type: Array<String>
+    permission: read-only
+
+  - name: installDate
+    summary: An attribute to store the application install/update time.  
+    type: Date
+    permission: read-only
+
+  - name: size
+    summary: An attribute to store the application size (installed space).   
+    type: Number
+    permission: read-only

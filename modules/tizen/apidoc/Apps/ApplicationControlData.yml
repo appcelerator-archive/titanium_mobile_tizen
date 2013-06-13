@@ -1,0 +1,13 @@
+---
+name: Modules.Tizen.Apps.ApplicationControlData
+summary: |
+    This object defines a key/value pair used to pass data between applications through the 
+    <Modules.Tizen.Apps.ApplicationControl> interface.
+properties:
+  - name: key
+    summary: An attribute to store the name of a key. 
+    type: String
+
+  - name: value
+    summary: An attribute to store the value associated with a key. 
+    type: Array<String>

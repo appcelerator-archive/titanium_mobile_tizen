@@ -1,0 +1,51 @@
+name: Modules.Tizen.NFC.NFCPeer
+summary: |
+  Accesses to the NFC peer-to-peer target.
+extends: Titanium.Proxy
+createable: false
+properties:
+
+  - name: isConnected
+    type: Boolean
+    summary: |
+        The value is necessary to check if this NFC peer-to-peer target is connected.
+    permission: read-only
+
+methods:
+
+  - name: sendNDEF
+    summary: |
+        Registers a callback function to be invoked when an NDEF message is received from the 
+        connected NFC peer-to-peer target.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:  
+
+        * `http://tizen.org/privilege/nfc.p2p`
+        
+    parameters:
+      - name: ndefMessage  
+        summary: NDEF message to send to NFC peer-to-peer target.
+        type: Modules.Tizen.NFC.NDEFMessage
+
+      - name: callback  
+        summary: |
+            Invoked in case of successfully sending data to NFC peer-to-peer target or in case 
+            of any error during sending.
+        type: Callback<ErrorResponse>
+
+events:
+
+  - name: ndefmessagereceived
+    summary: Fired when data has been read successfully from the NFC tag or target.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of your 
+        Titanium application:
+
+        * `http://tizen.org/privilege/nfc.p2p`
+
+    properties:
+      - name: message
+        summary: The received message.
+        type: Modules.Tizen.NFC.NDEFMessage
+        

@@ -1,0 +1,43 @@
+---
+name: Modules.Tizen.Calendar.CalendarAlarm
+summary:  An interface that contains information related to an event alarm or reminder.
+extends: Titanium.Proxy
+properties:
+  - name: absoluteDate 
+    type: Date
+    summary: |
+        An attribute to record the absolute date and time when an alarm should be triggered.
+    description: |
+        `absoluteDate` and `before` are mutually exclusive.
+        
+        This attribute is precise to the second. Milliseconds are ignored.
+    
+  - name: before 
+    type: Number
+    summary: |
+        An attribute to store the duration before an event starts on which the alarm should be 
+        triggered.
+    description: |
+        The duration should be positive.
+        `absoluteDate` and `before` are mutually exclusive.
+        
+        Will be rounded to integer seconds.
+        
+  - name: method 
+    type: String
+    summary: |
+        An attribute to denote the notification method used by an alarm.
+    description: |    
+        The value is one of the constants defined for this type:
+
+        - <Modules.Tizen.Calendar.ALARM_METHOD_SOUND>
+        - <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>
+    
+  - name: description  
+    type: String
+    summary: |
+        An attribute to store the description of an alarm.
+    description: |
+        When the method is <Modules.Tizen.Calendar.ALARM_METHOD_DISPLAY>, the alarm must also 
+        include a non-null description attribute, 
+        which contains the text to be displayed when the alarm is triggered. 

@@ -1,0 +1,357 @@
+---
+name: Modules.Tizen.DataSynchronization
+summary: |
+    This API provides methods to synchronize contact and event data to the server using the OMA
+    DS 1.2 protocol.
+description: |
+    To know the details of this specification, visit [http://www.openmobilealliance.org/](OMA web page).
+extends: Titanium.Module
+platforms: [tizen]
+
+properties:
+
+  - name: SYNC_MODE_MANUAL
+    summary: Indicates that the synchronization starts by manual trigger.
+    description: |
+        The sync type should be specified. The default value is TWO_WAY.
+    type: String
+    permission: read-only
+  - name: SYNC_MODE_PERIODIC
+    summary: |
+        Indicates that the synchronization starts automatically by a preset period.
+        The sync interval should be provided.
+    type: String
+    permission: read-only
+  - name: SYNC_MODE_PUSH
+    summary: |
+        Indicates that the synchronization starts automatically when changes are made.
+    description: |
+        The sync type is set to TWO_WAY. The synchronization can be triggered by the server based on
+        the standard SAN, Server Alerted Notification, sync type.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_TWO_WAY
+    summary: |
+         Indicates a normal sync type in which the client and the server exchange information about
+         modified data in these devices.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_SLOW
+    summary: |
+        Indicates a form of two-way sync in which the client and the server exchange all the data
+        from their database.
+    description: |
+        This type of sync is used for the first sync, or after a synchronization failure.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_ONE_WAY_FROM_CLIENT
+    summary: |
+        Indicates a sync type in which the client sends its modifications to the server but the
+        server does not send its modifications back to the client.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_REFRESH_FROM_CLIENT
+    summary: |
+        Indicates a sync type in which the client sends all its data from a database to the server.
+    description: |
+        The server is then expected to replace all data in the target database with the data
+        received from the client.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_ONE_WAY_FROM_SERVER
+    summary: |
+        Indicates a sync type in which the client gets all modifications from the server but the
+        client does not send its modifications to the server.
+    type: String
+    permission: read-only
+  - name: SYNC_TYPE_REFRESH_FROM_SERVER
+    summary: |
+        Indicates a sync type in which the server sends all its data from a database to the client.
+        The client is then expected to replace all data in the target database with the
+        data received from the server.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_5_MINUTES
+    summary: Time interval of 5 minutes.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_15_MINUTES
+    summary: Time interval of 15 minutes.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_1_HOUR
+    summary: Time interval of 1 hour.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_4_HOURS
+    summary: Time interval of 4 hours.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_12_HOURS
+    summary: Time interval of 12 hours.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_1_DAY
+    summary: Time interval of 1 day.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_1_WEEK
+    summary: Time interval of 1 week.
+    type: String
+    permission: read-only
+  - name: SYNC_INTERVAL_1_MONTH
+    summary: Time interval of 1 month.
+    type: String
+    permission: read-only
+  - name: SYNC_SERVICE_TYPE_CONTACT
+    summary: Indicates the device contact records.
+    type: String
+    permission: read-only
+  - name: SYNC_SERVICE_TYPE_EVENT
+    summary: Indicates the device calendar event records.
+    type: String
+    permission: read-only
+  - name: SYNC_STATUS_SUCCESS
+    summary: Indicates the sync is successful.
+    type: String
+    permission: read-only
+  - name: SYNC_STATUS_FAIL
+    summary: Indicates the sync has failed.
+    type: String
+    permission: read-only
+  - name: SYNC_STATUS_STOP
+    summary: Indicates the sync has been stopped by user's action.
+    type: String
+    permission: read-only
+  - name: SYNC_STATUS_NONE
+    summary: Indicates the sync was never performed.
+    type: String
+    permission: read-only
+
+
+methods:
+
+  - name: add
+    summary: Adds a sync profile.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profile
+        summary:  The sync profile information to add.
+        type: Modules.Tizen.DataSynchronization.SyncProfileInfo
+
+  - name: update
+    summary: Updates an existing sync profile.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profile
+        summary:  The sync profile information to update.
+        type: Modules.Tizen.DataSynchronization.SyncProfileInfo
+
+  - name: remove
+    summary: Removes an existing sync profile.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profileId
+        summary:  The sync profile ID to remove.
+        type: Number
+
+  - name: getMaxProfilesNum
+    summary: Gets the maximum number of supported sync profiles on a platform.
+    description: |
+        Normally the platform sets a limitation on the number of supported profiles. It will return
+        0 or negative value if no limitation is set.
+ 
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    returns:
+        summary: The number of supported profiles on a platform.
+        type: Number
+
+  - name: getProfilesNum
+    summary: Gets the current number of sync profiles on a device.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    returns:
+        summary: The current number of profiles on a device.
+        type: Number
+
+  - name: getSyncProfileInfo
+    summary: |
+        Gets the [SyncProfileInfo](Modules.Tizen.DataSynchronization.SyncProfileInfo) object from a
+        given profile ID.
+    description: |
+        An attempt to retrieve a `SyncProfileInfo` doesn't get any confidential information such as
+        the password of `SyncInfo` or `SyncServiceInfo`, but instead will return null.
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profileId
+        summary:   The ID to use to get the profile information.
+        type: Number
+    returns:
+        summary: The profile information of the given ID.
+        type: Modules.Tizen.DataSynchronization.SyncProfileInfo
+
+  - name: getAll
+    summary: Gets the information of all sync profiles saved in a device.
+    description: |
+        An attempt to retrieve a `SyncProfileInfo` doesn't get any confidential information such as
+        the password of `SyncInfo` or `SyncServiceInfo`, but instead will return null.
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    returns:
+        summary: The profile information array.
+        type: Array<Modules.Tizen.DataSynchronization.SyncProfileInfo>
+
+  - name: startSync
+    summary: Starts a sync operation with a given profile ID.
+    description: |
+        If the sync mode is set to `MANUAL`, the synchronization will not start automatically until
+        this method is called. This method will work even in `PUSH` or `PERIODIC` mode.
+
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profileId
+        summary: The profile ID with which to initiate the sync operation.
+        type: Number
+
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<SyncProgress>
+        optional: true
+
+  - name: stopSync
+    summary: Stops an ongoing sync operation that is specified by the `profileId` parameter.
+    description: |
+        To use this method, you must include the following privilege in the `tiapp.xml` file of
+        your Titanium application:
+
+        * `http://tizen.org/privilege/datasync`
+
+        This is a public-level privilege.
+ 
+    parameters:
+
+      - name: profileId
+        summary: The ID of the ongoing sync operation to stop.
+        type: Number
+
+  - name: createSyncInfo
+    summary: Adds an instance of [SyncInfo](Modules.Tizen.DataSynchronization.SyncInfo).
+    parameters:
+
+      - name: params
+        summary: |
+            Parameters required to initialize the object being created. Not all combinations of
+            parameters are allowed - please see the documentation for the propertoes of
+            [SyncInfo](Modules.Tizen.DataSynchronization.SyncInfo) for information on the
+            allowed combinations.
+        type: Dictionary<Modules.Tizen.DataSynchronization.SyncInfo>
+
+---
+name: SyncProgress
+createable: false
+summary: |
+    Simple object returned in the callback from the
+    [startSync](Modules.Tizen.DataSynchronization.startSync) method.
+
+    Only one property out of `progress`,
+    `completed`, and `stopped`, will be defined at any given time, provided `success` is true.
+extends: ErrorResponse
+properties:
+  - name: profileId
+    summary: The ID of the corresponding sync operation.
+    type: Number
+  - name: progress
+    summary: |
+        Simple object describing progress information.
+    type: SyncProgressDict
+  - name: completed
+    summary: True if operation successfully completed; undefined otherwise.
+    type: Boolean
+  - name: stopped
+    summary: True if operation was stopped; undefined otherwise.
+    type: Boolean
+
+---
+name: SyncProgressDict
+createable: false
+summary: |
+    Simple object returned in the callback from the
+    [startSync](Modules.Tizen.DataSynchronization.startSync) method in the
+    `progress` field.
+properties:
+  - name: serviceType
+    summary: The sync service category type.
+    type: String
+  - name: isFromServer
+    summary: |
+        The direction of the operation. If the direction of operation is from the server to the |
+        client, then value is `true`.
+    type: Boolean
+  - name: totalPerService
+    summary: |
+        The total number of records to synchronize for the current sync service type aggregating all
+        operations.
+    type: Number
+  - name: syncedPerService
+    summary: |
+        The number of synchronized records for the current sync service type aggregating all
+        operations.
+    type: Number
+ 

@@ -1,0 +1,20 @@
+---
+name: Modules.Tizen.CompositeFilter
+summary: CompositeFilter represents a set of filters. 
+description: |
+    The composite filters can be one of the 2 types:
+    The union - used to filter objects that match any of the filters it includes.
+    The intersection - used to filter objects that match all filters it includes.
+
+extends: Modules.Tizen.AbstractFilter
+
+properties:
+  - name: type
+    summary: The name of the object attribute used for filtering.
+    description: Use <Modules.Tizen.COMPOSITE_FILTER_TYPE_UNION> or <Modules.Tizen.COMPOSITE_FILTER_TYPE_INTERSECTION> 
+    type: String
+
+  - name:  filters
+    summary: The list of filters in the composite filter. 
+    type: Array<Modules.Tizen.AbstractFilter>
+    default: FILTER_MATCH_FLAG_EXACTLY
