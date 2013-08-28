@@ -230,6 +230,10 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 			type: {
 				set: function(value, oldValue) {
 					var self = this;
+					if (value !== oldValue) {
+						this.columns = void 0;
+						this._dateTimeInput = null;
+
 					function createInput(inputType) {
 						var dateTimeInput = self._dateTimeInput = new DateTimeInput({
 							type: inputType,
@@ -237,16 +241,14 @@ define(["Ti/_/declare", "Ti/_/event", "Ti/UI/View", "Ti/_/UI/Widget", "Ti/UI", "
 							height: UI.INHERIT
 						});
 						dateTimeInput.addEventListener("change", function(e) {
-							self.properties.__values__.value = e.value;
+							self.__values__.properties.value = e.value;
 							self.fireEvent("change",e);
 						});
 						dateTimeInput.min = self.min;
 						dateTimeInput.max = self.max;
 						self._add(dateTimeInput);
 					}
-					if (value !== oldValue) {
-						this.columns = void 0;
-						this._dateTimeInput = null;
+
 						switch(value) {
 							case UI.PICKER_TYPE_DATE:
 								createInput("Date");

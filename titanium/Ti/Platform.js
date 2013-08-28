@@ -30,22 +30,22 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 	function onSuccessWifiNetworkCallback(wifiNetwork) {
 		//receive SystemInfoWifiNetwork 
 		if (wifiNetwork.status === 'ON') {
-			Platform.constants.__values__.address = wifiNetwork.ipAddress;
+			Platform.__values__.constants.address = wifiNetwork.ipAddress;
 		} else {
-			Platform.constants.__values__.address = void 0;
+			Platform.__values__.constants.address = void 0;
 		}
 		console.log('Platform.address is set to ' + Platform.address);
 	}
 
 	// Tizen listener for Model.
 	function onSuccessModelCallback(build) {
-		Platform.constants.__values__.model = build.model;
+		Platform.__values__.constants.model = build.model;
 	}
 
 	function onSuccessBatteryCallback(battery) {
-		Platform.constants.__values__.batteryMonitoring = true;
-		Platform.constants.__values__.batteryLevel = battery.level * 100;
-		Platform.constants.__values__.batteryState = battery.isCharging ?
+		Platform.__values__.constants.batteryMonitoring = true;
+		Platform.__values__.constants.batteryLevel = battery.level * 100;
+		Platform.__values__.constants.batteryState = battery.isCharging ?
 			Platform.BATTERY_STATE_CHARGING :
 			(battery.level === 1 ? Platform.BATTERY_STATE_FULL : Platform.BATTERY_STATE_UNPLUGGED);
 	}
@@ -111,7 +111,7 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 				batteryLevel: void 0,
 				batteryState: void 0,
 				isBrowser: true,
-				id: mid,
+				id: 'ID001',
 				locale: Locale,
 				macaddress: void 0,
 				model: nav.userAgent,
@@ -143,11 +143,11 @@ define(['Ti/_', 'Ti/_/browser', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Locale', 'Ti/_/
 	// Get our application info.		
 	try {
 		// The unique ID for an installed application. Will not change while the app is running.
-		Platform.constants.__values__.id = tizen.application.getAppInfo().id;
+		Platform.__values__.constants.id = tizen.application.getAppInfo().id;
 	} catch (e) {
 		// The web simulator throws an exception, because id is undefined.
 		// Initialize to something sane.
-		Platform.constants.__values__.id = 'ID001';
+		//Platform.__values__.constants.id = 'ID001';
 	}
 
 	if (deviceCapabilities.wifi) {

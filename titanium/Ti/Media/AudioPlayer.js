@@ -9,7 +9,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 		_changeState: function(newState, description) {
 			Audio.prototype._changeState.apply(this, arguments);
 
-			var cons = this.constants.__values__;
+			var cons = this.__values__.constants;
 
 			cons.idle = this._initialized && !cons.playing;
 
@@ -58,7 +58,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			}
 
 			this._nextCmd = 0;
-			this.constants.__values__.autoplay = false;
+			this.__values__.constants.autoplay = false;
 		},
 
 		stateDescription: function(stateId) {

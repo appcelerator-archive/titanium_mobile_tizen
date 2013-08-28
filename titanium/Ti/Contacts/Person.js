@@ -7,8 +7,8 @@ define(
 			if (!args.id) {
 				var contact = contactHelper.createTizenContact(args);
 				tizen.contact.getDefaultAddressBook().add(contact);
-				this.constants.__values__.id = contact.id;
-				this.constants.__values__.modified = contact.lastUpdated;
+				this.__values__.constants.id = contact.id;
+				this.__values__.constants.modified = contact.lastUpdated;
 			}
 		},
 

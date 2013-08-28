@@ -40,8 +40,8 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 
 		_changeState: function(newState) {
 			this._currentState = newState;
-			this.constants.__values__.playing = PLAYING === newState;
-			this.properties.__values__.paused = PAUSED === newState;
+			this.__values__.constants.playing = PLAYING === newState;
+			this.__values__.properties.paused = PAUSED === newState;
 		},
 
 		_createAudio: function(url) {
@@ -89,10 +89,10 @@ define(['Ti/_/declare', 'Ti/_/dom', 'Ti/_/event', 'Ti/_/Evented'],
 		release: function() {
 			var audio = this._audio,
 				parent = audio && audio.parentNode,
-				p = this.properties.__values__;
+				p = this.__values__.properties;
 
 			this._currentState = STOPPED;
-			this.constants.__values__.playing = p.paused = false;
+			this.__values__.constants.playing = p.paused = false;
 			p.url = this._initialized = this._nextCmd = 0;
 
 			if (parent) {

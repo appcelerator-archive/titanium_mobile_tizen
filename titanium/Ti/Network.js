@@ -72,9 +72,9 @@ define(['Ti/_/Evented', 'Ti/_/lang'], function(Evented, lang) {
 			networkType = 'MOBILE';
 		}
 
-		Network.constants.__values__.networkType = type;
-		Network.constants.__values__.networkTypeName = networkType;
-		Network.constants.__values__.online = online;
+		Network.__values__.constants.networkType = type;
+		Network.__values__.constants.networkTypeName = networkType;
+		Network.__values__.constants.online = online;
 
 		Network.fireEvent('change', {
 			networkType: type,

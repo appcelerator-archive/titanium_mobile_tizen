@@ -30,7 +30,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 			var d = this._audio.duration * 1000;
 			// Blackberry OS 7 gives the initial duration as Infinity
 			// So we leave duration at zero until the duration of <audio> is finite.
-			d === Infinity || (this.constants.__values__.duration = Math.floor(d));
+			d === Infinity || (this.__values__.constants.duration = Math.floor(d));
 		},
 
 		_error: function() {
@@ -59,7 +59,7 @@ define(['Ti/_/declare', 'Ti/_/Media/Audio'], function(declare, Audio) {
 		},
 
 		release: function() {
-			this.constants.__values__.duration = 0;
+			this.__values__.constants.duration = 0;
 			Audio.prototype.release.apply(this, arguments);
 		},
 

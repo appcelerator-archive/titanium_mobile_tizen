@@ -1,11 +1,11 @@
 define(['Ti/_', 'Ti/_/Evented', 'Ti/_/lang', 'Ti/Platform'], function(_, Evented, lang, Platform) {
 
 	function onSuccessDisplayCallback(display) {
-		dc.constants.__values__.xdpi = display.dotsPerInchWidth;
-		dc.constants.__values__.ydpi = display.dotsPerInchHeight;
-		dc.constants.__values__.dpi = Math.max(display.dotsPerInchHeight, display.dotsPerInchWidth);
-		dc.constants.__values__.platformWidth = display.resolutionWidth;
-		dc.constants.__values__.platformHeight = display.resolutionHeight;
+		dc.__values__.constants.xdpi = display.dotsPerInchWidth;
+		dc.__values__.constants.ydpi = display.dotsPerInchHeight;
+		dc.__values__.constants.dpi = Math.max(display.dotsPerInchHeight, display.dotsPerInchWidth);
+		dc.__values__.constants.platformWidth = display.resolutionWidth;
+		dc.__values__.constants.platformHeight = display.resolutionHeight;
 	}
 
 	var ua = navigator.userAgent.toLowerCase(),

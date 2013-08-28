@@ -21,6 +21,7 @@ var ti = require('titanium-sdk'),
 	wrench = require('wrench'),
 	xmldom = require('xmldom'),			// for DOM parsing
 	runner = require('child_process'),	// for executing child processes (archiving, etc)
+	admzip = require(path.normalize(path.join(path.dirname(require.resolve('node-appc')), 'node_modules', 'adm-zip', 'adm-zip.js' ))),
 	DOMParser = xmldom.DOMParser,
 	jsExtRegExp = /\.js$/,
 	HTML_HEADER = [
@@ -1239,6 +1240,7 @@ build.prototype = {
 	// - callback: the function to call upon completion
 	wgtPackaging7z: function (logger, callback) {
 		logger.info(__('Packaging application into wgt'));
+		
 		// Create the tasks to unzip each entry in the zip file
 		var child,
 			stdout = '',
@@ -1275,6 +1277,17 @@ build.prototype = {
 				}
 			}
 		});
+/*
+		//cleanup
+		fs.unlinkSync(path.join(this.buildDir, '.manifest.tmp'));
+
+		// creating archives
+    	var zip = new admzip();
+
+    	zip.addLocalFolder(this.buildDir, './');
+    	zip.writeZip( path.join(this.buildDir, 'tizenapp.wgt'));
+    	callback();
+*/
 	},
 
 	// Pack the source files into a .wgt file on Linux/MacOS, using the standard zip utility.

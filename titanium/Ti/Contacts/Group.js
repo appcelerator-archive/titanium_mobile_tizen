@@ -7,9 +7,9 @@ define(['Ti/_/declare', 'Ti/Contacts'], function(declare, Contacts) {
 			if (!args.id) {
 				this._group = new tizen.ContactGroup(args.name);
 				this._addressbook.addGroup(this._group);
-				this.constants.__values__.recordId = this._group.id;
+				this.__values__.constants.recordId = this._group.id;
 			} else {
-				this.constants.__values__.recordId = args.id;
+				this.__values__.constants.recordId = args.id;
 			}
 		},
 
