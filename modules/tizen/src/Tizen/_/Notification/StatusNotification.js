@@ -143,7 +143,31 @@ define(['Ti/_/declare', 'Tizen/_/Notification/Notification', 'Tizen/_/Notificati
 				set: function(value) {
 					this._obj.progressValue = value;
 				}
-			}
+			},
+			ledColor: {
+				get: function() {
+					return this._obj.ledColor;
+				},
+				set: function(value) {
+					this._obj.ledColor = value;
+				}
+			},
+			ledOnPeriod: {
+				get: function() {
+					return this._obj.ledOnPeriod;
+				},
+				set: function(value) {
+					this._obj.ledOnPeriod = value;
+				}
+			},
+			ledOffPeriod: {
+				get: function() {
+					return this._obj.ledOffPeriod;
+				},
+				set: function(value) {
+					this._obj.ledOffPeriod = value;
+				}
+			},
 		}
 
 	});
