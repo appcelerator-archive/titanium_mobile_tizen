@@ -195,7 +195,18 @@ methods:
       - name: callback
         summary: Function to invoke on success or failure.
         type: Callback<RegisterRFCOMMServiceByUUIDResponse>
- 
+
+  - name: getBluetoothProfileHandler
+    summary: Gets the profile handler for the given type.
+
+    parameters: 
+      - name: profileType
+        summary: The type of Bluetooth Profile. 
+        type: String
+
+    returns:
+        type: Modules.Tizen.Bluetooth.BluetoothProfileHandler
+
 events:
   - name: discoverystarted
     description: |

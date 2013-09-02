@@ -11,3 +11,8 @@ properties:
     summary: Represents the model name of the current device.
     type: String
     permission: read-only
+
+  - name: buildVersion
+    summary: Represents the build version information of the device.
+    type: String
+    permission: read-only

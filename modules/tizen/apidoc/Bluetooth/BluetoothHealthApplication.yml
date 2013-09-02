@@ -1,0 +1,27 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothHealthApplication
+summary: |
+    This interface represents the Bluetooth health application. 
+extends: Titanium.Proxy
+createable: false
+
+methods:
+
+  - name: unregister
+    summary: Unregisters this application. 
+    parameters:
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ErrorResponse>
+
+properties:
+
+  - name: dataType
+    summary: The MDEP data type used for communication, which is referenced in the ISO/IEEE 11073-20601 spec. For example, pulse oximeter is 4100 and blood pressure monitor is 4103. 
+    type: Number
+    permission: read-only
+
+  - name: name
+    summary: The friendly name associated with sink application. 
+    type: String
+    permission: read-only

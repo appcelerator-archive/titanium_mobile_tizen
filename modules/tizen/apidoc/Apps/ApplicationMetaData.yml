@@ -1,0 +1,14 @@
+---
+name: Modules.Tizen.Apps.ApplicationMetaData
+summary: |
+    This interface defines the meta data of an installed application.    
+properties:
+  - name: key
+    summary: An attribute to store the key of the application meta data. 
+    type: String
+    permission: read-only
+
+  - name: value
+    summary: An attribute to store the value of the application meta data.
+    type: String
+    permission: read-only

@@ -1,0 +1,42 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothHealthChannel
+summary: |
+    This interface represents the handler of Bluetooth health device profile. The BluetoothHealthProfileHandler object is created by BluetoothAdapter.getBluetoothProfileHandler().
+extends: Titanium.Proxy
+createable: false
+
+methods:
+
+  - name: close
+    summary: Close the connected channel. BluetoothHealthChannel.isConnected is changed to false and onclose event is invoked when this channel is closed successfully.
+
+  - name: sendData
+    summary: Send data and returns the number of bytes actually written. 
+    returns: 
+        type: Number
+    parameters:
+      - name: date
+        summary: The data to send. 
+        type: Array<Number>
+
+properties:
+
+  - name: peer
+    summary: The remote device to which this channel is connected. 
+    type: Modules.Tizen.Bluetooth.BluetoothDevice
+    permission: read-only
+
+  - name: channelType
+    summary: The type of of this channel. 
+    type: String
+    permission: read-only
+
+  - name: application
+    summary: The health application which is used to communicate with the remote device. 
+    type: Modules.Tizen.Bluetooth.BluetoothHealthApplication
+    permission: read-only
+
+  - name: isConnected
+    summary: The type of of this channel. 
+    type: Boolean
+    permission: read-only

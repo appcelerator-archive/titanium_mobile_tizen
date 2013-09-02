@@ -1,0 +1,31 @@
+---
+name: Modules.Tizen.WebSetting
+summary: This is the top-level interface for the WebSetting API that managed the settings of the Web view in your Web application. 
+extends: Titanium.Module
+platforms: [tizen]
+
+methods:
+  - name: setUserAgentString
+    summary: Sets the custom user agent string for your Web application. 
+    description: |
+        This method allows the user to set the user agent string of the Web view in the Web application. By default, the Web view in your application has the same user agent string as the Tizen browser on the device.
+    
+    parameters:
+      - name: userAgent
+        summary: User agent to set for the Web view in your Web application. 
+        type: String
+      - name: callback
+        summary: To be invoked if the requested setting operation succeeds or fails. 
+        type: Callback<ErrorResponse>
+        optional: true
+        
+  - name: removeAllCookies
+    summary: Removes all the cookies saved for the Web view in your Web application. 
+    description: |
+        The Web view in your Web application can store cookies like a browser. This method allows the user to remove all the cookies saved for the Web application. 
+    
+    parameters:
+      - name: callback
+        summary: To be invoked if the requested delete operation succeeds or fails.
+        type: Callback<ErrorResponse>
+        optional: true

@@ -1,0 +1,12 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothProfileHandler
+summary: |
+    This interface represents the Bluetooth profile handler. 
+extends: Titanium.Proxy
+createable: false
+
+properties:
+  - name: profileType
+    summary: The type of Bluetooth profile.
+    type: String
+    permission: read-only

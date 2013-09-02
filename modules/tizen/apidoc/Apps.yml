@@ -188,6 +188,20 @@ methods:
         type: String
         optional: true
 
+  - name: getAppMetaData
+    summary: Gets application meta data array for a specified application ID.
+    description: |
+        If the ID is set to null or not set at all, it returns application meta data array for the current application.          
+    returns:
+      - type: Array<Modules.Tizen.Apps.ApplicationMetaData>
+        summary: Array of meta data of a specified application. If there are no meta data for a specified application, empty array will be returned 
+    parameters: 
+      - name: id
+        summary: |
+            A string representing application ID. If the ID is not provided, the application metadata array of the calling application will be returned. 
+        type: String
+        optional: true
+
 events:
   - name: installed
     summary: Fired when an application is installed.
