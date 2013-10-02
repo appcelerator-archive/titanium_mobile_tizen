@@ -1,6 +1,6 @@
 // Wraps Tizen interface "BluetoothHealthApplication" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothHealthChannel'], function(declare, Evented, BluetoothHealthChannel) {
+define(['Ti/_/declare', 'Ti/_/Evented'], function(declare, Evented) {
 
 	function onError (e, callback) {
 		callback({
@@ -27,9 +27,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothHealthChanne
 					listening = true;
 
 					this._obj.onconnect = function(channel) {
-						self.fireEvent('onconnect', {
-							channel: new BluetoothHealthChannel(channel)
-						});
+						self.fireEvent('onconnect');
 					};
 				}
 			},

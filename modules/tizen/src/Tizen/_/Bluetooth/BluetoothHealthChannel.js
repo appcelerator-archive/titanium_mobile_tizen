@@ -35,7 +35,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 							self.fireEvent('onchannelclosed');
 
 							listening = false;
-						};
+						}
 					});
 				}
 			},

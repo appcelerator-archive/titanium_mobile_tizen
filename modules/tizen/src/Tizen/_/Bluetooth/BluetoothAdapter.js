@@ -1,7 +1,7 @@
 // Wraps Tizen interface "BluetoothAdapter" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler', 'Tizen/_/Bluetooth/BluetoothProfileHandler'],
-	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, BluetoothProfileHandler) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler', 'Tizen/_/Bluetooth/BluetoothProfileHandler', 'Tizen/_/Bluetooth/BluetoothHealthProfileHandler'],
+	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, BluetoothProfileHandler, BluetoothHealthProfileHandler) {
 
 		function onError (e, callback) {
 			callback({
@@ -239,6 +239,8 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				// Wrap the object (create a Titanium wrapped object out of a native Tizen object)
 				if (object.toString() === '[object BluetoothProfileHandler]') {
 					return new BluetoothProfileHandler(object);
+				} else if (object.toString() === '[object BluetoothHealthProfileHandler]') {
+					return new BluetoothHealthProfileHandler(object);
 				} else {
 					throw new Error('Object of unknown type');
 				}

@@ -1,6 +1,6 @@
 // Wraps Tizen interface "BluetoothHealthProfileHandler" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothHealthApplication', 'Tizen/_/Bluetooth/BluetoothHealthChannel'], function(declare, Evented, BluetoothHealthApplication, BluetoothHealthChannel) {
+define(['Ti/_/declare', 'Tizen/_/Bluetooth/BluetoothProfileHandler', 'Tizen/_/Bluetooth/BluetoothHealthApplication', 'Tizen/_/Bluetooth/BluetoothHealthChannel'], function(declare, BluetoothProfileHandler, BluetoothHealthApplication, BluetoothHealthChannel) {
 
 	function onError(e, callback) {
 		callback({
@@ -10,7 +10,7 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothHealthApplic
 		});
 	}
 
-	var healthProfileHandler = declare(Evented, {
+	var healthProfileHandler = declare(BluetoothProfileHandler, {
 			constructor: function(nativeObj) {
 				// nativeObj is a native Tizen object; simply wrap it (take ownership of it)
 				this._obj = nativeObj;
