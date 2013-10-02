@@ -2,7 +2,7 @@
 name: Modules.Tizen.Bluetooth.BluetoothHealthProfileHandler
 summary: |
     This interface represents the handler of Bluetooth health device profile. The BluetoothHealthProfileHandler object is created by BluetoothAdapter.getBluetoothProfileHandler().
-extends: Titanium.Proxy
+extends: Modules.Tizen.Bluetooth.BluetoothProfileHandler
 createable: false
 
 methods:
