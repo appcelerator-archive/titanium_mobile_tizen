@@ -1,7 +1,7 @@
 // Wraps Tizen interface "BluetoothAdapter" that resides in Tizen module "Bluetooth".
 
-define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler'],
-	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler) {
+define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Tizen/_/Bluetooth/BluetoothServiceHandler', 'Tizen/_/Bluetooth/BluetoothProfileHandler', 'Tizen/_/Bluetooth/BluetoothHealthProfileHandler'],
+	function(declare, Evented, BluetoothDevice, BluetoothServiceHandler, BluetoothProfileHandler, BluetoothHealthProfileHandler) {
 
 		function onError (e, callback) {
 			callback({
@@ -197,6 +197,53 @@ define(['Ti/_/declare', 'Ti/_/Evented', 'Tizen/_/Bluetooth/BluetoothDevice', 'Ti
 				}, callback && function(e) {
 					onError(e, callback);
 				});
+			},
+
+			addEventListener: function () {
+				var self = this;
+
+				Evented.addEventListener.apply(this, arguments);
+
+				if (!listening) {
+					listening = true;
+
+					this._obj.setChangeListener({
+						onstatechanged: function(powered) {
+							self.fireEvent('onstatechanged', {
+								powered: powered
+							});
+						},
+						onnamechanged: function(name) {
+							self.fireEvent('onnamechanged', {
+								name: name
+							});
+						},
+						onvisibilitychanged: function(visible) {
+							self.fireEvent('onvisibilitychanged', {
+								visible: visible
+							});
+						}
+					});					
+				}
+			},
+
+			getBluetoothProfileHandler: function(/*BluetoothProfileType*/ profileType) {
+				try {
+					return this._wrap(this._obj.getBluetoothProfileHandler(profileType));
+				} catch(e) {
+					console.log(e.message);
+				}
+			},
+
+			_wrap: function(object) {
+				// Wrap the object (create a Titanium wrapped object out of a native Tizen object)
+				if (object.toString() === '[object BluetoothProfileHandler]') {
+					return new BluetoothProfileHandler(object);
+				} else if (object.toString() === '[object BluetoothHealthProfileHandler]') {
+					return new BluetoothHealthProfileHandler(object);
+				} else {
+					throw new Error('Object of unknown type');
+				}
 			},
 
 			constants: {

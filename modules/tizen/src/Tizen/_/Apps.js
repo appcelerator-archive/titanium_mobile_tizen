@@ -1,8 +1,8 @@
 // Wraps Tizen module "Application".
 // Module "Application" is renamed as "Apps" in this wrapper.
 
-define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/ApplicationInformation', 'Tizen/_/Apps/ApplicationContext', 'Tizen/_/Apps/Application'],
-	function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application) {
+define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/ApplicationInformation', 'Tizen/_/Apps/ApplicationContext', 'Tizen/_/Apps/Application', 'Tizen/_/Apps/ApplicationMetaData'],
+	function(lang, Evented, WebAPIError, ApplicationInformation, ApplicationContext, Application, ApplicationMetaData) {
 
 		var listening;
 
@@ -221,6 +221,20 @@ define(['Ti/_/lang', 'Ti/_/Evented', 'Tizen/_/WebAPIError', 'Tizen/_/Apps/Applic
 
 			getAppSharedURI: function(id) {
 					return tizen.application.getAppSharedURI(id);
+			},
+
+			getAppMetaData: function(id /*ApplicationId*/) {
+				var applicationId = id ? id : null,
+					result = [],
+					i = 0,
+					metaDataArray = tizen.application.getAppMetaData.call(tizen.application, applicationId),
+					len = metaDataArray && metaDataArray.length;
+
+				for (; i < len; i++) {
+					result.push(new ApplicationMetaData(metaDataArray[i]));
+				}
+
+				return result;
 			}
 		}, true);
 

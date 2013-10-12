@@ -1,0 +1,33 @@
+---
+name: Modules.Tizen.Bluetooth.BluetoothHealthProfileHandler
+summary: |
+    This interface represents the handler of Bluetooth health device profile. The BluetoothHealthProfileHandler object is created by BluetoothAdapter.getBluetoothProfileHandler().
+extends: Modules.Tizen.Bluetooth.BluetoothProfileHandler
+createable: false
+
+methods:
+  - name: registerSinkApplication
+    summary: Registers an application for the Sink role.        
+    parameters:
+      - name: dateType
+        summary: The MDEP data type used for communication, which is referenced in the ISO/IEEE 11073-20601 spec. For example, pulse oximeter is 4100 and blood pressure monitor is 4103. 
+        type: Number
+      - name: name
+        summary: The friendly name associated with sink application.
+        type: String
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<RegisterSinkApplicationResponse>
+
+  - name: connectToSource
+    summary: Connect to the health device which acts as the Source role.
+    parameters:
+      - name: peer
+        summary: The remote device which acts as the Source role. 
+        type: Modules.Tizen.Bluetooth.BluetoothDevice
+      - name: application
+        summary: The registered application for the Sink role. 
+        type: Modules.Tizen.Bluetooth.BluetoothHealthApplication
+      - name: callback
+        summary: Function to invoke on success or failure.
+        type: Callback<ConnectToSourceResponse>

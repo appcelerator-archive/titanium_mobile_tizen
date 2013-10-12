@@ -231,6 +231,20 @@ properties:
     type: Number
     summary: The initial progress value of the notification.
 
+  - name: ledColor
+    type: String
+    summary: Sets the notification LED indicator color property.
+    description: |
+        The color is a numerical RGB value(#rrggbb). The format of a RGB value in hexadecimal notation is a "#" immediately followed by exactly six hexadecimal characters(0-9, A-F). The color format is case-insensitive. The LED indicator color will show its a close approximation. LED will only light on when screen is off. To turn the LED off, set "#000000" or null to ledColor. This method has effects when the device has notification LED. 
+
+  - name: ledOnPeriod
+    type: Number
+    summary: The milliseconds for which the light is on The light continuously toggles on (ledOnPeriod) and off (ledOffPeriod). By default, this attribute is set to 0.
+
+  - name: ledOffPeriod
+    type: Number
+    summary: The milliseconds for which the light is off By default, this attribute is set to 0.
+
 ---
 name: StatusNotificationInit
 summary: Simple object that contains parameters for [createStatusNotification](Modules.Tizen.Notification.createStatusNotification).

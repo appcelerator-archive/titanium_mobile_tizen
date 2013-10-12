@@ -20,3 +20,8 @@ properties:
 
     type: String
     permission: read-only
+
+  - name: isAutoRotation
+    summary: Whether the device is in autorotation.
+    type: Boolean
+    permission: read-only

@@ -103,6 +103,8 @@ properties:
     permission: read-only    
     
   - name: POWER_SCREEN_STATE_SCREEN_BRIGHT
+    deprecated: 
+        since: "3.0.2"
     summary: |
         The minimal screen state is set to POWER_SCREEN_STATE_SCREEN_BRIGHT and device does not 
         change to the POWER_SCREEN_STATE_SCREEN_NORMAL state automatically.

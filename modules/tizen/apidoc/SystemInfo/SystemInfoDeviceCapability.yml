@@ -369,3 +369,8 @@ properties:
     summary: Indicates whether the device supports native osp API.
     type: Boolean
     permission: read-only
+
+  - name: profile
+    summary: Represents the profile of the current device.
+    type: String
+    permission: read-only
