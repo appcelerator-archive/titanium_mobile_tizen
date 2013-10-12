@@ -1458,11 +1458,11 @@ build.prototype = {
 		}
 	},
 
-	// Find the path to 7zip packer utility. Using 7zip from node-appc which is guaranteed to be present.
+	// Find the path to 7zip packer utility. Using 7zip from our utils directory which is guaranteed to be present.
 	// Parameters:
 	// - logger: the logger object
 	find7za: function (logger) {
-		var zippath = path.normalize(path.join(path.dirname(require.resolve('node-appc')), '..','tools','7zip','7za.exe'));
+		var zippath = path.normalize(path.join(this.mobilewebSdkPath, 'utils', '7za.exe'));
 		if (fs.existsSync(zippath)) {
 			return zippath;
 		} else {
