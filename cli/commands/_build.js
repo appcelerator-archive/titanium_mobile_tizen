@@ -100,7 +100,7 @@ UglifyJS.AST_Node.warn_function = function () {};
 exports.config = function (logger, config, cli) {
 	return function (finished) {
 		cli.createHook('build.mobileweb.config', function (callback) {
-			callback({
+			callback(null, {
 				flags: {
 					'debug': {
 						default: false,
@@ -184,7 +184,7 @@ exports.config = function (logger, config, cli) {
 					}
 				}
 			});
-		})(function (err, results, result) {
+		})(function (err, result) {
 			finished(result);
 		});
 	};
