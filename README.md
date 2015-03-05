@@ -25,4 +25,4 @@ To protect the interests of the Titanium contributors, Appcelerator, customers a
 Legal
 -----
 Licensed under the Apache Public License v2. Please see the LICENSE file for more information.
-Copyright (c) 2012-2013 by Appcelerator, Inc. All Rights Reserved.
+Copyright (c) 2012-2014 by Appcelerator, Inc. All Rights Reserved.
