@@ -1,5 +1,4 @@
-Titanium Mobile for Tizen
-=========================
+# Titanium Mobile for Tizen
 
 Welcome to the Appcelerator Titanium Mobile open source project. Titanium provides a platform for web developers to build cross-platform, native mobile applications using JavaScript. For more information on Titanium, visit http://www.appcelerator.com.
 
